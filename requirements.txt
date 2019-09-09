@@ -1,0 +1,10 @@
+django-debug-toolbar
+requests
+django~=2.2.0
+django-markdownx
+mozilla_django_oidc
+pymdown-extensions
+django-webpack-loader
+django-crispy-forms
+dj-database-url
+python-decouple

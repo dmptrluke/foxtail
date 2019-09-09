@@ -1,0 +1,24 @@
+
+# Python
+__pycache__/
+
+
+# Django
+*.log
+settings.ini
+db.sqlite3
+
+# IntelliJ
+.idea
+*.iml
+out
+gen
+
+# NPM
+node_modules
+webpack-stats.json
+package-lock.json
+
+# produced assets
+static
+assets/bundles
