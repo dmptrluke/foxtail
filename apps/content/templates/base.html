@@ -1,0 +1,37 @@
+{% load static %}
+{% load render_bundle from webpack_loader %}
+<!doctype html>
+<html lang="en" class="no-js">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+    <title>
+        {% block title_full %}{% block title %}{% endblock title %} – furry.nz{% endblock title_full %}
+    </title>
+
+    {% render_bundle 'main' 'css' %}
+    <script>(function (a) {
+        a.remove("no-js");
+        a.add("js")
+    })(document.documentElement.classList);</script>
+
+    {% block extra_head %}{% endblock extra_head %}
+</head>
+{% block body %}
+    <body>
+
+    {% block header %}
+        {% include "components/header.html" %}
+    {% endblock header %}
+    <div class="container px-3 py-4 px-md-4 py-md-5">
+        {% block content %}{% endblock content %}
+    </div>
+    {% include "components/footer.html" %}
+    {% render_bundle 'runtime' 'js' %}
+    {% render_bundle 'vendor' 'js' %}
+    {% render_bundle 'main' 'js' %}
+    {% block extra_footer %}{% endblock extra_footer %}
+    </body>
+{% endblock body %}
+</html>
