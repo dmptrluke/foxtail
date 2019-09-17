@@ -1,13 +1,14 @@
 const path = require('path');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const TerserJSPlugin = require('terser-webpack-plugin');
+const webpack = require('webpack');
 const {CleanWebpackPlugin} = require('clean-webpack-plugin');
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const BundleTracker = require('webpack-bundle-tracker');
 
 
 module.exports = {
-    entry: './assets/js/main.js',
+    entry: ['./assets/js/main.js', './assets/scss/index.scss'],
     optimization: {
         minimizer: [new TerserJSPlugin({}), new OptimizeCSSAssetsPlugin({})],
         moduleIds: 'hashed',
@@ -39,7 +40,11 @@ module.exports = {
             sourceMap: true,
         }),
         new CleanWebpackPlugin(),
-        new BundleTracker({filename: './webpack-stats.json'})
+        new BundleTracker({filename: './webpack-stats.json'}),
+        new webpack.ProvidePlugin({
+            $: 'jquery',
+            jQuery: 'jquery'
+        }),
     ],
     module: {
         rules: [
@@ -79,11 +84,29 @@ module.exports = {
                 ],
             },
             {
-                test: /\.(png|svg|jpg|gif)$/,
+                test: /\.(png|svg|webp|jpg|gif)$/,
+                use: {
+                    loader: 'file-loader',
+                    options: {
+                        name: '[contenthash].[ext]',
+                        outputPath: 'images/'
+                    }
+                }
+            },
+            {
+                test: /\.(woff(2)?|ttf|eot|svg)(\?v=\d+\.\d+\.\d+)?$/,
                 use: [
-                    'file-loader'
+                    {
+                        loader: 'file-loader',
+                        options: {
+                            name: '[contenthash].[ext]',
+                            outputPath: 'fonts/'
+                        }
+                    }
                 ]
             }
         ],
-    },
-};
+    }
+    ,
+}
+;

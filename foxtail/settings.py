@@ -17,10 +17,6 @@ from dj_database_url import parse as db_url
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
-
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = config('SECRET_KEY')
 
@@ -32,7 +28,6 @@ INTERNAL_IPS = config('INTERNAL_IPS', default="", cast=Csv())
 
 
 # Application definition
-
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -69,6 +64,8 @@ if DEBUG:
 
 ROOT_URLCONF = 'foxtail.urls'
 
+TEMPLATE_DIRS = (os.path.join(BASE_DIR, 'templates'),)
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -89,6 +86,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'foxtail.wsgi.application'
 
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 # Authentication
 # https://mozilla-django-oidc.readthedocs.io/en/stable/installation.html
@@ -103,6 +101,7 @@ OIDC_RP_CLIENT_ID = config('OIDC_RP_CLIENT_ID')
 OIDC_RP_CLIENT_SECRET = config('OIDC_RP_CLIENT_SECRET')
 
 OIDC_RP_SIGN_ALGO = "RS256"
+OIDC_RP_SCOPES = "openid email profile"
 
 OIDC_OP_JWKS_ENDPOINT = "https://login.furry.nz/.well-known/openid-configuration/jwks"
 OIDC_OP_AUTHORIZATION_ENDPOINT = "https://login.furry.nz/connect/authorize"
@@ -159,14 +158,13 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
-TEMPLATE_DIRS = (os.path.join(BASE_DIR, 'templates'),)
-
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+STATIC_ROOT = os.path.join(BASE_DIR, 'generated_static')
 
-STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, 'assets'),
-)
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "static"),
+    ("bundles", os.path.join(BASE_DIR, 'assets/bundles'))
+]
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
@@ -174,10 +172,9 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Webpack Loader
 WEBPACK_LOADER = {
-
     'DEFAULT': {
         'CACHE': not DEBUG,
-        'BUNDLE_DIR_NAME': 'bundles/', # must end with slash
+        'BUNDLE_DIR_NAME': 'bundles/',  # must end with slash
         'STATS_FILE': os.path.join(BASE_DIR, 'webpack-stats.json'),
         'POLL_INTERVAL': 0.1,
         'TIMEOUT': None,
@@ -187,13 +184,11 @@ WEBPACK_LOADER = {
 
 # Crispy Forms
 #
-
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 
 # Markdownx
 # https://neutronx.github.io/django-markdownx/customization/
-
 import pymdownx.emoji
 
 MARKDOWNX_MARKDOWN_EXTENSIONS = [

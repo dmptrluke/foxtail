@@ -1,7 +1,5 @@
-
 # Python
 __pycache__/
-
 
 # Django
 *.log
@@ -20,5 +18,6 @@ webpack-stats.json
 package-lock.json
 
 # produced assets
-static
-assets/bundles
+static_out/
+media/
+assets/bundles/
