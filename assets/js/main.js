@@ -1,3 +1,2 @@
-import '../scss/index.scss'
-
+import $ from 'jquery';
 import 'bootstrap';
