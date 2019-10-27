@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 import os
 from decouple import config, Csv
 from dj_database_url import parse as db_url
+import pymdownx.emoji
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -93,22 +94,25 @@ SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 AUTH_USER_MODEL = 'users.User'
 
 AUTHENTICATION_BACKENDS = [
-    'mozilla_django_oidc.auth.OIDCAuthenticationBackend',
+    'apps.users.authentication.CustomOIDCAB',
     'django.contrib.auth.backends.ModelBackend'
 ]
 
 OIDC_RP_CLIENT_ID = config('OIDC_RP_CLIENT_ID')
 OIDC_RP_CLIENT_SECRET = config('OIDC_RP_CLIENT_SECRET')
 
+OIDC_STORE_ID_TOKEN = True
+OIDC_OP_LOGOUT_URL_METHOD = 'apps.users.authentication.provider_logout'
+
 OIDC_RP_SIGN_ALGO = "RS256"
 OIDC_RP_SCOPES = "openid email profile"
 
-_OIDC_SERVER = config('OIDC_SERVER')
+OIDC_SERVER = config('OIDC_SERVER')
 
-OIDC_OP_JWKS_ENDPOINT = f"{_OIDC_SERVER}/.well-known/openid-configuration/jwks"
-OIDC_OP_AUTHORIZATION_ENDPOINT = f"{_OIDC_SERVER}/connect/authorize"
-OIDC_OP_TOKEN_ENDPOINT = f"{_OIDC_SERVER}/connect/token"
-OIDC_OP_USER_ENDPOINT = f"{_OIDC_SERVER}/connect/userinfo"
+OIDC_OP_JWKS_ENDPOINT = f"{OIDC_SERVER}/.well-known/openid-configuration/jwks"
+OIDC_OP_AUTHORIZATION_ENDPOINT = f"{OIDC_SERVER}/connect/authorize"
+OIDC_OP_TOKEN_ENDPOINT = f"{OIDC_SERVER}/connect/token"
+OIDC_OP_USER_ENDPOINT = f"{OIDC_SERVER}/connect/userinfo"
 
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
@@ -204,8 +208,6 @@ CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 # Markdownx
 # https://neutronx.github.io/django-markdownx/customization/
-import pymdownx.emoji
-
 MARKDOWNX_MARKDOWN_EXTENSIONS = [
     'pymdownx.smartsymbols',
     'pymdownx.betterem',
@@ -220,3 +222,5 @@ MARKDOWNX_MARKDOWN_EXTENSION_CONFIGS = {
         'emoji_generator': pymdownx.emoji.to_alt
     }
 }
+
+
