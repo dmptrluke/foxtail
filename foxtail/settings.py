@@ -103,10 +103,12 @@ OIDC_RP_CLIENT_SECRET = config('OIDC_RP_CLIENT_SECRET')
 OIDC_RP_SIGN_ALGO = "RS256"
 OIDC_RP_SCOPES = "openid email profile"
 
-OIDC_OP_JWKS_ENDPOINT = "https://login.furry.nz/.well-known/openid-configuration/jwks"
-OIDC_OP_AUTHORIZATION_ENDPOINT = "https://login.furry.nz/connect/authorize"
-OIDC_OP_TOKEN_ENDPOINT = "https://login.furry.nz/connect/token"
-OIDC_OP_USER_ENDPOINT = "https://login.furry.nz/connect/userinfo"
+_OIDC_SERVER = config('OIDC_SERVER')
+
+OIDC_OP_JWKS_ENDPOINT = f"{_OIDC_SERVER}/.well-known/openid-configuration/jwks"
+OIDC_OP_AUTHORIZATION_ENDPOINT = f"{_OIDC_SERVER}/connect/authorize"
+OIDC_OP_TOKEN_ENDPOINT = f"{_OIDC_SERVER}/connect/token"
+OIDC_OP_USER_ENDPOINT = f"{_OIDC_SERVER}/connect/userinfo"
 
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
@@ -168,6 +170,19 @@ STATICFILES_DIRS = [
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+# Email
+# https://sendgrid.com/docs/for-developers/sending-email/django/
+# https://docs.djangoproject.com/en/2.2/topics/email/
+
+DEFAULT_FROM_EMAIL = config('email_from_user')
+SERVER_EMAIL = config('email_from_system')
+
+EMAIL_HOST = config('email_host', default='smtp.sendgrid.net')
+EMAIL_HOST_USER = config('email_user')
+EMAIL_HOST_PASSWORD = config('email_pass')
+EMAIL_PORT = config('email_port', default=587, cast=int)
+EMAIL_USE_TLS = config('email_tls', default=True, cast=bool)
 
 
 # Webpack Loader
