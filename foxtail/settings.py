@@ -13,10 +13,14 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
+import logging
 import os
-from decouple import config, Csv
-from dj_database_url import parse as db_url
+
 import pymdownx.emoji
+from decouple import config, Csv, UndefinedValueError
+from dj_database_url import parse as db_url
+
+logger = logging.getLogger(__name__)
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -216,14 +220,23 @@ WEBPACK_LOADER = {
 # <https://sendgrid.com/docs/for-developers/sending-email/django/>
 # <https://docs.djangoproject.com/en/2.2/topics/email/>
 
-DEFAULT_FROM_EMAIL = config('email_from_user')
-SERVER_EMAIL = config('email_from_system')
+try:
+    DEFAULT_FROM_EMAIL = config('email_from_user')
+    SERVER_EMAIL = config('email_from_system')
 
-EMAIL_HOST = config('email_host', default='smtp.sendgrid.net')
-EMAIL_HOST_USER = config('email_user')
-EMAIL_HOST_PASSWORD = config('email_pass')
-EMAIL_PORT = config('email_port', default=587, cast=int)
-EMAIL_USE_TLS = config('email_tls', default=True, cast=bool)
+    EMAIL_HOST = config('email_host', default='smtp.sendgrid.net')
+    EMAIL_HOST_USER = config('email_user')
+    EMAIL_HOST_PASSWORD = config('email_pass')
+    EMAIL_PORT = config('email_port', default=587, cast=int)
+    EMAIL_USE_TLS = config('email_tls', default=True, cast=bool)
+except UndefinedValueError as e:
+    if DEBUG:
+        logger.warning('Foxtail is in DEBUG mode with missing email credentials. '
+                       'Enabling console email backend!')
+        EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+    else:
+        raise e
+
 
 # Crispy Forms
 # <https://django-crispy-forms.readthedocs.io/en/latest/>
