@@ -39,14 +39,15 @@ class CustomOIDCAB(OIDCAuthenticationBackend):
         if len(users) == 1:
             return self.update_user(users[0], user_info)
         elif len(users) > 1:
-            # In the rare case that two user accounts have the same email address,
-            # bail. Randomly selecting one seems really wrong.
-            msg = 'Multiple users returned'
-            raise SuspiciousOperation(msg)
+            # In the rare case that two user accounts have the same identifier,
+            # bail. This really shouldn't happen. Something is wrong.
+            raise SuspiciousOperation('Multiple users returned')
+
         elif self.get_settings('OIDC_CREATE_USER', True):
-            user = self.create_user(user_info)
-            return user
+            # We have no user. Let's make one!
+            return self.create_user(user_info)
         else:
+            # ...or not
             LOGGER.debug('Login failed: No user with identifier %s found, and '
                          'OIDC_CREATE_USER is False', username)
 
