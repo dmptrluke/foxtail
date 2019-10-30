@@ -8,7 +8,9 @@ const BundleTracker = require('webpack-bundle-tracker');
 
 
 module.exports = {
-    entry: ['./assets/js/main.js', './assets/scss/index.scss'],
+    entry: {
+        main:  ['./assets/js/main.js',  './assets/scss/index.scss']
+    },
     optimization: {
         minimizer: [new TerserJSPlugin({}), new OptimizeCSSAssetsPlugin({})],
         moduleIds: 'hashed',
@@ -84,7 +86,7 @@ module.exports = {
                 ],
             },
             {
-                test: /\.(png|svg|webp|jpg|gif)$/,
+                test: /\.(png|webp|jpg|gif)$/,
                 use: {
                     loader: 'file-loader',
                     options: {
