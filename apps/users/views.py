@@ -12,3 +12,6 @@ class UserView(TemplateView):
 class LogoutView(OIDCLogoutView):
     def get(self, request):
         return self.post(request)
+
+
+__all__ = ['UserView', 'LogoutView']

@@ -12,3 +12,6 @@ class Character(models.Model):
     description = models.TextField(blank=True, default='')
 
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+
+
+__all__ = ['Character']
