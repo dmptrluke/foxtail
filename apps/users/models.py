@@ -2,7 +2,6 @@ from django.contrib.auth.base_user import AbstractBaseUser
 from django.contrib.auth.models import PermissionsMixin, AbstractUser
 from django.db import models
 
-
 class User(AbstractUser):
     username = models.CharField(
         "User identifier",
@@ -24,3 +23,5 @@ class Profile(models.Model):
     class Meta:
         verbose_name_plural = 'profile'
 
+
+__all__ = ['User', 'Profile']
