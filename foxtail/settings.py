@@ -31,9 +31,11 @@ SECRET_KEY = config('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config('DEBUG', default=False, cast=bool)
 
-ALLOWED_HOSTS = config('ALLOWED_HOSTS', cast=Csv())
+ALLOWED_HOSTS = config('ALLOWED_HOSTS', default=[], cast=Csv())
 INTERNAL_IPS = config('INTERNAL_IPS', default="", cast=Csv())
 
+# Some basic security
+SESSION_COOKIE_SECURE = True
 
 # Application definition
 INSTALLED_APPS = [
