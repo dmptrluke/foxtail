@@ -29,11 +29,11 @@
     "postcss-loader": "^3.0.0",
     "precss": "^4.0.0",
     "sass-loader": "^8.0.0",
+    "svgxuse": "^1.2.6",
     "terser-webpack-plugin": "^2.2.1",
     "webpack": "^4.41.2",
     "webpack-bundle-tracker": "^0.4.3",
     "webpack-cli": "^3.3.9",
     "webpack-merge": "^4.2.2"
-  },
-  "dependencies": {}
+  }
 }

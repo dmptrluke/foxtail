@@ -1,5 +1,6 @@
 {% load static %}
 {% load render_bundle from webpack_loader %}
+
 <!doctype html>
 <html lang="en" class="no-js">
 <head>
@@ -10,6 +11,7 @@
         {% block title_full %}{% block title %}{% endblock title %} – furry.nz{% endblock title_full %}
     </title>
 
+    <link rel="prefetch" href="{% static "icons.svg" %}">
     {% render_bundle 'main' 'css' %}
     <script>(function (a) {
         a.remove("no-js");
@@ -24,9 +26,11 @@
     {% block header %}
         {% include "components/header.html" %}
     {% endblock header %}
-    <div class="container px-3 py-4 px-md-4 py-md-5">
-        {% block content %}{% endblock content %}
-    </div>
+    {% block content_base %}
+        <div class="container px-3 py-4 px-md-4 py-md-5">
+            {% block content %}{% endblock content %}
+        </div>
+    {% endblock content_base %}
     {% include "components/footer.html" %}
     {% render_bundle 'runtime' 'js' %}
     {% render_bundle 'vendor' 'js' %}

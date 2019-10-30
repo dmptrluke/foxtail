@@ -1,8 +1,33 @@
 {% extends "base.html" %}
-{% load static %}
+{% load icon %}
+
 {% block title_full %}furry.nz{% endblock title_full %}
 
 {% block content %}
-    <h1>Profile.</h1>
-    <p>{{ user.email }}.</p>
+    <div class="row">
+        <div class="col-lg-7">
+            <h1>Profile.</h1>
+            <p>{{ user.email }}.</p>
+        </div>
+        <div class="col-lg-5">
+            <h3>Account Information</h3>
+            <dl class="row">
+                <dt class="col-xl-4">Identifier</dt>
+                <dd class="col-xl-8">{{ user.username }}</dd>
+                <dt class="col-xl-4">Display Name</dt>
+                <dd class="col-xl-8">{{ user.display_name }}</dd>
+                <dt class="col-xl-4">Email</dt>
+                <dd class="col-xl-8">{{ user.email }}</dd>
+            </dl>
+            <p>
+                <div class="btn-group" role="group" aria-label="Basic example">
+                <a href="{{ OIDC_SERVER }}/Manage/Index" class="btn btn-primary ">Manage Account</a>
+                <a href="{{ OIDC_SERVER }}/Manage/Index" class="btn btn-secondary ">
+                  {% icon 'refresh' %}
+                </a>
+        </div>
+            </p>
+
+        </div>
+    </div>
 {% endblock content %}

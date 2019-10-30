@@ -1,0 +1,21 @@
+.icon {
+	display: inline-flex;
+	align-self: center;
+}
+
+.icon svg {
+	height: 1em;
+	width: 1em;
+	stroke-width: 0;
+	stroke: currentColor;
+	fill: currentColor;
+}
+
+.icon.svg-baseline svg {
+	top: .125em;
+	position: relative;
+}
+
+.icon-refresh {
+  width: 0.8571428571428571em;
+}
