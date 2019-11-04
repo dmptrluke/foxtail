@@ -1,6 +1,5 @@
 {% load static %}
 {% load render_bundle from webpack_loader %}
-
 <!doctype html>
 <html lang="en" class="no-js">
 <head>
@@ -12,43 +11,44 @@
     </title>
 
     <link rel="prefetch" href="{% static "icons.svg" %}">
-
     {% render_bundle 'main' 'css' %}
 
-    <script nonce="{{ request.csp_nonce }}">(function (a) {
-        a.remove("no-js");
-        a.add("js")
-    })(document.documentElement.classList);</script>
+    <script nonce="{{ request.csp_nonce }}">
+        (function (a) {
+            a.remove("no-js");
+            a.add("js")
+        })(document.documentElement.classList);
+    </script>
 
     {% block extra_head %}{% endblock extra_head %}
 </head>
-{% block body %}
-    <body>
 
-    {% block header %}
-        {% include "components/header.html" %}
-    {% endblock header %}
-    {% block content_base %}
-        <div class="container px-3 py-4 px-md-4 py-md-5">
-            {% block content %}{% endblock content %}
-        </div>
-    {% endblock content_base %}
-    {% include "components/footer.html" %}
-    {% render_bundle 'runtime' 'js' %}
-    {% render_bundle 'vendor' 'js' %}
-    {% render_bundle 'main' 'js' %}
+<body>
+{% block header %}
+    {% include "components/header.html" %}
+{% endblock header %}
 
-    {% if sentry_event_id %}
-        <script src="https://browser.sentry-cdn.com/5.7.1/bundle.min.js"
-                integrity="sha384-KMv6bBTABABhv0NI+rVWly6PIRvdippFEgjpKyxUcpEmDWZTkDOiueL5xW+cztZZ"
-                crossorigin="anonymous"></script>
+{% block content_base %}
+    <div class="container px-3 py-4 px-md-4 py-md-5">
+        {% block content %}{% endblock content %}
+    </div>
+{% endblock content_base %}
 
-        <script nonce="{{ request.csp_nonce }}">
-            Sentry.init({dsn: '{{ SENTRY_DSN }}'});
-            Sentry.showReportDialog({eventId: '{{ sentry_event_id }}'})
-        </script>
-    {% endif %}
-    {% block extra_footer %}{% endblock extra_footer %}
-    </body>
-{% endblock body %}
+{% include "components/footer.html" %}
+{% render_bundle 'runtime' 'js' %}
+{% render_bundle 'vendor' 'js' %}
+{% render_bundle 'main' 'js' %}
+
+{% if sentry_event_id %}
+    <script src="https://browser.sentry-cdn.com/5.7.1/bundle.min.js"
+            integrity="sha384-KMv6bBTABABhv0NI+rVWly6PIRvdippFEgjpKyxUcpEmDWZTkDOiueL5xW+cztZZ"
+            crossorigin="anonymous"></script>
+
+    <script nonce="{{ request.csp_nonce }}">
+        Sentry.init({dsn: '{{ SENTRY_DSN }}'});
+        Sentry.showReportDialog({eventId: '{{ sentry_event_id }}'})
+    </script>
+{% endif %}
+{% block extra_footer %}{% endblock extra_footer %}
+</body>
 </html>
