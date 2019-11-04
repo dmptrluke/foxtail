@@ -240,13 +240,13 @@ WEBPACK_LOADER = {
 SENTRY_ENABLED = config('sentry_enabled', default=False, cast=bool)
 
 if SENTRY_ENABLED:
+    SENTRY_DSN = config('sentry_dsn')
+
     import sentry_sdk
     from sentry_sdk.integrations.django import DjangoIntegration
 
-    CSP_SCRIPT_SRC += ['https://browser.sentry-cdn.com/']
-
     _vars = {
-        'dsn': config('sentry_dsn'),
+        'dsn': SENTRY_DSN,
         'send_default_pii': config('sentry_pii', default=False, cast=bool),
         'integrations': [DjangoIntegration()]
     }
