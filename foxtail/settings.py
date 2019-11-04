@@ -118,8 +118,7 @@ X_FRAME_OPTIONS = 'DENY'
 CSP_INCLUDE_NONCE_IN = ['script-src']
 CSP_UPGRADE_INSECURE_REQUESTS = True
 
-CSP_SCRIPT_SRC = ["'self'", "www.google.com/recaptcha/"]
-CSP_FRAME_SRC = ["www.google.com/recaptcha/"]
+CSP_SCRIPT_SRC = ["'self'"]
 
 # Database
 # <https://docs.djangoproject.com/en/2.2/ref/settings/#databases>
