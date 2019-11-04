@@ -96,15 +96,49 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'foxtail.wsgi.application'
 
-
-# Security
-
-# Some basic security
-SESSION_COOKIE_SECURE = True
-
 # Recognise upstream proxy SSL
 # <https://docs.djangoproject.com/en/2.2/ref/settings/#secure-proxy-ssl-header>
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+# Security
+# <https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/#https>
+# <https://docs.djangoproject.com/en/2.2/ref/middleware/#x-xss-protection>
+
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
+
+SECURE_CONTENT_TYPE_NOSNIFF = True
+SECURE_BROWSER_XSS_FILTER = True
+
+X_FRAME_OPTIONS = 'DENY'
+
+# CSP Headers
+# <https://django-csp.readthedocs.io/en/latest/>
+
+CSP_INCLUDE_NONCE_IN = ['script-src']
+CSP_UPGRADE_INSECURE_REQUESTS = True
+
+CSP_SCRIPT_SRC = ["'self'", "www.google.com/recaptcha/"]
+CSP_FRAME_SRC = ["www.google.com/recaptcha/"]
+
+# Database
+# <https://docs.djangoproject.com/en/2.2/ref/settings/#databases>
+# <https://pypi.org/project/dj-database-url/>
+
+DATABASES = {
+    'default': config(
+        'DATABASE_URL',
+        default='sqlite:///' + os.path.join(BASE_DIR, 'db.sqlite3'),
+        cast=db_url
+    )
+}
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        'LOCATION': 'unique-snowflake',
+    },
+}
 
 # Authentication
 # <https://mozilla-django-oidc.readthedocs.io/en/stable/installation.html>
@@ -136,37 +170,6 @@ OIDC_OP_JWKS_ENDPOINT = f"{OIDC_SERVER}/.well-known/openid-configuration/jwks"
 OIDC_OP_AUTHORIZATION_ENDPOINT = f"{OIDC_SERVER}/connect/authorize"
 OIDC_OP_TOKEN_ENDPOINT = f"{OIDC_SERVER}/connect/token"
 OIDC_OP_USER_ENDPOINT = f"{OIDC_SERVER}/connect/userinfo"
-
-# CSP Headers
-# <https://django-csp.readthedocs.io/en/latest/>
-
-CSP_INCLUDE_NONCE_IN = ['script-src']
-CSP_UPGRADE_INSECURE_REQUESTS = True
-
-CSP_OBJECT_SRC = ["'none'"]
-CSP_SCRIPT_SRC = ["'self'", "https://www.google.com/recaptcha/"]
-CSP_FRAME_SRC = ["https://www.google.com/recaptcha/"]
-
-# Database
-# <https://docs.djangoproject.com/en/2.2/ref/settings/#databases>
-# <https://pypi.org/project/dj-database-url/>
-# -----
-# The dj-database-url library is used to parse the database URL from config
-
-DATABASES = {
-    'default': config(
-        'DATABASE_URL',
-        default='sqlite:///' + os.path.join(BASE_DIR, 'db.sqlite3'),
-        cast=db_url
-    )
-}
-
-CACHES = {
-    'default': {
-        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
-        'LOCATION': 'unique-snowflake',
-    },
-}
 
 # Password validation
 # <https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators>
