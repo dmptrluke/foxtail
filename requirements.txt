@@ -1,6 +1,6 @@
 requests==2.22.0
 django==2.2.7
-sentry_sdk==0.13.1
+sentry-sdk==0.13.1
 python-decouple==3.1
 git+git://github.com/dmptrluke/mozilla-django-oidc.git@master#egg=mozilla_django_oidc
 pymdown-extensions==6.1
