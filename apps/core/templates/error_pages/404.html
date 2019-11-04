@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block title %}Page Not Found{% endblock %}
+
+{% block content %}
+    <section id="page-title">
+        <h1>Error 404</h1>
+        <p class="lead">Page Not Found</p>
+    </section>
+
+    <section id="page-content">
+        <p>Sorry, but the page you were trying to view does not exist.</p>
+        {% if sentry_event_id %}
+            <p>If you need assistance, you may reference this error as
+                <strong>{{ sentry_event_id }}</strong>.
+            </p>
+        {% endif %}
+    </section>
+{% endblock content %}

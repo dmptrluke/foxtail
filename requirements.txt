@@ -4,6 +4,7 @@ sentry_sdk==0.13.1
 python-decouple==3.1
 git+git://github.com/dmptrluke/mozilla-django-oidc.git@master#egg=mozilla_django_oidc
 pymdown-extensions==6.1
+django-csp==3.5
 django-markdownx==2.0.28
 django-webpack-loader==0.6.0
 django-debug-toolbar==2.0

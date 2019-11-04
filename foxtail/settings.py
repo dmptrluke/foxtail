@@ -34,9 +34,6 @@ DEBUG = config('DEBUG', default=False, cast=bool)
 ALLOWED_HOSTS = config('ALLOWED_HOSTS', default=[], cast=Csv())
 INTERNAL_IPS = config('INTERNAL_IPS', default="", cast=Csv())
 
-# Some basic security
-SESSION_COOKIE_SECURE = True
-
 # Application definition
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -68,6 +65,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'csp.middleware.CSPMiddleware',
     'mozilla_django_oidc.middleware.SessionRefresh',
 ]
 
@@ -98,6 +96,11 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'foxtail.wsgi.application'
 
+
+# Security
+
+# Some basic security
+SESSION_COOKIE_SECURE = True
 
 # Recognise upstream proxy SSL
 # <https://docs.djangoproject.com/en/2.2/ref/settings/#secure-proxy-ssl-header>
@@ -133,6 +136,16 @@ OIDC_OP_JWKS_ENDPOINT = f"{OIDC_SERVER}/.well-known/openid-configuration/jwks"
 OIDC_OP_AUTHORIZATION_ENDPOINT = f"{OIDC_SERVER}/connect/authorize"
 OIDC_OP_TOKEN_ENDPOINT = f"{OIDC_SERVER}/connect/token"
 OIDC_OP_USER_ENDPOINT = f"{OIDC_SERVER}/connect/userinfo"
+
+# CSP Headers
+# <https://django-csp.readthedocs.io/en/latest/>
+
+CSP_INCLUDE_NONCE_IN = ['script-src']
+CSP_UPGRADE_INSECURE_REQUESTS = True
+
+CSP_OBJECT_SRC = ["'none'"]
+CSP_SCRIPT_SRC = ["'self'", "https://www.google.com/recaptcha/"]
+CSP_FRAME_SRC = ["https://www.google.com/recaptcha/"]
 
 # Database
 # <https://docs.djangoproject.com/en/2.2/ref/settings/#databases>
@@ -229,6 +242,8 @@ SENTRY_ENABLED = config('sentry_enabled', default=False, cast=bool)
 if SENTRY_ENABLED:
     import sentry_sdk
     from sentry_sdk.integrations.django import DjangoIntegration
+
+    CSP_SCRIPT_SRC += ['https://browser.sentry-cdn.com/']
 
     _vars = {
         'dsn': config('sentry_dsn'),
