@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block title %}Forbidden{% endblock %}
+
+{% block content %}
+    <section id="page-title">
+        <h1>Error 403</h1>
+        <p class="lead">Forbidden</p>
+    </section>
+
+    <section id="page-content">
+        <p>You don't have permission to access this resource.</p>
+        {% if sentry_event_id %}
+            <p>If you need assistance, you may reference this error as
+                <strong>{{ sentry_event_id }}</strong>.
+            </p>
+        {% endif %}
+    </section>
+{% endblock content %}
