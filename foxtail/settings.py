@@ -242,9 +242,7 @@ if SENTRY_ENABLED:
         repo = git.Repo(search_parent_directories=True)
         sha = repo.head.object.hexsha
 
-        _vars += {
-            'release': sha
-        }
+        _vars['release'] = sha
 
     sentry_sdk.init(**_vars)
 
