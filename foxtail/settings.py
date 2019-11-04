@@ -47,9 +47,11 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'apps.core.apps.CoreConfig',
-    'apps.users.apps.UserConfig',
+    'apps.accounts.apps.UserConfig',
     'apps.content.apps.ContentConfig',
     'apps.directory.apps.DirectoryConfig',
+    'adminsortable2',
+    'guardian',
     'markdownx',
     'webpack_loader',
     'crispy_forms'
@@ -107,19 +109,20 @@ SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 # This section is configured for the login.furry.nz authentication server. It
 # may require changes for other OpenID Connect providers
 
-AUTH_USER_MODEL = 'users.User'
+AUTH_USER_MODEL = 'accounts.User'
 
 LOGIN_REDIRECT_URL = '/'
 
 AUTHENTICATION_BACKENDS = [
-    'apps.users.authentication.CustomOIDCAB'
+    'apps.accounts.authentication.CustomOIDCAB',
+    'guardian.backends.ObjectPermissionBackend'
 ]
 
 OIDC_RP_CLIENT_ID = config('OIDC_RP_CLIENT_ID')
 OIDC_RP_CLIENT_SECRET = config('OIDC_RP_CLIENT_SECRET')
 
 OIDC_STORE_ID_TOKEN = True
-OIDC_OP_LOGOUT_URL_METHOD = 'apps.users.authentication.provider_logout'
+OIDC_OP_LOGOUT_URL_METHOD = 'apps.accounts.authentication.provider_logout'
 
 OIDC_RP_SIGN_ALGO = "RS256"
 OIDC_RP_SCOPES = "openid email profile"
@@ -218,6 +221,31 @@ WEBPACK_LOADER = {
     }
 }
 
+# Sentry.io
+# <https://docs.sentry.io/platforms/python/django/>
+
+if config('sentry_enabled', default=False, cast=bool):
+    import sentry_sdk
+    from sentry_sdk.integrations.django import DjangoIntegration
+
+    _vars = {
+        'dsn': config('sentry_dsn'),
+        'send_default_pii': config('sentry_pii', default=False, cast=bool),
+        'integrations': [DjangoIntegration()]
+    }
+
+    if config('sentry_git', default=False, cast=bool):
+        import git
+
+        repo = git.Repo(search_parent_directories=True)
+        sha = repo.head.object.hexsha
+
+        _vars += {
+            'release': sha
+        }
+
+    sentry_sdk.init(**_vars)
+
 # Email
 # <https://sendgrid.com/docs/for-developers/sending-email/django/>
 # <https://docs.djangoproject.com/en/2.2/topics/email/>
@@ -231,6 +259,7 @@ try:
     EMAIL_HOST_PASSWORD = config('email_pass')
     EMAIL_PORT = config('email_port', default=587, cast=int)
     EMAIL_USE_TLS = config('email_tls', default=True, cast=bool)
+
 except UndefinedValueError as e:
     if DEBUG:
         logger.warning('Foxtail is in DEBUG mode with missing email credentials. '
@@ -239,11 +268,9 @@ except UndefinedValueError as e:
     else:
         raise e
 
-
 # Crispy Forms
 # <https://django-crispy-forms.readthedocs.io/en/latest/>
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
-
 
 # MarkdownX
 # <https://neutronx.github.io/django-markdownx/customization/>
