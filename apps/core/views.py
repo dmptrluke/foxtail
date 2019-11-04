@@ -1,5 +1,5 @@
+from django.conf import settings
 from django.shortcuts import render
-from sentry_sdk import last_event_id
 
 
 def handler_400(request, *args, **kwargs):
@@ -15,5 +15,10 @@ def handler_404(request, *args, **kwargs):
 
 
 def handler_500(request, *args, **kwargs):
-    context = {'sentry_event_id': last_event_id()}
+    if settings.SENTRY_ENABLED:
+        from sentry_sdk import last_event_id
+        context = {'sentry_event_id': last_event_id()}
+    else:
+        context = {}
+
     return render(request, 'error_pages/500.html', context=context, status=500)

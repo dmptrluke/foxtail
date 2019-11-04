@@ -224,7 +224,9 @@ WEBPACK_LOADER = {
 # Sentry.io
 # <https://docs.sentry.io/platforms/python/django/>
 
-if config('sentry_enabled', default=False, cast=bool):
+SENTRY_ENABLED = config('sentry_enabled', default=False, cast=bool)
+
+if SENTRY_ENABLED:
     import sentry_sdk
     from sentry_sdk.integrations.django import DjangoIntegration
 
@@ -245,6 +247,7 @@ if config('sentry_enabled', default=False, cast=bool):
         }
 
     sentry_sdk.init(**_vars)
+
 
 # Email
 # <https://sendgrid.com/docs/for-developers/sending-email/django/>
