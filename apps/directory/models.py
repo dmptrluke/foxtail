@@ -2,7 +2,16 @@ from django.db import models
 
 
 # Create your models here.
-from apps.users.models import User
+from apps.accounts.models import User
+
+
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+
+    class Meta:
+        permissions = (
+            ('directory_view', 'Can View Profile'),
+        )
 
 
 class Character(models.Model):
@@ -14,4 +23,4 @@ class Character(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
 
-__all__ = ['Character']
+__all__ = ['Profile', 'Character']

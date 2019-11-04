@@ -2,18 +2,10 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 
-from .models import User, Profile
-
-
-class ProfileInline(admin.StackedInline):
-    model = Profile
-    can_delete = False
-    fk_name = 'user'
+from .models import User
 
 
 class CustomUserAdmin(UserAdmin):
-    inlines = (ProfileInline,)
-    list_select_related = ('profile',)
     readonly_fields = ('username', 'display_name', 'email', 'profile_URL')
     ordering = ('display_name',)
 
@@ -33,11 +25,6 @@ class CustomUserAdmin(UserAdmin):
             'fields': ('username', 'password1', 'password2'),
         }),
     )
-
-    def get_inline_instances(self, request, obj=None):
-        if not obj:
-            return list()
-        return super(CustomUserAdmin, self).get_inline_instances(request, obj)
 
 
 admin.site.register(User, CustomUserAdmin)

@@ -17,11 +17,4 @@ class User(AbstractUser):
         return f"{self.email}"
 
 
-class Profile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-
-    class Meta:
-        verbose_name_plural = 'profile'
-
-
-__all__ = ['User', 'Profile']
+__all__ = ['User']

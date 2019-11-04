@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% load markdownify %}
+
+{% block title %}{{ page.title }}{% endblock %}
+
+{% block extra_head %}
+    <link rel="canonical" href="{{ BASE_URL }}{{ page.get_absolute_url }}"/>
+{% endblock %}
+
+
+{% block content %}
+    <section id="page-title">
+        <h1>{{ page.title }}</h1>
+        {% if page.subtitle %}
+            <p class="lead">{{ page.subtitle }}</p>
+        {% endif %}
+    </section>
+
+    <section id="page-content">
+        {{ page.body | markdown | safe }}
+    </section>
+
+{% endblock content %}
