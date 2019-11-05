@@ -8,6 +8,9 @@ from apps.accounts.models import User
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
 
+    description = models.TextField(blank=True, default='')
+    gender = models.CharField(max_length=100, default='', blank=True, help_text="100 characters or fewer.")
+
     class Meta:
         permissions = (
             ('directory_view', 'Can View Profile'),

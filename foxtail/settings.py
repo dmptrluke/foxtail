@@ -115,7 +115,7 @@ X_FRAME_OPTIONS = 'DENY'
 # CSP Headers
 # <https://django-csp.readthedocs.io/en/latest/>
 
-CSP_INCLUDE_NONCE_IN = ['script-src']
+CSP_INCLUDE_NONCE_IN = ['script-src', 'style-src']
 CSP_UPGRADE_INSECURE_REQUESTS = True
 
 CSP_SCRIPT_SRC = ["'self'"]
