@@ -1,5 +1,5 @@
 {% load static %}
-{% load render_bundle from webpack_loader %}
+{% load render_bundle_csp %}
 <!doctype html>
 <html lang="en" class="no-js">
 <head>
@@ -11,7 +11,7 @@
     </title>
 
     <link rel="prefetch" href="{% static "icons.svg" %}">
-    {% render_bundle 'main' 'css' %}
+    {% render_bundle_csp 'main' 'css' %}
 
     <script nonce="{{ request.csp_nonce }}">
         (function (a) {
@@ -35,9 +35,9 @@
 {% endblock content_base %}
 
 {% include "components/footer.html" %}
-{% render_bundle 'runtime' 'js' %}
-{% render_bundle 'vendor' 'js' %}
-{% render_bundle 'main' 'js' %}
+{% render_bundle_csp 'runtime' 'js' %}
+{% render_bundle_csp 'vendor' 'js' %}
+{% render_bundle_csp 'main' 'js' %}
 
 {% if sentry_event_id %}
     <script src="https://browser.sentry-cdn.com/5.7.1/bundle.min.js"
