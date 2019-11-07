@@ -29,7 +29,7 @@
 {% endblock header %}
 
 {% block content_base %}
-    <div id="primary" class="container px-3 py-4 px-md-4 py-md-5">
+    <div id="content" class="container px-3 py-4 px-md-4 py-md-5">
         {% block content %}{% endblock content %}
     </div>
 {% endblock content_base %}
@@ -42,7 +42,8 @@
 {% if sentry_event_id %}
     <script src="https://browser.sentry-cdn.com/5.7.1/bundle.min.js"
             integrity="sha384-KMv6bBTABABhv0NI+rVWly6PIRvdippFEgjpKyxUcpEmDWZTkDOiueL5xW+cztZZ"
-            crossorigin="anonymous"></script>
+            crossorigin="anonymous"
+            nonce="{{ request.csp_nonce }}"></script>
 
     <script nonce="{{ request.csp_nonce }}">
         Sentry.init({dsn: '{{ SENTRY_DSN }}'});
