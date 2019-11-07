@@ -9,8 +9,9 @@ const BundleTracker = require('webpack-bundle-tracker');
 
 module.exports = {
     entry: {
-        main:  ['./assets/js/main.js',  './assets/scss/index.scss']
+        main:  ['./js/main.js',  './scss/index.scss']
     },
+    context: path.resolve(__dirname, "assets"),
     optimization: {
         minimizer: [new TerserJSPlugin({}), new OptimizeCSSAssetsPlugin({})],
         moduleIds: 'hashed',
