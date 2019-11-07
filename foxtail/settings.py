@@ -233,7 +233,6 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static_out')
 
 # noinspection PyUnresolvedReferences
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, "static"),
     ("bundles", os.path.join(BASE_DIR, 'assets/bundles'))
 ]
 
