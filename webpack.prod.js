@@ -1,5 +1,6 @@
 const merge = require('webpack-merge');
 const CompressionPlugin = require('compression-webpack-plugin');
+const ImageminPlugin = require('imagemin-webpack-plugin').default;
 const zopfli = require('@gfx/zopfli');
 const common = require('./webpack.common.js');
 
@@ -18,5 +19,6 @@ module.exports = merge(common, {
             },
             deleteOriginalAssets: false,
         }),
+        new ImageminPlugin({ test: /\.(jpe?g|png|gif|svg)$/i })
     ]
 });
