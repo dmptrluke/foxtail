@@ -142,12 +142,24 @@ DATABASES = {
     )
 }
 
-CACHES = {
-    'default': {
-        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
-        'LOCATION': 'unique-snowflake',
-    },
-}
+CACHE_ENABLED = config('cache_enabled', default=False, cast=bool)
+
+if CACHE_ENABLED:
+    CACHES = {
+        'default': {
+            'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+            'LOCATION': config('cache_location', default='127.0.0.1:11211'),
+        }
+    }
+
+    # enable the cached session backend if caching is enabled
+    SESSION_ENGINE = "django.contrib.sessions.backends.cached_db"
+else:
+    CACHES = {
+        'default': {
+            'BACKEND': 'django.core.cache.backends.dummy.DummyCache'
+        },
+    }
 
 # Authentication
 # <https://mozilla-django-oidc.readthedocs.io/en/stable/installation.html>
