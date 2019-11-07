@@ -276,6 +276,11 @@ if SENTRY_ENABLED:
         'integrations': [DjangoIntegration()]
     }
 
+    SENTRY_ENVIRONMENT = config('sentry_environment', default=False)
+
+    if SENTRY_ENVIRONMENT:
+        _vars['environment'] = SENTRY_ENVIRONMENT
+
     if config('sentry_git', default=False, cast=bool):
         import git
 
