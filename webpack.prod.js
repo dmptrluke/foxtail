@@ -8,6 +8,7 @@ module.exports = merge(common, {
     mode: 'production',
     devtool: 'source-map',
     plugins: [
+        new ImageminPlugin({ test: /\.(jpe?g|png|gif|svg)$/i }),
         new CompressionPlugin({
             filename: '[path].gz[query]',
             test: /\.(js|css|html|svg)$/,
@@ -18,7 +19,6 @@ module.exports = merge(common, {
                 return zopfli.gzip(input, compressionOptions, callback);
             },
             deleteOriginalAssets: false,
-        }),
-        new ImageminPlugin({ test: /\.(jpe?g|png|gif|svg)$/i })
+        })
     ]
 });
