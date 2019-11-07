@@ -122,6 +122,10 @@ CSP_UPGRADE_INSECURE_REQUESTS = True
 CSP_SCRIPT_SRC = ["'unsafe-inline'", "'self'"]
 CSP_STYLE_SRC = ["'unsafe-inline'", "'self'"]
 
+CSP_BASE_URI = ["'none'"]
+CSP_FRAME_ANCESTORS = ["'none'"]
+CSP_FORM_ACTION = ["'self'"]
+
 if not DEBUG:
     CSP_SCRIPT_SRC += ["'strict-dynamic'"]
 
