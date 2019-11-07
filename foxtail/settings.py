@@ -109,6 +109,7 @@ CSRF_COOKIE_SECURE = True
 
 SECURE_CONTENT_TYPE_NOSNIFF = True
 SECURE_BROWSER_XSS_FILTER = True
+SECURE_REFERRER_POLICY = 'same-origin'
 
 X_FRAME_OPTIONS = 'DENY'
 
@@ -118,7 +119,12 @@ X_FRAME_OPTIONS = 'DENY'
 CSP_INCLUDE_NONCE_IN = ['script-src', 'style-src']
 CSP_UPGRADE_INSECURE_REQUESTS = True
 
-CSP_SCRIPT_SRC = ["'self'"]
+CSP_SCRIPT_SRC = ["'unsafe-inline'", "'self'"]
+CSP_STYLE_SRC = ["'unsafe-inline'", "'self'"]
+
+if not DEBUG:
+    CSP_SCRIPT_SRC += ["'strict-dynamic'"]
+
 
 # Database
 # <https://docs.djangoproject.com/en/2.2/ref/settings/#databases>
@@ -148,6 +154,7 @@ CACHES = {
 AUTH_USER_MODEL = 'accounts.User'
 
 LOGIN_REDIRECT_URL = '/'
+LOGIN_URL = '/oidc/authenticate/'
 
 AUTHENTICATION_BACKENDS = [
     'apps.accounts.authentication.CustomOIDCAB',
@@ -206,7 +213,7 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 # noinspection PyUnresolvedReferences
-STATIC_ROOT = os.path.join(BASE_DIR, 'generated_static')
+STATIC_ROOT = os.path.join(BASE_DIR, 'static_out')
 
 # noinspection PyUnresolvedReferences
 STATICFILES_DIRS = [
