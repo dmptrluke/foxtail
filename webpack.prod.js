@@ -1,5 +1,6 @@
 const merge = require('webpack-merge');
 const CompressionPlugin = require('compression-webpack-plugin');
+const zopfli = require('@gfx/zopfli');
 const common = require('./webpack.common.js');
 
 module.exports = merge(common, {
@@ -7,12 +8,14 @@ module.exports = merge(common, {
     devtool: 'source-map',
     plugins: [
         new CompressionPlugin({
-            filename: '[path].br[query]',
-            algorithm: 'brotliCompress',
+            filename: '[path].gz[query]',
             test: /\.(js|css|html|svg)$/,
-            compressionOptions: {level: 11},
-            threshold: 10240,
-            minRatio: 0.8,
+            compressionOptions: {
+                numiterations: 15,
+            },
+            algorithm(input, compressionOptions, callback) {
+                return zopfli.gzip(input, compressionOptions, callback);
+            },
             deleteOriginalAssets: false,
         }),
     ]
