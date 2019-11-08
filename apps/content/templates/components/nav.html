@@ -4,12 +4,23 @@
 </button>
 <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
     <div class="navbar-nav mr-auto">
-        <a class="nav-item nav-link {% if request.resolver_match.url_name == "index" %} active{% endif %}" href="/">Home</a>
+        <a class="nav-item nav-link {% if request.resolver_match.url_name == "index" %} active{% endif %}"
+           href="/">Home</a>
     </div>
     <div class="navbar-nav">
         {% if user.is_authenticated %}
-            <a class="nav-item nav-link {% if request.resolver_match.url_name == "user-profile" %} active{% endif %}" href="{% url 'user-profile' %}">{{ user.display_name }}</a>
-            <a class="nav-item nav-link" href="{% url 'user-logout' %}?next={{ request.path }}">Sign Out</a>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle {% if request.resolver_match.url_name == "user-profile" %} active{% endif %}"
+                   href="#" id="accountDropdown" role="button" data-toggle="dropdown"
+                   aria-haspopup="true" aria-expanded="false">
+                    {{ user.display_name }}
+                </a>
+                <div class="dropdown-menu" aria-labelledby="accountDropdown">
+                    <a class="dropdown-item" href="{% url 'user-profile' %}">Account Settings</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="{% url 'user-logout' %}?next={{ request.path }}">Sign Out</a>
+                </div>
+            </li>
         {% else %}
             <a class="nav-item nav-link " href="{% url 'oidc_authentication_init' %}">Login</a>
         {% endif %}
