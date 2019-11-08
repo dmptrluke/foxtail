@@ -1,15 +1,22 @@
+// things taken from bootstrap as-is
+// needed for the rest of this file to function
 $spacer: 1rem;
+$white: #fff;
 
 $spacers: (
-    0: 0,
-    1: ($spacer * .25),
-    2: ($spacer * .5),
-    3: $spacer,
-    4: ($spacer * 1.5),
-    5: ($spacer * 2),
-    6: ($spacer * 3)
+        0: 0,
+        1: ($spacer * .25),
+        2: ($spacer * .5),
+        3: $spacer,
+        4: ($spacer * 1.5),
+        5: ($spacer * 2),
+        6: ($spacer * 3)
 );
 
-$navbar-padding-y: $spacer * .75 !default;
-
+// add a neat bit of blueness to the dark
 $dark: #2c3840;
+
+$navbar-padding-y: $spacer * .75 !default;
+$navbar-dark-color: rgba($white, .65) !default;
+$navbar-dark-hover-color: rgba($white, .85) !default;
+
