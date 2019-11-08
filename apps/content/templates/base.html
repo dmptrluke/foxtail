@@ -28,11 +28,11 @@
     {% include "components/header.html" %}
 {% endblock header %}
 
-{% block content_base %}
-    <div id="content" class="container px-3 py-4 px-md-4 py-md-5">
+{% block base_content %}
+    <main class="container px-3 py-4 px-md-4 py-md-5">
         {% block content %}{% endblock content %}
-    </div>
-{% endblock content_base %}
+    </main>
+{% endblock base_content %}
 
 {% include "components/footer.html" %}
 {% render_bundle_csp 'runtime' 'js' %}
