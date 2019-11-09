@@ -9,7 +9,7 @@
     "build-dev": "webpack --config webpack.dev.js",
     "build": "webpack --config webpack.prod.js"
   },
-  "browserslist": "default",
+  "browserslist": "defaults",
   "devDependencies": {
     "@babel/core": "^7.7.2",
     "@babel/preset-env": "^7.7.1",
