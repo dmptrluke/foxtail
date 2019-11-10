@@ -16,11 +16,11 @@
     {% if socialaccount_providers %}
         <p>Please sign in with one
             of your existing third party accounts. Or, <a href="{{ signup_url }}">create a
-            {{ site.name }} account</a> and sign in below:</p>
+            {{ site.name }} account</a> and sign in below.</p>
 
         <div class="socialaccount_ballot">
                 {% include "components/provider_list.html" with process="login" %}
-            <div class="my-3 font-weight-bold">or</div>
+            <hr class="my-4">
         </div>
 
         {% include "socialaccount/snippets/login_extra.html" %}
