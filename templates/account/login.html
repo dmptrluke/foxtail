@@ -20,9 +20,7 @@
             {% include "components/provider_list.html" with process="login" %}
             <hr class="my-4">
         </div>
-
         {% include "socialaccount/snippets/login_extra.html" %}
-
     {% else %}
         <p>Please sign in or <a href="{{ signup_url }}">create an account</a> to continue.</p>
     {% endif %}
