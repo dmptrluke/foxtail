@@ -19,6 +19,10 @@
             <p>The service <strong>{{ client.name }}</strong> would like to access your <strong>furry.nz</strong> account.</p>
         {% endif %}
 
+        {% if client.terms_url %}
+            <p>The privacy policy of {{ client.name }} can be viewed <a href="{{ client.terms_url }}">here</a>.</p>
+        {% endif %}
+
         <div class="form-group">
             <input type="submit" class="btn btn-secondary" value="Decline"/>
             <input name="allow" type="submit" class="btn btn-primary" value="Authorize"/>

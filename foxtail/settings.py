@@ -32,7 +32,7 @@ SECRET_KEY = config('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config('DEBUG', default=False, cast=bool)
 
-BASE_URL = config('BASE_URL')
+SITE_URL = config('SITE_URL')
 SITE_ID = 1
 
 ALLOWED_HOSTS = config('ALLOWED_HOSTS', default=[], cast=Csv())
