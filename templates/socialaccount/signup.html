@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block title %}Create Account{% endblock %}
+
+{% block content %}
+    <h1>Complete Account Creation</h1>
+
+    <p>
+        You are about to use your {{ account.get_provider.name }} account to login to
+        {{ site.name }}. As a final step, please complete the following form.
+    </p>
+
+    <form method="post" action="{% url 'socialaccount_signup' %}">
+        {% csrf_token %}
+        <div class="row">
+            <div class="col-md-12">
+                {{ form | crispy }}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-actions">
+                    <input type="submit" class="btn btn-primary" value="Create Account">
+                </div>
+            </div>
+        </div>
+    </form>
+{% endblock content %}
