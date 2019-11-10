@@ -1,0 +1,23 @@
+{% load socialaccount %}
+{% load icon %}
+
+{% get_providers as socialaccount_providers %}
+
+{% for provider in socialaccount_providers %}
+    {% if provider.id == "openid" %}
+        {% for brand in provider.get_brands %}
+            <div class="btn-group">
+                <a title="{{ brand.name }}"
+                   class="socialaccount_provider {{ provider.id }} {{ brand.id }} btn btn-outline-primary"
+                   href="{% provider_login_url provider.id openid=brand.openid_url process=process %}"
+                >{% icon brand.name %} {{ brand.name }}</a>
+            </div>
+        {% endfor %}
+    {% endif %}
+    <div class="btn-group">
+        <a title="{{ provider.name }}" class="socialaccount_provider {{ provider.id }} btn btn-outline-primary"
+           href="{% provider_login_url provider.id process=process scope=scope auth_params=auth_params %}">
+            {% icon provider.name|lower %} {{ provider.name }}
+        </a>
+    </div>
+{% endfor %}

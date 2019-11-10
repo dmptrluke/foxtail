@@ -15,14 +15,12 @@
     {% get_providers as socialaccount_providers %}
     {% if socialaccount_providers %}
         <p>Please sign in with one
-            of your existing third party accounts. Or, <a href="{{ signup_url }}">sign up</a>
-            for a {{ site.name }} account and sign in below:</p>
+            of your existing third party accounts. Or, <a href="{{ signup_url }}">create a
+            {{ site.name }} account</a> and sign in below:</p>
 
         <div class="socialaccount_ballot">
-            <ul class="socialaccount_providers">
-                {% include "socialaccount/snippets/provider_list.html" with process="login" %}
-            </ul>
-            <div class="login-or">or</div>
+                {% include "components/provider_list.html" with process="login" %}
+            <div class="my-3 font-weight-bold">or</div>
         </div>
 
         {% include "socialaccount/snippets/login_extra.html" %}
