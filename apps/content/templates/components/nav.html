@@ -13,11 +13,10 @@
                 <a class="nav-link dropdown-toggle {% if request.resolver_match.url_name == "account_set_password" %} active{% endif %}"
                    href="#" id="accountDropdown" role="button" data-toggle="dropdown"
                    aria-haspopup="true" aria-expanded="false">
-                    {{ user.email }}
+                    {{ user.username }}
                 </a>
                 <div class="dropdown-menu" aria-labelledby="accountDropdown">
-                    <a class="dropdown-item" href="{% url 'account_change_password' %}">Change Password</a>
-                    <a class="dropdown-item" href="{% url 'account_email' %}">Change Email</a>
+                    <a class="dropdown-item" href="{% url 'profile' %}">Manage Account</a>
                     <a class="dropdown-item" href="{% url 'socialaccount_connections' %}">Connected Accounts</a>
                     {% if user.is_superuser %}
                         <div class="dropdown-divider"></div>
