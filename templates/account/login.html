@@ -6,7 +6,7 @@
 {% block title %}Sign In{% endblock %}
 
 {% block extra_head %}
-    <link rel="canonical" href="{{ SITE_URL }}{% url 'account_login' %}"/>
+    <link rel="canonical" href="{{ BASE_URL }}{% url 'account_login' %}"/>
 {% endblock %}
 
 {% block content %}
@@ -15,7 +15,7 @@
     {% get_providers as socialaccount_providers %}
     {% if socialaccount_providers %}
         <p>Please sign in with one
-            of your existing third party accounts. Or, <a href="{{ signup_url }}">create a
+            of your existing accounts. Or, <a href="{{ signup_url }}">create a
             {{ site.name }} account</a> and sign in below.</p>
 
         <div class="socialaccount_ballot">

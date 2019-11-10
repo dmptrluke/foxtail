@@ -1,31 +1,25 @@
 {% extends "base.html" %}
 {% load icon %}
 
-{% block title %}User Profile{% endblock %}
+{% block title %}Manage Account{% endblock %}
 
 {% block content %}
     <div class="row">
         <div class="col-lg-7">
-            <h1>Profile.</h1>
+            <h1>Manage Account</h1>
             <p>{{ user.email }}.</p>
         </div>
         <div class="col-lg-5">
             <h3>Account Information</h3>
             <dl class="row">
-                <dt class="col-xl-4">Identifier</dt>
+                <dt class="col-xl-4">Username</dt>
                 <dd class="col-xl-8">{{ user.username }}</dd>
-                <dt class="col-xl-4">Display Name</dt>
-                <dd class="col-xl-8">{{ user.display_name }}</dd>
-                <dt class="col-xl-4">Email</dt>
+                <dt class="col-xl-4">Primary Email</dt>
                 <dd class="col-xl-8">{{ user.email }}</dd>
             </dl>
             <p>
-                <div class="btn-group" role="group" aria-label="Basic example">
-                <a href="{{ OIDC_SERVER }}/Manage/Index" class="btn btn-primary ">Manage Account</a>
-                <a href="{{ OIDC_SERVER }}/Manage/Index" class="btn btn-secondary ">
-                  {% icon 'refresh' %}
-                </a>
-        </div>
+                <a href="{% url 'account_email' %}" class="btn btn-primary">Manage Email</a>
+                <a href="{% url 'account_change_password' %}" class="btn btn-secondary">Change Password</a>
             </p>
 
         </div>

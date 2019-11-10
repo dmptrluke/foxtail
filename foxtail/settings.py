@@ -138,6 +138,8 @@ CSP_BASE_URI = ["'none'"]
 CSP_FRAME_ANCESTORS = ["'none'"]
 CSP_FORM_ACTION = ["https:"]
 
+CSP_EXCLUDE_URL_PREFIXES = ('/admin',)
+
 if not DEBUG:
     CSP_SCRIPT_SRC += ["'strict-dynamic'"]
 
@@ -259,6 +261,11 @@ MESSAGE_TAGS = {
 STATIC_URL = '/static/'
 # noinspection PyUnresolvedReferences
 STATIC_ROOT = os.path.join(BASE_DIR, 'static_out')
+
+if DEBUG:
+    STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.StaticFilesStorage'
+else:
+    STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.ManifestStaticFilesStorage'
 
 # noinspection PyUnresolvedReferences
 STATICFILES_DIRS = [
