@@ -3,8 +3,7 @@ from django.conf import settings
 
 def site(request):
     response = {
-        'DEBUG': settings.DEBUG,
-        'OIDC_SERVER': settings.OIDC_SERVER
+        'DEBUG': settings.DEBUG
     }
 
     if settings.SENTRY_ENABLED:
