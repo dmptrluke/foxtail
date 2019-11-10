@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% load account %}
+
+{% block title %}Confirm Email{% endblock %}
+
+{% block content %}
+    <h1>Confirm Email</h1>
+
+    {% if confirmation %}
+        {% user_display confirmation.email_address.user as user_display %}
+
+        <p>
+            You are about to confirm the email <strong>{{ confirmation.email_address.email }}</strong>
+            is an e-mail address for the user <strong>{{ user_display }}</strong>. To continue, just hit
+            the button below.
+        </p>
+
+        <form method="post" action="{% url 'account_confirm_email' confirmation.key %}">
+            {% csrf_token %}
+            <div class="form-group">
+                <input type="submit" class="btn btn-primary btn-lg" value="Confirm">
+            </div>
+        </form>
+
+    {% else %}
+    {% endif %}
+{% endblock content %}
