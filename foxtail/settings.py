@@ -136,7 +136,7 @@ CSP_IMG_SRC = ["'self'", "data:"]
 
 CSP_BASE_URI = ["'none'"]
 CSP_FRAME_ANCESTORS = ["'none'"]
-CSP_FORM_ACTION = ["'self'"]
+CSP_FORM_ACTION = ["https:"]
 
 if not DEBUG:
     CSP_SCRIPT_SRC += ["'strict-dynamic'"]
