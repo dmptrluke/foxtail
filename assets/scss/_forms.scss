@@ -1,0 +1,17 @@
+form {
+  .asteriskField{
+    display: none;
+  }
+}
+
+.form-inline {
+  .form-group {
+    margin-right: ($spacer * .5);
+    label {
+      margin-right: ($spacer * .5);
+    }
+  }
+  .form-group:last-of-type {
+    margin-right: 0;
+  }
+}

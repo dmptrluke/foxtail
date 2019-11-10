@@ -11,23 +11,17 @@
     <h1>Create Account</h1>
 
     <p>Already have an account? Then please <a href="{{ login_url }}">sign in</a>.</p>
-    
+
     <form method="post" action="{% url 'account_signup' %}">
         {% csrf_token %}
-        <div class="row">
-            <div class="col-md-12">
-                {{ form | crispy }}
-            </div>
+        <div class="form-group">
+            {{ form | crispy }}
         </div>
-        <div class="row">
-            <div class="col-md-12">
-                <div class="form-actions">
-                    <input type="submit" class="btn btn-primary" value="Create Account">
-                    {% if redirect_field_value %}
-                        <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}"/>
-                    {% endif %}
-                </div>
-            </div>
+        <div class="form-group">
+            <input type="submit" class="btn btn-primary" value="Create Account">
+            {% if redirect_field_value %}
+                <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}"/>
+            {% endif %}
         </div>
     </form>
 {% endblock content %}
