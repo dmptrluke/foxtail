@@ -30,6 +30,7 @@
 
 {% block base_content %}
     <main class="container px-3 py-4 px-md-4 py-md-5">
+        {% include "components/messages.html" %}
         {% block content %}{% endblock content %}
     </main>
 {% endblock base_content %}

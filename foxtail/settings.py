@@ -19,6 +19,7 @@ import os
 import pymdownx.emoji
 from decouple import config, Csv, UndefinedValueError
 from dj_database_url import parse as db_url
+from django.contrib.messages import constants as messages
 
 logger = logging.getLogger(__name__)
 
@@ -45,7 +46,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.sites',
-
     'django.contrib.staticfiles',
     'apps.core.apps.CoreConfig',
     'apps.accounts.apps.UserConfig',
@@ -60,6 +60,8 @@ INSTALLED_APPS = [
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
+    'allauth.socialaccount.providers.github',
+    'allauth.socialaccount.providers.google',
 ]
 
 if DEBUG:
@@ -139,7 +141,6 @@ CSP_FORM_ACTION = ["'self'"]
 if not DEBUG:
     CSP_SCRIPT_SRC += ["'strict-dynamic'"]
 
-
 # Database
 # <https://docs.djangoproject.com/en/2.2/ref/settings/#databases>
 # <https://pypi.org/project/dj-database-url/>
@@ -172,24 +173,48 @@ else:
     }
 
 # Authentication
+# <https://django-allauth.readthedocs.io/en/latest/>
 
 AUTH_USER_MODEL = 'accounts.User'
+
+LOGIN_REDIRECT_URL = '/'
 
 AUTHENTICATION_BACKENDS = [
     'allauth.account.auth_backends.AuthenticationBackend',
     'guardian.backends.ObjectPermissionBackend'
 ]
 
-ACCOUNT_AUTHENTICATION_METHOD = 'email'
+ACCOUNT_ADAPTER = 'apps.accounts.authentication.AccountAdapter'
+
+ACCOUNT_AUTHENTICATION_METHOD = 'username_email'
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_DEFAULT_HTTP_PROTOCOL = 'https'
+
+SOCIALACCOUNT_PROVIDERS = {
+    'github': {
+        'SCOPE': [
+            'read:user',
+            'user:email'
+        ],
+    },
+    'google': {
+        'SCOPE': [
+            'profile',
+            'email',
+        ],
+        'AUTH_PARAMS': {
+            'access_type': 'online',
+        }
+    }
+}
+
+# OIDC Server
 
 OIDC_SESSION_MANAGEMENT_ENABLE = True
 
 # ReCAPTCHA
 RECAPTCHA_SECRET_KEY = config('RECAPTCHA_SECRET_KEY')
 RECAPTCHA_PUBLIC_KEY = config('RECAPTCHA_PUBLIC_KEY')
-
 
 # Password validation
 # <https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators>
@@ -219,6 +244,15 @@ USE_I18N = True
 USE_L10N = True
 USE_TZ = True
 
+# Messages
+MESSAGE_TAGS = {
+    messages.DEBUG: 'alert-info',
+    messages.INFO: 'alert-info',
+    messages.SUCCESS: 'alert-success',
+    messages.WARNING: 'alert-warning',
+    messages.ERROR: 'alert-danger',
+}
+
 # Static files (CSS, JavaScript, Images)
 # <https://docs.djangoproject.com/en/2.2/howto/static-files/>
 
@@ -238,6 +272,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 # if using the debug server, set the correct MIME type for .js files
 if DEBUG:
     import mimetypes
+
     mimetypes.add_type("text/javascript", ".js", True)
 
 # Webpack Loader
@@ -285,7 +320,6 @@ if SENTRY_ENABLED:
 
     sentry_sdk.init(**_vars)
 
-
 # Email
 # <https://sendgrid.com/docs/for-developers/sending-email/django/>
 # <https://docs.djangoproject.com/en/2.2/topics/email/>
@@ -328,4 +362,5 @@ MARKDOWNX_MARKDOWN_EXTENSION_CONFIGS = {
         'emoji_generator': pymdownx.emoji.to_alt
     }
 }
+
 

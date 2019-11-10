@@ -18,6 +18,11 @@
                 <div class="dropdown-menu" aria-labelledby="accountDropdown">
                     <a class="dropdown-item" href="{% url 'account_change_password' %}">Change Password</a>
                     <a class="dropdown-item" href="{% url 'account_email' %}">Change Email</a>
+                    <a class="dropdown-item" href="{% url 'socialaccount_connections' %}">Connected Accounts</a>
+                    {% if user.is_superuser %}
+                        <div class="dropdown-divider"></div>
+                         <a class="dropdown-item" href="{% url 'admin:index' %}">Admin Panel</a>
+                    {% endif %}
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item" href="{% url 'account_logout' %}?next={{ request.path }}">Sign Out</a>
                 </div>
