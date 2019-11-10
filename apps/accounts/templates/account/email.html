@@ -5,7 +5,8 @@
 
 {% block content %}
 
-    <h1>Change Email</h1>
+    {% include "account_nav.html" %}
+    <h2>Change Email</h2>
     {% if user.emailaddress_set.all %}
         <p>The following email addresses are associated with your account:</p>
 
@@ -66,7 +67,7 @@
     {% endif %}
 
 
-    <h2>Add Email</h2>
+    <h3>Add Email</h3>
 
     <form method="post" action="{% url 'account_email' %}" class="add_email form-inline">
         <div class="form-group">
