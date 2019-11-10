@@ -186,6 +186,11 @@ AUTHENTICATION_BACKENDS = [
     'guardian.backends.ObjectPermissionBackend'
 ]
 
+ACCOUNT_FORMS = {
+    'signup': 'apps.accounts.forms.SignupForm',
+    'login': 'apps.accounts.forms.LoginForm'
+}
+
 ACCOUNT_ADAPTER = 'apps.accounts.authentication.AccountAdapter'
 
 ACCOUNT_AUTHENTICATION_METHOD = 'username_email'

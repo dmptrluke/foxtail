@@ -1,6 +1,8 @@
 {% extends "base.html" %}
 {% load crispy_forms_tags %}
 
+{% load account socialaccount %}
+
 {% block title %}Create Account{% endblock %}
 
 {% block extra_head %}
@@ -10,12 +12,24 @@
 {% block content %}
     <h1>Create Account</h1>
 
-    <p>Already have an account? Then please <a href="{{ login_url }}">sign in</a>.</p>
+        {% get_providers as socialaccount_providers %}
+    {% if socialaccount_providers %}
+        <p>You can create a new account with one of the following services, or with the form below.</p>
+
+        <div class="socialaccount_ballot">
+            {% include "components/provider_list.html" with process="account_signup" %}
+            <hr class="my-4">
+        </div>
+
+        {% include "socialaccount/snippets/login_extra.html" %}
+
+    {% endif %}
+
 
     <form method="post" action="{% url 'account_signup' %}">
         {% csrf_token %}
         <div class="form-group">
-            {{ form | crispy }}
+            {% crispy form %}
         </div>
         <div class="form-group">
             <input type="submit" class="btn btn-primary" value="Create Account">
