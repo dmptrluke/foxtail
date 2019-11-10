@@ -31,6 +31,9 @@ SECRET_KEY = config('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config('DEBUG', default=False, cast=bool)
 
+BASE_URL = config('BASE_URL')
+SITE_ID = 1
+
 ALLOWED_HOSTS = config('ALLOWED_HOSTS', default=[], cast=Csv())
 INTERNAL_IPS = config('INTERNAL_IPS', default="", cast=Csv())
 
@@ -38,10 +41,11 @@ INTERNAL_IPS = config('INTERNAL_IPS', default="", cast=Csv())
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
-    'mozilla_django_oidc',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
+    'django.contrib.sites',
+
     'django.contrib.staticfiles',
     'apps.core.apps.CoreConfig',
     'apps.accounts.apps.UserConfig',
@@ -51,7 +55,11 @@ INSTALLED_APPS = [
     'guardian',
     'markdownx',
     'webpack_loader',
-    'crispy_forms'
+    'crispy_forms',
+    'oidc_provider',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
 ]
 
 if DEBUG:
@@ -65,8 +73,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'csp.middleware.CSPMiddleware',
-    'mozilla_django_oidc.middleware.SessionRefresh',
+    'oidc_provider.middleware.SessionManagementMiddleware',
+    'csp.middleware.CSPMiddleware'
 ]
 
 if DEBUG:
@@ -88,6 +96,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'django.template.context_processors.request',
                 'apps.core.context_processors.site',
             ],
         },
@@ -163,42 +172,27 @@ else:
     }
 
 # Authentication
-# <https://mozilla-django-oidc.readthedocs.io/en/stable/installation.html>
-# -----
-# This section is configured for the login.furry.nz authentication server. It
-# may require changes for other OpenID Connect providers
 
 AUTH_USER_MODEL = 'accounts.User'
 
-LOGIN_REDIRECT_URL = '/'
-LOGIN_URL = '/oidc/authenticate/'
-
 AUTHENTICATION_BACKENDS = [
-    'apps.accounts.authentication.CustomOIDCAB',
+    'allauth.account.auth_backends.AuthenticationBackend',
     'guardian.backends.ObjectPermissionBackend'
 ]
 
-OIDC_RP_CLIENT_ID = config('OIDC_RP_CLIENT_ID')
-OIDC_RP_CLIENT_SECRET = config('OIDC_RP_CLIENT_SECRET')
+ACCOUNT_AUTHENTICATION_METHOD = 'email'
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_DEFAULT_HTTP_PROTOCOL = 'https'
 
-OIDC_STORE_ID_TOKEN = True
-OIDC_OP_LOGOUT_URL_METHOD = 'apps.accounts.authentication.provider_logout'
+OIDC_SESSION_MANAGEMENT_ENABLE = True
 
-OIDC_RP_SIGN_ALGO = "RS256"
-OIDC_RP_SCOPES = "openid email profile"
+# ReCAPTCHA
+RECAPTCHA_SECRET_KEY = config('RECAPTCHA_SECRET_KEY')
+RECAPTCHA_PUBLIC_KEY = config('RECAPTCHA_PUBLIC_KEY')
 
-OIDC_SERVER = config('OIDC_SERVER')
-
-OIDC_OP_JWKS_ENDPOINT = f"{OIDC_SERVER}/.well-known/openid-configuration/jwks"
-OIDC_OP_AUTHORIZATION_ENDPOINT = f"{OIDC_SERVER}/connect/authorize"
-OIDC_OP_TOKEN_ENDPOINT = f"{OIDC_SERVER}/connect/token"
-OIDC_OP_USER_ENDPOINT = f"{OIDC_SERVER}/connect/userinfo"
 
 # Password validation
 # <https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators>
-# -----
-# Password validation is largely redundant with the use of an external authentication
-# server. However, it can't hurt to leave some sane defaults in.
 
 AUTH_PASSWORD_VALIDATORS = [
     {

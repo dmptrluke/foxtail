@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% load account socialaccount %}
+
+{% block title %}Sign In{% endblock %}
+
+{% block extra_head %}
+    <link rel="canonical" href="{{ BASE_URL }}{% url 'account_login' %}"/>
+{% endblock %}
+
+{% block content %}
+    <h1>Sign In</h1>
+
+    {% get_providers as socialaccount_providers %}
+    {% if socialaccount_providers %}
+        <p>Please sign in with one
+            of your existing third party accounts. Or, <a href="{{ signup_url }}">sign up</a>
+            for a {{ site.name }} account and sign in below:</p>
+
+        <div class="socialaccount_ballot">
+            <ul class="socialaccount_providers">
+                {% include "socialaccount/snippets/provider_list.html" with process="login" %}
+            </ul>
+            <div class="login-or">or</div>
+        </div>
+
+        {% include "socialaccount/snippets/login_extra.html" %}
+
+    {% else %}
+        <p>Please sign in or <a href="{{ signup_url }}">create an account</a> to continue.</p>
+    {% endif %}
+
+    <form method="post" action="{% url 'account_login' %}">
+        {% csrf_token %}
+        <div class="row">
+            <div class="col-md-12">
+                {{ form | crispy }}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12 form-group">
+                <p>Forgotten your password? <a href="{% url 'account_reset_password' %}">Click here to reset.</a></p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-actions">
+                    <input type="submit" class="btn btn-primary" value="Sign In">
+
+                    <a class="btn btn-secondary" href="{{ signup_url }}">Create Account</a>
+
+                    {% if redirect_field_value %}
+                        <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}"/>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </form>
+{% endblock content %}

@@ -10,19 +10,20 @@
     <div class="navbar-nav">
         {% if user.is_authenticated %}
             <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle {% if request.resolver_match.url_name == "user-profile" %} active{% endif %}"
+                <a class="nav-link dropdown-toggle {% if request.resolver_match.url_name == "account_set_password" %} active{% endif %}"
                    href="#" id="accountDropdown" role="button" data-toggle="dropdown"
                    aria-haspopup="true" aria-expanded="false">
-                    {{ user.display_name }}
+                    {{ user.email }}
                 </a>
                 <div class="dropdown-menu" aria-labelledby="accountDropdown">
-                    <a class="dropdown-item" href="{% url 'user-profile' %}">Account Settings</a>
+                    <a class="dropdown-item" href="{% url 'account_change_password' %}">Change Password</a>
+                    <a class="dropdown-item" href="{% url 'account_email' %}">Change Email</a>
                     <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="{% url 'user-logout' %}?next={{ request.path }}">Sign Out</a>
+                    <a class="dropdown-item" href="{% url 'account_logout' %}?next={{ request.path }}">Sign Out</a>
                 </div>
             </li>
         {% else %}
-            <a class="nav-item nav-link " href="{% url 'oidc_authentication_init' %}">Login</a>
+            <a class="nav-item nav-link " href="{% url 'account_login' %}">Login</a>
         {% endif %}
     </div>
 </div>

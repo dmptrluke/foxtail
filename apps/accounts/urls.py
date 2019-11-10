@@ -1,7 +1,8 @@
-from django.urls import path
-from apps.accounts.views import *
+from django.urls import path, include
+
+from apps.accounts import views
 
 urlpatterns = [
-    path('logout', LogoutView.as_view(), name='user-logout'),
-    path('profile', UserView.as_view(), name='user-profile')
+
+    path('profile', views.UserView.as_view(), name='profile')
 ]

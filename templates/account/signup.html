@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block title %}Create Account{% endblock %}
+
+{% block extra_head %}
+    <link rel="canonical" href="{{ BASE_URL }}{% url 'account_signup' %}"/>
+{% endblock %}
+
+{% block content %}
+    <h1>Create Account</h1>
+
+    <p>Already have an account? Then please <a href="{{ login_url }}">sign in</a>.</p>
+    
+    <form method="post" action="{% url 'account_signup' %}">
+        {% csrf_token %}
+        <div class="row">
+            <div class="col-md-12">
+                {{ form | crispy }}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-actions">
+                    <input type="submit" class="btn btn-primary" value="Create Account">
+                    {% if redirect_field_value %}
+                        <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}"/>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </form>
+{% endblock content %}

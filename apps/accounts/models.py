@@ -3,13 +3,6 @@ from django.db import models
 
 
 class User(AbstractUser):
-    username = models.CharField(
-        "User identifier",
-        max_length=150,
-        unique=True,
-        help_text=None,
-    )
-
     display_name = models.CharField(max_length=50)
     profile_URL = models.CharField(max_length=25)
 
