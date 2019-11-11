@@ -2,6 +2,7 @@ requests==2.22.0
 django==2.2.7
 sentry-sdk==0.13.2
 python-decouple==3.1
+argon2-cffi==19.2.0
 gitpython==3.0.4
 python-memcached==1.59
 django-oidc-provider==0.7.0
