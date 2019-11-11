@@ -27,7 +27,8 @@
 
     {% else %}
         <p>
-            This site is currently still under construction. You can still create and manage your {{ request.site.name }} account.
+            To continue, you'll need to create a {{ request.site.name }} account or sign in to an existing one.
+            You can do this using the buttons below.
         </p>
         <p class="mb-6">
             <a href="{% url 'account_signup' %}" class="btn btn-dark btn-lg my-1">Create Account</a>
