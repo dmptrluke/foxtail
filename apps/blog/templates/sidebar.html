@@ -1,5 +1,7 @@
 {% load taggit_templatetags2_tags %}
 {% load cache %}
+{% load humanize %}
+{% load markdownify %}
 {% load static %}
 {% load icon %}
 
@@ -11,37 +13,30 @@
     </section>
     <section>
         <h3>Recent Posts</h3>
-        {% for post in sidebar_post_list %}
-            <div class="card mb-2">
-
-                {% if post.image %}
-                    <a href="{{ post.get_absolute_url }}">
-                        <img class="card-img-top" src="{{ post.image.crop.300x150 }}" alt="">
-                    </a>
-                {% endif %}
-
-                <div class="card-body">
-                    <h5 class="card-title">
-                        <a class="stretched-link text-reset" href="{{ post.get_absolute_url }}">{{ post.title | safe }}</a>
-                    </h5>
-                    <div class="card-text">
-                        <span>{{ post.created|date:"F jS, Y" }}</span>
+        <div class="list-group">
+            {% for post in sidebar_post_list %}
+                <a href="{{ post.get_absolute_url }}" class="list-group-item list-group-item-action">
+                    <div class="d-flex w-100 justify-content-between">
+                        <h5 class="mb-1">{{ post.title | safe }}</h5>
+                        <small>{{ post.created | naturaltime }}</small>
                     </div>
-                </div>
+                    <p class="mb-1">{{ post.text | markdown | safe | striptags | truncatechars:50 }}</p>
 
-            </div>
-        {% endfor %}
+                </a>
+            {% endfor %}
+        </div>
     </section>
     <section>
         <h3>Categories</h3>
-        <ul>
+        <div class="list-group">
             {% get_taglist as tags for 'blog.Post' %}
             {% for tag in tags %}
-                <li>
-                    <a href="{% url 'blog_list' %}?tag={{ tag.slug }}">{{ tag.name | title }} <span>({{ tag.num_times }})</span>
-                    </a></li>
+                    <a href="{% url 'blog_list' %}?tag={{ tag.slug }}" class="list-group-item list-group-item-action">
+                        {{ tag.name | title }}
+                        <span>({{ tag.num_times }})</span>
+                    </a>
             {% endfor %}
-        </ul>
+        </div>
 
     </section>
 </div>

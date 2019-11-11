@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load markdownify %}
+{% load humanize %}
 {% load account %}
 
 {% block title_full %}furry.nz{% endblock title_full %}
@@ -54,7 +55,7 @@
                             {{ post.title | safe }}
                         </h5>
                         <h6 class="card-subtitle mb-2 text-muted">
-                            {{ post.created|date:"F jS, Y" }}
+                            {{ post.created | naturaltime }}
                         </h6>
                         <p class="card-text">
                             {{ post.text | markdown | safe | striptags | truncatechars:70 }}
