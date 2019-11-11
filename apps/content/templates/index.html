@@ -1,25 +1,44 @@
 {% extends "base.html" %}
 {% load markdownify %}
+{% load account %}
 
 {% block title_full %}furry.nz{% endblock title_full %}
 
 {% block content %}
-    <h1>Welcome to the new furry.nz!</h1>
+    <h1>Welcome to furry.nz.</h1>
 
     <h3>But wait - we aren't quite ready yet...</h3>
+
 
     <p>
         This site is currently still under construction. We've launched the parts of the website that are ready so far
         so you can log in and manage your furry.nz account.
     </p>
 
-    <h3>Things that are ready:</h3>
-    <p>
-        You can <a href="{% url 'account_signup' %}">create</a>, manage, and log into your new furry.nz account. You'll
-        need one of these to create a FurCoNZ
-        order.
-    </p>
-    <h3>New Zealand Furry News</h3>
+    {% if user.is_authenticated %}
+
+        <p >
+            You're now logged in as <em>{% user_display user %}</em>! Use the buttons below to manage your furry.nz account.
+        </p>
+        <p class="mb-6">
+            <a href="{% url 'account_profile' %}" class="btn btn-dark btn-lg">Manage Account</a>
+            <a href="{% url 'account_logout' %}" class="btn btn-dark btn-lg">Sign Out</a>
+        </p>
+
+    {% else %}
+        <p>
+            This site is currently still under construction. You can still create and manage your furry.nz account.
+        </p>
+                <p class="mb-6">
+            <a href="{% url 'account_signup' %}" class="btn btn-dark btn-lg">Create Account</a>
+            <a href="{% url 'account_login' %}" class="btn btn-dark btn-lg">Sign In</a>
+
+        </p>
+    {% endif %}
+
+
+
+    <h3 class="mb-3">News & Updates</h3>
     <div class="row mb-2">
 
 
