@@ -26,6 +26,7 @@ urlpatterns = [
     url(r'^accounts/', include('apps.accounts.urls')),
     url(r'^accounts/', include('allauth.urls')),
     path('directory/', include('apps.directory.urls')),
+    path('blog/', include('apps.blog.urls')),
     path('', include('apps.content.urls'))
 ]
 

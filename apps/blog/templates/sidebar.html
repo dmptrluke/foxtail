@@ -1,0 +1,43 @@
+{% load taggit_templatetags2_tags %}
+{% load cache %}
+{% load static %}
+{% load icon %}
+
+<div class="sidebar">
+    <section>
+        <form action="{% url 'blog_list' %}">
+            <input type="search" name="q" class="form-control" placeholder="Search here...">
+        </form>
+    </section>
+    <section>
+        <h3>Recent Posts</h3>
+            {% for post in sidebar_post_list %}
+                <div class="card">
+                <div class="card-body">
+                    {% if post.image %}
+                        <img src="{{ post.image.crop.70x70 }}" alt="">
+                    {% else %}
+
+                    {% endif %}
+                <h5 class="card-title"><a href="{{ post.get_absolute_url }}">{{ post.title | safe }}</a></h5>
+                    <div class="card-text">
+
+                        <span>{{ post.created|date:"F jS, Y" }}</span>
+                    </div>
+                  </div>
+                </div>
+            {% endfor %}
+    </section>
+    <section>
+        <h3>Categories</h3>
+        <ul>
+            {% get_taglist as tags for 'blog.Post' %}
+            {% for tag in tags %}
+                <li>
+                    <a href="{% url 'blog_list' %}?tag={{ tag.slug }}">{{ tag.name | title }} <span>({{ tag.num_times }})</span>
+                </a></li>
+            {% endfor %}
+        </ul>
+
+    </section>
+</div>

@@ -47,10 +47,14 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.sites',
     'django.contrib.staticfiles',
+    'django.contrib.postgres',
     'apps.core.apps.CoreConfig',
+    'apps.blog.apps.BlogConfig',
     'apps.accounts.apps.UserConfig',
     'apps.content.apps.ContentConfig',
     'apps.directory.apps.DirectoryConfig',
+    'taggit',
+    'taggit_templatetags2',
     'adminsortable2',
     'guardian',
     'markdownx',
@@ -58,6 +62,7 @@ INSTALLED_APPS = [
     'crispy_forms',
     'oidc_provider',
     'captcha',
+    'versatileimagefield',
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
@@ -361,6 +366,13 @@ except UndefinedValueError as e:
 # Crispy Forms
 # <https://django-crispy-forms.readthedocs.io/en/latest/>
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
+# VersatileImageField
+# <https://django-versatileimagefield.readthedocs.io/en/latest/installation.html#versatileimagefield-settings>
+
+VERSATILEIMAGEFIELD_SETTINGS = {
+    'jpeg_resize_quality': 80
+}
 
 # MarkdownX
 # <https://neutronx.github.io/django-markdownx/customization/>
