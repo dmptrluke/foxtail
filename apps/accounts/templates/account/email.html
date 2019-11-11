@@ -26,10 +26,12 @@
                                 {% if emailaddress.verified %}
                                     <span class="badge badge-success">Verified</span>
                                 {% else %}
-                                    <span class="badge badge-secondary">Unverified</span>
+                                    <span class="badge badge-secondary" data-toggle="tooltip" data-placement="top"
+                                          title="An email address can not be set as primary until it is verified.">Unverified</span>
                                 {% endif %}
                                 {% if emailaddress.primary %}
-                                    <span class="badge badge-primary">Primary</span>
+                                    <span class="badge badge-primary" data-toggle="tooltip" data-placement="top"
+                                          title="All communications will be sent to this address.">Primary</span>
                                 {% endif %}
                             </label>
                         </div>
