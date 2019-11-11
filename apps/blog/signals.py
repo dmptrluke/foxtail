@@ -12,8 +12,8 @@ def warm_post_thumbnail_images(sender, instance, **kwargs):
         warmer = VersatileImageFieldWarmer(
             instance_or_queryset=instance,
             rendition_key_set=[
-                ('banner', 'crop__350x200'),
-                ('thumb', 'crop__70x70')
+                ('banner', 'crop__800x350'),
+                ('thumb', 'crop__300x150')
             ],
             image_attr='image'
         )
