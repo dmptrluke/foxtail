@@ -1,4 +1,4 @@
-<nav class="nav nav-tabs nav-fill mb-4">
+<nav class="nav nav-pills nav-fill mb-3 flex-column flex-sm-row">
     <a class="nav-item nav-link {% if request.resolver_match.url_name == "account_profile" %} active{% endif %}" href="{% url 'account_profile' %}">
         Profile
     </a>
@@ -12,3 +12,4 @@
         Connected Accounts
     </a>
 </nav>
+<hr class="mb-4 mt-0">
