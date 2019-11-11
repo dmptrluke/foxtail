@@ -7,7 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
     <title>
-        {% block title_full %}{% block title %}{% endblock title %} – furry.nz{% endblock title_full %}
+        {% block title_full %}{% block title %}{% endblock title %} – {{ request.site.name }}{% endblock title_full %}
     </title>
 
     <link rel="prefetch" href="{% static "icons.svg" %}">

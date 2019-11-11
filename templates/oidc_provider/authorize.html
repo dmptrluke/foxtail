@@ -8,15 +8,15 @@
         {{ hidden_inputs }}
 
         {% if scopes %}
-            <p>The service <strong>{{ client.name }}</strong> would like to access your <strong>furry.nz</strong> account. The service is
-            requesting the following information:</p>
+            <p>The service <strong>{{ client.name }}</strong> would like to access your <strong>{{ request.site.name }}</strong> account.
+                The service is requesting the following information:</p>
             <ul>
                 {% for scope in scopes %}
                     <li><strong>{{ scope.name }}</strong><br><i>{{ scope.description }}</i></li>
                 {% endfor %}
             </ul>
         {% else %}
-            <p>The service <strong>{{ client.name }}</strong> would like to access your <strong>furry.nz</strong> account.</p>
+            <p>The service <strong>{{ client.name }}</strong> would like to access your <strong>{{ request.site.name }}</strong> account.</p>
         {% endif %}
 
         {% if client.terms_url %}
