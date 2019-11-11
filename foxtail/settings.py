@@ -158,7 +158,7 @@ CSP_IMG_SRC = ["'self'", "data:"]
 
 CSP_BASE_URI = ["'none'"]
 CSP_FRAME_ANCESTORS = ["'none'"]
-CSP_FORM_ACTION = ["https:"]
+CSP_FORM_ACTION = ["'self'", 'furconz.org.nz']
 
 CSP_EXCLUDE_URL_PREFIXES = ('/admin',)
 
