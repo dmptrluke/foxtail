@@ -7,18 +7,19 @@ from .models import Post
 class PostAdmin(MarkdownxModelAdmin):
     fieldsets = (
         ('Content', {
-            'fields': ('title', 'tags', 'author', 'text')
+            'fields': ('title', 'created', 'tags', 'author', 'text')
         }),
         ('Image', {
             'fields': ('image',),
         }),
         ('Advanced options', {
             'classes': ('collapse',),
-            'fields': ('slug', 'created',),
+            'fields': ('slug',),
         }),
     )
 
     prepopulated_fields = {"slug": ("title",)}
+    readonly_fields = ('created',)
     list_filter = ('created', 'tags', 'author')
     list_display = ('title', 'tag_list', 'created', 'modified', 'author')
 
