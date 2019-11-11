@@ -15,37 +15,38 @@
 
     <h3>Things that are ready:</h3>
     <p>
-        You can <a href="{% url 'account_signup' %}">create</a>, manage, and log into your new furry.nz account. You'll need one of these to create a FurCoNZ
+        You can <a href="{% url 'account_signup' %}">create</a>, manage, and log into your new furry.nz account. You'll
+        need one of these to create a FurCoNZ
         order.
     </p>
-        <h3>New Zealand Furry News</h3>
-        <div class="row mb-2">
+    <h3>New Zealand Furry News</h3>
+    <div class="row mb-2">
 
 
         {% for post in post_list %}
-            <div class="col-md-4">
-            <div class="card">
+            <div class="col-lg-4">
+                <div class="card mb-4">
 
-                {% if post.image %}
-                    <a href="{{ post.get_absolute_url }}">
-                        <img class="card-img-top" src="{{ post.image.crop.300x150 }}" alt="">
-                    </a>
-                {% endif %}
+                    {% if post.image %}
+                        <a href="{{ post.get_absolute_url }}">
+                            <img class="card-img-top" src="{{ post.image.crop.300x150 }}" alt="">
+                        </a>
+                    {% endif %}
 
-                <div class="card-body">
-                    <h5 class="card-title">
-                        {{ post.title | safe }}
-                    </h5>
-                    <h6 class="card-subtitle mb-2 text-muted">
-                        {{ post.created|date:"F jS, Y" }}
-                    </h6>
-                    <p class="card-text">
-                        {{ post.text | markdown | safe | striptags | truncatechars:70 }}
-                    </p>
-                    <a href="{{ post.get_absolute_url }}" class="btn btn-primary">Read more</a>
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            {{ post.title | safe }}
+                        </h5>
+                        <h6 class="card-subtitle mb-2 text-muted">
+                            {{ post.created|date:"F jS, Y" }}
+                        </h6>
+                        <p class="card-text">
+                            {{ post.text | markdown | safe | striptags | truncatechars:70 }}
+                        </p>
+                        <a href="{{ post.get_absolute_url }}" class="btn btn-primary">Read more</a>
+                    </div>
+
                 </div>
-
-            </div>
             </div>
         {% endfor %}
     </div>
