@@ -9,27 +9,29 @@
     <h1>Welcome to furry.nz.</h1>
 
     <p>
-        But wait - we aren't quite ready yet... This site is currently still under construction. We've launched the parts of the website that are ready so far
+        But wait - we aren't quite ready yet... This site is currently still under construction. We've launched the
+        parts of the website that are ready so far
         so you can log in and manage your furry.nz account.
     </p>
 
     {% if user.is_authenticated %}
 
-        <p >
-            You're now logged in as <em>{% user_display user %}</em>! Use the buttons below to manage your furry.nz account.
+        <p>
+            You're now logged in as <em>{% user_display user %}</em>! Use the buttons below to manage your furry.nz
+            account.
         </p>
         <p class="mb-6">
-            <a href="{% url 'account_profile' %}" class="btn btn-dark btn-lg">Manage Account</a>
-            <a href="{% url 'account_logout' %}" class="btn btn-dark btn-lg">Sign Out</a>
+            <a href="{% url 'account_profile' %}" class="btn btn-dark btn-lg my-1">Manage Account</a>
+            <a href="{% url 'account_logout' %}" class="btn btn-dark btn-lg my-1">Sign Out</a>
         </p>
 
     {% else %}
         <p>
             This site is currently still under construction. You can still create and manage your furry.nz account.
         </p>
-                <p class="mb-6">
-            <a href="{% url 'account_signup' %}" class="btn btn-dark btn-lg">Create Account</a>
-            <a href="{% url 'account_login' %}" class="btn btn-dark btn-lg">Sign In</a>
+        <p class="mb-6">
+            <a href="{% url 'account_signup' %}" class="btn btn-dark btn-lg my-1">Create Account</a>
+            <a href="{% url 'account_login' %}" class="btn btn-dark btn-lg my-1">Sign In</a>
 
         </p>
     {% endif %}
