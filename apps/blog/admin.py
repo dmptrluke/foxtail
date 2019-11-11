@@ -14,7 +14,7 @@ class PostAdmin(MarkdownxModelAdmin):
         }),
         ('Advanced options', {
             'classes': ('collapse',),
-            'fields': ('slug',),
+            'fields': ('slug', 'created',),
         }),
     )
 
@@ -27,4 +27,3 @@ class PostAdmin(MarkdownxModelAdmin):
 
 
 admin.site.register(Post, PostAdmin)
-
