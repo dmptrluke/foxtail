@@ -54,6 +54,20 @@ INSTALLED_APPS = [
     'apps.accounts.apps.UserConfig',
     'apps.content.apps.ContentConfig',
     'apps.directory.apps.DirectoryConfig',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.google',
+    'allauth.socialaccount.providers.facebook',
+    'allauth.socialaccount.providers.github',
+
+    # Configure the django-otp package.
+    'django_otp',
+    'django_otp.plugins.otp_totp',
+    'django_otp.plugins.otp_static',
+
+    # Enable two-factor auth.
+    'allauth_2fa',
     'taggit',
     'taggit_templatetags2',
     'adminsortable2',
@@ -64,12 +78,7 @@ INSTALLED_APPS = [
     'oidc_provider',
     'captcha',
     'versatileimagefield',
-    'allauth',
-    'allauth.account',
-    'allauth.socialaccount',
-    'allauth.socialaccount.providers.google',
-    'allauth.socialaccount.providers.facebook',
-    'allauth.socialaccount.providers.github',
+
 ]
 
 if DEBUG:
@@ -81,6 +90,8 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django_otp.middleware.OTPMiddleware',
+    'allauth_2fa.middleware.AllauthTwoFactorMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.contrib.sites.middleware.CurrentSiteMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -202,6 +213,8 @@ ACCOUNT_FORMS = {
 }
 
 ACCOUNT_ADAPTER = 'apps.accounts.authentication.AccountAdapter'
+
+ALLAUTH_2FA_ALWAYS_REVEAL_BACKUP_TOKENS = False
 
 ACCOUNT_AUTHENTICATION_METHOD = 'username_email'
 ACCOUNT_EMAIL_REQUIRED = True
