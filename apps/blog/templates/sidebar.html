@@ -12,7 +12,7 @@
     <section>
         <h3>Recent Posts</h3>
         {% for post in sidebar_post_list %}
-            <div class="card">
+            <div class="card mb-2">
 
                 {% if post.image %}
                     <a href="{{ post.get_absolute_url }}">
