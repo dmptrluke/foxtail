@@ -3,21 +3,21 @@
 {% load humanize %}
 {% load account %}
 
-{% block title_full %}furry.nz{% endblock title_full %}
+{% block title_full %}{{ request.site.name }}{% endblock title_full %}
 
 {% block content %}
-    <h1>Welcome to furry.nz.</h1>
+    <h1>Welcome to {{ request.site.name }}.</h1>
 
     <p>
         But wait - we aren't quite ready yet... This site is currently still under construction. We've launched the
         parts of the website that are ready so far
-        so you can log in and manage your furry.nz account.
+        so you can log in and manage your {{ request.site.name }} account.
     </p>
 
     {% if user.is_authenticated %}
 
         <p>
-            You're now logged in as <em>{% user_display user %}</em>! Use the buttons below to manage your furry.nz
+            You're now logged in as <em>{% user_display user %}</em>! Use the buttons below to manage your {{ request.site.name }}
             account.
         </p>
         <p class="mb-6">
