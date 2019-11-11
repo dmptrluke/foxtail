@@ -11,22 +11,28 @@
     </section>
     <section>
         <h3>Recent Posts</h3>
-            {% for post in sidebar_post_list %}
-                <div class="card">
-                <div class="card-body">
-                    {% if post.image %}
-                        <img src="{{ post.image.crop.70x70 }}" alt="">
-                    {% else %}
-
-                    {% endif %}
-                <h5 class="card-title"><a href="{{ post.get_absolute_url }}">{{ post.title | safe }}</a></h5>
-                    <div class="card-text">
-
-                        <span>{{ post.created|date:"F jS, Y" }}</span>
+        {% for post in sidebar_post_list %}
+            <div class="card">
+                <div class="row no-gutters">
+                    <div class="col-md-4">
+                        {% if post.image %}
+                            <img class="card-img" src="{{ post.image.crop.70x70 }}" alt="">
+                        {% endif %}
                     </div>
-                  </div>
+                    <div class="col-md-8">
+                        <div class="card-body">
+
+                            <h5 class="card-title"><a href="{{ post.get_absolute_url }}">{{ post.title | safe }}</a>
+                            </h5>
+                            <div class="card-text">
+
+                                <span>{{ post.created|date:"F jS, Y" }}</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            {% endfor %}
+            </div>
+        {% endfor %}
     </section>
     <section>
         <h3>Categories</h3>
@@ -35,7 +41,7 @@
             {% for tag in tags %}
                 <li>
                     <a href="{% url 'blog_list' %}?tag={{ tag.slug }}">{{ tag.name | title }} <span>({{ tag.num_times }})</span>
-                </a></li>
+                    </a></li>
             {% endfor %}
         </ul>
 
