@@ -9,6 +9,7 @@ python-memcached==1.59
 django-oidc-provider==0.7.0
 pymdown-extensions==6.1
 django-allauth==0.40.0
+django-allauth-2fa==0.7
 django-csp==3.5
 django-recaptcha==2.0.5
 django-markdownx==2.0.28

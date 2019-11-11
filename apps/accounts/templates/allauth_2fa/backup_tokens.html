@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block title %}Two-Factor Authentication{% endblock %}
+
+{% block content %}
+    {% include "account_nav.html" %}
+    <h2>
+        Two-Factor Authentication
+    </h2>
+
+    <p>Two-factor authentication (2FA) is currently enabled on this account.</p>
+
+    {% if backup_tokens %}
+        {% if reveal_tokens %}
+            <p>Backup tokens have been generated. These will not be viewable again once you leave this page.</p>
+            <ul>
+                {% for token in backup_tokens %}
+                    <li>{{ token.token }}</li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>Backup tokens have been generated, but are not revealed here for security reasons.
+                Press the button below to generate new ones.</p>
+        {% endif %}
+    {% else %}
+        <p>No backup tokens have been generated. Press the button below to generate some.</p>
+    {% endif %}
+    <p>
+        <form method="post">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-secondary">
+                {% trans 'Generate backup tokens' %}
+            </button>
+        </form>
+    </p>
+    <a href="{% url 'two-factor-remove' %}" class="btn btn-outline-danger">Disable Two Factor</a>
+{% endblock %}

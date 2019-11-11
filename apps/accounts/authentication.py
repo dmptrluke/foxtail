@@ -1,6 +1,6 @@
-from allauth.account.adapter import DefaultAccountAdapter
+from allauth_2fa.adapter import OTPAdapter
 
 
-class AccountAdapter(DefaultAccountAdapter):
+class AccountAdapter(OTPAdapter):
     pass
 
