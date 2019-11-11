@@ -1,6 +1,6 @@
 from allauth.account import forms as auth_forms
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Layout, Row, Column, Field, Submit
+from crispy_forms.layout import Layout, Row, Column, Field
 
 from apps.core.fields import CustomCheckbox
 

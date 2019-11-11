@@ -57,6 +57,7 @@ INSTALLED_APPS = [
     'webpack_loader',
     'crispy_forms',
     'oidc_provider',
+    'captcha',
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
@@ -84,13 +85,13 @@ if DEBUG:
 
 ROOT_URLCONF = 'foxtail.urls'
 
-TEMPLATE_DIRS = (os.path.join(BASE_DIR, 'templates'),)
+# Template Engine
+# <https://docs.djangoproject.com/en/dev/topics/templates/>
 
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates')]
-        ,
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -100,6 +101,7 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
                 'django.template.context_processors.request',
                 'apps.core.context_processors.site',
+                'csp.context_processors.nonce'
             ],
         },
     },
@@ -221,7 +223,7 @@ SOCIALACCOUNT_PROVIDERS = {
 OIDC_SESSION_MANAGEMENT_ENABLE = True
 
 # ReCAPTCHA
-RECAPTCHA_SECRET_KEY = config('RECAPTCHA_SECRET_KEY')
+RECAPTCHA_PRIVATE_KEY = config('RECAPTCHA_PRIVATE_KEY')
 RECAPTCHA_PUBLIC_KEY = config('RECAPTCHA_PUBLIC_KEY')
 
 # Password validation
