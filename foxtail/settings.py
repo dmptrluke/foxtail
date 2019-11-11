@@ -155,6 +155,7 @@ CSP_UPGRADE_INSECURE_REQUESTS = True
 CSP_SCRIPT_SRC = ["'unsafe-inline'", "'self'"]
 CSP_STYLE_SRC = ["'unsafe-inline'", "'self'"]
 CSP_IMG_SRC = ["'self'", "data:"]
+CSP_OBJECT_SRC = ["'none'"]
 
 CSP_BASE_URI = ["'none'"]
 CSP_FRAME_ANCESTORS = ["'none'"]
