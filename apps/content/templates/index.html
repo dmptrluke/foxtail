@@ -1,5 +1,4 @@
 {% extends "base.html" %}
-{% load static %}
 {% block title_full %}furry.nz{% endblock title_full %}
 
 {% block content %}
@@ -11,13 +10,10 @@
         This site is currently still under construction. We've launched the parts of the website that are ready so far
         so you can log in and manage your furry.nz account.
     </p>
-    <p>
-        <strong>(the above statement is a lie - you are looking at a test site, currently)</strong>
-    </p>
 
     <h3>Things that are ready:</h3>
     <p>
-        You can create, manage, and log into your new furry.nz account. You'll need one of these to create a FurCoNZ
+        You can <a href="{{ signup_url }}">create</a>, manage, and log into your new furry.nz account. You'll need one of these to create a FurCoNZ
         order.
     </p>
 {% endblock content %}
