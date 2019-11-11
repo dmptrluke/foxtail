@@ -13,24 +13,22 @@
         <h3>Recent Posts</h3>
         {% for post in sidebar_post_list %}
             <div class="card">
-                <div class="row no-gutters">
-                    <div class="col-md-4">
-                        {% if post.image %}
-                            <img class="card-img" src="{{ post.image.crop.70x70 }}" alt="">
-                        {% endif %}
-                    </div>
-                    <div class="col-md-8">
-                        <div class="card-body">
 
-                            <h5 class="card-title"><a href="{{ post.get_absolute_url }}">{{ post.title | safe }}</a>
-                            </h5>
-                            <div class="card-text">
+                {% if post.image %}
+                    <a href="{{ post.get_absolute_url }}">
+                        <img class="card-img-top" src="{{ post.image.crop.300x150 }}" alt="">
+                    </a>
+                {% endif %}
 
-                                <span>{{ post.created|date:"F jS, Y" }}</span>
-                            </div>
-                        </div>
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <a class="stretched-link text-reset" href="{{ post.get_absolute_url }}">{{ post.title | safe }}</a>
+                    </h5>
+                    <div class="card-text">
+                        <span>{{ post.created|date:"F jS, Y" }}</span>
                     </div>
                 </div>
+
             </div>
         {% endfor %}
     </section>
