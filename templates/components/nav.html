@@ -10,13 +10,13 @@
     <div class="navbar-nav">
         {% if user.is_authenticated %}
             <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle {% if request.resolver_match.url_name == "account_set_password" %} active{% endif %}"
+                <a class="nav-link dropdown-toggle {% if "account_" in request.resolver_match.url_name %} active{% endif %}"
                    href="#" id="accountDropdown" role="button" data-toggle="dropdown"
                    aria-haspopup="true" aria-expanded="false">
                     {{ user.username }}
                 </a>
                 <div class="dropdown-menu" aria-labelledby="accountDropdown">
-                    <a class="dropdown-item" href="{% url 'profile' %}">Manage Account</a>
+                    <a class="dropdown-item" href="{% url 'account_profile' %}">Manage Account</a>
                     {% if user.is_superuser %}
                         <div class="dropdown-divider"></div>
                          <a class="dropdown-item" href="{% url 'admin:index' %}">Admin Panel</a>
