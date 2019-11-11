@@ -1,19 +1,19 @@
 .icon {
-	display: inline-flex;
-	align-self: center;
-}
+  display: inline-flex;
+  align-self: center;
 
-.icon svg {
-	height: 1em;
-	width: 1em;
-	stroke-width: 0;
-	stroke: currentColor;
-	fill: currentColor;
+  svg {
+    height: 1em;
+    width: 1em;
+    stroke-width: 0;
+    stroke: currentColor;
+    fill: currentColor;
+  }
 }
 
 .icon.svg-baseline svg {
-	top: .125em;
-	position: relative;
+  top: .125em;
+  position: relative;
 }
 
 .icon-refresh {
@@ -42,4 +42,8 @@
 
 .icon-google {
   width: 0.8398571428571427em;
+}
+
+.icon-search {
+  width: 0.9285714285714285em;
 }
