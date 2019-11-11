@@ -12,8 +12,8 @@ class Page(models.Model):
     sort_order = models.PositiveIntegerField(default=0, blank=False, null=False)
     show_in_menu = models.BooleanField(default=True, help_text="Set this if you want the page "
                                                                "to be listed in site navigation.")
-    slug = models.SlugField(unique=True, help_text="Changing this value after inital creation will break existing page "
-                                                   "URLs. Must be unique.")
+    slug = models.SlugField(unique=True, help_text="Changing this value after initial creation will break existing "
+                                                   "page URLs. Must be unique.")
 
     body = MarkdownxField()
 

@@ -9,9 +9,10 @@
     <h1>Welcome to {{ request.site.name }}.</h1>
 
     <p>
-        But wait - we aren't quite ready yet... This site is currently still under construction. We've launched the
-        parts of the website that are ready so far
-        so you can log in and manage your {{ request.site.name }} account.
+        Welcome to {{ request.site.name }}, the resource for New Zealand <a href="https://www.anthrocon.org/what-is-furry/" target="_blank"
+                                                                 rel="noreferrer" data-toggle="tooltip" title="What is a furry?">furries</a>.
+        Most of the functionality of site is currently under construction, but we've launched the parts of the website
+        that are ready so far so you can log in and manage your {{ request.site.name }} account.
     </p>
 
     {% if user.is_authenticated %}
@@ -41,11 +42,9 @@
 
     <h3 class="mb-3">News & Updates</h3>
     <div class="row mb-2">
-
-
         {% for post in post_list %}
             <div class="col-lg-4">
-                <div class="card mb-4">
+                <article class="card mb-4">
 
                     {% if post.image %}
                         <a href="{{ post.get_absolute_url }}">
@@ -66,7 +65,7 @@
                         <a href="{{ post.get_absolute_url }}" class="btn btn-primary">Read more</a>
                     </div>
 
-                </div>
+                </article>
             </div>
         {% endfor %}
     </div>
