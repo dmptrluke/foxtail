@@ -21,48 +21,53 @@
 {% block title %}{{ post.title }} - Blog{% endblock %}
 
 {% block content %}
+    <div class="row">
+        <div class="col-lg-8">
+            <article class="blog-post mb-5">
+                {% if post.image %}
+                    <img class="img-fluid mb-3" src="{{ post.image.crop.800x350 }}" alt="">
+                {% endif %}
+                <h2><a class="text-reset" href="{{ post.get_absolute_url }}">{{ post.title }}</a></h2>
+                <p class="text-muted">{{ post.created|date:"F jS, Y" }}</p>
+                <p>{{ post.text | markdown | safe }}</p>
 
-            <div class="row">
-                <div class="col-lg-8">
-                      <article class="blog-post">
-                        {% if post.image %}
-                            <img class="img-fluid mb-5" src="{{ post.image.crop.800x350 }}" alt="">
-                        {% endif %}
-                        <h2><a href="{{ post.get_absolute_url }}">{{ post.title }}</a></h2>
-                        <p class="text-muted">{{ post.created|date:"F jS, Y" }}</p>
-                        <p>{{ post.text | markdown | safe }}</p>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <ul class="list-inline">
+                            <li class="list-inline-item">Share Post:</li>
+                            <li class="list-inline-item"><a class="facebook"
+                                                            href="https://www.facebook.com/sharer/sharer.php?u=
+                                                                    {{ SITE_URL }}{{ post.get_absolute_url }}">
+                                {% icon "facebook" %}
+                            </a></li>
+                            <li class="list-inline-item"><a class="twitter"
+                                                            href="http://www.twitter.com/share?url=
 
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <ul class="list-inline">
-                                        <li class="list-inline-item">Share Post:</li>
-                                        <li class="list-inline-item"><a class="facebook"
-                                               href="https://www.facebook.com/sharer/sharer.php?u={{ SITE_URL }}{{ post.get_absolute_url }}">
-                                            {% icon "facebook" %}
-                                        </a></li>
-                                        <li class="list-inline-item"><a class="twitter"
-                                               href="http://www.twitter.com/share?url={{ SITE_URL }}{{ post.get_absolute_url }}&amp;text={{ post.title | safe | urlencode }}&amp;hashtags=southernpaws">
-                                            {% icon "twitter" %}
-                                        </a></li>
-                                        <li class="list-inline-item"><a class="telegram"
-                                               href="https://telegram.me/share/url?url={{ SITE_URL }}{{ post.get_absolute_url }}&amp;text={{ post.title | safe | urlencode }}">
-                                            {% icon "telegram" %}
-                                        </a></li>
-                                    </ul>
-                                </div>
-                                <div class="col-md-6 text-right">
-                                    {% for tag in post.tags.all %}
-                                        {% if forloop.first %}in{% endif %}
-                                        <a href="{% url 'blog_list' %}?tag={{ tag.slug }}">{{ tag.name | title }}</a>{% if not forloop.last %}, {% endif %}
-                                    {% endfor %}
-                            </div>
-                            </div>
-                      </article>
+                                                                    {{ SITE_URL }}{{ post.get_absolute_url }}&amp;text={{ post.title | safe | urlencode }}&amp;hashtags=southernpaws">
+                                {% icon "twitter" %}
+                            </a></li>
+                            <li class="list-inline-item"><a class="telegram"
+                                                            href="https://telegram.me/share/url?url=
 
-
+                                                                    {{ SITE_URL }}{{ post.get_absolute_url }}&amp;text={{ post.title | safe | urlencode }}">
+                                {% icon "telegram" %}
+                            </a></li>
+                        </ul>
+                    </div>
+                    <div class="col-sm-6 text-right">
+                        {% for tag in post.tags.all %}
+                            {% if forloop.first %}in{% endif %}
+                            <a href="{% url 'blog_list' %}?tag={{ tag.slug }}">{{ tag.name | title }}</a>
+                            {% if not forloop.last %}, {% endif %}
+                        {% endfor %}
+                    </div>
                 </div>
-                <div class="col-lg-4">
-                    {% include "sidebar.html" %}
-                </div>
-            </div>
+            </article>
+
+
+        </div>
+        <div class="col-lg-4">
+            {% include "sidebar.html" %}
+        </div>
+    </div>
 {% endblock content %}
