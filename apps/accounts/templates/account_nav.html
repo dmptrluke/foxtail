@@ -1,5 +1,5 @@
 <nav class="nav nav-tabs nav-fill mb-4">
-    <a class="nav-item nav-link {% if request.resolver_match.url_name == "profile" %} active{% endif %}" href="{% url 'profile' %}">
+    <a class="nav-item nav-link {% if request.resolver_match.url_name == "account_profile" %} active{% endif %}" href="{% url 'account_profile' %}">
         Profile
     </a>
     <a class="nav-item nav-link{% if request.resolver_match.url_name == "account_change_password" %} active{% endif %}" href="{% url 'account_change_password' %}">
