@@ -4,19 +4,20 @@
 {% block title %}Two-Factor Authentication{% endblock %}
 
 {% block content %}
-        {% include "account_nav.html" %}
-<h2>
-    Two-Factor Authentication
-</h2>
+    {% include "account_nav.html" %}
+    <h2>
+        Two-Factor Authentication
+    </h2>
 
-<p>Are you sure you would like to disable two-factor authentication?
-</p>
+    <p>
+        Are you sure you would like to disable two-factor authentication?
+    </p>
 
-<form method="post">
-  {% csrf_token %}
-  <button type="submit" class="btn btn-danger">
-    Yes, I'm sure
-  </button>
-</form>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger">
+            Yes, I'm sure
+        </button>
+    </form>
 
 {% endblock %}
