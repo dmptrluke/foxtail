@@ -1,16 +1,21 @@
 {% extends 'base.html' %}
 {% load crispy_forms_tags %}
 
-{% block content %}
-<h1>
-  Two-Factor Authentication
-</h1>
+{% block title %}Two-Factor Authentication{% endblock %}
 
-<form method="post">
-  {% csrf_token %}
-  {{ form | crispy }}
-  <button type="submit" class="btn btn-primary">
-    Authenticate
-  </button>
-</form>
+{% block content %}
+    <h1>
+        Two-Factor Authentication
+    </h1>
+    <p>
+        This account has two-factor authentication enabled. Please enter the code from your authenticator app, or a
+        pre-generated backup token.
+    </p>
+    <form method="post">
+        {% csrf_token %}
+        {{ form | crispy }}
+        <button type="submit" class="btn btn-primary">
+            Authenticate
+        </button>
+    </form>
 {% endblock %}
