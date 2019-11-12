@@ -7,6 +7,11 @@ register = template.Library()
 
 @register.simple_tag(takes_context=True)
 def render_bundle_csp(context, bundle_name, extension=None, config='DEFAULT', attrs=''):
-    attrs += f'nonce="{ context.request.csp_nonce }"'
+    try:
+        attrs += f'nonce="{ context.request.csp_nonce }"'
+    except AttributeError:
+        # ¯\_(ツ)_/¯
+        pass
+
     tags = utils.get_as_tags(bundle_name, extension=extension, config=config, attrs=attrs)
     return mark_safe('\n'.join(tags))
