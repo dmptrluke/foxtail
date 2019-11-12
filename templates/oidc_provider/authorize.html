@@ -1,5 +1,7 @@
 {% extends "base.html" %}
 
+{% block title %}Service Authorisation{% endblock %}
+
 {% block content %}
     <h1>Authorise {{ client.name }}</h1>
 
@@ -7,26 +9,27 @@
         {% csrf_token %}
         {{ hidden_inputs }}
 
-        {% if scopes %}
-            <p>The service <strong>{{ client.name }}</strong> would like to access your <strong>{{ request.site.name }}</strong> account.
-                The service is requesting the following information:</p>
-            <ul>
+        <p>The service <strong>{{ client.name }}</strong> would like to access your
+            <strong>{{ request.site.name }}</strong> account.
+            The service is requesting the following information:</p>
+        <ul>
+            <li><strong>User Identifier</strong><br><i>A unique value representing your {{ request.site.name }}
+                account.</i></li>
+            {% if scopes %}
                 {% for scope in scopes %}
                     <li><strong>{{ scope.name }}</strong><br><i>{{ scope.description }}</i></li>
                 {% endfor %}
-            </ul>
-        {% else %}
-            <p>The service <strong>{{ client.name }}</strong> would like to access your <strong>{{ request.site.name }}</strong> account.</p>
-        {% endif %}
-
-        {% if client.terms_url %}
-            <p>The privacy policy of {{ client.name }} can be viewed <a href="{{ client.terms_url }}">here</a>.</p>
-        {% endif %}
+            {% endif %}
+        </ul>
 
         <div class="form-group">
             <input type="submit" class="btn btn-secondary" value="Decline"/>
             <input name="allow" type="submit" class="btn btn-primary" value="Authorize"/>
         </div>
 
+        {% if client.terms_url %}
+            <p class="text-muted">The privacy policy of {{ client.name }} can be viewed <a href="{{ client.terms_url }}"
+                                                                                           target="_blank">here</a>.</p>
+        {% endif %}
     </form>
 {% endblock content %}
