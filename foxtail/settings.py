@@ -160,7 +160,7 @@ CSP_OBJECT_SRC = ["'none'"]
 
 CSP_BASE_URI = ["'none'"]
 CSP_FRAME_ANCESTORS = ["'none'"]
-CSP_FORM_ACTION = ["'self'", 'furconz.org.nz']
+CSP_FORM_ACTION = ["'self'", 'furconz.org.nz', 'furco.nz', 'test.furco.nz', 'local.dev.furco.nz']
 
 CSP_EXCLUDE_URL_PREFIXES = ('/admin',)
 
