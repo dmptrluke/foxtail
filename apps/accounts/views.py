@@ -15,4 +15,5 @@ class UserView(LoginRequiredMixin, UpdateView):
     def get_success_url(self):
         return reverse('account_profile')
 
+
 __all__ = ['UserView']
