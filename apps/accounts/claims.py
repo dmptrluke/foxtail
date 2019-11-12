@@ -11,6 +11,9 @@ def userinfo(claims, user):
     if user.last_name:
         claims['family_name'] = user.last_name
 
+    if user.date_of_birth:
+        claims['birthdate'] = user.date_of_birth.isoformat()
+
     claims['preferred_username'] = user.username
     claims['email'] = user.email
 

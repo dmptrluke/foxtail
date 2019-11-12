@@ -3,8 +3,9 @@ from django.db import models
 
 
 class User(AbstractUser):
-    email = models.EmailField('email address', blank=False,
-                              help_text="Required. This must be a valid email address for account activation.")
+    email = models.EmailField('email address', blank=False)
+
+    date_of_birth = models.DateField(null=True)
 
     display_name = models.CharField(max_length=50)
     profile_URL = models.CharField(max_length=25)

@@ -46,8 +46,7 @@ class LoginForm(auth_forms.LoginForm):
 class UserForm(ModelForm):
     class Meta:
         model = User
-
-        fields = ('username', 'first_name', 'last_name')
+        fields = ('username', 'date_of_birth', 'first_name', 'last_name')
 
     def __init__(self, *args, **kwargs):
         super(UserForm, self).__init__(*args, **kwargs)
@@ -59,6 +58,7 @@ class UserForm(ModelForm):
         self.helper.layout = Layout(
             Row(
                 Column('username', css_class='col-md-6'),
+                Column('date_of_birth', css_class='col-md-6'),
             ),
             Row(
                 Column('first_name', css_class='col-md-6'),
