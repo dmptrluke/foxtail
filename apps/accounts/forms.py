@@ -1,7 +1,9 @@
 from allauth.account import forms as auth_forms
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Row, Column, Field
+from django.forms import SelectDateWidget, ModelForm
 
+from apps.accounts.models import User
 from apps.core.fields import CustomCheckbox
 
 
@@ -38,5 +40,29 @@ class LoginForm(auth_forms.LoginForm):
             'login',
             'password',
             CustomCheckbox('remember')
+        )
+
+
+class UserForm(ModelForm):
+    class Meta:
+        model = User
+
+        fields = ('username', 'first_name', 'last_name')
+
+    def __init__(self, *args, **kwargs):
+        super(UserForm, self).__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_tag = False
+        self.helper.disable_csrf = True
+        self.helper.error_text_inline = False
+
+        self.helper.layout = Layout(
+            Row(
+                Column('username', css_class='col-md-6'),
+            ),
+            Row(
+                Column('first_name', css_class='col-md-6'),
+                Column('last_name', css_class='col-md-6'),
+            )
         )
 
