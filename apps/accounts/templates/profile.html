@@ -6,27 +6,13 @@
 
 {% block content %}
     {% include "account_nav.html" %}
-    <div class="row">
-        <div class="col-lg-7">
-            <form method="post" action="{% url 'account_profile' %}">
-                {% csrf_token %}
-                <div class="form-group">
-                    {% crispy form %}
-                </div>
-                <div class="form-group">
-                    <input type="submit" class="btn btn-primary" value="Save Changes">
-                </div>
-            </form>
+    <form method="post" action="{% url 'account_profile' %}">
+        {% csrf_token %}
+        <div class="form-group">
+            {% crispy form %}
         </div>
-        <div class="col-lg-5">
-            <h3>Account Overview</h3>
-            <dl class="row">
-                <dt class="col-xl-4">Username</dt>
-                <dd class="col-xl-8">{{ user.username }}</dd>
-                <dt class="col-xl-4">Primary Email</dt>
-                <dd class="col-xl-8">{{ user.email }}</dd>
-            </dl>
-
+        <div class="form-group">
+            <input type="submit" class="btn btn-primary" value="Save Changes">
         </div>
-    </div>
+    </form>
 {% endblock content %}
