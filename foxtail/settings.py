@@ -40,7 +40,7 @@ INTERNAL_IPS = config('INTERNAL_IPS', default="", cast=Csv())
 
 # Application definition
 INSTALLED_APPS = [
-    'django.contrib.admin',
+    'apps.admin.apps.CustomAdminConfig',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -91,12 +91,13 @@ MIDDLEWARE = [
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django_otp.middleware.OTPMiddleware',
     'allauth_2fa.middleware.AllauthTwoFactorMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.contrib.sites.middleware.CurrentSiteMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
     'oidc_provider.middleware.SessionManagementMiddleware',
 ]
 
