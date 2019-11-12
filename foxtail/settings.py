@@ -261,8 +261,8 @@ PASSWORD_HASHERS = [
 ]
 
 # OIDC Server
-
 OIDC_SESSION_MANAGEMENT_ENABLE = True
+OIDC_USERINFO = 'apps.accounts.claims.userinfo'
 
 # ReCAPTCHA
 RECAPTCHA_DOMAIN = 'www.recaptcha.net'
