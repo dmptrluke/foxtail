@@ -11,7 +11,7 @@ class User(AbstractUser):
     profile_URL = models.CharField(max_length=25)
 
     def __str__(self):
-        return f"{self.email}"
+        return f"{self.username}"
 
 
 __all__ = ['User']
