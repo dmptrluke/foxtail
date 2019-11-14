@@ -50,6 +50,21 @@ class LoginForm(auth_forms.LoginForm):
         )
 
 
+class ResetPasswordForm(auth_forms.ResetPasswordForm):
+    captcha = ReCaptchaField()
+
+    def __init__(self, *args, **kwargs):
+        super(ResetPasswordForm, self).__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_tag = False
+        self.helper.disable_csrf = True
+
+        self.helper.layout = Layout(
+            'email',
+            'captcha'
+        )
+
+
 class UserForm(ModelForm):
     class Meta:
         model = User
@@ -72,4 +87,5 @@ class UserForm(ModelForm):
                 Column('last_name', css_class='col-md-6'),
             )
         )
+
 
