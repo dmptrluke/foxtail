@@ -218,6 +218,7 @@ AUTHENTICATION_BACKENDS = [
 
 ACCOUNT_FORMS = {
     'signup': 'apps.accounts.forms.SignupForm',
+    'reset_password': 'apps.accounts.forms.ResetPasswordForm',
     'login': 'apps.accounts.forms.LoginForm'
 }
 
