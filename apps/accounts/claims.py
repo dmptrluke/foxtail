@@ -2,14 +2,14 @@ def userinfo(claims, user):
     """
     Populates standard OpenID Connect claims
     """
-    if user.first_name or user.last_name:
-        claims['name'] = " ".join([user.first_name, user.last_name])
+    claims['name'] = getattr(user, 'full_name', None)
 
-    if user.first_name:
-        claims['given_name'] = user.first_name
+    # stop defaults
+    claims['given_name'] = None
+    claims['family_name'] = None
 
-    if user.last_name:
-        claims['family_name'] = user.last_name
+    if user.gender:
+        claims['gender'] = user.gender.lower()
 
     if user.date_of_birth:
         claims['birthdate'] = user.date_of_birth.isoformat()
