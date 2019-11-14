@@ -5,7 +5,7 @@ from markdownx.admin import MarkdownxModelAdmin
 from .models import Page
 
 
-class PageAdmin(SortableAdminMixin, MarkdownxModelAdmin):
+class PageAdmin(SortableAdminMixin, MarkdownxModelAdmin):  # lgtm [py/conflicting-attributes]
     fieldsets = (
         (None, {
             'fields': ('title', 'subtitle', 'body')
