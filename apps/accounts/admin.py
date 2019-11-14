@@ -6,10 +6,19 @@ from .models import User
 
 
 class CustomUserAdmin(UserAdmin):
-    list_display = ['username', 'email', 'name', 'date_joined', 'is_active']
+    list_display = ['username', 'email', 'full_name', 'date_joined', 'is_active']
 
-    def name(self, obj):
-        return f"{obj.first_name} {obj.last_name}"
+    exclude = ('first_name', 'last_name')
+    readonly_fields = ('email',)
+
+    fieldsets = (
+        (None, {'fields': ('username', 'email', 'password')}),
+        ('Personal info', {'fields': ('full_name', 'gender', 'date_of_birth')}),
+        ('Permissions', {
+            'fields': ('is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions'),
+        }),
+        ('Important dates', {'fields': ('last_login', 'date_joined')}),
+    )
 
 
 admin.site.register(User, CustomUserAdmin)

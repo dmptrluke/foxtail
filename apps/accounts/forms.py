@@ -63,7 +63,6 @@ class ResetPasswordForm(auth_forms.ResetPasswordForm):
         self.helper.form_tag = False
         self.helper.disable_csrf = True
 
-
         self.helper.layout = Layout(
             'email',
             'captcha'
@@ -76,7 +75,7 @@ class UserForm(ModelForm):
         widgets = {
             'date_of_birth': SelectDateWidget(years=range(1900, 2011)),
         }
-        fields = ('username', 'display_name', 'date_of_birth', 'gender', 'first_name', 'last_name')
+        fields = ('username', 'display_name', 'date_of_birth', 'gender', 'full_name')
 
     def __init__(self, *args, **kwargs):
         super(UserForm, self).__init__(*args, **kwargs)
@@ -97,11 +96,10 @@ class UserForm(ModelForm):
                 'Personal Information',
                 HTML('<p class="small">This information is optional.</p>'),
                 Row(
-                    Column('first_name', css_class='col-md-6'),
-                    Column('last_name', css_class='col-md-6'),
+                    Column('full_name', css_class='col-md-6'),
+                    Column('gender', css_class='col-md-6'),
                 ),
                 Row(
-                    Column('gender', css_class='col-md-6'),
                     Column('date_of_birth', css_class='col-md-6'),
                 )
             ),
