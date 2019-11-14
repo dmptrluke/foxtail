@@ -28,8 +28,10 @@
         </div>
 
         {% if client.terms_url %}
-            <p class="text-muted">The privacy policy of {{ client.name }} can be viewed <a href="{{ client.terms_url }}"
-                                                                                           target="_blank">here</a>.</p>
+            <p class="text-muted">
+                The privacy policy of {{ client.name }} can be viewed
+                <a href="{{ client.terms_url }}" target="_blank" rel="noopener noreferrer">here</a>.
+            </p>
         {% endif %}
     </form>
 {% endblock content %}
