@@ -156,6 +156,8 @@ X_FRAME_OPTIONS = 'DENY'
 CSP_INCLUDE_NONCE_IN = ['script-src', 'style-src']
 CSP_UPGRADE_INSECURE_REQUESTS = True
 
+CSP_REPORT_URI = config('csp_report_uri', default=None)
+
 CSP_SCRIPT_SRC = ["'unsafe-inline'", "'self'"]
 CSP_STYLE_SRC = ["'unsafe-inline'", "'self'"]
 CSP_IMG_SRC = ["'self'", "data:"]
@@ -163,7 +165,7 @@ CSP_OBJECT_SRC = ["'none'"]
 
 CSP_BASE_URI = ["'none'"]
 CSP_FRAME_ANCESTORS = ["'none'"]
-CSP_FORM_ACTION = ["'self'", 'furconz.org.nz', 'furco.nz', 'test.furco.nz', 'local.dev.furco.nz']
+CSP_FORM_ACTION = ["'self'"] + config('csp_form_action', default='', cast=Csv())
 
 CSP_EXCLUDE_URL_PREFIXES = ('/admin',)
 
