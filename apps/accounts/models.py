@@ -5,7 +5,8 @@ from django.db import models
 class User(AbstractUser):
     email = models.EmailField('email address', blank=False)
 
-    date_of_birth = models.DateField(null=True)
+    date_of_birth = models.DateField(null=True, blank=True)
+    gender = models.CharField(max_length=50, blank=True)
 
     display_name = models.CharField(max_length=50)
     profile_URL = models.CharField(max_length=25)

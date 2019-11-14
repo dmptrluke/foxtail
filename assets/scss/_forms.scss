@@ -21,3 +21,7 @@ form {
 #div_id_captcha .invalid-feedback {
   display: inline;
 }
+
+.selectdatewidget.form-control {
+  margin-bottom: ($spacer * .5);
+}

@@ -7,11 +7,6 @@
     {% include "account_nav.html" %}
     <form method="post" action="{% url 'account_profile' %}">
         {% csrf_token %}
-        <div class="form-group">
-            {% crispy form %}
-        </div>
-        <div class="form-group">
-            <input type="submit" class="btn btn-primary" value="Save Changes">
-        </div>
+        {% crispy form %}
     </form>
 {% endblock content %}
