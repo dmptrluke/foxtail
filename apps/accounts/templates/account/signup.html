@@ -1,12 +1,10 @@
 {% extends "base.html" %}
-{% load crispy_forms_tags %}
-
-{% load account socialaccount %}
+{% load account socialaccount crispy_forms_tags recaptcha %}
 
 {% block title %}Create Account{% endblock %}
 
 {% block extra_head %}
-    <link rel="canonical" href="{{ SITE_URL }}{% url 'account_signup' %}"/>
+    {% recaptcha_head %}
 {% endblock %}
 
 {% block content %}
