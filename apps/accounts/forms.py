@@ -1,13 +1,16 @@
 from allauth.account import forms as auth_forms
+from captcha.fields import ReCaptchaField
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Row, Column, Field
-from django.forms import SelectDateWidget, ModelForm
+from django.forms import ModelForm
 
 from apps.accounts.models import User
 from apps.core.fields import CustomCheckbox
 
 
 class SignupForm(auth_forms.SignupForm):
+    captcha = ReCaptchaField()
+
     def __init__(self, *args, **kwargs):
         super(SignupForm, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
@@ -25,7 +28,11 @@ class SignupForm(auth_forms.SignupForm):
             Row(
                 Column(Field('password1', placeholder=''), css_class='col-md-6'),
                 Column(Field('password2', placeholder=''), css_class='col-md-6')
+            ),
+            Row(
+                Column('captcha', css_class='col-md-12'),
             )
+
         )
 
 

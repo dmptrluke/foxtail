@@ -160,6 +160,7 @@ CSP_REPORT_URI = config('csp_report_uri', default=None)
 
 CSP_SCRIPT_SRC = ["'unsafe-inline'", "'self'"]
 CSP_STYLE_SRC = ["'unsafe-inline'", "'self'"]
+CSP_FRAME_SRC = ['https://www.google.com/recaptcha/']
 CSP_IMG_SRC = ["'self'", "data:"]
 CSP_OBJECT_SRC = ["'none'"]
 

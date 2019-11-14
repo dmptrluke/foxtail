@@ -1,5 +1,5 @@
 form {
-  .asteriskField{
+  .asteriskField {
     display: none;
   }
 }
@@ -7,6 +7,7 @@ form {
 .form-inline {
   .form-group {
     margin-right: ($spacer * .5);
+
     label {
       margin-right: ($spacer * .5);
     }
@@ -14,4 +15,9 @@ form {
   .form-group:last-of-type {
     margin-right: 0;
   }
+}
+
+// hack to make sure captcha errors show up on forms
+#div_id_captcha .invalid-feedback {
+  display: inline;
 }
