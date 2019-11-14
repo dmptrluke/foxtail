@@ -24,12 +24,12 @@ class SignupForm(auth_forms.SignupForm):
 
         self.helper.layout = Layout(
             Row(
-                Column(Field('username', placeholder=''), css_class='col-md-6'),
-                Column(Field('email', placeholder=''), css_class='col-md-6')
+                Column(Field('username', autocomplete='username', placeholder=''), css_class='col-md-6'),
+                Column(Field('email', autocomplete='email', placeholder=''), css_class='col-md-6')
             ),
             Row(
-                Column(Field('password1', placeholder=''), css_class='col-md-6'),
-                Column(Field('password2', placeholder=''), css_class='col-md-6')
+                Column(Field('password1', autocomplete='new-password', placeholder=''), css_class='col-md-6'),
+                Column(Field('password2', autocomplete='new-password', placeholder=''), css_class='col-md-6')
             ),
             Row(
                 Column('captcha', css_class='col-md-12'),
@@ -48,8 +48,8 @@ class LoginForm(auth_forms.LoginForm):
         self.helper.help_text_inline = False
 
         self.helper.layout = Layout(
-            'login',
-            'password',
+            Field('login', autocomplete='username'),
+            Field('password', autocomplete='current-password'),
             CustomCheckbox('remember')
         )
 
@@ -96,8 +96,8 @@ class UserForm(ModelForm):
                 'Personal Information',
                 HTML('<p class="small">This information is optional.</p>'),
                 Row(
-                    Column('full_name', css_class='col-md-6'),
-                    Column('gender', css_class='col-md-6'),
+                    Column(Field('full_name', autocomplete='name'), css_class='col-md-6'),
+                    Column(Field('gender', autocomplete='sex'), css_class='col-md-6'),
                 ),
                 Row(
                     Column('date_of_birth', css_class='col-md-6'),
