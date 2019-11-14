@@ -9,8 +9,9 @@
     <h1>Welcome to {{ request.site.name }}.</h1>
 
     <p>
-        Welcome to {{ request.site.name }}, the resource for New Zealand <a href="https://www.anthrocon.org/what-is-furry/" target="_blank"
-                                                                 rel="noreferrer" data-toggle="tooltip" title="What is a furry?">furries</a>.
+        Welcome to {{ request.site.name }}, the resource for New Zealand <a
+            href="https://www.anthrocon.org/what-is-furry/" target="_blank" rel="noopener noreferrer"
+            data-toggle="tooltip" title="What is a furry?">furries</a>.
         Most of the functionality of site is currently under construction, but we've launched the parts of the website
         that are ready so far so you can log in and manage your {{ request.site.name }} account.
     </p>
@@ -18,7 +19,8 @@
     {% if user.is_authenticated %}
 
         <p>
-            You're now logged in as <em>{% user_display user %}</em>! Use the buttons below to manage your {{ request.site.name }}
+            You're now logged in as <em>{% user_display user %}</em>! Use the buttons below to manage
+            your {{ request.site.name }}
             account.
         </p>
         <p class="mb-6">
