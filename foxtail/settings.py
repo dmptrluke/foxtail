@@ -139,7 +139,10 @@ SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 # <https://docs.djangoproject.com/en/2.2/ref/middleware/#x-xss-protection>
 
 SESSION_COOKIE_SECURE = True
+SESSION_COOKIE_NAME = '__Host-sessionid'
+
 CSRF_COOKIE_SECURE = True
+CSRF_COOKIE_NAME = '__Host-csrftoken'
 
 SECURE_CONTENT_TYPE_NOSNIFF = True
 SECURE_BROWSER_XSS_FILTER = True
