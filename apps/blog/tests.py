@@ -126,7 +126,8 @@ class FeedViewTests(TestCase):
 
 class BlogDetailViewTests(TestCase):
     def setUp(self):
-        Post.objects.create(title='1-title', slug='1-slug', text='1-text', author='1-author')
+        self.post = Post.objects.create(title='1-title', slug='1-slug', text='1-text', author='1-author')
+        self.post.tags.add("green", "blue")
 
     def test_template(self):
         response = self.client.get(reverse('blog_detail', kwargs={'slug': '1-slug'}))
@@ -137,3 +138,7 @@ class BlogDetailViewTests(TestCase):
         self.assertContains(response, '1-title')
         self.assertContains(response, '1-text')
 
+    def test_tags(self):
+        response = self.client.get(reverse('blog_detail', kwargs={'slug': '1-slug'}))
+        self.assertContains(response, '?tag=blue">Blue')
+        self.assertContains(response, '?tag=green">Green')
