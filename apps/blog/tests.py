@@ -114,11 +114,14 @@ class FeedViewTests(TestCase):
         response = self.client.get(reverse('blog_feed'))
         feed = atoma.parse_rss_bytes(response.content)
 
-        assert feed.items[0].title == '1-title'
-        assert feed.items[0].description == '1-text'
+        titles = [item.title for item in feed.items]
+        descriptions = [item.description for item in feed.items]
 
-        assert feed.items[1].title == '2-title'
-        assert feed.items[1].description == '2-text'
+        assert '1-title' in titles
+        assert '2-title' in titles
+
+        assert '1-text' in descriptions
+        assert '2-text' in descriptions
 
 
 class BlogDetailViewTests(TestCase):
