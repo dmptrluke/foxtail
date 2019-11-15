@@ -18,7 +18,7 @@ jobs:
     - checkout
     - restore_cache:
         keys:
-        - pip-{{ checksum "requirements.txt" }}-{{ checksum "package-lock.json" }}
+        - pip-{{ checksum "requirements.txt" }}-{{ checksum "package.json" }}
     - run:
         command: |
           if true; then
@@ -33,7 +33,7 @@ jobs:
         command: npm install
         name: Install Node Dependencies
     - save_cache:
-        key: pip-{{ checksum "requirements.txt" }}-{{ checksum "package-lock.json" }}
+        key: pip-{{ checksum "requirements.txt" }}-{{ checksum "package.json" }}
         paths:
         - /home/circleci/.local/lib/
         - ./node_modules
@@ -42,4 +42,6 @@ jobs:
         command: npm run-script build-dev
     - run:
         name: Running tests
-        command: python manage.py test
+        command: python manage.py test 2>&1 | tee -a results.txt
+    - store_artifacts:
+        path: results.txt
