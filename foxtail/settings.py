@@ -128,6 +128,16 @@ TEMPLATES = [
     },
 ]
 
+# Message Tags
+# <https://docs.djangoproject.com/en/2.2/ref/contrib/messages/#message-tags>
+MESSAGE_TAGS = {
+    messages.DEBUG: 'debug',
+    messages.INFO: 'info',
+    messages.SUCCESS: 'success',
+    messages.WARNING: 'warning',
+    messages.ERROR: 'danger',
+}
+
 WSGI_APPLICATION = 'foxtail.wsgi.application'
 
 # Recognise upstream proxy SSL
@@ -319,7 +329,6 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 # if using the debug server, set the correct MIME type for .js files
 if DEBUG:
     import mimetypes
-
     mimetypes.add_type("text/javascript", ".js", True)
 
 # Webpack Loader
@@ -368,7 +377,6 @@ if SENTRY_ENABLED:
     sentry_sdk.init(**_vars)
 
 # Email
-# <https://sendgrid.com/docs/for-developers/sending-email/django/>
 # <https://docs.djangoproject.com/en/2.2/topics/email/>
 
 try:

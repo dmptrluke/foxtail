@@ -1,0 +1,10 @@
+{% include "captcha/includes/js_v2_checkbox.html" %}
+<noscript>
+    <div class="alert alert-danger">This form requires Javascript for reCAPTCHA.
+        Please enable Javascript.
+    </div>
+</noscript>
+<div class="g-recaptcha"
+    {% for name, value in widget.attrs.items %}{% if value is not False %} {{ name }}{% if value is not True %}="{{ value|stringformat:'s' }}"{% endif %}{% endif %}{% endfor %}
+>
+</div>
