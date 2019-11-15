@@ -2,7 +2,7 @@ from django.db import migrations
 
 
 def combine_names(apps, schema_editor):
-    # We can't import the Person model directly as it may be a newer
+    # We can't import the User model directly as it may be a newer
     # version than this migration expects. We use the historical version.
     User = apps.get_model('accounts', 'User')
     for user in User.objects.all():
