@@ -21,6 +21,7 @@ class SignupForm(auth_forms.SignupForm):
 
         self.fields['username'].help_text = "Required. 150 characters or fewer."
         self.fields['email'].help_text = "Required. This must be a valid email address for account activation."
+        self.fields['captcha'].label = False
 
         self.helper.layout = Layout(
             Row(
@@ -62,6 +63,8 @@ class ResetPasswordForm(auth_forms.ResetPasswordForm):
         self.helper = FormHelper()
         self.helper.form_tag = False
         self.helper.disable_csrf = True
+
+        self.fields['captcha'].label = False
 
         self.helper.layout = Layout(
             'email',
