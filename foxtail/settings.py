@@ -35,7 +35,7 @@ DEBUG = config('DEBUG', default=False, cast=bool)
 SITE_URL = config('SITE_URL')
 SITE_ID = 1
 
-ALLOWED_HOSTS = config('ALLOWED_HOSTS', default=[], cast=Csv())
+ALLOWED_HOSTS = config('ALLOWED_HOSTS', default="", cast=Csv())
 INTERNAL_IPS = config('INTERNAL_IPS', default="", cast=Csv())
 
 # Application definition
@@ -375,7 +375,7 @@ try:
     DEFAULT_FROM_EMAIL = config('email_from_user')
     SERVER_EMAIL = config('email_from_system')
 
-    EMAIL_HOST = config('email_host', default='smtp.sendgrid.net')
+    EMAIL_HOST = config('email_host')
     EMAIL_HOST_USER = config('email_user')
     EMAIL_HOST_PASSWORD = config('email_pass')
     EMAIL_PORT = config('email_port', default=587, cast=int)
