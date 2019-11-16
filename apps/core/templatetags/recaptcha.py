@@ -20,5 +20,3 @@ def recaptcha_widget():
 
     html = '<div class="g-recaptcha" data-sitekey="{0}"></div>'
     return format_html(html, key)
-
-

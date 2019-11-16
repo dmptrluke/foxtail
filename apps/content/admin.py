@@ -7,12 +7,8 @@ from .models import Page
 
 class PageAdmin(SortableAdminMixin, MarkdownxModelAdmin):  # lgtm [py/conflicting-attributes]
     fieldsets = (
-        (None, {
-            'fields': ('title', 'subtitle', 'body')
-        }),
-        ('Advanced options', {
-            'fields': ('slug', 'show_in_menu'),
-        }),
+        (None, {'fields': ('title', 'subtitle', 'body')}),
+        ('Advanced options', {'fields': ('slug', 'show_in_menu'),}),
     )
 
     list_display = ('title', 'slug', 'modified', 'show_in_menu')

@@ -6,16 +6,9 @@ from .models import Post
 
 class PostAdmin(MarkdownxModelAdmin):
     fieldsets = (
-        ('Content', {
-            'fields': ('title', 'created', 'tags', 'author', 'text')
-        }),
-        ('Image', {
-            'fields': ('image',),
-        }),
-        ('Advanced options', {
-            'classes': ('collapse',),
-            'fields': ('slug',),
-        }),
+        ('Content', {'fields': ('title', 'created', 'tags', 'author', 'text')}),
+        ('Image', {'fields': ('image',),}),
+        ('Advanced options', {'classes': ('collapse',), 'fields': ('slug',),}),
     )
 
     prepopulated_fields = {"slug": ("title",)}

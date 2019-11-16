@@ -6,14 +6,20 @@ from markdownx.models import MarkdownxField
 
 class Page(models.Model):
     title = models.CharField(max_length=100, help_text="100 characters or fewer.")
-    subtitle = models.CharField(max_length=100, blank=True, default='', help_text="100 characters or fewer. Optional.")
+    subtitle = models.CharField(
+        max_length=100, blank=True, default='', help_text="100 characters or fewer. Optional."
+    )
     modified = models.DateTimeField(auto_now=True, verbose_name="date modified")
 
     sort_order = models.PositiveIntegerField(default=0, blank=False, null=False)
-    show_in_menu = models.BooleanField(default=True, help_text="Set this if you want the page "
-                                                               "to be listed in site navigation.")
-    slug = models.SlugField(unique=True, help_text="Changing this value after initial creation will break existing "
-                                                   "page URLs. Must be unique.")
+    show_in_menu = models.BooleanField(
+        default=True, help_text="Set this if you want the page " "to be listed in site navigation."
+    )
+    slug = models.SlugField(
+        unique=True,
+        help_text="Changing this value after initial creation will break existing "
+        "page URLs. Must be unique.",
+    )
 
     body = MarkdownxField()
 

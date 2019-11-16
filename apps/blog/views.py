@@ -23,15 +23,15 @@ class BlogListView(generic.ListView):
             # user is doing a search query
             query = SearchQuery(q)
             vector = SearchVector('text', 'title')
-            queryset = self.model.objects.annotate(rank=SearchRank(vector, query)) \
-                .prefetch_related('tags') \
+            queryset = (
+                self.model.objects.annotate(rank=SearchRank(vector, query))
+                .prefetch_related('tags')
                 .order_by('-rank')
+            )
 
         elif tag:
             # user is doing a tag query
-            queryset = self.model.objects \
-                .prefetch_related('tags') \
-                .filter(tags__slug__in=[tag])
+            queryset = self.model.objects.prefetch_related('tags').filter(tags__slug__in=[tag])
         else:
             queryset = self.model.objects.prefetch_related('tags').all()
 
