@@ -4,15 +4,16 @@ workflows:
   version: 2
   build-and-test:
     jobs:
-      - prepare_enviroment
+      - update_dependencies
       - test:
           requires:
-            - prepare_enviroment
+            - update_dependencies
 jobs:
-  prepare_enviroment:
+  update_dependencies:
     docker:
       - image: circleci/python:3.7-node
     steps:
+      - checkout
       - restore_cache:
           keys:
             - pip-{{ checksum "requirements.txt" }}-{{ checksum "package.json" }}
