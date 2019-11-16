@@ -5,7 +5,7 @@ workflows:
   build-and-test:
     jobs:
       - update_dependencies
-      - test:
+      - run_tests:
           requires:
             - update_dependencies
 jobs:
@@ -35,7 +35,7 @@ jobs:
           paths:
             - /home/circleci/.local/lib/
             - ./node_modules
-  test:
+  run_tests:
     docker:
       - image: circleci/python:3.7-node
         environment:

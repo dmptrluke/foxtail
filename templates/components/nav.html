@@ -7,7 +7,7 @@
         <a class="nav-item nav-link {% if request.resolver_match.url_name == "index" %} active{% endif %}"
            href="/">Home</a>
         <a class="nav-item nav-link {% if "blog_" in request.resolver_match.url_name %} active{% endif %}"
-           href="{% url 'blog_list' %}">Blog</a>
+           href="{% url 'blog_list' %}">News</a>
     </div>
     <div class="navbar-nav">
         {% if user.is_authenticated %}
