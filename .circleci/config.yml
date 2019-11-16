@@ -1,6 +1,40 @@
-version: 2.0
+version: 2.1
+
+workflows:
+  version: 2
+  build-and-test:
+    jobs:
+      - prepare_enviroment
+      - test:
+          requires:
+            - prepare_enviroment
 jobs:
-  build:
+  prepare_enviroment:
+    docker:
+      - image: circleci/python:3.7-node
+    steps:
+      - restore_cache:
+          keys:
+            - pip-{{ checksum "requirements.txt" }}-{{ checksum "package.json" }}
+      - run:
+          command: |
+            if true; then
+              pip install --user -r requirements.txt
+              pip install --user -r .circleci/requirements.txt
+            else
+              pip install -r requirements.txt
+              pip install -r .circleci/requirements.txt
+            fi
+          name: Install Python Dependencies
+      - run:
+          command: npm install
+          name: Install Node Dependencies
+      - save_cache:
+          key: pip-{{ checksum "requirements.txt" }}-{{ checksum "package.json" }}
+          paths:
+            - /home/circleci/.local/lib/
+            - ./node_modules
+  test:
     docker:
       - image: circleci/python:3.7-node
         environment:
@@ -15,33 +49,15 @@ jobs:
           POSTGRES_USER: root
           POSTGRES_DB: test
     steps:
-    - checkout
-    - restore_cache:
-        keys:
-        - pip-{{ checksum "requirements.txt" }}-{{ checksum "package.json" }}
-    - run:
-        command: |
-          if true; then
-            pip install --user -r requirements.txt
-            pip install --user -r .circleci/requirements.txt
-          else
-            pip install -r requirements.txt
-            pip install -r .circleci/requirements.txt
-          fi
-        name: Install Python Dependencies
-    - run:
-        command: npm install
-        name: Install Node Dependencies
-    - save_cache:
-        key: pip-{{ checksum "requirements.txt" }}-{{ checksum "package.json" }}
-        paths:
-        - /home/circleci/.local/lib/
-        - ./node_modules
-    - run:
-        name: Generate assets
-        command: npm run-script build-dev
-    - run:
-        name: Running tests
-        command: python manage.py test 2>&1 | tee -a results.txt
-    - store_artifacts:
-        path: results.txt
+      - checkout
+      - restore_cache:
+          keys:
+            - pip-{{ checksum "requirements.txt" }}-{{ checksum "package.json" }}
+      - run:
+          name: Generate assets
+          command: npm run-script build-dev
+      - run:
+          name: Running tests
+          command: python manage.py test 2>&1 | tee -a results.txt
+      - store_artifacts:
+          path: results.txt
