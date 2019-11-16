@@ -16,7 +16,8 @@ class PostAdmin(MarkdownxModelAdmin):
     list_filter = ('created', 'tags', 'author')
     list_display = ('title', 'tag_list', 'created', 'modified', 'author')
 
-    def tag_list(self, obj):
+    @staticmethod
+    def tag_list(obj):
         return u", ".join(o.name for o in obj.tags.all())
 
 

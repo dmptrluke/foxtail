@@ -59,6 +59,6 @@ jobs:
           command: npm run-script build-dev
       - run:
           name: Running tests
-          command: python manage.py test 2>&1 | tee -a results.txt
+          command: python manage.py test -v 2 2>&1 | tee -a results.txt
       - store_artifacts:
           path: results.txt
