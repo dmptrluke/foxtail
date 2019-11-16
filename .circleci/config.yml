@@ -53,6 +53,7 @@ jobs:
       - image: circleci/buildpack-deps
         environment:
           SENTRY_PROJECT: furrynz
+    resource_class: small
     steps:
       - checkout
       - run:
