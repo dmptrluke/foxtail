@@ -49,10 +49,6 @@ jobs:
       - store_artifacts:
           path: results.txt
   sentry:
-    filters:
-      branches:
-        only:
-          - master
     docker:
       - image: circleci/buildpack-deps
         environment:
@@ -96,3 +92,6 @@ workflows:
             - update_dependencies
       - sentry:
           context: Sentry
+          filters:
+            branches:
+              only: master
