@@ -1,0 +1,15 @@
+.navbar-brand {
+	.icon {
+		vertical-align: top;
+		width: 30px;
+		height: 30px;
+		margin-right: 0.5em;
+
+		svg {
+			width: 30px;
+			height: 30px;
+			position: static;
+			top: 0;
+		}
+	}
+}
