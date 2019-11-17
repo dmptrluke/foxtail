@@ -46,9 +46,11 @@ jobs:
           command: npm run-script build-dev
       - run:
           name: Running tests
-          command: python manage.py test -v 2 2>&1 | tee -a results.txt
-      - store_artifacts:
-          path: results.txt
+          command: |
+            mkdir test-reports
+            python -m pytest --junitxml=test-reports/junit.xml
+      - store_test_results:
+          path: test-reports
   sentry:
     docker:
       - image: circleci/buildpack-deps
