@@ -44,35 +44,35 @@ class AuthenticatedResponseCodeTests(TestCase):
 
         url = reverse('account_profile')
         response = self.client.get(url)
-        self.assertEquals(response.status_code, 200)
+        self.assertEqual(response.status_code, 200)
 
     def test_email(self):
         self.client.force_login(self.user)
 
         url = reverse('account_email')
         response = self.client.get(url)
-        self.assertEquals(response.status_code, 200)
+        self.assertEqual(response.status_code, 200)
 
     def test_connections(self):
         self.client.force_login(self.user)
 
         url = reverse('socialaccount_connections')
         response = self.client.get(url)
-        self.assertEquals(response.status_code, 200)
+        self.assertEqual(response.status_code, 200)
 
     def test_set_password(self):
         self.client.force_login(self.user)
 
         url = reverse('account_set_password')
         response = self.client.get(url)
-        self.assertEquals(response.status_code, 200)
+        self.assertEqual(response.status_code, 200)
 
     def test_change_password(self):
         self.client.force_login(self.user_with_password)
 
         url = reverse('account_change_password')
         response = self.client.get(url)
-        self.assertEquals(response.status_code, 200)
+        self.assertEqual(response.status_code, 200)
 
     def test_change_to_set(self):
         """ user has no password set, so this should redirect to set_password """

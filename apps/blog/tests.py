@@ -10,32 +10,32 @@ class ResponseCodeTests(TestCase):
     def test_blog(self):
         url = reverse('blog_list')
         response = self.client.get(url)
-        self.assertEquals(response.status_code, 200)
+        self.assertEqual(response.status_code, 200)
 
     def test_feed(self):
         url = reverse('blog_feed')
         response = self.client.get(url)
-        self.assertEquals(response.status_code, 200)
+        self.assertEqual(response.status_code, 200)
 
     def test_blog_detail(self):
         Post.objects.create(title='1-title', slug='1-slug', text='1-text', author='1-author')
         url = reverse('blog_detail', kwargs={'slug': '1-slug'})
         response = self.client.get(url)
-        self.assertEquals(response.status_code, 200)
+        self.assertEqual(response.status_code, 200)
 
 
 class URLResolverTests(TestCase):
     def test_blog(self):
         resolver = resolve('/blog/')
-        self.assertEquals(resolver.view_name, 'blog_list')
+        self.assertEqual(resolver.view_name, 'blog_list')
 
     def test_feed(self):
         resolver = resolve('/blog/feed/')
-        self.assertEquals(resolver.view_name, 'blog_feed')
+        self.assertEqual(resolver.view_name, 'blog_feed')
 
     def test_blog_detail(self):
         resolver = resolve('/blog/test-post/')
-        self.assertEquals(resolver.view_name, 'blog_detail')
+        self.assertEqual(resolver.view_name, 'blog_detail')
 
 
 class PostModelTest(TestCase):

@@ -7,13 +7,13 @@ class ResponseCodeTests(TestCase):
     def test_index(self):
         url = reverse('index')
         response = self.client.get(url)
-        self.assertEquals(response.status_code, 200)
+        self.assertEqual(response.status_code, 200)
 
 
 class URLResolverTests(TestCase):
     def test_index(self):
         resolver = resolve('/')
-        self.assertEquals(resolver.view_name, 'index')
+        self.assertEqual(resolver.view_name, 'index')
 
 
 class IndexViewTests(TestCase):

@@ -1,6 +1,6 @@
 from django import template
 from django.utils.html import format_html
-from django.contrib.staticfiles.templatetags.staticfiles import static
+from django.templatetags.static import static
 
 register = template.Library()
 
