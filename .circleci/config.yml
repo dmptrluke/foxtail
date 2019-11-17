@@ -7,7 +7,8 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-            - pip-{{ checksum "requirements.txt" }}-{{ checksum "package.json" }}
+            - pip-{{ checksum "requirements.txt" }}-{{ checksum ".circleci/requirements.txt" }}-{{ checksum "package.json" }}
+            - pip-
       - run:
           command: |
             pip install --user -r requirements.txt
@@ -17,7 +18,7 @@ jobs:
           command: npm install
           name: Install Node Dependencies
       - save_cache:
-          key: pip-{{ checksum "requirements.txt" }}-{{ checksum "package.json" }}
+          key: pip-{{ checksum "requirements.txt" }}-{{ checksum ".circleci/requirements.txt" }}-{{ checksum "package.json" }}
           paths:
             - /home/circleci/.local/lib/
             - ./node_modules
@@ -39,7 +40,7 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-            - pip-{{ checksum "requirements.txt" }}-{{ checksum "package.json" }}
+            - pip-{{ checksum "requirements.txt" }}-{{ checksum ".circleci/requirements.txt" }}-{{ checksum "package.json" }}
       - run:
           name: Generate assets
           command: npm run-script build-dev
