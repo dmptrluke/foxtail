@@ -12,6 +12,8 @@ $spacers: (
         5: ($spacer * 2),
         6: ($spacer * 3)
 );
+// fonts
+$font-family-sans-serif:      -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji" !default;
 
 // add a neat bit of blueness to the dark
 $dark: #2c3840;
