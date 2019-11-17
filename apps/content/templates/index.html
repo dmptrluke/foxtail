@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% load markdownify humanize account %}
+
+{% block title_full %}{{ request.site.name }}{% endblock title_full %}
+
+{% block content %}
+    <h1>Welcome to {{ request.site.name }}.</h1>
+
+    <p>
+        Welcome to {{ request.site.name }}, the resource for New Zealand <a
+            href="https://www.anthrocon.org/what-is-furry/" target="_blank" rel="noopener noreferrer"
+            data-toggle="tooltip" title="What is a furry?">furries</a>.
+        Most of the functionality of site is currently under construction, but we've launched the parts of the website
+        that are ready so far so you can log in and manage your {{ request.site.name }} account.
+    </p>
+
+    {% if user.is_authenticated %}
+
+        <p>
+            You're now logged in as <em>{% user_display user %}</em>! Use the buttons below to manage
+            your {{ request.site.name }}
+            account.
+        </p>
+        <p class="mb-6">
+            <a href="{% url 'account_profile' %}" class="btn btn-dark btn-lg mb-2">Manage Account</a>
+            <a href="{% url 'account_logout' %}" class="btn btn-dark btn-lg mb-2">Sign Out</a>
+        </p>
+
+    {% else %}
+        <p>
+            To continue, you'll need to create a {{ request.site.name }} account or sign in to an existing one.
+            You can do this using the buttons below.
+        </p>
+        <p class="mb-6">
+            <a href="{% url 'account_signup' %}" class="btn btn-dark btn-lg mb-2">Create Account</a>
+            <a href="{% url 'account_login' %}" class="btn btn-dark btn-lg mb-2">Sign In</a>
+
+        </p>
+    {% endif %}
+
+
+
+    <h3 class="mb-3">News & Updates</h3>
+    <div class="row mb-2">
+        {% for post in post_list %}
+            <div class="col-lg-4">
+                <article class="card mb-4">
+
+                    {% if post.image %}
+                        <a href="{{ post.get_absolute_url }}">
+                            <img class="card-img-top" src="{{ post.image.crop.300x150 }}" alt="">
+                        </a>
+                    {% endif %}
+
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            {{ post.title | safe }}
+                        </h5>
+                        <h6 class="card-subtitle mb-2 text-muted">
+                            {{ post.created | naturaltime }}
+                        </h6>
+                        <p class="card-text">
+                            {{ post.text | markdown | safe | striptags | truncatechars:70 }}
+                        </p>
+                        <a href="{{ post.get_absolute_url }}" class="btn btn-primary">Read more</a>
+                    </div>
+
+                </article>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock content %}
