@@ -33,4 +33,4 @@ class AuthenticatedIndexViewTests(TestCase):
 
     def test_content(self):
         response = self.client.get(reverse('index'))
-        self.assertContains(response, "You're now logged in as <em>user1")
+        self.assertContains(response, "You're now logged in as <strong>user1")
