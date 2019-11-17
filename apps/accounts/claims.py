@@ -15,6 +15,7 @@ def userinfo(claims, user):
         claims['birthdate'] = user.date_of_birth.isoformat()
 
     claims['preferred_username'] = user.username
+    claims['nickname'] = user.username
     claims['email'] = user.email
 
     return claims

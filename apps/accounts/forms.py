@@ -80,7 +80,7 @@ class UserForm(ModelForm):
         widgets = {
             'date_of_birth': SelectDateWidget(years=range(1900, 2011)),
         }
-        fields = ('username', 'display_name', 'date_of_birth', 'gender', 'full_name')
+        fields = ('username', 'date_of_birth', 'gender', 'full_name')
 
     def __init__(self, *args, **kwargs):
         super(UserForm, self).__init__(*args, **kwargs)

@@ -1,8 +1,23 @@
 from django.contrib.auth.models import AbstractUser, PermissionsMixin
 from django.db import models
 
+from .validators import UsernameValidator
+
 
 class User(AbstractUser):
+    username_validator = UsernameValidator()
+
+    username = models.CharField(
+        'username',
+        max_length=120,
+        unique=True,
+        help_text='Required. 120 characters or fewer. Letters, digits, spaces, and @/./+/-/_ only.',
+        validators=[username_validator],
+        error_messages={
+            'unique': "A user with that username already exists.",
+        },
+    )
+
     email = models.EmailField('email address', blank=False)
 
     full_name = models.CharField(max_length=120, blank=True)
@@ -10,7 +25,6 @@ class User(AbstractUser):
     date_of_birth = models.DateField(null=True, blank=True)
     gender = models.CharField(max_length=50, blank=True)
 
-    display_name = models.CharField(max_length=50)
     profile_URL = models.CharField(max_length=25)
 
     def __str__(self):
