@@ -1,3 +1,4 @@
+import pytest
 from django.test import TestCase
 from django.urls import reverse, resolve
 
@@ -6,36 +7,37 @@ import atoma
 from .models import Post
 
 
-class ResponseCodeTests(TestCase):
-    def test_blog(self):
+class ResponseCodeTests:
+    def test_blog(self, client):
         url = reverse('blog_list')
-        response = self.client.get(url)
-        self.assertEqual(response.status_code, 200)
+        response = client.get(url)
+        assert response.status_code == 200
 
-    def test_feed(self):
+    def test_feed(self, client):
         url = reverse('blog_feed')
-        response = self.client.get(url)
-        self.assertEqual(response.status_code, 200)
+        response = client.get(url)
+        assert response.status_code == 200
 
-    def test_blog_detail(self):
+    @pytest.mark.django_db
+    def test_blog_detail(self, client):
         Post.objects.create(title='1-title', slug='1-slug', text='1-text', author='1-author')
         url = reverse('blog_detail', kwargs={'slug': '1-slug'})
-        response = self.client.get(url)
-        self.assertEqual(response.status_code, 200)
+        response = client.get(url)
+        assert response.status_code == 200
 
 
-class URLResolverTests(TestCase):
+class URLResolverTests:
     def test_blog(self):
         resolver = resolve('/blog/')
-        self.assertEqual(resolver.view_name, 'blog_list')
+        assert resolver.view_name == 'blog_list'
 
     def test_feed(self):
         resolver = resolve('/blog/feed/')
-        self.assertEqual(resolver.view_name, 'blog_feed')
+        assert resolver.view_name == 'blog_feed'
 
     def test_blog_detail(self):
         resolver = resolve('/blog/test-post/')
-        self.assertEqual(resolver.view_name, 'blog_detail')
+        assert resolver.view_name == 'blog_detail'
 
 
 class PostModelTest(TestCase):
