@@ -28,8 +28,8 @@ jobs:
         environment:
           DEBUG: true
           SECRET_KEY: fakekey
-          RECAPTCHA_PRIVATE_KEY: fakekey
-          RECAPTCHA_PUBLIC_KEY: fakekey
+          RECAPTCHA_PUBLIC_KEY: 6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI
+          RECAPTCHA_PRIVATE_KEY: 6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe
           SITE_URL: test
           DATABASE_URL: postgres://root@localhost:5432/test
       - image: circleci/postgres:10

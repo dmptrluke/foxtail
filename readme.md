@@ -53,7 +53,7 @@ Included below is an example of a minimal `settings.ini` file to be used for loc
 [settings]
 DEBUG=True
 SITE_URL=http://127.0.0.1:8000
-ALLOWED_HOSTS=127.0.0.1
+INTERNAL_IPS=127.0.0.1
 
 # replace this with your own key!
 SECRET_KEY=XJB2yYbJDaBhrDm9e7uB787Uv3HfYcZ
