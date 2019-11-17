@@ -56,12 +56,18 @@ SITE_URL=http://127.0.0.1:8000
 INTERNAL_IPS=127.0.0.1
 
 # replace this with your own key!
-SECRET_KEY=XJB2yYbJDaBhrDm9e7uB787Uv3HfYcZ
+SECRET_KEY=REPLACEME
 
 # recaptcha test keys
 RECAPTCHA_PUBLIC_KEY=6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI
 RECAPTCHA_PRIVATE_KEY=6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe
 
+```
+
+To generate a new secret key, open a Python shell and run the following command.
+
+```
+from foxtail.utils import get_random_secret_key; get_random_secret_key()
 ```
 
 ### Installing
