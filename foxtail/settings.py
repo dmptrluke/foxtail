@@ -233,6 +233,7 @@ ACCOUNT_FORMS = {
 }
 
 ACCOUNT_ADAPTER = 'apps.accounts.authentication.AccountAdapter'
+SOCIALACCOUNT_ADAPTER = 'apps.accounts.authentication.SocialAccountAdapter'
 
 ALLAUTH_2FA_ALWAYS_REVEAL_BACKUP_TOKENS = False
 
