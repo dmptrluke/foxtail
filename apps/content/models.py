@@ -1,7 +1,7 @@
 from django.db import models
 from django.urls import reverse
 
-from apps.core.fields import MarkdownField, ClassyValidator
+from foxtail_blog.fields import MarkdownField, ClassyValidator
 
 
 class Page(models.Model):

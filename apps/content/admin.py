@@ -1,11 +1,11 @@
 from adminsortable2.admin import SortableAdminMixin
 from django.contrib import admin
-from markdownx.admin import MarkdownxModelAdmin
+from django.contrib.admin import ModelAdmin
 
 from .models import Page
 
 
-class PageAdmin(SortableAdminMixin, MarkdownxModelAdmin):  # lgtm [py/conflicting-attributes]
+class PageAdmin(SortableAdminMixin, ModelAdmin):  # lgtm [py/conflicting-attributes]
     fieldsets = (
         (None, {'fields': ('title', 'subtitle', 'body')}),
         ('Advanced options', {'fields': ('slug', 'show_in_menu'),}),

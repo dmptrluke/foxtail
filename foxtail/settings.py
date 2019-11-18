@@ -73,7 +73,6 @@ INSTALLED_APPS = [
     'taggit_templatetags2',
     'adminsortable2',
     'guardian',
-    'markdownx',
     'webpack_loader',
     'crispy_forms',
     'oidc_provider',
@@ -412,9 +411,8 @@ VERSATILEIMAGEFIELD_SETTINGS = {
     'jpeg_resize_quality': 80
 }
 
-# MarkdownX
-# <https://neutronx.github.io/django-markdownx/customization/>
-MARKDOWNX_MARKDOWN_EXTENSIONS = [
+# Markdown
+MARKDOWN_EXTENSIONS = [
     'pymdownx.smartsymbols',
     'pymdownx.betterem',
     'pymdownx.tilde',
@@ -425,7 +423,7 @@ MARKDOWNX_MARKDOWN_EXTENSIONS = [
     'smarty'
 ]
 
-MARKDOWNX_MARKDOWN_EXTENSION_CONFIGS = {
+MARKDOWN_EXTENSION_CONFIGS = {
     'pymdownx.emoji': {
         'emoji_generator': pymdownx.emoji.to_alt
     }

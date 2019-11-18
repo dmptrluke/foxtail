@@ -22,7 +22,6 @@ from django.urls import path, include
 urlpatterns = [
     path('admin/', admin.site.urls),
     url(r'^openid/', include('oidc_provider.urls', namespace='oidc_provider')),
-    url(r'^markdownx/', include('markdownx.urls')),
     url(r'^accounts/', include('apps.accounts.urls')),
     url(r'^accounts/', include('allauth_2fa.urls')),
     url(r'^accounts/', include('allauth.urls')),
