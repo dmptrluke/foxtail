@@ -1,9 +1,7 @@
 from django.db import models
 from django.urls import reverse
 
-from markdownx.models import MarkdownxField
-
-from apps.core.fields import MarkdownField
+from apps.core.fields import MarkdownField, ClassyValidator
 
 
 class Page(models.Model):
@@ -23,7 +21,7 @@ class Page(models.Model):
         "page URLs. Must be unique.",
     )
 
-    body = MarkdownField(rendered_field='body_rendered')
+    body = MarkdownField(rendered_field='body_rendered', validator=ClassyValidator)
     body_rendered = models.TextField(blank=True)
 
     class Meta:

@@ -8,22 +8,35 @@ from markdown import markdown
 EXTENSIONS = getattr(settings, 'MARKDOWNX_MARKDOWN_EXTENSIONS', [])
 EXTENSION_CONFIGS = getattr(settings, 'MARKDOWNX_MARKDOWN_EXTENSION_CONFIGS', [])
 
-ALLOWED_TAGS = bleach_whitelist.markdown_tags + ['dl', 'del', 'abbr']
-ALLOWED_ATTRS = {
-    'abbr': ['title']
-}
 
-ALLOWED_ATTRS.update(bleach_whitelist.markdown_attrs)
+class NullValidator:
+    sanitize = False
 
 
-class CustomCheckbox(Field):
-    template = 'components/custom_checkbox.html'
+class StandardValidator:
+    allowed_tags = bleach_whitelist.markdown_tags + ['dl', 'del', 'abbr']
+    allowed_attrs = {
+        **bleach_whitelist.markdown_attrs,
+        'abbr': ['title']
+    }
+    sanitize = True
+
+
+class ClassyValidator:
+    allowed_tags = bleach_whitelist.markdown_tags + ['dl', 'del', 'abbr']
+    allowed_attrs = {
+        **bleach_whitelist.markdown_attrs,
+        'abbr': ['title'],
+        'img': ['src', 'alt', 'title', 'class'],
+        'a': ['href', 'alt', 'title', 'class']
+    }
+    sanitize = True
 
 
 class MarkdownField(MarkdownxField):
-    def __init__(self, rendered_field=None, sanitize=True):
+    def __init__(self, rendered_field=None, validator=StandardValidator):
         self.rendered_field = rendered_field
-        self.sanitize = sanitize
+        self.validator = validator
         super(MarkdownField, self).__init__()
 
     def pre_save(self, model_instance, add):
@@ -38,11 +51,15 @@ class MarkdownField(MarkdownxField):
             extension_configs=EXTENSION_CONFIGS
         )
 
-        if self.sanitize:
-            clean = bleach.clean(dirty, ALLOWED_TAGS, ALLOWED_ATTRS)
+        if self.validator.sanitize:
+            clean = bleach.clean(dirty, self.validator.allowed_tags, self.validator.allowed_attrs)
             setattr(model_instance, self.rendered_field, clean)
         else:
             # danger!
             setattr(model_instance, self.rendered_field, dirty)
 
         return value
+
+
+class CustomCheckbox(Field):
+    template = 'components/custom_checkbox.html'
