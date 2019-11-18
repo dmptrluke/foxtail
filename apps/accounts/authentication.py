@@ -41,7 +41,7 @@ class SocialAccountAdapter(DefaultSocialAccountAdapter):
                 user_field(user, 'full_name', merged_name)
 
         gender = data.get('gender')
-        if name:
+        if gender:
             user_field(user, 'gender', gender.title())
 
         return user
