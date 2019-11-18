@@ -1,6 +1,6 @@
 from django.views.generic import TemplateView, DetailView
 
-from apps.blog.models import Post
+from foxtail_blog.models import Post
 from apps.content.models import *
 
 

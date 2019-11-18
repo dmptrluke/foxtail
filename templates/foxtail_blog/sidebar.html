@@ -30,7 +30,7 @@
     <section>
         <h3>Categories</h3>
         <div class="list-group">
-            {% get_taglist as tags for 'blog.Post' %}
+            {% get_taglist as tags for 'foxtail_blog.Post' %}
             {% for tag in tags %}
                 <a href="{% url 'blog_list' %}?tag={{ tag.slug }}" class="list-group-item list-group-item-action
                     d-flex justify-content-between align-items-center">
