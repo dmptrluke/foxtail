@@ -15,7 +15,6 @@ django-allauth==0.40.0
 django-allauth-2fa==0.7
 django-csp==3.5
 django-recaptcha==2.0.5
-django-markdownx==2.0.28
 django-taggit==1.1.0
 django-taggit-templatetags2==1.6.1
 django-versatileimagefield==1.11
@@ -25,4 +24,4 @@ django-crispy-forms==1.8.0
 django-admin-sortable2==0.7.3
 django-guardian==2.1.0
 dj-database-url==0.5.0
-foxtail-blog==0.1.2
+foxtail-blog>=0.1.3
