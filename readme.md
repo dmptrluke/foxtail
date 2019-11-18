@@ -66,7 +66,7 @@ RECAPTCHA_PRIVATE_KEY=6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe
 
 To generate a new secret key, open a Python shell and run the following command.
 
-```
+```py
 from foxtail.utils import get_random_secret_key; get_random_secret_key()
 ```
 
