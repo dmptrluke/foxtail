@@ -3,6 +3,8 @@ from django.urls import reverse
 
 from markdownx.models import MarkdownxField
 
+from apps.core.fields import MarkdownField
+
 
 class Page(models.Model):
     title = models.CharField(max_length=100, help_text="100 characters or fewer.")
@@ -21,7 +23,8 @@ class Page(models.Model):
         "page URLs. Must be unique.",
     )
 
-    body = MarkdownxField()
+    body = MarkdownField(rendered_field='body_rendered')
+    body_rendered = models.TextField(blank=True)
 
     class Meta:
         ordering = ['sort_order']

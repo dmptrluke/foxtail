@@ -17,7 +17,7 @@
     </section>
 
     <section id="page-content">
-        {{ page.body | markdown | safe }}
+        {{ page.body_rendered | safe }}
     </section>
 
 {% endblock content %}

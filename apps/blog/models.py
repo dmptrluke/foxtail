@@ -1,9 +1,10 @@
 from django.db import models
 from django.urls import reverse
 
-from markdownx.models import MarkdownxField
 from taggit.managers import TaggableManager
 from versatileimagefield.fields import VersatileImageField, PPOIField
+
+from apps.core.fields import MarkdownField
 
 
 class Post(models.Model):
@@ -22,7 +23,8 @@ class Post(models.Model):
     image = VersatileImageField(upload_to='blog', blank=True, null=True, ppoi_field='image_ppoi')
     image_ppoi = PPOIField()
 
-    text = MarkdownxField()
+    text = MarkdownField(rendered_field='text_rendered')
+    text_rendered = models.TextField(blank=True)
 
     class Meta:
         ordering = ['-pk']

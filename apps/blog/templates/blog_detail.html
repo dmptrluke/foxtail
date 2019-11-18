@@ -6,7 +6,7 @@
     <meta property="og:url" content="{{ SITE_URL }}{{ post.get_absolute_url }}">
     <meta property="og:type" content="article"/>
     <meta property="og:title" content="{{ post.title }}">
-    <meta name="description" content="{{ post.text | markdown | striptags | truncatechars:200 }}">
+    <meta name="description" content="{{ post.text_rendered | striptags | truncatechars:200 }}">
     <meta property="og:description"
           content="{{ post.text | markdown | striptags | truncatechars:200 }}">
     <meta property="article:published_time" content="{{ post.created | date:"c" }}">
@@ -27,7 +27,7 @@
                 {% endif %}
                 <h2><a class="text-reset" href="{{ post.get_absolute_url }}">{{ post.title }}</a></h2>
                 <p class="text-muted">{{ post.created|date:"F jS, Y" }}</p>
-                <p>{{ post.text | markdown | safe }}</p>
+                <p class="rendered-markdown">{{ post.text_rendered | safe }}</p>
 
                 <div class="row">
                     <div class="col-sm-6">
@@ -41,13 +41,13 @@
                             <li class="list-inline-item"><a class="twitter"
                                                             href="http://www.twitter.com/share?url=
 
-                                                                    {{ SITE_URL }}{{ post.get_absolute_url }}&amp;text={{ post.title | safe | urlencode }}&amp;hashtags=southernpaws">
+                                                                    {{ SITE_URL }}{{ post.get_absolute_url }}&amp;text={{ post.title | urlencode }}&amp;hashtags=southernpaws">
                                 {% icon "twitter" %}
                             </a></li>
                             <li class="list-inline-item"><a class="telegram"
                                                             href="https://telegram.me/share/url?url=
 
-                                                                    {{ SITE_URL }}{{ post.get_absolute_url }}&amp;text={{ post.title | safe | urlencode }}">
+                                                                    {{ SITE_URL }}{{ post.get_absolute_url }}&amp;text={{ post.title | urlencode }}">
                                 {% icon "telegram" %}
                             </a></li>
                         </ul>
