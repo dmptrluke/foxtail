@@ -1,5 +1,6 @@
 from django.contrib.admin import AdminSite
-from django.contrib.auth.decorators import login_required
+from django.http import HttpResponseRedirect
+from django.urls import reverse
 from django.views.decorators.cache import never_cache
 
 
@@ -8,6 +9,11 @@ class CustomAdminSite(AdminSite):
     site_title = 'Foxtail Admin'
 
     @never_cache
-    @login_required
     def login(self, request, extra_context=None):
-        return super().login(self, request, extra_context=None)
+        if request.method == 'GET' and self.has_permission(request):
+            # Already logged-in, redirect to admin index
+            index_path = reverse('admin:index', current_app=self.name)
+            return HttpResponseRedirect(index_path)
+        else:
+            login_path = reverse('account_login')
+            return HttpResponseRedirect(login_path)
