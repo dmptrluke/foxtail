@@ -434,4 +434,4 @@ if config('USING_HEROKU', default=False, cast=bool):
     import django_heroku
     django_heroku.settings(locals())
 
-    MIDDLEWARE.insert(2, 'whitenoise.middleware.WhiteNoiseMiddleware')
+
