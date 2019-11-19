@@ -70,7 +70,6 @@ INSTALLED_APPS = [
     # Enable two-factor auth.
     'allauth_2fa',
     'taggit',
-    'taggit_templatetags2',
     'adminsortable2',
     'guardian',
     'webpack_loader',
