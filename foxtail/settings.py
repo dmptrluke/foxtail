@@ -165,7 +165,7 @@ X_FRAME_OPTIONS = 'DENY'
 CSP_INCLUDE_NONCE_IN = ['script-src', 'style-src']
 CSP_UPGRADE_INSECURE_REQUESTS = True
 
-CSP_REPORT_URI = config('csp_report_uri', default=None)
+CSP_REPORT_URI = config('CSP_REPORT_URI', default=None)
 
 CSP_SCRIPT_SRC = ["'unsafe-inline'", "'self'"]
 CSP_STYLE_SRC = ["'unsafe-inline'", "'self'"]
@@ -176,7 +176,7 @@ CSP_OBJECT_SRC = ["'none'"]
 
 CSP_BASE_URI = ["'none'"]
 CSP_FRAME_ANCESTORS = ["'none'"]
-CSP_FORM_ACTION = ["'self'"] + config('csp_form_action', default='', cast=Csv())
+CSP_FORM_ACTION = ["'self'"] + config('CSP_FORM_ACTION', default='', cast=Csv())
 
 CSP_EXCLUDE_URL_PREFIXES = ('/admin',)
 
@@ -195,13 +195,13 @@ DATABASES = {
     )
 }
 
-CACHE_ENABLED = config('cache_enabled', default=False, cast=bool)
+CACHE_ENABLED = config('CACHE_ENABLED', default=False, cast=bool)
 
 if CACHE_ENABLED:
     CACHES = {
         'default': {
             'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
-            'LOCATION': config('cache_location', default='127.0.0.1:11211'),
+            'LOCATION': config('CACHE_LOCATION', default='127.0.0.1:11211'),
         }
     }
 
@@ -350,17 +350,17 @@ WEBPACK_LOADER = {
 # Sentry.io
 # <https://docs.sentry.io/platforms/python/django/>
 
-SENTRY_ENABLED = config('sentry_enabled', default=False, cast=bool)
+SENTRY_ENABLED = config('SENTRY_ENABLED', default=False, cast=bool)
 
 if SENTRY_ENABLED:
-    SENTRY_DSN = config('sentry_dsn')
+    SENTRY_DSN = config('SENTRY_DSN')
 
     import sentry_sdk
     from sentry_sdk.integrations.django import DjangoIntegration
 
     _vars = {
         'dsn': SENTRY_DSN,
-        'send_default_pii': config('sentry_pii', default=False, cast=bool),
+        'send_default_pii': config('SENTRY_PII', default=False, cast=bool),
         'integrations': [DjangoIntegration()]
     }
 
@@ -369,7 +369,7 @@ if SENTRY_ENABLED:
     if SENTRY_ENVIRONMENT:
         _vars['environment'] = SENTRY_ENVIRONMENT
 
-    if config('sentry_git', default=False, cast=bool):
+    if config('SENTRY_GIT', default=False, cast=bool):
         import git
 
         repo = git.Repo(search_parent_directories=True)
@@ -383,14 +383,14 @@ if SENTRY_ENABLED:
 # <https://docs.djangoproject.com/en/2.2/topics/email/>
 
 try:
-    DEFAULT_FROM_EMAIL = config('email_from_user')
-    SERVER_EMAIL = config('email_from_system')
+    DEFAULT_FROM_EMAIL = config('EMAIL_FROM_USER')
+    SERVER_EMAIL = config('EMAIL_FROM_SYSTEM')
 
-    EMAIL_HOST = config('email_host')
-    EMAIL_HOST_USER = config('email_user')
-    EMAIL_HOST_PASSWORD = config('email_pass')
-    EMAIL_PORT = config('email_port', default=587, cast=int)
-    EMAIL_USE_TLS = config('email_tls', default=True, cast=bool)
+    EMAIL_HOST = config('EMAIL_HOST')
+    EMAIL_HOST_USER = config('EMAIL_USER')
+    EMAIL_HOST_PASSWORD = config('EMAIL_PASS')
+    EMAIL_PORT = config('EMAIL_PORT', default=587, cast=int)
+    EMAIL_USE_TLS = config('EMAIL_TLS', default=True, cast=bool)
 
 except UndefinedValueError as e:
     if DEBUG:
@@ -430,6 +430,8 @@ MARKDOWN_EXTENSION_CONFIGS = {
 }
 
 # Heroku Support
-if config('using_heroku', default=False, cast=bool):
+if config('USING_HEROKU', default=False, cast=bool):
     import django_heroku
     django_heroku.settings(locals())
+
+    MIDDLEWARE.insert(2, 'whitenoise.middleware.WhiteNoiseMiddleware')
