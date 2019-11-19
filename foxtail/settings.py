@@ -315,10 +315,7 @@ STATIC_URL = '/static/'
 # noinspection PyUnresolvedReferences
 STATIC_ROOT = os.path.join(BASE_DIR, 'static_out')
 
-if DEBUG:
-    STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.StaticFilesStorage'
-else:
-    STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.ManifestStaticFilesStorage'
+STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.StaticFilesStorage'
 
 # noinspection PyUnresolvedReferences
 STATICFILES_DIRS = [

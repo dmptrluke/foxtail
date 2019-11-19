@@ -9,7 +9,7 @@
         {% block title_full %}{% block title %}{% endblock title %} – {{ request.site.name }}{% endblock title_full %}
     </title>
 
-    <link rel="prefetch" href="{% static "icons.svg" %}">
+    <link rel="prefetch" href="{% static "icons_r1.svg" %}">
 
     <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,500,700&display=swap" nonce="{{ request.csp_nonce }}" rel="stylesheet">
     {% render_bundle_csp 'main' 'css' %}
