@@ -431,6 +431,13 @@ MARKDOWN_EXTENSION_CONFIGS = {
 
 # Heroku Support
 if config('USING_HEROKU', default=False, cast=bool):
+    SESSION_ENGINE = "django.contrib.sessions.backends.cached_db"
+    CACHES = {
+        'default': {
+            'BACKEND': 'django_bmemcached.memcached.BMemcached'
+        }
+    }
+
     import django_heroku
     django_heroku.settings(locals())
 
