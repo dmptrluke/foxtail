@@ -37,35 +37,35 @@
         </p>
     {% endif %}
 
-
-
     <h3 class="mb-3">News & Updates</h3>
     <div class="row mb-2">
-        {% for post in post_list %}
-            <div class="col-lg-4">
-                <article class="card mb-4">
+        {% cache 1800 index_blog %}
+            {% for post in post_list %}
+                <div class="col-lg-4">
+                    <article class="card mb-4">
 
-                    {% if post.image %}
-                        <a href="{{ post.get_absolute_url }}">
-                            <img class="card-img-top" src="{{ post.image.crop.300x150 }}" alt="">
-                        </a>
-                    {% endif %}
+                        {% if post.image %}
+                            <a href="{{ post.get_absolute_url }}">
+                                <img class="card-img-top" src="{{ post.image.crop.300x150 }}" alt="">
+                            </a>
+                        {% endif %}
 
-                    <div class="card-body">
-                        <h5 class="card-title">
-                            {{ post.title }}
-                        </h5>
-                        <h6 class="card-subtitle mb-2 text-muted">
-                            {{ post.created | naturaltime }}
-                        </h6>
-                        <p class="card-text">
-                            {{ post.text_rendered | safe | striptags | truncatechars:70 }}
-                        </p>
-                        <a href="{{ post.get_absolute_url }}" class="btn btn-primary">Read more</a>
-                    </div>
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                {{ post.title }}
+                            </h5>
+                            <h6 class="card-subtitle mb-2 text-muted">
+                                {{ post.created | naturaltime }}
+                            </h6>
+                            <p class="card-text">
+                                {{ post.text_rendered | safe | striptags | truncatechars:70 }}
+                            </p>
+                            <a href="{{ post.get_absolute_url }}" class="btn btn-primary">Read more</a>
+                        </div>
 
-                </article>
-            </div>
-        {% endfor %}
+                    </article>
+                </div>
+            {% endfor %}
+        {% endcache %}
     </div>
 {% endblock content %}
