@@ -430,5 +430,6 @@ MARKDOWN_EXTENSION_CONFIGS = {
 }
 
 # Heroku Support
-import django_heroku
-django_heroku.settings(locals())
+if config('using_heroku', default=False, cast=bool):
+    import django_heroku
+    django_heroku.settings(locals())
