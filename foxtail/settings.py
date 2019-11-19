@@ -168,7 +168,7 @@ CSP_UPGRADE_INSECURE_REQUESTS = True
 CSP_REPORT_URI = config('CSP_REPORT_URI', default=None)
 
 CSP_SCRIPT_SRC = ["'unsafe-inline'", "'self'"]
-CSP_STYLE_SRC = ["'unsafe-inline'", "'self'"]
+CSP_STYLE_SRC = ["'unsafe-inline'", 'fonts.googleapis.com', "'self'"]
 CSP_FRAME_SRC = ['https://www.google.com/recaptcha/']
 CSP_FONT_SRC = ['fonts.gstatic.com']
 CSP_IMG_SRC = ["'self'", "data:"]
