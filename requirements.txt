@@ -1,4 +1,5 @@
 requests==2.22.0
+gunicorn==20.0.0
 django==2.2.7
 bleach==3.1.0
 bleach-whitelist==0.0.10
@@ -15,6 +16,7 @@ django-allauth==0.40.0
 django-allauth-2fa==0.7
 django-csp==3.5
 django-recaptcha==2.0.5
+django-heroku==0.3.1
 django-taggit==1.1.0
 django-taggit-templatetags2==1.6.1
 django-versatileimagefield==1.11

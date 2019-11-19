@@ -428,3 +428,7 @@ MARKDOWN_EXTENSION_CONFIGS = {
         'emoji_generator': pymdownx.emoji.to_alt
     }
 }
+
+# Heroku Support
+import django_heroku
+django_heroku.settings(locals())
