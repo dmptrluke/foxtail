@@ -1,8 +1,22 @@
 version: 2.1
 jobs:
-  update_dependencies:
+  test:
     docker:
       - image: circleci/python:3.7-node
+        environment:
+          DEBUG: true
+          SECRET_KEY: fake
+          RECAPTCHA_PUBLIC_KEY: 6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI
+          RECAPTCHA_PRIVATE_KEY: 6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe
+          SITE_URL: test
+          CACHE_ENABLED: true
+          CACHE_URL: memcache://localhost:11211
+          DATABASE_URL: postgres://root@localhost:5432/test
+      - image: memcached:1.5
+      - image: circleci/postgres:10
+        environment:
+          POSTGRES_USER: root
+          POSTGRES_DB: test
     resource_class: medium
     steps:
       - checkout
@@ -23,29 +37,6 @@ jobs:
           paths:
             - /home/circleci/.local/lib/
             - ./node_modules
-  run_tests:
-    docker:
-      - image: circleci/python:3.7-node
-        environment:
-          DEBUG: true
-          SECRET_KEY: fakekey
-          RECAPTCHA_PUBLIC_KEY: 6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI
-          RECAPTCHA_PRIVATE_KEY: 6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe
-          SITE_URL: test
-          CACHE_ENABLED: true
-          CACHE_URL: memcache://localhost:11211
-          DATABASE_URL: postgres://root@localhost:5432/test
-      - image: memcached:1.5
-      - image: circleci/postgres:10
-        environment:
-          POSTGRES_USER: root
-          POSTGRES_DB: test
-    resource_class: medium
-    steps:
-      - checkout
-      - restore_cache:
-          keys:
-            - pip-{{ checksum "requirements.txt" }}-{{ checksum ".circleci/requirements.txt" }}-{{ checksum "package.json" }}
       - run:
           name: Generate assets
           command: npm run-script build-dev
@@ -95,10 +86,7 @@ workflows:
   version: 2
   build-and-test:
     jobs:
-      - update_dependencies
-      - run_tests:
-          requires:
-            - update_dependencies
+      - test
       - sentry:
           context: Sentry
           filters:
