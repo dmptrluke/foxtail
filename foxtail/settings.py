@@ -3,8 +3,8 @@ Base settings for the foxtail project.
 You shouldn't need to edit this file in most cases.
 
 Custom/instance specific settings can be customised using a
-<settings.ini> or <.env> file placed in the project root, or with
-environment variables (see https://pypi.org/project/python-decouple/)
+<.env> file placed in the project root, or with environment
+variables (see https://django-environ.readthedocs.io/)
 
 For Django documentation on this file, see
 https://docs.djangoproject.com/en/2.2/topics/settings/
@@ -16,27 +16,36 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 import logging
 import os
 
+import environ
 import pymdownx.emoji
-from decouple import config, Csv, UndefinedValueError
-from dj_database_url import parse as db_url
 from django.contrib.messages import constants as messages
+from django.core.exceptions import ImproperlyConfigured
+
+
 
 logger = logging.getLogger(__name__)
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+env = environ.Env()
+environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
+
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = config('SECRET_KEY')
+SECRET_KEY = env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = config('DEBUG', default=False, cast=bool)
+DEBUG = env.bool('DEBUG', default=False)
 
-SITE_URL = config('SITE_URL')
+SITE_URL = env('SITE_URL')
 SITE_ID = 1
 
-ALLOWED_HOSTS = config('ALLOWED_HOSTS', default="", cast=Csv())
-INTERNAL_IPS = config('INTERNAL_IPS', default="", cast=Csv())
+ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=[])
+INTERNAL_IPS = env.list('INTERNAL_IPS', default=[])
+
+ROOT_URLCONF = 'foxtail.urls'
+
+WSGI_APPLICATION = 'foxtail.wsgi.application'
 
 # Application definition
 INSTALLED_APPS = [
@@ -95,14 +104,11 @@ MIDDLEWARE = [
     'allauth_2fa.middleware.AllauthTwoFactorMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.contrib.sites.middleware.CurrentSiteMiddleware',
-
     'oidc_provider.middleware.SessionManagementMiddleware',
 ]
 
 if DEBUG:
     MIDDLEWARE += ['debug_toolbar.middleware.DebugToolbarMiddleware']
-
-ROOT_URLCONF = 'foxtail.urls'
 
 # Template Engine
 # <https://docs.djangoproject.com/en/dev/topics/templates/>
@@ -136,8 +142,6 @@ MESSAGE_TAGS = {
     messages.ERROR: 'danger',
 }
 
-WSGI_APPLICATION = 'foxtail.wsgi.application'
-
 # Recognise upstream proxy SSL
 # <https://docs.djangoproject.com/en/2.2/ref/settings/#secure-proxy-ssl-header>
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
@@ -164,7 +168,7 @@ X_FRAME_OPTIONS = 'DENY'
 CSP_INCLUDE_NONCE_IN = ['script-src', 'style-src']
 CSP_UPGRADE_INSECURE_REQUESTS = True
 
-CSP_REPORT_URI = config('CSP_REPORT_URI', default=None)
+CSP_REPORT_URI = env('CSP_REPORT_URI', default=None)
 
 CSP_SCRIPT_SRC = ["'unsafe-inline'", "'self'"]
 CSP_STYLE_SRC = ["'unsafe-inline'", 'fonts.googleapis.com', "'self'"]
@@ -175,10 +179,11 @@ CSP_OBJECT_SRC = ["'none'"]
 
 CSP_BASE_URI = ["'none'"]
 CSP_FRAME_ANCESTORS = ["'none'"]
-CSP_FORM_ACTION = ["'self'"] + config('CSP_FORM_ACTION', default='', cast=Csv())
+CSP_FORM_ACTION = ["'self'"] + env.list('CSP_FORM_ACTION', default=[])
 
 CSP_EXCLUDE_URL_PREFIXES = ('/admin',)
 
+# we don't use strict-dynamic in debug because it breaks django-debug-toolbar
 if not DEBUG:
     CSP_SCRIPT_SRC += ["'strict-dynamic'"]
 
@@ -187,24 +192,23 @@ if not DEBUG:
 # <https://pypi.org/project/dj-database-url/>
 
 DATABASES = {
-    'default': config(
+    'default': env.db(
         'DATABASE_URL',
-        default='sqlite:///' + os.path.join(BASE_DIR, 'db.sqlite3'),
-        cast=db_url
+        default='sqlite:///' + os.path.join(BASE_DIR, 'db.sqlite3')
     )
 }
 
-CACHE_ENABLED = config('CACHE_ENABLED', default=False, cast=bool)
+# Cache
+# <https://docs.djangoproject.com/en/2.2/topics/cache/#setting-up-the-cache>
+CACHE_ENABLED = env.bool('CACHE_ENABLED', default=False)
 
 if CACHE_ENABLED:
     CACHES = {
-        'default': {
-            'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
-            'LOCATION': config('CACHE_LOCATION', default='127.0.0.1:11211'),
-        }
+        'default': env.cache()
     }
 
     # enable the cached session backend if caching is enabled
+    # <https://docs.djangoproject.com/en/2.2/topics/http/sessions/#using-cached-sessions>
     SESSION_ENGINE = "django.contrib.sessions.backends.cached_db"
 else:
     CACHES = {
@@ -218,12 +222,22 @@ else:
 
 AUTH_USER_MODEL = 'accounts.User'
 
-LOGIN_REDIRECT_URL = '/'
-
 AUTHENTICATION_BACKENDS = [
     'allauth.account.auth_backends.AuthenticationBackend',
     'guardian.backends.ObjectPermissionBackend'
 ]
+
+ACCOUNT_ADAPTER = 'apps.accounts.authentication.AccountAdapter'
+SOCIALACCOUNT_ADAPTER = 'apps.accounts.authentication.SocialAccountAdapter'
+
+ACCOUNT_AUTHENTICATION_METHOD = 'username_email'
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_DEFAULT_HTTP_PROTOCOL = 'https'
+
+# custom validator allows spaces in usernames
+ACCOUNT_USERNAME_VALIDATORS = 'apps.accounts.validators.username_validators'
+
+LOGIN_REDIRECT_URL = '/'
 
 ACCOUNT_FORMS = {
     'signup': 'apps.accounts.forms.SignupForm',
@@ -231,16 +245,7 @@ ACCOUNT_FORMS = {
     'login': 'apps.accounts.forms.LoginForm'
 }
 
-ACCOUNT_ADAPTER = 'apps.accounts.authentication.AccountAdapter'
-SOCIALACCOUNT_ADAPTER = 'apps.accounts.authentication.SocialAccountAdapter'
-
 ALLAUTH_2FA_ALWAYS_REVEAL_BACKUP_TOKENS = False
-
-ACCOUNT_AUTHENTICATION_METHOD = 'username_email'
-ACCOUNT_EMAIL_REQUIRED = True
-ACCOUNT_DEFAULT_HTTP_PROTOCOL = 'https'
-
-ACCOUNT_USERNAME_VALIDATORS = 'apps.accounts.validators.username_validators'
 
 SOCIALACCOUNT_AUTO_SIGNUP = False
 SOCIALACCOUNT_PROVIDERS = {
@@ -280,13 +285,15 @@ PASSWORD_HASHERS = [
 ]
 
 # OIDC Server
+# <https://django-oidc-provider.readthedocs.io/en/latest/>
 OIDC_SESSION_MANAGEMENT_ENABLE = True
 OIDC_USERINFO = 'apps.accounts.claims.userinfo'
 
 # ReCAPTCHA
+# <https://pypi.org/project/django-recaptcha/>
 RECAPTCHA_DOMAIN = 'www.recaptcha.net'
-RECAPTCHA_PRIVATE_KEY = config('RECAPTCHA_PRIVATE_KEY')
-RECAPTCHA_PUBLIC_KEY = config('RECAPTCHA_PUBLIC_KEY')
+RECAPTCHA_PRIVATE_KEY = env('RECAPTCHA_PRIVATE_KEY')
+RECAPTCHA_PUBLIC_KEY = env('RECAPTCHA_PUBLIC_KEY')
 
 # Internationalization
 # <https://docs.djangoproject.com/en/2.2/topics/i18n/>
@@ -311,17 +318,15 @@ MESSAGE_TAGS = {
 # <https://docs.djangoproject.com/en/2.2/howto/static-files/>
 
 STATIC_URL = '/static/'
-# noinspection PyUnresolvedReferences
 STATIC_ROOT = os.path.join(BASE_DIR, 'static_out')
-
-STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.StaticFilesStorage'
 
 # noinspection PyUnresolvedReferences
 STATICFILES_DIRS = [
     ("bundles", os.path.join(BASE_DIR, 'assets/bundles'))
 ]
 
-# noinspection PyUnresolvedReferences
+# Media
+# <https://docs.djangoproject.com/en/dev/ref/settings/#media-root>
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
@@ -346,26 +351,26 @@ WEBPACK_LOADER = {
 # Sentry.io
 # <https://docs.sentry.io/platforms/python/django/>
 
-SENTRY_ENABLED = config('SENTRY_ENABLED', default=False, cast=bool)
+SENTRY_ENABLED = env.bool('SENTRY_ENABLED', default=False)
 
 if SENTRY_ENABLED:
-    SENTRY_DSN = config('SENTRY_DSN')
+    SENTRY_DSN = env('SENTRY_DSN')
 
     import sentry_sdk
     from sentry_sdk.integrations.django import DjangoIntegration
 
     _vars = {
         'dsn': SENTRY_DSN,
-        'send_default_pii': config('SENTRY_PII', default=False, cast=bool),
+        'send_default_pii': env.bool('SENTRY_PII', default=False),
         'integrations': [DjangoIntegration()]
     }
 
-    SENTRY_ENVIRONMENT = config('sentry_environment', default=False)
+    SENTRY_ENVIRONMENT = env('sentry_environment', default=False)
 
     if SENTRY_ENVIRONMENT:
         _vars['environment'] = SENTRY_ENVIRONMENT
 
-    if config('SENTRY_GIT', default=False, cast=bool):
+    if env.bool('SENTRY_GIT', default=False):
         import git
 
         repo = git.Repo(search_parent_directories=True)
@@ -375,20 +380,39 @@ if SENTRY_ENABLED:
 
     sentry_sdk.init(**_vars)
 
+# Logging
+# <https://docs.djangoproject.com/en/dev/ref/settings/#logging>
+# <https://docs.djangoproject.com/en/dev/topics/logging>
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "formatters": {
+        "verbose": {
+            "format": "%(levelname)s %(asctime)s %(module)s "
+            "%(process)d %(thread)d %(message)s"
+        }
+    },
+    "handlers": {
+        "console": {
+            "level": "DEBUG",
+            "class": "logging.StreamHandler",
+            "formatter": "verbose",
+        }
+    },
+    "root": {"level": "INFO", "handlers": ["console"]},
+}
+
 # Email
 # <https://docs.djangoproject.com/en/2.2/topics/email/>
 
 try:
-    DEFAULT_FROM_EMAIL = config('EMAIL_FROM_USER')
-    SERVER_EMAIL = config('EMAIL_FROM_SYSTEM')
+    DEFAULT_FROM_EMAIL = env('EMAIL_FROM_USER')
+    SERVER_EMAIL = env('EMAIL_FROM_SYSTEM')
 
-    EMAIL_HOST = config('EMAIL_HOST')
-    EMAIL_HOST_USER = config('EMAIL_USER')
-    EMAIL_HOST_PASSWORD = config('EMAIL_PASS')
-    EMAIL_PORT = config('EMAIL_PORT', default=587, cast=int)
-    EMAIL_USE_TLS = config('EMAIL_TLS', default=True, cast=bool)
+    EMAIL_CONFIG = env.email_url('EMAIL_URL')
+    vars().update(EMAIL_CONFIG)
 
-except UndefinedValueError as e:
+except ImproperlyConfigured as e:
     if DEBUG:
         logger.warning('Foxtail is in DEBUG mode with missing email credentials. '
                        'Enabling console email backend!')
@@ -402,7 +426,6 @@ CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 # VersatileImageField
 # <https://django-versatileimagefield.readthedocs.io/en/latest/installation.html#versatileimagefield-settings>
-
 VERSATILEIMAGEFIELD_SETTINGS = {
     'jpeg_resize_quality': 80
 }
@@ -426,7 +449,7 @@ MARKDOWN_EXTENSION_CONFIGS = {
 }
 
 # Heroku Support
-if config('USING_HEROKU', default=False, cast=bool):
+if env.bool('USING_HEROKU', default=False):
     SESSION_ENGINE = "django.contrib.sessions.backends.cached_db"
     CACHES = {
         'default': {
@@ -436,5 +459,3 @@ if config('USING_HEROKU', default=False, cast=bool):
 
     import django_heroku
     django_heroku.settings(locals())
-
-

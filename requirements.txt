@@ -4,13 +4,13 @@ bleach==3.1.0
 bleach-whitelist==0.0.10
 psycopg2==2.8.4
 sentry-sdk==0.13.2
-python-decouple==3.3
 argon2-cffi==19.2.0
 gitpython==3.0.5
 python-memcached==1.59
 django-oidc-provider==0.7.0
 markdown==3.1.1
 pymdown-extensions==6.2
+django-environ==0.4.5
 django-allauth==0.40.0
 django-allauth-2fa==0.7
 django-csp==3.5

@@ -45,12 +45,11 @@ npm run-script build-dev
 ### Configuration
 
 A number of basic configuration options are required for foxtail to function. These can be
-set using environment varibles, or placed in a `settings.ini` file in the project root.
+set using environment varibles, or placed in a `.env` file in the project root.
 
-Included below is an example of a minimal `settings.ini` file to be used for local development.
+Included below is an example of a minimal `.env` file to be used for local development.
 
-```ini
-[settings]
+```
 DEBUG=True
 SITE_URL=http://127.0.0.1:8000
 INTERNAL_IPS=127.0.0.1
@@ -64,10 +63,11 @@ RECAPTCHA_PRIVATE_KEY=6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe
 
 ```
 
-To generate a new secret key, open a Python shell and run the following command.
+To generate a new secret key, open a Python shell and run the following commands.
 
 ```py
-from foxtail.utils import get_random_secret_key; get_random_secret_key()
+from foxtail.utils import get_random_secret_key
+get_random_secret_key()
 ```
 
 ### Installing
