@@ -32,7 +32,7 @@ jobs:
           RECAPTCHA_PUBLIC_KEY: 6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI
           RECAPTCHA_PRIVATE_KEY: 6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe
           SITE_URL: test
-          CACHE_ENABLED: test
+          CACHE_ENABLED: true
           CACHE_LOCATION: localhost:11211
           DATABASE_URL: postgres://root@localhost:5432/test
       - image: memcached:1.5
