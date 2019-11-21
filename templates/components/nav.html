@@ -4,10 +4,8 @@
 </button>
 <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
     <div class="navbar-nav mr-auto">
-        <a class="nav-item nav-link {% if request.resolver_match.url_name == "index" %} active{% endif %}"
-           href="/">Home</a>
-        <a class="nav-item nav-link {% if "blog_" in request.resolver_match.url_name %} active{% endif %}"
-           href="{% url 'blog_list' %}">News</a>
+        <a class="nav-item nav-link{% if request.resolver_match.url_name == "index" %} active{% endif %}" href="/">Home</a>
+        <a class="nav-item nav-link{% if "blog_" in request.resolver_match.url_name %} active{% endif %}" href="{% url 'blog_list' %}">News</a>
     </div>
     <div class="navbar-nav">
         {% if user.is_authenticated %}

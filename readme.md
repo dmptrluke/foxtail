@@ -88,13 +88,16 @@ End with an example of getting some data out of the system or using it for a lit
 
 ## Running the tests
 
-This project uses `pytest` and `pytest-django` for automated code testing.
+This project uses `pytest`, `pytest-django`, and `selenium` for automated code testing.
 
-To install the dependencies for testing, use the following command.
+To install the dependencies for testing, use the following command. You may also need to follow 
+[additional steps](https://selenium-python.readthedocs.io/installation.html) to get the 
+selenium test suites to run.
+```
+pip install -r tests/requirements.txt
+```
 
-```
-pip install -r .circleci/requirements.txt
-```
+
 
 You can then use the following command to run the automated test suites.
 

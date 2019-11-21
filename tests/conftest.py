@@ -16,7 +16,7 @@ def driver(request):
     options = webdriver.ChromeOptions()
     options.add_argument('headless')
 
-    browser = webdriver.Chrome(chrome_options=options)
+    browser = webdriver.Chrome(options=options)
 
     yield browser
 
