@@ -9,9 +9,12 @@ from django.forms import ModelForm, SelectDateWidget, Form
 from apps.accounts.models import User
 from apps.core.fields import CustomCheckbox
 
+from django.conf import settings
+
 
 class SignupForm(auth_forms.SignupForm):
-    captcha = ReCaptchaField()
+    if settings.RECAPTCHA_ENABLED:
+        captcha = ReCaptchaField()
 
     def __init__(self, *args, **kwargs):
         super(SignupForm, self).__init__(*args, **kwargs)
@@ -23,7 +26,9 @@ class SignupForm(auth_forms.SignupForm):
 
         self.fields['username'].help_text = "Required. 150 characters or fewer."
         self.fields['email'].help_text = "Required. This must be a valid email address for account activation."
-        self.fields['captcha'].label = False
+
+        if settings.RECAPTCHA_ENABLED:
+            self.fields['captcha'].label = False
 
         self.helper.layout = Layout(
             Row(

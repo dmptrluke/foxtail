@@ -289,6 +289,7 @@ OIDC_USERINFO = 'apps.accounts.claims.userinfo'
 
 # ReCAPTCHA
 # <https://pypi.org/project/django-recaptcha/>
+RECAPTCHA_ENABLED = True
 RECAPTCHA_DOMAIN = 'www.recaptcha.net'
 RECAPTCHA_PRIVATE_KEY = env('RECAPTCHA_PRIVATE_KEY')
 RECAPTCHA_PUBLIC_KEY = env('RECAPTCHA_PUBLIC_KEY')
