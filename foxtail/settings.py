@@ -320,7 +320,8 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static_out')
 
 # noinspection PyUnresolvedReferences
 STATICFILES_DIRS = [
-    ("bundles", os.path.join(BASE_DIR, 'assets/bundles'))
+    ("bundles", os.path.join(BASE_DIR, 'assets/bundles')),
+    os.path.join(BASE_DIR, 'assets/static')
 ]
 
 # Media
