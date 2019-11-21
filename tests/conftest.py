@@ -3,7 +3,7 @@ from django.core.management import call_command
 from selenium import webdriver
 
 
-@pytest.fixture(scope='session')
+@pytest.fixture(scope='module')
 def django_db_setup(django_db_setup, django_db_blocker):
     with django_db_blocker.unblock():
         call_command('loaddata', 'tests/data.json')

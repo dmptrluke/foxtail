@@ -2,7 +2,6 @@ import pytest
 
 
 @pytest.mark.django_db
-@pytest.mark.live_server
 def test_unauthenticated_user_browsing(driver, live_server):
     # user visits the website
     driver.get(live_server.url)

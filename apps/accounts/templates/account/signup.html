@@ -24,10 +24,10 @@
     {% endif %}
 
 
-    <form method="post" action="{% url 'account_signup' %}">
+    <form method="post" id="create_account_form" action="{% url 'account_signup' %}">
         {% csrf_token %}
         {% crispy form %}
-        <input type="submit" class="btn btn-primary" value="Create Account">
+        <input type="submit" id="create_account_submit" class="btn btn-primary" value="Create Account">
         {% if redirect_field_value %}
             <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}"/>
         {% endif %}
