@@ -4,7 +4,7 @@ __pycache__/
 
 # Django
 *.log
-settings.ini
+.env
 db.sqlite3
 
 # IntelliJ

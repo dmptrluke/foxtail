@@ -42,7 +42,7 @@
         {% cache 1800 index_blog %}
             {% for post in post_list %}
                 <div class="col-lg-4">
-                    <article class="card mb-4">
+                    <article class="card mb-4 blog-card">
 
                         {% if post.image %}
                             <a href="{{ post.get_absolute_url }}">

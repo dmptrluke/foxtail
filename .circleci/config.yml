@@ -2,7 +2,7 @@ version: 2.1
 jobs:
   test:
     docker:
-      - image: circleci/python:3.7-node
+      - image: circleci/python:3.7-node-browsers
         environment:
           DEBUG: true
           SECRET_KEY: fake
@@ -10,9 +10,8 @@ jobs:
           RECAPTCHA_PRIVATE_KEY: 6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe
           SITE_URL: test
           CACHE_ENABLED: true
-          CACHE_URL: memcache://localhost:11211
+          CACHE_URL: dummycache://
           DATABASE_URL: postgres://root@localhost:5432/test
-      - image: memcached:1.5
       - image: circleci/postgres:10
         environment:
           POSTGRES_USER: root
@@ -22,18 +21,18 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-            - pip-{{ checksum "requirements.txt" }}-{{ checksum ".circleci/requirements.txt" }}-{{ checksum "package.json" }}
+            - pip-{{ checksum "requirements.txt" }}-{{ checksum "tests/requirements.txt" }}-{{ checksum "package.json" }}
             - pip-
       - run:
           command: |
             pip install --user -r requirements.txt
-            pip install --user -r .circleci/requirements.txt
+            pip install --user -r tests/requirements.txt
           name: Install Python Dependencies
       - run:
           command: npm install
           name: Install Node Dependencies
       - save_cache:
-          key: pip-{{ checksum "requirements.txt" }}-{{ checksum ".circleci/requirements.txt" }}-{{ checksum "package.json" }}
+          key: pip-{{ checksum "requirements.txt" }}-{{ checksum "tests/requirements.txt" }}-{{ checksum "package.json" }}
           paths:
             - /home/circleci/.local/lib/
             - ./node_modules
