@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block title %}Confirm Deletion{% endblock %}
+
+{% block content %}
+    <h1>Confirm Deletion</h1>
+
+    <p>
+        Are you sure you want to delete the following comment?
+    </p>
+    <p class="border p-4 bg-light">
+        <strong>{{ object.author.get_short_name }}</strong><br/>
+        {{ object.text }}
+    </p>
+
+    <form method="post">
+        {% csrf_token %}
+        {% if redirect_field_value %}
+            <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}"/>
+        {% endif %}
+        <button type="submit" class="btn btn-lg btn-primary">
+            Confirm
+        </button>
+    </form>
+{% endblock content %}
