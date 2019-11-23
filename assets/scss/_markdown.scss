@@ -1,0 +1,6 @@
+.rendered-markdown {
+	blockquote {
+		margin-bottom: $spacer;
+		@include font-size($blockquote-font-size);
+	}
+}
