@@ -1,0 +1,29 @@
+{% load crispy_forms_tags recaptcha %}
+{% block extra_head %}
+    {% recaptcha_head %}
+{% endblock %}
+
+<section id="comments" class="mb-4">
+    <h3>Comments</h3>
+    {% for comment in post.comments.all %}
+        <div class="d-flex flex-row comment my-3" id="comment-{{ comment.pk }}">
+            <div class="mr-3"><img src="https://ui-avatars.com/api/?length=1&name={{ comment.author.get_short_name |urlencode }}" alt="..."></div>
+            <div class="flex-grow-1">
+                <h5>{{ comment.author.get_short_name }}</h5>
+                <p class="text-break">{{ comment.text }}</p>
+            </div>
+        </div>
+    {% endfor %}
+</section>
+
+<section id="comments-form">
+    <h4>Leave a Comment</h4>
+    {% if user.is_authenticated %}
+        <form method="post" class="mt-3">
+            {% csrf_token %}
+            {% crispy form %}
+        </form>
+    {% else %}
+        <p>Please <a href="{% url 'account_login' %}">sign in</a> to leave a comment.</p>
+    {% endif %}
+</section>

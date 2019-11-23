@@ -33,23 +33,24 @@
                     <div class="col-sm-6">
                         <ul class="list-inline">
                             <li class="list-inline-item">Share Post:</li>
-                            <li class="list-inline-item"><a class="facebook"
-                                                            href="https://www.facebook.com/sharer/sharer.php?u=
-                                                                    {{ SITE_URL }}{{ post.get_absolute_url }}">
-                                {% icon "facebook" %}
-                            </a></li>
-                            <li class="list-inline-item"><a class="twitter"
-                                                            href="http://www.twitter.com/share?url=
-
-                                                                    {{ SITE_URL }}{{ post.get_absolute_url }}&amp;text={{ post.title | urlencode }}&amp;hashtags=southernpaws">
-                                {% icon "twitter" %}
-                            </a></li>
-                            <li class="list-inline-item"><a class="telegram"
-                                                            href="https://telegram.me/share/url?url=
-
-                                                                    {{ SITE_URL }}{{ post.get_absolute_url }}&amp;text={{ post.title | urlencode }}">
-                                {% icon "telegram" %}
-                            </a></li>
+                            <li class="list-inline-item">
+                                <a class="facebook"
+                                   href="https://www.facebook.com/sharer/sharer.php?u=
+                                           {{ SITE_URL }}{{ post.get_absolute_url }}">
+                                    {% icon "facebook" %}
+                                </a></li>
+                            <li class="list-inline-item">
+                                <a class="twitter"
+                                   href="http://www.twitter.com/share?url=
+                                           {{ SITE_URL }}{{ post.get_absolute_url }}&amp;text={{ post.title | urlencode }}&amp;hashtags=furrynz">
+                                    {% icon "twitter" %}
+                                </a></li>
+                            <li class="list-inline-item">
+                                <a class="telegram"
+                                   href="https://telegram.me/share/url?url=
+                                           {{ SITE_URL }}{{ post.get_absolute_url }}&amp;text={{ post.title | urlencode }}">
+                                    {% icon "telegram" %}
+                                </a></li>
                         </ul>
                     </div>
                     <div class="col-sm-6 text-right">
@@ -61,7 +62,9 @@
                     </div>
                 </div>
             </article>
-
+            {% if post.allow_comments %}
+                {% include "blog/comments.html" %}
+            {% endif %}
 
         </div>
         <div class="col-lg-4">

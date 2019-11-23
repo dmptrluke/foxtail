@@ -172,7 +172,7 @@ CSP_SCRIPT_SRC = ["'unsafe-inline'", "'self'"]
 CSP_STYLE_SRC = ["'unsafe-inline'", 'fonts.googleapis.com', "'self'"]
 CSP_FRAME_SRC = ['https://www.google.com/recaptcha/']
 CSP_FONT_SRC = ['fonts.gstatic.com']
-CSP_IMG_SRC = ["'self'", "data:"]
+CSP_IMG_SRC = ["'self'", "data:", "ui-avatars.com", "www.gravatar.com"]
 CSP_OBJECT_SRC = ["'none'"]
 
 CSP_BASE_URI = ["'none'"]
