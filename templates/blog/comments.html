@@ -7,7 +7,9 @@
     <h3>Comments</h3>
     {% for comment in post.comments.all %}
         <div class="d-flex flex-row comment my-3" id="comment-{{ comment.pk }}">
-            <div class="mr-3"><img src="https://ui-avatars.com/api/?length=1&name={{ comment.author.get_short_name |urlencode }}" alt="..."></div>
+            <div class="mr-3"><img
+                    src="https://ui-avatars.com/api/?length=1&name={{ comment.author.get_short_name |urlencode }}"
+                    alt="..."></div>
             <div class="flex-grow-1">
                 <h5>{{ comment.author.get_short_name }}</h5>
                 <p class="text-break">{{ comment.text }}</p>
