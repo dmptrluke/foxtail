@@ -198,22 +198,14 @@ DATABASES = {
 
 # Cache
 # <https://docs.djangoproject.com/en/2.2/topics/cache/#setting-up-the-cache>
-CACHE_ENABLED = env.bool('CACHE_ENABLED', default=False)
+CACHE_URL = env.cache(default='dummycache://')
+CACHES = {
+    'default': CACHE_URL
+}
 
-if CACHE_ENABLED:
-    CACHES = {
-        'default': env.cache()
-    }
-
-    # enable the cached session backend if caching is enabled
-    # <https://docs.djangoproject.com/en/2.2/topics/http/sessions/#using-cached-sessions>
-    SESSION_ENGINE = "django.contrib.sessions.backends.cached_db"
-else:
-    CACHES = {
-        'default': {
-            'BACKEND': 'django.core.cache.backends.dummy.DummyCache'
-        },
-    }
+# enable the cached session backend
+# <https://docs.djangoproject.com/en/2.2/topics/http/sessions/#using-cached-sessions>
+SESSION_ENGINE = "django.contrib.sessions.backends.cached_db"
 
 # Authentication
 # <https://django-allauth.readthedocs.io/en/latest/>
