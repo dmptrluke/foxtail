@@ -442,7 +442,7 @@ MARKDOWN_EXTENSIONS = [
     'pymdownx.tilde',
     'pymdownx.caret',
     'pymdownx.emoji',
-    'sane_lists'
+    'sane_lists',
     'def_list',
     'nl2br',
     'abbr',
