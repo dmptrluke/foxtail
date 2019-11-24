@@ -11,7 +11,7 @@ class Event(models.Model):
     tags = TaggableManager(blank=True)
 
     where = models.CharField(max_length=200)
-    what = MarkdownField(rendered_field='text_rendered', validator=ClassyValidator)
+    what = MarkdownField(rendered_field='what_rendered', validator=ClassyValidator)
     what_rendered = RenderedMarkdownField()
 
     start = models.DateTimeField()

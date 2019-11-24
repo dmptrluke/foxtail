@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% load icon %}
+
+{% block title %}Event List{% endblock %}
+
+{% block content %}
+
+
+    {% if event_list %}
+        <div class="card-columns">
+            {% for event in event_list %}
+                <div class="card text-white bg-dark">
+                    {% if event.image %}
+                        <a href="{{ event.get_absolute_url }}">
+                            <img class="card-img-top" src="{{ event.image.crop.300x150 }}" alt="">
+                        </a>
+                    {% endif %}
+
+                    <div class="card-body">
+                        <h5 class="card-title">{{ event.title }}</h5>
+                        <p class="card-text">{{ event.what_rendered | safe | striptags | truncatechars:120 }}</p>
+                        <p class="card-text"><strong>{{ event.start | date:"F jS, Y" }}</strong></p>
+                        <a href="{{ event.get_absolute_url }}" class="btn btn-primary">View Event</a>
+                    </div>
+                    {% if event.tags %}
+                        <div class="card-footer">
+                            {% for tag in event.tags.all %}
+                                <small>{{ tag.name | title }}{% if not forloop.last %}, {% endif %}</small>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+{% endblock content %}

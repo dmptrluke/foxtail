@@ -68,4 +68,22 @@
             {% endfor %}
         {% endcache %}
     </div>
+
+    <h3 class="mb-3">Upcoming Events</h3>
+    <div class="row mb-2">
+        {% cache 1800 index_events %}
+            {% for event in event_list %}
+                <div class="col-lg-4">
+                    <article class="card mb-4 bg-light ">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ event.title }}</h5>
+                            <p class="card-text">{{ event.what_rendered | safe | striptags | truncatechars:120 }}</p>
+                            <p class="card-text"><strong>{{ event.start | date:"F jS, Y" }}</strong></p>
+                            <a href="{{ event.get_absolute_url }}" class="btn btn-outline-primary">View event</a>
+                        </div>
+                    </article>
+                </div>
+            {% endfor %}
+        {% endcache %}
+    </div>
 {% endblock content %}
