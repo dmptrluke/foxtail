@@ -12,7 +12,7 @@ def warm_event_thumbnail_images(sender, instance, **kwargs):
         warmer = VersatileImageFieldWarmer(
             instance_or_queryset=instance,
             rendition_key_set=[
-                ('banner', 'crop__350x200')
+                ('banner', 'crop__350x175')
             ],
             image_attr='image'
         )
