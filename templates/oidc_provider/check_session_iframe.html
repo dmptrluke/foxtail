@@ -1,15 +1,15 @@
-{% load staticfiles %}
+{% load static %}
 
 <html lang="en">
     <head>
         <meta charset="utf-8">
         <title>OP Iframe</title>
         <script src="{% static 'oidc_provider/js/sha256.min.js' %}" nonce="{{ CSP_NONCE }}"></script>
-        <script language="JavaScript" type="text/javascript"  nonce="{{ CSP_NONCE }}">
+        <script type="text/javascript"  nonce="{{ CSP_NONCE }}">
             window.addEventListener("message", receiveMessage, false);
 
             function receiveMessage(e) {
-                if (!e.data || typeof e.data != 'string' || e.data == 'error') {
+                if (!e.data || typeof e.data != 'string' || e.data === 'error') {
                     return;
                 }
 
@@ -23,7 +23,7 @@
 
                     var sessionStateCalculated = sha256(clientId + ' ' + e.origin + ' ' + browserState + ' ' + salt) + '.' + salt;
 
-                    if (sessionState == sessionStateCalculated) {
+                    if (sessionState === sessionStateCalculated) {
                         status = 'unchanged';
                     } else {
                         status = 'changed';
@@ -38,7 +38,7 @@
                 var theName = 'op_browser_state=';
                 var theCookie = document.cookie + ';';
                 var start = theCookie.indexOf(theName);
-                if (start != -1)
+                if (start !== -1)
                 {
                     var end = theCookie.indexOf(';', start);
                     return unescape(theCookie.substring(start + theName.length, end));
