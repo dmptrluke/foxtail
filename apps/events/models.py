@@ -22,3 +22,6 @@ class Event(models.Model):
 
     image = VersatileImageField(upload_to='events', blank=True, null=True, ppoi_field='image_ppoi')
     image_ppoi = PPOIField()
+
+    class Meta:
+        ordering = ["start"]
