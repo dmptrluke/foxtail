@@ -4,6 +4,7 @@ from .models import Event
 
 class EventList(ArchiveIndexView):
     queryset = Event.objects.all()
+    ordering = 'start'
     date_field = "start"
     make_object_list = True
     allow_future = True
@@ -12,6 +13,7 @@ class EventList(ArchiveIndexView):
 
 class EventListYear(YearArchiveView):
     queryset = Event.objects.all()
+    ordering = 'start'
     date_field = "start"
     make_object_list = True
     allow_future = True
