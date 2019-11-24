@@ -3,14 +3,14 @@ from django.views.generic import ListView, DetailView
 from .models import Character
 
 
-class CharacterListView(ListView):
+class CharacterList(ListView):
     model = Character
     template_name = 'character_list.html'
 
 
-class CharacterView(DetailView):
+class CharacterDetail(DetailView):
     model = Character
     template_name = 'character_detail.html'
 
 
-__all__ = ['CharacterListView']
+__all__ = ['CharacterList', 'CharacterDetail']

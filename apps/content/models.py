@@ -1,7 +1,7 @@
 from django.db import models
 from django.urls import reverse
 
-from foxtail_blog.fields import MarkdownField, ClassyValidator
+from foxtail_blog.fields import MarkdownField, ClassyValidator, RenderedMarkdownField
 
 
 class Page(models.Model):
@@ -22,7 +22,7 @@ class Page(models.Model):
     )
 
     body = MarkdownField(rendered_field='body_rendered', validator=ClassyValidator)
-    body_rendered = models.TextField(blank=True)
+    body_rendered = RenderedMarkdownField()
 
     class Meta:
         ordering = ['sort_order']

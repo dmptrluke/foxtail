@@ -26,6 +26,7 @@ urlpatterns = [
     url(r'^accounts/', include('allauth_2fa.urls')),
     url(r'^accounts/', include('allauth.urls')),
     path('directory/', include('apps.directory.urls')),
+    path('events/', include('apps.events.urls')),
     path('blog/', include('foxtail_blog.urls')),
     path('', include('apps.content.urls'))
 ]
