@@ -3,4 +3,7 @@ from django.contrib.admin import ModelAdmin
 
 from .models import Event
 
-admin.site.register(Event, ModelAdmin)
+class EventAdmin(ModelAdmin):
+    list_display = ('title', 'start')
+
+admin.site.register(Event, EventAdmin)

@@ -1,10 +1,20 @@
-from django.views.generic import ListView, DetailView
-
+from django.views.generic import ListView, DetailView, ArchiveIndexView, DateDetailView, YearArchiveView
 from .models import Event
 
 
-class EventList(ListView):
-    model = Event
+class EventList(ArchiveIndexView):
+    queryset = Event.objects.all()
+    date_field = "start"
+    make_object_list = True
+    allow_future = True
+    template_name = 'event_list.html'
+
+
+class EventListYear(YearArchiveView):
+    queryset = Event.objects.all()
+    date_field = "start"
+    make_object_list = True
+    allow_future = True
     template_name = 'event_list.html'
 
 

@@ -1,12 +1,38 @@
 {% extends "base.html" %}
 {% load icon %}
 
-{% block title %}Character Detail{% endblock %}
+{% block extra_head %}
+    <link rel="canonical" href="{{ SITE_URL }}{{ page.get_absolute_url }}"/>
+{% endblock %}
+
+{% block title %}Event Details{% endblock %}
 
 {% block content %}
-    <div class="row">
-        <ul>
-            <li>{{ event.name }}</li>
-        </ul>
+    <div class="text-white bg-dark">
+        {% if event.image %}
+            <img class="card-img-top" src="{{ event.image.crop.1150x300 }}" alt="">
+        {% endif %}
+
+        <div class="card-body">
+            <h4 class="card-title mb-2">{{ event.title }}</h4>
+            <h5 class="card-subtitle mb-2">{{ event.where }}</h5>
+            {{ event.what_rendered | safe }}
+            <h6 class="card-subtitle">Starts</h6>
+            <p class="card-text">{{ event.start | date:"F jS, Y" }}, at {{ event.start | date:"P" }}</p>
+            {% if event.end %}
+                <h6 class="card-subtitle">Ends</h6>
+                <p class="card-text">{{ event.end | date:"F jS, Y" }}, at {{ event.end | date:"P" }}</p>
+            {% endif %}
+            {% if event.url %}
+                <a class="btn btn-light" href="{{ event.url }}" rel="nofollow" target="_blank">View event website</a>
+            {% endif %}
+        </div>
+        {% if event.tags %}
+            <div class="card-footer">
+                {% for tag in event.tags.all %}
+                    {{ tag.name | title }}{% if not forloop.last %}, {% endif %}
+                {% endfor %}
+            </div>
+        {% endif %}
     </div>
 {% endblock content %}

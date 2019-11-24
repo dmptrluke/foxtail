@@ -55,7 +55,7 @@
                                 {{ post.title }}
                             </h5>
                             <h6 class="card-subtitle mb-2 text-muted">
-                                {{ post.created | naturaltime }}
+                                {{ post.created | naturalday }}
                             </h6>
                             <p class="card-text">
                                 {{ post.text_rendered | safe | striptags | truncatechars:70 }}

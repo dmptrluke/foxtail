@@ -6,9 +6,9 @@
 {% block content %}
 
 
-    {% if event_list %}
+    {% if object_list  %}
         <div class="card-columns">
-            {% for event in event_list %}
+            {% for event in object_list  %}
                 <div class="card text-white bg-dark">
                     {% if event.image %}
                         <a href="{{ event.get_absolute_url }}">
@@ -18,7 +18,7 @@
 
                     <div class="card-body">
                         <h5 class="card-title mb-2">{{ event.title }}</h5>
-                        <h6 class="card-title"><em>{{ event.where }}</em></h6>
+                        <h6 class="card-subtitle mb-2">{{ event.where }}</h6>
                         <p class="card-text">{{ event.what_rendered | safe | striptags | truncatechars:120 }}</p>
                         <p class="card-text"><strong>{{ event.start | date:"F jS, Y" }}</strong></p>
                         <a href="{{ event.get_absolute_url }}" class="btn btn-primary">View Event</a>

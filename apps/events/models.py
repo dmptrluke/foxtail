@@ -1,4 +1,5 @@
 from django.db import models
+from django.urls import reverse
 from taggit.managers import TaggableManager
 
 from foxtail_blog.fields import MarkdownField, RenderedMarkdownField, ClassyValidator
@@ -14,14 +15,19 @@ class Event(models.Model):
     what = MarkdownField(rendered_field='what_rendered', validator=ClassyValidator)
     what_rendered = RenderedMarkdownField()
 
-    start = models.DateTimeField()
-    end = models.DateTimeField()
+    url = models.URLField(blank=True)
 
-    created = models.DateTimeField(auto_now_add=True, verbose_name="date created")
-    modified = models.DateTimeField(auto_now=True, verbose_name="date modified")
+    start = models.DateTimeField()
+    end = models.DateTimeField(blank=True)
 
     image = VersatileImageField(upload_to='events', blank=True, null=True, ppoi_field='image_ppoi')
     image_ppoi = PPOIField()
 
+    created = models.DateTimeField(auto_now_add=True, verbose_name="date created")
+    modified = models.DateTimeField(auto_now=True, verbose_name="date modified")
+
     class Meta:
         ordering = ["start"]
+
+    def get_absolute_url(self):
+        return reverse('event_detail', kwargs={'year': self.start.year, 'pk': self.pk})
