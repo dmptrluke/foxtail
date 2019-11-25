@@ -1,6 +1,8 @@
 from django.views.generic import TemplateView, DetailView
 from foxtail_blog.models import Post
 
+from datetime import datetime
+
 from apps.events.models import Event
 from .models import Page
 
@@ -10,8 +12,9 @@ class IndexView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        today = datetime.today()
         context['post_list'] = Post.objects.all()[:3]
-        context['event_list'] = Event.objects.all()[:3]
+        context['event_list'] = Event.objects.filter(end__date__gte=today)[:3]
         return context
 
 
