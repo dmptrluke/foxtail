@@ -7,11 +7,10 @@ register = template.Library()
 
 @register.simple_tag(takes_context=True)
 def recaptcha_head(context):
-    host = getattr(settings, 'RECAPTCHA_HOST', 'https://recaptcha.net')
     nonce = context.request.csp_nonce
 
-    html = '<script src ="{0}/recaptcha/api.js" nonce="{1}" async defer></script>'
-    return format_html(html, host, nonce)
+    html = '<script src ="http://www.google.com/recaptcha/api.js" nonce="{1}" async defer></script>'
+    return format_html(html, nonce)
 
 
 @register.simple_tag()
