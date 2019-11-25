@@ -9,7 +9,7 @@ register = template.Library()
 def recaptcha_head(context):
     nonce = context.request.csp_nonce
 
-    html = '<script src ="http://www.google.com/recaptcha/api.js" nonce="{1}" async defer></script>'
+    html = '<script src ="http://www.google.com/recaptcha/api.js" nonce="{0}" async defer></script>'
     return format_html(html, nonce)
 
 
