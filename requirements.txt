@@ -1,3 +1,5 @@
+psycopg2-binary;platform_system=="Windows"
+python-magic-bin;platform_system=="Windows"
 requests==2.22.0
 django==2.2.7
 bleach==3.1.0

@@ -1,6 +1,7 @@
 # Python
 __pycache__/
 .pytest_cache
+.tox
 
 # Django
 *.log
