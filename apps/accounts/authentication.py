@@ -36,8 +36,13 @@ class SocialAccountAdapter(DefaultSocialAccountAdapter):
         if name:
             user_field(user, 'full_name', name)
         else:
+            merged_name = ""
             if first_name:
-                merged_name = ' '.join([first_name, last_name])
+                merged_name += first_name
+            if last_name:
+                merged_name += last_name
+
+            if merged_name:
                 user_field(user, 'full_name', merged_name)
 
         gender = data.get('gender')
