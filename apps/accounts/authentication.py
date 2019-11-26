@@ -40,7 +40,7 @@ class SocialAccountAdapter(DefaultSocialAccountAdapter):
             if first_name:
                 name_parts.append(first_name)
             if last_name:
-                last_name.append(first_name)
+                name_parts.append(last_name)
 
             if name_parts:
                 merged_name = " ".join(name_parts)
