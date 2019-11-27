@@ -1,5 +1,4 @@
 name: Run Tests
-
 on: [push]
 
 jobs:
@@ -7,9 +6,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
+
       - uses: actions/setup-node@v1
         with:
           node-version: '10.x'
+
       - name: Cache Node dependencies
         id: node-cache
         uses: actions/cache@v1
@@ -18,28 +19,35 @@ jobs:
           key: ${{ runner.OS }}-node-${{ hashFiles('**/package.json') }}
           restore-keys: |
             ${{ runner.OS }}-node-
+
       - name: Install JS dependencies
         if: steps.node-cache.outputs.cache-hit != 'true'
         run: npm install
+
       - name: Generate assets
         run: npm run-script build-dev
+
       - name: Store assets for testing
         uses: actions/upload-artifact@v1
         with:
           name: bundles
           path: assets/bundles
+
       - name: Store webpack-stats for testing
         uses: actions/upload-artifact@v1
         with:
           name: webpack-stats
           path: webpack-stats.json
+
   test:
     runs-on: ubuntu-latest
     needs: generate_assets
+
     strategy:
       max-parallel: 4
       matrix:
         python-version: [3.6, 3.7, 3.8]
+
     services:
       postgres:
         image: postgres:10
@@ -52,20 +60,25 @@ jobs:
           - 5432/tcp
         # needed because the postgres container does not provide a healthcheck
         options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+
     steps:
       - uses: actions/checkout@v1
+
       - name: Install libpq-dev
         run: sudo apt-get -y install libpq-dev
+
       - name: Download and install chromedriver
         run: |
           export CHROME_DRIVER_VERSION=`curl -sS chromedriver.storage.googleapis.com/LATEST_RELEASE`
           wget http://chromedriver.storage.googleapis.com/$CHROME_DRIVER_VERSION/chromedriver_linux64.zip
           sudo unzip chromedriver_linux64.zip -d /usr/local/bin
           export CHROME_BIN=chromium-browser
+
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v1
         with:
           python-version: ${{ matrix.python-version }}
+
       - name: Cache Python dependencies
         id: py-cache
         uses: actions/cache@v1
@@ -74,21 +87,25 @@ jobs:
           key: ${{ runner.OS }}-py${{ matrix.python-version }}-${{ hashFiles('**/requirements.txt') }}
           restore-keys: |
             ${{ runner.OS }}-py${{ matrix.python-version }}-
+
       - name: Install Python dependencies
         if: steps.py-cache.outputs.cache-hit != 'true'
         run: |
           python -m pip install --upgrade pip
           pip install --user -r requirements.txt
           pip install --user -r tests/requirements.txt
+
       - name: Get assets
         uses: actions/download-artifact@v1
         with:
           name: bundles
           path: assets/bundles
+
       - name: Get webpack-stats
         uses: actions/download-artifact@v1
         with:
           name: webpack-stats
+
       - name: Test with pytest
         env:
           DEBUG: true
@@ -100,34 +117,34 @@ jobs:
           SITE_URL: test
         run: |
           python -m pytest
+
   sentry:
     runs-on: ubuntu-latest
     needs: test
+
     env:
       SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
       SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
       SENTRY_PROJECT: ${{ secrets.SENTRY_PROJECT }}
+
     steps:
       - uses: actions/checkout@v1
 
       - name: Install Sentry
         run: curl -sL https://sentry.io/get-cli/ | sudo bash
 
-      - name: Save current git hash to sentry-release-version.txt
-        run: git rev-parse HEAD > sentry-release-version.txt
+      - name: Set VERSION to current git hash
+        run: |
+        VERSION=$(git rev-parse HEAD)
+        echo "::set-env name=VERSION::$VERSION"
 
       - name: Create a new Sentry release
         run: |
-          VERSION=$(git rev-parse HEAD)
           sentry-cli releases --org "${SENTRY_ORG}" new \
             --project "${SENTRY_PROJECT}" "${VERSION}"
 
       - name: Set commits for release
-        run: |
-          VERSION=$(cat sentry-release-version.txt)
-          sentry-cli releases --org "${SENTRY_ORG}" set-commits --auto "${VERSION}"
+        run: sentry-cli releases --org "${SENTRY_ORG}" set-commits --auto "${VERSION}"
 
       - name: Finalise release
-        run: |
-          VERSION=$(cat sentry-release-version.txt)
-          sentry-cli releases --org "${SENTRY_ORG}" finalize "${VERSION}"
+        run: sentry-cli releases --org "${SENTRY_ORG}" finalize "${VERSION}"
