@@ -16,10 +16,14 @@ def contact(request):
 
             context = {
                 'name': name,
+                'authentication': False,
                 'email': email,
                 'message': message,
                 'SITE_URL': settings.SITE_URL
             }
+            if request.user.is_authenticated():
+                context['authentication'] = request.user.username
+
             send_mail('emails/submission.tpl', context, None, ['website@furry.nz'])
 
             messages.success(request, 'Your message has been sent.')

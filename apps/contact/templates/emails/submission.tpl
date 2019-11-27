@@ -3,10 +3,13 @@
 {% block subject %}Contact form submission - {{ name }}{% endblock %}
 
 {% block body %}
-A user has submitted a request using the contact form on the website. The details are below:
+    A user has submitted a request using the contact form on the website. The details are below:
 
-Name: {{ name }}
-Email: {{ email }}
-Message:
-{{ message }}
+    Name: {{ name }}
+    {% if authentication %}
+        Authentication: {{ authentication }}
+    {% endif %}
+    Email: {{ email }}
+    Message:
+    {{ message }}
 {% endblock %}

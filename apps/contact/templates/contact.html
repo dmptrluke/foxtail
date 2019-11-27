@@ -14,6 +14,13 @@
         try to get back to you as soon as possible. If the form doesn't work for you, you can email us
         at <a href="mailto:website@furry.nz">website@furry.nz</a>.
     </p>
+
+    {% if user.is_authenticated %}
+        <p>
+            Since you're signed in, your username <strong>{{ user.username }}</strong> will be included with your message.
+        </p>
+    {% endif %}
+
     <form method="post" action="{% url 'contact' %}">
         {% csrf_token %}
         {% crispy form %}
