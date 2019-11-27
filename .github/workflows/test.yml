@@ -46,9 +46,9 @@ jobs:
       uses: actions/cache@v1
       with:
         path: ~/.local/lib/
-        key: ${{ runner.OS }}-py-${{ hashFiles('**/requirements.txt') }}
+        key: ${{ runner.OS }}-py${{ matrix.python-version }}-${{ hashFiles('**/requirements.txt') }}
         restore-keys: |
-          ${{ runner.OS }}-py-
+          ${{ runner.OS }}-py${{ matrix.python-version }}-
     - name: Install JS dependencies
       if: steps.node-cache.outputs.cache-hit != 'true'
       run: npm install
@@ -62,5 +62,4 @@ jobs:
       run: npm run-script build-dev
     - name: Test with pytest
       run: |
-        pip install pytest
-        pytest
+        python -m pytest
