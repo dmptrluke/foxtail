@@ -1,4 +1,4 @@
-# foxtail [![CircleCI](https://circleci.com/gh/dmptrluke/foxtail/tree/master.svg?style=shield)](https://circleci.com/gh/dmptrluke/foxtail/tree/master)
+# foxtail [![CircleCI](https://github.com/dmptrluke/foxtail/workflows/Run%20Tests/badge.svg)](https://github.com/dmptrluke/foxtail/actions)
 
 The code behind furry.nz - a  login provider and general community website for the NZ furry community.
 
