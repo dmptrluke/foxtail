@@ -9,16 +9,16 @@ jobs:
 
       - uses: actions/setup-node@v1
         with:
-          node-version: '10.x'
+          node-version: '12.x'
 
       - name: Cache Node dependencies
         id: node-cache
         uses: actions/cache@v1
         with:
           path: node_modules
-          key: ${{ runner.OS }}-node-${{ hashFiles('**/package.json') }}
+          key: ${{ runner.OS }}-node1.2-${{ hashFiles('**/package.json') }}
           restore-keys: |
-            ${{ runner.OS }}-node-
+            ${{ runner.OS }}-node1.2-
 
       - name: Install JS dependencies
         if: steps.node-cache.outputs.cache-hit != 'true'
