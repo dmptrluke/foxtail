@@ -73,6 +73,7 @@ jobs:
         uses: actions/download-artifact@v1
         with:
           name: bundles
+          path: assets/bundles
       - name: Test with pytest
         run: |
           python -m pytest
