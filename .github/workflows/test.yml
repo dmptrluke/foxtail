@@ -15,51 +15,50 @@ jobs:
       max-parallel: 4
       matrix:
         python-version: [3.6, 3.7, 3.8]
-
     steps:
-    - uses: actions/checkout@v1
-    - name: Install libpq-dev
-      run: sudo apt-get install libpq-dev
-    - name: Download and install chromedriver
-      run: |
-        export CHROME_DRIVER_VERSION=`curl -sS chromedriver.storage.googleapis.com/LATEST_RELEASE`
-        wget http://chromedriver.storage.googleapis.com/$CHROME_DRIVER_VERSION/chromedriver_linux64.zip
-        sudo unzip chromedriver_linux64.zip -d /usr/local/bin
-        export CHROME_BIN=chromium-browser
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v1
-      with:
-        python-version: ${{ matrix.python-version }}
-    - uses: actions/setup-node@v1
-      with:
-        node-version: '10.x'
-    - name: Cache Node dependencies
-      id: node-cache
-      uses: actions/cache@v1
-      with:
-        path: node_modules
-        key: ${{ runner.OS }}-node-${{ hashFiles('**/package.json') }}
-        restore-keys: |
-          ${{ runner.OS }}-node-
-    - name: Cache Python dependencies
-      id: pip-cache
-      uses: actions/cache@v1
-      with:
-        path: ~/.local/lib/
-        key: ${{ runner.OS }}-py${{ matrix.python-version }}-${{ hashFiles('**/requirements.txt') }}
-        restore-keys: |
-          ${{ runner.OS }}-py${{ matrix.python-version }}-
-    - name: Install JS dependencies
-      if: steps.node-cache.outputs.cache-hit != 'true'
-      run: npm install
-    - name: Install Python dependencies
-      if: steps.py-cache.outputs.cache-hit != 'true'
-      run: |
-        python -m pip install --upgrade pip
-        pip install --user -r requirements.txt
-        pip install --user -r tests/requirements.txt
-    - name: Generate assets
-      run: npm run-script build-dev
-    - name: Test with pytest
-      run: |
-        python -m pytest
+      - uses: actions/checkout@v1
+      - name: Install libpq-dev
+        run: sudo apt-get -y install libpq-dev
+      - name: Download and install chromedriver
+        run: |
+          export CHROME_DRIVER_VERSION=`curl -sS chromedriver.storage.googleapis.com/LATEST_RELEASE`
+          wget http://chromedriver.storage.googleapis.com/$CHROME_DRIVER_VERSION/chromedriver_linux64.zip
+          sudo unzip chromedriver_linux64.zip -d /usr/local/bin
+          export CHROME_BIN=chromium-browser
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v1
+        with:
+          python-version: ${{ matrix.python-version }}
+      - uses: actions/setup-node@v1
+        with:
+          node-version: '10.x'
+      - name: Cache Node dependencies
+        id: node-cache
+        uses: actions/cache@v1
+        with:
+          path: node_modules
+          key: ${{ runner.OS }}-node-${{ hashFiles('**/package.json') }}
+          restore-keys: |
+            ${{ runner.OS }}-node-
+      - name: Cache Python dependencies
+        id: py-cache
+        uses: actions/cache@v1
+        with:
+          path: ~/.local/lib/
+          key: ${{ runner.OS }}-py${{ matrix.python-version }}-${{ hashFiles('**/requirements.txt') }}
+          restore-keys: |
+            ${{ runner.OS }}-py${{ matrix.python-version }}-
+      - name: Install JS dependencies
+        if: steps.node-cache.outputs.cache-hit != 'true'
+        run: npm install
+      - name: Install Python dependencies
+        if: steps.py-cache.outputs.cache-hit != 'true'
+        run: |
+          python -m pip install --upgrade pip
+          pip install --user -r requirements.txt
+          pip install --user -r tests/requirements.txt
+      - name: Generate assets
+        run: npm run-script build-dev
+      - name: Test with pytest
+        run: |
+          python -m pytest
