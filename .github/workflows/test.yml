@@ -3,18 +3,37 @@ name: Run Tests
 on: [push]
 
 jobs:
+  prepare-node:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Cache Node dependencies
+        id: node-cache
+        uses: actions/cache@v1
+        with:
+          path: node_modules
+          key: ${{ runner.OS }}-node-${{ hashFiles('**/package.json') }}
+          restore-keys: |
+            ${{ runner.OS }}-node-
+      - uses: actions/setup-node@v1
+        if: steps.node-cache.outputs.cache-hit != 'true'
+        with:
+          node-version: '10.x'
+      - name: Install JS dependencies
+        if: steps.node-cache.outputs.cache-hit != 'true'
+        run: npm install
   test:
+    runs-on: ubuntu-latest
+    needs: prepare-node
+    strategy:
+      max-parallel: 4
+      matrix:
+        python-version: [3.6, 3.7, 3.8]
     env:
       DEBUG: true
       SECRET_KEY: fake
       RECAPTCHA_PUBLIC_KEY: 6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI
       RECAPTCHA_PRIVATE_KEY: 6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe
       SITE_URL: test
-    runs-on: ubuntu-latest
-    strategy:
-      max-parallel: 4
-      matrix:
-        python-version: [3.6, 3.7, 3.8]
     steps:
       - uses: actions/checkout@v1
       - name: Install libpq-dev
@@ -29,17 +48,6 @@ jobs:
         uses: actions/setup-python@v1
         with:
           python-version: ${{ matrix.python-version }}
-      - uses: actions/setup-node@v1
-        with:
-          node-version: '10.x'
-      - name: Cache Node dependencies
-        id: node-cache
-        uses: actions/cache@v1
-        with:
-          path: node_modules
-          key: ${{ runner.OS }}-node-${{ hashFiles('**/package.json') }}
-          restore-keys: |
-            ${{ runner.OS }}-node-
       - name: Cache Python dependencies
         id: py-cache
         uses: actions/cache@v1
@@ -48,9 +56,12 @@ jobs:
           key: ${{ runner.OS }}-py${{ matrix.python-version }}-${{ hashFiles('**/requirements.txt') }}
           restore-keys: |
             ${{ runner.OS }}-py${{ matrix.python-version }}-
-      - name: Install JS dependencies
-        if: steps.node-cache.outputs.cache-hit != 'true'
-        run: npm install
+      - name: Cache Node dependencies
+        id: node-cache
+        uses: actions/cache@v1
+        with:
+          path: node_modules
+          key: ${{ runner.OS }}-node-${{ hashFiles('**/package.json') }}
       - name: Install Python dependencies
         if: steps.py-cache.outputs.cache-hit != 'true'
         run: |
