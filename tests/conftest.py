@@ -1,5 +1,4 @@
 import pytest
-import os
 from django.core.management import call_command
 from selenium import webdriver
 
@@ -13,15 +12,11 @@ def django_db_setup(django_db_setup, django_db_blocker):
 @pytest.fixture(scope='module')
 def driver(request):
     """Provide a selenium webdriver instance."""
-    driver = os.environ.get('ChromeWebDriver', None)
-
+    # SetUp
     options = webdriver.ChromeOptions()
     options.add_argument('headless')
 
-    if driver:
-        browser = webdriver.Chrome(driver, options=options)
-    else:
-        browser = webdriver.Chrome(options=options)
+    browser = webdriver.Chrome(options=options)
 
     yield browser
 
