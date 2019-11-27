@@ -18,7 +18,7 @@ class Event(models.Model):
     url = models.URLField(blank=True)
 
     start = models.DateTimeField()
-    end = models.DateTimeField(blank=True)
+    end = models.DateTimeField(blank=True, help_text="End date is optional.")
 
     image = VersatileImageField(upload_to='events', blank=True, null=True, ppoi_field='image_ppoi')
     image_ppoi = PPOIField()
@@ -28,6 +28,9 @@ class Event(models.Model):
 
     class Meta:
         ordering = ["start"]
+
+    def __str__(self):
+        return self.title
 
     def get_absolute_url(self):
         return reverse('event_detail', kwargs={'year': self.start.year, 'pk': self.pk})

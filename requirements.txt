@@ -17,6 +17,7 @@ django-allauth-2fa==0.7
 django-csp==3.5
 django-environ==0.4.5
 django-recaptcha==2.0.5
+django-mail-templated-simple==3.2
 django-taggit==1.1.0
 django-versatileimagefield==1.11
 django-webpack-loader==0.6.0

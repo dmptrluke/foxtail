@@ -1,6 +1,5 @@
 from allauth.account import forms as auth_forms
 
-from allauth.socialaccount import forms as social_forms
 from captcha.fields import ReCaptchaField
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Row, Column, Field, Fieldset, Submit, HTML

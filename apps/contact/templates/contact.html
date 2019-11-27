@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags recaptcha %}
+
+{% block title %}Contact Us{% endblock %}
+
+{% block extra_head %}
+    {% recaptcha_head %}
+{% endblock %}
+
+{% block content %}
+    <h1>Contact Us</h1>
+    <p>If you'd like to get in contact with us, you can use the form below to send us an email. We
+        will
+        try to get back to you as soon as possible. If the form doesn't work for you, you can email us
+        at <a href="mailto:website@furry.nz">website@furry.nz</a>.
+    </p>
+    <form method="post" action="{% url 'contact' %}">
+        {% csrf_token %}
+        {% crispy form %}
+        <input class="btn btn-primary" type="submit" value="Send">
+    </form>
+{% endblock content %}

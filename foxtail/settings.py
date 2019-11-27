@@ -61,6 +61,7 @@ INSTALLED_APPS = [
     'apps.accounts',
     'apps.content',
     'apps.events',
+    'apps.contact',
     'apps.directory',
     'foxtail_blog',
     'allauth',
@@ -70,13 +71,10 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.twitter',
     'allauth.socialaccount.providers.discord',
     'allauth.socialaccount.providers.github',
-
-    # Configure the django-otp package.
     'django_otp',
     'django_otp.plugins.otp_totp',
     'django_otp.plugins.otp_static',
-
-    # Enable two-factor auth.
+    'mail_templated_simple',
     'allauth_2fa',
     'taggit',
     'adminsortable2',
