@@ -1,9 +1,9 @@
-name: Python package
+name: Run Tests
 
 on: [push]
 
 jobs:
-  build:
+  test:
     env:
       DEBUG: true
       SECRET_KEY: fake
@@ -18,6 +18,8 @@ jobs:
 
     steps:
     - uses: actions/checkout@v1
+    - name: Install libpq-dev
+      run: sudo apt-get install libpq-dev
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v1
       with:
