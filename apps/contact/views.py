@@ -21,7 +21,7 @@ def contact(request):
                 'message': message,
                 'SITE_URL': settings.SITE_URL
             }
-            if request.user.is_authenticated():
+            if request.user.is_authenticated:
                 context['authentication'] = request.user.username
 
             send_mail('emails/submission.tpl', context, None, ['website@furry.nz'])
