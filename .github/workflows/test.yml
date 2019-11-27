@@ -135,8 +135,8 @@ jobs:
 
       - name: Set VERSION to current git hash
         run: |
-        VERSION=$(git rev-parse HEAD)
-        echo "::set-env name=VERSION::$VERSION"
+          VERSION=$(git rev-parse HEAD)
+          echo "::set-env name=VERSION::$VERSION"
 
       - name: Create a new Sentry release
         run: |
