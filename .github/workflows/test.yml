@@ -28,6 +28,11 @@ jobs:
         with:
           name: bundles
           path: assets/bundles
+      - name: Store webpack-stats for testing
+        uses: actions/upload-artifact@v1
+        with:
+          name: webpack-stats
+          path: webpack-stats.json
   test:
     runs-on: ubuntu-latest
     needs: generate_assets
@@ -74,6 +79,11 @@ jobs:
         with:
           name: bundles
           path: assets/bundles
+      - name: Get webpack-stats
+        uses: actions/download-artifact@v1
+        with:
+          name: webpack-stats
+          path: webpack-stats.json
       - name: Test with pytest
         run: |
           python -m pytest
