@@ -40,11 +40,24 @@ jobs:
       max-parallel: 4
       matrix:
         python-version: [3.6, 3.7, 3.8]
+    services:
+      postgres:
+        image: postgres:10.11
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: postgres
+        ports:
+          # will assign a random free host port
+          - 5432/tcp
+        # needed because the postgres container does not provide a healthcheck
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
     env:
       DEBUG: true
       SECRET_KEY: fake
       RECAPTCHA_PUBLIC_KEY: 6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI
       RECAPTCHA_PRIVATE_KEY: 6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe
+      DATABASE_URL: postgres://postgres@localhost:${{ job.services.postgres.ports[5432] }}/postgres
       WEBPACK_STATS_PATH: webpack-stats/webpack-stats.json
       SITE_URL: test
     steps:
