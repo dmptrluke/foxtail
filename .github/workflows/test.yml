@@ -83,7 +83,6 @@ jobs:
         uses: actions/download-artifact@v1
         with:
           name: webpack-stats
-          path: webpack-stats.json
       - name: Test with pytest
         run: |
           python -m pytest
