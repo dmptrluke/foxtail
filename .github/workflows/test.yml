@@ -46,9 +46,9 @@ jobs:
       uses: actions/cache@v1
       with:
         path: ~/.local/lib/
-        key: ${{ runner.OS }}-pip-${{ hashFiles('**/requirements.txt') }}
+        key: ${{ runner.OS }}-py-${{ hashFiles('**/requirements.txt') }}
         restore-keys: |
-          ${{ runner.OS }}-pip-
+          ${{ runner.OS }}-py-
     - name: Install JS dependencies
       if: steps.node-cache.outputs.cache-hit != 'true'
       run: npm install
@@ -56,8 +56,8 @@ jobs:
       if: steps.py-cache.outputs.cache-hit != 'true'
       run: |
         python -m pip install --upgrade pip
-        pip install -r --user requirements.txt
-        pip install -r --user tests/requirements.txt
+        pip install --user -r requirements.txt
+        pip install --user -r tests/requirements.txt
     - name: Generate assets
       run: npm run-script build-dev
     - name: Test with pytest
