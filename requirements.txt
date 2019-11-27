@@ -5,7 +5,7 @@ django==2.2.7
 bleach==3.1.0
 bleach-whitelist==0.0.10
 psycopg2==2.8.4
-sentry-sdk==0.13.3
+sentry-sdk==0.13.4
 argon2-cffi==19.2.0
 gitpython==3.0.5
 python-memcached==1.59
