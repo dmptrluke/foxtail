@@ -331,11 +331,13 @@ if DEBUG:
 
 # Webpack Loader
 # <https://github.com/owais/django-webpack-loader>
+WEBPACK_STATS_PATH = env('WEBPACK_STATS_PATH', default='webpack-stats.json')
+
 WEBPACK_LOADER = {
     'DEFAULT': {
         'CACHE': not DEBUG,
         'BUNDLE_DIR_NAME': 'bundles/',  # must end with slash
-        'STATS_FILE': os.path.join(BASE_DIR, 'webpack-stats.json'),
+        'STATS_FILE': os.path.join(BASE_DIR, WEBPACK_STATS_PATH),
         'POLL_INTERVAL': 0.1,
         'TIMEOUT': None,
         'IGNORE': [r'.+\.hot-update.js', r'.+\.map']
