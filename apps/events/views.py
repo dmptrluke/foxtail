@@ -1,4 +1,4 @@
-from django.views.generic import ListView, DetailView, ArchiveIndexView, DateDetailView, YearArchiveView
+from django.views.generic import DetailView, ArchiveIndexView, YearArchiveView
 from .models import Event
 
 

@@ -1,14 +1,12 @@
 from allauth.account import forms as auth_forms
-
 from captcha.fields import ReCaptchaField
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Row, Column, Field, Fieldset, Submit, HTML
-from django.forms import ModelForm, SelectDateWidget, Form
+from django.conf import settings
+from django.forms import ModelForm, SelectDateWidget
 
 from apps.accounts.models import User
 from apps.core.fields import CustomCheckbox
-
-from django.conf import settings
 
 
 class SignupForm(auth_forms.SignupForm):

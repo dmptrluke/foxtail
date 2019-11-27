@@ -10,7 +10,7 @@ from .models import Page
 class PageAdmin(SortableAdminMixin, ModelAdmin):  # lgtm [py/conflicting-attributes]
     fieldsets = (
         (None, {'fields': ('title', 'subtitle', 'body')}),
-        ('Advanced options', {'fields': ('slug', 'show_in_menu'),}),
+        ('Advanced options', {'fields': ('slug', 'show_in_menu')}),
     )
 
     formfield_overrides = {

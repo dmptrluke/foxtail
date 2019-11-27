@@ -24,7 +24,7 @@
                 <p class="card-text">{{ event.end | date:"F jS, Y" }}, at {{ event.end | date:"P" }}</p>
             {% endif %}
             {% if event.url %}
-                <a class="btn btn-primary" href="{{ event.url }}" rel="nofollow" target="_blank">View event website</a>
+                <a class="btn btn-primary" href="{{ event.url }}" rel="noopener noreferrer" target="_blank">View event website</a>
             {% endif %}
         </div>
         {% if event.tags %}
