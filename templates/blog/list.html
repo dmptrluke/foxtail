@@ -18,7 +18,7 @@
             </div>
             {% if posts %}
                 {% for post in posts %}
-                    <article class="blog-post mb-5">
+                    <article class="blog-post border-bottom pb-5 mb-5">
                         {% if post.image %}
                             <img class="img-fluid mb-3" src="{{ post.image.crop.800x350 }}" alt="">
                         {% endif %}
