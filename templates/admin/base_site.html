@@ -1,0 +1,20 @@
+<!-- app/templates/admin/base_site.html -->
+
+{% extends "admin/base_site.html" %}
+
+{% block extrastyle %}
+{% if DEBUG %}
+    <style type="text/css">
+        body:before {
+            display: block;
+            line-height: 35px;
+            text-align: center;
+            font-weight: bold;
+            text-transform: uppercase;
+            color: white;
+            content: "debug mode";
+            background-color: #dc3545;
+        }
+    </style>
+{% endif %}
+{% endblock %}
