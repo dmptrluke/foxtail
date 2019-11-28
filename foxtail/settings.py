@@ -61,9 +61,9 @@ INSTALLED_APPS = [
     'apps.accounts',
     'apps.content',
     'apps.events',
-    'apps.contact',
     'apps.directory',
     'foxtail_blog',
+    'foxtail_contact',
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
@@ -458,6 +458,16 @@ MARKDOWN_EXTENSION_CONFIGS = {
         'emoji_generator': pymdownx.emoji.to_alt
     }
 }
+
+# Foxtail Blog
+# <https://github.com/dmptrluke/foxtail-blog>
+
+BLOG_COMMENTS = True
+
+# Foxtail Contact
+# <https://github.com/dmptrluke/foxtail-contact>
+
+CONTACT_EMAILS = env.list('CONTACT_EMAILS')
 
 # Heroku Support
 if env.bool('USING_HEROKU', default=False):

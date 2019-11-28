@@ -110,6 +110,7 @@ jobs:
         env:
           DEBUG: true
           SECRET_KEY: fake
+          CONTACT_EMAILS: test@example.com
           RECAPTCHA_PUBLIC_KEY: 6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI
           RECAPTCHA_PRIVATE_KEY: 6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe
           DATABASE_URL: postgres://postgres:hunter2@localhost:${{ job.services.postgres.ports['5432'] }}/postgres

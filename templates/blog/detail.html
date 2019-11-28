@@ -39,7 +39,7 @@
                     </div>
                 </div>
             </article>
-            {% if post.allow_comments %}
+            {% if post.allow_comments and comments_enabled %}
                 {% include "blog/comments.html" %}
             {% endif %}
 

@@ -41,7 +41,7 @@ urlpatterns = [
     url(r'^accounts/', include('allauth.urls')),
     path('directory/', include('apps.directory.urls')),
     path('events/', include('apps.events.urls')),
-    path('contact/', include('apps.contact.urls')),
+    path('contact/', include('foxtail_contact.urls')),
     path('blog/', include('foxtail_blog.urls')),
     path('', include('apps.content.urls'))
 ]
