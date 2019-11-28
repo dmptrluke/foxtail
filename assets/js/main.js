@@ -1,5 +1,4 @@
 import 'bootstrap';
-import 'svgxuse';
 
 
 $(function () {
