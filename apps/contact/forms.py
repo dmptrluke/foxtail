@@ -1,12 +1,15 @@
 from captcha.fields import ReCaptchaField
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Layout, Row, Column
+from crispy_forms.layout import Layout, Row, Column, Div, HTML
 
 from django import forms
+from django.conf import settings
 
 
 class ContactForm(forms.Form):
-    captcha = ReCaptchaField()
+    if settings.RECAPTCHA_ENABLED:
+        captcha = ReCaptchaField()
+
     name = forms.CharField(required=True)
     email = forms.EmailField(required=True)
     message = forms.CharField(
@@ -21,7 +24,8 @@ class ContactForm(forms.Form):
         self.helper.disable_csrf = True
         self.helper.error_text_inline = False
 
-        self.fields['captcha'].label = False
+        if settings.RECAPTCHA_ENABLED:
+            self.fields['captcha'].label = False
 
         self.helper.layout = Layout(
             Row(
@@ -33,5 +37,5 @@ class ContactForm(forms.Form):
             ),
             Row(
                 Column('captcha', css_class='col-md-12'),
-            )
+            ) if settings.RECAPTCHA_ENABLED else HTML('<!-- security! -->')
         )

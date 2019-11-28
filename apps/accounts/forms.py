@@ -38,7 +38,7 @@ class SignupForm(auth_forms.SignupForm):
             ),
             Row(
                 Column('captcha', css_class='col-md-12'),
-            )
+            ) if settings.RECAPTCHA_ENABLED else HTML('<!-- security! -->')
 
         )
 

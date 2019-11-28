@@ -24,6 +24,6 @@
     <form method="post" action="{% url 'contact' %}">
         {% csrf_token %}
         {% crispy form %}
-        <input class="btn btn-primary" type="submit" value="Send">
+        <input id="contact_submit" class="btn btn-primary" type="submit" value="Send">
     </form>
 {% endblock content %}
