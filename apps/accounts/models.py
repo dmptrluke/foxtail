@@ -1,3 +1,4 @@
+from allauth.account.models import EmailAddress
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
@@ -32,6 +33,15 @@ class User(AbstractUser):
 
     def get_short_name(self):
         return self.username
+
+    @property
+    def email_verified(self):
+        """ check if the users main email is verified """
+        # todo: cached property
+        return EmailAddress.objects.filter(user=self,
+                                           email=self.email,
+                                           verified=True,
+                                           primary=True).exists()
 
     def __str__(self):
         return f"{self.username}"
