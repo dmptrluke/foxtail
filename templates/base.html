@@ -43,6 +43,8 @@
 {% render_bundle_csp 'vendor' 'js' %}
 {% render_bundle_csp 'main' 'js' %}
 
+{% comment %}
+{# this had to be commented out because Sentry does not support our nonce-based CSP correctly #}
 {% if sentry_event_id %}
     <script src="https://browser.sentry-cdn.com/5.7.1/bundle.min.js"
             integrity="sha384-KMv6bBTABABhv0NI+rVWly6PIRvdippFEgjpKyxUcpEmDWZTkDOiueL5xW+cztZZ"
@@ -54,6 +56,8 @@
         Sentry.showReportDialog({eventId: '{{ sentry_event_id }}'})
     </script>
 {% endif %}
+{% endcomment %}
+
 {% block extra_footer %}{% endblock extra_footer %}
 </body>
 </html>
