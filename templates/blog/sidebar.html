@@ -7,22 +7,22 @@
                 <input type="search" name="q" class="form-control" placeholder="Search..."
                        aria-describedby="button-search">
                 <div class="input-group-append">
-                    <button type="submit"  class="btn btn-outline-secondary" id="button-search">{% icon "search" %}</button>
+                    <button type="submit"  class="btn btn-outline-secondary" id="button-search">
+                        {% icon "search" %}</button>
                 </div>
             </div>
         </form>
     </section>
     <section>
         <h3>Recent Posts</h3>
-        <div class="list-group">
+        <div class="list-group list-group-flush">
             {% for post in sidebar_post_list %}
                 <a href="{{ post.get_absolute_url }}" class="list-group-item list-group-item-action">
                     <div class="d-flex w-100 justify-content-between">
-                        <h5 class="mb-1">{{ post.title | truncatechars:15 }}</h5>
-                        <small>{{ post.created | naturaltime }}</small>
+                        <h5 class="mb-1 d-inline-block text-truncate">{{ post.title }}</h5>
+                        <small class="text-nowrap">{{ post.created | naturaltime }}</small>
                     </div>
-                    <p class="mb-1">{{ post.text_rendered | safe | striptags | truncatechars:50 }}</p>
-
+                    <p class="mb-1">{{ post.text_rendered | safe | striptags | truncatechars:60 }}</p>
                 </a>
             {% endfor %}
         </div>
@@ -38,7 +38,6 @@
                 </a>
             {% endfor %}
         </div>
-
     </section>
 </div>
 {% endcache %}
