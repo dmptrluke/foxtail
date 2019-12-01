@@ -6,9 +6,9 @@
     <meta property="og:url" content="{{ SITE_URL }}{{ post.get_absolute_url }}">
     <meta property="og:type" content="article"/>
     <meta property="og:title" content="{{ post.title }}">
-    <meta name="description" content="{{ post.text_rendered | safe | striptags | truncatechars:200 }}">
+    <meta name="description" content="{{ post.text_rendered | striptags | truncatechars:200 }}">
     <meta property="og:description"
-          content="{{ post.text_rendered | safe | striptags | truncatechars:200 }}">
+          content="{{ post.text_rendered | striptags | truncatechars:200 }}">
     <meta property="article:published_time" content="{{ post.created | date:"c" }}">
     <meta property="article:modified_time" content="{{ post.modified | date:"c" }}">
     {% if post.image %}

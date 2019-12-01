@@ -1,18 +1,21 @@
-<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
-        aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
 </button>
-<div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+
+<div class="collapse navbar-collapse" id="navbarNav">
+    {# main navigation #}
     <div class="navbar-nav mr-auto">
         <a class="nav-item nav-link{% if "blog_" in request.resolver_match.url_name %} active{% endif %}"
            href="{% url 'blog_list' %}">News</a>
         <a class="nav-item nav-link{% if "event_" in request.resolver_match.url_name %} active{% endif %}"
            href="{% url 'event_list' %}">Events</a>
     </div>
+    {# user menu #}
     <div class="navbar-nav">
         {% if user.is_authenticated %}
             <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle {% if "account_" in request.resolver_match.url_name %} active{% endif %}"
+                <a class="nav-link dropdown-toggle{% if "account_" in request.resolver_match.url_name %} active{% endif %}"
                    href="#" id="account-dropdown" role="button" data-toggle="dropdown"
                    aria-haspopup="true" aria-expanded="false">
                     {{ user.username }}
@@ -31,7 +34,7 @@
                 </div>
             </li>
         {% else %}
-            <a class="nav-item nav-link " href="{% url 'account_login' %}">Sign In</a>
+            <a class="nav-item nav-link" href="{% url 'account_login' %}">Sign In</a>
         {% endif %}
     </div>
 </div>

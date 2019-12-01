@@ -16,7 +16,9 @@
         <div class="card-body">
             <h4 class="card-title mb-2">{{ event.title }}</h4>
             <h5 class="card-subtitle mb-2">{{ event.where }}</h5>
-            {{ event.what_rendered | safe }}
+            <p class="rendered-markdown">
+                {{ event.what_rendered | safe }}
+            </p>
             <h6 class="card-subtitle">Starts</h6>
             <p class="card-text">{{ event.start | date:"F jS, Y" }}, at {{ event.start | date:"P" }}</p>
             {% if event.end %}
@@ -24,7 +26,9 @@
                 <p class="card-text">{{ event.end | date:"F jS, Y" }}, at {{ event.end | date:"P" }}</p>
             {% endif %}
             {% if event.url %}
-                <a class="btn btn-primary" href="{{ event.url }}" rel="noopener noreferrer" target="_blank">View event website</a>
+                <a class="btn btn-primary" href="{{ event.url }}" rel="noopener noreferrer" target="_blank">
+                    View event website
+                </a>
             {% endif %}
         </div>
         {% if event.tags %}

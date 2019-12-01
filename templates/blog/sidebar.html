@@ -23,7 +23,7 @@
                             <h5>{{ post.title }}</h5>
                             <small>{{ post.created | naturaltime }}</small>
                         </header>
-                        <p class="mb-1">{{ post.text_rendered | safe | striptags | truncatechars:80 }}</p>
+                        <p class="mb-1">{{ post.text_rendered | striptags | truncatechars:80 }}</p>
                     </a>
                 {% endfor %}
             </div>

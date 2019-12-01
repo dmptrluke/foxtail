@@ -1,0 +1,22 @@
+.index-card {
+	.card-title {
+		display: inline-block;
+		max-width: 100%;
+		@include text-truncate;
+	}
+
+	.card-text {
+		display: -webkit-box;
+		-webkit-line-clamp: 2;
+		-webkit-box-orient: vertical;
+		overflow: hidden;
+	}
+}
+
+
+#event-cards {
+	.card-text {
+		-webkit-line-clamp: 3;
+	}
+}
+

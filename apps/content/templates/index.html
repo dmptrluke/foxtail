@@ -40,11 +40,11 @@
     {% endif %}
 
     <h3 class="mb-3">Recent News</h3>
-    <div class="row mb-2">
+    <div class="row mb-2" id="blog-cards">
         {% cache 1800 index_blog %}
             {% for post in post_list %}
                 <div class="col-lg-4">
-                    <article class="card mb-4 blog-card">
+                    <article class="card mb-4 index-card">
 
                         {% if post.image %}
                             <a href="{{ post.get_absolute_url }}">
@@ -63,7 +63,7 @@
                                 {{ post.created | date:"F jS, Y" }}
                             </h6>
                             <p class="card-text">
-                                {{ post.text_rendered | safe | striptags | truncatechars:70 }}
+                                {{ post.text_rendered | striptags | truncatechars:100 }}
                             </p>
                             <a href="{{ post.get_absolute_url }}" class="btn btn-primary"
                                aria-label="Read the full post.">Read more</a>
@@ -76,15 +76,15 @@
     </div>
 
     <h3 class="mb-3">Upcoming Events</h3>
-    <div class="row mb-2">
+    <div class="row mb-2" id="event-cards">
         {% cache 1800 index_events %}
             {% for event in event_list %}
                 <div class="col-lg-4">
-                    <article class="card mb-4 bg-light ">
+                    <article class="card mb-4 bg-light index-card">
                         <div class="card-body">
                             <h5 class="card-title">{{ event.title }}</h5>
-                            <p class="card-text">{{ event.what_rendered | safe | striptags | truncatechars:120 }}</p>
-                            <p class="card-text"><strong>{{ event.start | date:"F jS, Y" }}</strong></p>
+                            <p class="card-text">{{ event.what_rendered | striptags | truncatechars:140 }}</p>
+                            <h6 class="mb-3">{{ event.start | date:"F jS, Y" }}</h6>
                             <a href="{{ event.get_absolute_url }}" class="btn btn-outline-primary">View event</a>
                         </div>
                     </article>
