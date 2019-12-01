@@ -1,7 +1,7 @@
 {% load cache humanize static icon %}
 {% cache 1800 sidebar %}
     <div class="sidebar">
-        <section>
+        <section id="search">
             <form action="{% url 'blog_list' %}">
                 <div class="input-group">
                     <label class="sr-only" for="search-field">Search</label>
@@ -14,21 +14,21 @@
                 </div>
             </form>
         </section>
-        <section>
+        <section id="recent-posts">
             <h3>Recent Posts</h3>
             <div class="list-group list-group-flush">
                 {% for post in sidebar_post_list %}
                     <a href="{{ post.get_absolute_url }}" class="list-group-item list-group-item-action">
-                        <div class="d-flex w-100 justify-content-between">
-                            <h5 class="mb-1 d-inline-block text-truncate">{{ post.title }}</h5>
-                            <small class="text-nowrap ml-2">{{ post.created | naturaltime }}</small>
-                        </div>
-                        <p class="mb-1">{{ post.text_rendered | safe | striptags | truncatechars:60 }}</p>
+                        <header>
+                            <h5>{{ post.title }}</h5>
+                            <small>{{ post.created | naturaltime }}</small>
+                        </header>
+                        <p class="mb-1">{{ post.text_rendered | safe | striptags | truncatechars:80 }}</p>
                     </a>
                 {% endfor %}
             </div>
         </section>
-        <section>
+        <section id="categories">
             <h3>Categories</h3>
             <div class="list-group">
                 {% for tag in sidebar_tag_list %}

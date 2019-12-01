@@ -48,7 +48,10 @@
 
                         {% if post.image %}
                             <a href="{{ post.get_absolute_url }}">
-                                <img class="card-img-top" src="{{ post.image.crop.300x150 }}" alt="">
+                                <img class="card-img-top"
+                                     src="{{ post.image.crop.300x150 }}"
+                                     srcset="{{ post.image.crop.300x150 }} 1x, {{ post.image.crop.600x300 }} 2x"
+                                     alt="">
                             </a>
                         {% endif %}
 

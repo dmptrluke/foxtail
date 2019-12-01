@@ -23,7 +23,10 @@
         <div class="col-lg-8">
             <article class="blog-post mb-5">
                 {% if post.image %}
-                    <img class="img-fluid mb-3" src="{{ post.image.crop.800x350 }}" alt="">
+                    <img class="img-fluid mb-3"
+                         srcset="{{ post.image.crop.800x350 }} 1x, {{ post.image.crop.1200x525 }} 2x"
+                         src="{{ post.image.crop.800x350 }}"
+                         alt="">
                 {% endif %}
                 <h2><a class="text-reset" href="{{ post.get_absolute_url }}">{{ post.title }}</a></h2>
                 <p class="text-muted">{{ post.created | date:"F jS, Y" }}</p>

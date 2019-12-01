@@ -1,0 +1,26 @@
+.sidebar {
+	#recent-posts {
+		header {
+			display: flex;
+			justify-content: space-between;
+			width: 100%;
+
+			h5 {
+				display: inline-block;
+				@include text-truncate;
+			}
+
+			small {
+				white-space: nowrap;
+				margin-left: ($spacer * .5);
+			}
+		}
+
+		p {
+			display: -webkit-box;
+			-webkit-line-clamp: 2;
+			-webkit-box-orient: vertical;
+			overflow: hidden;
+		}
+	}
+}
