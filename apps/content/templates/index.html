@@ -62,7 +62,8 @@
                             <p class="card-text">
                                 {{ post.text_rendered | safe | striptags | truncatechars:70 }}
                             </p>
-                            <a href="{{ post.get_absolute_url }}" class="btn btn-primary">Read more</a>
+                            <a href="{{ post.get_absolute_url }}" class="btn btn-primary"
+                               aria-label="Read the full post.">Read more</a>
                         </div>
 
                     </article>
