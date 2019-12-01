@@ -177,6 +177,7 @@ CSP_FRAME_SRC = ['https://www.google.com/recaptcha/']
 CSP_FONT_SRC = ["'self'", 'data:', 'fonts.gstatic.com']
 CSP_IMG_SRC = ["'self'", 'data:', 'ui-avatars.com', 'www.gravatar.com']
 CSP_OBJECT_SRC = ["'none'"]
+CSP_CONNECT_SRC = ['https://sentry.io']
 
 CSP_BASE_URI = ["'none'"]
 CSP_FRAME_ANCESTORS = ["'none'"]

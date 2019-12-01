@@ -25,12 +25,14 @@
 </head>
 
 <body>
+<a class="sr-only sr-only-focusable" href="#main-content">Skip to main content</a>
+
 {% block header %}
     {% include "components/header.html" %}
 {% endblock header %}
 
 {% block base_content %}
-    <main class="container px-3 py-4 px-md-4 py-md-5">
+    <main id="main-content" class="container px-3 py-4 px-md-4 py-md-5">
         {% include "components/messages.html" %}
         {% block content %}{% endblock content %}
     </main>

@@ -1,43 +1,44 @@
-{% load cache humanize markdownify static icon %}
+{% load cache humanize static icon %}
 {% cache 1800 sidebar %}
-<div class="sidebar">
-    <section>
-        <form action="{% url 'blog_list' %}">
-            <div class="input-group">
-                <input type="search" name="q" class="form-control" placeholder="Search..."
-                       aria-describedby="button-search">
-                <div class="input-group-append">
-                    <button type="submit"  class="btn btn-outline-secondary" id="button-search">
-                        {% icon "search" %}</button>
-                </div>
-            </div>
-        </form>
-    </section>
-    <section>
-        <h3>Recent Posts</h3>
-        <div class="list-group list-group-flush">
-            {% for post in sidebar_post_list %}
-                <a href="{{ post.get_absolute_url }}" class="list-group-item list-group-item-action">
-                    <div class="d-flex w-100 justify-content-between">
-                        <h5 class="mb-1 d-inline-block text-truncate">{{ post.title }}</h5>
-                        <small class="text-nowrap">{{ post.created | naturaltime }}</small>
+    <div class="sidebar">
+        <section>
+            <form action="{% url 'blog_list' %}">
+                <div class="input-group">
+                    <label class="sr-only" for="search-field">Search</label>
+                    <input type="search" name="q" id="search-field" class="form-control" placeholder="Search...">
+                    <div class="input-group-append">
+                        <button type="submit" class="btn btn-outline-secondary" id="search-button"
+                                aria-label="Submit Search Query">
+                            {% icon "search" %}</button>
                     </div>
-                    <p class="mb-1">{{ post.text_rendered | safe | striptags | truncatechars:60 }}</p>
-                </a>
-            {% endfor %}
-        </div>
-    </section>
-    <section>
-        <h3>Categories</h3>
-        <div class="list-group">
-            {% for tag in sidebar_tag_list %}
-                <a href="{% url 'blog_list' %}?tag={{ tag.slug }}" class="list-group-item list-group-item-action
+                </div>
+            </form>
+        </section>
+        <section>
+            <h3>Recent Posts</h3>
+            <div class="list-group list-group-flush">
+                {% for post in sidebar_post_list %}
+                    <a href="{{ post.get_absolute_url }}" class="list-group-item list-group-item-action">
+                        <div class="d-flex w-100 justify-content-between">
+                            <h5 class="mb-1 d-inline-block text-truncate">{{ post.title }}</h5>
+                            <small class="text-nowrap ml-2">{{ post.created | naturaltime }}</small>
+                        </div>
+                        <p class="mb-1">{{ post.text_rendered | safe | striptags | truncatechars:60 }}</p>
+                    </a>
+                {% endfor %}
+            </div>
+        </section>
+        <section>
+            <h3>Categories</h3>
+            <div class="list-group">
+                {% for tag in sidebar_tag_list %}
+                    <a href="{% url 'blog_list' %}?tag={{ tag.slug }}" class="list-group-item list-group-item-action
                     d-flex justify-content-between align-items-center">
-                    {{ tag.name | title }}
-                    <span class="badge badge-primary badge-pill">{{ tag.num_times }}</span>
-                </a>
-            {% endfor %}
-        </div>
-    </section>
-</div>
+                        {{ tag.name | title }}
+                        <span class="badge badge-primary badge-pill">{{ tag.num_times }}</span>
+                    </a>
+                {% endfor %}
+            </div>
+        </section>
+    </div>
 {% endcache %}
