@@ -12,7 +12,10 @@
                 <div class="card text-white bg-dark">
                     {% if event.image %}
                         <a href="{{ event.get_absolute_url }}">
-                            <img class="card-img-top" src="{{ event.image.crop.350x175 }}" alt="">
+                            <img class="card-img-top"
+                                 src="{{ event.image.crop.350x175 }}"
+                                 srcset="{{ event.image.crop.350x175 }} 1x, {{ event.image.crop.700x350 }} 2x"
+                                 alt="">
                         </a>
                     {% endif %}
 
