@@ -1,14 +1,14 @@
 {% extends "base.html" %}
-{% load markdownify icon cache %}
+{% load icon cache %}
 
 {% block extra_head %}
     <meta name="twitter:card" content="summary"/>
     <meta property="og:url" content="{{ SITE_URL }}{{ post.get_absolute_url }}">
     <meta property="og:type" content="article"/>
     <meta property="og:title" content="{{ post.title }}">
-    <meta name="description" content="{{ post.text_rendered | striptags | truncatechars:200 }}">
+    <meta name="description" content="{{ post.text_rendered | safe | striptags | truncatechars:200 }}">
     <meta property="og:description"
-          content="{{ post.text | markdown | striptags | truncatechars:200 }}">
+          content="{{ post.text_rendered | safe | striptags | truncatechars:200 }}">
     <meta property="article:published_time" content="{{ post.created | date:"c" }}">
     <meta property="article:modified_time" content="{{ post.modified | date:"c" }}">
     {% if post.image %}
@@ -26,7 +26,7 @@
                     <img class="img-fluid mb-3" src="{{ post.image.crop.800x350 }}" alt="">
                 {% endif %}
                 <h2><a class="text-reset" href="{{ post.get_absolute_url }}">{{ post.title }}</a></h2>
-                <p class="text-muted">{{ post.created|date:"F jS, Y" }}</p>
+                <p class="text-muted">{{ post.created | date:"F jS, Y" }}</p>
                 <p class="rendered-markdown">{{ post.text_rendered | safe }}</p>
 
                 <div class="row">

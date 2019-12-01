@@ -6,7 +6,7 @@
 {% block content %}
     {% include "account_nav.html" %}
 
-    <h2>Connected Accounts</h2>
+    <h3>Connected Accounts</h3>
 
     {% if form.accounts %}
         <p>You can sign in to your account using any of the following services:</p>
@@ -51,7 +51,7 @@
         <p>You currently have no social network accounts connected to this account.</p>
     {% endif %}
 
-    <h3>Link an account</h3>
+    <h4>Link an account</h4>
 
     <p>
         {% include "components/provider_list.html" with process="connect" %}

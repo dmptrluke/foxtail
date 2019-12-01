@@ -80,7 +80,8 @@ class UserForm(ModelForm):
     class Meta:
         model = User
         widgets = {
-            'date_of_birth': SelectDateWidget(years=range(1900, 2011)),
+            'date_of_birth': SelectDateWidget(years=range(1920, 2011),
+                                              empty_label=("Year", "Month", "Day")),
         }
         fields = ('username', 'date_of_birth', 'gender', 'full_name')
 

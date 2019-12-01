@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load markdownify humanize account cache %}
+{% load humanize account cache %}
 
 {% block title_full %}{{ request.site.name }}{% endblock title_full %}
 
@@ -20,18 +20,20 @@
             your {{ request.site.name }}
             account.
         </p>
-        <p class="mb-5">
-            <a href="{% url 'account_profile' %}" class="btn btn-dark btn-lg mb-2">Manage Account</a>
-            <a href="{% url 'account_logout' %}" class="btn btn-dark btn-lg mb-2">Sign Out</a>
-        </p>
-
+        <form method="post" action="{% url 'account_logout' %}?next={{ request.path }}">
+            <p class="mb-5">
+                <a href="{% url 'account_profile' %}" class="btn btn-dark btn-lg mb-2 mr-1">Manage Account</a>
+                {% csrf_token %}
+                <input type="submit" class="btn btn-dark btn-lg mb-2" value="Sign Out">
+            </p>
+        </form>
     {% else %}
         <p class="mb-4">
             To continue, you'll need to create a {{ request.site.name }} account or sign in to an existing one.
             You can do this using the buttons below.
         </p>
         <p class="mb-5">
-            <a href="{% url 'account_signup' %}" class="btn btn-dark btn-lg mb-2">Create Account</a>
+            <a href="{% url 'account_signup' %}" class="btn btn-dark btn-lg mb-2 mr-1">Create Account</a>
             <a href="{% url 'account_login' %}" class="btn btn-dark btn-lg mb-2">Sign In</a>
 
         </p>
@@ -55,7 +57,7 @@
                                 {{ post.title }}
                             </h5>
                             <h6 class="card-subtitle mb-2 text-muted">
-                                {{ post.created | naturalday }}
+                                {{ post.created | date:"F jS, Y" }}
                             </h6>
                             <p class="card-text">
                                 {{ post.text_rendered | safe | striptags | truncatechars:70 }}

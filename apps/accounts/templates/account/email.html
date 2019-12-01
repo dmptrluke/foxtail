@@ -6,17 +6,15 @@
 {% block content %}
 
     {% include "account_nav.html" %}
-    <h2>Change Email</h2>
     {% if user.emailaddress_set.all %}
         <p>The following email addresses are associated with your account:</p>
 
-        <form action="{% url 'account_email' %}" class="email_list" method="post">
+        <form action="{% url 'account_email' %}" class="email_list mb-4" method="post">
             {% csrf_token %}
-            <fieldset class="form-group">
 
                 <div class="form-group">
                     {% for emailaddress in user.emailaddress_set.all %}
-                        <div class="custom-control custom-radio">
+                        <div class="custom-control custom-radio mb-2">
                             <input id="email_radio_{{ forloop.counter }}" type="radio" name="email"
                                    {% if emailaddress.primary or user.emailaddress_set.count == 1 %}checked="checked"{% endif %}
                                    value="{{ emailaddress.email }}" class="custom-control-input">
@@ -49,7 +47,6 @@
                     </button>
                 </div>
 
-            </fieldset>
         </form>
 
     {% else %}
@@ -67,7 +64,7 @@
     {% endif %}
 
 
-    <h3>Add Email</h3>
+    <h4>Add Email</h4>
 
     <form method="post" action="{% url 'account_email' %}" class="add_email form-inline">
         <div class="form-group">
