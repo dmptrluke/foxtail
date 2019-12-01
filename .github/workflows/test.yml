@@ -121,7 +121,6 @@ jobs:
 
   sentry:
     runs-on: ubuntu-latest
-    needs: test
 
     env:
       SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
