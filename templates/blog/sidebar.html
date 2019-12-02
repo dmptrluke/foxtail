@@ -34,7 +34,7 @@
                 {% for tag in sidebar_tag_list %}
                     <a href="{% url 'blog_list' %}?tag={{ tag.slug }}" class="list-group-item list-group-item-action
                     d-flex justify-content-between align-items-center">
-                        {{ tag.name | title }}
+                        {{ tag.name | capfirst }}
                         <span class="badge badge-primary badge-pill">{{ tag.num_times }}</span>
                     </a>
                 {% endfor %}
