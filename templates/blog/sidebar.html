@@ -1,19 +1,19 @@
 {% load cache humanize static icon %}
-{% cache 1800 sidebar %}
-    <div class="sidebar">
-        <section id="search">
-            <form action="{% url 'blog_list' %}">
-                <div class="input-group">
-                    <label class="sr-only" for="search-field">Search</label>
-                    <input type="search" name="q" id="search-field" class="form-control" placeholder="Search...">
-                    <div class="input-group-append">
-                        <button type="submit" class="btn btn-outline-secondary" id="search-button"
-                                aria-label="Submit Search Query">
-                            {% icon "search" %}</button>
-                    </div>
+<div class="sidebar">
+    <section id="search">
+        <form action="{% url 'blog_list' %}">
+            <div class="input-group">
+                <label class="sr-only" for="search-field">Search</label>
+                <input type="search" name="q" id="search-field" class="form-control" placeholder="Search...">
+                <div class="input-group-append">
+                    <button type="submit" class="btn btn-outline-secondary" id="search-button"
+                            aria-label="Submit Search Query">
+                        {% icon "search" %}</button>
                 </div>
-            </form>
-        </section>
+            </div>
+        </form>
+    </section>
+    {% cache 1800 sidebar_posts %}
         <section id="recent-posts">
             <h3>Recent Posts</h3>
             <div class="list-group list-group-flush">
@@ -28,19 +28,19 @@
                 {% endfor %}
             </div>
         </section>
-        <section id="categories">
-            <h3>Categories</h3>
-            <div class="list-group">
-                {% for tag in sidebar_tag_list %}
-                    <a href="{% url 'blog_list' %}?tag={{ tag.slug }}" class="list-group-item list-group-item-action
+    {% endcache %}
+    <section id="categories">
+        <h3>Categories</h3>
+        <div class="list-group">
+            {% for tag in sidebar_tag_list %}
+                <a href="{% url 'blog_list' %}?tag={{ tag.slug }}" class="list-group-item list-group-item-action
                     d-flex justify-content-between align-items-center{% if request.GET.tag == tag.slug %} active{% endif %}">
-                        {{ tag.name | capfirst }}
-                        <span class="badge badge-pill {% if request.GET.tag == tag.slug %}badge-light{% else %}badge-primary{% endif %}">
+                    {{ tag.name | capfirst }}
+                    <span class="badge badge-pill {% if request.GET.tag == tag.slug %}badge-light{% else %}badge-primary{% endif %}">
                             {{ tag.num_times }}
                         </span>
-                    </a>
-                {% endfor %}
-            </div>
-        </section>
-    </div>
-{% endcache %}
+                </a>
+            {% endfor %}
+        </div>
+    </section>
+</div>
