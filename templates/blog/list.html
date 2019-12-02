@@ -37,7 +37,9 @@
                             <div class="col-sm-6 text-sm-right">
                                     {% for tag in post.tags.all %}
                                         {% if forloop.first %}in{% endif %}
-                                        <a href="{% url 'blog_list' %}?tag={{ tag.slug }}">{{ tag.name | capfirst }}</a>{% if not forloop.last %}, {% endif %}
+                                        <a href="{% url 'blog_list' %}?tag={{ tag.slug }}">
+                                            {{ tag.name | capfirst }}</a>
+                                        {% if not forloop.last %}, {% endif %}
                                     {% endfor %}
                             </div>
                         </div>

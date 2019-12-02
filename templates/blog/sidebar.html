@@ -33,9 +33,11 @@
             <div class="list-group">
                 {% for tag in sidebar_tag_list %}
                     <a href="{% url 'blog_list' %}?tag={{ tag.slug }}" class="list-group-item list-group-item-action
-                    d-flex justify-content-between align-items-center">
+                    d-flex justify-content-between align-items-center{% if request.GET.tag == tag.slug %} active{% endif %}">
                         {{ tag.name | capfirst }}
-                        <span class="badge badge-primary badge-pill">{{ tag.num_times }}</span>
+                        <span class="badge badge-pill {% if request.GET.tag == tag.slug %}badge-light{% else %}badge-primary{% endif %}">
+                            {{ tag.num_times }}
+                        </span>
                     </a>
                 {% endfor %}
             </div>
