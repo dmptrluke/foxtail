@@ -63,7 +63,7 @@
                                 {{ post.created | date:"F jS, Y" }}
                             </h6>
                             <p class="card-text">
-                                {{ post.text_rendered | striptags | truncatechars:100 }}
+                                {{ post.text_rendered | safe | striptags | truncatechars:100 }}
                             </p>
                             <a href="{{ post.get_absolute_url }}" class="btn btn-primary"
                                aria-label="Read the full post.">Read more</a>
@@ -83,7 +83,7 @@
                     <article class="card mb-4 bg-light index-card">
                         <div class="card-body">
                             <h5 class="card-title">{{ event.title }}</h5>
-                            <p class="card-text">{{ event.what_rendered | striptags | truncatechars:140 }}</p>
+                            <p class="card-text">{{ event.what_rendered | safe | striptags | truncatechars:140 }}</p>
                             <h6 class="mb-3">{{ event.start | date:"F jS, Y" }}</h6>
                             <a href="{{ event.get_absolute_url }}" class="btn btn-outline-primary">View event</a>
                         </div>
