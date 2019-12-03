@@ -1,4 +1,4 @@
-tox==3.14.1
+tox==3.14.2
 coverage==4.5.4
 atoma==0.0.17
 pytest==5.3.1
