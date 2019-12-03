@@ -1,6 +1,3 @@
-from allauth.account.models import EmailAddress
-
-
 def userinfo(claims, user):
     """
     Populates standard OpenID Connect claims

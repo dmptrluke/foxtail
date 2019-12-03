@@ -84,7 +84,7 @@ INSTALLED_APPS = [
     'oidc_provider',
     'captcha',
     'versatileimagefield',
-
+    'django_cleanup.apps.CleanupConfig'
 ]
 
 if DEBUG:
@@ -308,11 +308,12 @@ MESSAGE_TAGS = {
     messages.ERROR: 'alert-danger',
 }
 
-# Static files (CSS, JavaScript, Images)
+# Static files and media (CSS, JavaScript, Images)
 # <https://docs.djangoproject.com/en/2.2/howto/static-files/>
+# <https://docs.djangoproject.com/en/dev/ref/settings/#media-root>
 
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'static_out')
+MEDIA_URL = '/media/'
 
 # noinspection PyUnresolvedReferences
 STATICFILES_DIRS = [
@@ -320,10 +321,29 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'assets/static')
 ]
 
-# Media
-# <https://docs.djangoproject.com/en/dev/ref/settings/#media-root>
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+AZURE_ENABLED = env.bool('AZURE_ENABLED', default=False)
+
+if AZURE_ENABLED:
+
+    AZURE_ACCOUNT_NAME = env('AZURE_ACCOUNT_NAME')
+    AZURE_ACCOUNT_KEY = env('AZURE_ACCOUNT_KEY')
+    AZURE_CUSTOM_DOMAIN = env('AZURE_CUSTOM_DOMAIN', default=None)
+
+    AZURE_SSL = env.bool('AZURE_SSL', default=True)
+    AZURE_EMULATED_MODE = env.bool('AZURE_EMULATED_MODE', default=False)
+
+    AZURE_URL_EXPIRATION_SECS = 86400
+
+    AZURE_CONTAINER = env('AZURE_CONTAINER')
+    AZURE_PUBLIC_CONTAINER = env('AZURE_PUBLIC_CONTAINER')
+
+    DEFAULT_FILE_STORAGE = 'storages.backends.azure_storage.AzureStorage'
+    STATICFILES_STORAGE = 'apps.core.storages.PublicAzureStorage'
+
+else:
+    MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+    STATIC_ROOT = os.path.join(BASE_DIR, 'static_out')
+
 
 # if using the debug server, set the correct MIME type for .js files
 if DEBUG:
