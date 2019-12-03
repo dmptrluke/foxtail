@@ -1,4 +1,4 @@
-{% load crispy_forms_tags recaptcha %}
+{% load crispy_forms_tags recaptcha avatar %}
 {% block extra_head %}
     {% recaptcha_head %}
 {% endblock %}
@@ -8,7 +8,7 @@
     {% for comment in post.comments.all %}
         <div class="d-flex flex-row comment mb-4" id="comment-{{ comment.pk }}">
             <div class="mr-3"><img
-                    src="https://ui-avatars.com/api/?length=1&name={{ comment.author.get_short_name | urlencode }}"
+                    src="{{ user|avatar_url:64 }}"
                     alt="..."></div>
             <div class="flex-grow-1">
                 <h5>{{ comment.author.get_short_name }}</h5>

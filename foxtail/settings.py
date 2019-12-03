@@ -130,64 +130,9 @@ TEMPLATES = [
     },
 ]
 
-# Message Tags
-# <https://docs.djangoproject.com/en/2.2/ref/contrib/messages/#message-tags>
-MESSAGE_TAGS = {
-    messages.DEBUG: 'debug',
-    messages.INFO: 'info',
-    messages.SUCCESS: 'success',
-    messages.WARNING: 'warning',
-    messages.ERROR: 'danger',
-}
-
 # Recognise upstream proxy SSL
 # <https://docs.djangoproject.com/en/2.2/ref/settings/#secure-proxy-ssl-header>
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-
-# Security
-# <https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/#https>
-# <https://docs.djangoproject.com/en/2.2/ref/middleware/#x-xss-protection>
-
-SESSION_COOKIE_SECURE = True
-SESSION_COOKIE_NAME = '__Host-sessionid'
-
-CSRF_COOKIE_SECURE = True
-CSRF_COOKIE_NAME = '__Host-csrftoken'
-
-SECURE_CONTENT_TYPE_NOSNIFF = True
-SECURE_BROWSER_XSS_FILTER = True
-SECURE_REFERRER_POLICY = 'same-origin'
-
-X_FRAME_OPTIONS = 'DENY'
-
-# CSP Headers
-# <https://django-csp.readthedocs.io/en/latest/>
-
-CSP_INCLUDE_NONCE_IN = ['script-src', 'style-src']
-CSP_UPGRADE_INSECURE_REQUESTS = True
-
-CSP_DEFAULT_SRC = ["'self'"]
-
-CSP_REPORT_URI = env('CSP_REPORT_URI', default=None)
-
-CSP_SCRIPT_SRC = ["'unsafe-inline'", "'self'", 'https://www.google.com/recaptcha/',
-                  'https://www.gstatic.com/recaptcha/']
-CSP_STYLE_SRC = ["'unsafe-inline'", 'fonts.googleapis.com', "'self'"]
-CSP_FRAME_SRC = ['https://www.google.com/recaptcha/']
-CSP_FONT_SRC = ["'self'", 'data:', 'fonts.gstatic.com']
-CSP_IMG_SRC = ["'self'", 'data:', 'ui-avatars.com', 'www.gravatar.com']
-CSP_OBJECT_SRC = ["'none'"]
-CSP_CONNECT_SRC = ['https://sentry.io']
-
-CSP_BASE_URI = ["'none'"]
-CSP_FRAME_ANCESTORS = ["'none'"]
-CSP_FORM_ACTION = ["'self'"] + env.list('CSP_FORM_ACTION', default=[])
-
-CSP_EXCLUDE_URL_PREFIXES = ('/admin',)
-
-# we don't use strict-dynamic in debug because it breaks django-debug-toolbar
-if not DEBUG:
-    CSP_SCRIPT_SRC += ["'strict-dynamic'"]
 
 # Database
 # <https://docs.djangoproject.com/en/2.2/ref/settings/#databases>
@@ -332,13 +277,11 @@ if AZURE_ENABLED:
     AZURE_SSL = env.bool('AZURE_SSL', default=True)
     AZURE_EMULATED_MODE = env.bool('AZURE_EMULATED_MODE', default=False)
 
-    AZURE_URL_EXPIRATION_SECS = 86400
+    AZURE_MEDIA_CONTAINER = env('AZURE_MEDIA_CONTAINER')
+    AZURE_STATIC_CONTAINER = env('AZURE_STATIC_CONTAINER')
 
-    AZURE_CONTAINER = env('AZURE_CONTAINER')
-    AZURE_PUBLIC_CONTAINER = env('AZURE_PUBLIC_CONTAINER')
-
-    DEFAULT_FILE_STORAGE = 'storages.backends.azure_storage.AzureStorage'
-    STATICFILES_STORAGE = 'apps.core.storages.PublicAzureStorage'
+    DEFAULT_FILE_STORAGE = 'apps.core.storages.MediaAzureStorage'
+    STATICFILES_STORAGE = 'apps.core.storages.StaticAzureStorage'
 
 else:
     MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
@@ -364,6 +307,55 @@ WEBPACK_LOADER = {
         'IGNORE': [r'.+\.hot-update.js', r'.+\.map']
     }
 }
+
+# Security
+# <https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/#https>
+# <https://docs.djangoproject.com/en/2.2/ref/middleware/#x-xss-protection>
+
+SESSION_COOKIE_SECURE = True
+SESSION_COOKIE_NAME = '__Host-sessionid'
+
+CSRF_COOKIE_SECURE = True
+CSRF_COOKIE_NAME = '__Host-csrftoken'
+
+SECURE_CONTENT_TYPE_NOSNIFF = True
+SECURE_BROWSER_XSS_FILTER = True
+SECURE_REFERRER_POLICY = 'same-origin'
+
+X_FRAME_OPTIONS = 'DENY'
+
+# CSP Headers
+# <https://django-csp.readthedocs.io/en/latest/>
+
+CSP_INCLUDE_NONCE_IN = ['script-src', 'style-src']
+CSP_UPGRADE_INSECURE_REQUESTS = True
+
+ASSET_HOSTS = env.list('ASSET_HOSTS', default=[])
+
+CSP_DEFAULT_SRC = ["'self'"]
+
+CSP_REPORT_URI = env('CSP_REPORT_URI', default=None)
+
+CSP_SCRIPT_SRC = ["'unsafe-inline'", "'self'", 'https://www.google.com/recaptcha/',
+                  'https://www.gstatic.com/recaptcha/'] + ASSET_HOSTS
+CSP_STYLE_SRC = ["'unsafe-inline'", 'fonts.googleapis.com', "'self'"] + ASSET_HOSTS
+CSP_FRAME_SRC = ['https://www.google.com/recaptcha/']
+CSP_FONT_SRC = ["'self'", 'data:', 'fonts.gstatic.com'] + ASSET_HOSTS
+CSP_IMG_SRC = ["'self'", 'data:', 'ui-avatars.com', 'www.gravatar.com'] + ASSET_HOSTS
+CSP_OBJECT_SRC = ["'none'"]
+CSP_CONNECT_SRC = ["'self'", 'https://sentry.io']
+
+CSP_BASE_URI = ["'none'"]
+CSP_FRAME_ANCESTORS = ["'none'"]
+CSP_FORM_ACTION = ["'self'"] + env.list('CSP_FORM_ACTION', default=[])
+
+CSP_EXCLUDE_URL_PREFIXES = ('/admin',)
+
+# we don't use strict-dynamic in debug because it breaks django-debug-toolbar
+if not DEBUG:
+    CSP_SCRIPT_SRC += ["'strict-dynamic'"]
+
+
 
 # Sentry.io
 # <https://docs.sentry.io/platforms/python/django/>
