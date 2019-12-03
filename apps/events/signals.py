@@ -7,14 +7,11 @@ from .models import Event
 
 
 @receiver(post_save, sender=Event)
-def warm_event_thumbnail_images(sender, instance, **kwargs):
+def warm_event_images(sender, instance, **kwargs):
     if instance.image:
         warmer = VersatileImageFieldWarmer(
             instance_or_queryset=instance,
-            rendition_key_set=[
-                ('banner', 'crop__350x175'),
-                ('banner2x', 'crop__700x350')
-            ],
+            rendition_key_set='event_image',
             image_attr='image'
         )
         warmer.warm()

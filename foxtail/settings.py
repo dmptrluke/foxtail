@@ -449,7 +449,25 @@ CRISPY_TEMPLATE_PACK = 'bootstrap4'
 # VersatileImageField
 # <https://django-versatileimagefield.readthedocs.io/en/latest/installation.html#versatileimagefield-settings>
 VERSATILEIMAGEFIELD_SETTINGS = {
-    'jpeg_resize_quality': 80
+    'jpeg_resize_quality': 80,
+    'cache_name': 'vif',
+    'sized_directory_name': '_s',
+    'filtered_directory_name': '_f',
+    'image_key_post_processor': 'versatileimagefield.processors.md5_16'
+}
+
+VERSATILEIMAGEFIELD_RENDITION_KEY_SETS = {
+    'event_image': [
+        ('mini', 'crop__350x175'),
+        ('mini2x', 'crop__700x350'),
+        ('banner', 'crop__1150x300')
+    ],
+    'post_image': [
+        ('mini', 'crop__350x175'),
+        ('mini2x', 'crop__700x350'),
+        ('banner', 'crop__800x350'),
+        ('banner2x', 'crop__1200x525'),
+    ]
 }
 
 # Markdown
