@@ -10,6 +10,6 @@ register = template.Library()
 def avatar_url(user, size=40):
     email = user.email
 
-    default = "https://example.com/static/images/defaultavatar.jpg"
+    default = "https://ui-avatars.com/api/" + urlencode({'length': 1, 'name': user.get_short_name()})
     return "https://www.gravatar.com/avatar/{}?{}".format(
         md5(email.lower().encode('utf-8')).hexdigest(), urlencode({'d': default, 's': str(size)}))
