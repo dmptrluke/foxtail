@@ -341,7 +341,7 @@ CSP_SCRIPT_SRC = ["'unsafe-inline'", "'self'", 'https://www.google.com/recaptcha
 CSP_STYLE_SRC = ["'unsafe-inline'", 'fonts.googleapis.com', "'self'"] + ASSET_HOSTS
 CSP_FRAME_SRC = ['https://www.google.com/recaptcha/']
 CSP_FONT_SRC = ["'self'", 'data:', 'fonts.gstatic.com'] + ASSET_HOSTS
-CSP_IMG_SRC = ["'self'", 'data:', 'ui-avatars.com', 'www.gravatar.com'] + ASSET_HOSTS
+CSP_IMG_SRC = ["'self'", 'data:', 'ui-avatars.com', '*.wp.com', 'www.gravatar.com'] + ASSET_HOSTS
 CSP_OBJECT_SRC = ["'none'"]
 CSP_CONNECT_SRC = ["'self'", 'https://sentry.io']
 
