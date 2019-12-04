@@ -34,7 +34,7 @@ sitemaps = {
 urlpatterns = [
     path('sitemap.xml', sitemap, {'sitemaps': sitemaps},
          name='django.contrib.sitemaps.views.sitemap'),
-    path('django-rq/', include('django_rq.urls')),
+    path('admin/django-rq/', include('django_rq.urls')),
     path('admin/', admin.site.urls),
     url(r'^openid/', include('oidc_provider.urls', namespace='oidc_provider')),
     url(r'^accounts/', include('apps.accounts.urls')),
