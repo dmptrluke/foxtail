@@ -84,6 +84,7 @@ INSTALLED_APPS = [
     'oidc_provider',
     'captcha',
     'versatileimagefield',
+    "django_rq",
     'django_cleanup.apps.CleanupConfig'
 ]
 
@@ -147,14 +148,21 @@ DATABASES = {
 
 # Cache
 # <https://docs.djangoproject.com/en/2.2/topics/cache/#setting-up-the-cache>
-CACHE_URL = env.cache(default='dummycache://')
 CACHES = {
-    'default': CACHE_URL
+    'default': env.cache(default='dummycache://')
 }
 
 # enable the cached session backend
 # <https://docs.djangoproject.com/en/2.2/topics/http/sessions/#using-cached-sessions>
 SESSION_ENGINE = "django.contrib.sessions.backends.cached_db"
+
+# django-rq
+# <https://github.com/rq/django-rq>
+RQ_QUEUES = {
+    'default': {
+        'USE_REDIS_CACHE': 'default',
+    }
+}
 
 # Authentication
 # <https://django-allauth.readthedocs.io/en/latest/>

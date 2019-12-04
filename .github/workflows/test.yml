@@ -61,6 +61,12 @@ jobs:
         # needed because the postgres container does not provide a healthcheck
         options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
 
+      redis:
+        image: redis
+        ports:
+          - 6379/tcp
+        options: --entrypoint redis-server
+
     steps:
       - uses: actions/checkout@v1
 
@@ -114,6 +120,7 @@ jobs:
           RECAPTCHA_PUBLIC_KEY: 6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI
           RECAPTCHA_PRIVATE_KEY: 6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe
           DATABASE_URL: postgres://postgres:hunter2@localhost:${{ job.services.postgres.ports['5432'] }}/postgres
+          CACHE_URL: redis://localhost:${{ job.services.redis.ports[6379] }}/1
           WEBPACK_STATS_PATH: webpack-stats/webpack-stats.json
           SITE_URL: test
         run: |
