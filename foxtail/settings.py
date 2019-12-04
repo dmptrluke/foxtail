@@ -160,7 +160,8 @@ SESSION_ENGINE = "django.contrib.sessions.backends.cached_db"
 # <https://github.com/rq/django-rq>
 RQ_QUEUES = {
     'default': {
-        'USE_REDIS_CACHE': 'default'
+        'USE_REDIS_CACHE': 'default',
+        'ASYNC': env.bool('RQ_ASYNC', default=True)
     }
 }
 
@@ -439,7 +440,7 @@ LOGGING = {
 try:
     DEFAULT_FROM_EMAIL = env('EMAIL_FROM_USER')
     SERVER_EMAIL = env('EMAIL_FROM_SYSTEM')
-    EMAIL_ASYNC = env.bool('EMAIL_ASYNC', default=False)
+    EMAIL_ASYNC = env.bool('EMAIL_ASYNC', default=True)
 
     EMAIL_CONFIG = env.email_url('EMAIL_URL')
 
