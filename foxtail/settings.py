@@ -395,6 +395,8 @@ if SENTRY_ENABLED:
 
         _vars['release'] = sha
 
+        repo.close()
+
     sentry_sdk.init(**_vars)
 
 # Logging
