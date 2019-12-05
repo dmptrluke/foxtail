@@ -237,6 +237,17 @@ PASSWORD_HASHERS = [
 OIDC_SESSION_MANAGEMENT_ENABLE = True
 OIDC_USERINFO = 'apps.accounts.claims.userinfo'
 
+OIDC_CLAIMS_SUPPORTED = [
+    'sub',
+    'name',
+    'preferred_username',
+    'nickname',
+    'gender',
+    'birthdate',
+    'email',
+    'email_verified'
+]
+
 # ReCAPTCHA
 # <https://pypi.org/project/django-recaptcha/>
 RECAPTCHA_ENABLED = True
