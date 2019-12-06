@@ -2,7 +2,7 @@ from django.db import models
 from django.urls import reverse
 from taggit.managers import TaggableManager
 
-from foxtail_blog.fields import MarkdownField, RenderedMarkdownField, ClassyValidator
+from foxtail_blog.fields import MarkdownField, RenderedMarkdownField, VALIDATOR_CLASSY
 from versatileimagefield.fields import VersatileImageField, PPOIField
 
 
@@ -12,7 +12,7 @@ class Event(models.Model):
     tags = TaggableManager(blank=True)
 
     where = models.CharField(max_length=200)
-    what = MarkdownField(rendered_field='what_rendered', validator=ClassyValidator)
+    what = MarkdownField(rendered_field='what_rendered', validator=VALIDATOR_CLASSY)
     what_rendered = RenderedMarkdownField()
 
     url = models.URLField(blank=True)

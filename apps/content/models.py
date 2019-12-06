@@ -1,7 +1,7 @@
 from django.db import models
 from django.urls import reverse
 
-from foxtail_blog.fields import MarkdownField, ClassyValidator, RenderedMarkdownField
+from foxtail_blog.fields import MarkdownField, RenderedMarkdownField, VALIDATOR_CLASSY
 
 
 class Page(models.Model):
@@ -21,7 +21,7 @@ class Page(models.Model):
         "page URLs. Must be unique.",
     )
 
-    body = MarkdownField(rendered_field='body_rendered', validator=ClassyValidator)
+    body = MarkdownField(rendered_field='body_rendered', validator=VALIDATOR_CLASSY)
     body_rendered = RenderedMarkdownField()
 
     class Meta:
