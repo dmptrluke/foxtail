@@ -1,8 +1,8 @@
 from django.db import models
 from django.urls import reverse
+from markdownfield.fields import MarkdownField, RenderedMarkdownField
+from markdownfield.validators import VALIDATOR_CLASSY
 from taggit.managers import TaggableManager
-
-from foxtail_blog.fields import MarkdownField, RenderedMarkdownField, VALIDATOR_CLASSY
 from versatileimagefield.fields import VersatileImageField, PPOIField
 
 

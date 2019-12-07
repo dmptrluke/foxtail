@@ -1,7 +1,8 @@
 from django.db import models
 from django.urls import reverse
 
-from foxtail_blog.fields import MarkdownField, RenderedMarkdownField, VALIDATOR_CLASSY
+from markdownfield.fields import MarkdownField, RenderedMarkdownField
+from markdownfield.validators import VALIDATOR_CLASSY
 
 
 class Page(models.Model):
@@ -18,7 +19,7 @@ class Page(models.Model):
     slug = models.SlugField(
         unique=True,
         help_text="Changing this value after initial creation will break existing "
-        "page URLs. Must be unique.",
+                  "page URLs. Must be unique.",
     )
 
     body = MarkdownField(rendered_field='body_rendered', validator=VALIDATOR_CLASSY)
