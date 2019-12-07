@@ -137,7 +137,6 @@ SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 # Database
 # <https://docs.djangoproject.com/en/2.2/ref/settings/#databases>
-# <https://pypi.org/project/dj-database-url/>
 
 DATABASES = {
     'default': env.db(
