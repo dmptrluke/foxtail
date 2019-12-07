@@ -530,12 +530,5 @@ CONTACT_EMAILS = env.list('CONTACT_EMAILS')
 
 # Heroku Support
 if env.bool('USING_HEROKU', default=False):
-    SESSION_ENGINE = "django.contrib.sessions.backends.cached_db"
-    CACHES = {
-        'default': {
-            'BACKEND': 'django_bmemcached.memcached.BMemcached'
-        }
-    }
-
     import django_heroku
     django_heroku.settings(locals())
