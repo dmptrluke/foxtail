@@ -57,6 +57,7 @@ def send_messages_async(messages, **kwargs):
         except Exception as e:
             # Not expecting any specific kind of exception here because it
             # could be any number of things, depending on the backend
+            # TODO: We need to handle this properly.
             logger.exception("Failed to send email message to %r (%r)",
                              message.to, e)
 
