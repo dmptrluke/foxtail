@@ -253,6 +253,10 @@ RECAPTCHA_ENABLED = True
 RECAPTCHA_PRIVATE_KEY = env('RECAPTCHA_PRIVATE_KEY')
 RECAPTCHA_PUBLIC_KEY = env('RECAPTCHA_PUBLIC_KEY')
 
+# Taggit
+# <https://django-taggit.readthedocs.io/en/latest/getting_started.html>
+TAGGIT_CASE_INSENSITIVE = True
+
 # Internationalization
 # <https://docs.djangoproject.com/en/2.2/topics/i18n/>
 
