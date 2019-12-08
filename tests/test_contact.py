@@ -47,4 +47,3 @@ def test_unauthenticated_user_contact(driver, live_server, settings):
     assert "John Doe" in mail.outbox[0].body
     assert "test@example.com" in mail.outbox[0].body
     assert "Lorem ipsum dolor sit contact" in mail.outbox[0].body
-

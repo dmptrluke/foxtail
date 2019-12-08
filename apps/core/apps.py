@@ -7,4 +7,4 @@ class CoreConfig(AppConfig):
     def ready(self):
         # import signal handlers
         # noinspection PyUnresolvedReferences
-        import apps.core.signals
+        import apps.core.signals  # noqa: F401

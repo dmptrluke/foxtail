@@ -374,8 +374,6 @@ CSP_EXCLUDE_URL_PREFIXES = ('/admin',)
 if not DEBUG:
     CSP_SCRIPT_SRC += ["'strict-dynamic'"]
 
-
-
 # Sentry.io
 # <https://docs.sentry.io/platforms/python/django/>
 

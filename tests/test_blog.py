@@ -48,6 +48,8 @@ def test_blog_comments(authenticated_driver, live_server, settings):
     assert 'test' in my_comment.text
     assert 'I like this post' in my_comment.text
 
+    assert 'Hello' in their_comment.text
+
     # we don't like it, delete it!
     delete_button = my_comment.find_element_by_link_text('delete comment')
     delete_button.click()

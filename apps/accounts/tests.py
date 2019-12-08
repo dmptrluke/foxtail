@@ -91,6 +91,3 @@ class AuthenticatedResponseCodeTests(TestCase):
         redirect_url = reverse('account_change_password')
         response = self.client.get(url)
         self.assertRedirects(response, redirect_url, 302)
-
-
-

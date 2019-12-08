@@ -8,4 +8,4 @@ class EventsConfig(AppConfig):
     def ready(self):
         # import signal handlers
         # noinspection PyUnresolvedReferences
-        import apps.events.signals
+        import apps.events.signals  # noqa: F401
