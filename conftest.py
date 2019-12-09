@@ -11,20 +11,30 @@ def django_db_setup(django_db_setup, django_db_blocker):
 
 
 @pytest.fixture
-def user():
-    """Add a test user to the database."""
-    user_ = get_user_model().objects.create(
-        username='test',
-        email='test@example.com'
-    )
+def user(db, django_user_model, django_username_field):
+    """A Django user.
+    This uses an existing user with username "user", or creates a new one with
+    password "password".
+    """
+    UserModel = django_user_model
+    username_field = django_username_field
+    username = "user@example.com" if username_field == "email" else "test"
 
-    return user_
+    try:
+        user = UserModel._default_manager.get(**{username_field: username})
+    except UserModel.DoesNotExist:
+        extra_fields = {}
+        if username_field not in ("username", "email"):
+            extra_fields[username_field] = "test"
+        user = UserModel._default_manager.create_user(
+            username, "user@example.com", "password", **extra_fields
+        )
+    return user
 
 
 @pytest.fixture(scope='module')
 def driver(request):
     """Provide a selenium webdriver instance."""
-    # SetUp
     options = webdriver.ChromeOptions()
     options.add_argument('headless')
 
@@ -32,12 +42,11 @@ def driver(request):
 
     yield browser
 
-    # TearDown
     browser.quit()
 
 
 @pytest.fixture
-def authenticated_driver(driver, client, live_server, user, settings):
+def authenticated_driver(db, driver, client, live_server, user, settings):
     """Return a browser instance with logged-in user session."""
     settings.CSRF_COOKIE_SECURE = False
     settings.SESSION_COOKIE_SECURE = False
