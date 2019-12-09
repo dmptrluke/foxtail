@@ -16,16 +16,12 @@ class AccountAdapter(OTPAdapter):
         username = user_username(user)
         user_username(
             user,
-            username or self.generate_unique_username([
-                full_name,
-                email,
-                username,
-                'user']))
+            username or self.generate_unique_username([full_name, email, username, 'user'])
+        )
 
 
 class SocialAccountAdapter(DefaultSocialAccountAdapter):
     def populate_user(self, request, sociallogin, data):
-        # get data, process data
         username = data.get('username')
         email = data.get('email')
 
@@ -34,11 +30,10 @@ class SocialAccountAdapter(DefaultSocialAccountAdapter):
         user_username(user, username or '')
         user_email(user, valid_email_or_none(email) or '')
 
-        _date_of_birth = data.get('birthdate')
-        if _date_of_birth:
+        if date_of_birth := data.get('birthdate'):
             try:
-                date_of_birth = datetime.strptime(_date_of_birth, "%Y-%m-%d")
-                user_field(user, 'date_of_birth', date_of_birth)
+                parsed = datetime.strptime(date_of_birth, "%Y-%m-%d")
+                user.date_of_birth = parsed
             except ValueError:
                 pass
 
@@ -46,21 +41,16 @@ class SocialAccountAdapter(DefaultSocialAccountAdapter):
         first_name = data.get('first_name')
         last_name = data.get('last_name')
 
+        # if a full name exists, use that, if not,
+        # join first_name and last_name
         if name:
             user_field(user, 'full_name', name)
         else:
-            name_parts = []
-            if first_name:
-                name_parts.append(first_name)
-            if last_name:
-                name_parts.append(last_name)
+            merged = ' '.join(x for x in [first_name, last_name] if x)
+            if merged != '':
+                user_field(user, 'full_name', merged)
 
-            if name_parts:
-                merged_name = " ".join(name_parts)
-                user_field(user, 'full_name', merged_name)
-
-        gender = data.get('gender')
-        if gender:
+        if gender := data.get('gender'):
             user_field(user, 'gender', gender.title())
 
         return user
