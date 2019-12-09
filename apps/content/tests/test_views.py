@@ -1,19 +1,8 @@
 from django.contrib.auth import get_user_model
 from django.test import TestCase
-from django.urls import reverse, resolve
+from django.urls import reverse
 
-
-class ResponseCodeTests(TestCase):
-    def test_index(self):
-        url = reverse('index')
-        response = self.client.get(url)
-        self.assertEqual(response.status_code, 200)
-
-
-class URLResolverTests(TestCase):
-    def test_index(self):
-        resolver = resolve('/')
-        self.assertEqual(resolver.view_name, 'index')
+from apps.content.models import Page
 
 
 class IndexViewTests(TestCase):
@@ -34,3 +23,16 @@ class AuthenticatedIndexViewTests(TestCase):
     def test_content(self):
         response = self.client.get(reverse('index'))
         self.assertContains(response, "You're now logged in as <strong>user1")
+
+
+class PageViewTests(TestCase):
+    def setUp(self):
+        Page.objects.create(title="Page", slug="slug-1", body="TURBO", body_rendered="BEEP")
+
+    def test_template(self):
+        response = self.client.get(reverse('page-detail', kwargs={'slug': 'slug-1'}))
+        self.assertTemplateUsed(response, 'page.html')
+
+    def test_content(self):
+        response = self.client.get(reverse('page-detail', kwargs={'slug': 'slug-1'}))
+        self.assertContains(response, "TURBO")
