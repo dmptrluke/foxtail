@@ -10,8 +10,8 @@ def django_db_setup(django_db_setup, django_db_blocker):
         call_command('loaddata', 'tests/data.json')
 
 
-@pytest.fixture()
-def user(db):
+@pytest.fixture
+def user():
     """Add a test user to the database."""
     user_ = get_user_model().objects.create(
         username='test',
@@ -36,7 +36,7 @@ def driver(request):
     browser.quit()
 
 
-@pytest.fixture()
+@pytest.fixture
 def authenticated_driver(driver, client, live_server, user, settings):
     """Return a browser instance with logged-in user session."""
     settings.CSRF_COOKIE_SECURE = False
