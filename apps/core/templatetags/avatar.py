@@ -5,6 +5,7 @@ from django import template
 
 register = template.Library()
 
+
 # TEMPLATE USE:  {{ user|avatar_url:150 }}
 @register.filter
 def avatar_url(user, size=40):

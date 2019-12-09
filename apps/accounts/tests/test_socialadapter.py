@@ -1,7 +1,5 @@
 from django.contrib.auth import get_user_model
 
-from datetime import datetime
-
 from apps.accounts.authentication import SocialAccountAdapter
 test_adapter = SocialAccountAdapter()
 

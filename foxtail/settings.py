@@ -14,7 +14,7 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
 import logging
-import os
+from pathlib import Path
 
 import environ
 import pymdownx.emoji
@@ -23,11 +23,11 @@ from django.core.exceptions import ImproperlyConfigured
 
 logger = logging.getLogger(__name__)
 
-# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+# Build paths inside the project like this: str(BASE_DIR / 'subdir').
+BASE_DIR = Path(__file__).resolve(strict=True).parents[1]
 
 env = environ.Env()
-environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
+environ.Env.read_env(str(BASE_DIR / '.env'))
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = env('SECRET_KEY')
@@ -115,7 +115,7 @@ if DEBUG:
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates')],
+        'DIRS': [str(BASE_DIR / 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -141,7 +141,7 @@ SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 DATABASES = {
     'default': env.db(
         'DATABASE_URL',
-        default='sqlite:///' + os.path.join(BASE_DIR, 'db.sqlite3')
+        default='sqlite:///' + str(BASE_DIR / 'db.sqlite3')
     )
 }
 
@@ -157,10 +157,12 @@ SESSION_ENGINE = "django.contrib.sessions.backends.cached_db"
 
 # django-rq
 # <https://github.com/rq/django-rq>
+RQ_ASYNC = env.bool('RQ_ASYNC', default=True)
+
 RQ_QUEUES = {
     'default': {
         'USE_REDIS_CACHE': 'default',
-        'ASYNC': env.bool('RQ_ASYNC', default=True)
+        'ASYNC': RQ_ASYNC
     }
 }
 
@@ -285,8 +287,8 @@ MEDIA_URL = '/media/'
 
 # noinspection PyUnresolvedReferences
 STATICFILES_DIRS = [
-    ("bundles", os.path.join(BASE_DIR, 'assets/bundles')),
-    os.path.join(BASE_DIR, 'assets/static')
+    ("bundles", str(BASE_DIR / 'assets/bundles')),
+    str(BASE_DIR / 'assets/static')
 ]
 
 AZURE_ENABLED = env.bool('AZURE_ENABLED', default=False)
@@ -307,8 +309,8 @@ if AZURE_ENABLED:
     STATICFILES_STORAGE = 'apps.core.storages.StaticAzureStorage'
 
 else:
-    MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-    STATIC_ROOT = os.path.join(BASE_DIR, 'static_out')
+    MEDIA_ROOT = str(BASE_DIR / 'media')
+    STATIC_ROOT = str(BASE_DIR / 'static_out')
 
 
 # if using the debug server, set the correct MIME type for .js files
@@ -324,7 +326,7 @@ WEBPACK_LOADER = {
     'DEFAULT': {
         'CACHE': not DEBUG,
         'BUNDLE_DIR_NAME': 'bundles/',  # must end with slash
-        'STATS_FILE': os.path.join(BASE_DIR, WEBPACK_STATS_PATH),
+        'STATS_FILE': str(BASE_DIR / WEBPACK_STATS_PATH),
         'POLL_INTERVAL': 0.1,
         'TIMEOUT': None,
         'IGNORE': [r'.+\.hot-update.js', r'.+\.map']
@@ -448,27 +450,17 @@ LOGGING = {
 
 # Email
 # <https://docs.djangoproject.com/en/2.2/topics/email/>
+DEFAULT_FROM_EMAIL = env('EMAIL_FROM_USER', default='webmaster@localhost')
+SERVER_EMAIL = env('EMAIL_FROM_SYSTEM', default='root@localhost')
 
-try:
-    DEFAULT_FROM_EMAIL = env('EMAIL_FROM_USER')
-    SERVER_EMAIL = env('EMAIL_FROM_SYSTEM')
-    EMAIL_ASYNC = env.bool('EMAIL_ASYNC', default=True)
+EMAIL_CONFIG = env.email_url('EMAIL_URL', default='consolemail://')
 
-    EMAIL_CONFIG = env.email_url('EMAIL_URL')
+if RQ_ASYNC:
+    EMAIL_REAL_BACKEND = EMAIL_CONFIG.get('EMAIL_BACKEND')
+    EMAIL_CONFIG['EMAIL_BACKEND'] = 'apps.core.email.AsyncEmailBackend'
 
-    if EMAIL_ASYNC:
-        EMAIL_REAL_BACKEND = EMAIL_CONFIG.get('EMAIL_BACKEND')
-        EMAIL_CONFIG['EMAIL_BACKEND'] = 'apps.core.email.AsyncEmailBackend'
+vars().update(EMAIL_CONFIG)
 
-    vars().update(EMAIL_CONFIG)
-
-except ImproperlyConfigured as e:
-    if DEBUG:
-        logger.warning('Foxtail is in DEBUG mode with missing email credentials. '
-                       'Enabling console email backend!')
-        EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-    else:
-        raise e
 
 # Crispy Forms
 # <https://django-crispy-forms.readthedocs.io/en/latest/>
