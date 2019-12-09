@@ -30,7 +30,8 @@ class SocialAccountAdapter(DefaultSocialAccountAdapter):
         user_username(user, username or '')
         user_email(user, valid_email_or_none(email) or '')
 
-        if date_of_birth := data.get('birthdate'):
+        date_of_birth = data.get('birthdate')
+        if date_of_birth:
             try:
                 parsed = datetime.strptime(date_of_birth, "%Y-%m-%d")
                 user.date_of_birth = parsed
@@ -50,7 +51,8 @@ class SocialAccountAdapter(DefaultSocialAccountAdapter):
             if merged != '':
                 user_field(user, 'full_name', merged)
 
-        if gender := data.get('gender'):
+        gender = data.get('gender')
+        if gender:
             user_field(user, 'gender', gender.title())
 
         return user
