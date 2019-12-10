@@ -12,6 +12,9 @@ module.exports = {
         main: ['./js/main.js', './scss/index.scss']
     },
     context: path.resolve(__dirname, "assets"),
+    performance: {
+        hints: false
+    },
     optimization: {
         minimizer: [new TerserJSPlugin({}), new OptimizeCSSAssetsPlugin({})],
         moduleIds: 'hashed',
