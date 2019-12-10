@@ -235,6 +235,7 @@ PASSWORD_HASHERS = [
 # OIDC Server
 # <https://django-oidc-provider.readthedocs.io/en/latest/>
 OIDC_SESSION_MANAGEMENT_ENABLE = True
+OIDC_SESSION_MANAGEMENT_COOKIE_SECURE = True
 OIDC_USERINFO = 'apps.accounts.claims.userinfo'
 
 OIDC_CLAIMS_SUPPORTED = [
