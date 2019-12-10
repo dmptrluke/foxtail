@@ -15,13 +15,13 @@ to keep things tidy.
 
 ### Prerequisites
 
-To get started, you'll need to install the Python requirements. You can do this with the following command. 
+To get started, you'll need to install the Python requirements. You can do this with the following command.
 
 ```
 pip install -r requirements.txt
 ```
 
-And, the node.js requirements. 
+And, the node.js requirements.
 
 ```
 npm install
@@ -96,8 +96,8 @@ You should then be able to access foxtail at http://127.0.0.1:8000/.
 
 This project uses `pytest`, `pytest-django`, and `selenium` for automated code testing.
 
-To install the dependencies for testing, use the following command. You may also need to follow 
-[additional steps](https://selenium-python.readthedocs.io/installation.html) to get the 
+To install the dependencies for testing, use the following command. You may also need to follow
+[additional steps](https://selenium-python.readthedocs.io/installation.html) to get the
 selenium test suites to run.
 ```
 pip install -r tests/requirements.txt
@@ -124,19 +124,19 @@ There are four main components to deploying this project in a real production en
 * Using PostgreSQL for database.
 * Configuring and enabling Django-RQ
 
-You will also need to follow most of the steps listed above in *Getting Started*, with some obvious alterations - 
+You will also need to follow most of the steps listed above in *Getting Started*, with some obvious alterations -
 
 * `npm run-script build` instead of `npm run-script build-dev`
 * `DEBUG=FALSE` in .env
 
 ### Gunicorn
-Following the Gunicorn documentation is the simplest way to get this working. 
+Following the Gunicorn documentation is the simplest way to get this working.
 The base command you'll want to use to run the project will be `gunicorn foxtail.wsgi:application`.
 
-This does not include any additional flags you may need to set, such as `-w 3` to set the number of workers, or any 
+This does not include any additional flags you may need to set, such as `-w 3` to set the number of workers, or any
  web server/socket configuration. **You will have to set those up yourself**. See the below link
  for information.
- 
+
 http://docs.gunicorn.org/en/latest/deploy.html
 
 ### Redis

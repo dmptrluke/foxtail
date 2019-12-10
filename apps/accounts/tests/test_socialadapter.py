@@ -1,6 +1,7 @@
 from django.contrib.auth import get_user_model
 
 from apps.accounts.authentication import SocialAccountAdapter
+
 test_adapter = SocialAccountAdapter()
 
 

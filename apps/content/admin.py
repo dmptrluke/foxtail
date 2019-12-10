@@ -1,8 +1,9 @@
-from adminsortable2.admin import SortableAdminMixin
 from django.contrib import admin
 from django.contrib.admin import ModelAdmin
 from django.db.models import TextField
 from django.forms import Textarea
+
+from adminsortable2.admin import SortableAdminMixin
 
 from .models import Page
 

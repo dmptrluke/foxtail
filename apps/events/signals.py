@@ -1,5 +1,6 @@
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+
 from versatileimagefield.image_warmer import VersatileImageFieldWarmer
 
 from .models import Event

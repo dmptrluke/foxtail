@@ -16,9 +16,10 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 import logging
 from pathlib import Path
 
+from django.contrib.messages import constants as messages
+
 import environ
 import pymdownx.emoji
-from django.contrib.messages import constants as messages
 
 logger = logging.getLogger(__name__)
 

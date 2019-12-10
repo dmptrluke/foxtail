@@ -1,7 +1,7 @@
-import pytest
+from django.core import mail
 from django.urls import reverse
 
-from django.core import mail
+import pytest
 
 
 @pytest.mark.django_db

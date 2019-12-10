@@ -29,12 +29,13 @@ License for the derived code follows:
     SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 """
 
-import django_rq
 import logging
 
 from django.conf import settings
 from django.core.mail import get_connection
 from django.core.mail.backends.base import BaseEmailBackend
+
+import django_rq
 
 
 def send_messages_async(messages, **kwargs):

@@ -1,9 +1,10 @@
-from django.views.generic import TemplateView, DetailView
-from foxtail_blog.models import Post
-
 from datetime import datetime
 
+from django.views.generic import DetailView, TemplateView
+
 from apps.events.models import Event
+from foxtail_blog.models import Post
+
 from .models import Page
 
 
