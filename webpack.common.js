@@ -16,7 +16,7 @@ module.exports = {
         hints: false
     },
     optimization: {
-        minimizer: [new TerserJSPlugin({}), new OptimizeCSSAssetsPlugin({})],
+        minimizer: [new TerserJSPlugin({})],
         moduleIds: 'hashed',
         runtimeChunk: 'single',
         splitChunks: {
@@ -82,8 +82,8 @@ module.exports = {
                         options: {
                             plugins: function () {
                                 return [
-                                    require('precss'),
-                                    require('autoprefixer')
+                                    require('autoprefixer'),
+                                    require('cssnano')
                                 ];
                             },
                             sourceMap: true,
@@ -92,10 +92,7 @@ module.exports = {
                     {
                         loader: 'sass-loader',
                         options: {
-                            sassOptions: {
-                                sourceMap: true
-                            }
-
+                            sourceMap: true,
                         },
                     },
                 ],
