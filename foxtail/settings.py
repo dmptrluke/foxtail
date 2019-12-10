@@ -19,7 +19,6 @@ from pathlib import Path
 import environ
 import pymdownx.emoji
 from django.contrib.messages import constants as messages
-from django.core.exceptions import ImproperlyConfigured
 
 logger = logging.getLogger(__name__)
 

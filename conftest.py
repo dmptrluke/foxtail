@@ -1,5 +1,4 @@
 import pytest
-from django.contrib.auth import get_user_model
 from django.core.management import call_command
 from selenium import webdriver
 
@@ -16,17 +15,17 @@ def user(db, django_user_model, django_username_field):
     This uses an existing user with username "user", or creates a new one with
     password "password".
     """
-    UserModel = django_user_model
+    user_model = django_user_model
     username_field = django_username_field
     username = "user@example.com" if username_field == "email" else "test"
 
     try:
-        user = UserModel._default_manager.get(**{username_field: username})
-    except UserModel.DoesNotExist:
+        user = user_model._default_manager.get(**{username_field: username})
+    except user_model.DoesNotExist:
         extra_fields = {}
         if username_field not in ("username", "email"):
             extra_fields[username_field] = "test"
-        user = UserModel._default_manager.create_user(
+        user = user_model._default_manager.create_user(
             username, "user@example.com", "password", **extra_fields
         )
     return user
@@ -37,7 +36,6 @@ def driver(request):
     """Provide a selenium webdriver instance."""
     options = webdriver.ChromeOptions()
     options.add_argument('headless')
-
     browser = webdriver.Chrome(options=options)
 
     yield browser
