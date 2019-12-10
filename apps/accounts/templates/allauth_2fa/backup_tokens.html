@@ -9,26 +9,31 @@
 
     {% if backup_tokens %}
         {% if reveal_tokens %}
-            <p>These backup tokens will allow you to access your account in case you lose your authenticator. Take note of them and store them safely!</p>
+            <p>These backup tokens will allow you to access your account in case you lose your authenticator. Take note
+                of them and store them safely!</p>
             <ul class="list-unstyled">
                 {% for token in backup_tokens %}
                     <li class="text-monospace">{{ token.token }}</li>
                 {% endfor %}
             </ul>
-            <p class="text-muted">These tokens will not be visible again. If you forget them, you'll have to generate new ones.</p>
+            <p class="text-muted">These tokens will not be visible again. If you forget them, you'll have to generate
+                new ones.</p>
         {% else %}
-            <p>Backup tokens have been generated, but are not revealed here for security reasons.  Generating new tokens will invalidate all previous tokens.</p>
+            <p>Backup tokens have been generated, but are not revealed here for security reasons. Generating new tokens
+                will invalidate all previous tokens.</p>
         {% endif %}
     {% else %}
         <p>No backup tokens have been generated. Press the button below to generate some.</p>
     {% endif %}
-    <p>
-        <form method="post">
+
+    <form method="post">
+        <p>
             {% csrf_token %}
             <button type="submit" class="btn btn-secondary">
                 {% trans 'Generate Backup Tokens' %}
             </button>
-        </form>
-    </p>
+        </p>
+    </form>
+
     <a href="{% url 'two-factor-remove' %}" class="btn btn-outline-danger">Disable Two Factor</a>
 {% endblock %}

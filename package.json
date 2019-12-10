@@ -9,6 +9,9 @@
         "build-dev": "webpack --config webpack.dev.js",
         "build": "webpack --config webpack.prod.js"
     },
+    "stylelint": {
+        "extends": "stylelint-config-recommended-scss"
+    },
     "browserslist": "defaults",
     "dependencies": {
         "@babel/core": "^7.7.2",
@@ -21,6 +24,7 @@
         "clean-webpack-plugin": "^3.0.0",
         "compression-webpack-plugin": "^3.0.0",
         "css-loader": "^3.2.0",
+        "cssnano": "^4.1.10",
         "ekko-lightbox": "^5.3.0",
         "file-loader": "^5.0.2",
         "imagemin-webpack-plugin": "^2.4.2",
@@ -37,7 +41,11 @@
         "webpack": "^4.41.2",
         "webpack-bundle-tracker": "^0.4.3",
         "webpack-cli": "^3.3.10",
-        "webpack-merge": "^4.2.2",
-        "cssnano": "^4.1.10"
+        "webpack-merge": "^4.2.2"
+    },
+    "devDependencies": {
+        "stylelint": "^12.0.0",
+        "stylelint-config-recommended-scss": "^4.1.0",
+        "stylelint-scss": "^3.13.0"
     }
 }
