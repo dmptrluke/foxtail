@@ -516,6 +516,8 @@ MARKDOWN_EXTENSION_CONFIGS = {
 # <https://github.com/dmptrluke/foxtail-blog>
 
 BLOG_COMMENTS = True
+BLOG_FEED_TITLE = "Latest News"
+BLOG_FEED_DESCRIPTION = "The latest furry news."
 
 # Foxtail Contact
 # <https://github.com/dmptrluke/foxtail-contact>
