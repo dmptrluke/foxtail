@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block title %}Authorised Applications{% endblock %}
+
+{% block content %}
+    {% include "account_nav.html" %}
+    <h3>Authorised Applications</h3>
+    <p>You have granted the following applications access to your {{ request.site.name }} account.</p>
+    {% for consent in object_list %}
+        <h5><a href="{{ consent.client.website_url }}">{{ consent.client.name }}</a></h5>
+        <ul>
+            <li><strong>User Identifier</strong><br><i>A unique value representing your {{ request.site.name }}
+                account.</i></li>
+            {% if consent.detailed_scopes %}
+                {% for scope in consent.detailed_scopes %}
+                    <li><strong>{{ scope.name }}</strong><br><i>{{ scope.description }}</i></li>
+                {% endfor %}
+            {% endif %}
+        </ul>
+    {% empty %}
+        <li>You have not granted any applications access to your {{ request.site.name }} account.</li>
+    {% endfor %}
+{% endblock content %}

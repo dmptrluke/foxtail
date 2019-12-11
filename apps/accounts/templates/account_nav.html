@@ -11,8 +11,11 @@
     <a class="nav-item nav-link{% if 'two-factor' in request.resolver_match.url_name %} active{% endif %}" href="{% url 'two-factor-setup' %}">
         2FA
     </a>
+    <a class="nav-item nav-link{% if 'account_concent' in request.resolver_match.url_name %} active{% endif %}" href="{% url 'account_concent_list' %}">
+        Authorised Applications
+    </a>
     <a class="nav-item nav-link{% if request.resolver_match.url_name == "socialaccount_connections" %} active{% endif %}" href="{% url 'socialaccount_connections' %}">
-        Connected Accounts
+        Social Accounts
     </a>
 </nav>
 <hr class="mb-4 mt-0">

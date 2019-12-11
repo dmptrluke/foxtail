@@ -1,6 +1,8 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse
-from django.views.generic import UpdateView
+from django.views.generic import ListView, UpdateView
+
+from oidc_provider.models import UserConsent
 
 from apps.accounts.forms import UserForm
 
@@ -16,4 +18,12 @@ class UserView(LoginRequiredMixin, UpdateView):
         return reverse('account_profile')
 
 
-__all__ = ['UserView']
+class ConsentList(LoginRequiredMixin, ListView):
+    template_name = 'consent_list.html'
+    model = UserConsent
+
+    def get_queryset(self):
+        return self.model.objects.filter(user=self.request.user)
+
+
+__all__ = ['UserView', 'ConsentList']
