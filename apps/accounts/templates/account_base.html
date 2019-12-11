@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags icon %}
+
+{% block title %}Manage Account{% endblock %}
+
+{% block content %}
+    {% include "account_nav.html" %}
+    {% block account_content %}
+    {% endblock account_content %}
+{% endblock content %}

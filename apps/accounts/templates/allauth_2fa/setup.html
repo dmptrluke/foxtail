@@ -1,10 +1,9 @@
-{% extends 'base.html' %}
+{% extends 'account_base.html' %}
 {% load crispy_forms_filters i18n %}
 
 {% block title %}Two-Factor Authentication{% endblock %}
 
-{% block content %}
-    {% include "account_nav.html" %}
+{% block account_content %}
     <h3>Two-factor Authentication</h3>
 
     <p>Two-factor authentication (2FA) is NOT currently enabled on this account. You can enable it using by following

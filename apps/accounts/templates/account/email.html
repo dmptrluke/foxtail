@@ -1,11 +1,9 @@
-{% extends "base.html" %}
+{% extends "account_base.html" %}
 {% load crispy_forms_filters %}
 
 {% block title %}Change Email{% endblock %}
 
-{% block content %}
-
-    {% include "account_nav.html" %}
+{% block account_content %}
     <h3>Manage Email</h3>
     {% if user.emailaddress_set.all %}
         <p>The following email addresses are associated with your account:</p>

@@ -1,11 +1,9 @@
-{% extends "base.html" %}
+{% extends "account_base.html" %}
 {% load icon %}
 
 {% block title %}Social Accounts{% endblock %}
 
-{% block content %}
-    {% include "account_nav.html" %}
-
+{% block account_content %}
     <h3>Social Accounts</h3>
 
     {% if form.accounts %}
@@ -59,4 +57,4 @@
 
 
     {% include "socialaccount/snippets/login_extra.html" %}
-{% endblock content %}
+{% endblock %}
