@@ -1,4 +1,4 @@
-<nav class="nav nav-pills nav-fill mb-3 flex-column flex-sm-row">
+<nav class="nav nav-lines nav-fill mb-4 flex-column flex-sm-row">
     <a class="nav-item nav-link {% if request.resolver_match.url_name == "account_profile" %} active{% endif %}" href="{% url 'account_profile' %}">
         Profile
     </a>
@@ -11,11 +11,10 @@
     <a class="nav-item nav-link{% if 'two-factor' in request.resolver_match.url_name %} active{% endif %}" href="{% url 'two-factor-setup' %}">
         2FA
     </a>
-    <a class="nav-item nav-link{% if 'account_concent' in request.resolver_match.url_name %} active{% endif %}" href="{% url 'account_concent_list' %}">
-        Authorised Applications
+    <a class="nav-item nav-link{% if 'account_application' in request.resolver_match.url_name %} active{% endif %}" href="{% url 'account_application_list' %}">
+        Applications
     </a>
     <a class="nav-item nav-link{% if request.resolver_match.url_name == "socialaccount_connections" %} active{% endif %}" href="{% url 'socialaccount_connections' %}">
         Social Accounts
     </a>
 </nav>
-<hr class="mb-4 mt-0">
