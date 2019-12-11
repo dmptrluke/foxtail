@@ -16,7 +16,8 @@
 
             <div class="flex-grow-1 border-left pl-3">
                 <h5>{{ consent.client.name }}<small> — <a
-                        href="{{ consent.client.website_url }}">{{ consent.client.website_url }}</a></small></h5>
+                        href="{{ consent.client.website_url }}" rel="noopener noreferrer"
+                        target="_blank">{{ consent.client.website_url }}</a></small></h5>
                 <p>{{ consent.client.name }} has access to the following information:</p>
                 <dl class="mb-0">
                     <dt>User Identifier</dt>
@@ -30,7 +31,8 @@
                 </dl>
                 {% if consent.client.terms_url %}
                     <p class="mb-0">
-                        <small><a href="{{ consent.client.terms_url }}">View Privacy Policy</a></small>
+                        <small><a href="{{ consent.client.terms_url }}" rel="noopener noreferrer" target="_blank">View
+                            Privacy Policy</a></small>
                     </p>
                 {% endif %}
             </div>
