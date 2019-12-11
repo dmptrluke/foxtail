@@ -20,6 +20,7 @@ class UserView(LoginRequiredMixin, UpdateView):
 
 class ConsentList(LoginRequiredMixin, ListView):
     template_name = 'consent_list.html'
+    context_object_name = 'consent_list'
     model = UserConsent
 
     def get_queryset(self):

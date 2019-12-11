@@ -1,23 +1,42 @@
 {% extends "base.html" %}
 
-{% block title %}Authorised Applications{% endblock %}
+{% block title %}Authorized Applications{% endblock %}
 
 {% block content %}
     {% include "account_nav.html" %}
-    <h3>Authorised Applications</h3>
-    <p>You have granted the following applications access to your {{ request.site.name }} account.</p>
-    {% for consent in object_list %}
-        <h5><a href="{{ consent.client.website_url }}">{{ consent.client.name }}</a></h5>
-        <ul>
-            <li><strong>User Identifier</strong><br><i>A unique value representing your {{ request.site.name }}
-                account.</i></li>
-            {% if consent.detailed_scopes %}
-                {% for scope in consent.detailed_scopes %}
-                    <li><strong>{{ scope.name }}</strong><br><i>{{ scope.description }}</i></li>
-                {% endfor %}
-            {% endif %}
-        </ul>
-    {% empty %}
-        <li>You have not granted any applications access to your {{ request.site.name }} account.</li>
-    {% endfor %}
+    <h3>Authorized Applications</h3>
+    <p class="mb-4">You have granted <strong>{{ consent_list|length }}
+        application{{ consent_list|length|pluralize }}</strong> access
+        to your account.</p>
+
+        {% for consent in consent_list %}
+            <div class=" d-flex flex-row mb-4">
+                <div class="mr-3">
+                    <img class="rounded" src="{{ consent.client.logo.url }}" alt="{{ consent.client.name }}">
+                </div>
+
+                <div class="flex-grow-1 border-left pl-3">
+                    <h5>{{ consent.client.name }}<small> — <a href="{{ consent.client.website_url }}">{{ consent.client.website_url }}</a></small></h5>
+                    <p>{{ consent.client.name }} has access to the following information:</p>
+                    <dl>
+                        <dt>User Identifier</dt>
+                        <dd>Access to a unique value representing your {{ request.site.name }} account.</dd>
+                        {% if consent.detailed_scopes %}
+                            {% for scope in consent.detailed_scopes %}
+                                <dt>{{ scope.name }}</dt>
+                                <dd>{{ scope.description }}</dd>
+                            {% endfor %}
+                        {% endif %}
+                    </dl>
+
+
+                </div>
+            </div>
+
+
+
+
+        {% empty %}
+            <li>You have not granted any applications access to your {{ request.site.name }} account.</li>
+        {% endfor %}
 {% endblock content %}
