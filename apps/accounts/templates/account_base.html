@@ -3,8 +3,10 @@
 
 {% block title %}Manage Account{% endblock %}
 
-{% block content %}
-    {% include "account_nav.html" %}
-    {% block account_content %}
-    {% endblock account_content %}
-{% endblock content %}
+{% block base_content %}
+    <main id="main-content" class="container px-3 py-3 px-md-4">
+        {% include "account_nav.html" %}
+        {% block content %}
+        {% endblock content %}
+    </main>
+{% endblock base_content %}

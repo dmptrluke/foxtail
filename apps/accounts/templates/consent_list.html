@@ -2,7 +2,7 @@
 
 {% block title %}Authorized Applications{% endblock %}
 
-{% block account_content %}
+{% block content %}
     <h3>Authorized Applications</h3>
     <p class="mb-4">You have granted <strong>{{ consent_list|length }}
         application{{ consent_list|length|pluralize }}</strong> access
@@ -38,4 +38,4 @@
         {% empty %}
             <li>You have not granted any applications access to your {{ request.site.name }} account.</li>
         {% endfor %}
-{% endblock account_content %}
+{% endblock content %}

@@ -3,9 +3,9 @@
 
 {% block title %}Manage Account{% endblock %}
 
-{% block account_content %}
+{% block content %}
     <form method="post" action="{% url 'account_profile' %}">
         {% csrf_token %}
         {% crispy form %}
     </form>
-{% endblock account_content %}
+{% endblock content %}
