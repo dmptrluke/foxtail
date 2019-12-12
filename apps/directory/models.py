@@ -13,6 +13,9 @@ class Profile(models.Model):
     class Meta:
         permissions = (('directory_view', 'Can View Profile'),)
 
+    def __str__(self):
+        return f"{self.user.username}"
+
 
 class Character(models.Model):
     name = models.CharField(max_length=100, help_text="100 characters or fewer.")
@@ -23,6 +26,9 @@ class Character(models.Model):
     description = models.TextField(blank=True, default='')
 
     user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"{self.name} {self.user.username}"
 
 
 __all__ = ['Profile', 'Character']

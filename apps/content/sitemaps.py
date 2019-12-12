@@ -11,8 +11,8 @@ class StaticSitemap(Sitemap):
     def items(self):
         return ['index', 'blog_list']
 
-    def location(self, item):
-        return reverse(item)
+    def location(self, obj):
+        return reverse(obj)
 
 
 class PageSitemap(Sitemap):

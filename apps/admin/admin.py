@@ -14,6 +14,6 @@ class CustomAdminSite(AdminSite):
             # Already logged-in, redirect to admin index
             index_path = reverse('admin:index', current_app=self.name)
             return HttpResponseRedirect(index_path)
-        else:
-            login_path = reverse('account_login')
-            return HttpResponseRedirect(login_path)
+
+        login_path = reverse('account_login')
+        return HttpResponseRedirect(login_path)

@@ -14,7 +14,6 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.conf import settings
-from django.conf.urls import url
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.contrib.sitemaps.views import sitemap
@@ -36,10 +35,10 @@ urlpatterns = [
          name='django.contrib.sitemaps.views.sitemap'),
     path('admin/django-rq/', include('django_rq.urls')),
     path('admin/', admin.site.urls),
-    url(r'^openid/', include('oidc_provider.urls', namespace='oidc_provider')),
-    url(r'^accounts/', include('apps.accounts.urls')),
-    url(r'^accounts/', include('allauth_2fa.urls')),
-    url(r'^accounts/', include('allauth.urls')),
+    path('openid/', include('oidc_provider.urls', namespace='oidc_provider')),
+    path('accounts/', include('apps.accounts.urls')),
+    path('accounts/', include('allauth_2fa.urls')),
+    path('accounts/', include('allauth.urls')),
     path('directory/', include('apps.directory.urls')),
     path('events/', include('apps.events.urls')),
     path('contact/', include('foxtail_contact.urls')),
