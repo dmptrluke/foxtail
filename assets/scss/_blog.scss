@@ -1,5 +1,16 @@
 .sidebar {
 	#recent-posts {
+		h3 {
+			small {
+				font-size: 75%;
+				a {
+					color: #6c757d;
+				}
+				a:hover {
+					color: #ee802f;
+				}
+			}
+		}
 		header {
 			display: flex;
 			justify-content: space-between;

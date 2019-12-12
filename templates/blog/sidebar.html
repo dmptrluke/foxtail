@@ -15,7 +15,7 @@
     </section>
     {% cache 1800 sidebar_posts %}
         <section id="recent-posts">
-            <h3>Recent Posts</h3>
+            <h3>Recent Posts <small><a title="RSS Feed" href="{% url 'blog_feed'  %}">{% icon 'rss-square' tag='span' %}</a></small></h3>
             <div class="list-group list-group-flush">
                 {% for post in sidebar_post_list %}
                     <a href="{{ post.get_absolute_url }}" class="list-group-item list-group-item-action">
@@ -43,4 +43,5 @@
             {% endfor %}
         </div>
     </section>
+
 </div>
