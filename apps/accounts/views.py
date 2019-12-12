@@ -24,7 +24,7 @@ class ConsentList(LoginRequiredMixin, ListView):
     model = UserConsent
 
     def get_queryset(self):
-        return self.model.objects.filter(user=self.request.user)
+        return self.model.objects.filter(user=self.request.user).select_related('client')
 
 
 __all__ = ['UserView', 'ConsentList']

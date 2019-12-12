@@ -5,17 +5,18 @@
 
 {% block content %}
     <h3>Manage Email</h3>
-    {% if user.emailaddress_set.all %}
+    {% with emails=user.emailaddress_set.all %}
+    {% if emails %}
         <p>The following email addresses are associated with your account:</p>
 
         <form action="{% url 'account_email' %}" class="email_list mb-4" method="post">
             {% csrf_token %}
 
                 <div class="form-group">
-                    {% for emailaddress in user.emailaddress_set.all %}
+                    {% for emailaddress in emails %}
                         <div class="custom-control custom-radio mb-2">
                             <input id="email_radio_{{ forloop.counter }}" type="radio" name="email"
-                                   {% if emailaddress.primary or user.emailaddress_set.count == 1 %}checked="checked"{% endif %}
+                                   {% if emailaddress.primary or emails.count == 1 %}checked="checked"{% endif %}
                                    value="{{ emailaddress.email }}" class="custom-control-input">
                             <label for="email_radio_{{ forloop.counter }}"
                                    class="{% if emailaddress.primary %}primary_email{% endif %} custom-control-label">
@@ -61,6 +62,7 @@
         </div>
 
     {% endif %}
+    {% endwith %}
 
 
     <h4>Add Email</h4>
