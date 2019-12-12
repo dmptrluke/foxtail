@@ -68,7 +68,7 @@ def send_messages_async(messages, **kwargs):
 
 class AsyncEmailBackend(BaseEmailBackend):
     def __init__(self, fail_silently=False, **kwargs):
-        super(AsyncEmailBackend, self).__init__(fail_silently)
+        super().__init__(fail_silently)
         self.init_kwargs = kwargs
 
     def send_messages(self, messages, **kwargs):

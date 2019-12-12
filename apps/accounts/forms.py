@@ -15,7 +15,7 @@ class SignupForm(auth_forms.SignupForm):
         captcha = ReCaptchaField()
 
     def __init__(self, *args, **kwargs):
-        super(SignupForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.form_tag = False
         self.helper.disable_csrf = True
@@ -46,7 +46,7 @@ class SignupForm(auth_forms.SignupForm):
 
 class LoginForm(auth_forms.LoginForm):
     def __init__(self, *args, **kwargs):
-        super(LoginForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.form_tag = False
         self.helper.disable_csrf = True
@@ -64,7 +64,7 @@ class ResetPasswordForm(auth_forms.ResetPasswordForm):
     captcha = ReCaptchaField()
 
     def __init__(self, *args, **kwargs):
-        super(ResetPasswordForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.form_tag = False
         self.helper.disable_csrf = True
@@ -87,7 +87,7 @@ class UserForm(ModelForm):
         fields = ('username', 'date_of_birth', 'gender', 'full_name')
 
     def __init__(self, *args, **kwargs):
-        super(UserForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.form_tag = False
         self.helper.disable_csrf = True
