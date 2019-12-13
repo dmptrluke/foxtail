@@ -7,8 +7,6 @@ import markdownfield.fields
 
 class Migration(migrations.Migration):
 
-    replaces = [('content', '0002_pre-render_markdown'), ('content', '0003_rendered_field')]
-
     dependencies = [
         ('content', '0001_initial'),
     ]

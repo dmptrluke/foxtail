@@ -3,7 +3,7 @@ from django.db import migrations, models
 
 class Migration(migrations.Migration):
     dependencies = [
-        ('accounts', '0003_add_gender'),
+        ('accounts', '0001_initial_squashed'),
     ]
 
     operations = [

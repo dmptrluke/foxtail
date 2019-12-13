@@ -8,8 +8,6 @@ from django.db import migrations, models
 
 class Migration(migrations.Migration):
 
-    replaces = [('accounts', '0001_initial'), ('accounts', '0002_add_dob'), ('accounts', '0003_add_gender')]
-
     dependencies = [
         ('auth', '0011_update_proxy_permissions'),
     ]
