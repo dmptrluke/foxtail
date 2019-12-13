@@ -16,13 +16,11 @@ jobs:
         uses: actions/cache@v1
         with:
           path: node_modules
-          key: ${{ runner.OS }}-node1.2-${{ hashFiles('**/package.json') }}
-          restore-keys: |
-            ${{ runner.OS }}-node1.2-
+          key: ${{ runner.OS }}-npm-${{ hashFiles('**/package-lock.json') }}
 
       - name: Install JS dependencies
         if: steps.node-cache.outputs.cache-hit != 'true'
-        run: npm install
+        run: npm ci
 
       - name: Generate assets
         run: npm run-script build-dev

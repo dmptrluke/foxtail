@@ -19,7 +19,6 @@ gen
 # NPM
 node_modules
 webpack-stats.json
-package-lock.json
 
 # produced assets
 static_out/
