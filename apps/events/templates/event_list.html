@@ -4,13 +4,13 @@
 {% block title %}Event List{% endblock %}
 
 {% block content %}
-    <div class="row no-gutters" data-colcade="columns: .grid-col, items: .card">
+    <div class="row narrow-gutters" data-colcade="columns: .grid-col, items: .card">
         <div class="grid-col col-md-6 col-lg-4"></div>
         <div class="grid-col d-none d-md-block col-md-6 col-lg-4"></div>
         <div class="grid-col d-none d-lg-block col-md-6 col-lg-4"></div>
         {% for event in object_list %}
             <div class="col-md-6 col-lg-4">
-                <div class="card text-white bg-dark mb-3 mx-2">
+                <div class="card text-white bg-dark mb-3">
                     {% if event.image %}
                         <a href="{{ event.get_absolute_url }}">
                             <img class="card-img-top"
