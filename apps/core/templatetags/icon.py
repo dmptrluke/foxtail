@@ -1,5 +1,3 @@
-import os.path
-
 from django import template
 from django.contrib.staticfiles import finders
 from django.core.cache import cache
@@ -24,9 +22,9 @@ def icon_tag(icon_id, tag='div'):
         # no cached icon, damn. now I have to work with files
         icon_path = finders.find(f'icons/{icon_id}.svg')
 
-        if not os.path.isfile(icon_path):
+        if not icon_path:
             # yeet
-            raise FileNotFoundError
+            raise FileNotFoundError(f'No icon found for "{icon_id}".')
 
         with open(icon_path) as icon_file:
             icon_data = icon_file.read()
