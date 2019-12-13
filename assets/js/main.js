@@ -1,5 +1,5 @@
 import 'bootstrap';
-
+import 'colcade';
 
 $(function () {
     $('[data-toggle="tooltip"]').tooltip();

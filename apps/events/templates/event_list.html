@@ -4,35 +4,37 @@
 {% block title %}Event List{% endblock %}
 
 {% block content %}
-
-
-
-    <div class="card-columns">
+    <div class="row no-gutters" data-colcade="columns: .grid-col, items: .card">
+        <div class="grid-col col-4"></div>
+        <div class="grid-col col-4"></div>
+        <div class="grid-col col-4"></div>
         {% for event in object_list %}
-            <div class="card text-white bg-dark">
-                {% if event.image %}
-                    <a href="{{ event.get_absolute_url }}">
-                        <img class="card-img-top"
-                             src="{{ event.image.crop.350x175 }}"
-                             srcset="{{ event.image.crop.350x175 }} 1x, {{ event.image.crop.700x350 }} 2x"
-                             alt="">
-                    </a>
-                {% endif %}
+            <div class="col-4">
+                <div class="card text-white bg-dark mb-3 mx-2">
+                    {% if event.image %}
+                        <a href="{{ event.get_absolute_url }}">
+                            <img class="card-img-top"
+                                 src="{{ event.image.crop.350x175 }}"
+                                 srcset="{{ event.image.crop.350x175 }} 1x, {{ event.image.crop.700x350 }} 2x"
+                                 alt="">
+                        </a>
+                    {% endif %}
 
-                <div class="card-body">
-                    <h5 class="card-title mb-2">{{ event.title }}</h5>
-                    <h6 class="card-subtitle mb-2">{{ event.where }}</h6>
-                    <p class="card-text">{{ event.what_rendered | safe | striptags | truncatechars:120 }}</p>
-                    <p class="card-text"><strong>{{ event.start | date:"F jS, Y" }}</strong></p>
-                    <a href="{{ event.get_absolute_url }}" class="btn btn-primary">View Event</a>
-                </div>
-                {% if event.tags %}
-                    <div class="card-footer">
-                        {% for tag in event.tags.all %}
-                            <small>{{ tag.name | title }}{% if not forloop.last %}, {% endif %}</small>
-                        {% endfor %}
+                    <div class="card-body">
+                        <h5 class="card-title mb-2">{{ event.title }}</h5>
+                        <h6 class="card-subtitle mb-2">{{ event.where }}</h6>
+                        <p class="card-text">{{ event.what_rendered | safe | striptags | truncatechars:120 }}</p>
+                        <p class="card-text"><strong>{{ event.start | date:"F jS, Y" }}</strong></p>
+                        <a href="{{ event.get_absolute_url }}" class="btn btn-primary">View Event</a>
                     </div>
-                {% endif %}
+                    {% if event.tags %}
+                        <div class="card-footer">
+                            {% for tag in event.tags.all %}
+                                <small>{{ tag.name | title }}{% if not forloop.last %}, {% endif %}</small>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
             </div>
         {% empty %}
             <p>No events were found.</p>
