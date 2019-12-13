@@ -391,11 +391,12 @@ if SENTRY_ENABLED:
 
     import sentry_sdk
     from sentry_sdk.integrations.django import DjangoIntegration
+    from sentry_sdk.integrations.redis import RedisIntegration
 
     _vars = {
         'dsn': SENTRY_DSN,
         'send_default_pii': env.bool('SENTRY_PII', default=False),
-        'integrations': [DjangoIntegration()]
+        'integrations': [DjangoIntegration(), RedisIntegration()]
     }
 
     SENTRY_ENVIRONMENT = env('sentry_environment', default=False)
