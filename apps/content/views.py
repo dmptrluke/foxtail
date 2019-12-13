@@ -15,7 +15,7 @@ class IndexView(TemplateView):
         context = super().get_context_data(**kwargs)
         today = datetime.today()
         context['post_list'] = Post.objects.all()[:3]
-        context['event_list'] = Event.objects.filter(end__date__gte=today)[:3]
+        context['event_list'] = Event.objects.filter(end__gte=today)[:3]
         return context
 
 
