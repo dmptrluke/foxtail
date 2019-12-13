@@ -18,8 +18,11 @@ class Event(models.Model):
 
     url = models.URLField(blank=True)
 
-    start = models.DateTimeField()
-    end = models.DateTimeField(blank=True, help_text="End date is optional.")
+    start = models.DateField()
+    start_time = models.TimeField(null=True, blank=True, help_text="Time is optional.")
+
+    end = models.DateField(null=True, blank=True, help_text="End date and time are optional.")
+    end_time = models.TimeField(null=True, blank=True, help_text="End date and time are optional.")
 
     image = VersatileImageField(upload_to='events', blank=True, null=True, ppoi_field='image_ppoi')
     image_ppoi = PPOIField()

@@ -4,7 +4,7 @@ from .models import Event
 
 
 class EventList(ArchiveIndexView):
-    queryset = Event.objects.all()
+    queryset = Event.objects.all().prefetch_related('tags')
     ordering = 'start'
     date_field = "start"
     make_object_list = True
@@ -13,7 +13,7 @@ class EventList(ArchiveIndexView):
 
 
 class EventListYear(YearArchiveView):
-    queryset = Event.objects.all()
+    queryset = Event.objects.all().prefetch_related('tags')
     ordering = 'start'
     date_field = "start"
     make_object_list = True

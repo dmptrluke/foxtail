@@ -20,11 +20,22 @@
                 {{ event.what_rendered | safe }}
             </div>
             <h6 class="mb-0">Starts</h6>
-            <p>{{ event.start | date:"F jS, Y" }}, at {{ event.start | date:"P" }}</p>
-            {% if event.end %}
+            <p>{{ event.start | date:"F jS, Y" }}{{ event.start_time | time:", \a\t P" }}</p>
+
+            {# template clusterfuck that handles any combination of inputs #}
+            {% if event.end or event.end_time %}
                 <h6 class="mb-0">Ends</h6>
-                <p>{{ event.end | date:"F jS, Y" }}, at {{ event.end | date:"P" }}</p>
+                {% if event.end %}
+                    {% if event.end == event.start %}
+                        <p>Same day, at {{ event.end_time | time:"P" }}</p>
+                    {% else %}
+                        <p>{{ event.end | date:"F jS, Y" }}{{ event.end_time | time:", \a\t P" }}</p>
+                    {% endif %}
+                {% else %}
+                    <p>Same day, at {{ event.end_time | time:"P" }}</p>
+                {% endif %}
             {% endif %}
+
             {% if event.url %}
                 <a class="btn btn-primary" href="{{ event.url }}" rel="noopener noreferrer" target="_blank">
                     View event website
