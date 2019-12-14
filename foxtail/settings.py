@@ -57,6 +57,7 @@ INSTALLED_APPS = [
     'django.contrib.humanize',
     'django.contrib.postgres',
     'django.contrib.sitemaps',
+    'markdownfield',
     'apps.core',
     'apps.accounts',
     'apps.content',
