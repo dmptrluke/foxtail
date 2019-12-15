@@ -15,7 +15,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='page',
             name='body',
-            field=markdownfield.fields.MarkdownField(help_text='This field supports <a href="https://commonmark.org/help/" target="_blank">Markdown</a> formatting.'),
+            field=markdownfield.fields.MarkdownField(),
         ),
         migrations.AddField(
             model_name='page',

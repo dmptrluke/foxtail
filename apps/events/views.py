@@ -9,7 +9,9 @@ class EventList(ArchiveIndexView):
     date_field = "start"
     make_object_list = True
     allow_future = True
+    allow_empty = True
     template_name = 'event_list.html'
+    context_object_name = 'event_list'
 
 
 class EventListYear(YearArchiveView):
@@ -19,6 +21,7 @@ class EventListYear(YearArchiveView):
     make_object_list = True
     allow_future = True
     template_name = 'event_list.html'
+    context_object_name = 'event_list'
 
 
 class EventDetail(DetailView):

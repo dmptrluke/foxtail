@@ -1,3 +1,5 @@
+from datetime import datetime, timedelta
+
 from django.db import models
 from django.urls import reverse
 
@@ -38,3 +40,12 @@ class Event(models.Model):
 
     def get_absolute_url(self):
         return reverse('event_detail', kwargs={'year': self.start.year, 'pk': self.pk})
+
+    @property
+    def is_ended(self):
+        if self.end:
+            end = datetime.combine(self.end, self.end_time) if self.end_time else self.end
+        else:
+            end = datetime.combine(self.start, self.end_time) if self.end_time else (self.start + timedelta(days=1))
+
+        return end > datetime.now()
