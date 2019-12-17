@@ -15,10 +15,10 @@ class Event(models.Model):
     tags = TaggableManager(blank=True)
 
     where = models.CharField(max_length=200)
-    what = MarkdownField(rendered_field='what_rendered', validator=VALIDATOR_CLASSY)
+    what = MarkdownField(rendered_field='what_rendered', verbose_name='description', validator=VALIDATOR_CLASSY)
     what_rendered = RenderedMarkdownField()
 
-    url = models.URLField(blank=True)
+    url = models.URLField(blank=True, verbose_name='event URL')
 
     start = models.DateField()
     start_time = models.TimeField(null=True, blank=True, help_text="Time is optional.")

@@ -5,6 +5,21 @@ from .models import Event
 
 
 class EventAdmin(ModelAdmin):
+    fieldsets = (
+        (None, {
+            'fields': ('title', 'tags', 'url', 'what',)
+        }),
+        ('Location', {
+            'fields': ('where',),
+        }),
+        ('Time and Date', {
+            'fields': ('start', 'start_time', 'end', 'end_time'),
+        }),
+        ('Image', {
+            'fields': ('image',),
+        }),
+    )
+
     list_display = ('title', 'start', 'tag_list')
 
     @staticmethod
