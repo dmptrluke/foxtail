@@ -8,7 +8,7 @@ from apps.accounts.forms import UserForm
 
 
 class UserView(LoginRequiredMixin, UpdateView):
-    template_name = 'profile.html'
+    template_name = 'account/account.html'
     form_class = UserForm
 
     def get_object(self, queryset=None):
@@ -19,7 +19,7 @@ class UserView(LoginRequiredMixin, UpdateView):
 
 
 class ConsentList(LoginRequiredMixin, ListView):
-    template_name = 'consent_list.html'
+    template_name = 'account/applications.html'
     context_object_name = 'consent_list'
     model = UserConsent
 

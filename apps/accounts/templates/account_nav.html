@@ -1,6 +1,6 @@
 <nav class="nav nav-lines nav-fill mb-5 flex-column flex-md-row">
     <a class="nav-item nav-link {% if request.resolver_match.url_name == "account_profile" %} active{% endif %}" href="{% url 'account_profile' %}">
-        Profile
+        Account
     </a>
     <a class="nav-item nav-link{% if request.resolver_match.url_name == "account_change_password" %} active{% endif %}" href="{% url 'account_change_password' %}">
         Password

@@ -1,5 +1,5 @@
 from django.conf import settings
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 
 
 def handler_400(request, *args, **kwargs):
@@ -23,3 +23,7 @@ def handler_500(request, *args, **kwargs):
         context = {}
 
     return render(request, 'error_pages/500.html', context=context, status=500)
+
+
+def redirect_provider_info(request, *args, **kwargs):
+    return redirect('oidc_provider:provider-info')
