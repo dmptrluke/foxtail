@@ -3,35 +3,47 @@
 {% block title %}Service Authorisation{% endblock %}
 
 {% block content %}
-    <h1>Authorise {{ client.name }}</h1>
-
+    <h2 class="mb-4">Authorise Login</h2>
     <form method="post" action="{% url 'oidc_provider:authorize' %}">
         {% csrf_token %}
         {{ hidden_inputs }}
 
-        <p>The service <strong>{{ client.name }}</strong> would like to access your
-            <strong>{{ request.site.name }}</strong> account.
-            The service is requesting the following information:</p>
-        <ul>
-            <li><strong>User Identifier</strong><br><i>A unique value representing your {{ request.site.name }}
-                account.</i></li>
-            {% if scopes %}
-                {% for scope in scopes %}
-                    <li><strong>{{ scope.name }}</strong><br><i>{{ scope.description }}</i></li>
-                {% endfor %}
-            {% endif %}
-        </ul>
+        <div class="d-flex flex-column flex-md-row mb-4">
+            <div class="mr-3 mb-3 mb-md-0">
+                <img class="rounded" src="{{ client.logo.url }}" alt="{{ client.name }}">
+            </div>
+
+            <div class="flex-grow-1 border-left pl-3">
+                <h5>{{ client.name }}<small> — <a
+                        href="{{ client.website_url }}" rel="noopener noreferrer"
+                        target="_blank">{{ client.website_url }}</a></small></h5>
+                <p>
+                    <strong>{{ client.name }}</strong> would like to access your
+                    <strong>{{ request.site.name }}</strong> account. The application is requesting the following
+                    information:</p>
+                <dl class="mb-0">
+                    <dt>User Identifier</dt>
+                    <dd>Access to a unique value representing your {{ request.site.name }} account.</dd>
+                    {% if scopes %}
+                        {% for scope in scopes %}
+                            <dt>{{ scope.name }}</dt>
+                            <dd>{{ scope.description }}</dd>
+                        {% endfor %}
+                    {% endif %}
+                </dl>
+                {% if client.terms_url %}
+                    <p class="mb-0">
+                        <small><a href="{{ client.terms_url }}" rel="noopener noreferrer" target="_blank">View
+                            Privacy Policy</a></small>
+                    </p>
+                {% endif %}
+
+            </div>
+        </div>
 
         <div class="form-group">
             <input type="submit" class="btn btn-secondary" value="Decline"/>
             <input name="allow" type="submit" class="btn btn-primary" value="Authorize"/>
         </div>
-
-        {% if client.terms_url %}
-            <p class="text-muted">
-                The privacy policy of {{ client.name }} can be viewed
-                <a href="{{ client.terms_url }}" target="_blank" rel="noopener noreferrer">here</a>.
-            </p>
-        {% endif %}
     </form>
 {% endblock content %}

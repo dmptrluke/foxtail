@@ -9,8 +9,8 @@
         to your account.</p>
 
     {% for consent in consent_list %}
-        <div class=" d-flex flex-row mb-4">
-            <div class="mr-3">
+        <div class="d-flex flex-column flex-md-row mb-4">
+            <div class="mr-3 mb-3 mb-md-0">
                 <img class="rounded" src="{{ consent.client.logo.url }}" alt="{{ consent.client.name }}">
             </div>
 
