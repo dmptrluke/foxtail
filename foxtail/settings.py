@@ -290,7 +290,7 @@ MEDIA_URL = '/media/'
 
 # noinspection PyUnresolvedReferences
 STATICFILES_DIRS = [
-    ("bundles", str(BASE_DIR / 'assets/bundles')),
+    ("bundles", str(BASE_DIR / 'storage/bundles')),
     str(BASE_DIR / 'assets/static')
 ]
 
@@ -312,8 +312,8 @@ if AZURE_ENABLED:
     STATICFILES_STORAGE = 'apps.core.storages.StaticAzureStorage'
 
 else:
-    MEDIA_ROOT = str(BASE_DIR / 'media')
-    STATIC_ROOT = str(BASE_DIR / 'static_out')
+    MEDIA_ROOT = str(BASE_DIR / 'storage/media')
+    STATIC_ROOT = str(BASE_DIR / 'storage/static')
 
 
 # if using the debug server, set the correct MIME type for .js files
@@ -323,7 +323,7 @@ if DEBUG:
 
 # Webpack Loader
 # <https://github.com/owais/django-webpack-loader>
-WEBPACK_STATS_PATH = env('WEBPACK_STATS_PATH', default='webpack-stats.json')
+WEBPACK_STATS_PATH = env('WEBPACK_STATS_PATH', default='storage/webpack-stats.json')
 
 WEBPACK_LOADER = {
     'DEFAULT': {

@@ -21,6 +21,4 @@ node_modules
 webpack-stats.json
 
 # produced assets
-static_out/
-media/
-assets/bundles/
+storage/

@@ -30,7 +30,7 @@ module.exports = {
         }
     },
     output: {
-        path: path.resolve('./assets/bundles'),
+        path: path.resolve('./storage/bundles'),
         filename: '[name].[contenthash].js'
     },
     resolve: {
@@ -46,7 +46,7 @@ module.exports = {
             sourceMap: true,
         }),
         new CleanWebpackPlugin(),
-        new BundleTracker({filename: './webpack-stats.json'}),
+        new BundleTracker({filename: './storage/webpack-stats.json'}),
         new webpack.ProvidePlugin({
             $: 'jquery',
             jQuery: 'jquery'
