@@ -73,6 +73,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.twitter',
     'allauth.socialaccount.providers.discord',
     'allauth.socialaccount.providers.github',
+    'anymail',
     'django_otp',
     'django_otp.plugins.otp_totp',
     'django_otp.plugins.otp_static',
@@ -454,17 +455,20 @@ LOGGING = {
 
 # Email
 # <https://docs.djangoproject.com/en/2.2/topics/email/>
+# <https://anymail.readthedocs.io/en/stable/>
 DEFAULT_FROM_EMAIL = env('EMAIL_FROM_USER', default='webmaster@localhost')
 SERVER_EMAIL = env('EMAIL_FROM_SYSTEM', default='root@localhost')
 
-EMAIL_CONFIG = env.email_url('EMAIL_URL', default='consolemail://')
+if 'MAILGUN_API_KEY' in env:
+    EMAIL_BACKEND = "anymail.backends.mailgun.EmailBackend"
+    ANYMAIL_MAILGUN_API_KEY = env('MAILGUN_API_KEY')
 
-if RQ_ASYNC:
-    EMAIL_REAL_BACKEND = EMAIL_CONFIG.get('EMAIL_BACKEND')
-    EMAIL_CONFIG['EMAIL_BACKEND'] = 'apps.core.email.AsyncEmailBackend'
+    if 'MAILGUN_SENDER_DOMAIN' in env:
+        ANYMAIL_MAILGUN_SENDER_DOMAIN = env('MAILGUN_SENDER_DOMAIN')
 
-vars().update(EMAIL_CONFIG)
-
+else:
+    EMAIL_CONFIG = env.email_url('EMAIL_URL', default='consolemail://')
+    vars().update(EMAIL_CONFIG)
 
 # Crispy Forms
 # <https://django-crispy-forms.readthedocs.io/en/latest/>
