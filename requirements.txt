@@ -3,7 +3,7 @@ argon2-cffi==19.2.0
 bleach==3.1.0
 django==2.2.9
 django-admin-sortable2==0.7.5
-django-allauth==0.40.0
+django-allauth==0.41.0
 django-allauth-2fa==0.7
 django-anymail[mailgun]==7.0.0
 django-cleanup==4.0.0
