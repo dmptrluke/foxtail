@@ -60,6 +60,7 @@ INSTALLED_APPS = [
     'markdownfield',
     'csp_helpers',
     'apps.core',
+    'apps.email',
     'apps.accounts',
     'apps.content',
     'apps.events',
@@ -469,6 +470,9 @@ if 'MAILGUN_API_KEY' in env:
 else:
     EMAIL_CONFIG = env.email_url('EMAIL_URL', default='consolemail://')
     vars().update(EMAIL_CONFIG)
+
+EMAIL_REAL_BACKEND = EMAIL_BACKEND
+EMAIL_BACKEND = 'apps.email.engine.AsyncEmailBackend'
 
 # Crispy Forms
 # <https://django-crispy-forms.readthedocs.io/en/latest/>
