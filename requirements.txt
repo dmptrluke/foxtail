@@ -1,7 +1,6 @@
 python-magic-bin==0.4.14;platform_system=="Windows"
 argon2-cffi==19.2.0
 bleach==3.1.0
-bleach-whitelist==0.0.10
 django==2.2.8
 django-admin-sortable2==0.7.5
 django-allauth==0.40.0
@@ -9,13 +8,13 @@ django-allauth-2fa==0.7
 django-cleanup==4.0.0
 django-crispy-forms==1.8.1
 django-csp==3.5
-django-csp-helpers>=0.1.0
+django-csp-helpers>=0.1.1
 django-debug-toolbar==2.1
 django-environ==0.4.5
 django-guardian==2.1.0
 django-heroku==0.3.1
 django-mail-templated-simple==3.2
-django-markdownfield>=0.2.9
+django-markdownfield>=0.2.11
 django-oidc-provider-foxtail==0.7.5
 django-recaptcha==2.0.5
 django-redis-cache==2.1.0
