@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block title %}Verify Your Email Address{% endblock %}
+
+{% block content %}
+    <h1>Verify Your Email Address</h1>
+
+    <p>
+        We have sent an email to you for verification. Follow the link provided to finalize the signup process.
+        Please <a href="{% url 'contact' %}">contact us</a> if you do not receive it within a few minutes.
+    </p>
+
+{% endblock %}
