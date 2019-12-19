@@ -307,8 +307,8 @@ if AZURE_ENABLED:
     AZURE_SSL = env.bool('AZURE_SSL', default=True)
     AZURE_EMULATED_MODE = env.bool('AZURE_EMULATED_MODE', default=False)
 
-    AZURE_MEDIA_CONTAINER = env('AZURE_MEDIA_CONTAINER')
-    AZURE_STATIC_CONTAINER = env('AZURE_STATIC_CONTAINER')
+    AZURE_MEDIA_CONTAINER = env('AZURE_MEDIA_CONTAINER', default='media')
+    AZURE_STATIC_CONTAINER = env('AZURE_STATIC_CONTAINER', default='static')
 
     DEFAULT_FILE_STORAGE = 'apps.core.storages.MediaAzureStorage'
     STATICFILES_STORAGE = 'apps.core.storages.StaticAzureStorage'
@@ -348,9 +348,11 @@ SESSION_COOKIE_NAME = '__Host-sessionid'
 CSRF_COOKIE_SECURE = True
 CSRF_COOKIE_NAME = '__Host-csrftoken'
 
-SECURE_CONTENT_TYPE_NOSNIFF = True
 SECURE_BROWSER_XSS_FILTER = True
 SECURE_REFERRER_POLICY = 'same-origin'
+
+# this header is applied with nginx
+SECURE_CONTENT_TYPE_NOSNIFF = False
 
 X_FRAME_OPTIONS = 'DENY'
 

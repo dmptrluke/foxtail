@@ -7,7 +7,7 @@ from .models import Event
 class EventAdmin(ModelAdmin):
     fieldsets = (
         (None, {
-            'fields': ('title', 'tags', 'url', 'what',)
+            'fields': ('title', 'tags', 'what', 'url')
         }),
         ('Location', {
             'fields': ('where',),
