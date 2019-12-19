@@ -2,6 +2,12 @@
 
 {% extends "admin/base_site.html" %}
 
+{% block title %}{{ title }} | {{ site_title|default:'Foxtail Admin' }}{% endblock %}
+
+{% block branding %}
+<h1 id="site-name"><a href="{% url 'admin:index' %}">{{ site_header|default:'Foxtail Admin' }}</a></h1>
+{% endblock %}
+
 {% block extrastyle %}
 {% if DEBUG %}
     <style type="text/css">
