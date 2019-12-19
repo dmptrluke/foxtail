@@ -7,10 +7,10 @@ from .models import Event
 class EventAdmin(ModelAdmin):
     fieldsets = (
         (None, {
-            'fields': ('title', 'tags', 'what', 'url')
+            'fields': ('title', 'tags', 'description', 'url')
         }),
         ('Location', {
-            'fields': ('where',),
+            'fields': ('location',),
         }),
         ('Time and Date', {
             'fields': ('start', 'start_time', 'end', 'end_time'),

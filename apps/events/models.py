@@ -11,18 +11,15 @@ from versatileimagefield.fields import PPOIField, VersatileImageField
 
 class Event(models.Model):
     title = models.CharField(max_length=100, help_text="100 characters or fewer.")
-
     tags = TaggableManager(blank=True)
 
-    where = models.CharField(max_length=200)
-    what = MarkdownField(rendered_field='what_rendered', verbose_name='description', validator=VALIDATOR_CLASSY)
-    what_rendered = RenderedMarkdownField()
-
-    url = models.URLField(blank=True, verbose_name='event URL')
+    description = MarkdownField(rendered_field='description_rendered', validator=VALIDATOR_CLASSY)
+    description_rendered = RenderedMarkdownField()
+    url = models.URLField(blank=True)
+    location = models.CharField(max_length=200)
 
     start = models.DateField()
     start_time = models.TimeField(null=True, blank=True, help_text="Time is optional.")
-
     end = models.DateField(null=True, blank=True, help_text="End date and time are optional.")
     end_time = models.TimeField(null=True, blank=True, help_text="End date and time are optional.")
 

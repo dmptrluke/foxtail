@@ -78,7 +78,7 @@
                     <article class="card mb-4 bg-light index-card">
                         <div class="card-body">
                             <h5 class="card-title">{{ event.title }}</h5>
-                            <p class="card-text">{{ event.what_rendered | safe | striptags | truncatechars:140 }}</p>
+                            <p class="card-text">{{ event.description_rendered | safe | striptags | truncatechars:140 }}</p>
                             <h6 class="mb-3">{{ event.start | date:"F jS, Y" }}</h6>
                             <a href="{{ event.get_absolute_url }}" class="btn btn-outline-primary">View event</a>
                         </div>

@@ -15,9 +15,9 @@
 
         <div class="card-body">
             <h4 class="card-title mb-2">{{ event.title }}</h4>
-            <h5 class="card-subtitle mb-2">{{ event.where }}</h5>
+            <h5 class="card-subtitle mb-2">{{ event.location }}</h5>
             <div class="rendered-markdown">
-                {{ event.what_rendered | safe }}
+                {{ event.description_rendered | safe }}
             </div>
             <h6 class="mb-0">Starts</h6>
             <p>{{ event.start | date:"F jS, Y" }}{{ event.start_time | time:", \a\t P" }}</p>

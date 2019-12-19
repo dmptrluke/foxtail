@@ -22,8 +22,8 @@
 
                     <div class="card-body">
                         <h5 class="card-title mb-2">{{ event.title }}</h5>
-                        <h6 class="card-subtitle mb-2">{{ event.where }}</h6>
-                        <p class="card-text">{{ event.what_rendered | safe | striptags | truncatechars:120 }}</p>
+                        <h6 class="card-subtitle mb-2">{{ event.location }}</h6>
+                        <p class="card-text">{{ event.description_rendered | safe | striptags | truncatechars:120 }}</p>
                         <p class="card-text"><strong>{{ event.start | date:"F jS, Y" }}</strong></p>
                         <a href="{{ event.get_absolute_url }}" class="btn btn-primary">View Event</a>
                     </div>
