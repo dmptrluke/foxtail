@@ -88,8 +88,8 @@ INSTALLED_APPS = [
     'oidc_provider',
     'captcha',
     'versatileimagefield',
-    "django_rq",
-    'django_cleanup.apps.CleanupConfig'
+    'django_rq',
+    'django_cleanup.apps.CleanupConfig',
 ]
 
 if DEBUG:
@@ -299,20 +299,15 @@ STATICFILES_DIRS = [
 AZURE_ENABLED = env.bool('AZURE_ENABLED', default=False)
 
 if AZURE_ENABLED:
-
-    AZURE_ACCOUNT_NAME = env('AZURE_ACCOUNT_NAME')
-    AZURE_ACCOUNT_KEY = env('AZURE_ACCOUNT_KEY')
-    AZURE_CUSTOM_DOMAIN = env('AZURE_CUSTOM_DOMAIN', default=None)
+    AZURE_ACCOUNT_NAME = env('AZURE_ACCOUNT')
+    AZURE_ACCOUNT_KEY = env('AZURE_KEY')
+    AZURE_CUSTOM_DOMAIN = env('AZURE_DOMAIN', default=None)
 
     AZURE_SSL = env.bool('AZURE_SSL', default=True)
-    AZURE_EMULATED_MODE = env.bool('AZURE_EMULATED_MODE', default=False)
-
-    AZURE_MEDIA_CONTAINER = env('AZURE_MEDIA_CONTAINER', default='media')
-    AZURE_STATIC_CONTAINER = env('AZURE_STATIC_CONTAINER', default='static')
+    AZURE_EMULATED_MODE = env.bool('AZURE_EMULATED', default=False)
 
     DEFAULT_FILE_STORAGE = 'apps.core.storages.MediaAzureStorage'
     STATICFILES_STORAGE = 'apps.core.storages.StaticAzureStorage'
-
 else:
     MEDIA_ROOT = str(BASE_DIR / 'storage/media')
     STATIC_ROOT = str(BASE_DIR / 'storage/static')
@@ -349,7 +344,6 @@ CSRF_COOKIE_SECURE = True
 CSRF_COOKIE_NAME = '__Host-csrftoken'
 
 SECURE_BROWSER_XSS_FILTER = True
-SECURE_REFERRER_POLICY = 'same-origin'
 
 # this header is applied with nginx
 SECURE_CONTENT_TYPE_NOSNIFF = False
