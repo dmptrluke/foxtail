@@ -479,6 +479,7 @@ CRISPY_TEMPLATE_PACK = 'bootstrap4'
 VERSATILEIMAGEFIELD_SETTINGS = {
     'jpeg_resize_quality': 80,
     'cache_name': 'vif',
+    'create_images_on_demand': False,
     'sized_directory_name': '_s',
     'filtered_directory_name': '_f'
 }
