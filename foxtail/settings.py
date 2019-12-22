@@ -296,9 +296,10 @@ STATICFILES_DIRS = [
     str(BASE_DIR / 'assets/static')
 ]
 
-AZURE_ENABLED = env.bool('AZURE_ENABLED', default=False)
+AZURE_STATIC = env.bool('AZURE_STATIC', default=False)
+AZURE_MEDIA = env.bool('AZURE_MEDIA', default=False)
 
-if AZURE_ENABLED:
+if AZURE_STATIC or AZURE_MEDIA:
     AZURE_ACCOUNT_NAME = env('AZURE_ACCOUNT')
     AZURE_ACCOUNT_KEY = env('AZURE_KEY')
     AZURE_CUSTOM_DOMAIN = env('AZURE_DOMAIN', default=None)
@@ -306,11 +307,18 @@ if AZURE_ENABLED:
     AZURE_SSL = env.bool('AZURE_SSL', default=True)
     AZURE_EMULATED_MODE = env.bool('AZURE_EMULATED', default=False)
 
-    DEFAULT_FILE_STORAGE = 'apps.core.storages.MediaAzureStorage'
+
+if AZURE_STATIC:
     STATICFILES_STORAGE = 'apps.core.storages.StaticAzureStorage'
 else:
-    MEDIA_ROOT = str(BASE_DIR / 'storage/media')
+    STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.StaticFilesStorage'
     STATIC_ROOT = str(BASE_DIR / 'storage/static')
+
+if AZURE_MEDIA:
+    DEFAULT_FILE_STORAGE = 'apps.core.storages.MediaAzureStorage'
+else:
+    DEFAULT_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'
+    MEDIA_ROOT = str(BASE_DIR / 'storage/media')
 
 
 # if using the debug server, set the correct MIME type for .js files
