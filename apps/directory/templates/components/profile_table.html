@@ -1,0 +1,17 @@
+<thead>
+<tr>
+    <th scope="col">Name</th>
+    <th scope="col">Region</th>
+    <th scope="col">Fursona</th>
+</tr>
+</thead>
+<tbody>
+
+{% for profile in profile_list %}
+    <tr>
+        <th scope="row"><a href="{{ profile.get_absolute_url }}">{{ profile.user.username }}</a></th>
+        <td>Mark</td>
+        <td>Otto</td>
+    </tr>
+{% endfor %}
+</tbody>

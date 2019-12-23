@@ -7,8 +7,14 @@
         <h1>Furry Directory</h1>
     </section>
 
-    <section id="page-content" >
+    <section id="page-content">
         <a href="{{ user.profile.get_absolute_url }}" class="btn btn-dark btn-lg mb-2 mr-1">View my profile</a>
+    </section>
+
+    <section>
+        <table class="table table-hover">
+            {% include "components/profile_table.html" with profile_list=profile_list %}
+        </table>
     </section>
 
 {% endblock content %}

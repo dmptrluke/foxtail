@@ -1,27 +1,60 @@
 form {
-  .asteriskField {
-    display: none;
-  }
+	.asteriskField {
+		display: none;
+	}
 }
 
 .form-inline {
-  .form-group {
-    margin-right: ($spacer * .5);
+	.form-group {
+		margin-right: ($spacer * .5);
 
-    label {
-      margin-right: ($spacer * .5);
-    }
-  }
-  .form-group:last-of-type {
-    margin-right: 0;
-  }
+		label {
+			margin-right: ($spacer * .5);
+		}
+	}
+
+	.form-group:last-of-type {
+		margin-right: 0;
+	}
 }
 
 // hack to make sure captcha errors show up on forms
 #div_id_captcha .invalid-feedback {
-  display: inline;
+	display: inline;
 }
 
 .selectdatewidget.form-control {
-  margin-bottom: ($spacer * .5);
+	margin-bottom: ($spacer * .5);
+}
+
+// make choices.js select box look native
+.choices__inner {
+	color: $input-color;
+	background-color: $input-bg;
+	font-family: $input-font-family;
+	padding: 4.5px 7.5px 3.75px;
+	@include form-control-focus($ignore-warning: true);
+
+	border: $input-border-width solid $input-border-color;
+	@include font-size($input-font-size);
+	@include border-radius($input-border-radius, 0);
+
+	@include box-shadow($input-box-shadow);
+	@include transition($input-transition);
+}
+
+.is-focused .choices__inner,
+.is-open .choices__inner {
+	color: $input-focus-color;
+	background-color: $input-focus-bg;
+	border-color: $input-focus-border-color;
+	outline: 0;
+}
+
+.is-open .choices__inner {
+	border-radius: 2.5px 2.5px 0 0;
+}
+
+.choices[data-type*='select-one'] .choices__inner {
+	padding-bottom: 0;
 }

@@ -1,5 +1,6 @@
 import 'bootstrap';
 import 'colcade';
+import Choices from "choices.js";
 
 $(function () {
     $('[data-toggle="tooltip"]').tooltip();

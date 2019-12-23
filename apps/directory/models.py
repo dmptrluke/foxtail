@@ -2,6 +2,8 @@ from django.contrib.auth import get_user_model
 from django.db import models
 from django.urls import reverse
 
+from localflavor.nz.nz_regions import REGION_CHOICES
+
 from .validators import URLValidator
 
 
@@ -10,6 +12,8 @@ class Profile(models.Model):
 
     user = models.OneToOneField(get_user_model(), primary_key=True, on_delete=models.CASCADE)
     profile_URL = models.CharField(max_length=25, validators=[url_validator], blank=True, unique=True, null=True)
+
+    region = models.CharField(max_length=20, blank=True, choices=REGION_CHOICES)
 
     def __str__(self):
         return f"{self.user.username}"
