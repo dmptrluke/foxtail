@@ -27,8 +27,6 @@ class User(AbstractUser):
     date_of_birth = models.DateField(null=True, blank=True)
     gender = models.CharField(max_length=50, blank=True)
 
-    profile_URL = models.CharField(max_length=25)
-
     def get_full_name(self):
         return self.full_name
 

@@ -4,6 +4,7 @@ from django.conf import settings
 def site(request):
     response = {
         'DEBUG': settings.DEBUG,
+        'DIRECTORY_ENABLED': settings.DIRECTORY_ENABLED,
         'SITE_URL': settings.SITE_URL
     }
 

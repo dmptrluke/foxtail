@@ -10,6 +10,10 @@
            href="{% url 'blog_list' %}">News</a>
         <a class="nav-item nav-link{% if "event_" in request.resolver_match.url_name %} active{% endif %}"
            href="{% url 'event_list' %}">Events</a>
+        {% if DIRECTORY_ENABLED %}
+            <a class="nav-item nav-link{% if "dir_" in request.resolver_match.url_name %} active{% endif %}"
+           href="{% url 'dir_index' %}">Directory</a>
+        {% endif %}
     </div>
     {# user menu #}
     <div class="navbar-nav">

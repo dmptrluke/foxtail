@@ -1,12 +1,24 @@
 from django.contrib.auth import get_user_model
 from django.db import models
+from django.urls import reverse
+
+from .validators import URLValidator
 
 
 class Profile(models.Model):
+    url_validator = URLValidator()
+
     user = models.OneToOneField(get_user_model(), primary_key=True, on_delete=models.CASCADE)
+    profile_URL = models.CharField(max_length=25, validators=[url_validator], blank=True, unique=True, null=True)
 
     def __str__(self):
         return f"{self.user.username}"
+
+    def get_absolute_url(self):
+        return reverse('dir_profile', kwargs={'slug': self.profile_URL})
+
+    def get_modify_url(self):
+        return reverse('dir_profile_edit', kwargs={'pk': self.pk})
 
 
 class Character(models.Model):

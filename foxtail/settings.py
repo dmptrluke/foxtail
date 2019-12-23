@@ -544,3 +544,7 @@ CONTACT_EMAILS = env.list('CONTACT_EMAILS')
 if env.bool('USING_HEROKU', default=False):
     import django_heroku
     django_heroku.settings(locals())
+
+
+# Foxtail
+DIRECTORY_ENABLED = env.bool('DIRECTORY_ENABLED', default=False)
