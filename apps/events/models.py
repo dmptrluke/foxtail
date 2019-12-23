@@ -5,12 +5,14 @@ from django.urls import reverse
 
 from markdownfield.fields import MarkdownField, RenderedMarkdownField
 from markdownfield.validators import VALIDATOR_CLASSY
+from slugger import AutoSlugField
 from taggit.managers import TaggableManager
 from versatileimagefield.fields import PPOIField, VersatileImageField
 
 
 class Event(models.Model):
     title = models.CharField(max_length=100, help_text="100 characters or fewer.")
+    slug = AutoSlugField(populate_from='title', unique_for_year='start')
     tags = TaggableManager(blank=True)
 
     description = MarkdownField(rendered_field='description_rendered', validator=VALIDATOR_CLASSY)
@@ -36,7 +38,7 @@ class Event(models.Model):
         return self.title
 
     def get_absolute_url(self):
-        return reverse('event_detail', kwargs={'year': self.start.year, 'pk': self.pk})
+        return reverse('event_detail', kwargs={'year': self.start.year, 'slug': self.slug})
 
     @property
     def is_ended(self):

@@ -59,5 +59,5 @@ if settings.DEBUG:
 
     urlpatterns += [path('__debug__/', include(debug_toolbar.urls))]
 
-    if not settings.AZURE_ENABLED:
+    if not settings.AZURE_MEDIA:
         urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
