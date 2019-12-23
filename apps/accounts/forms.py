@@ -50,7 +50,7 @@ class LoginForm(auth_forms.LoginForm):
         self.helper.disable_csrf = True
         self.helper.error_text_inline = False
         self.helper.help_text_inline = False
-        self.use_custom_control = True
+        self.helper.use_custom_control = True
 
         self.helper.layout = Layout(
             Field('login', autocomplete='username'),
