@@ -5,6 +5,11 @@ import Choices from "choices.js";
 $(function () {
     $('[data-toggle="tooltip"]').tooltip();
 
+    const fields = document.querySelectorAll('[data-choices]');
+    fields.forEach((field) => {
+        new Choices(field, {});
+    });
+
     $('#id_text').keyup(function () {
         let length = $(this).val().length;
         let limit = $(this).attr('maxlength');

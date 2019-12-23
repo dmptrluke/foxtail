@@ -28,11 +28,16 @@ form {
 }
 
 // make choices.js select box look native
+.choices {
+	margin-bottom: 0;
+}
+
 .choices__inner {
+	min-height: 0;
 	color: $input-color;
 	background-color: $input-bg;
 	font-family: $input-font-family;
-	padding: 4.5px 7.5px 3.75px;
+	padding: 2px 7.5px 3.75px;
 	@include form-control-focus($ignore-warning: true);
 
 	border: $input-border-width solid $input-border-color;
@@ -56,5 +61,5 @@ form {
 }
 
 .choices[data-type*='select-one'] .choices__inner {
-	padding-bottom: 0;
+	padding-bottom: 2px;
 }
