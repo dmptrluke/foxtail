@@ -4,8 +4,5 @@
 {% block title %}Edit Profile{% endblock %}
 
 {% block content %}
-    <form method="post">
-        {% csrf_token %}
-        {% crispy form %}
-    </form>
+    {% crispy form %}
 {% endblock content %}

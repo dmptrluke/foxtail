@@ -4,8 +4,5 @@
 {% block title %}Manage Account{% endblock %}
 
 {% block content %}
-    <form method="post" action="{% url 'account_profile' %}">
-        {% csrf_token %}
-        {% crispy form %}
-    </form>
+    {% crispy form %}
 {% endblock content %}

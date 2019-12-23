@@ -7,7 +7,9 @@ $(function () {
 
     const fields = document.querySelectorAll('[data-choices]');
     fields.forEach((field) => {
-        new Choices(field, {});
+        new Choices(field, {
+            shouldSortItems: false
+        });
     });
 
     $('#id_text').keyup(function () {

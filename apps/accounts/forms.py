@@ -7,7 +7,6 @@ from crispy_forms.helper import FormHelper
 from crispy_forms.layout import HTML, Column, Field, Fieldset, Layout, Row, Submit
 
 from apps.accounts.models import User
-from apps.core.fields import CustomCheckbox
 
 
 class SignupForm(auth_forms.SignupForm):
@@ -18,7 +17,6 @@ class SignupForm(auth_forms.SignupForm):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.form_tag = False
-        self.helper.disable_csrf = True
         self.helper.error_text_inline = False
         self.helper.help_text_inline = False
 
@@ -52,11 +50,12 @@ class LoginForm(auth_forms.LoginForm):
         self.helper.disable_csrf = True
         self.helper.error_text_inline = False
         self.helper.help_text_inline = False
+        self.use_custom_control = True
 
         self.helper.layout = Layout(
             Field('login', autocomplete='username'),
             Field('password', autocomplete='current-password'),
-            CustomCheckbox('remember')
+            'remember'
         )
 
 
@@ -89,8 +88,6 @@ class UserForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper()
-        self.helper.form_tag = False
-        self.helper.disable_csrf = True
         self.helper.error_text_inline = False
         self.helper.help_text_inline = False
 
