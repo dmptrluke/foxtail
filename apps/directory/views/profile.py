@@ -17,8 +17,5 @@ class ProfileEditView(SuccessMessageMixin, LoginRequiredMixin, UpdateView):
     slug_field = 'profile_URL'
     form_class = ProfileForm
 
-    def get_object(self, queryset=None):
-        return self.request.user.profile
-
 
 __all__ = ["ProfileView", "ProfileEditView"]

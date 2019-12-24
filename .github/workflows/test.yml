@@ -82,9 +82,9 @@ jobs:
         uses: actions/cache@v1
         with:
           path: ~/.local/lib/
-          key: ${{ runner.OS }}-py${{ matrix.python-version }}-${{ hashFiles('**/requirements.txt') }}
+          key: ${{ runner.OS }}-pip${{ matrix.python-version }}-${{ hashFiles('**/requirements.txt') }}
           restore-keys: |
-            ${{ runner.OS }}-py${{ matrix.python-version }}-
+            ${{ runner.OS }}-pip${{ matrix.python-version }}-
 
       - name: Install Python dependencies
         if: steps.py-cache.outputs.cache-hit != 'true'

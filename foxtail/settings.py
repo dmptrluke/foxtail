@@ -93,7 +93,10 @@ INSTALLED_APPS = [
 ]
 
 if DEBUG:
-    INSTALLED_APPS += ['debug_toolbar']
+    INSTALLED_APPS += [
+        'debug_toolbar',
+        'nplusone.ext.django',
+    ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -111,7 +114,10 @@ MIDDLEWARE = [
 ]
 
 if DEBUG:
-    MIDDLEWARE += ['debug_toolbar.middleware.DebugToolbarMiddleware']
+    MIDDLEWARE += [
+        'debug_toolbar.middleware.DebugToolbarMiddleware',
+        'nplusone.ext.django.NPlusOneMiddleware',
+    ]
 
 # Template Engine
 # <https://docs.djangoproject.com/en/dev/topics/templates/>
@@ -444,16 +450,13 @@ LOGGING = {
     },
     "root": {"level": "INFO", "handlers": ["console"]},
     "loggers": {
-        "django.db.backends": {
-            "level": "ERROR",
-            "handlers": ["console"],
-            "propagate": False,
+        "nplusone": {
+            "level": "WARN",
+            "handlers": ["console"]
         },
-        "sentry_sdk": {"level": "ERROR", "handlers": ["console"], "propagate": False},
-        "django.security.DisallowedHost": {
+        "sentry_sdk": {
             "level": "ERROR",
-            "handlers": ["console"],
-            "propagate": False,
+            "handlers": ["console"]
         },
     },
 }

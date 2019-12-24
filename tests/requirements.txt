@@ -6,3 +6,5 @@ pytest-cov==2.8.1
 pytest-xdist==1.31.0
 selenium==3.141.0
 tox==3.14.2
+nplusone==1.0.0
+django-debug-toolbar==2.1
