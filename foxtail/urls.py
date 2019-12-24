@@ -48,9 +48,6 @@ urlpatterns = [
     path('', include('apps.content.urls'))
 ]
 
-handler400 = 'apps.core.views.handler_400'
-handler403 = 'apps.core.views.handler_403'
-handler404 = 'apps.core.views.handler_404'
 handler500 = 'apps.core.views.handler_500'
 
 
