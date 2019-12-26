@@ -5,11 +5,12 @@ from allauth.account import forms as auth_forms
 from captcha.fields import ReCaptchaField
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import HTML, Column, Field, Fieldset, Layout, Row, Submit
+from csp_helpers.mixins import CSPFormMixin
 
 from apps.accounts.models import User
 
 
-class SignupForm(auth_forms.SignupForm):
+class SignupForm(CSPFormMixin, auth_forms.SignupForm):
     if settings.RECAPTCHA_ENABLED:
         captcha = ReCaptchaField()
 

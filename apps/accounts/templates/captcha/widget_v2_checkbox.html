@@ -1,3 +1,10 @@
+<script nonce="{{ csp_nonce }}" src="https://{{ recaptcha_domain }}/recaptcha/api.js{% if api_params %}?{{ api_params }}{% endif %}"></script>
+<script nonce="{{ csp_nonce }}" type="text/javascript">
+    // Submit function to be called, after reCAPTCHA was successful.
+    var onSubmit_{{ widget_uuid }} = function(token) {
+        console.log("reCAPTCHA validated for 'data-widget-uuid=\"{{ widget_uuid }}\"'")
+    };
+</script>
 <noscript>
     <div class="alert alert-danger">This form requires Javascript for reCAPTCHA.
         Please enable Javascript.
