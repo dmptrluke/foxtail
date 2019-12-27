@@ -2,7 +2,7 @@
 
 from django.db import migrations
 
-import markdownfield.fields
+import markdownfield.models
 
 
 class Migration(migrations.Migration):
@@ -15,11 +15,11 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='page',
             name='body',
-            field=markdownfield.fields.MarkdownField(),
+            field=markdownfield.models.MarkdownField(),
         ),
         migrations.AddField(
             model_name='page',
             name='body_rendered',
-            field=markdownfield.fields.RenderedMarkdownField(editable=False),
+            field=markdownfield.models.RenderedMarkdownField(editable=False),
         ),
     ]

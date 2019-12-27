@@ -4,7 +4,7 @@ from django.db import migrations, models
 
 import taggit.managers
 import versatileimagefield.fields
-from markdownfield.fields import MarkdownField, RenderedMarkdownField
+from markdownfield.models import MarkdownField, RenderedMarkdownField
 
 
 class Migration(migrations.Migration):

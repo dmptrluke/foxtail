@@ -3,11 +3,15 @@ from django.forms import ModelForm
 from crispy_forms.bootstrap import PrependedText
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Field, Fieldset, Layout, Submit
+from csp_helpers.mixins import CSPFormMixin
+from markdownfield.forms import MarkdownFormField
 
 from .models import Profile
 
 
-class ProfileForm(ModelForm):
+class ProfileForm(CSPFormMixin, ModelForm):
+    test = MarkdownFormField(required=True)
+
     class Meta:
         model = Profile
         fields = ('profile_URL', 'region')
@@ -24,6 +28,6 @@ class ProfileForm(ModelForm):
                 PrependedText('profile_URL', 'furry.nz/directory/'),
                 Field('region', data_choices="true"),
             ),
-
+            'test',
             Submit('submit', 'Save Changes'),
         )

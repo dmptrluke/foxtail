@@ -1,7 +1,7 @@
 from django.db import models
 from django.urls import reverse
 
-from markdownfield.fields import MarkdownField, RenderedMarkdownField
+from markdownfield.models import MarkdownField, RenderedMarkdownField
 from markdownfield.validators import VALIDATOR_CLASSY
 
 
