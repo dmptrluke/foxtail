@@ -12,8 +12,9 @@ from .models import Profile
 class ProfileForm(CSPFormMixin, ModelForm):
     class Meta:
         model = Profile
-        fields = ('profile_URL', 'region')
+        fields = ('profile_URL', 'country', 'region')
         widgets = {
+            'country': CJSWidget(),
             'region': CJSWidget(),
         }
 
@@ -28,6 +29,7 @@ class ProfileForm(CSPFormMixin, ModelForm):
             Fieldset(
                 'Basic Details',
                 PrependedText('profile_URL', 'furry.nz/directory/'),
+                'country',
                 'region',
             ),
             Submit('submit', 'Save Changes'),

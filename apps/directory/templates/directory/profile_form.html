@@ -9,4 +9,21 @@
 
 {% block content %}
     {% crispy form %}
+
+    <script type="text/javascript" nonce="{{ request.csp_nonce }}">
+            if (country_choices.getValue(true) === 'NZ') {
+                region_choices.enable();
+            } else {
+                region_choices.disable();
+            }
+
+        country_choices.passedElement.element.addEventListener('change', function (e) {
+            if (e.detail.value === 'NZ') {
+                region_choices.enable();
+            } else {
+                region_choices.disable();
+                region_choices.setChoiceByValue('');
+            }
+        });
+    </script>
 {% endblock content %}
