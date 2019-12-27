@@ -1,11 +1,7 @@
 {% extends "base.html" %}
-{% load account socialaccount crispy_forms_tags recaptcha %}
+{% load account socialaccount crispy_forms_tags %}
 
 {% block title %}Create Account{% endblock %}
-
-{% block extra_head %}
-    {% recaptcha_head %}
-{% endblock %}
 
 {% block content %}
     <h1>Create Account</h1>
