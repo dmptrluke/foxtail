@@ -58,6 +58,7 @@ INSTALLED_APPS = [
     'django.contrib.postgres',
     'django.contrib.sitemaps',
     'markdownfield',
+    'cjswidget',
     'csp_helpers',
     'apps.core',
     'apps.email',

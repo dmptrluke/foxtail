@@ -3,6 +3,10 @@
 
 {% block title %}Edit Profile{% endblock %}
 
+{% block media_head %}
+    {{ form.media }}
+{% endblock %}
+
 {% block content %}
     {% crispy form %}
 {% endblock content %}
