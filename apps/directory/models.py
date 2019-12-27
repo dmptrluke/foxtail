@@ -1,4 +1,5 @@
 from django.contrib.auth import get_user_model
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.urls import reverse
 
@@ -23,6 +24,10 @@ class Profile(models.Model):
 
     def get_modify_url(self):
         return reverse('dir_profile_edit', kwargs={'pk': self.pk})
+
+    def clean(self):
+        if self.country != 'NZ' and self.region:
+            raise ValidationError({'region': 'Region may only be selected if country is New Zealand.'})
 
 
 class Character(models.Model):
