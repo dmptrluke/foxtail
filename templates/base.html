@@ -21,6 +21,9 @@
           rel="stylesheet" nonce="{{ request.csp_nonce }}">
 
     {% render_bundle_csp 'main' 'css' %}
+    {% render_bundle_csp 'runtime' 'js' attrs='defer ' %}
+    {% render_bundle_csp 'vendor' 'js' attrs='defer ' %}
+    {% render_bundle_csp 'main' 'js' attrs='defer ' %}
 
     <script nonce="{{ request.csp_nonce }}">
         (function (a) {
@@ -47,9 +50,6 @@
 {% endblock base_content %}
 
 {% include "components/footer.html" %}
-{% render_bundle_csp 'runtime' 'js' %}
-{% render_bundle_csp 'vendor' 'js' %}
-{% render_bundle_csp 'main' 'js' %}
 
 {% comment %}
 {# this had to be commented out because Sentry does not support our nonce-based CSP correctly #}
