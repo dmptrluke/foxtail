@@ -2,7 +2,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse
 from django.views.generic import ListView, UpdateView
 
-from allauth.account.views import SignupView
+from allauth.account.views import PasswordResetView, SignupView
 from csp_helpers.mixins import CSPViewMixin
 from oidc_provider.models import UserConsent
 
@@ -10,6 +10,10 @@ from apps.accounts.forms import UserForm
 
 
 class CSPSignupView(CSPViewMixin, SignupView):
+    pass
+
+
+class CSPPasswordResetView(CSPViewMixin, PasswordResetView):
     pass
 
 

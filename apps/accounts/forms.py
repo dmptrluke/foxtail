@@ -60,7 +60,7 @@ class LoginForm(auth_forms.LoginForm):
         )
 
 
-class ResetPasswordForm(auth_forms.ResetPasswordForm):
+class ResetPasswordForm(CSPFormMixin, auth_forms.ResetPasswordForm):
     captcha = ReCaptchaField()
 
     def __init__(self, *args, **kwargs):
