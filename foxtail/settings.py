@@ -408,26 +408,36 @@ if SENTRY_ENABLED:
     from sentry_sdk.integrations.django import DjangoIntegration
     from sentry_sdk.integrations.redis import RedisIntegration
 
+    from urllib.parse import urlparse
+
     _vars = {
         'dsn': SENTRY_DSN,
         'send_default_pii': env.bool('SENTRY_PII', default=False),
         'integrations': [DjangoIntegration(), RedisIntegration()]
     }
 
+    # attach environment
     SENTRY_ENVIRONMENT = env('sentry_environment', default=False)
-
     if SENTRY_ENVIRONMENT:
         _vars['environment'] = SENTRY_ENVIRONMENT
 
+    # attach version
     if env.bool('SENTRY_GIT', default=False):
         import git
-
         repo = git.Repo(search_parent_directories=True)
         sha = repo.head.object.hexsha
-
         _vars['release'] = sha
-
         repo.close()
+
+    # set CSP report URI
+    if env('SENTRY_CSP', default=False):
+        CSP_REPORT_URL = "https://sentry.io/api/{}/security/?sentry_key={}".format(
+            urlparse(SENTRY_DSN).path,
+            urlparse(SENTRY_DSN).username
+        )
+
+        if _vars.get('release'):
+            CSP_REPORT_URL += f"&sentry_release={_vars['release']}"
 
     sentry_sdk.init(**_vars)
 
