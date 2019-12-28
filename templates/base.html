@@ -14,10 +14,12 @@
         {% block title_full %}{% block title %}{% endblock title %} – {{ request.site.name }}{% endblock title_full %}
     </title>
 
-    {% block media_head %}{% endblock media_head %}
+    <script type="text/javascript" src="{% static "js/polyfill.min.js" %}" nonce="{{ request.csp_nonce }}"></script>
+
     <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
     <link type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,500,700&display=swap"
           rel="stylesheet" nonce="{{ request.csp_nonce }}">
+
     {% render_bundle_csp 'main' 'css' %}
 
     <script nonce="{{ request.csp_nonce }}">

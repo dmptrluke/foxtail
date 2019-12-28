@@ -10,13 +10,16 @@ module.exports = {
     entry: {
         main: ['./js/main.js', './scss/index.scss']
     },
+    output: {
+        path: path.resolve('./storage/bundles'),
+        filename: '[name].[contenthash].js'
+    },
     context: path.resolve(__dirname, "assets"),
     performance: {
         hints: false
     },
     node: false,
     optimization: {
-        minimizer: [new TerserJSPlugin({})],
         moduleIds: 'hashed',
         runtimeChunk: 'single',
         splitChunks: {
@@ -28,10 +31,6 @@ module.exports = {
                 }
             }
         }
-    },
-    output: {
-        path: path.resolve('./storage/bundles'),
-        filename: '[name].[contenthash].js'
     },
     resolve: {
         alias: {
@@ -60,7 +59,14 @@ module.exports = {
                 use: {
                     loader: 'babel-loader',
                     options: {
-                        presets: ['@babel/preset-env']
+                        presets: [
+                            ['@babel/preset-env',
+                                {
+                                    "useBuiltIns": "usage",
+                                    "corejs": 3
+                                }
+                            ]
+                        ]
                     }
                 }
             },

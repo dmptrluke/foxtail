@@ -23,7 +23,6 @@ class ProfileForm(CSPFormMixin, ModelForm):
         self.helper = FormHelper()
         self.helper.error_text_inline = False
         self.helper.help_text_inline = False
-        self.helper.include_media = False
 
         self.helper.layout = Layout(
             Fieldset(

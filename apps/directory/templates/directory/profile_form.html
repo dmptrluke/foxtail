@@ -3,20 +3,14 @@
 
 {% block title %}Edit Profile{% endblock %}
 
-{% block media_head %}
-    {{ form.media }}
-{% endblock %}
-
 {% block content %}
     {% crispy form %}
-
     <script type="text/javascript" nonce="{{ request.csp_nonce }}">
-            if (country_choices.getValue(true) === 'NZ') {
-                region_choices.enable();
-            } else {
-                region_choices.disable();
-            }
-
+        if (country_choices.getValue(true) === 'NZ') {
+            region_choices.enable();
+        } else {
+            region_choices.disable();
+        }
         country_choices.passedElement.element.addEventListener('change', function (e) {
             if (e.detail.value === 'NZ') {
                 region_choices.enable();

@@ -28,11 +28,11 @@ form {
 }
 
 // make choices.js select box look native
-.choices {
+.form-group .choices {
 	margin-bottom: 0;
 }
 
-.choices__inner {
+.form-group .choices__inner {
 	min-height: 0;
 	color: $input-color;
 	background-color: $input-bg;
@@ -48,18 +48,18 @@ form {
 	@include transition($input-transition);
 }
 
-.is-focused .choices__inner,
-.is-open .choices__inner {
+.form-group .is-focused .choices__inner,
+.form-group .is-open .choices__inner {
 	color: $input-focus-color;
 	background-color: $input-focus-bg;
 	border-color: $input-focus-border-color;
 	outline: 0;
 }
 
-.is-open .choices__inner {
+.form-group .is-open .choices__inner {
 	border-radius: 2.5px 2.5px 0 0;
 }
 
-.choices[data-type*='select-one'] .choices__inner {
+.form-group .choices[data-type*='select-one'] .choices__inner {
 	padding-bottom: 2px;
 }
