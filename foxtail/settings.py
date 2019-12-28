@@ -432,7 +432,7 @@ if SENTRY_ENABLED:
     # set CSP report URI
     if env('SENTRY_CSP', default=False):
         CSP_REPORT_URI = "https://sentry.io/api/{}/security/?sentry_key={}".format(
-            urlparse(SENTRY_DSN).path,
+            urlparse(SENTRY_DSN).path.strip('/'),
             urlparse(SENTRY_DSN).username
         )
 
