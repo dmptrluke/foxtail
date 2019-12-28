@@ -431,13 +431,13 @@ if SENTRY_ENABLED:
 
     # set CSP report URI
     if env('SENTRY_CSP', default=False):
-        CSP_REPORT_URL = "https://sentry.io/api/{}/security/?sentry_key={}".format(
+        CSP_REPORT_URI = "https://sentry.io/api/{}/security/?sentry_key={}".format(
             urlparse(SENTRY_DSN).path,
             urlparse(SENTRY_DSN).username
         )
 
         if _vars.get('release'):
-            CSP_REPORT_URL += f"&sentry_release={_vars['release']}"
+            CSP_REPORT_URI += f"&sentry_release={_vars['release']}"
 
     sentry_sdk.init(**_vars)
 
