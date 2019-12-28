@@ -10,7 +10,7 @@ django-cjswidget==0.2.0
 django-cleanup==4.0.0
 django-crispy-forms==1.8.1
 django-csp==3.5
-django-csp-helpers>=0.4.0
+django-csp-helpers>=0.4.1
 django-environ==0.4.5
 django-guardian==2.1.0
 django-heroku==0.3.1
