@@ -21,6 +21,7 @@
 {% block content %}
     <div class="row">
         <div class="col-lg-8">
+            {% include "components/publish_status.html" with object=post %}
             <article class="blog-post mb-5">
                 {% if post.image %}
                     <img class="img-fluid mb-3"

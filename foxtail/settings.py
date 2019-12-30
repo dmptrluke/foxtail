@@ -59,6 +59,7 @@ INSTALLED_APPS = [
     'django.contrib.sitemaps',
     'markdownfield',
     'cjswidget',
+    'published',
     'csp_helpers',
     'apps.core',
     'apps.email',

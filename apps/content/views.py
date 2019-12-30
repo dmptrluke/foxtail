@@ -2,6 +2,8 @@ from datetime import datetime
 
 from django.views.generic import DetailView, TemplateView
 
+from published.utils import queryset_filter
+
 from apps.events.models import Event
 from foxtail_blog.models import Post
 
@@ -14,7 +16,7 @@ class IndexView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         today = datetime.today()
-        context['post_list'] = Post.objects.all()[:3]
+        context['post_list'] = queryset_filter(Post.objects).all()[:3]
         context['event_list'] = Event.objects.filter(end__gte=today)[:3]
         return context
 
