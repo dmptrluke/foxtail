@@ -9,7 +9,7 @@ django-anymail[mailgun]==7.0.0
 django-cjswidget==0.3.0
 django-cleanup==4.0.0
 django-crispy-forms==1.8.1
-django-csp-foxtail==3.6 # TEMPORARY
+django-csp-foxtail==3.7 # TEMPORARY
 django-csp-helpers>=0.5.0
 django-environ==0.4.5
 django-guardian==2.1.0
