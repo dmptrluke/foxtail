@@ -51,8 +51,4 @@ class SocialAccountAdapter(DefaultSocialAccountAdapter):
             if merged != '':
                 user_field(user, 'full_name', merged)
 
-        gender = data.get('gender')
-        if gender:
-            user_field(user, 'gender', gender.title())
-
         return user

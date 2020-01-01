@@ -8,9 +8,6 @@ def userinfo(claims, user):
     claims['given_name'] = None
     claims['family_name'] = None
 
-    if user.gender:
-        claims['gender'] = user.gender.lower()
-
     if user.date_of_birth:
         claims['birthdate'] = user.date_of_birth.isoformat()
 

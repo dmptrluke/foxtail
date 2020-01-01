@@ -23,7 +23,6 @@
             "email": "david@example.com",
             "full_name": "David Davidson",
             "date_of_birth": null,
-            "gender": "Male",
             "groups": [],
             "user_permissions": []
         }

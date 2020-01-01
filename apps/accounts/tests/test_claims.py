@@ -13,7 +13,6 @@ class FakeUser:
     email: str
     email_verified: bool = True
     full_name: str = None
-    gender: str = None
     date_of_birth: date = None
 
 

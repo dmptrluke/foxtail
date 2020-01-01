@@ -84,7 +84,7 @@ class UserForm(ModelForm):
             'date_of_birth': SelectDateWidget(years=range(1920, 2011),
                                               empty_label=("Year", "Month", "Day")),
         }
-        fields = ('username', 'date_of_birth', 'gender', 'full_name')
+        fields = ('username', 'date_of_birth', 'full_name')
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -101,10 +101,10 @@ class UserForm(ModelForm):
             ),
             Fieldset(
                 'Personal Information',
-                HTML('<p class="small">This information is optional.</p>'),
+                HTML('<p class="small">This information is optional, and may be requested by'
+                     ' third-party applications. It will not be shared without your explicit consent.</p>'),
                 Row(
                     Column(Field('full_name', autocomplete='name'), css_class='col-md-6'),
-                    Column(Field('gender', autocomplete='sex'), css_class='col-md-6'),
                 ),
                 Row(
                     Column('date_of_birth', css_class='col-md-6'),

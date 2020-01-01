@@ -35,7 +35,6 @@ def test_full():
         'email': 'testface@example.com',
         'name': 'Test Face',
         'birthdate': '2006-05-23',
-        'gender': 'male'
     }
 
     processed_user = test_adapter.populate_user(None, login, data)
@@ -58,7 +57,6 @@ def test_split_names():
         'email': 'testface@example.com',
         'first_name': 'Test',
         'last_name': 'Face',
-        'gender': 'male'
     }
 
     processed_user = test_adapter.populate_user(None, login, data)
@@ -78,7 +76,6 @@ def test_both_names():
         'name': 'John Doe',
         'first_name': 'Test',
         'last_name': 'Face',
-        'gender': 'male'
     }
 
     processed_user = test_adapter.populate_user(None, login, data)

@@ -256,7 +256,6 @@ OIDC_CLAIMS_SUPPORTED = [
     'name',
     'preferred_username',
     'nickname',
-    'gender',
     'birthdate',
     'email',
     'email_verified'

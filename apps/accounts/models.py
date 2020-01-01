@@ -23,9 +23,7 @@ class User(AbstractUser):
     email = models.EmailField('email address', blank=False)
 
     full_name = models.CharField(max_length=120, blank=True)
-
     date_of_birth = models.DateField(null=True, blank=True)
-    gender = models.CharField(max_length=50, blank=True)
 
     def get_full_name(self):
         return self.full_name
