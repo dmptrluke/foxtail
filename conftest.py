@@ -1,27 +1,27 @@
-from django.conf import settings
 from django.core.management import call_command
 from django.test import RequestFactory
 
 import pytest
+from pytest_factoryboy import register
 from selenium import webdriver
 
 from apps.accounts.tests.factories import UserFactory, UserNoPasswordFactory
+from apps.events.tests.factories import EventFactory
+
+# accounts
+register(UserFactory, "user")
+register(UserFactory, "second_user")
+register(UserFactory, "third_user")
+register(UserNoPasswordFactory, "user_without_password")
+
+# events
+register(EventFactory)
 
 
 @pytest.fixture(scope='module')
 def django_db_setup(django_db_setup, django_db_blocker):
     with django_db_blocker.unblock():
         call_command('loaddata', 'tests/data.json')
-
-
-@pytest.fixture
-def user() -> settings.AUTH_USER_MODEL:
-    return UserFactory()
-
-
-@pytest.fixture
-def user_without_password() -> settings.AUTH_USER_MODEL:
-    return UserNoPasswordFactory()
 
 
 @pytest.fixture
