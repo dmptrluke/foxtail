@@ -560,7 +560,7 @@ CONTACT_EMAILS = env.list('CONTACT_EMAILS')
 # Heroku Support
 if env.bool('USING_HEROKU', default=False):
     import django_heroku
-    django_heroku.settings(locals())
+    django_heroku.settings(locals(), allowed_hosts=False)
 
 
 # Foxtail
