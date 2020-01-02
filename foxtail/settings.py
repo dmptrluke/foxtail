@@ -542,6 +542,9 @@ MARKDOWN_EXTENSION_CONFIGS = {
     }
 }
 
+# robots.txt
+ROBOTS_ALLOWED = env.bool('ROBOTS_ALLOWED', default=True)
+
 # Foxtail Blog
 # <https://github.com/dmptrluke/foxtail-blog>
 

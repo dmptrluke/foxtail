@@ -20,9 +20,9 @@ from django.contrib.sitemaps.views import sitemap
 from django.urls import include, path
 
 import apps.content.sitemaps as content_sitemaps
+import apps.core.views as core_views
 import apps.events.sitemaps as event_sitemaps
 import foxtail_blog.sitemaps as blog_sitemaps
-from apps.core.views import redirect_provider_info
 
 sitemaps = {
     'static': content_sitemaps.StaticSitemap,
@@ -34,7 +34,8 @@ sitemaps = {
 urlpatterns = [
     path('sitemap.xml', sitemap, {'sitemaps': sitemaps},
          name='django.contrib.sitemaps.views.sitemap'),
-    path('.well-known/openid-configuration/', redirect_provider_info),
+    path('robots.txt', core_views.robots),
+    path('.well-known/openid-configuration/', core_views.redirect_provider_info),
     path('admin/django-rq/', include('django_rq.urls')),
     path('admin/', admin.site.urls),
     path('openid/', include('oidc_provider.urls', namespace='oidc_provider')),

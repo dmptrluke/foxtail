@@ -1,5 +1,24 @@
+from textwrap import dedent
+
 from django.conf import settings
+from django.http import HttpResponse
 from django.shortcuts import redirect, render
+
+
+def robots(request):
+    if request.method == 'GET':
+        if settings.ROBOTS_ALLOWED:
+            text = dedent("""\
+                User-agent: *
+                Disallow:
+            """)
+        else:
+            text = dedent("""\
+                User-agent: *
+                Disallow: /
+                """)
+
+        return HttpResponse(text, content_type="text/plain")
 
 
 def handler_500(request, *args, **kwargs):
