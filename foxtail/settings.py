@@ -263,6 +263,9 @@ OIDC_CLAIMS_SUPPORTED = [
 
 # ReCAPTCHA
 # <https://pypi.org/project/django-recaptcha/>
+if DEBUG:
+    SILENCED_SYSTEM_CHECKS = ['captcha.recaptcha_test_key_error']
+
 RECAPTCHA_ENABLED = env.bool('RECAPTCHA_ENABLED', default=True)
 RECAPTCHA_PRIVATE_KEY = env('RECAPTCHA_PRIVATE_KEY')
 RECAPTCHA_PUBLIC_KEY = env('RECAPTCHA_PUBLIC_KEY')
