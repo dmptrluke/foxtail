@@ -1,10 +1,10 @@
 import pytest
 
+pytestmark = pytest.mark.django_db
+
 
 @pytest.mark.django_db
-def test_unauthenticated_user_browsing(driver, live_server, settings):
-    settings.RECAPTCHA_ENABLED = False
-
+def test_unauthenticated_user_browsing(driver, live_server):
     # user visits the website
     driver.get(live_server.url)
 

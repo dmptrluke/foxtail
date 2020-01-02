@@ -1,23 +1,14 @@
 from copy import deepcopy
-from dataclasses import dataclass
-from datetime import date
 
+import pytest
 from oidc_provider.lib.claims import STANDARD_CLAIMS
 
 from ..claims import userinfo
 
-
-@dataclass
-class FakeUser:
-    username: str
-    email: str
-    email_verified: bool = True
-    full_name: str = None
-    date_of_birth: date = None
+pytestmark = pytest.mark.django_db
 
 
-def test_minimal():
-    user = FakeUser('userone', 'test@example.com')
+def test_claims(user):
     claims = userinfo(deepcopy(STANDARD_CLAIMS), user)
 
     # test overridden defaults
@@ -25,9 +16,9 @@ def test_minimal():
     assert claims['family_name'] is None
 
     # test provided data
-    assert claims['nickname'] == 'userone'
-    assert claims['email'] == 'test@example.com'
-    assert claims['email_verified'] is True
+    assert claims['nickname'] == user.username
+    assert claims['email'] == user.email
+    assert claims['email_verified'] is False
 
     # test other data
-    assert claims['name'] is None
+    assert claims['name'] is user.full_name

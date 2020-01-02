@@ -2,15 +2,19 @@ from django.urls import reverse
 
 import pytest
 
+from apps.accounts.tests.factories import UserFactory
+
+pytestmark = pytest.mark.django_db
+
 
 @pytest.mark.django_db
 def test_account_creation(driver, live_server, settings):
-    settings.RECAPTCHA_ENABLED = False
-
     settings.CSRF_COOKIE_SECURE = False
     settings.SESSION_COOKIE_SECURE = False
     settings.CSRF_COOKIE_NAME = 'csrftoken'
     settings.SESSION_COOKIE_NAME = 'sessionid'
+
+    proto_user = UserFactory.build()
 
     # user visits the website
     driver.get(live_server.url)
@@ -29,16 +33,16 @@ def test_account_creation(driver, live_server, settings):
 
     # the user enters their details
     username_field = driver.find_element_by_name('username')
-    username_field.send_keys('John Doe')
+    username_field.send_keys(proto_user.username)
 
     email_field = driver.find_element_by_name('email')
-    email_field.send_keys('test@example.com')
+    email_field.send_keys(proto_user.email)
 
     password1_field = driver.find_element_by_name('password1')
-    password1_field.send_keys('ValidPassword24*')
+    password1_field.send_keys(proto_user._password)
 
     password2_field = driver.find_element_by_name('password2')
-    password2_field.send_keys('ValidPassword24*')
+    password2_field.send_keys(proto_user._password)
 
     # and hits submit, creating their account
     driver.find_element_by_id("create_account_submit").click()
@@ -48,4 +52,4 @@ def test_account_creation(driver, live_server, settings):
 
     # the user sees a green alert
     alert = driver.find_element_by_class_name('alert-success')
-    assert "Successfully signed in as John Doe" in alert.text
+    assert f"Successfully signed in as {proto_user.username}" in alert.text

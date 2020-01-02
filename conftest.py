@@ -1,7 +1,11 @@
+from django.conf import settings
 from django.core.management import call_command
+from django.test import RequestFactory
 
 import pytest
 from selenium import webdriver
+
+from apps.accounts.tests.factories import UserFactory, UserNoPasswordFactory
 
 
 @pytest.fixture(scope='module')
@@ -11,25 +15,18 @@ def django_db_setup(django_db_setup, django_db_blocker):
 
 
 @pytest.fixture
-def user(db, django_user_model, django_username_field):
-    """A Django user.
-    This uses an existing user with username "user", or creates a new one with
-    password "password".
-    """
-    user_model = django_user_model
-    username_field = django_username_field
-    username = "user@example.com" if username_field == "email" else "test"
+def user() -> settings.AUTH_USER_MODEL:
+    return UserFactory()
 
-    try:
-        user = user_model._default_manager.get(**{username_field: username})
-    except user_model.DoesNotExist:
-        extra_fields = {}
-        if username_field not in ("username", "email"):
-            extra_fields[username_field] = "test"
-        user = user_model._default_manager.create_user(
-            username, "user@example.com", "password", **extra_fields
-        )
-    return user
+
+@pytest.fixture
+def user_without_password() -> settings.AUTH_USER_MODEL:
+    return UserNoPasswordFactory()
+
+
+@pytest.fixture
+def request_factory() -> RequestFactory:
+    return RequestFactory()
 
 
 @pytest.fixture(scope='module')

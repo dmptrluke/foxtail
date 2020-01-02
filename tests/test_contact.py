@@ -3,11 +3,10 @@ from django.urls import reverse
 
 import pytest
 
+pytestmark = pytest.mark.django_db
 
-@pytest.mark.django_db
+
 def test_unauthenticated_user_contact(driver, live_server, settings):
-    settings.RECAPTCHA_ENABLED = False
-
     settings.CSRF_COOKIE_SECURE = False
     settings.SESSION_COOKIE_SECURE = False
     settings.CSRF_COOKIE_NAME = 'csrftoken'

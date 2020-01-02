@@ -2,11 +2,11 @@ from django.urls import reverse
 
 import pytest
 
+pytestmark = pytest.mark.django_db
+
 
 @pytest.mark.django_db
-def test_blog_comments(authenticated_driver, live_server, settings):
-    settings.RECAPTCHA_ENABLED = False
-
+def test_blog_comments(authenticated_driver, user, live_server, settings):
     driver = authenticated_driver
 
     # user heads to the contact page
@@ -46,7 +46,7 @@ def test_blog_comments(authenticated_driver, live_server, settings):
     my_comment = comments[1]
 
     # we make sure the comment is all good
-    assert 'test' in my_comment.text
+    assert user.username in my_comment.text
     assert 'I like this post' in my_comment.text
 
     assert 'Hello' in their_comment.text
