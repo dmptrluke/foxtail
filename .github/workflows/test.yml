@@ -7,16 +7,16 @@ jobs:
     steps:
       - uses: actions/checkout@v1
 
-      - uses: actions/setup-node@v1
-        with:
-          node-version: '12.x'
-
       - name: Cache Node dependencies
         id: node-cache
         uses: actions/cache@v1
         with:
           path: node_modules
           key: ${{ runner.OS }}-npm-${{ hashFiles('**/package-lock.json') }}
+
+      - uses: actions/setup-node@v1
+        with:
+          node-version: '12.x'
 
       - name: Install JS dependencies
         if: steps.node-cache.outputs.cache-hit != 'true'
@@ -101,7 +101,7 @@ jobs:
 
       - name: Test with pytest
         env:
-          DEBUG: true
+          TESTING: true
           SECRET_KEY: fake
           EMAIL_ASYNC: false
           RQ_ASYNC: false

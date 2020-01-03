@@ -34,6 +34,7 @@ SECRET_KEY = env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env.bool('DEBUG', default=False)
+TESTING = env.bool('TESTING', default=False)
 
 SITE_URL = env('SITE_URL')
 SITE_ID = 1
@@ -263,7 +264,7 @@ OIDC_CLAIMS_SUPPORTED = [
 
 # ReCAPTCHA
 # <https://pypi.org/project/django-recaptcha/>
-if DEBUG:
+if DEBUG or TESTING:
     SILENCED_SYSTEM_CHECKS = ['captcha.recaptcha_test_key_error']
 
 RECAPTCHA_ENABLED = env.bool('RECAPTCHA_ENABLED', default=True)
