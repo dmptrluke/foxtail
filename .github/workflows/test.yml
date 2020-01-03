@@ -1,5 +1,6 @@
-name: Run Tests
-on: [push]
+name: Test
+on:
+  push:
 
 jobs:
   generate_assets:
@@ -114,33 +115,3 @@ jobs:
           SITE_URL: test
         run: |
           python -m pytest
-
-  sentry:
-    runs-on: ubuntu-latest
-
-    env:
-      SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
-      SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
-      SENTRY_PROJECT: ${{ secrets.SENTRY_PROJECT }}
-
-    steps:
-      - uses: actions/checkout@v1
-
-      - name: Install Sentry
-        run: curl -sL https://sentry.io/get-cli/ | sudo bash
-
-      - name: Set VERSION to current git hash
-        run: |
-          VERSION=$(git rev-parse HEAD)
-          echo "::set-env name=VERSION::$VERSION"
-
-      - name: Create a new Sentry release
-        run: |
-          sentry-cli releases --org "${SENTRY_ORG}" new \
-            --project "${SENTRY_PROJECT}" "${VERSION}"
-
-      - name: Set commits for release
-        run: sentry-cli releases --org "${SENTRY_ORG}" set-commits --auto "${VERSION}"
-
-      - name: Finalise release
-        run: sentry-cli releases --org "${SENTRY_ORG}" finalize "${VERSION}"

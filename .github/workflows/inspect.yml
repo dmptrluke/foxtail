@@ -1,5 +1,4 @@
-name: pre-commit
-
+name: Inspect
 on:
   pull_request:
   push:
