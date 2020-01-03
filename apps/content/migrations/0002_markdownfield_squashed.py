@@ -15,11 +15,11 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='page',
             name='body',
-            field=markdownfield.models.MarkdownField(),
+            field=markdownfield.models.MarkdownField(rendered_field='body_rendered'),
         ),
         migrations.AddField(
             model_name='page',
             name='body_rendered',
-            field=markdownfield.models.RenderedMarkdownField(editable=False),
+            field=markdownfield.models.RenderedMarkdownField(),
         ),
     ]
