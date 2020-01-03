@@ -17,13 +17,19 @@ class Profile(models.Model):
     region = models.CharField(max_length=20, blank=True, choices=REGION_CHOICES)
 
     def __str__(self):
-        return f"{self.user.username}"
+        return f"{self.profile_URL}"
 
     def get_absolute_url(self):
         return reverse('dir_profile', kwargs={'slug': self.profile_URL})
 
     def get_modify_url(self):
-        return reverse('dir_profile_edit', kwargs={'pk': self.pk})
+        return reverse('dir_profile_edit', kwargs={'slug': self.profile_URL})
+
+    def can_modify(self, user: get_user_model()) -> bool:
+        """
+        Given a user, returns true if the user is allowed to edit this profile.
+        """
+        return user == self.user
 
     def clean(self):
         if self.country != 'NZ' and self.region:

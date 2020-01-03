@@ -1,4 +1,4 @@
-COUNTRY_CHOICES = {
+COUNTRY_CHOICES = (
     ('Common', (
         ("NZ", "New Zealand"),
         ("AU", "Australia"),
@@ -253,7 +253,7 @@ COUNTRY_CHOICES = {
         ("ZM", "Zambia"),
         ("ZW", "Zimbabwe"),
     )),
-}
+)
 
 REGION_CHOICES = (
     ('North Island', (

@@ -10,8 +10,9 @@
     <section id="page-content">
         <p>My username is: {{ profile.user.username }}</p>
         <p>My real name is: {{ profile.user.full_name }}</p>
-
-        <a href="{{ profile.get_modify_url }}" class="btn btn-dark btn-lg mb-2 mr-1">Edit this profile</a>
+        {% if can_modify %}
+            <a href="{{ profile.get_modify_url }}" class="btn btn-dark btn-lg mb-2 mr-1">Edit this profile</a>
+        {% endif %}
     </section>
 
 {% endblock content %}
