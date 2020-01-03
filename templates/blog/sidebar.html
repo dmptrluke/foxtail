@@ -29,6 +29,7 @@
             </div>
         </section>
     {% endcache %}
+    {% cache 1800 sidebartags %}
     <section id="categories">
         <h3>Categories</h3>
         <div class="list-group">
@@ -43,5 +44,5 @@
             {% endfor %}
         </div>
     </section>
-
+    {% endcache %}
 </div>
