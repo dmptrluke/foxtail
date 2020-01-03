@@ -1,5 +1,6 @@
 from datetime import datetime
 
+from django.db.models import Q
 from django.views.generic import DetailView, TemplateView
 
 from published.utils import queryset_filter
@@ -17,7 +18,7 @@ class IndexView(TemplateView):
         context = super().get_context_data(**kwargs)
         today = datetime.today()
         context['post_list'] = queryset_filter(Post.objects).all()[:3]
-        context['event_list'] = Event.objects.filter(end__gte=today)[:3]
+        context['event_list'] = Event.objects.filter(Q(start__gte=today) | Q(end__gte=today))[:3]
         return context
 
 

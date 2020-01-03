@@ -1,27 +1,33 @@
-from django.test import TestCase
-from django.urls import reverse
+from django.test import RequestFactory
 
-from apps.content.models import Page
+import pytest
 
+from apps.events.models import Event
+from foxtail_blog.models import Post
 
-class IndexViewTests(TestCase):
-    def test_template(self):
-        response = self.client.get(reverse('index'))
-        self.assertTemplateUsed(response, 'index.html')
+from ..views import IndexView
 
-    def test_content(self):
-        response = self.client.get(reverse('index'))
-        self.assertContains(response, "To continue, you'll need to create a")
+pytestmark = pytest.mark.django_db
 
 
-class PageViewTests(TestCase):
-    def setUp(self):
-        Page.objects.create(title="Page", slug="slug-1", body="TURBO", body_rendered="BEEP")
+def test_index(post: Post, event: Event, request_factory: RequestFactory):
+    view = IndexView()
+    request = request_factory.get('/')
 
-    def test_template(self):
-        response = self.client.get(reverse('page-detail', kwargs={'slug': 'slug-1'}))
-        self.assertTemplateUsed(response, 'page.html')
+    view.setup(request)
 
-    def test_content(self):
-        response = self.client.get(reverse('page-detail', kwargs={'slug': 'slug-1'}))
-        self.assertContains(response, "TURBO")
+    context = view.get_context_data()
+
+    # there should be one post
+    assert len(context['post_list']) == 1
+
+    # the post should be correct
+    post_context: Post = context['post_list'][0]
+    assert post_context.title == post.title
+
+    # there should be one event
+    assert len(context['event_list']) == 1
+
+    # the event should be correct
+    event_context: Event = context['event_list'][0]
+    assert event_context.title == event.title

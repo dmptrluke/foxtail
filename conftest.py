@@ -5,6 +5,7 @@ from pytest_factoryboy import register
 from selenium import webdriver
 
 from apps.accounts.tests.factories import UserFactory, UserNoPasswordFactory
+from apps.content.tests.factories import PageFactory
 from apps.events.tests.factories import EventFactory
 from foxtail_blog.tests.factories import PostFactory
 
@@ -17,6 +18,9 @@ register(UserNoPasswordFactory, "user_without_password")
 # blog
 register(PostFactory, "post")
 register(PostFactory, "second_post")
+
+# content
+register(PageFactory)
 
 # events
 register(EventFactory)
