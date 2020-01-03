@@ -14,8 +14,8 @@ def test_unauthenticated_user_browsing(driver, live_server, settings, post: Post
         }
     }
 
-    post.created = datetime.fromisoformat('2019-12-02')
-    second_post.created = datetime.fromisoformat('2019-11-01')
+    post.created = datetime(2019, 12, 2)
+    second_post.created = datetime(2019, 11, 1)
 
     post.save()
     second_post.save()
