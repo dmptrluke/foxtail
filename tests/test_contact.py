@@ -2,7 +2,9 @@ from django.core import mail
 from django.urls import reverse
 
 import pytest
+from faker import Faker
 
+fake = Faker()
 pytestmark = pytest.mark.django_db
 
 
@@ -18,15 +20,20 @@ def test_unauthenticated_user_contact(driver, live_server, settings):
     # the title contains contact
     assert 'contact' in driver.title.lower()
 
+    # we generate some data, now
+    name = fake.name()
+    email = fake.email()
+    message = fake.paragraphs()
+
     # the user fills out the form
     name_field = driver.find_element_by_name('name')
-    name_field.send_keys('John Doe')
+    name_field.send_keys(name)
 
     email_field = driver.find_element_by_name('email')
-    email_field.send_keys('test@example.com')
+    email_field.send_keys(email)
 
     message_field = driver.find_element_by_name('message')
-    message_field.send_keys('Lorem ipsum dolor sit contact, consectetur adipiscing elit.')
+    message_field.send_keys('\n\n'.join(message))
 
     driver.find_element_by_id("contact_submit").click()
 
@@ -43,6 +50,7 @@ def test_unauthenticated_user_contact(driver, live_server, settings):
     assert len(mail.outbox) == 1
 
     # and it has all the right info
-    assert "John Doe" in mail.outbox[0].body
-    assert "test@example.com" in mail.outbox[0].body
-    assert "Lorem ipsum dolor sit contact" in mail.outbox[0].body
+    assert name in mail.outbox[0].body
+    assert email in mail.outbox[0].body
+    for paragraph in message:
+        assert paragraph in mail.outbox[0].body

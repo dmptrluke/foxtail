@@ -1,15 +1,30 @@
+from datetime import datetime
+
 import pytest
+
+from foxtail_blog.models import Post
 
 pytestmark = pytest.mark.django_db
 
 
-@pytest.mark.django_db
-def test_unauthenticated_user_browsing(driver, live_server):
+def test_unauthenticated_user_browsing(driver, live_server, settings, post: Post, second_post: Post):
+    settings.CACHES = {
+        'default': {
+            'BACKEND': 'django.core.cache.backends.dummy.DummyCache',
+        }
+    }
+
+    post.created = datetime.fromisoformat('2019-12-02')
+    second_post.created = datetime.fromisoformat('2019-11-01')
+
+    post.save()
+    second_post.save()
+
     # user visits the website
     driver.get(live_server.url)
 
     # the title contains the website name
-    assert 'furry.nz' in driver.title
+    assert 'example.com' in driver.title
 
     # user sees the sign in button
     sign_in_button = driver.find_element_by_link_text("Sign In")
@@ -18,15 +33,20 @@ def test_unauthenticated_user_browsing(driver, live_server):
     # user sees the blog posts on the homepage, and reads the content
     blog_cards = driver.find_element_by_id('blog-cards').find_elements_by_class_name('index-card')
 
-    # there is only one blog post
-    assert len(blog_cards) == 1
+    # there are two blog postss
+    assert len(blog_cards) == 2
 
     # the user reads the blog post title, and some of the text
     card_one = blog_cards[0]
-    assert "Test blog post one" in card_one.text
-    assert "Lorem ipsum dolor sit amet," in card_one.text
+    assert post.title in card_one.text
+    assert post.text[0:15] in card_one.text
 
-    # the user sees the "read more" button, and is interested
+    # the user reads the blog post title, and some of the text
+    card_two = blog_cards[1]
+    assert second_post.title in card_two.text
+    assert second_post.text[0:15] in card_two.text
+
+    # the user sees the "read more" button on the first post, and is interested
     card_one_button = card_one.find_element_by_link_text("Read more")
     assert card_one_button
 
@@ -34,19 +54,15 @@ def test_unauthenticated_user_browsing(driver, live_server):
     card_one_button.click()
 
     # the page title is now for the blog post, being a new page
-    assert 'Test blog post one' in driver.title
+    assert post.title in driver.title
 
     # but it still also has the site name
-    assert 'furry.nz' in driver.title
+    assert 'example.com' in driver.title
 
     # the user reads the blog post
     blog_body = driver.find_element_by_class_name('blog-post')
 
     # the user reads the title, then the article, noticing when the post was published
-    assert "Test blog post one" in blog_body.text
-    assert "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce semper risus vitae arcu finibus " \
-           "convallis. Morbi eu pharetra felis, lacinia congue lectus. Suspendisse vulputate malesuada quam, id " \
-           "sodales purus auctor nec. Nam pulvinar ante sit amet ex viverra convallis. Nullam dictum, erat sed " \
-           "iaculis feugiat, dui nulla euismod purus, quis dictum nisl dolor vitae libero. Aliquam erat volutpat. " \
-           "Maecenas sodales lorem at sollicitudin volutpat." in blog_body.text
-    assert "November 18th, 2019" in blog_body.text
+    assert post.title in blog_body.text
+    assert post.text in blog_body.text
+    assert "December 2nd, 2019" in blog_body.text
