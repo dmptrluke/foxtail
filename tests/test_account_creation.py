@@ -48,7 +48,7 @@ def test_account_creation(driver, live_server, settings):
     driver.find_element_by_id("create_account_submit").click()
 
     # we should now be back at the homepage
-    assert driver.current_url == live_server.url + reverse('index')
+    assert driver.current_url == live_server.url + reverse('content:index')
 
     # the user sees a green alert
     alert = driver.find_element_by_class_name('alert-success')

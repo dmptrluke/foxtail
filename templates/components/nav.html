@@ -6,13 +6,13 @@
 <div class="collapse navbar-collapse" id="navbarNav">
     {# main navigation #}
     <div class="navbar-nav mr-auto">
-        <a class="nav-item nav-link{% if "blog_" in request.resolver_match.url_name %} active{% endif %}"
-           href="{% url 'blog_list' %}">News</a>
-        <a class="nav-item nav-link{% if "event_" in request.resolver_match.url_name %} active{% endif %}"
-           href="{% url 'event_list' %}">Events</a>
+        <a class="nav-item nav-link{% if request.resolver_match.app_name == "blog" %} active{% endif %}"
+           href="{% url 'blog:list' %}">News</a>
+        <a class="nav-item nav-link{% if request.resolver_match.app_name == "events" %} active{% endif %}"
+           href="{% url 'events:list' %}">Events</a>
         {% if DIRECTORY_ENABLED %}
-            <a class="nav-item nav-link{% if "dir_" in request.resolver_match.url_name %} active{% endif %}"
-           href="{% url 'dir_index' %}">Directory</a>
+            <a class="nav-item nav-link{% if request.resolver_match.app_name == "directory" %} active{% endif %}"
+           href="{% url 'directory:index' %}">Directory</a>
         {% endif %}
     </div>
     {# user menu #}

@@ -27,8 +27,8 @@ django-storages[azure]==1.8
 django-taggit==1.2.0
 django-versatileimagefield==2.0
 django-webpack-loader==0.6.0
-foxtail-blog>=0.12.2
-foxtail-contact>=0.3.1
+foxtail-blog>=0.13.0
+foxtail-contact>=0.4.0
 gitpython==3.0.5
 gunicorn==20.0.4
 markdown==3.1.1

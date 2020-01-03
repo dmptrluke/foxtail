@@ -1,7 +1,7 @@
 {% load icon %}
 <nav id="navigation" class="navbar sticky-top navbar-expand-lg navbar-dark bg-dark">
   <div class="container">
-    <a class="navbar-brand" href="/">{% icon 'paw' %}{{ request.site.name }}</a>
+    <a class="navbar-brand" href="{% url 'content:index' %}">{% icon 'paw' %}{{ request.site.name }}</a>
       {% include "components/nav.html" %}
   </div>
 </nav>

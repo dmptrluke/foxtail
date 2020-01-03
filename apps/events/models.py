@@ -38,7 +38,7 @@ class Event(models.Model):
         return self.title
 
     def get_absolute_url(self):
-        return reverse('event_detail', kwargs={'year': self.start.year, 'slug': self.slug})
+        return reverse('events:detail', kwargs={'year': self.start.year, 'slug': self.slug})
 
     @property
     def is_ended(self):

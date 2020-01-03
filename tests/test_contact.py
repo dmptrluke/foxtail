@@ -15,7 +15,7 @@ def test_unauthenticated_user_contact(driver, live_server, settings):
     settings.SESSION_COOKIE_NAME = 'sessionid'
 
     # user heads to the contact page
-    driver.get(live_server.url + reverse('contact'))
+    driver.get(live_server.url + reverse('contact:contact'))
 
     # the title contains contact
     assert 'contact' in driver.title.lower()
@@ -40,7 +40,7 @@ def test_unauthenticated_user_contact(driver, live_server, settings):
     driver.implicitly_wait(1)
 
     # we should still be a the same page
-    assert driver.current_url == live_server.url + reverse('contact')
+    assert driver.current_url == live_server.url + reverse('contact:contact')
 
     # the user sees a green alert
     alert = driver.find_element_by_class_name('alert-success')

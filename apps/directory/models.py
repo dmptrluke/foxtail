@@ -20,10 +20,10 @@ class Profile(models.Model):
         return f"{self.profile_URL}"
 
     def get_absolute_url(self):
-        return reverse('dir_profile', kwargs={'slug': self.profile_URL})
+        return reverse('directory:profile', kwargs={'slug': self.profile_URL})
 
     def get_modify_url(self):
-        return reverse('dir_profile_edit', kwargs={'slug': self.profile_URL})
+        return reverse('directory:profile_edit', kwargs={'slug': self.profile_URL})
 
     def can_modify(self, user: get_user_model()) -> bool:
         """

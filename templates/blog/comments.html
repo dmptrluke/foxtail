@@ -11,7 +11,7 @@
                 <h5>{{ comment.author.get_short_name }}</h5>
                 <p class="text-break mb-1">{{ comment.text }}</p>
                 {% if comment.author == request.user or perms.foxtail_blog.delete_comment %}
-                    <small class="mt-0"><a href="{% url 'blog_comment_delete' pk=comment.pk %}">delete comment</a></small>
+                    <small class="mt-0"><a href="{% url 'blog:comment_delete' pk=comment.pk %}">delete comment</a></small>
                 {% endif %}
             </div>
         </div>

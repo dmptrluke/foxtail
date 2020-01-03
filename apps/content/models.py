@@ -32,7 +32,7 @@ class Page(models.Model):
         return self.title
 
     def get_absolute_url(self):
-        return reverse('page-detail', kwargs={'slug': self.slug})
+        return reverse('content:page', kwargs={'slug': self.slug})
 
 
 __all__ = ['Page']
