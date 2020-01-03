@@ -4,7 +4,7 @@ on:
     branches: [master]
 
 jobs:
-  log_release:
+  release:
     runs-on: ubuntu-latest
 
     env:
