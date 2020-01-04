@@ -61,6 +61,7 @@ INSTALLED_APPS = [
     'markdownfield',
     'cjswidget',
     'published',
+    'structured_data',
     'csp_helpers',
     'apps.core',
     'apps.email',
@@ -287,12 +288,15 @@ USE_TZ = True
 
 # Messages
 MESSAGE_TAGS = {
-    messages.DEBUG: 'alert-info',
+    messages.DEBUG: 'alert-secondary',
     messages.INFO: 'alert-info',
     messages.SUCCESS: 'alert-success',
     messages.WARNING: 'alert-warning',
     messages.ERROR: 'alert-danger',
 }
+
+if DEBUG:
+    MESSAGE_LEVEL = 10
 
 # Static files and media (CSS, JavaScript, Images)
 # <https://docs.djangoproject.com/en/2.2/howto/static-files/>
