@@ -553,6 +553,16 @@ MARKDOWN_EXTENSION_CONFIGS = {
 # robots.txt
 ROBOTS_ALLOWED = env.bool('ROBOTS_ALLOWED', default=True)
 
+# Django Structured Data
+# <https://github.com/dmptrluke/django-structured-data>
+DEFAULT_STRUCTURED_DATA = {
+    "publisher": {
+        "@type": "Organization",
+        "name": "furry.nz",
+    }
+}
+
+
 # Foxtail Blog
 # <https://github.com/dmptrluke/foxtail-blog>
 
