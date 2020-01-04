@@ -1,7 +1,7 @@
 {% load crispy_forms_tags avatar %}
 
-{% if comment_list %}
-    <section id="comments" class="mb-4">
+<section id="comments" class="mb-4">
+    {% if comment_list %}
         <h4 class="mb-3">Comments</h4>
         {% for comment in comment_list %}
             <div class="d-flex flex-row comment mb-4" id="comment-{{ comment.pk }}">
@@ -18,8 +18,8 @@
                 </div>
             </div>
         {% endfor %}
-    </section>
-{% endif %}
+    {% endif %}
+</section>
 
 <section id="comments-form">
     <h4>Leave a Comment</h4>

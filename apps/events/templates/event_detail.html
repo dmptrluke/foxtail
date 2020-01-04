@@ -25,6 +25,7 @@
             {# template clusterfuck that handles any combination of inputs #}
             {% if event.end or event.end_time %}
                 <h6 class="mb-0">Ends</h6>
+                {% spaceless %}
                 {% if event.end %}
                     {% if event.end == event.start %}
                         <p>Same day, at {{ event.end_time | time:"P" }}</p>
@@ -34,6 +35,7 @@
                 {% else %}
                     <p>Same day, at {{ event.end_time | time:"P" }}</p>
                 {% endif %}
+                {% endspaceless %}
             {% endif %}
 
             {% if event.url %}
