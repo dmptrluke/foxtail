@@ -1,20 +1,10 @@
 {% extends "base.html" %}
-{% load icon cache jsonld %}
+{% load icon cache jsonld opengraph %}
 
 {% block extra_head %}
     <meta name="twitter:card" content="summary"/>
-    <meta property="og:url" content="{{ SITE_URL }}{{ post.get_absolute_url }}">
-    <meta property="og:type" content="article"/>
-    <meta property="og:title" content="{{ post.title }}">
-    <meta name="description" content="{{ post.text_rendered | striptags | truncatechars:200 }}">
-    <meta property="og:description"
-          content="{{ post.text_rendered | striptags | truncatechars:200 }}">
-    <meta property="article:published_time" content="{{ post.created | date:"c" }}">
-    <meta property="article:modified_time" content="{{ post.modified | date:"c" }}">
-    {% if post.image %}
-        <meta property="og:image" content="{{ SITE_URL }}{{ post.image.url }}">
-    {% endif %}
     {% json_ld_for post %}
+    {% og_for post %}
 {% endblock %}
 
 {% block title %}{{ post.title }} - Blog{% endblock %}
