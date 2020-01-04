@@ -183,6 +183,7 @@ RQ_QUEUES = {
 # Authentication
 # <https://django-allauth.readthedocs.io/en/latest/>
 
+# django
 AUTH_USER_MODEL = 'accounts.User'
 
 AUTHENTICATION_BACKENDS = [
@@ -190,17 +191,16 @@ AUTHENTICATION_BACKENDS = [
     'guardian.backends.ObjectPermissionBackend'
 ]
 
+LOGIN_REDIRECT_URL = '/'
+
+# allauth
 ACCOUNT_ADAPTER = 'apps.accounts.authentication.AccountAdapter'
-SOCIALACCOUNT_ADAPTER = 'apps.accounts.authentication.SocialAccountAdapter'
 
 ACCOUNT_AUTHENTICATION_METHOD = 'username_email'
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_DEFAULT_HTTP_PROTOCOL = 'https'
 
-# custom validator allows spaces in usernames
 ACCOUNT_USERNAME_VALIDATORS = 'apps.accounts.validators.username_validators'
-
-LOGIN_REDIRECT_URL = '/'
 
 ACCOUNT_FORMS = {
     'signup': 'apps.accounts.forms.SignupForm',
@@ -208,8 +208,8 @@ ACCOUNT_FORMS = {
     'login': 'apps.accounts.forms.LoginForm'
 }
 
-ALLAUTH_2FA_ALWAYS_REVEAL_BACKUP_TOKENS = False
-
+# allauth social
+SOCIALACCOUNT_ADAPTER = 'apps.accounts.authentication.SocialAccountAdapter'
 SOCIALACCOUNT_AUTO_SIGNUP = False
 SOCIALACCOUNT_PROVIDERS = {
     'github': {
@@ -229,25 +229,10 @@ SOCIALACCOUNT_PROVIDERS = {
     }
 }
 
-# Passwords
-# <https://docs.djangoproject.com/en/2.2/topics/auth/passwords/>
+# allauth 2FA
+ALLAUTH_2FA_ALWAYS_REVEAL_BACKUP_TOKENS = False
 
-# <https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators>
-AUTH_PASSWORD_VALIDATORS = [
-    {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
-    {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'},
-    {'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator'},
-    {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
-]
-
-PASSWORD_HASHERS = [
-    'django.contrib.auth.hashers.Argon2PasswordHasher',
-    'django.contrib.auth.hashers.PBKDF2PasswordHasher',
-    'django.contrib.auth.hashers.PBKDF2SHA1PasswordHasher',
-    'django.contrib.auth.hashers.BCryptSHA256PasswordHasher',
-]
-
-# OIDC Server
+# OpenID Connect Provider
 # <https://django-oidc-provider.readthedocs.io/en/latest/>
 OIDC_SESSION_MANAGEMENT_ENABLE = True
 OIDC_SESSION_MANAGEMENT_COOKIE_SECURE = True
@@ -261,6 +246,24 @@ OIDC_CLAIMS_SUPPORTED = [
     'birthdate',
     'email',
     'email_verified'
+]
+
+# Passwords
+# <https://docs.djangoproject.com/en/2.2/topics/auth/passwords/>
+# <https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators>
+
+AUTH_PASSWORD_VALIDATORS = [
+    {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
+]
+
+PASSWORD_HASHERS = [
+    'django.contrib.auth.hashers.Argon2PasswordHasher',
+    'django.contrib.auth.hashers.PBKDF2PasswordHasher',
+    'django.contrib.auth.hashers.PBKDF2SHA1PasswordHasher',
+    'django.contrib.auth.hashers.BCryptSHA256PasswordHasher',
 ]
 
 # ReCAPTCHA
@@ -559,6 +562,7 @@ DEFAULT_STRUCTURED_DATA = {
     "publisher": {
         "@type": "Organization",
         "name": "furry.nz",
+        "url": "https://furry.nz",
     }
 }
 

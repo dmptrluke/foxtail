@@ -1,8 +1,9 @@
 <footer id="footer">
     <div class="container">
-        <p>{{ request.site.name }} - powered by <a href="https://github.com/dmptrluke/foxtail" target="_blank"
-                                                   rel="noopener noreferrer">foxtail</a> -
-            <a href="{% url 'content:page' slug='privacy' %}">privacy</a>
-            {% if DEBUG %} - debug mode{% endif %}</p>
+        <p>{{ request.site.name }} —
+            <a href="https://github.com/dmptrluke/foxtail" target="_blank" rel="noopener noreferrer">source</a>,
+            <a href="{% url 'content:page' slug='privacy' %}">privacy</a>,
+            <a href="https://archive.furry.nz"  target="_blank" rel="noopener noreferrer">archive</a>
+        </p>
     </div>
 </footer>
