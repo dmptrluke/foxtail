@@ -13,7 +13,7 @@
     <div class="row">
         <div class="col-lg-8">
             {% include "components/publish_status.html" with object=post %}
-            <article class="blog-post mb-5">
+            <article class="blog-post mb-6">
                 {% if post.image %}
                     <img class="img-fluid mb-3"
                          srcset="{{ post.image.crop.800x350 }} 1x, {{ post.image.crop.1200x525 }} 2x"
@@ -21,25 +21,13 @@
                          alt="">
                 {% endif %}
                 <h2><a class="text-reset" href="{{ post.get_absolute_url }}">{{ post.title }}</a></h2>
-                <p class="text-muted">{{ post.created | date:"F jS, Y" }}</p>
+                <p class="text-muted">{{ post.created | date:"F jS, Y" }} — by Nipper</p>
                 <p class="rendered-markdown">{{ post.text_rendered | safe }}</p>
-
-                <div class="row">
-                    <div class="col-sm-12 text-right">
-                        {% for tag in post.tags.all %}
-                            {% if forloop.first %}in{% endif %}
-                            <a href="{% url 'blog:list' %}?tag={{ tag.slug }}">{{ tag.name | capfirst }}</a>{% if not forloop.last %}, {% endif %}
-                        {% endfor %}
-                    </div>
-                </div>
             </article>
             {% if post.allow_comments and comments_enabled %}
                 {% include "blog/comments.html" %}
             {% endif %}
-
         </div>
-
-
         <div class="col-lg-4">
             <hr class="d-sm-block d-lg-none my-5">
             {% include "blog/sidebar.html" %}
