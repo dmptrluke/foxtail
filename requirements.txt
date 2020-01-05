@@ -10,12 +10,12 @@ django-cjswidget==0.3.0
 django-cleanup==4.0.0
 django-crispy-forms==1.8.1
 django-csp-foxtail==3.6 # TEMPORARY
-django-csp-helpers>=0.5.0
+django-csp-helpers>=0.6.0
 django-environ==0.4.5
 django-guardian==2.1.0
 django-heroku==0.3.1
 django-mail-templated-simple==3.2
-django-markdownfield>=0.6.1
+django-markdownfield>=0.7.0
 django-oidc-provider-foxtail==0.7.6
 django-otp==0.7.5
 django-published>=0.6.1

@@ -553,6 +553,8 @@ MARKDOWN_EXTENSION_CONFIGS = {
     }
 }
 
+MARKDOWN_LINKIFY_BLACKLIST = env.list('MARKDOWN_LINKIFY_BLACKLIST', default=[])
+
 # robots.txt
 ROBOTS_ALLOWED = env.bool('ROBOTS_ALLOWED', default=True)
 
