@@ -21,12 +21,14 @@
         Please enable Javascript.
     </div>
 </noscript>
+{% comment %}
 <p class="text-muted mt-n2">
     <small>This page is protected by reCAPTCHA and the Google
         <a href="https://policies.google.com/privacy">Privacy Policy</a> and
         <a href="https://policies.google.com/terms">Terms of Service</a> apply.
     </small>
 </p>
+{% endcomment %}
 <div class="g-recaptcha"
     {% for name, value in widget.attrs.items %}{% if value is not False %} {{ name }}{% if value is not True %}="{{ value|stringformat:'s' }}"{% endif %}{% endif %}{% endfor %}
 >
