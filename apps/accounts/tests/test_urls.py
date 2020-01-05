@@ -14,3 +14,8 @@ def test_signup():
 def test_reset_password():
     assert reverse("account_reset_password") == "/accounts/password/reset/"
     assert resolve("/accounts/password/reset/").view_name == "account_reset_password"
+
+
+def test_application_list():
+    assert reverse("account_application_list") == "/accounts/applications/"
+    assert resolve("/accounts/applications/").view_name == "account_application_list"
