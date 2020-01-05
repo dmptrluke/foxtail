@@ -106,6 +106,7 @@ jobs:
           SECRET_KEY: fake
           EMAIL_ASYNC: false
           RQ_ASYNC: false
+          DIRECTORY_ENABLED: true
           CONTACT_EMAILS: test@example.com
           RECAPTCHA_ENABLED: false
           RECAPTCHA_PUBLIC_KEY: 6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI
