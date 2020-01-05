@@ -33,7 +33,7 @@ def test_blog_comments(authenticated_driver, user, live_server, post: Post):
     comment_field = comment_form.find_element_by_name('text')
     comment_field.send_keys(comment_text)
 
-    comment_form.find_element_by_name('submit').click()
+    comment_form.find_element_by_name('post-comment').click()
 
     # the user sees a green alert
     alert = driver.find_element_by_class_name('alert-success')

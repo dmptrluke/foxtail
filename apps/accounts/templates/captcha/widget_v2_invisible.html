@@ -1,0 +1,22 @@
+<script nonce="{{ csp_nonce }}" type="text/javascript">
+    // Submit function to be called, after reCAPTCHA was successful.
+    function onSubmit_{{ widget_uuid }}() {
+        console.log("reCAPTCHA validated for 'data-widget-uuid=\"{{ widget_uuid }}\"'. Submitting form...");
+        document.querySelector('.g-recaptcha[data-widget-uuid="{{ widget_uuid }}"]').closest('form').submit();
+        grecaptcha.reset();
+    }
+    function verifyCaptcha_{{ widget_uuid}}(e) {
+        e.preventDefault();
+        grecaptcha.execute();
+    }
+    // Bind the helper function to the form submit action.
+    document.addEventListener( 'DOMContentLoaded', function () {
+        var element = document.querySelector('.g-recaptcha[data-widget-uuid="{{ widget_uuid }}"]');
+        element.closest('form').addEventListener('submit', verifyCaptcha_{{ widget_uuid}});
+    });
+</script>
+<script nonce="{{ csp_nonce }}" src="https://{{ recaptcha_domain }}/recaptcha/api.js{% if api_params %}?{{ api_params }}{% endif %}"></script>
+<div class="g-recaptcha"
+    {% for name, value in widget.attrs.items %}{% if value is not False %} {{ name }}{% if value is not True %}="{{ value|stringformat:'s' }}"{% endif %}{% endif %}{% endfor %}
+>
+</div>
