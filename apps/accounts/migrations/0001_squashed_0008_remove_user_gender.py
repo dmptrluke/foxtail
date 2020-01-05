@@ -6,9 +6,6 @@ import apps.accounts.validators
 
 
 class Migration(migrations.Migration):
-
-    replaces = [('accounts', '0001_initial_squashed'), ('accounts', '0004_add_full_name'), ('accounts', '0005_merge_names'), ('accounts', '0006_username_spaces'), ('accounts', '0007_remove_user_profile_url'), ('accounts', '0008_remove_user_gender')]
-
     initial = True
 
     dependencies = [
