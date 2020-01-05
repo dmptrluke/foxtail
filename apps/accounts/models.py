@@ -1,5 +1,7 @@
 from django.contrib.auth.models import AbstractUser
+from django.core.exceptions import ValidationError
 from django.db import models
+from django.utils.timezone import now
 
 from allauth.account.models import EmailAddress
 
@@ -24,6 +26,11 @@ class User(AbstractUser):
 
     full_name = models.CharField(max_length=120, blank=True)
     date_of_birth = models.DateField(null=True, blank=True)
+
+    def clean(self):
+        if self.date_of_birth:
+            if self.date_of_birth >= now():
+                raise ValidationError({'date_of_birth': 'Date of birth can not be in the future.'})
 
     def get_full_name(self):
         return self.full_name

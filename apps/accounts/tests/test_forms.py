@@ -1,7 +1,7 @@
 import pytest
 from faker import Faker
 
-from apps.accounts.forms import SignupForm
+from apps.accounts.forms import SignupForm, UserForm
 
 from .factories import UserFactory
 
@@ -119,3 +119,85 @@ class TestSignupForm:
         assert not form.is_valid()
         assert len(form.errors) == 1
         assert "password2" in form.errors
+
+
+class TestUserForm:
+    def test_full_form(self):
+        proto_user = UserFactory.build()
+
+        form = UserForm(
+            {
+                "username": proto_user.username,
+                "date_of_birth": proto_user.date_of_birth,
+                "full_name": proto_user.full_name,
+            }
+        )
+
+        assert form.is_valid()
+
+    def test_minimal_form(self):
+        proto_user = UserFactory.build()
+
+        form = UserForm(
+            {
+                "username": proto_user.username,
+                "date_of_birth": None,
+                "full_name": None,
+            }
+        )
+
+        assert form.is_valid()
+
+    def test_duplicate_username(self, user):
+        form = UserForm(
+            {
+                "username": user.username,
+                "date_of_birth": None,
+                "full_name": None,
+            }
+        )
+
+        assert not form.is_valid()
+        assert len(form.errors) == 1
+        assert "username" in form.errors
+
+    def test_invalid_username(self):
+        form = UserForm(
+            {
+                "username": "user****name",
+                "date_of_birth": None,
+                "full_name": None,
+            }
+        )
+
+        assert not form.is_valid()
+        assert len(form.errors) == 1
+        assert "username" in form.errors
+
+    def test_blank_username(self):
+        form = UserForm(
+            {
+                "username": None,
+                "date_of_birth": None,
+                "full_name": None,
+            }
+        )
+
+        assert not form.is_valid()
+        assert len(form.errors) == 1
+        assert "username" in form.errors
+
+    def test_future_dob(self):
+        proto_user = UserFactory.build()
+
+        form = UserForm(
+            {
+                "username": proto_user.username,
+                "date_of_birth": fake.future_date(),
+                "full_name": proto_user.full_name,
+            }
+        )
+
+        assert not form.is_valid()
+        assert len(form.errors) == 1
+        assert "date_of_birth" in form.errors

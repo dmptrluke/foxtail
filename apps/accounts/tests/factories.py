@@ -8,6 +8,7 @@ from factory import DjangoModelFactory, Faker, post_generation
 class UserNoPasswordFactory(DjangoModelFactory):
     username = Faker("user_name")
     email = Faker("email")
+    date_of_birth = Faker("date_between", start_date="-50y", end_date="-18y")
     full_name = Faker("name")
     password = "!NONE"
 
