@@ -8,9 +8,6 @@ import apps.directory.validators
 
 
 class Migration(migrations.Migration):
-
-    replaces = [('directory', '0001_initial'), ('directory', '0002_defuck_everything'), ('directory', '0003_profile_profile_url'), ('directory', '0004_profile_region'), ('directory', '0005_auto_20191227_2003'), ('directory', '0006_auto_20200103_2126')]
-
     initial = True
 
     dependencies = [
