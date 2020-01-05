@@ -29,7 +29,7 @@ class User(AbstractUser):
 
     def clean(self):
         if self.date_of_birth:
-            if self.date_of_birth >= now():
+            if self.date_of_birth >= now().date():
                 raise ValidationError({'date_of_birth': 'Date of birth can not be in the future.'})
 
     def get_full_name(self):
