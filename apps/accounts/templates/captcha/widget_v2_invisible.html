@@ -16,6 +16,17 @@
     });
 </script>
 <script nonce="{{ csp_nonce }}" src="https://{{ recaptcha_domain }}/recaptcha/api.js{% if api_params %}?{{ api_params }}{% endif %}"></script>
+<noscript>
+    <div class="alert alert-danger">This form requires Javascript for reCAPTCHA.
+        Please enable Javascript.
+    </div>
+</noscript>
+<p class="text-muted mt-n2">
+    <small>This page is protected by reCAPTCHA and the Google
+        <a href="https://policies.google.com/privacy">Privacy Policy</a> and
+        <a href="https://policies.google.com/terms">Terms of Service</a> apply.
+    </small>
+</p>
 <div class="g-recaptcha"
     {% for name, value in widget.attrs.items %}{% if value is not False %} {{ name }}{% if value is not True %}="{{ value|stringformat:'s' }}"{% endif %}{% endif %}{% endfor %}
 >
