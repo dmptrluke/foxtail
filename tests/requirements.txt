@@ -1,5 +1,5 @@
 atoma==0.0.17
-coverage==5.0.1
+coverage==5.0.2
 django-debug-toolbar==2.1
 factory-boy==2.12.0
 faker==3.0.0
