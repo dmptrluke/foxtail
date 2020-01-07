@@ -4,14 +4,13 @@ from django.db import models
 from django.urls import reverse
 
 from .constants import COUNTRY_CHOICES, REGION_CHOICES
-from .validators import URLValidator
+from .validators import validate_blacklist, validate_url
 
 
 class Profile(models.Model):
-    url_validator = URLValidator()
-
     user = models.OneToOneField(get_user_model(), primary_key=True, on_delete=models.CASCADE)
-    profile_URL = models.CharField(max_length=25, validators=[url_validator], blank=True, unique=True, null=True)
+    profile_URL = models.CharField(max_length=25, validators=[validate_url, validate_blacklist],
+                                   unique=True)
 
     country = models.CharField(max_length=20, blank=True, choices=COUNTRY_CHOICES)
     region = models.CharField(max_length=20, blank=True, choices=REGION_CHOICES)
@@ -32,6 +31,9 @@ class Profile(models.Model):
         return user == self.user
 
     def clean(self):
+        if self.country != 'NZ' and self.region:
+            raise ValidationError({'region': 'Region may only be selected if country is New Zealand.'})
+
         if self.country != 'NZ' and self.region:
             raise ValidationError({'region': 'Region may only be selected if country is New Zealand.'})
 

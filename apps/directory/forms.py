@@ -33,3 +33,20 @@ class ProfileForm(CSPFormMixin, ModelForm):
             ),
             Submit('submit', 'Save Changes'),
         )
+
+
+class ProfileCreateForm(CSPFormMixin, ModelForm):
+    class Meta:
+        model = Profile
+        fields = ('profile_URL',)
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.error_text_inline = False
+        self.helper.help_text_inline = False
+
+        self.helper.layout = Layout(
+            PrependedText('profile_URL', 'furry.nz/directory/'),
+            Submit('create', 'Create Profile'),
+        )
