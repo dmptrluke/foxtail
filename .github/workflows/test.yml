@@ -109,10 +109,6 @@ jobs:
           DIRECTORY_ENABLED: true
           CONTACT_EMAILS: test@example.com
           RECAPTCHA_ENABLED: false
-          RECAPTCHA_PUBLIC_KEY: 6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI
-          RECAPTCHA_INVIS_PUBLIC_KEY: 6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI
-          RECAPTCHA_PRIVATE_KEY: 6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe
-          RECAPTCHA_INVIS_PRIVATE_KEY: 6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe
           DATABASE_URL: postgres://postgres:hunter2@localhost:${{ job.services.postgres.ports['5432'] }}/postgres
           CACHE_URL: redis://localhost:${{ job.services.redis.ports[6379] }}/1
           SITE_URL: test

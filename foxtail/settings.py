@@ -272,11 +272,13 @@ if DEBUG or TESTING:
     SILENCED_SYSTEM_CHECKS = ['captcha.recaptcha_test_key_error']
 
 RECAPTCHA_ENABLED = env.bool('RECAPTCHA_ENABLED', default=True)
-RECAPTCHA_PRIVATE_KEY = env('RECAPTCHA_PRIVATE_KEY')
-RECAPTCHA_PUBLIC_KEY = env('RECAPTCHA_PUBLIC_KEY')
 
-RECAPTCHA_INVIS_PRIVATE_KEY = env('RECAPTCHA_INVIS_PRIVATE_KEY')
-RECAPTCHA_INVIS_PUBLIC_KEY = env('RECAPTCHA_INVIS_PUBLIC_KEY')
+# yes, I have to do it this way
+if env('RECAPTCHA_PRIVATE_KEY', default=False):
+    RECAPTCHA_PRIVATE_KEY = env('RECAPTCHA_PRIVATE_KEY')
+
+if env('RECAPTCHA_PUBLIC_KEY', default=False):
+    RECAPTCHA_PRIVATE_KEY = env('RECAPTCHA_PUBLIC_KEY')
 
 # Taggit
 # <https://django-taggit.readthedocs.io/en/latest/getting_started.html>

@@ -1,5 +1,4 @@
 {% extends "base.html" %}
-{% load icon %}
 
 {% block title %}Blog{% endblock %}
 
@@ -17,18 +16,18 @@
                 {% endif %}
             </div>
             {% if posts %}
-                {% for post in posts %}
+                {% for post in page_obj %}
                     <article class="blog-post {% if not forloop.last %}border-bottom pb-5{% endif %} mb-5">
                         <a class="text-reset" href="{{ post.get_absolute_url }}">
-                        {% if post.image %}
-                            <img class="img-fluid mb-3"
-                                 srcset="{{ post.image.crop.800x350 }} 1x, {{ post.image.crop.1200x525 }} 2x"
-                                 src="{{ post.image.crop.800x350 }}"
-                                 alt="">
-                        {% endif %}
-                        <h2>
-                            {{ post.title }}
-                        </h2></a>
+                            {% if post.image %}
+                                <img class="img-fluid mb-3"
+                                     srcset="{{ post.image.crop.800x350 }} 1x, {{ post.image.crop.1200x525 }} 2x"
+                                     src="{{ post.image.crop.800x350 }}"
+                                     alt="">
+                            {% endif %}
+                            <h2>
+                                {{ post.title }}
+                            </h2></a>
                         <p class="text-muted">{{ post.created|date:"F jS, Y" }}</p>
                         <div class="rendered-markdown">{{ post.text_rendered | safe }}</div>
                         <div class="row mt-4">
@@ -51,36 +50,9 @@
             {% else %}
                 <p>No posts found.</p>
             {% endif %}
-            {% block pagination %}
-                {# surely I can do this in a more compact manner #}
-                {% if is_paginated %}
-                    <ul class="pagination justify-content-center">
-
-                        {% if page_obj.has_previous %}
-                            <a href="{{ request.path }}?page=
-                                        {{ page_obj.previous_page_number }}{% if request.GET.q %}&q=
-
-                                {{ request.GET.q }}{% elif request.GET.tag %}&tag={{ request.GET.tag }}{% endif %}"
-                               class="prev" rel="prev">{% icon "angle-left" %}prev</a>
-                        {% endif %}
-                        {% for i in paginator.page_range %}
-                            {% if page_obj.number == i %}
-                                <li><a class="active">{{ i }}</a></li>
-                            {% else %}
-                                <li><a href="?page={{ i }}">{{ i }}</a></li>
-                            {% endif %}
-                        {% endfor %}
-
-                        {% if page_obj.has_next %}
-                            <a href="{{ request.path }}?page=
-                                        {{ page_obj.next_page_number }}{% if request.GET.q %}&q=
-
-                                {{ request.GET.q }}{% elif request.GET.tag %}&tag={{ request.GET.tag }}{% endif %}"
-                               class="next" rel="next">next{% icon "angle-right" %}</a>
-                        {% endif %}
-                    </ul>
-                {% endif %}
-            {% endblock %}
+            {% if is_paginated %}
+                {% include 'components/pagination.html' %}
+            {% endif %}
 
         </div>
         <div class="col-lg-4">
