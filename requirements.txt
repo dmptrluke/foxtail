@@ -10,7 +10,7 @@ django-cjswidget==0.3.0
 django-cleanup==4.0.0
 django-crispy-forms==1.8.1
 django-csp-foxtail==3.6 # TEMPORARY
-django-csp-helpers>=0.6.0
+django-csp-helpers>=0.6.2
 django-environ==0.4.5
 django-guardian==2.1.0
 django-heroku==0.3.1
@@ -37,5 +37,6 @@ psycopg2==2.8.4;platform_system!="Windows"
 psycopg2-binary==2.8.4;platform_system=="Windows"
 pymdown-extensions==6.2.1
 requests==2.22.0
+rq==1.2.0
 sentry-sdk==0.13.5
 the_big_username_blacklist==1.5.4
