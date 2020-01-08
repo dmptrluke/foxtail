@@ -268,17 +268,19 @@ PASSWORD_HASHERS = [
 
 # ReCAPTCHA
 # <https://pypi.org/project/django-recaptcha/>
+
+# I used to pull these from captcha.constants, but it does some annoying stuff
+# and seems to run all of the Django system checks if I even touch that module
+TEST_PUBLIC_KEY = "6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"
+TEST_PRIVATE_KEY = "6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe"
+
 if DEBUG or TESTING:
     SILENCED_SYSTEM_CHECKS = ['captcha.recaptcha_test_key_error']
 
 RECAPTCHA_ENABLED = env.bool('RECAPTCHA_ENABLED', default=True)
 
-# yes, I have to do it this way
-if env('RECAPTCHA_PRIVATE_KEY', default=False):
-    RECAPTCHA_PRIVATE_KEY = env('RECAPTCHA_PRIVATE_KEY')
-
-if env('RECAPTCHA_PUBLIC_KEY', default=False):
-    RECAPTCHA_PRIVATE_KEY = env('RECAPTCHA_PUBLIC_KEY')
+RECAPTCHA_PUBLIC_KEY = env('RECAPTCHA_PUBLIC_KEY', default=TEST_PUBLIC_KEY)
+RECAPTCHA_PRIVATE_KEY = env('RECAPTCHA_PRIVATE_KEY', default=TEST_PRIVATE_KEY)
 
 # Taggit
 # <https://django-taggit.readthedocs.io/en/latest/getting_started.html>
