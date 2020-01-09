@@ -86,7 +86,6 @@ INSTALLED_APPS = [
     'allauth_2fa',
     'taggit',
     'adminsortable2',
-    'guardian',
     'webpack_loader',
     'crispy_forms',
     'oidc_provider',
@@ -188,7 +187,6 @@ AUTH_USER_MODEL = 'accounts.User'
 
 AUTHENTICATION_BACKENDS = [
     'allauth.account.auth_backends.AuthenticationBackend',
-    'guardian.backends.ObjectPermissionBackend'
 ]
 
 LOGIN_REDIRECT_URL = '/'

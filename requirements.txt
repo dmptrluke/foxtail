@@ -12,7 +12,6 @@ django-crispy-forms==1.8.1
 django-csp==3.6
 django-csp-helpers>=0.6.2
 django-environ==0.4.5
-django-guardian==2.1.0
 django-heroku==0.3.1
 django-mail-templated-simple==3.2
 django-markdownfield>=0.7.0
