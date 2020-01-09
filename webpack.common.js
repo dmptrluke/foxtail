@@ -1,10 +1,8 @@
+const webpack = require('webpack');
 const path = require('path');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const TerserJSPlugin = require('terser-webpack-plugin');
-const webpack = require('webpack');
 const {CleanWebpackPlugin} = require('clean-webpack-plugin');
 const BundleTracker = require('webpack-bundle-tracker');
-
 
 module.exports = {
     entry: {
