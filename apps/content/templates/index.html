@@ -4,34 +4,22 @@
 {% block title_full %}{{ request.site.name }} – the resource for New Zealand furries{% endblock title_full %}
 
 {% block content %}
-    <h1>Welcome to {{ request.site.name }}</h1>
-
-    <p>
-        Welcome to {{ request.site.name }}, the resource for New Zealand <a
-            href="https://www.anthrocon.org/what-is-furry/" target="_blank" rel="noopener noreferrer"
-            data-toggle="tooltip" class="text-decoration-none" title="What is a furry?">furries</a>!
-        Most of the functionality of site is currently under construction, but we've launched the parts of the website
-        that are ready so far so you can log in and manage your {{ request.site.name }} account.
-    </p>
-
     {% if user.is_authenticated %}
-        <form method="post" action="{% url 'account_logout' %}?next={{ request.path }}">
-            <p class="mb-5 mt-4">
-                <a href="{% url 'account_profile' %}" class="btn btn-dark btn-lg mb-2 mr-1">Manage Account</a>
-                {% csrf_token %}
-                <input type="submit" class="btn btn-dark btn-lg mb-2" value="Sign Out">
-            </p>
-        </form>
     {% else %}
-        <p>
-            To continue, you'll need to create a {{ request.site.name }} account or sign in to an existing one.
-            You can do this using the buttons below.
-        </p>
-        <p class="mb-5 mt-4">
-            <a href="{% url 'account_signup' %}" class="btn btn-dark btn-lg mb-2 mr-1">Create Account</a>
-            <a href="{% url 'account_login' %}" class="btn btn-dark btn-lg mb-2">Sign In</a>
+        <div class="card text-white bg-dark mb-4" style="max-width: 18rem;">
+            <div class="card-body">
+                <h5 class="card-title">Welcome to furry.nz, the resource for New Zealand furries!</h5>
+                <p class="card-text">
+                    To comment, contribute, and participate you'll need to
+                    <a href="{% url 'account_signup' %}" class="text-light">create a {{ request.site.name }} account</a>
+                    or
+                    <a href="{% url 'account_login' %}" class="text-light">sign in</a> to an existing one.
+                </p>
 
-        </p>
+                <a href="{% url 'account_signup' %}" class="btn mr-2 btn-primary">Create Account</a>
+                <a href="{% url 'account_login' %}" class="btn btn-primary">Sign In</a>
+            </div>
+        </div>
     {% endif %}
 
     <h3 class="mb-3">Recent News</h3>
