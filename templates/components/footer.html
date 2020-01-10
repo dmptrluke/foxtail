@@ -1,9 +1,12 @@
+{% load tz %}
+{% get_current_timezone as TIME_ZONE %}
 <footer id="footer">
     <div class="container">
         <p>{{ request.site.name }} —
             <a href="https://github.com/dmptrluke/foxtail" target="_blank" rel="noopener noreferrer">source</a>,
             <a href="{% url 'content:page' slug='privacy' %}">privacy</a>,
-            <a href="https://archive.furry.nz"  target="_blank" rel="noopener noreferrer">archive</a>
+            <a href="https://archive.furry.nz"  target="_blank" rel="noopener noreferrer">archive</a>,
+            <abbr title="The time zone is {{ TIME_ZONE }}">tz</abbr>
         </p>
     </div>
 </footer>
