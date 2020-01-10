@@ -23,6 +23,7 @@ class ProfileEditView(CSPViewMixin, SuccessMessageMixin, LoginRequiredMixin, Upd
     model = Profile
     success_message = 'Your profile has been updated'
     slug_field = 'profile_URL'
+    template_name = 'directory/profile_edit.html'
     form_class = ProfileForm
 
     def get_object(self, *args, **kwargs):
@@ -36,6 +37,7 @@ class ProfileCreateView(CSPViewMixin, SuccessMessageMixin, LoginRequiredMixin, C
     model = Profile
     success_message = 'Your profile has been updated'
     slug_field = 'profile_URL'
+    template_name = 'directory/profile_create.html'
     form_class = ProfileCreateForm
 
     def form_valid(self, form):

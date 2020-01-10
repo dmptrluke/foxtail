@@ -1,6 +1,7 @@
 from django.contrib.auth.models import AbstractUser
 from django.core.exceptions import ValidationError
 from django.db import models
+from django.utils.functional import cached_property
 from django.utils.timezone import now
 
 from allauth.account.models import EmailAddress
@@ -38,10 +39,9 @@ class User(AbstractUser):
     def get_short_name(self):
         return self.username
 
-    @property
+    @cached_property
     def email_verified(self):
         """ check if the users main email is verified """
-        # todo: cached property
         return EmailAddress.objects.filter(user=self,
                                            email=self.email,
                                            verified=True,
