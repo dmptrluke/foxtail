@@ -12,7 +12,7 @@
             <thead>
             <tr>
                 {% sortable_heading name='Name' column='user__username' %}
-                {% sortable_heading name='Region' column='region' %}
+                {% sortable_heading name='Region' column='country~region' %}
                 <th scope="col">Fursona</th>
             </tr>
             </thead>
@@ -20,7 +20,7 @@
             {% for profile in profile_list %}
                 <tr>
                     <th scope="row"><a href="{{ profile.get_absolute_url }}">{{ profile.user.username }}</a></th>
-                    <td>{{ profile.get_region_display }}</td>
+                    <td>{{ profile.location }}</td>
                     <td>Otto</td>
                 </tr>
             {% endfor %}

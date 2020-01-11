@@ -29,7 +29,7 @@ class Profile(models.Model):
         """
         Given a user, returns true if the user is allowed to edit this profile.
         """
-        return user == self.user
+        return True
 
     def clean(self):
         if self.country != 'NZ' and self.region:
@@ -37,6 +37,15 @@ class Profile(models.Model):
 
         if self.country != 'NZ' and self.region:
             raise ValidationError({'region': 'Region may only be selected if country is New Zealand.'})
+
+    @property
+    def location(self):
+        if self.country != 'NZ':
+            return self.get_country_display()
+        elif self.country == 'NZ':
+            return self.get_region_display()
+        else:
+            return None
 
     @cached_property
     def structured_data(self):
