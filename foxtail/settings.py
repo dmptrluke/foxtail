@@ -568,13 +568,7 @@ ROBOTS_ALLOWED = env.bool('ROBOTS_ALLOWED', default=True)
 # <https://github.com/dmptrluke/django-structured-data>
 DEFAULT_STRUCTURED_DATA = {
     "publisher": {
-        "@type": "Organization",
-        "name": "furry.nz",
-        "url": "https://furry.nz",
-        "logo": {
-            "@type": "ImageObject",
-            "url": "https://cdn.furry.nz/static/paw.png"
-        },
+        "@id": "https://furry.nz/#organization",
     }
 }
 
