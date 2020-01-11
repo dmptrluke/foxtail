@@ -571,6 +571,10 @@ DEFAULT_STRUCTURED_DATA = {
         "@type": "Organization",
         "name": "furry.nz",
         "url": "https://furry.nz",
+        "logo": {
+            "@type": "ImageObject",
+            "url": "https://cdn.furry.nz/static/paw.png"
+        },
     }
 }
 
