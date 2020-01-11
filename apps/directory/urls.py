@@ -8,7 +8,7 @@ urlpatterns = []
 
 if settings.DIRECTORY_ENABLED:
     urlpatterns += [
-        path('', views.DirectoryIndex.as_view(), name='index'),
+        path('', views.ProfileListView.as_view(), name='index'),
 
         # creation
         path('create/', views.ProfileCreateView.as_view(), name='profile_create'),

@@ -1,0 +1,9 @@
+.table-sortable {
+	th.asc a {
+		@include caret(up);
+	}
+
+		th.desc a {
+		@include caret();
+	}
+}

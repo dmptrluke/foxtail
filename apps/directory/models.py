@@ -2,6 +2,7 @@ from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.urls import reverse
+from django.utils.functional import cached_property
 
 from .constants import COUNTRY_CHOICES, REGION_CHOICES
 from .validators import validate_blacklist, validate_url
@@ -36,6 +37,14 @@ class Profile(models.Model):
 
         if self.country != 'NZ' and self.region:
             raise ValidationError({'region': 'Region may only be selected if country is New Zealand.'})
+
+    @cached_property
+    def structured_data(self):
+        return {
+            '@type': 'Person',
+            '@id': 'https://furry.nz/' + self.get_absolute_url(),
+            'name': self.user
+        }
 
 
 class Character(models.Model):

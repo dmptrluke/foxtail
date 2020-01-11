@@ -1,15 +1,14 @@
-from django.views.generic import TemplateView
+from django.views.generic import ListView
+
+from braces.views import OrderableListMixin
 
 from apps.directory.models import Profile
 
 
-class DirectoryIndex(TemplateView):
-    template_name = 'directory/index.html'
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['profile_list'] = Profile.objects.all()
-        return context
+class ProfileListView(OrderableListMixin, ListView):
+    model = Profile
+    orderable_columns = ('user__username', 'region')
+    orderable_columns_default = 'user__username'
 
 
-__all__ = ["DirectoryIndex"]
+__all__ = ["ProfileListView"]
