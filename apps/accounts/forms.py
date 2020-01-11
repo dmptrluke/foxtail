@@ -3,8 +3,9 @@ from django.forms import ModelForm, SelectDateWidget
 
 from allauth.account import forms as auth_forms
 from captcha.fields import ReCaptchaField
+from captcha.widgets import ReCaptchaV2Invisible
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import HTML, Column, Field, Fieldset, Layout, Row, Submit
+from crispy_forms.layout import HTML, Column, Div, Field, Fieldset, Layout, Row, Submit
 from csp_helpers.mixins import CSPFormMixin
 
 from apps.accounts.models import User
@@ -12,7 +13,10 @@ from apps.accounts.models import User
 
 class SignupForm(CSPFormMixin, auth_forms.SignupForm):
     if settings.RECAPTCHA_ENABLED:
-        captcha = ReCaptchaField()
+        if settings.RECAPTCHA_INVISIBLE:
+            captcha = ReCaptchaField(widget=ReCaptchaV2Invisible)
+        else:
+            captcha = ReCaptchaField()
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -29,16 +33,14 @@ class SignupForm(CSPFormMixin, auth_forms.SignupForm):
 
         self.helper.layout = Layout(
             Row(
-                Column(Field('username', autocomplete='username', placeholder=''), css_class='col-md-6'),
-                Column(Field('email', autocomplete='email', placeholder=''), css_class='col-md-6')
+                Div(Field('username', autocomplete='username', placeholder=''), css_class='col-md-6'),
+                Div(Field('email', autocomplete='email', placeholder=''), css_class='col-md-6')
             ),
             Row(
-                Column(Field('password1', autocomplete='new-password', placeholder=''), css_class='col-md-6'),
-                Column(Field('password2', autocomplete='new-password', placeholder=''), css_class='col-md-6')
+                Div(Field('password1', autocomplete='new-password', placeholder=''), css_class='col-md-6'),
+                Div(Field('password2', autocomplete='new-password', placeholder=''), css_class='col-md-6')
             ),
-            Row(
-                Column('captcha', css_class='col-md-12'),
-            ) if settings.RECAPTCHA_ENABLED else HTML('<!-- security! -->')
+            'captcha' if settings.RECAPTCHA_ENABLED else HTML('<!-- security! -->')
 
         )
 
@@ -61,7 +63,11 @@ class LoginForm(auth_forms.LoginForm):
 
 
 class ResetPasswordForm(CSPFormMixin, auth_forms.ResetPasswordForm):
-    captcha = ReCaptchaField()
+    if settings.RECAPTCHA_ENABLED:
+        if settings.RECAPTCHA_INVISIBLE:
+            captcha = ReCaptchaField(widget=ReCaptchaV2Invisible)
+        else:
+            captcha = ReCaptchaField()
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -73,7 +79,7 @@ class ResetPasswordForm(CSPFormMixin, auth_forms.ResetPasswordForm):
 
         self.helper.layout = Layout(
             'email',
-            'captcha'
+            'captcha' if settings.RECAPTCHA_ENABLED else HTML('<!-- security! -->')
         )
 
 
