@@ -21,6 +21,20 @@ class IndexView(TemplateView):
         context['event_list'] = Event.objects.filter(Q(start__gte=today) | Q(end__gte=today))[:3]
         return context
 
+    @property
+    def structured_data(self):
+        return {
+            '@type': 'WebSite',
+            '@id': 'https://furry.nz/#website',
+            'name': 'furry.nz',
+            'description': 'The resource for New Zealand furries.',
+            'url': 'https://furry.nz/',
+            'author': {
+                '@type': 'Organization',
+                '@id': 'https://furry.nz/#organization',
+            }
+        }
+
 
 class PageView(DetailView):
     model = Page

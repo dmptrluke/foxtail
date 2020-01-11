@@ -1,7 +1,15 @@
 {% extends "base.html" %}
-{% load humanize account cache %}
+{% load humanize account cache jsonld opengraph meta %}
 
 {% block title_full %}{{ request.site.name }} – the resource for New Zealand furries{% endblock title_full %}
+
+{% block extra_head %}
+    <meta name="twitter:card" content="summary"/>
+
+    {% json_ld_for view %}
+    {% og_for view %}
+    {% meta_for view %}
+{% endblock %}
 
 {% block content %}
     {% if user.is_authenticated %}
