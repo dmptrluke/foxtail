@@ -16,7 +16,7 @@ class Profile(models.Model):
                                    unique=True)
 
     country = models.CharField(max_length=20, blank=True, choices=COUNTRY_CHOICES)
-    region = models.CharField(max_length=20, blank=True, choices=REGION_CHOICES)
+    region = models.SmallIntegerField(blank=True, null=True, choices=REGION_CHOICES)
 
     def __str__(self):
         return f"{self.profile_URL}"
