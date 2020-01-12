@@ -50,7 +50,7 @@ class Profile(models.Model):
         else:
             loc = self.get_country_display()
 
-        flag = static(f'flags/{self.country}.png')
+        flag = static(f'flags/{self.country.lower()}.png')
         return mark_safe(f'<img src="{flag}" /> {loc}')
 
     @cached_property
