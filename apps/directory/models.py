@@ -1,8 +1,10 @@
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 from django.db import models
+from django.templatetags.static import static
 from django.urls import reverse
 from django.utils.functional import cached_property
+from django.utils.safestring import mark_safe
 
 from .constants import COUNTRY_CHOICES, REGION_CHOICES
 from .validators import validate_blacklist, validate_url
@@ -40,12 +42,16 @@ class Profile(models.Model):
 
     @property
     def location(self):
-        if self.country != 'NZ':
-            return self.get_country_display()
-        elif self.country == 'NZ':
-            return self.get_region_display()
+        if not self.country:
+            return " - "
+
+        if self.country == 'NZ':
+            loc = self.get_region_display()
         else:
-            return None
+            loc = self.get_country_display()
+
+        flag = static(f'flags/{self.country}.png')
+        return mark_safe(f'<img src="{flag}" /> {loc}')
 
     @cached_property
     def structured_data(self):
