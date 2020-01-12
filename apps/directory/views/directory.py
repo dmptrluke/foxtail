@@ -1,5 +1,4 @@
-from django.db.models import Case, Value, When
-from django.db.models.functions import NullIf
+from django.db.models import Case, When
 from django.views.generic import ListView
 
 from braces.views import SelectRelatedMixin
@@ -32,18 +31,27 @@ class ProfileListView(SelectRelatedMixin, ListView):
         rules = []
         if self.order_by == 'name':
             columns = ['user__username']
+
         elif self.order_by == 'location':
             columns = ['region', 'country']
             if self.ordering == 'desc':
-                rules.append(Case(When(country='NZ', then=1), default=0))
+                rules.append(Case(
+                    When(country='NZ', then=1),
+                    When(country='', then=2),
+                    default=0)
+                )
             else:
-                rules.append(Case(When(country='NZ', then=0), default=1))
+                rules.append(Case(
+                    When(country='NZ', then=0),
+                    When(country='', then=2),
+                    default=1)
+                )
 
         for column in columns:
             if self.ordering == 'desc':
-                rules.append(NullIf(column, Value('')).desc(nulls_last=True))
+                rules.append('-' + column)
             else:
-                rules.append(NullIf(column, Value('')).asc(nulls_last=True))
+                rules.append(column)
 
         return queryset.order_by(*rules)
 
