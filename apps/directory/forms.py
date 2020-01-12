@@ -14,8 +14,8 @@ class ProfileForm(CSPFormMixin, ModelForm):
         model = Profile
         fields = ('profile_URL', 'country', 'region')
         widgets = {
-            'country': CJSWidget(),
-            'region': CJSWidget(),
+            'country': CJSWidget(options={'shouldSort': False}),
+            'region': CJSWidget(options={'shouldSort': False}),
         }
 
     def __init__(self, *args, **kwargs):
