@@ -45,13 +45,16 @@ class Profile(models.Model):
         if not self.country:
             return " - "
 
-        if self.country == 'NZ':
+        if self.region:
             loc = self.get_region_display()
         else:
             loc = self.get_country_display()
 
-        flag = static(f'flags/{self.country.lower()}.png')
-        return mark_safe(f'<img src="{flag}" /> {loc}')
+        if not self.country == 'NZ':
+            flag = static(f'flags/{self.country.lower()}.png')
+            return mark_safe(f'<img src="{flag}" /> {loc}')
+        else:
+            return loc
 
     @cached_property
     def structured_data(self):
