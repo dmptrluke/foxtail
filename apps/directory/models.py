@@ -15,6 +15,12 @@ class Profile(models.Model):
     profile_URL = models.CharField(max_length=25, validators=[validate_url, validate_blacklist],
                                    unique=True)
 
+    description = models.TextField(blank=True)
+
+    show_name = models.BooleanField(default=False, verbose_name="Share my Full Name")
+    show_birthday = models.BooleanField(default=False, verbose_name="Share my Birthday")
+    show_age = models.BooleanField(default=False, verbose_name="Share my Age")
+
     country = models.CharField(max_length=20, blank=True, choices=COUNTRY_CHOICES)
     region = models.SmallIntegerField(blank=True, null=True, choices=REGION_CHOICES)
 
