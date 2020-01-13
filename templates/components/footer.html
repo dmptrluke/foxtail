@@ -6,7 +6,10 @@
             <a href="https://github.com/dmptrluke/foxtail" target="_blank" rel="noopener noreferrer">source</a>,
             <a href="{% url 'content:page' slug='privacy' %}">privacy</a>,
             <a href="https://archive.furry.nz"  target="_blank" rel="noopener noreferrer">archive</a>,
-            <abbr title="The time zone is {{ TIME_ZONE }}">tz</abbr>
+            <abbr title="The time zone is {{ TIME_ZONE }}">tz</abbr>,
+
+            <a role="button" data-toggle="popover" data-placement="top"  title="Support Information"
+               data-content="'{{ DEBUG_DATA | escape }}'">?</a>
         </p>
     </div>
 </footer>

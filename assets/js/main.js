@@ -6,6 +6,7 @@ import 'colcade';
 
 function on_load() {
     $('[data-toggle="tooltip"]').tooltip();
+    $('[data-toggle="popover"]').popover()
 
     $('#id_text').keyup(function () {
         let length = $(this).val().length;

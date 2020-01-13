@@ -138,6 +138,7 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
                 'django.template.context_processors.request',
                 'apps.core.context_processors.site',
+                'apps.core.context_processors.debug',
                 'csp.context_processors.nonce'
             ],
         },
