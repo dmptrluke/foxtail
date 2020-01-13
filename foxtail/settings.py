@@ -585,11 +585,5 @@ BLOG_FEED_DESCRIPTION = "The latest furry news."
 
 CONTACT_EMAILS = env.list('CONTACT_EMAILS')
 
-# Heroku Support
-if env.bool('USING_HEROKU', default=False):
-    import django_heroku
-    django_heroku.settings(locals(), allowed_hosts=False)
-
-
 # Foxtail
 DIRECTORY_ENABLED = env.bool('DIRECTORY_ENABLED', default=False)
