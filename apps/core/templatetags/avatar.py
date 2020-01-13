@@ -13,4 +13,4 @@ def avatar_url(user, size=40):
 
     default = "https://ui-avatars.com/api/" + urlencode({'length': 1, 'name': user.get_short_name()})
     return "https://www.gravatar.com/avatar/{}?{}".format(
-        md5(email.lower().encode('utf-8')).hexdigest(), urlencode({'d': default, 's': str(size)}))
+        md5(email.lower().encode('utf-8')).hexdigest(), urlencode({'d': default, 's': str(size)}))  # nosec

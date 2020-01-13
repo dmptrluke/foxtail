@@ -30,9 +30,8 @@ def icon_tag(icon_id, tag='div'):
             icon_data = icon_file.read()
             cache.set(f'icon3_{icon_id}', icon_data, None)
 
-    html = format_html("""
+    return format_html("""
         <{0} class='icon icon-{1} svg-baseline'>
             {2}
         </{0}>
-        """, tag, icon_id, mark_safe(icon_data))
-    return html
+        """, tag, icon_id, mark_safe(icon_data))  # nosec

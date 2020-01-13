@@ -4,7 +4,7 @@ from django.db import models
 from django.templatetags.static import static
 from django.urls import reverse
 from django.utils.functional import cached_property
-from django.utils.safestring import mark_safe
+from django.utils.html import format_html
 
 from .constants import COUNTRY_CHOICES, REGION_CHOICES
 from .validators import validate_blacklist, validate_url
@@ -45,16 +45,16 @@ class Profile(models.Model):
         if not self.country:
             return " - "
 
-        if self.region:
-            loc = self.get_region_display()
-        else:
-            loc = self.get_country_display()
+        loc = self.get_region_display() or self.get_country_display()
 
-        if not self.country == 'NZ':
-            flag = static(f'flags/{self.country.lower()}.png')
-            return mark_safe(f'<img src="{flag}" /> {loc}')
-        else:
+        if self.country == 'NZ':
             return loc
+        else:
+            flag = static(f'flags/{self.country.lower()}.png')
+            return format_html(
+                '<img src="{}" /> {}',
+                flag, loc
+            )
 
     @cached_property
     def structured_data(self):
