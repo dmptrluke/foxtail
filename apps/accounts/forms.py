@@ -72,14 +72,12 @@ class ResetPasswordForm(CSPFormMixin, auth_forms.ResetPasswordForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper()
-        self.helper.form_tag = False
-        self.helper.disable_csrf = True
-
         self.fields['captcha'].label = False
 
         self.helper.layout = Layout(
             'email',
-            'captcha' if settings.RECAPTCHA_ENABLED else HTML('<!-- security! -->')
+            'captcha' if settings.RECAPTCHA_ENABLED else HTML('<!-- security! -->'),
+            Submit('reset', 'Reset Password'),
         )
 
 
