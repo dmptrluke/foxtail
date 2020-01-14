@@ -36,7 +36,7 @@ SECRET_KEY = env('SECRET_KEY')
 DEBUG = env.bool('DEBUG', default=False)
 TESTING = env.bool('TESTING', default=False)
 
-SITE_URL = env('SITE_URL')
+SITE_URL = env('SITE_URL').rstrip('/')
 SITE_ID = 1
 
 ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=[])
