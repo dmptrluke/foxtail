@@ -3,7 +3,10 @@
 
 {% block title %}Edit Profile{% endblock %}
 
+{% block extra_head %}
+    {% render_bundle_csp 'profile_edit' attrs='defer' %}
+{% endblock extra_head %}
+
 {% block content %}
     {% crispy form %}
-    {% render_bundle_csp 'profile_edit' %}
 {% endblock content %}
