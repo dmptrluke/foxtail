@@ -6,7 +6,8 @@ const BundleTracker = require('webpack-bundle-tracker');
 
 module.exports = {
     entry: {
-        main: ['./js/main.js', './scss/index.scss']
+        main: ['./js/main.js', './scss/index.scss'],
+        profile_edit: ['./js/profile_edit.js']
     },
     output: {
         path: path.resolve('./storage/bundles'),
