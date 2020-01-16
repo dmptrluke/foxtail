@@ -7,6 +7,8 @@ register = template.Library()
 def url_transform(context, **kwargs):
     query = context['request'].GET.copy()
     for k, v in kwargs.items():
-        query[k] = v
-    print(query)
+        if v is None:
+            del query[k]
+        else:
+            query[k] = v
     return query.urlencode()
