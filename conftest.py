@@ -1,11 +1,13 @@
 from django.test import RequestFactory
 
 import pytest
+from published.constants import NEVER_AVAILABLE
 from pytest_factoryboy import register
 from selenium import webdriver
 
 from apps.accounts.tests.factories import UserFactory, UserNoPasswordFactory
 from apps.content.tests.factories import PageFactory
+from apps.directory.tests.factories import ProfileFactory
 from apps.events.tests.factories import EventFactory
 from foxtail_blog.tests.factories import PostFactory
 
@@ -18,9 +20,13 @@ register(UserNoPasswordFactory, "user_without_password")
 # blog
 register(PostFactory, "post")
 register(PostFactory, "second_post")
+register(PostFactory, "hidden_post", publish_status=NEVER_AVAILABLE)
 
 # content
 register(PageFactory)
+
+# directory
+register(ProfileFactory)
 
 # events
 register(EventFactory)

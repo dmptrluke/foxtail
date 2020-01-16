@@ -1,6 +1,7 @@
 from django.test import RequestFactory
 
 import pytest
+from structured_data.util import json_encode
 
 from apps.events.models import Event
 from foxtail_blog.models import Post
@@ -11,13 +12,17 @@ from ..views import IndexView, PageView
 pytestmark = pytest.mark.django_db
 
 
-def test_index(post: Post, event: Event, request_factory: RequestFactory):
+def test_index(post: Post, hidden_post: Post, event: Event, request_factory: RequestFactory):
     view = IndexView()
     request = request_factory.get('/')
 
     view.setup(request)
 
     context = view.get_context_data()
+
+    # the structured data should exist, and be valid
+    sd = view.structured_data
+    json_encode(sd)
 
     # there should be one post
     assert len(context['post_list']) == 1
