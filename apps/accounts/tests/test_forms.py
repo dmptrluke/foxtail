@@ -24,6 +24,22 @@ class TestSignupForm:
 
         assert form.is_valid()
 
+    def test_banned_username(self):
+        proto_user = UserFactory.build()
+
+        form = SignupForm(
+            {
+                "username": "root",
+                "email": proto_user.email,
+                "password1": proto_user._password,
+                "password2": proto_user._password,
+            }
+        )
+
+        assert not form.is_valid()
+        assert len(form.errors) == 1
+        assert "username" in form.errors
+
     def test_duplicate_username(self, user):
         proto_user = UserFactory.build()
 
@@ -147,6 +163,19 @@ class TestUserForm:
         )
 
         assert form.is_valid()
+
+    def test_banned_username(self, user):
+        form = UserForm(
+            {
+                "username": "root",
+                "date_of_birth": None,
+                "full_name": None,
+            }
+        )
+
+        assert not form.is_valid()
+        assert len(form.errors) == 1
+        assert "username" in form.errors
 
     def test_duplicate_username(self, user):
         form = UserForm(

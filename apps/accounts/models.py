@@ -6,18 +6,16 @@ from django.utils.timezone import now
 
 from allauth.account.models import EmailAddress
 
-from .validators import UsernameValidator
+from .validators import username_validators
 
 
 class User(AbstractUser):
-    username_validator = UsernameValidator()
-
     username = models.CharField(
         'username',
         max_length=30,
         unique=True,
         help_text='Required. 30 characters or fewer. Letters, digits, spaces, and @/./+/-/_ only.',
-        validators=[username_validator],
+        validators=username_validators,
         error_messages={
             'unique': "A user with that username already exists.",
         },
