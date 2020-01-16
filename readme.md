@@ -38,9 +38,6 @@ npm run-script build-dev
 ```
 
 During development, you can also use `run-script watch` to enable live reloads.
-```
-npm run-script build-dev
-```
 
 ### Configuration
 
