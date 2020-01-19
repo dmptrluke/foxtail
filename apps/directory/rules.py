@@ -15,7 +15,7 @@ is_owner_or_editor = is_owner | is_editor
 
 
 # PRIVACY RULES
-def can_see(field: str):
+def can_view(model: str, field: str):
     """
     A function that generates django-rules predicates when given a field name.
 
@@ -25,7 +25,7 @@ def can_see(field: str):
     The generated predicate works like any other django-rules predicate, and can
     be used to construct rules.
     """
-    name = f'can_see:{field}'
+    name = f'can_view:{model}:{field}'
 
     @predicate(name)
     def fn(user: get_user_model(), obj):
@@ -38,7 +38,7 @@ def can_see(field: str):
     return fn
 
 
-rules.add_perm('can_see_full_name', can_see('full_name') | is_owner | is_editor)
-rules.add_perm('can_see_age', can_see('age') | is_owner | is_editor)
-rules.add_perm('can_see_birthday', can_see('birthday') | is_owner | is_editor)
-rules.add_perm('can_see_description', can_see('description') | is_owner | is_editor)
+rules.add_perm('view_profile_full_name', can_view('profile', 'full_name') | is_owner_or_editor)
+rules.add_perm('view_profile_age', can_view('profile', 'age') | is_owner_or_editor)
+rules.add_perm('view_profile_birthday', can_view('profile', 'birthday') | is_owner_or_editor)
+rules.add_perm('view_profile_description', can_view('profile', 'description') | is_owner_or_editor)

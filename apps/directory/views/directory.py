@@ -1,14 +1,11 @@
 from django.db.models import Case, When
 from django.views.generic import ListView
 
-from braces.views import SelectRelatedMixin
-
 from apps.directory.models import Profile
 
 
-class ProfileListView(SelectRelatedMixin, ListView):
+class ProfileListView(ListView):
     model = Profile
-    select_related = ['user']
     order_by = None
     ordering = None
 
@@ -19,7 +16,7 @@ class ProfileListView(SelectRelatedMixin, ListView):
         return context
 
     def get_queryset(self):
-        queryset = super().get_queryset()
+        queryset = super().get_queryset().select_related('user')
 
         self.ordering = self.request.GET.get("ordering", 'asc')
 
@@ -29,6 +26,8 @@ class ProfileListView(SelectRelatedMixin, ListView):
             self.order_by = 'location'
 
         rules = []
+        columns = []
+
         if self.order_by == 'name':
             columns = ['user__username']
 
@@ -38,14 +37,12 @@ class ProfileListView(SelectRelatedMixin, ListView):
                 rules.append(Case(
                     When(country='NZ', then=1),
                     When(country='', then=2),
-                    default=0)
-                )
+                    default=0))
             else:
                 rules.append(Case(
                     When(country='NZ', then=0),
                     When(country='', then=2),
-                    default=1)
-                )
+                    default=1))
 
         for column in columns:
             if self.ordering == 'desc':

@@ -16,6 +16,8 @@ def has_perm(context, perm, on=None):
 
 
 @register.simple_tag(takes_context=True)
-def can_see(context, on, field):
-    perm = f'can_see_{field}'
+def can_view(context, field, on):
+    model_name = on.__class__.__name__
+    perm = f'view_{model_name}_{field}'.lower()
+    print('checking', perm)
     return has_perm(context, perm, on)

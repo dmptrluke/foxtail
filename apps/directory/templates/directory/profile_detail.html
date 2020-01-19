@@ -13,12 +13,15 @@
         <p>My username is: {{ profile.user.username }}</p>
         <p>My real name is: {{ profile.user.full_name }}</p>
 
-        {% can_see profile 'description' as show_description %}
+        {% can_view 'description' on=profile as show_description %}
+
         {% if show_description %}
-            {{ profile.description }}
+            <p>
+                {{ profile.description }}
+            </p>
         {% endif %}
 
-    {% has_perm 'directory.change_profile' profile as can_edit %}
+        {% has_perm 'directory.change_profile' on=profile as can_edit %}
         {% if can_edit %}
             <a href="{{ profile.get_modify_url }}" class="btn btn-dark btn-lg mb-2 mr-1">Edit this profile</a>
         {% endif %}
