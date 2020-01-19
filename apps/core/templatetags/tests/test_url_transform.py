@@ -1,7 +1,9 @@
+from django.test import RequestFactory
+
 from ..url_transform import url_transform
 
 
-def test_basic_transform(request_factory):
+def test_basic_transform(request_factory: RequestFactory):
     context = {
         'request': request_factory.get("/accounts/")
     }
@@ -14,7 +16,7 @@ def test_basic_transform(request_factory):
     assert transformed == 'page=1'
 
 
-def test_replace_transform(request_factory):
+def test_replace_transform(request_factory: RequestFactory):
     context = {
         'request': request_factory.get("/accounts/?page=1")
     }
@@ -27,7 +29,7 @@ def test_replace_transform(request_factory):
     assert transformed == 'page=2'
 
 
-def test_merge_transform(request_factory):
+def test_merge_transform(request_factory: RequestFactory):
     context = {
         'request': request_factory.get("/accounts/?page=2")
     }
@@ -40,7 +42,7 @@ def test_merge_transform(request_factory):
     assert transformed == 'page=2&view=list'
 
 
-def test_clear_transform(request_factory):
+def test_clear_transform(request_factory: RequestFactory):
     context = {
         'request': request_factory.get("/accounts/?page=2&view=list")
     }

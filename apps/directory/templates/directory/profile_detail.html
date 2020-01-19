@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load rules %}
 
 {% block title %}Furry Directory{% endblock %}
 
@@ -10,7 +11,9 @@
     <section id="page-content">
         <p>My username is: {{ profile.user.username }}</p>
         <p>My real name is: {{ profile.user.full_name }}</p>
-        {% if can_modify %}
+
+        {% has_perm 'directory.change_profile' request.user profile as can_edit %}
+        {% if can_edit %}
             <a href="{{ profile.get_modify_url }}" class="btn btn-dark btn-lg mb-2 mr-1">Edit this profile</a>
         {% endif %}
     </section>

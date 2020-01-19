@@ -58,6 +58,7 @@ INSTALLED_APPS = [
     'django.contrib.humanize',
     'django.contrib.postgres',
     'django.contrib.sitemaps',
+    'rules.apps.AutodiscoverRulesConfig',
     'markdownfield',
     'cjswidget',
     'published',
@@ -85,7 +86,6 @@ INSTALLED_APPS = [
     'mail_templated_simple',
     'allauth_2fa',
     'taggit',
-    'adminsortable2',
     'webpack_loader',
     'crispy_forms',
     'oidc_provider',
@@ -187,6 +187,7 @@ RQ_QUEUES = {
 AUTH_USER_MODEL = 'accounts.User'
 
 AUTHENTICATION_BACKENDS = [
+    'rules.permissions.ObjectPermissionBackend',
     'allauth.account.auth_backends.AuthenticationBackend',
 ]
 

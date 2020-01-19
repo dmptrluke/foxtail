@@ -12,10 +12,6 @@ class Page(models.Model):
     )
     modified = models.DateTimeField(auto_now=True, verbose_name="date modified")
 
-    sort_order = models.PositiveIntegerField(default=0, blank=False, null=False)
-    show_in_menu = models.BooleanField(
-        default=True, help_text="Set this if you want the page " "to be listed in site navigation."
-    )
     slug = models.SlugField(
         unique=True,
         help_text="Changing this value after initial creation will break existing "
@@ -24,9 +20,6 @@ class Page(models.Model):
 
     body = MarkdownField(rendered_field='body_rendered', validator=VALIDATOR_CLASSY)
     body_rendered = RenderedMarkdownField()
-
-    class Meta:
-        ordering = ['sort_order']
 
     def __str__(self):
         return self.title

@@ -6,11 +6,14 @@ from django.urls import reverse
 from django.utils.functional import cached_property
 from django.utils.html import format_html
 
-from .constants import COUNTRY_CHOICES, REGION_CHOICES
-from .validators import validate_blacklist, validate_url
+from rules.contrib.models import RulesModel
+
+from .. import rules
+from ..constants import COUNTRY_CHOICES, REGION_CHOICES
+from ..validators import validate_blacklist, validate_url
 
 
-class Profile(models.Model):
+class Profile(RulesModel):
     user = models.OneToOneField(get_user_model(), primary_key=True, on_delete=models.CASCADE)
     profile_URL = models.CharField(max_length=25, validators=[validate_url, validate_blacklist],
                                    unique=True)
@@ -24,6 +27,11 @@ class Profile(models.Model):
     country = models.CharField(max_length=20, blank=True, choices=COUNTRY_CHOICES)
     region = models.SmallIntegerField(blank=True, null=True, choices=REGION_CHOICES)
 
+    class Meta:
+        rules_permissions = {
+            'change': rules.is_owner_or_editor,
+        }
+
     def __str__(self):
         return f"{self.profile_URL}"
 
@@ -32,12 +40,6 @@ class Profile(models.Model):
 
     def get_modify_url(self):
         return reverse('directory:profile_edit', kwargs={'slug': self.profile_URL})
-
-    def can_modify(self, user: get_user_model()) -> bool:
-        """
-        Given a user, returns true if the user is allowed to edit this profile.
-        """
-        return True
 
     def clean(self):
         if self.country != 'NZ' and self.region:
@@ -71,18 +73,4 @@ class Profile(models.Model):
         }
 
 
-class Character(models.Model):
-    name = models.CharField(max_length=100, help_text="100 characters or fewer.")
-    species = models.CharField(max_length=100, help_text="100 characters or fewer.")
-    gender = models.CharField(
-        max_length=100, default='', blank=True, help_text="100 characters or fewer."
-    )
-    description = models.TextField(blank=True, default='')
-
-    user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, related_name='characters')
-
-    def __str__(self):
-        return f"{self.name} {self.user.username}"
-
-
-__all__ = ['Profile', 'Character']
+__all__ = ['Profile']
