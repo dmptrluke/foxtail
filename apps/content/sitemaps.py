@@ -20,4 +20,7 @@ class PageSitemap(Sitemap):
     changefreq = "daily"
 
     def items(self):
-        return Page.objects.filter(show_in_menu=True)
+        return Page.objects.all()
+
+
+__all__ = ['StaticSitemap', 'PageSitemap']
