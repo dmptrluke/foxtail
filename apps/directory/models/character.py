@@ -1,8 +1,10 @@
 from django.contrib.auth import get_user_model
 from django.db import models
 
+from .base import BaseModel
 
-class Character(models.Model):
+
+class Character(BaseModel):
     name = models.CharField(max_length=100, help_text="100 characters or fewer.")
     species = models.CharField(max_length=100, help_text="100 characters or fewer.")
     gender = models.CharField(

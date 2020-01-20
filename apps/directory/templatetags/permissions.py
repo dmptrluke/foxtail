@@ -3,6 +3,8 @@ Modified versions of the standard django_rules template tags.
 """
 from django import template
 
+from ..models.base import BaseModel
+
 register = template.Library()
 
 
@@ -16,12 +18,11 @@ def has_perm(context, perm, on=None):
 
 
 @register.simple_tag(takes_context=True)
-def can_view(context, field, on=None):
-    if on is None:
-        on = context.get('object', None)
-        if on is None:
+def can_view(context, field, obj: BaseModel = None):
+    if obj is None:
+        obj = context.get('object', None)
+        if obj is None:
             raise ValueError('No object was passed to can_view, and one could not be automatically determined.')
 
-    model_name = on.__class__.__name__
-    perm = f'view_{model_name}_{field}'.lower()
-    return has_perm(context, perm, on)
+    user = context['request'].user
+    return obj.can_view(field, user)

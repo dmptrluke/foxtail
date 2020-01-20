@@ -6,14 +6,12 @@ from django.urls import reverse
 from django.utils.functional import cached_property
 from django.utils.html import format_html
 
-from rules.contrib.models import RulesModel
-
-from .. import rules
 from ..constants import COUNTRY_CHOICES, REGION_CHOICES
 from ..validators import validate_blacklist, validate_url
+from .base import BaseModel
 
 
-class Profile(RulesModel):
+class Profile(BaseModel):
     user = models.OneToOneField(get_user_model(), primary_key=True, on_delete=models.CASCADE)
     profile_URL = models.CharField(max_length=25, validators=[validate_url, validate_blacklist],
                                    unique=True)
@@ -26,11 +24,6 @@ class Profile(RulesModel):
 
     country = models.CharField(max_length=20, blank=True, choices=COUNTRY_CHOICES)
     region = models.SmallIntegerField(blank=True, null=True, choices=REGION_CHOICES)
-
-    class Meta:
-        rules_permissions = {
-            'change': rules.is_owner_or_editor,
-        }
 
     def __str__(self):
         return f"{self.profile_URL}"
