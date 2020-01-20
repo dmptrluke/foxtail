@@ -1,4 +1,3 @@
-from django.contrib.postgres.fields import JSONField
 from django.db.models import Model
 
 from rules.contrib.models import RulesModelBase, RulesModelMixin
@@ -10,8 +9,6 @@ class BaseModel(RulesModelMixin, Model, metaclass=RulesModelBase):
     """
     Implements shared custom logic used by directory models.
     """
-    privacy_rules = JSONField(default=dict)
-
     class Meta:
         abstract = True
 
