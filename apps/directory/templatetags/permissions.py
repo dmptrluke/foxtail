@@ -16,8 +16,12 @@ def has_perm(context, perm, on=None):
 
 
 @register.simple_tag(takes_context=True)
-def can_view(context, field, on):
+def can_view(context, field, on=None):
+    if on is None:
+        on = context.get('object', None)
+        if on is None:
+            raise ValueError('No object was passed to can_view, and one could not be automatically determined.')
+
     model_name = on.__class__.__name__
     perm = f'view_{model_name}_{field}'.lower()
-    print('checking', perm)
     return has_perm(context, perm, on)
