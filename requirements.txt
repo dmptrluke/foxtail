@@ -39,5 +39,5 @@ pymdown-extensions==6.2.1
 requests==2.22.0
 rules==2.2
 rq==1.2.0
-sentry-sdk==0.14.0
+sentry-sdk==0.14.1
 the_big_username_blacklist==1.5.4
