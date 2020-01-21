@@ -1,3 +1,12 @@
+from django.db.models import IntegerChoices
+
+
+class PrivacyChoices(IntegerChoices):
+    PUBLIC = 0, 'Everyone'
+    SIGNED_IN = 5, 'Signed-in Users'
+    NOBODY = 10, 'Only Me'
+
+
 COUNTRY_CHOICES = (
     ('Common', (
         ("NZ", "New Zealand"),

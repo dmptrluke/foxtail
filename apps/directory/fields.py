@@ -1,10 +1,6 @@
-from django.db.models import IntegerChoices, SmallIntegerField
+from django.db.models import SmallIntegerField
 
-
-class PrivacyChoices(IntegerChoices):
-    NOBODY = 0, 'Only Me'
-    PUBLIC = 5, 'Public'
-    SIGNED_IN = 10, 'Signed-in Users'
+from .constants import PrivacyChoices
 
 
 class PrivacyField(SmallIntegerField):
@@ -16,5 +12,6 @@ class PrivacyField(SmallIntegerField):
     def deconstruct(self):
         name, path, args, kwargs = super().deconstruct()
         del kwargs['choices']
-        del kwargs['default']
+        if kwargs['default'] == PrivacyChoices.PUBLIC:
+            del kwargs['default']
         return name, path, args, kwargs
