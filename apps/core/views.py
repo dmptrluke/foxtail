@@ -8,9 +8,11 @@ from django.shortcuts import redirect, render
 def robots(request):
     if request.method == 'GET':
         if settings.ROBOTS_ALLOWED:
-            text = dedent("""\
+            text = dedent(f"""\
                 User-agent: *
                 Disallow:
+
+                Sitemap: {settings.SITE_URL}/sitemap.xml
             """)
         else:
             text = dedent("""\
