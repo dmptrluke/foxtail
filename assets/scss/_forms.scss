@@ -18,6 +18,11 @@ form {
 	}
 }
 
+// hack to not show extra useless padding with invisible capthca
+#div_id_captcha {
+	margin-bottom: 0;
+}
+
 // hack to make sure captcha errors show up on forms
 #div_id_captcha .invalid-feedback {
 	display: inline;
