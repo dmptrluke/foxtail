@@ -12,9 +12,11 @@ def test_robots_enabled(request_factory: RequestFactory, settings):
 
     response = robots(request)
 
-    expected_response = dedent("""\
+    expected_response = dedent(f"""\
         User-agent: *
         Disallow:
+
+        Sitemap: {settings.SITE_URL}/sitemap.xml
     """)
 
     assert response.content.decode('utf-8') == expected_response
