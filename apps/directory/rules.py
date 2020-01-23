@@ -4,8 +4,11 @@ from rules import predicate
 
 # BASIC ACCESS RULES
 @predicate
-def is_owner(user, obj):
-    return obj.user == user
+def is_owner(user, obj=None):
+    if obj:
+        return obj.user == user
+    else:
+        return False
 
 
 is_editor = rules.is_group_member('editors')
