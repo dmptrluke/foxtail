@@ -1,14 +1,11 @@
 from django.conf import settings
-from django.forms import ModelForm, SelectDateWidget
 
 from allauth.account import forms as auth_forms
 from captcha.fields import ReCaptchaField
 from captcha.widgets import ReCaptchaV2Invisible
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import HTML, Column, Div, Field, Fieldset, Layout, Row, Submit
+from crispy_forms.layout import HTML, Div, Field, Layout, Row, Submit
 from csp_helpers.mixins import CSPFormMixin
-
-from apps.accounts.models import User
 
 
 class SignupForm(CSPFormMixin, auth_forms.SignupForm):
@@ -81,15 +78,7 @@ class ResetPasswordForm(CSPFormMixin, auth_forms.ResetPasswordForm):
         )
 
 
-class UserForm(ModelForm):
-    class Meta:
-        model = User
-        widgets = {
-            'date_of_birth': SelectDateWidget(years=range(1920, 2011),
-                                              empty_label=("Year", "Month", "Day")),
-        }
-        fields = ('username', 'date_of_birth', 'full_name')
-
+class ChangePasswordForm(auth_forms.ChangePasswordForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper()
@@ -97,22 +86,25 @@ class UserForm(ModelForm):
         self.helper.help_text_inline = False
 
         self.helper.layout = Layout(
-            Fieldset(
-                'Basic Details',
-                Row(
-                    Column('username', css_class='col-md-6'),
-                )
-            ),
-            Fieldset(
-                'Personal Information',
-                HTML('<p class="small">This information is optional, and may be requested by'
-                     ' third-party applications. It will not be shared without your explicit consent.</p>'),
-                Row(
-                    Column(Field('full_name', autocomplete='name'), css_class='col-md-6'),
-                ),
-                Row(
-                    Column('date_of_birth', css_class='col-md-6'),
-                )
-            ),
-            Submit('submit', 'Save Changes'),
+            Field('oldpassword', autocomplete='current-password', placeholder=''),
+            Field('password1', autocomplete='new-password', placeholder=''),
+            Field('password2', autocomplete='new-password', placeholder=''),
+            Submit('change', 'Change Password'),
         )
+
+
+class SetPasswordForm(auth_forms.ChangePasswordForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.error_text_inline = False
+        self.helper.help_text_inline = False
+
+        self.helper.layout = Layout(
+            Field('password1', autocomplete='new-password', placeholder=''),
+            Field('password2', autocomplete='new-password', placeholder=''),
+            Submit('set', 'Set Password'),
+        )
+
+
+__all__ = ['ChangePasswordForm', 'ResetPasswordForm', 'LoginForm', 'SignupForm']

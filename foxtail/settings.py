@@ -204,6 +204,7 @@ ACCOUNT_USERNAME_VALIDATORS = 'apps.accounts.validators.username_validators'
 
 ACCOUNT_FORMS = {
     'signup': 'apps.accounts.forms.SignupForm',
+    'change_password': 'apps.accounts.forms.ChangePasswordForm',
     'reset_password': 'apps.accounts.forms.ResetPasswordForm',
     'login': 'apps.accounts.forms.LoginForm'
 }
