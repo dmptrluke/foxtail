@@ -6,21 +6,20 @@ from django.shortcuts import redirect, render
 
 
 def robots(request):
-    if request.method == 'GET':
-        if settings.ROBOTS_ALLOWED:
-            text = dedent(f"""\
-                User-agent: *
-                Disallow:
+    if settings.ROBOTS_ALLOWED:
+        text = dedent(f"""\
+            User-agent: *
+            Disallow:
 
-                Sitemap: {settings.SITE_URL}/sitemap.xml
+            Sitemap: {settings.SITE_URL}/sitemap.xml
+        """)
+    else:
+        text = dedent("""\
+            User-agent: *
+            Disallow: /
             """)
-        else:
-            text = dedent("""\
-                User-agent: *
-                Disallow: /
-                """)
 
-        return HttpResponse(text, content_type="text/plain")
+    return HttpResponse(text, content_type="text/plain")
 
 
 def handler_500(request, *args, **kwargs):
