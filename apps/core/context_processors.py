@@ -11,11 +11,6 @@ def site(request):
         'SITE_URL': settings.SITE_URL
     }
 
-    if request.META.get('HTTP_X_FORWARDED_FOR', None):
-        response['IP_ADDR'] = request.META.get('HTTP_X_FORWARDED_FOR').split(',')[0]
-    else:
-        response['IP_ADDR'] = request.META.get('REMOTE_ADDR', None)
-
     if settings.SENTRY_ENABLED:
         response['SENTRY_DSN'] = settings.SENTRY_DSN
 
