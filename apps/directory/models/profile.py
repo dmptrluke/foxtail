@@ -61,7 +61,7 @@ class Profile(BaseModel):
         return {
             '@type': 'Person',
             '@id': 'https://furry.nz/' + self.get_absolute_url(),
-            'name': self.user
+            'name': self.user.username
         }
 
 
