@@ -10,7 +10,7 @@ class EventAdmin(ModelAdmin):
             'fields': ('title', 'tags', 'description', 'url')
         }),
         ('Location', {
-            'fields': ('location',),
+            'fields': ('location', 'address'),
         }),
         ('Time and Date', {
             'fields': ('start', 'start_time', 'end', 'end_time'),

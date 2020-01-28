@@ -1,7 +1,11 @@
 from datetime import datetime, timedelta
 
+from django.conf import settings
 from django.db import models
 from django.urls import reverse
+from django.utils.functional import cached_property
+from django.utils.html import strip_tags
+from django.utils.text import Truncator
 from django.utils.timezone import now
 
 from markdownfield.models import MarkdownField, RenderedMarkdownField
@@ -20,7 +24,9 @@ class Event(models.Model):
     description = MarkdownField(rendered_field='description_rendered', validator=VALIDATOR_CLASSY)
     description_rendered = RenderedMarkdownField()
     url = models.URLField(blank=True)
+
     location = models.CharField(max_length=200)
+    address = models.TextField(blank=True)
 
     start = models.DateField()
     start_time = models.TimeField(null=True, blank=True, help_text="Time is optional.")
@@ -51,3 +57,38 @@ class Event(models.Model):
             end = datetime.combine(self.start, self.end_time) if self.end_time else (self.start + timedelta(days=1))
 
         return end < now()
+
+    @cached_property
+    def structured_data(self):
+        url = settings.SITE_URL + self.get_absolute_url()
+        data = {
+            '@type': 'Event',
+            'name': self.title,
+            'description': self.description or Truncator(strip_tags(self.description_rendered)).chars(200),
+            'startDate': self.start.strftime('%Y-%m-%d'),
+            'url': url,
+            'mainEntityOfPage': {
+                '@type': 'WebPage',
+                '@id': url
+            },
+        }
+
+        if self.end:
+            data['endDate'] = self.end.strftime('%Y-%m-%d')
+
+        if self.location:
+            data['location'] = {
+                '@type': 'Place',
+                'name': self.location,
+                'address': self.address or self.location,
+            }
+
+        if self.image:
+            data['image'] = {
+                '@type': 'ImageObject',
+                'url': settings.SITE_URL + self.image.url,
+                'height': self.image.height,
+                'width': self.image.width
+            }
+
+        return data

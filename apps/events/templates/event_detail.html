@@ -1,11 +1,15 @@
 {% extends "base.html" %}
-{% load icon %}
+{% load icon cache jsonld opengraph meta %}
 
 {% block extra_head %}
     <link rel="canonical" href="{{ SITE_URL }}{{ event.get_absolute_url }}"/>
+    <meta name="twitter:card" content="summary_large_image"/>
+    {% json_ld_for event %}
+    {% og_for event %}
+    {% meta_for event %}
 {% endblock %}
 
-{% block title %}Event Details{% endblock %}
+{% block title %}{{ event.title }}{% endblock %}
 
 {% block content %}
     <div class="text-white bg-dark">
