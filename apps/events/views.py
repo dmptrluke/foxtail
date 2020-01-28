@@ -19,6 +19,11 @@ class EventListYear(YearMixin, ListView):
     template_name = 'event_list.html'
     context_object_name = 'event_list'
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['year'] = str(self.get_year())
+        return context
+
     def get_queryset(self):
         try:
             date = datetime.strptime(str(self.get_year()), self.get_year_format())

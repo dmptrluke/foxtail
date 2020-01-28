@@ -2,6 +2,23 @@
 
 {% block title %}New Zealand Furry News{% endblock %}
 
+{% block extra_head %}
+    <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+                {
+                    "@type": "ListItem",
+                    "position": 1,
+                    "name": "News",
+                    "item": "{{ SITE_URL }}{% url 'blog:list' %}"
+                }
+            ]
+        }
+    </script>
+{% endblock %}
+
 {% block content %}
     <div class="row">
         <div class="col-lg-8">

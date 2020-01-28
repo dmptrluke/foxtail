@@ -3,6 +3,46 @@
 
 {% block title %}Upcoming Furry Events{% endblock %}
 
+{% block extra_head %}
+    {% if year %}
+        <script type="application/ld+json">
+            {
+                "@context": "https://schema.org",
+                "@type": "BreadcrumbList",
+                "itemListElement": [
+                    {
+                        "@type": "ListItem",
+                        "position": 1,
+                        "name": "Events",
+                        "item": "{{ SITE_URL }}{% url 'events:list' %}"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 2,
+                        "name": "{{ year }}",
+                        "item": "{{ SITE_URL }}{% url 'events:list_year' year=year %}"
+                    }
+                ]
+            }
+        </script>
+    {% else %}
+        <script type="application/ld+json">
+            {
+                "@context": "https://schema.org",
+                "@type": "BreadcrumbList",
+                "itemListElement": [
+                    {
+                        "@type": "ListItem",
+                        "position": 1,
+                        "name": "Events",
+                        "item": "{{ SITE_URL }}{% url 'events:list' %}"
+                    }
+                ]
+            }
+        </script>
+    {% endif %}
+{% endblock %}
+
 {% block content %}
     <div class="row narrow-gutters" data-colcade="columns: .grid-col, items: .card">
         <div class="grid-col col-md-6 col-lg-4"></div>
