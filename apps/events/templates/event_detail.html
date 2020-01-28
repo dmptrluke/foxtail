@@ -7,6 +7,33 @@
     {% json_ld_for event %}
     {% og_for event %}
     {% meta_for event %}
+    <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+                {
+                    "@type": "ListItem",
+                    "position": 1,
+                    "name": "Events",
+                    "item": "{{ SITE_URL }}{% url 'events:list' %}"
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 2,
+                    "name": "{{ event.start.year }}",
+                    "item": "{{ SITE_URL }}{% url 'events:list_year' year=event.start.year %}"
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 3,
+                    "name": "{{ event.title }}",
+                    "item": "{{ SITE_URL }}{{ event.get_absolute_url }}"
+                }
+            ]
+        }
+    </script>
+
 {% endblock %}
 
 {% block title %}{{ event.title }}{% endblock %}
@@ -30,15 +57,15 @@
             {% if event.end or event.end_time %}
                 <h6 class="mb-0">Ends</h6>
                 {% spaceless %}
-                {% if event.end %}
-                    {% if event.end == event.start %}
-                        <p>Same day, at {{ event.end_time | time:"P" }}</p>
+                    {% if event.end %}
+                        {% if event.end == event.start %}
+                            <p>Same day, at {{ event.end_time | time:"P" }}</p>
+                        {% else %}
+                            <p>{{ event.end | date:"F jS, Y" }}{{ event.end_time | time:", \a\t P" }}</p>
+                        {% endif %}
                     {% else %}
-                        <p>{{ event.end | date:"F jS, Y" }}{{ event.end_time | time:", \a\t P" }}</p>
+                        <p>Same day, at {{ event.end_time | time:"P" }}</p>
                     {% endif %}
-                {% else %}
-                    <p>Same day, at {{ event.end_time | time:"P" }}</p>
-                {% endif %}
                 {% endspaceless %}
             {% endif %}
 

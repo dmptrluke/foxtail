@@ -7,6 +7,26 @@
     {% json_ld_for post %}
     {% og_for post %}
     {% meta_for post %}
+        <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+                {
+                    "@type": "ListItem",
+                    "position": 1,
+                    "name": "News",
+                    "item": "{{ SITE_URL }}{% url 'blog:list' %}"
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 2,
+                    "name": "{{ post.title }}",
+                    "item": "{{ SITE_URL }}{{ post.get_absolute_url }}"
+                }
+            ]
+        }
+    </script>
 {% endblock %}
 
 {% block title %}{{ post.title }} – News{% endblock %}
