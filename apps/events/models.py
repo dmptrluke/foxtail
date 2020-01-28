@@ -86,7 +86,7 @@ class Event(models.Model):
         if self.image:
             data['image'] = {
                 '@type': 'ImageObject',
-                'url': settings.SITE_URL + self.image.url,
+                'url': self.image.url,
                 'height': self.image.height,
                 'width': self.image.width
             }
