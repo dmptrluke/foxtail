@@ -30,7 +30,7 @@
     <link rel="icon" type="image/png" sizes="16x16" href="{% static "favicon-16x16.png" %}">
 
     <title>
-        {% block title_full %}{% block title %}{% endblock title %} – {{ request.site.name }}{% endblock title_full %}
+        {% block title_full %}{% block title %}{% endblock title %} | {{ request.site.name }}{% endblock title_full %}
     </title>
 
     <script type="text/javascript" src="{% static "js/polyfill.min.js" %}" nonce="{{ request.csp_nonce }}"></script>
