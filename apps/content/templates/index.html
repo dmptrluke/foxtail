@@ -34,7 +34,8 @@
     <div class="row mb-2" id="blog-cards">
         {% cache 1800 index_blog %}
             {% for post in post_list %}
-                <div class="col-lg-4">
+                {# only show two items on smaller devices #}
+                <div class="col-lg-4 col-md-6 {% if forloop.counter == 3 %}d-none d-lg-block{% endif %}">
                     <article class="card mb-4 index-card">
 
                         {% if post.image %}
@@ -70,7 +71,8 @@
     <div class="row mb-2" id="event-cards">
         {% cache 1800 index_events %}
             {% for event in event_list %}
-                <div class="col-lg-4">
+                {# only show two items on smaller devices #}
+                <div class="col-lg-4 col-md-6 {% if forloop.counter == 3 %}d-none d-lg-block{% endif %}">
                     <article class="card mb-4 bg-light index-card">
                         <div class="card-body">
                             <h5 class="card-title">{{ event.title }}</h5>
