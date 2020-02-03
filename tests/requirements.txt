@@ -2,7 +2,7 @@ atoma==0.0.17
 coverage==5.0.3
 django-debug-toolbar==2.2
 nplusone==1.0.0
-pytest==5.3.4
+pytest==5.3.5
 pytest-cov==2.8.1
 pytest-django==3.8.0
 pytest-factoryboy==2.0.3
