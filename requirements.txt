@@ -3,7 +3,7 @@ argon2-cffi==19.2.0
 bleach==3.1.0
 django==3.0.3
 django-allauth==0.41.0
-django-allauth-2fa-foxtail==0.8rc0 # TEMPORARY
+django-allauth-2fa==0.8
 django-anymail[mailgun]==7.0.0
 django-braces==1.14.0
 django-cjswidget==0.4.1
