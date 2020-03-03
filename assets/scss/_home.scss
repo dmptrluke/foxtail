@@ -5,6 +5,11 @@
 		@include text-truncate;
 	}
 
+	.card-subtitle {
+		margin-top: -$card-spacer-y / 1.5;
+		margin-bottom: $card-spacer-y;
+	}
+
 	.card-text {
 		display: -webkit-box;
 		-webkit-line-clamp: 2;
