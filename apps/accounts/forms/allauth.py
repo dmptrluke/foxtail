@@ -4,7 +4,7 @@ from allauth.account import forms as auth_forms
 from captcha.fields import ReCaptchaField
 from captcha.widgets import ReCaptchaV2Invisible
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import HTML, Div, Field, Layout, Row, Submit
+from crispy_forms.layout import HTML, Column, Field, Layout, Row, Submit
 from csp_helpers.mixins import CSPFormMixin
 
 
@@ -30,12 +30,12 @@ class SignupForm(CSPFormMixin, auth_forms.SignupForm):
 
         self.helper.layout = Layout(
             Row(
-                Div(Field('username', autocomplete='username', placeholder=''), css_class='col-md-6'),
-                Div(Field('email', autocomplete='email', placeholder=''), css_class='col-md-6')
+                Column(Field('username', autocomplete='username', placeholder='')),
+                Column(Field('email', autocomplete='email', placeholder=''))
             ),
             Row(
-                Div(Field('password1', autocomplete='new-password', placeholder=''), css_class='col-md-6'),
-                Div(Field('password2', autocomplete='new-password', placeholder=''), css_class='col-md-6')
+                Column(Field('password1', autocomplete='new-password', placeholder='')),
+                Column(Field('password2', autocomplete='new-password', placeholder=''))
             ),
             'captcha' if settings.RECAPTCHA_ENABLED else HTML('<!-- security! -->')
 

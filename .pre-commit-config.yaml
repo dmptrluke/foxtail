@@ -5,7 +5,7 @@ default_language_version:
     python: python3.8
 repos:
 -   repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v2.4.0
+    rev: v2.5.0
     hooks:
     -   id: trailing-whitespace
     -   id: end-of-file-fixer
@@ -30,7 +30,7 @@ repos:
       exclude: 'tests'
 
 -   repo: https://github.com/asottile/seed-isort-config
-    rev: v1.9.4
+    rev: v2.1.0
     hooks:
     -   id: seed-isort-config
 
@@ -41,7 +41,6 @@ repos:
         additional_dependencies: [toml]
 
 -   repo: https://github.com/asottile/pyupgrade
-    rev: v1.25.3
+    rev: v2.1.0
     hooks:
     -   id: pyupgrade
-        args: [--py37-plus]
