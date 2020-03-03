@@ -1,5 +1,5 @@
-let age_checkbox;
-let birthday_checkbox;
+let age_privacy;
+let birthday_privacy;
 
 let dob_warning;
 
@@ -21,15 +21,16 @@ function on_load() {
 
     // DOB warning
     dob_warning = document.getElementById('dob_warning');
-    age_checkbox = document.getElementById('id_show_age');
-    birthday_checkbox = document.getElementById('id_show_birthday');
+    age_privacy = document.getElementById('id_age_privacy');
+    birthday_privacy = document.getElementById('id_birthday_privacy');
 
-    age_checkbox.addEventListener('change', checkboxes);
-    birthday_checkbox.addEventListener('change', checkboxes);
+    age_privacy.addEventListener('change', checkboxes);
+    birthday_privacy.addEventListener('change', checkboxes);
+    checkboxes()
 }
 
 function checkboxes() {
-    if (age_checkbox.checked && birthday_checkbox.checked)  {
+    if (age_privacy.value !== "10"  && birthday_privacy.value !== "10")  {
         dob_warning.classList.remove('d-none');
     } else {
         dob_warning.classList.add('d-none');

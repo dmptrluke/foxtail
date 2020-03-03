@@ -6,7 +6,7 @@ from django.urls import reverse
 from django.utils.functional import cached_property
 from django.utils.html import format_html
 
-from ..constants import COUNTRY_CHOICES, REGION_CHOICES
+from ..constants import COUNTRY_CHOICES, REGION_CHOICES, PrivacyChoices
 from ..fields import PrivacyField
 from ..validators import validate_blacklist, validate_url
 from .base import BaseModel
@@ -19,6 +19,9 @@ class Profile(BaseModel):
 
     description = models.TextField(blank=True)
     description_privacy = PrivacyField()
+
+    age_privacy = PrivacyField()
+    birthday_privacy = PrivacyField(default=PrivacyChoices.NOBODY)
 
     country = models.CharField(max_length=20, blank=True, choices=COUNTRY_CHOICES)
     region = models.SmallIntegerField(blank=True, null=True, choices=REGION_CHOICES)
