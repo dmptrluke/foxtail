@@ -18,7 +18,7 @@
         "@babel/preset-env": "^7.8.7",
         "@gfx/zopfli": "^1.0.14",
         "autoprefixer": "^9.7.4",
-        "babel-loader": "^8.0.6",
+        "babel-loader": "^8.1.0",
         "bootstrap": "^4.4.1",
         "clean-webpack-plugin": "^3.0.0",
         "colcade": "^0.2.0",
