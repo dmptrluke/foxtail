@@ -9,9 +9,11 @@
         {{ hidden_inputs }}
 
         <div class="d-flex flex-column flex-md-row mb-4">
-            <div class="mr-3 mb-3 mb-md-0">
-                <img class="rounded" src="{{ client.logo.url }}" alt="{{ client.name }}">
-            </div>
+            {% if client.logo %}
+                <div class="mr-3 mb-3 mb-md-0">
+                    <img class="rounded" src="{{ client.logo.url }}" alt="{{ client.name }}">
+                </div>
+            {% endif %}
 
             <div class="flex-grow-1 border-left pl-3">
                 <h5>{{ client.name }}<small> — <a
