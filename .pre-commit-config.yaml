@@ -18,7 +18,7 @@ repos:
         args: ['--maxkb=1024']
 
 -   repo: https://gitlab.com/pycqa/flake8
-    rev: 3.7.9
+    rev: 3.8.1
     hooks:
     -   id: flake8
         additional_dependencies: [flake8-django, flake8-builtins]
@@ -30,7 +30,7 @@ repos:
       exclude: 'tests'
 
 -   repo: https://github.com/asottile/seed-isort-config
-    rev: v2.1.0
+    rev: v2.1.1
     hooks:
     -   id: seed-isort-config
 
@@ -41,6 +41,6 @@ repos:
         additional_dependencies: [toml]
 
 -   repo: https://github.com/asottile/pyupgrade
-    rev: v2.1.0
+    rev: v2.4.1
     hooks:
     -   id: pyupgrade

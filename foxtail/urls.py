@@ -1,3 +1,5 @@
+# flake8: noqa
+
 """foxtail URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:

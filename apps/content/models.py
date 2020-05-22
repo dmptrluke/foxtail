@@ -27,5 +27,9 @@ class Page(models.Model):
     def get_absolute_url(self):
         return reverse('content:page', kwargs={'slug': self.slug})
 
+    class Meta:
+        verbose_name = "page"
+        verbose_name_plural = "pages"
+
 
 __all__ = ['Page']
