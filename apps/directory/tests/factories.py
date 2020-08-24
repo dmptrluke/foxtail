@@ -1,4 +1,5 @@
-from factory import DjangoModelFactory, Faker, SubFactory
+from factory import Faker, SubFactory
+from factory.django import DjangoModelFactory
 
 from apps.accounts.tests.factories import UserFactory
 
