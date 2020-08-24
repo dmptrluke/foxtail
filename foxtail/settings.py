@@ -41,6 +41,7 @@ SITE_ID = 1
 
 ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=[])
 INTERNAL_IPS = env.list('INTERNAL_IPS', default=[])
+USE_X_FORWARDED_HOST = env.bool('USE_X_FORWARDED_HOST', default=False)
 
 ROOT_URLCONF = 'foxtail.urls'
 
