@@ -3,7 +3,7 @@ coverage==5.2.1
 django-debug-toolbar==2.2
 nplusone==1.0.0
 pytest==5.4.3
-pytest-cov==2.10.0
+pytest-cov==2.10.1
 pytest-django==3.9.0
 pytest-factoryboy==2.0.3
 pytest-xdist==2.0.0
