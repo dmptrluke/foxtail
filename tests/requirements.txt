@@ -6,6 +6,6 @@ pytest==6.0.1
 pytest-cov==2.10.1
 pytest-django==3.9.0
 pytest-factoryboy==2.0.3
-pytest-xdist==2.0.0
+pytest-xdist==2.1.0
 selenium==3.141.0
 tox==3.19.0
