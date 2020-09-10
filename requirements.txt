@@ -38,6 +38,6 @@ psycopg2-binary==2.8.5;platform_system=="Windows"
 pymdown-extensions==8.0
 requests==2.24.0
 rules==2.2
-rq==1.5.1
+rq==1.5.2
 sentry-sdk==0.17.3
 the_big_username_blacklist==1.5.4
