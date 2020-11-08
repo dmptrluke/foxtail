@@ -13,7 +13,7 @@ jobs:
       SENTRY_PROJECT: ${{ secrets.SENTRY_PROJECT }}
 
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v2
 
       - name: Install Sentry
         run: curl -sL https://sentry.io/get-cli/ | sudo bash
