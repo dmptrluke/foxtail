@@ -425,11 +425,11 @@ SENTRY_ENABLED = env.bool('SENTRY_ENABLED', default=False)
 if SENTRY_ENABLED:
     SENTRY_DSN = env('SENTRY_DSN')
 
+    from urllib.parse import urlparse
+
     import sentry_sdk
     from sentry_sdk.integrations.django import DjangoIntegration
     from sentry_sdk.integrations.redis import RedisIntegration
-
-    from urllib.parse import urlparse
 
     _vars = {
         'dsn': SENTRY_DSN,

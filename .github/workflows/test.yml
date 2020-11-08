@@ -39,7 +39,7 @@ jobs:
     strategy:
       max-parallel: 4
       matrix:
-        python-version: [3.6, 3.7, 3.8]
+        python-version: [3.7, 3.8, 3.9]
 
     services:
       postgres:
@@ -61,7 +61,7 @@ jobs:
         options: --entrypoint redis-server
 
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v2
 
       - name: Install libpq-dev
         run: sudo apt-get -y install libpq-dev
@@ -74,7 +74,7 @@ jobs:
           sudo unzip chromedriver_linux64.zip -d /usr/local/bin
 
       - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v1
+        uses: actions/setup-python@v2
         with:
           python-version: ${{ matrix.python-version }}
 
