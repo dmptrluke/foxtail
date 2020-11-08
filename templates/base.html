@@ -41,7 +41,6 @@
 
     {% render_bundle_csp 'main' 'css' %}
     {% render_bundle_csp 'runtime' 'js' attrs='defer' %}
-    {% render_bundle_csp 'vendor' 'js' attrs='defer' %}
     {% render_bundle_csp 'main' 'js' attrs='defer' %}
 
     <script nonce="{{ request.csp_nonce }}">

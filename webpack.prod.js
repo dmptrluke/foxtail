@@ -1,7 +1,6 @@
-const path = require('path');
-const { merge } = require('webpack-merge');
+const {merge} = require('webpack-merge');
 const CompressionPlugin = require('compression-webpack-plugin');
-const ImageminPlugin = require('imagemin-webpack-plugin').default;
+const ImageMinimizerPlugin = require('image-minimizer-webpack-plugin');
 const zopfli = require('@gfx/zopfli');
 const common = require('./webpack.common.js');
 
@@ -9,9 +8,23 @@ module.exports = merge(common, {
     mode: 'production',
     devtool: 'source-map',
     plugins: [
-        new ImageminPlugin({
-            test: /\.(jpe?g|png|gif|svg)$/i,
-            cacheFolder: path.resolve('./node_modules/.cache/imagemin')
+        new ImageMinimizerPlugin({
+            minimizerOptions: {
+                plugins: [
+                    ['jpegtran', {progressive: true}],
+                    ['optipng', {optimizationLevel: 5}],
+                    [
+                        'svgo',
+                        {
+                            plugins: [
+                                {
+                                    removeViewBox: false,
+                                },
+                            ],
+                        },
+                    ],
+                ],
+            },
         }),
         new CompressionPlugin({
             filename: '[path].gz[query]',

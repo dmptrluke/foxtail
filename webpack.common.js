@@ -11,6 +11,7 @@ module.exports = {
     },
     output: {
         path: path.resolve('./storage/bundles'),
+        publicPath: '/static/bundles/',
         filename: '[name].[contenthash].js'
     },
     context: path.resolve(__dirname, "assets"),
@@ -19,17 +20,8 @@ module.exports = {
     },
     node: false,
     optimization: {
-        moduleIds: 'hashed',
+        moduleIds: 'deterministic',
         runtimeChunk: 'single',
-        splitChunks: {
-            cacheGroups: {
-                vendor: {
-                    test: /[\\/]node_modules[\\/]/,
-                    name: 'vendor',
-                    chunks: 'all'
-                }
-            }
-        }
     },
     resolve: {
         alias: {
@@ -38,10 +30,7 @@ module.exports = {
     },
     plugins: [
         new MiniCssExtractPlugin({
-            // Options similar to the same options in webpackOptions.output
-            // both options are optional
-            filename: '[name].[contenthash].css',
-            sourceMap: true,
+            filename: '[name].[contenthash].css'
         }),
         new CleanWebpackPlugin(),
         new BundleTracker({filename: './storage/webpack-stats.json'}),
@@ -85,11 +74,12 @@ module.exports = {
                     {
                         loader: 'postcss-loader',
                         options: {
-                            plugins: function () {
-                                return [
-                                    require('autoprefixer'),
-                                    require('cssnano')
-                                ];
+                            postcssOptions: {
+                                plugins: [
+                                    [
+                                        'autoprefixer'
+                                    ],
+                                ],
                             },
                             sourceMap: true,
                         },
@@ -97,7 +87,9 @@ module.exports = {
                     {
                         loader: 'sass-loader',
                         options: {
-                            sourceMap: true,
+                            sassOptions: {
+                                sourceMap: true
+                            }
                         },
                     },
                 ],
