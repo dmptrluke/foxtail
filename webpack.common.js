@@ -11,6 +11,7 @@ module.exports = {
     },
     output: {
         path: path.resolve('./storage/bundles'),
+        publicPath: '',
         filename: '[name].[contenthash].js'
     },
     context: path.resolve(__dirname, "assets"),
