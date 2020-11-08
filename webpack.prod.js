@@ -27,7 +27,7 @@ module.exports = merge(common, {
             },
         }),
         new CompressionPlugin({
-            filename: '[path].gz[query]',
+            filename: '[path][base].gz',
             test: /\.(js|css|html|svg)$/,
             compressionOptions: {
                 numiterations: 15,
