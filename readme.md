@@ -1,4 +1,5 @@
 # foxtail [![CircleCI](https://github.com/dmptrluke/foxtail/workflows/Test/badge.svg)](https://github.com/dmptrluke/foxtail/actions)
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fdmptrluke%2Ffoxtail.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Fdmptrluke%2Ffoxtail?ref=badge_shield)
 
 The code behind furry.nz - a  login provider and general community website for the NZ furry community.
 
@@ -112,6 +113,9 @@ file, You can obtain one at http://mozilla.org/MPL/2.0/.
 This Source Code Form is "Incompatible With Secondary Licenses", as
 defined by the Mozilla Public License, v. 2.0.
 ```
+
+
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fdmptrluke%2Ffoxtail.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Fdmptrluke%2Ffoxtail?ref=badge_large)
 
 ## Built With
 
