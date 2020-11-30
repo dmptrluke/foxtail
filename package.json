@@ -23,7 +23,7 @@
         "clean-webpack-plugin": "^3.0.0",
         "colcade": "^0.2.0",
         "compression-webpack-plugin": "^6.1.1",
-        "core-js": "^3.6.5",
+        "core-js": "^3.8.0",
         "css-loader": "^5.0.1",
         "cssnano": "^4.1.10",
         "ekko-lightbox": "^5.3.0",
