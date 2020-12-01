@@ -4,6 +4,7 @@ from django.contrib.auth import get_user_model
 
 from factory import Faker, post_generation
 from factory.django import DjangoModelFactory
+from faker import Faker as StockFaker
 
 
 class UserNoPasswordFactory(DjangoModelFactory):
@@ -21,12 +22,11 @@ class UserNoPasswordFactory(DjangoModelFactory):
 class UserFactory(UserNoPasswordFactory):
     @post_generation
     def password(self, create: bool, extracted: Sequence[Any], **kwargs):
-        password = Faker(
-            "password",
+        password = StockFaker().password(
             length=42,
             special_chars=True,
             digits=True,
             upper_case=True,
             lower_case=True,
-        ).generate()
+        )
         self.set_password(password)
