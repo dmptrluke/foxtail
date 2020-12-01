@@ -28,5 +28,5 @@ class UserFactory(UserNoPasswordFactory):
             digits=True,
             upper_case=True,
             lower_case=True,
-        ).generate(extra_kwargs={})
+        ).generate()
         self.set_password(password)
