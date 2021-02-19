@@ -2,6 +2,7 @@
     "name": "foxtail",
     "version": "1.0.0",
     "description": "",
+    "license": "MPL-2.0-no-copyleft-exception",
     "private": true,
     "author": "",
     "scripts": {
