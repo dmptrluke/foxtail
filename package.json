@@ -16,7 +16,7 @@
     "browserslist": "defaults",
     "dependencies": {
         "@babel/core": "^7.13.1",
-        "@babel/preset-env": "^7.12.17",
+        "@babel/preset-env": "^7.13.5",
         "@gfx/zopfli": "^1.0.15",
         "autoprefixer": "^10.2.4",
         "babel-loader": "^8.2.2",
