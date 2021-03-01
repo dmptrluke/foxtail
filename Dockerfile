@@ -23,6 +23,7 @@ COPY [".", "./"]
 EXPOSE 8000
 ENV PYTHONPATH "${PYTHONPATH}:/app"
 ENV DJANGO_SETTINGS_MODULE=foxtail.settings
+ENV GUNICORN_WORKERS=2
 
 RUN mkdir /app/static
 
