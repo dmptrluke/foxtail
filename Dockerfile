@@ -17,8 +17,7 @@ COPY ["requirements.txt", "./"]
 
 RUN pip install -r requirements.txt
 
-COPY --from=0 /app/assets/dist /app/assets/dist
-COPY --from=0 /app/assets/webpack-stats.json /app/assets/webpack-stats.json
+COPY --from=0 /app/assets/generated /app/assets/generated
 COPY [".", "./"]
 
 EXPOSE 8000

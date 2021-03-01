@@ -29,8 +29,8 @@ jobs:
       - name: Store assets for testing
         uses: actions/upload-artifact@v2
         with:
-          name: dist
-          path: assets/dist
+          name: generated
+          path: assets/generated
           retention-days: 1
 
   test:
@@ -98,8 +98,8 @@ jobs:
       - name: Get assets
         uses: actions/download-artifact@v2
         with:
-          name: dist
-          path: assets/dist
+          name: generated
+          path: assets/generated
 
       - name: Test with pytest
         env:
