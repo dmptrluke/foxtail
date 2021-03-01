@@ -24,7 +24,7 @@ jobs:
         run: npm ci
 
       - name: Generate assets
-        run: npm run-script build-dev
+        run: npm run-script build-development
 
       - name: Store assets for testing
         uses: actions/upload-artifact@v2
