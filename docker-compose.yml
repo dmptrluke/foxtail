@@ -22,11 +22,12 @@ services:
     image: dmptrluke/foxtail:latest
     build:
       context: .
+      args:
+        build_mode: "development"
     ports:
       - "8000:8000"
     env_file: ./foxtail.env
     environment:
-      MODE: "development"
       DEBUG: "True"
       DATABASE_URL: "postgres://foxtail:foxtail@db/foxtail"
       CACHE_URL: "redis://redis/1"
