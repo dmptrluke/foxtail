@@ -23,7 +23,7 @@ services:
     build:
       context: .
       args:
-        build_mode: "development"
+        BUILD_MODE: "development"
     ports:
       - "8000:8000"
     env_file: ./foxtail.env
