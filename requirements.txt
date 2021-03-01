@@ -11,6 +11,7 @@ django-cleanup==5.1.0
 django-crispy-forms==1.11.1
 django-csp==3.7
 django-csp-helpers>=0.6.2
+django-debug-toolbar==3.2
 django-environ==0.4.5
 django-mail-templated-simple==3.2
 django-markdownfield>=0.8.0
@@ -30,9 +31,11 @@ factory-boy==3.2.0
 faker==6.5.0
 foxtail-blog>=0.22.0
 foxtail-contact>=0.5.1
+whitenoise==5.2.0
 gitpython==3.1.13
 gunicorn==20.0.4
 markdown==3.3.4
+nplusone==1.0.0
 psycopg2==2.8.6;platform_system!="Windows"
 psycopg2-binary==2.8.6;platform_system=="Windows"
 pymdown-extensions==8.1.1

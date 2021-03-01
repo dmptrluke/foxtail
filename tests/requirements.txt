@@ -1,7 +1,5 @@
 atoma==0.0.17
 coverage==5.4
-django-debug-toolbar==3.2
-nplusone==1.0.0
 pytest==6.2.2
 pytest-cov==2.11.1
 pytest-django==4.1.0

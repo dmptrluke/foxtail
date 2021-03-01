@@ -104,6 +104,7 @@ if DEBUG:
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'csp.middleware.CSPMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -320,7 +321,7 @@ MEDIA_URL = '/media/'
 
 # noinspection PyUnresolvedReferences
 STATICFILES_DIRS = [
-    ("bundles", str(BASE_DIR / 'storage/bundles')),
+    ("bundles", str(BASE_DIR / 'assets/dist')),
     str(BASE_DIR / 'assets/static')
 ]
 
@@ -339,8 +340,8 @@ if AZURE_STATIC or AZURE_MEDIA:
 if AZURE_STATIC:
     STATICFILES_STORAGE = 'apps.core.storages.StaticAzureStorage'
 else:
-    STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.StaticFilesStorage'
-    STATIC_ROOT = str(BASE_DIR / 'storage/static')
+    STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
+    STATIC_ROOT = str(BASE_DIR / 'static')
 
 if AZURE_MEDIA:
     DEFAULT_FILE_STORAGE = 'apps.core.storages.MediaAzureStorage'
@@ -348,15 +349,12 @@ else:
     DEFAULT_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'
     MEDIA_ROOT = str(BASE_DIR / 'storage/media')
 
-
-# if using the debug server, set the correct MIME type for .js files
-if DEBUG:
-    import mimetypes
-    mimetypes.add_type("text/javascript", ".js", True)
+if TESTING:
+    WHITENOISE_AUTOREFRESH = True
 
 # Webpack Loader
 # <https://github.com/owais/django-webpack-loader>
-WEBPACK_STATS_PATH = env('WEBPACK_STATS_PATH', default='storage/webpack-stats.json')
+WEBPACK_STATS_PATH = env('WEBPACK_STATS_PATH', default='assets/webpack-stats.json')
 
 WEBPACK_LOADER = {
     'DEFAULT': {

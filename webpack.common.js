@@ -10,7 +10,7 @@ module.exports = {
         profile_edit: ['./js/profile_edit.js']
     },
     output: {
-        path: path.resolve('./storage/bundles'),
+        path: path.resolve('./assets/dist'),
         publicPath: '',
         filename: '[name].[contenthash].js'
     },
@@ -33,7 +33,7 @@ module.exports = {
             filename: '[name].[contenthash].css'
         }),
         new CleanWebpackPlugin(),
-        new BundleTracker({filename: './storage/webpack-stats.json'}),
+        new BundleTracker({filename: './assets/webpack-stats.json'}),
         new webpack.ProvidePlugin({
             $: 'jquery',
             jQuery: 'jquery'
