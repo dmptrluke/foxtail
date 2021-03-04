@@ -123,7 +123,6 @@ defined by the Mozilla Public License, v. 2.0.
 
 ## Thanks To
 
-* [JetBrains](https://www.jetbrains.com/?from=furry.nz) - For providing software licenses for PyCharm Professional
-and other software through their open source program.
+* [JetBrains](https://www.jetbrains.com/?from=furry.nz) - For providing software licenses for PyCharm Professional through their open source program.
 * [BrowserStack](https://www.browserstack.com/open-source) - For providing free desktop and mobile web testing
 through their open source program.
