@@ -4,6 +4,10 @@ form {
 	}
 }
 
+.form-group {
+	margin-bottom: ($spacer * 2);
+}
+
 .form-inline {
 	.form-group {
 		margin-right: ($spacer * .5);
