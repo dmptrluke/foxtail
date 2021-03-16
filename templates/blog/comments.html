@@ -5,7 +5,7 @@
         <h4 class="mb-3">Comments</h4>
         {% for comment in comment_list %}
             <div class="d-flex flex-row comment mb-4" id="comment-{{ comment.pk }}">
-                <div class="mr-3"><img
+                <div class="me-3"><img
                         src="{{ comment.author|avatar_url:64 }}"
                         alt="..."></div>
                 <div class="flex-grow-1">

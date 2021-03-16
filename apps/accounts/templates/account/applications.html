@@ -10,11 +10,11 @@
 
     {% for consent in consent_list %}
         <div class="d-flex flex-column flex-md-row mb-4">
-            <div class="mr-3 mb-3 mb-md-0">
+            <div class="me-3 mb-3 mb-md-0">
                 <img class="rounded" src="{{ consent.client.logo.url }}" alt="{{ consent.client.name }}">
             </div>
 
-            <div class="flex-grow-1 border-left pl-3">
+            <div class="flex-grow-1 border-start ps-3">
                 <h5>{{ consent.client.name }}<small> — <a
                         href="{{ consent.client.website_url }}" rel="noopener noreferrer"
                         target="_blank">{{ consent.client.website_url }}</a></small></h5>
