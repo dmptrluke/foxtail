@@ -29,9 +29,9 @@ $primary: #006b99; // #0088c2; preferred, workaround
 // add a neat bit of blueness to the dark
 $dark: #2c3840;
 
-// make the links a tad darker to increase contrast
-$link-color: darken($primary, 5%);
-$link-hover-color: darken($link-color, 10%);
+// link underlines only when hovering
+$link-decoration: none;
+$link-hover-decoration: underline;
 
 $navbar-padding-y: $spacer * .75 !default;
 $navbar-dark-color: rgba($white, .65) !default;

@@ -22,13 +22,13 @@
                                    class="{% if emailaddress.primary %}primary_email{% endif %} custom-control-label">
                                 {{ emailaddress.email }}
                                 {% if emailaddress.verified %}
-                                    <span class="badge badge-success">Verified</span>
+                                    <span class="badge bg-success">Verified</span>
                                 {% else %}
-                                    <span class="badge badge-secondary" data-bs-toggle="tooltip" data-bs-placement="top"
+                                    <span class="badge bg-secondary" data-bs-toggle="tooltip" data-bs-placement="top"
                                           title="An email address can not be set as primary until it is verified.">Unverified</span>
                                 {% endif %}
                                 {% if emailaddress.primary %}
-                                    <span class="badge badge-primary" data-bs-toggle="tooltip" data-bs-placement="top"
+                                    <span class="badge bg-primary" data-bs-toggle="tooltip" data-bs-placement="top"
                                           title="All communications will be sent to this address.">Primary</span>
                                 {% endif %}
                             </label>
