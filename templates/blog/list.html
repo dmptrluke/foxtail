@@ -35,7 +35,7 @@
             {% if posts %}
                 {% for post in page_obj %}
                     <article class="blog-post {% if not forloop.last %}border-bottom pb-5{% endif %} mb-5">
-                        <a class="text-reset" href="{{ post.get_absolute_url }}">
+                        <a class="text-reset text-decoration-none" href="{{ post.get_absolute_url }}">
                             {% if post.image %}
                                 <img class="img-fluid mb-3"
                                      srcset="{{ post.image.crop.800x350 }} 1x, {{ post.image.crop.1200x525 }} 2x"

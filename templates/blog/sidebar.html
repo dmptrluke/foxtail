@@ -2,14 +2,11 @@
 <div class="sidebar">
     <section id="search">
         <form action="{% url 'blog:list' %}">
-            <label class="sr-only" for="search-field">Search</label>
+            <label class="visually-hidden" for="search-field">Search</label>
             <div class="input-group">
                 <input type="search" name="q" id="search-field" class="form-control" placeholder="Search...">
-                <div class="input-group-append">
-                    <button type="submit" class="btn btn-outline-secondary" id="search-button"
-                            aria-label="Submit Search Query">
-                        {% icon "search" %}</button>
-                </div>
+                <button type="submit" class="btn btn-outline-secondary" id="search-button"
+                            aria-label="Submit Search Query">{% icon "search" %}</button>
             </div>
         </form>
     </section>

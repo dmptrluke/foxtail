@@ -1,12 +1,21 @@
-import 'core-js/stable';
-import 'regenerator-runtime/runtime';
+import Dropdown from 'bootstrap/js/dist/dropdown';
+import Collapse from 'bootstrap/js/dist/collapse';
+import Alert from 'bootstrap/js/dist/alert';
+import Popover from 'bootstrap/js/dist/popover';
+import Tooltip from 'bootstrap/js/dist/tooltip';
 
-import 'bootstrap';
 import 'colcade';
 
 function on_load() {
-    $('[data-toggle="tooltip"]').tooltip();
-    $('[data-toggle="popover"]').popover()
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+      return new Tooltip(tooltipTriggerEl)
+    })
+
+    var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'))
+    var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
+      return new Popover(popoverTriggerEl)
+    })
 
     $('#id_text').keyup(function () {
         let length = $(this).val().length;

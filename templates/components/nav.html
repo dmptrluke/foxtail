@@ -1,11 +1,11 @@
-<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
-        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-</button>
 
-<div class="collapse navbar-collapse" id="navbarNav">
+<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+<div class="collapse navbar-collapse" id="navbar">
     {# main navigation #}
-    <div class="navbar-nav mr-auto">
+    <div class="navbar-nav me-auto mb-2 mb-lg-0">
         <a class="nav-item nav-link{% if request.resolver_match.app_name == "blog" %} active{% endif %}"
            href="{% url 'blog:list' %}">News</a>
         <a class="nav-item nav-link{% if request.resolver_match.app_name == "events" %} active{% endif %}"
@@ -20,7 +20,7 @@
         {% if user.is_authenticated %}
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle{% if "account_" in request.resolver_match.url_name %} active{% endif %}"
-                   href="#" id="account-dropdown" role="button" data-toggle="dropdown"
+                   href="#" id="account-dropdown" role="button" data-bs-toggle="dropdown"
                    aria-haspopup="true" aria-expanded="false">
                     {{ user.username }}
                 </a>

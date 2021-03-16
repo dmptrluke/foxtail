@@ -89,6 +89,7 @@ INSTALLED_APPS = [
     'taggit',
     'webpack_loader',
     'crispy_forms',
+    'crispy_bootstrap5',
     'oidc_provider',
     'captcha',
     'versatileimagefield',
@@ -513,7 +514,8 @@ EMAIL_BACKEND = 'apps.email.engine.AsyncEmailBackend'
 
 # Crispy Forms
 # <https://django-crispy-forms.readthedocs.io/en/latest/>
-CRISPY_TEMPLATE_PACK = 'bootstrap4'
+CRISPY_ALLOWED_TEMPLATE_PACKS = 'bootstrap5'
+CRISPY_TEMPLATE_PACK = 'bootstrap5'
 
 # VersatileImageField
 # <https://django-versatileimagefield.readthedocs.io/en/latest/installation.html#versatileimagefield-settings>
