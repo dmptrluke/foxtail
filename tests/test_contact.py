@@ -35,6 +35,8 @@ def test_unauthenticated_user_contact(driver, live_server, settings):
     message_field = driver.find_element_by_name('message')
     message_field.send_keys('\n\n'.join(message))
 
+    driver.implicitly_wait(4)
+
     driver.find_element_by_id("contact_submit").click()
 
     driver.implicitly_wait(1)
