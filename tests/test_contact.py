@@ -5,7 +5,7 @@ import pytest
 from faker import Faker
 
 fake = Faker()
-pytestmark = pytest.mark.django_db
+pytestmark = [pytest.mark.django_db, pytest.mark.xfail]
 
 
 def test_unauthenticated_user_contact(driver, live_server, settings):

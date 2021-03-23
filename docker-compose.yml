@@ -7,6 +7,8 @@ services:
     environment:
       POSTGRES_USER: foxtail
       POSTGRES_PASSWORD: foxtail
+    ports:
+      - "5432:5432"
     volumes:
       - db:/var/lib/postgresql/data
 
@@ -17,6 +19,8 @@ services:
       POSTGRES_PASSWORD: foxtail
     volumes:
       - redis:/data
+    ports:
+      - "6379:6379"
 
   foxtail:
     image: dmptrluke/foxtail:latest
