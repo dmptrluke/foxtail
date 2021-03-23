@@ -9,7 +9,7 @@ django-anymail[mailgun]==8.2
 django-braces==1.14.0
 django-cjswidget==0.4.1
 django-cleanup==5.1.0
-django-crispy-forms==1.11.1
+django-crispy-forms==1.11.2
 django-csp==3.7
 django-csp-helpers>=0.6.2
 django-debug-toolbar==3.2
