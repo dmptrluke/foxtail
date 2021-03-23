@@ -1,6 +1,9 @@
 node_modules
 .env
 .github
+assets/generated
 storage
+static
+assets/*.json
 *.env
 docs

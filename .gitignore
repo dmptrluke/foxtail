@@ -22,7 +22,7 @@ node_modules
 webpack-stats.json
 
 # produced assets
-assets/dist/
+assets/generated/
 storage/
 static/
 assets/*.json
