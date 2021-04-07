@@ -35,7 +35,7 @@
         "imagemin-optipng": "^8.0.0",
         "imagemin-svgo": "^9.0.0",
         "jquery": "^3.6.0",
-        "mini-css-extract-plugin": "^1.4.0",
+        "mini-css-extract-plugin": "^1.4.1",
         "node-sass": "^5.0.0",
         "postcss": "^8.2.9",
         "postcss-loader": "^5.2.0",
