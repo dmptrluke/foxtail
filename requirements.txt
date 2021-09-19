@@ -33,7 +33,7 @@ faker==8.1.2
 foxtail-blog>=0.22.0
 foxtail-contact>=0.5.1
 whitenoise==5.2.0
-gitpython==3.1.14
+gitpython==3.1.24
 gunicorn==20.1.0
 markdown==3.3.4
 nplusone==1.0.0
