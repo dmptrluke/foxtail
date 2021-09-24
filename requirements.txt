@@ -39,7 +39,7 @@ markdown==3.3.4
 nplusone==1.0.0
 psycopg2==2.8.6;platform_system!="Windows"
 psycopg2-binary==2.8.6;platform_system=="Windows"
-pymdown-extensions==8.1.1
+pymdown-extensions==8.2
 requests==2.25.1
 rules==3.0
 rq==1.10.0
