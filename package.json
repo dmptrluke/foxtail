@@ -33,7 +33,7 @@
         "image-minimizer-webpack-plugin": "^2.2.0",
         "imagemin-jpegtran": "^7.0.0",
         "imagemin-optipng": "^8.0.0",
-        "imagemin-svgo": "^9.0.0",
+        "imagemin-svgo": "^10.0.0",
         "jquery": "^3.6.0",
         "mini-css-extract-plugin": "^1.5.0",
         "node-sass": "^5.0.0",
