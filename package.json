@@ -27,7 +27,7 @@
         "compression-webpack-plugin": "^7.1.2",
         "core-js": "^3.11.0",
         "css-loader": "^5.2.4",
-        "cssnano": "^5.0.1",
+        "cssnano": "^5.0.2",
         "ekko-lightbox": "^5.3.0",
         "file-loader": "^6.2.0",
         "image-minimizer-webpack-plugin": "^2.2.0",
