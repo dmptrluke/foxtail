@@ -40,7 +40,7 @@ nplusone==1.0.0
 psycopg2==2.8.6;platform_system!="Windows"
 psycopg2-binary==2.8.6;platform_system=="Windows"
 pymdown-extensions==8.2
-requests==2.25.1
+requests==2.26.0
 rules==3.0
 rq==1.10.0
 sentry-sdk==1.1.0
