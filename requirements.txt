@@ -29,7 +29,7 @@ django-taggit==1.4.0
 django-versatileimagefield==2.0
 django-webpack-loader==0.7.0
 factory-boy==3.2.0
-faker==8.1.2
+faker==9.3.1
 foxtail-blog>=0.22.0
 foxtail-contact>=0.5.1
 whitenoise==5.2.0
