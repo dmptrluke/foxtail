@@ -1,5 +1,5 @@
 atoma==0.0.17
-coverage==5.5
+coverage==6.3.2
 pytest==6.2.5
 pytest-cov==2.12.1
 pytest-django==4.2.0
