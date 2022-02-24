@@ -5,4 +5,4 @@ pytest-cov==2.12.1
 pytest-django==4.2.0
 pytest-factoryboy==2.1.0
 pytest-xdist==2.2.1
-selenium==3.141.0
+selenium==4.1.2
