@@ -2,7 +2,7 @@ python-magic-bin==0.4.14;platform_system=="Windows"
 argon2-cffi==20.1.0
 bleach==4.1.0
 crispy-bootstrap5==0.3.1
-django==3.2.7
+django==4.0.5
 django-allauth==0.45.0
 django-allauth-2fa==0.8
 django-anymail[mailgun]==8.2
