@@ -5,7 +5,7 @@ crispy-bootstrap5==0.3.1
 django==3.2.15
 django-allauth==0.45.0
 django-allauth-2fa==0.8
-django-anymail[mailgun]==8.2
+django-anymail[mailgun]==8.6
 django-braces==1.14.0
 django-cjswidget==0.4.1
 django-cleanup==5.2.0
