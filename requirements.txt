@@ -6,7 +6,7 @@ django==3.2.18
 django-allauth==0.45.0
 django-allauth-2fa==0.8
 django-anymail[mailgun]==8.2
-django-braces==1.14.0
+django-braces==1.15.0
 django-cjswidget==0.4.1
 django-cleanup==5.2.0
 django-crispy-forms==1.14.0
