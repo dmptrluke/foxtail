@@ -28,7 +28,7 @@ django-structured-data==0.5.1
 django-taggit==3.0.0
 django-versatileimagefield==2.2
 django-webpack-loader==1.8.1
-factory-boy==3.2.0
+factory-boy==3.2.1
 faker==17.0.0
 foxtail-blog>=0.22.0
 foxtail-contact>=0.5.1
