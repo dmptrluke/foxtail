@@ -40,7 +40,7 @@
         "postcss": "^8.4.21",
         "postcss-loader": "^7.0.2",
         "precss": "^4.0.0",
-        "sass-loader": "^12.1.0",
+        "sass-loader": "^13.2.1",
         "webpack": "^5.75.0",
         "webpack-bundle-tracker": "^1.8.1",
         "webpack-cli": "^5.0.1",
