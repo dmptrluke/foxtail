@@ -35,7 +35,7 @@ foxtail-contact>=0.5.1
 whitenoise==6.3.0
 gitpython==3.1.31
 gunicorn==20.1.0
-markdown==3.3.4
+markdown==3.4.3
 nplusone==1.0.0
 psycopg2==2.9.3;platform_system!="Windows"
 psycopg2-binary==2.9.5;platform_system=="Windows"
