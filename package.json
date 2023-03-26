@@ -49,6 +49,6 @@
     "devDependencies": {
         "stylelint": "^13.13.1",
         "stylelint-config-recommended-scss": "^4.2.0",
-        "stylelint-scss": "^3.21.0"
+        "stylelint-scss": "^4.6.0"
     }
 }
