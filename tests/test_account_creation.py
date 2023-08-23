@@ -1,4 +1,5 @@
 from django.urls import reverse
+from selenium.webdriver.common.by import By
 
 import pytest
 
@@ -20,7 +21,7 @@ def test_account_creation(driver, live_server, settings):
     driver.get(live_server.url)
 
     # user sees the create account button, and clicks it
-    create_account_btn = driver.find_element_by_link_text("Create Account")
+    create_account_btn = driver.find_element(By.LINK_TEXT, "Create Account")
     assert create_account_btn
 
     create_account_btn.click()
@@ -32,24 +33,24 @@ def test_account_creation(driver, live_server, settings):
     assert 'Create Account' in driver.title
 
     # the user enters their details
-    username_field = driver.find_element_by_name('username')
+    username_field = driver.find_element(By.NAME, 'username')
     username_field.send_keys(proto_user.username)
 
-    email_field = driver.find_element_by_name('email')
+    email_field = driver.find_element(By.NAME, 'email')
     email_field.send_keys(proto_user.email)
 
-    password1_field = driver.find_element_by_name('password1')
+    password1_field = driver.find_element(By.NAME, 'password1')
     password1_field.send_keys(proto_user._password)
 
-    password2_field = driver.find_element_by_name('password2')
+    password2_field = driver.find_element(By.NAME, 'password2')
     password2_field.send_keys(proto_user._password)
 
     # and hits submit, creating their account
-    driver.find_element_by_id("create_account_submit").click()
+    driver.find_element(By.ID, "create_account_submit").click()
 
     # we should now be back at the homepage
     assert driver.current_url == live_server.url + reverse('content:index')
 
     # the user sees a green alert
-    alert = driver.find_element_by_class_name('alert-success')
+    alert = driver.find_element(By.CLASS_NAME, 'alert-success')
     assert f"Successfully signed in as {proto_user.username}" in alert.text

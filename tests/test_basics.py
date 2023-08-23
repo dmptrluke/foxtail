@@ -1,4 +1,5 @@
 from datetime import datetime
+from selenium.webdriver.common.by import By
 
 import pytest
 
@@ -27,11 +28,11 @@ def test_unauthenticated_user_browsing(driver, live_server, settings, post: Post
     assert 'example.com' in driver.title
 
     # user sees the sign in button
-    sign_in_button = driver.find_element_by_link_text("Sign In")
+    sign_in_button = driver.find_element(By.LINK_TEXT, "Sign In")
     assert sign_in_button
 
     # user sees the blog posts on the homepage, and reads the content
-    blog_cards = driver.find_element_by_id('blog-cards').find_elements_by_class_name('index-card')
+    blog_cards = driver.find_element(By.ID, 'blog-cards').find_element(By.CLASS_NAME, 'index-card')
 
     # there are two blog postss
     assert len(blog_cards) == 2
@@ -47,7 +48,7 @@ def test_unauthenticated_user_browsing(driver, live_server, settings, post: Post
     assert second_post.text[0:15] in card_two.text
 
     # the user sees the "read more" button on the first post, and is interested
-    card_one_button = card_one.find_element_by_link_text("Read more")
+    card_one_button = card_one.find_element(By.LINK_TEXT, "Read more")
     assert card_one_button
 
     # the user clicks it
@@ -60,7 +61,7 @@ def test_unauthenticated_user_browsing(driver, live_server, settings, post: Post
     assert 'example.com' in driver.title
 
     # the user reads the blog post
-    blog_body = driver.find_element_by_class_name('blog-post')
+    blog_body = driver.find_element(By.CLASS_NAME, 'blog-post')
 
     # the user reads the title, then the article, noticing when the post was published
     assert post.title in blog_body.text

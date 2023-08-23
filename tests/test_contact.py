@@ -1,5 +1,6 @@
 from django.core import mail
 from django.urls import reverse
+from selenium.webdriver.common.by import By
 
 import pytest
 from faker import Faker
@@ -26,18 +27,18 @@ def test_unauthenticated_user_contact(driver, live_server, settings):
     message = fake.paragraphs()
 
     # the user fills out the form
-    name_field = driver.find_element_by_name('name')
+    name_field = driver.find_element(By.NAME, 'name')
     name_field.send_keys(name)
 
-    email_field = driver.find_element_by_name('email')
+    email_field = driver.find_element(By.NAME, 'email')
     email_field.send_keys(email)
 
-    message_field = driver.find_element_by_name('message')
+    message_field = driver.find_element(By.NAME, 'message')
     message_field.send_keys('\n\n'.join(message))
 
     driver.implicitly_wait(4)
 
-    driver.find_element_by_id("contact_submit").click()
+    driver.find_element(By.ID, "contact_submit").click()
 
     driver.implicitly_wait(1)
 
@@ -45,7 +46,7 @@ def test_unauthenticated_user_contact(driver, live_server, settings):
     assert driver.current_url == live_server.url + reverse('contact:contact')
 
     # the user sees a green alert
-    alert = driver.find_element_by_class_name('alert-success')
+    alert = driver.find_element(By.CLASS_NAME, 'alert-success')
     assert "Your message has been sent" in alert.text
 
     # we have an email sent!
