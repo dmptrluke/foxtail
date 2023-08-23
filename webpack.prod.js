@@ -9,21 +9,37 @@ module.exports = merge(common, {
     devtool: 'source-map',
     plugins: [
         new ImageMinimizerPlugin({
-            minimizerOptions: {
-                plugins: [
-                    ['jpegtran', {progressive: true}],
-                    ['optipng', {optimizationLevel: 5}],
-                    [
-                        'svgo',
-                        {
-                            plugins: [
+            minimizer: {
+                implementation: ImageMinimizerPlugin.imageminMinify,
+                options: {
+
+                    plugins: [
+                        ['jpegtran', {progressive: true}],
+                        ['optipng', {optimizationLevel: 5}],
+                        [
+                            "svgo",
+                            {
+                              plugins: [
                                 {
-                                    removeViewBox: false,
+                                  name: "preset-default",
+                                  params: {
+                                    overrides: {
+                                      removeViewBox: false,
+                                      addAttributesToSVGElement: {
+                                        params: {
+                                          attributes: [
+                                            { xmlns: "http://www.w3.org/2000/svg" },
+                                          ],
+                                        },
+                                      },
+                                    },
+                                  },
                                 },
-                            ],
-                        },
+                              ],
+                            },
+                        ],
                     ],
-                ],
+                },
             },
         }),
         new CompressionPlugin({

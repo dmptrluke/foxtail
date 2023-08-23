@@ -33,7 +33,10 @@ module.exports = {
             filename: '[name].[contenthash].css'
         }),
         new CleanWebpackPlugin(),
-        new BundleTracker({filename: './assets/generated/webpack-stats.json'}),
+        new BundleTracker({
+                path: path.join(__dirname, '/assets/generated'),
+                filename: 'webpack-stats.json',
+            }),
         new webpack.ProvidePlugin({
             $: 'jquery',
             jQuery: 'jquery'
