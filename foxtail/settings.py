@@ -408,7 +408,7 @@ CSP_CONNECT_SRC = ["'self'", 'https://sentry.io']
 
 CSP_BASE_URI = ["'none'"]
 CSP_FRAME_ANCESTORS = ["'none'"]
-CSP_FORM_ACTION = ["'self'"] + env.list('CSP_FORM_ACTION', default=[])
+#CSP_FORM_ACTION = ["'self'"] + env.list('CSP_FORM_ACTION', default=[])
 
 CSP_EXCLUDE_URL_PREFIXES = ('/admin',)
 
