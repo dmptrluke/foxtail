@@ -18,18 +18,20 @@ ENV PYTHONPATH="${PYTHONPATH}:/app"
 ENV DJANGO_SETTINGS_MODULE=foxtail.settings
 ENV GUNICORN_WORKERS=2
 
+# add a user/group for our app to run under
+RUN groupadd -r abc -g 5678 && useradd --no-log-init -u 5678 -r -g abc abc
+
 WORKDIR /app
 
 COPY ["requirements.txt", "./"]
-RUN pip install -r requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
 
 COPY --from=0 /app/assets/generated /app/assets/generated
 COPY [".", "./"]
 
-# Creates a non-root user with an explicit UID and adds permission to access the /app folder
-# For more info, please refer to https://aka.ms/vscode-docker-python-configure-containers
-RUN adduser -u 5678 --disabled-password --gecos "" appuser && chown -R appuser /app
-USER appuser
+# Ensures file ownership is correct
+RUN chown -R appuser /app
+USER abc
 
 EXPOSE 8000
 CMD django-admin collectstatic --noinput;gunicorn --bind 0.0.0.0:8000 foxtail.wsgi:application
