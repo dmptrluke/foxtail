@@ -323,7 +323,7 @@ MEDIA_URL = '/media/'
 
 # noinspection PyUnresolvedReferences
 STATICFILES_DIRS = [
-    ("bundles", str(BASE_DIR / 'assets/generated/bundles')),
+    ("webpack_bundles", str(BASE_DIR / 'assets/generated/webpack_bundles')),
     str(BASE_DIR / 'assets/static')
 ]
 

@@ -10,7 +10,7 @@ module.exports = {
         profile_edit: ['./js/profile_edit.js']
     },
     output: {
-        path: path.resolve('./assets/generated/bundles'),
+        path: path.resolve('./assets/generated/webpack_bundles'),
         publicPath: '',
         filename: '[name].[contenthash].js'
     },
