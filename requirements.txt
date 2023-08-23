@@ -1,6 +1,6 @@
 python-magic-bin==0.4.14;platform_system=="Windows"
 argon2-cffi==21.3.0
-bleach==4.1.0
+bleach==6.0.0
 crispy-bootstrap5==0.7
 django==3.2.20
 django-allauth==0.45.0
