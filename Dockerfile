@@ -30,7 +30,7 @@ COPY --from=0 /app/assets/generated /app/assets/generated
 COPY [".", "./"]
 
 # Ensures file ownership is correct
-RUN chown -R appuser /app
+RUN chown -R abc /app
 USER abc
 
 EXPOSE 8000

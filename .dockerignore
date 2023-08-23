@@ -1,6 +1,11 @@
 node_modules
 .env
 .github
+.editorconfig
+.gitignore
+.isort.cfg
+.pre-commit-config.yaml
+docker-compose.yaml
 assets/generated
 storage
 static
