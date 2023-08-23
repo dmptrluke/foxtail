@@ -39,7 +39,7 @@
 {% block title %}{{ event.title }}{% endblock %}
 
 {% block content %}
-    <div class="text-white bg-dark">
+    <div class="card text-white bg-dark">
         {% if event.image %}
             <img class="card-img-top" src="{{ event.image.crop.1150x300 }}" alt="">
         {% endif %}
