@@ -12,28 +12,9 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v3
     - name: Install Python
-      uses: actions/setup-python@v2
+      uses: actions/setup-python@v4
       with:
         python-version: '3.11'
     - name: Preform pre-commit analysis
       uses: pre-commit/action@v2.0.0
       
-  analyse:
-    name: CodeQL
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
-        
-      # Initializes the CodeQL tools for scanning.
-      - name: Initialize CodeQL
-        uses: github/codeql-action/init@v1
-        with:
-          languages: javascript, python
-
-      - name: Autobuild
-        uses: github/codeql-action/autobuild@v1
-
-      - name: Perform CodeQL Analysis
-        uses: github/codeql-action/analyze@v1
