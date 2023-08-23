@@ -1,7 +1,7 @@
 from datetime import datetime
-from selenium.webdriver.common.by import By
 
 import pytest
+from selenium.webdriver.common.by import By
 
 from foxtail_blog.models import Post
 

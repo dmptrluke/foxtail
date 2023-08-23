@@ -1,9 +1,9 @@
 from django.core import mail
 from django.urls import reverse
-from selenium.webdriver.common.by import By
 
 import pytest
 from faker import Faker
+from selenium.webdriver.common.by import By
 
 fake = Faker()
 pytestmark = [pytest.mark.django_db, pytest.mark.xfail]

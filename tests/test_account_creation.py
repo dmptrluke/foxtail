@@ -1,7 +1,7 @@
 from django.urls import reverse
-from selenium.webdriver.common.by import By
 
 import pytest
+from selenium.webdriver.common.by import By
 
 from apps.accounts.tests.factories import UserFactory
 
