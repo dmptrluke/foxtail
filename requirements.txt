@@ -19,7 +19,7 @@ django-markdownfield>=0.10.0
 django-oidc-provider-foxtail==0.7.6
 django-otp==1.2.2
 django-published>=0.7.0
-django-recaptcha==2.0.6
+django-recaptcha==3.0.0
 django-redis-cache==3.0.1
 django-rq==2.4.1
 django-slugger==1.1.2
