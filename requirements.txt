@@ -20,7 +20,7 @@ django-oidc-provider-foxtail==0.7.6
 django-otp==1.2.2
 django-published>=0.7.0
 django-recaptcha==3.0.0
-django-redis-cache==3.0.1
+django-redis==5.3.0
 django-rq==2.8.1
 django-slugger==1.1.2
 django-storages[azure]==1.13.2
