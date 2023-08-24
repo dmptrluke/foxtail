@@ -32,7 +32,7 @@ factory-boy==3.3.0
 faker==17.0.0
 foxtail-blog>=0.22.0
 foxtail-contact>=0.5.1
-whitenoise==6.3.0
+whitenoise==6.5.0
 gitpython==3.1.32
 gunicorn==21.2.0
 markdown==3.4.4
