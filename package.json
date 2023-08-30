@@ -16,7 +16,7 @@
     "browserslist": "defaults",
     "dependencies": {
         "@babel/core": "^7.22.11",
-        "@babel/preset-env": "^7.22.10",
+        "@babel/preset-env": "^7.22.14",
         "@gfx/zopfli": "^1.0.15",
         "@popperjs/core": "^2.11.8",
         "autoprefixer": "^10.4.15",
