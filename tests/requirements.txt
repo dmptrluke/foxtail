@@ -1,6 +1,6 @@
 atoma==0.0.17
 coverage==7.3.0
-pytest==7.4.0
+pytest==7.4.1
 pytest-cov==4.1.0
 pytest-django==4.5.2
 pytest-factoryboy==2.5.1
