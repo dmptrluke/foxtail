@@ -17,7 +17,7 @@ django-environ==0.11.2
 django-mail-templated-simple==3.2
 django-markdownfield==0.11.0
 django-oidc-provider-foxtail==0.7.6
-django-otp==1.2.2
+django-otp==1.2.3
 django-published>=0.8.0
 django-recaptcha==3.0.0
 django-redis==5.3.0
