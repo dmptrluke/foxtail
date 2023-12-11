@@ -4,15 +4,14 @@
 {% block title %}Sign In{% endblock %}
 
 {% block content %}
-<h1>Sign In</h1>
 {% if process == "connect" %}
-<h1>{% blocktrans with provider.name as provider %}Connect {{ provider }}{% endblocktrans %}</h1>
+<h1>Connect {{ provider }}</h1>
 
-<p>{% blocktrans with provider.name as provider %}You are about to connect a new third party account from {{ provider }}.{% endblocktrans %}</p>
+<p></p>You are about to connect a new third party account from {{ provider }}.</p>
 {% else %}
-<h1>{% blocktrans with provider.name as provider %}Sign In Via {{ provider }}{% endblocktrans %}</h1>
+<h1>Sign In Via {{ provider }}</h1>
 
-<p>{% blocktrans with provider.name as provider %}You are about to sign in using a third party account from {{ provider }}.{% endblocktrans %}</p>
+<p>You are about to sign in using a third party account from {{ provider }}.</p>
 {% endif %}
 
 <form method="post">
