@@ -1,8 +1,8 @@
 atoma==0.0.17
-coverage==7.3.0
-pytest==7.4.0
+coverage==7.3.1
+pytest==7.4.2
 pytest-cov==4.1.0
 pytest-django==4.5.2
 pytest-factoryboy==2.5.1
 pytest-xdist==3.3.1
-selenium==4.11.2
+selenium==4.12.0
