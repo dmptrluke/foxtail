@@ -107,4 +107,4 @@ class SetPasswordForm(auth_forms.ChangePasswordForm):
         )
 
 
-__all__ = ['ChangePasswordForm', 'ResetPasswordForm', 'LoginForm', 'SignupForm']
+__all__ = ['ChangePasswordForm', 'ResetPasswordForm', 'SetPasswordForm', 'LoginForm', 'SignupForm']
