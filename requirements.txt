@@ -26,7 +26,7 @@ django-slugger==1.1.2
 django-storages[azure]==1.14
 django-structured-data==0.6.0
 django-taggit==4.0.0
-django-versatileimagefield==3.0
+django-versatileimagefield==3.1
 django-webpack-loader==2.0.1
 factory-boy==3.3.0
 faker==19.6.2
