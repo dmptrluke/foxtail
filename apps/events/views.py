@@ -9,7 +9,7 @@ from .models import Event
 
 class EventList(ListView):
     queryset = Event.objects.all().prefetch_related('tags')
-    ordering = 'start'
+    ordering = '-start'
     template_name = 'event_list.html'
     context_object_name = 'event_list'
 
