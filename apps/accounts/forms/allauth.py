@@ -1,11 +1,11 @@
 from django.conf import settings
 
 from allauth.account import forms as auth_forms
-from captcha.fields import ReCaptchaField
-from captcha.widgets import ReCaptchaV2Invisible
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import HTML, Column, Field, Layout, Row, Submit
 from csp_helpers.mixins import CSPFormMixin
+from django_recaptcha.fields import ReCaptchaField
+from django_recaptcha.widgets import ReCaptchaV2Invisible
 
 
 class SignupForm(CSPFormMixin, auth_forms.SignupForm):

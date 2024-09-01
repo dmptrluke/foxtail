@@ -92,7 +92,7 @@ INSTALLED_APPS = [
     'crispy_forms',
     'crispy_bootstrap5',
     'oidc_provider',
-    'captcha',
+    'django_recaptcha',
     'versatileimagefield',
     'django_rq',
     'django_cleanup.apps.CleanupConfig',
@@ -282,7 +282,7 @@ TEST_PUBLIC_KEY = "6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"
 TEST_PRIVATE_KEY = "6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe"
 
 if DEBUG or TESTING:
-    SILENCED_SYSTEM_CHECKS = ['captcha.recaptcha_test_key_error']
+    SILENCED_SYSTEM_CHECKS = ['django_recaptcha.recaptcha_test_key_error']
 
 RECAPTCHA_ENABLED = env.bool('RECAPTCHA_ENABLED', default=True)
 RECAPTCHA_INVISIBLE = env.bool('RECAPTCHA_INVISIBLE', default=True)
