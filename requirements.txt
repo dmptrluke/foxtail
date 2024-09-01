@@ -2,7 +2,7 @@ python-magic-bin==0.4.14;platform_system=="Windows"
 argon2-cffi==23.1.0
 bleach==6.1.0
 crispy-bootstrap5==2024.2
-django==4.2.9
+django==4.2.15
 django-allauth==64.2.0
 django-allauth-2fa==0.11.1
 django-anymail[mailgun]==11.1
@@ -29,11 +29,11 @@ django-taggit==6.0.0
 django-versatileimagefield==3.1
 django-webpack-loader==3.1.1
 factory-boy==3.3.0
-faker==19.6.2
+faker==28.1.0
 foxtail-blog>=0.24.2
 foxtail-contact>=0.6.0
-whitenoise==6.5.0
-gitpython==3.1.37
+whitenoise==6.7.0
+gitpython==3.1.43
 pytz==2024.1
 gunicorn==23.0.0
 markdown==3.7
@@ -44,7 +44,7 @@ pymdown-extensions==10.9
 requests==2.32.3
 requests-oauthlib==2.0.0
 PyJWT==2.9.0
-rules==3.3
+rules==3.4
 rq==1.16.2
-sentry-sdk==1.31.0
+sentry-sdk==2.13.0
 the_big_username_blacklist==1.5.4
