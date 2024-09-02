@@ -42,7 +42,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('openid/', include('oidc_provider.urls', namespace='oidc_provider')),
     path('accounts/', include('apps.accounts.urls')),
-    path('accounts/', include('allauth_2fa.urls')),
     path('accounts/', include('allauth.urls')),
     path('directory/', include('apps.directory.urls')),
     path('events/', include('apps.events.urls')),

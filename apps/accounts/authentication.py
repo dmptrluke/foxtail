@@ -1,12 +1,12 @@
 from datetime import datetime
 
+from allauth.account.adapter import DefaultAccountAdapter
 from allauth.account.utils import user_email, user_field, user_username
 from allauth.socialaccount.adapter import DefaultSocialAccountAdapter
 from allauth.utils import valid_email_or_none
-from allauth_2fa.adapter import OTPAdapter
 
 
-class AccountAdapter(OTPAdapter):
+class AccountAdapter(DefaultAccountAdapter):
     def populate_username(self, request, user):
         """
         overrides the base populate_username to not make use of first_name and last_name

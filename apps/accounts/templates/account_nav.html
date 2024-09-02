@@ -8,7 +8,7 @@
     <a class="nav-item nav-link{% if request.resolver_match.url_name == "account_email" %} active{% endif %}" href="{% url 'account_email' %}">
         Email
     </a>
-    <a class="nav-item nav-link{% if 'two-factor' in request.resolver_match.url_name %} active{% endif %}" href="{% url 'two-factor-setup' %}">
+    <a class="nav-item nav-link{% if 'two-factor' in request.resolver_match.url_name %} active{% endif %}" href="">
         2FA
     </a>
     <a class="nav-item nav-link{% if 'account_application' in request.resolver_match.url_name %} active{% endif %}" href="{% url 'account_application_list' %}">

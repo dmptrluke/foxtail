@@ -76,9 +76,9 @@ INSTALLED_APPS = [
     'foxtail_contact',
     'allauth',
     'allauth.account',
+    'allauth.mfa',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google',
-    'allauth.socialaccount.providers.twitter',
     'allauth.socialaccount.providers.discord',
     'allauth.socialaccount.providers.github',
     'anymail',
@@ -86,7 +86,6 @@ INSTALLED_APPS = [
     'django_otp.plugins.otp_totp',
     'django_otp.plugins.otp_static',
     'mail_templated_simple',
-    'allauth_2fa',
     'taggit',
     'webpack_loader',
     'crispy_forms',
@@ -115,7 +114,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'allauth.account.middleware.AccountMiddleware',
     'django_otp.middleware.OTPMiddleware',
-    'allauth_2fa.middleware.AllauthTwoFactorMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.contrib.sites.middleware.CurrentSiteMiddleware',
     'oidc_provider.middleware.SessionManagementMiddleware',
@@ -236,8 +234,15 @@ SOCIALACCOUNT_PROVIDERS = {
     }
 }
 
-# allauth 2FA
-ALLAUTH_2FA_ALWAYS_REVEAL_BACKUP_TOKENS = False
+# allauth-mfa
+
+MFA_FORMS = {
+    'authenticate': 'allauth.mfa.base.forms.AuthenticateForm',
+    'reauthenticate': 'allauth.mfa.base.forms.AuthenticateForm',
+    'activate_totp': 'allauth.mfa.totp.forms.ActivateTOTPForm',
+    'deactivate_totp': 'allauth.mfa.totp.forms.DeactivateTOTPForm',
+    'generate_recovery_codes': 'allauth.mfa.recovery_codes.forms.GenerateRecoveryCodesForm',
+}
 
 # OpenID Connect Provider
 # <https://django-oidc-provider.readthedocs.io/en/latest/>
