@@ -45,7 +45,7 @@ pymdown-extensions==10.9
 requests==2.32.3
 requests-oauthlib==2.0.0
 PyJWT==2.9.0
-rules==3.4
+rules==3.5
 rq==1.16.2
 sentry-sdk==2.13.0
 the_big_username_blacklist==1.5.4
