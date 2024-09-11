@@ -35,7 +35,7 @@ foxtail-blog>=0.24.2
 foxtail-contact>=0.6.0
 whitenoise==6.7.0
 gitpython==3.1.43
-pytz==2024.1
+pytz==2024.2
 gunicorn==23.0.0
 markdown==3.7
 nplusone==1.0.0
