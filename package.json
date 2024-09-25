@@ -43,7 +43,7 @@
         "postcss-loader": "^8.1.1",
         "precss": "^4.0.0",
         "sass-loader": "^16.0.1",
-        "webpack": "^5.94.0",
+        "webpack": "^5.95.0",
         "webpack-bundle-tracker": "^3.1.1",
         "webpack-cli": "^5.1.4",
         "webpack-merge": "^6.0.1"
