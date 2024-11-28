@@ -49,7 +49,7 @@
         "webpack-merge": "^6.0.1"
     },
     "devDependencies": {
-        "stylelint": "^16.9.0",
+        "stylelint": "^16.11.0",
         "stylelint-config-recommended-scss": "^14.1.0",
         "stylelint-scss": "^6.5.1"
     }
