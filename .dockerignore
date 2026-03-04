@@ -6,8 +6,11 @@ node_modules
 .gitignore
 .isort.cfg
 .pre-commit-config.yaml
-docker-compose.yaml
-assets/generated
+compose.yaml
+compose.override.yaml
+compose.test.yaml
+compose.prod.yaml
+build
 storage
 static
 assets/*.json

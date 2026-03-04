@@ -4,17 +4,19 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const {CleanWebpackPlugin} = require('clean-webpack-plugin');
 const BundleTracker = require('webpack-bundle-tracker');
 
+const ROOT_DIR = path.resolve(__dirname, '..');
+
 module.exports = {
     entry: {
         main: ['./js/main.js', './scss/index.scss'],
         profile_edit: ['./js/profile_edit.js']
     },
     output: {
-        path: path.resolve('./assets/generated/webpack_bundles'),
+        path: path.resolve(ROOT_DIR, 'build/webpack_bundles'),
         publicPath: '',
         filename: '[name].[contenthash].js'
     },
-    context: path.resolve(__dirname, "assets"),
+    context: path.resolve(ROOT_DIR, "assets"),
     performance: {
         hints: false
     },
@@ -25,7 +27,7 @@ module.exports = {
     },
     resolve: {
         alias: {
-            '~': path.resolve(__dirname, 'node_modules')
+            '~': path.resolve(ROOT_DIR, 'node_modules')
         },
     },
     plugins: [
@@ -34,7 +36,7 @@ module.exports = {
         }),
         new CleanWebpackPlugin(),
         new BundleTracker({
-                path: path.join(__dirname, '/assets/generated'),
+                path: path.join(ROOT_DIR, '/build'),
                 filename: 'webpack-stats.json',
             }),
         new webpack.ProvidePlugin({

@@ -25,7 +25,7 @@ services:
     image: dmptrluke/foxtail:latest
     build:
       context: .
-      target: app
+      target: dev
       args:
         BUILD_MODE: development
     ports:
@@ -34,31 +34,9 @@ services:
     environment:
       DATABASE_URL: "postgres://foxtail:foxtail@db/foxtail"
       CACHE_URL: "redis://redis/1"
+      CONTACT_EMAILS: "admin@example.com"
     volumes:
       - storage:/app/storage
-    depends_on:
-      db:
-        condition: service_healthy
-      redis:
-        condition: service_started
-
-  test:
-    build:
-      context: .
-      target: test
-      args:
-        BUILD_MODE: development
-    environment:
-      TESTING: "true"
-      SECRET_KEY: "test-secret-key"
-      SITE_URL: "http://localhost:8000"
-      EMAIL_ASYNC: "false"
-      RQ_ASYNC: "false"
-      DIRECTORY_ENABLED: "true"
-      CONTACT_EMAILS: "test@example.com"
-      RECAPTCHA_ENABLED: "false"
-      DATABASE_URL: "postgres://foxtail:foxtail@db/foxtail"
-      CACHE_URL: "redis://redis/1"
     depends_on:
       db:
         condition: service_healthy

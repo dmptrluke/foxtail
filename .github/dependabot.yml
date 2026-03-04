@@ -8,9 +8,16 @@ updates:
     timezone: Pacific/Auckland
   open-pull-requests-limit: 10
 - package-ecosystem: pip
-  directory: "/"
+  directory: "/requirements"
   schedule:
     interval: daily
+    time: '09:00'
+    timezone: Pacific/Auckland
+  open-pull-requests-limit: 10
+- package-ecosystem: github-actions
+  directory: "/"
+  schedule:
+    interval: weekly
     time: '09:00'
     timezone: Pacific/Auckland
   open-pull-requests-limit: 10

@@ -1,0 +1,33 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Dev Server",
+            "type": "debugpy",
+            "request": "attach",
+            "connect": {
+                "host": "localhost",
+                "port": 5678
+            },
+            "pathMappings": [
+                {
+                    "localRoot": "${workspaceFolder}",
+                    "remoteRoot": "/app"
+                }
+            ],
+            "preLaunchTask": "Docker: Dev Server"
+        },
+        {
+            "name": "Test (apps)",
+            "type": "node-terminal",
+            "request": "launch",
+            "command": "docker compose -f compose.yaml -f compose.test.yaml run --rm test pytest src/apps/ -v"
+        },
+        {
+            "name": "Test (all)",
+            "type": "node-terminal",
+            "request": "launch",
+            "command": "docker compose -f compose.yaml -f compose.test.yaml run --rm test pytest src/apps/ src/tests/ -v"
+        }
+    ]
+}

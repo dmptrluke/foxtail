@@ -1,0 +1,76 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Docker: Build",
+            "type": "shell",
+            "command": "docker compose build",
+            "presentation": {
+                "reveal": "always",
+                "panel": "shared"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Docker: Stop All",
+            "type": "shell",
+            "command": "docker compose down",
+            "presentation": {
+                "reveal": "silent",
+                "panel": "shared"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Docker: Run Migrations",
+            "type": "shell",
+            "command": "docker compose run --rm foxtail django-admin migrate",
+            "presentation": {
+                "reveal": "always",
+                "panel": "shared"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Docker: Open Shell",
+            "type": "shell",
+            "command": "docker compose run --rm foxtail bash",
+            "presentation": {
+                "reveal": "always",
+                "panel": "dedicated"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Docker: Dev Server",
+            "type": "shell",
+            "command": "docker compose up foxtail",
+            "isBackground": true,
+            "presentation": {
+                "reveal": "always",
+                "panel": "dedicated"
+            },
+            "problemMatcher": {
+                "owner": "docker-debugpy",
+                "pattern": {
+                    "regexp": "^$"
+                },
+                "background": {
+                    "activeOnStart": true,
+                    "beginsPattern": "Attaching to",
+                    "endsPattern": "Listening for debugger connections"
+                }
+            }
+        },
+        {
+            "label": "Docker: Test Build",
+            "type": "shell",
+            "command": "docker compose -f compose.yaml -f compose.test.yaml build test",
+            "presentation": {
+                "reveal": "always",
+                "panel": "shared"
+            },
+            "problemMatcher": []
+        }
+    ]
+}

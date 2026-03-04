@@ -1,0 +1,47 @@
+# Production compose file — standalone, copy and customize for your deployment.
+#
+# Usage:
+#   docker compose -f compose.prod.yaml up -d
+#
+# Requires a .env file with at minimum:
+#   SECRET_KEY, SITE_URL, ALLOWED_HOSTS
+
+services:
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: foxtail
+      POSTGRES_PASSWORD: foxtail
+    volumes:
+      - db:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U foxtail"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7
+    volumes:
+      - redis:/data
+
+  foxtail:
+    image: ghcr.io/dmptrluke/foxtail:latest
+    ports:
+      - "8000:8000"
+    env_file: .env
+    environment:
+      DATABASE_URL: "postgres://foxtail:foxtail@db/foxtail"
+      CACHE_URL: "redis://redis/1"
+    volumes:
+      - storage:/app/storage
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_started
+
+volumes:
+  storage:
+  db:
+  redis:

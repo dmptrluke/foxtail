@@ -25,7 +25,8 @@ import pymdownx.emoji
 logger = logging.getLogger(__name__)
 
 # Build paths inside the project like this: str(BASE_DIR / 'subdir').
-BASE_DIR = Path(__file__).resolve(strict=True).parents[1]
+SRC_DIR = Path(__file__).resolve(strict=True).parents[1]
+BASE_DIR = SRC_DIR.parent
 
 env = environ.Env()
 environ.Env.read_env(str(BASE_DIR / '.env'))
@@ -131,7 +132,7 @@ if DEBUG:
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [(BASE_DIR / 'templates').as_posix()],
+        'DIRS': [(SRC_DIR / 'templates').as_posix()],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -207,9 +208,9 @@ ACCOUNT_USERNAME_VALIDATORS = 'apps.accounts.validators.username_validators'
 
 ACCOUNT_FORMS = {
     'signup': 'apps.accounts.forms.SignupForm',
-    'change_password': 'apps.accounts.forms.ChangePasswordForm',
-    'set_password': 'apps.accounts.forms.SetPasswordForm',
-    'reset_password': 'apps.accounts.forms.ResetPasswordForm',
+    'change_password': 'apps.accounts.forms.ChangePasswordForm',  # nosec B105
+    'set_password': 'apps.accounts.forms.SetPasswordForm',  # nosec B105
+    'reset_password': 'apps.accounts.forms.ResetPasswordForm',  # nosec B105
     'login': 'apps.accounts.forms.LoginForm'
 }
 
@@ -330,7 +331,7 @@ MEDIA_URL = '/media/'
 
 # noinspection PyUnresolvedReferences
 STATICFILES_DIRS = [
-    ("webpack_bundles", str(BASE_DIR / 'assets/generated/webpack_bundles')),
+    ("webpack_bundles", str(BASE_DIR / 'build/webpack_bundles')),
     str(BASE_DIR / 'assets/static')
 ]
 
@@ -363,7 +364,7 @@ if TESTING:
 
 # Webpack Loader
 # <https://github.com/owais/django-webpack-loader>
-WEBPACK_STATS_PATH = env('WEBPACK_STATS_PATH', default='assets/generated/webpack-stats.json')
+WEBPACK_STATS_PATH = env('WEBPACK_STATS_PATH', default='build/webpack-stats.json')
 
 WEBPACK_LOADER = {
     'DEFAULT': {

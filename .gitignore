@@ -22,7 +22,7 @@ gen
 node_modules
 
 # produced assets
-assets/generated/*
-!assets/generated/webpack-stats.json
+build/*
+!build/webpack-stats.json
 storage/
 static/
