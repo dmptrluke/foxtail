@@ -8,7 +8,7 @@ from ..views import EventDetail, EventList
 pytestmark = pytest.mark.django_db
 
 
-def test_list(event: Event, request_factory: RequestFactory):
+def test_list(event: Event, past_event: Event, request_factory: RequestFactory):
     view = EventList()
     request = request_factory.get('/events/')
 
@@ -17,12 +17,13 @@ def test_list(event: Event, request_factory: RequestFactory):
     view.object_list = view.get_queryset()
     context = view.get_context_data()
 
-    # there should be one event
-    assert len(context['event_list']) == 1
+    # future event should be in upcoming
+    assert len(context['upcoming_events']) == 1
+    assert context['upcoming_events'][0].title == event.title
 
-    # the event should be correct
-    event_context: Event = context['event_list'][0]
-    assert event_context.title == event.title
+    # past event should be in past
+    assert len(context['past_events']) == 1
+    assert context['past_events'][0].title == past_event.title
 
 
 def test_detail(event: Event, request_factory: RequestFactory):
