@@ -4,7 +4,7 @@
 #   docker compose -f compose.prod.yaml up -d
 #
 # Requires a .env file with at minimum:
-#   SECRET_KEY, SITE_URL, ALLOWED_HOSTS
+#   SECRET_KEY, SITE_URL, ALLOWED_HOSTS, CONTACT_EMAILS
 
 services:
   db:

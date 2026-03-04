@@ -36,7 +36,8 @@ RUN apt-get update \
 
 COPY --from=assets /app/build ./build
 COPY --chown=abc:abc . .
-RUN mkdir -p /app/static && chown abc:abc /app/static
+RUN mkdir -p /app/static /app/storage/media \
+    && chown -R abc:abc /app/static /app/storage
 
 USER abc
 
