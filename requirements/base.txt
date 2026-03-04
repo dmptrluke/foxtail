@@ -37,7 +37,7 @@ gunicorn==23.0.0
 markdown==3.7
 psycopg2==2.9.10;platform_system!="Windows"
 psycopg2-binary==2.9.10;platform_system=="Windows"
-pymdown-extensions==10.9
+pymdown-extensions==10.16.1
 requests==2.32.3
 requests-oauthlib==2.0.0
 PyJWT==2.9.0
