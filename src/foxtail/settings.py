@@ -304,7 +304,6 @@ LANGUAGE_CODE = 'en-au'
 TIME_ZONE = 'Pacific/Auckland'
 
 USE_I18N = True
-USE_L10N = True
 USE_TZ = True
 
 # Messages
@@ -332,10 +331,15 @@ STATICFILES_DIRS = [
     str(BASE_DIR / 'assets/static')
 ]
 
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
+STORAGES = {
+    "default": {
+        "BACKEND": "django.core.files.storage.FileSystemStorage",
+    },
+    "staticfiles": {
+        "BACKEND": "whitenoise.storage.CompressedStaticFilesStorage",
+    },
+}
 STATIC_ROOT = str(BASE_DIR / 'static')
-
-DEFAULT_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'
 MEDIA_ROOT = str(BASE_DIR / 'storage/media')
 
 if TESTING:
@@ -364,8 +368,6 @@ SESSION_COOKIE_NAME = '__Host-sessionid'
 
 CSRF_COOKIE_SECURE = True
 CSRF_COOKIE_NAME = '__Host-csrftoken'
-
-SECURE_BROWSER_XSS_FILTER = True
 
 # this header is applied with nginx
 SECURE_CONTENT_TYPE_NOSNIFF = False
