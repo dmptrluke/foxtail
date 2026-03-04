@@ -22,7 +22,6 @@ django-recaptcha==4.0.0
 django-redis==5.4.0
 django-rq==2.10.2
 django-slugger==1.1.2
-django-storages[azure]==1.14.4
 django-structured-data==0.6.0
 django-taggit==6.0.0
 django-versatileimagefield==3.1
