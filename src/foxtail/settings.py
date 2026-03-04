@@ -119,6 +119,9 @@ if DEBUG:
     MIDDLEWARE += [
         'debug_toolbar.middleware.DebugToolbarMiddleware'
     ]
+    DEBUG_TOOLBAR_CONFIG = {
+        'SHOW_TOOLBAR_CALLBACK': lambda _request: DEBUG,
+    }
 
 # Template Engine
 # <https://docs.djangoproject.com/en/dev/topics/templates/>
