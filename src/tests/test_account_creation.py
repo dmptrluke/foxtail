@@ -2,6 +2,8 @@ from django.urls import reverse
 
 import pytest
 from selenium.webdriver.common.by import By
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.ui import WebDriverWait
 
 from apps.accounts.tests.factories import UserFactory
 
@@ -27,10 +29,13 @@ def test_account_creation(driver, live_server, settings):
     create_account_btn.click()
 
     # we are now on the account creation page
-    assert driver.current_url == live_server.url + reverse('account_signup')
-
-    # the page title is now for create account page
+    WebDriverWait(driver, 10).until(EC.url_contains('/accounts/signup/'))
     assert 'Create Account' in driver.title
+
+    # wait for the form to be fully loaded with CSRF token
+    WebDriverWait(driver, 10).until(
+        EC.presence_of_element_located((By.CSS_SELECTOR, 'input[name="csrfmiddlewaretoken"]'))
+    )
 
     # the user enters their details
     username_field = driver.find_element(By.NAME, 'username')
@@ -46,11 +51,16 @@ def test_account_creation(driver, live_server, settings):
     password2_field.send_keys(proto_user._password)
 
     # and hits submit, creating their account
-    driver.find_element(By.ID, "create_account_submit").click()
+    submit_btn = WebDriverWait(driver, 10).until(
+        EC.element_to_be_clickable((By.ID, "create_account_submit"))
+    )
+    submit_btn.click()
 
     # we should now be back at the homepage
-    assert driver.current_url == live_server.url + reverse('content:index')
+    WebDriverWait(driver, 10).until(EC.url_to_be(live_server.url + reverse('content:index')))
 
     # the user sees a green alert
-    alert = driver.find_element(By.CLASS_NAME, 'alert-success')
+    alert = WebDriverWait(driver, 10).until(
+        EC.presence_of_element_located((By.CLASS_NAME, 'alert-success'))
+    )
     assert f"Successfully signed in as {proto_user.username}" in alert.text

@@ -1,9 +1,21 @@
 from datetime import datetime
 
+from django.core.exceptions import ValidationError
+from django.core.validators import validate_email
+
 from allauth.account.adapter import DefaultAccountAdapter
 from allauth.account.utils import user_email, user_field, user_username
 from allauth.socialaccount.adapter import DefaultSocialAccountAdapter
-from allauth.utils import valid_email_or_none
+
+
+def valid_email_or_none(email):
+    try:
+        if email:
+            validate_email(email)
+            return email
+    except ValidationError:
+        pass
+    return None
 
 
 class AccountAdapter(DefaultAccountAdapter):

@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 
 from django.conf import settings
 from django.db import models
@@ -10,7 +10,6 @@ from django.utils.timezone import now
 
 from markdownfield.models import MarkdownField, RenderedMarkdownField
 from markdownfield.validators import VALIDATOR_CLASSY
-from pytz import utc
 from slugger import AutoSlugField
 from taggit.managers import TaggableManager
 from versatileimagefield.fields import PPOIField, VersatileImageField
@@ -52,7 +51,7 @@ class Event(models.Model):
     def is_ended(self):
         if self.end:
             end = datetime.combine(self.end, self.end_time) if self.end_time else\
-                datetime.combine(self.end, datetime.min.time(), tzinfo=utc)
+                datetime.combine(self.end, datetime.min.time(), tzinfo=timezone.utc)
         else:
             end = datetime.combine(self.start, self.end_time) if self.end_time else (self.start + timedelta(days=1))
 
