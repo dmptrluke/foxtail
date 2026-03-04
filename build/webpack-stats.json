@@ -1,48 +1,9 @@
 {
   "status": "done",
   "assets": {
-    "main.2f331bf38e8223dfc24d.js": {
-      "name": "main.2f331bf38e8223dfc24d.js",
-      "path": "C:\\Users\\Luke\\Projects\\foxtail\\build\\webpack_bundles\\main.2f331bf38e8223dfc24d.js"
-    },
-    "main.2f331bf38e8223dfc24d.js.map": {
-      "name": "main.2f331bf38e8223dfc24d.js.map",
-      "path": "C:\\Users\\Luke\\Projects\\foxtail\\build\\webpack_bundles\\main.2f331bf38e8223dfc24d.js.map"
-    },
-    "main.3df609b3972e52284cb2.css": {
-      "name": "main.3df609b3972e52284cb2.css",
-      "path": "C:\\Users\\Luke\\Projects\\foxtail\\build\\webpack_bundles\\main.3df609b3972e52284cb2.css"
-    },
-    "main.3df609b3972e52284cb2.css.map": {
-      "name": "main.3df609b3972e52284cb2.css.map",
-      "path": "C:\\Users\\Luke\\Projects\\foxtail\\build\\webpack_bundles\\main.3df609b3972e52284cb2.css.map"
-    },
-    "profile_edit.a89bf3bcc9fd0bd59fc4.js": {
-      "name": "profile_edit.a89bf3bcc9fd0bd59fc4.js",
-      "path": "C:\\Users\\Luke\\Projects\\foxtail\\build\\webpack_bundles\\profile_edit.a89bf3bcc9fd0bd59fc4.js"
-    },
-    "profile_edit.a89bf3bcc9fd0bd59fc4.js.map": {
-      "name": "profile_edit.a89bf3bcc9fd0bd59fc4.js.map",
-      "path": "C:\\Users\\Luke\\Projects\\foxtail\\build\\webpack_bundles\\profile_edit.a89bf3bcc9fd0bd59fc4.js.map"
-    },
-    "runtime.4fb8abc8b3a6bdc3d598.js": {
-      "name": "runtime.4fb8abc8b3a6bdc3d598.js",
-      "path": "C:\\Users\\Luke\\Projects\\foxtail\\build\\webpack_bundles\\runtime.4fb8abc8b3a6bdc3d598.js"
-    },
-    "runtime.4fb8abc8b3a6bdc3d598.js.map": {
-      "name": "runtime.4fb8abc8b3a6bdc3d598.js.map",
-      "path": "C:\\Users\\Luke\\Projects\\foxtail\\build\\webpack_bundles\\runtime.4fb8abc8b3a6bdc3d598.js.map"
-    }
   },
   "chunks": {
-    "main": [
-      "runtime.4fb8abc8b3a6bdc3d598.js",
-      "main.3df609b3972e52284cb2.css",
-      "main.2f331bf38e8223dfc24d.js"
-    ],
-    "profile_edit": [
-      "runtime.4fb8abc8b3a6bdc3d598.js",
-      "profile_edit.a89bf3bcc9fd0bd59fc4.js"
-    ]
+    "main": [],
+    "profile_edit": []
   }
 }
