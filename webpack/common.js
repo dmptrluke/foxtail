@@ -1,7 +1,6 @@
 const webpack = require('webpack');
 const path = require('path');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const {CleanWebpackPlugin} = require('clean-webpack-plugin');
 const BundleTracker = require('webpack-bundle-tracker');
 
 const ROOT_DIR = path.resolve(__dirname, '..');
@@ -9,120 +8,97 @@ const ROOT_DIR = path.resolve(__dirname, '..');
 module.exports = {
     entry: {
         main: ['./js/main.js', './scss/index.scss'],
-        profile_edit: ['./js/profile_edit.js']
+        profile_edit: ['./js/profile_edit.js'],
     },
     output: {
         path: path.resolve(ROOT_DIR, 'build/webpack_bundles'),
         publicPath: '',
-        filename: '[name].[contenthash].js'
+        filename: '[name].[contenthash].js',
+        clean: true,
     },
-    context: path.resolve(ROOT_DIR, "assets"),
+    context: path.resolve(ROOT_DIR, 'assets'),
     performance: {
-        hints: false
+        hints: false,
     },
-    node: false,
     optimization: {
         moduleIds: 'deterministic',
         runtimeChunk: 'single',
     },
     resolve: {
         alias: {
-            '~': path.resolve(ROOT_DIR, 'node_modules')
+            '~': path.resolve(ROOT_DIR, 'node_modules'),
         },
     },
     plugins: [
         new MiniCssExtractPlugin({
-            filename: '[name].[contenthash].css'
+            filename: '[name].[contenthash].css',
         }),
-        new CleanWebpackPlugin(),
         new BundleTracker({
-                path: path.join(ROOT_DIR, '/build'),
-                filename: 'webpack-stats.json',
-            }),
+            path: path.join(ROOT_DIR, '/build'),
+            filename: 'webpack-stats.json',
+        }),
         new webpack.ProvidePlugin({
             $: 'jquery',
-            jQuery: 'jquery'
+            jQuery: 'jquery',
         }),
     ],
     module: {
         rules: [
             {
                 test: /\.m?js$/,
-                exclude: /(node_modules|bower_components)/,
+                exclude: /node_modules/,
                 use: {
                     loader: 'babel-loader',
                     options: {
                         presets: [
-                            ['@babel/preset-env',
+                            [
+                                '@babel/preset-env',
                                 {
-                                    "useBuiltIns": "usage",
-                                    "corejs": "3.38"
-                                }
-                            ]
-                        ]
-                    }
-                }
+                                    useBuiltIns: 'usage',
+                                    corejs: '3.38',
+                                },
+                            ],
+                        ],
+                    },
+                },
             },
-
             {
                 test: /\.(sa|sc|c)ss$/,
                 use: [
-                    {
-                        loader: MiniCssExtractPlugin.loader,
-                    },
+                    MiniCssExtractPlugin.loader,
                     {
                         loader: 'css-loader',
-                        options: {
-                            sourceMap: true,
-                        },
+                        options: { sourceMap: true },
                     },
                     {
                         loader: 'postcss-loader',
                         options: {
                             postcssOptions: {
-                                plugins: [
-                                    [
-                                        'autoprefixer'
-                                    ],
-                                ],
+                                plugins: ['autoprefixer'],
                             },
                             sourceMap: true,
                         },
                     },
                     {
                         loader: 'sass-loader',
-                        options: {
-                            sassOptions: {
-                                sourceMap: true
-                            }
-                        },
+                        options: { sourceMap: true },
                     },
                 ],
             },
             {
                 test: /\.(png|webp|jpg|gif)$/,
-                use: {
-                    loader: 'file-loader',
-                    options: {
-                        name: '[contenthash].[ext]',
-                        outputPath: 'images/'
-                    }
-                }
+                type: 'asset/resource',
+                generator: {
+                    filename: 'images/[contenthash][ext]',
+                },
             },
             {
-                test: /\.(woff(2)?|ttf|eot|svg)(\?v=\d+\.\d+\.\d+)?$/,
-                use: [
-                    {
-                        loader: 'file-loader',
-                        options: {
-                            name: '[contenthash].[ext]',
-                            outputPath: 'fonts/'
-                        }
-                    }
-                ]
-            }
+                test: /\.(woff2?|ttf|eot|svg)(\?v=\d+\.\d+\.\d+)?$/,
+                type: 'asset/resource',
+                generator: {
+                    filename: 'fonts/[contenthash][ext]',
+                },
+            },
         ],
-    }
-    ,
-}
-;
+    },
+};
