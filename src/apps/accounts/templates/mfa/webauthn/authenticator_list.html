@@ -1,0 +1,55 @@
+{% extends 'account_base.html' %}
+{% load humanize %}
+
+{% block title %}Security Keys{% endblock %}
+
+{% block content %}
+    <h3>Security Keys</h3>
+
+    {% if authenticators|length == 0 %}
+        <p>No security keys have been added.</p>
+    {% else %}
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Key</th>
+                        <th>Usage</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for authenticator in authenticators %}
+                        <tr>
+                            <td>
+                                {{ authenticator }}
+                                {% if authenticator.wrap.is_passwordless is True %}
+                                    <span class="badge bg-primary">Passkey</span>
+                                {% elif authenticator.wrap.is_passwordless is False %}
+                                    <span class="badge bg-secondary">Security key</span>
+                                {% else %}
+                                    <span class="badge bg-warning" title="This key does not indicate whether it is a passkey.">Unspecified</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                Added on {{ authenticator.created_at|date:"SHORT_DATE_FORMAT" }}.
+                                {% if authenticator.last_used_at %}
+                                    Last used {{ authenticator.last_used_at|naturaltime }}.
+                                {% else %}
+                                    Not used.
+                                {% endif %}
+                            </td>
+                            <td class="text-end">
+                                <a href="{% url 'mfa_edit_webauthn' pk=authenticator.pk %}" class="btn btn-sm btn-outline-secondary">Edit</a>
+                                <a href="{% url 'mfa_remove_webauthn' pk=authenticator.pk %}" class="btn btn-sm btn-outline-danger">Remove</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% endif %}
+
+    <a href="{% url 'mfa_add_webauthn' %}" class="btn btn-primary">Add</a>
+    <a href="{% url 'mfa_index' %}" class="btn btn-outline-secondary ms-2">Back</a>
+{% endblock %}

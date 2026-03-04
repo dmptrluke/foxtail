@@ -1,0 +1,29 @@
+{% extends 'account_base.html' %}
+{% load crispy_forms_filters %}
+
+{% block title %}Add Security Key{% endblock %}
+
+{% block content %}
+    <h3>Add Security Key</h3>
+
+    <form method="post" action="{% url 'mfa_add_webauthn' %}">
+        {% csrf_token %}
+        {{ form | crispy }}
+        <button type="button" id="mfa_webauthn_add" class="btn btn-primary">
+            Add
+        </button>
+        <a href="{% url 'mfa_list_webauthn' %}" class="btn btn-outline-secondary ms-2">Cancel</a>
+    </form>
+
+    {% include "mfa/webauthn/snippets/scripts.html" %}
+    {{ js_data|json_script:"js_data" }}
+    <script data-allauth-onload="allauth.webauthn.forms.addForm" type="application/json">{
+    "ids": {
+        "add": "mfa_webauthn_add",
+        "passwordless": "{{ form.passwordless.auto_id }}",
+        "credential": "{{ form.credential.auto_id }}",
+        "data": "js_data"
+    }
+}
+    </script>
+{% endblock %}

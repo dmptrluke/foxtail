@@ -1,5 +1,4 @@
 {% extends 'account_base.html' %}
-{% load i18n %}
 
 {% block title %}Recovery Codes{% endblock %}
 
@@ -19,7 +18,7 @@
     {% endif %}
 
     <a href="{% url 'mfa_generate_recovery_codes' %}" class="btn btn-secondary">
-        {% trans 'Generate Recovery Codes' %}
+        Generate Recovery Codes
     </a>
 
     <a href="{% url 'mfa_index' %}" class="btn btn-outline-secondary ms-2">Back</a>

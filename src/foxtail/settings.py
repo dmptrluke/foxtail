@@ -233,6 +233,9 @@ SOCIALACCOUNT_PROVIDERS = {
 
 # allauth-mfa
 
+MFA_SUPPORTED_TYPES = ["recovery_codes", "totp", "webauthn"]
+MFA_WEBAUTHN_ALLOW_INSECURE_ORIGIN = DEBUG
+
 MFA_FORMS = {
     'authenticate': 'allauth.mfa.base.forms.AuthenticateForm',
     'reauthenticate': 'allauth.mfa.base.forms.AuthenticateForm',

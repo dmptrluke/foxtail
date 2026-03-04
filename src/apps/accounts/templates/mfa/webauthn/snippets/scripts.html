@@ -1,0 +1,5 @@
+{% load static %}
+<noscript>This functionality requires JavaScript.</noscript>
+<script src="{% static 'mfa/js/webauthn-json.js' %}" nonce="{{ request.csp_nonce }}"></script>
+<script src="{% static 'mfa/js/webauthn.js' %}" nonce="{{ request.csp_nonce }}"></script>
+<script src="{% static 'account/js/onload.js' %}" nonce="{{ request.csp_nonce }}"></script>
