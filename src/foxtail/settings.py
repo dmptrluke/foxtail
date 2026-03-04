@@ -100,8 +100,7 @@ INSTALLED_APPS = [
 
 if DEBUG:
     INSTALLED_APPS += [
-        'debug_toolbar',
-        'nplusone.ext.django',
+        'debug_toolbar'
     ]
 
 MIDDLEWARE = [
@@ -122,8 +121,7 @@ MIDDLEWARE = [
 
 if DEBUG:
     MIDDLEWARE += [
-        'debug_toolbar.middleware.DebugToolbarMiddleware',
-        'nplusone.ext.django.NPlusOneMiddleware',
+        'debug_toolbar.middleware.DebugToolbarMiddleware'
     ]
 
 # Template Engine
@@ -488,10 +486,6 @@ LOGGING = {
     },
     "root": {"level": "INFO", "handlers": ["console"]},
     "loggers": {
-        "nplusone": {
-            "level": "WARN",
-            "handlers": ["console"]
-        },
         "sentry_sdk": {
             "level": "ERROR",
             "handlers": ["console"]
