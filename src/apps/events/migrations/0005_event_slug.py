@@ -3,7 +3,7 @@
 from django.db import migrations
 from django.utils.text import slugify
 
-from slugger import AutoSlugField
+from apps.core.fields import AutoSlugField
 
 
 def generate_slugs(apps, schema_editor):
