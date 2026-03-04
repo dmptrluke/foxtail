@@ -37,11 +37,6 @@ jobs:
     runs-on: ubuntu-latest
     needs: generate_assets
 
-    strategy:
-      max-parallel: 4
-      matrix:
-        python-version: ['3.13']
-
     services:
       postgres:
         image: postgres:16
@@ -64,19 +59,19 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up Python ${{ matrix.python-version }}
+      - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: ${{ matrix.python-version }}
+          python-version: '3.13'
 
       - name: Cache Python dependencies
         id: py-cache
         uses: actions/cache@v4
         with:
           path: ~/.local/lib/
-          key: ${{ runner.OS }}-pip${{ matrix.python-version }}-${{ hashFiles('requirements/*.txt') }}
+          key: ${{ runner.OS }}-pip-3.13-${{ hashFiles('requirements/*.txt') }}
           restore-keys: |
-            ${{ runner.OS }}-pip${{ matrix.python-version }}-
+            ${{ runner.OS }}-pip-3.13-
 
       - name: Install system dependencies
         run: sudo apt-get -y install libpq-dev

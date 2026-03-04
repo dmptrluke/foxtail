@@ -73,3 +73,4 @@ class AsyncEmailBackend(BaseEmailBackend):
 
     def send_messages(self, messages, **kwargs):
         django_rq.enqueue(send_messages_async, messages, **kwargs)
+        return len(messages)

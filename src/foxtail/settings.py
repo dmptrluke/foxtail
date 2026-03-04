@@ -7,10 +7,10 @@ Custom/instance specific settings can be customised using a
 variables (see https://django-environ.readthedocs.io/)
 
 For Django documentation on this file, see
-https://docs.djangoproject.com/en/2.2/topics/settings/
+https://docs.djangoproject.com/en/stable/topics/settings/
 
 For the full list of settings and their values, see
-https://docs.djangoproject.com/en/2.2/ref/settings/
+https://docs.djangoproject.com/en/stable/ref/settings/
 """
 
 import logging
@@ -140,7 +140,6 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'django.template.context_processors.request',
                 'apps.core.context_processors.site',
                 'apps.core.context_processors.debug',
                 'csp.context_processors.nonce'
@@ -150,11 +149,11 @@ TEMPLATES = [
 ]
 
 # Recognise upstream proxy SSL
-# <https://docs.djangoproject.com/en/2.2/ref/settings/#secure-proxy-ssl-header>
+# <https://docs.djangoproject.com/en/stable/ref/settings/#secure-proxy-ssl-header>
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 # Database
-# <https://docs.djangoproject.com/en/2.2/ref/settings/#databases>
+# <https://docs.djangoproject.com/en/stable/ref/settings/#databases>
 
 DATABASES = {
     'default': env.db(
@@ -164,13 +163,13 @@ DATABASES = {
 }
 
 # Cache
-# <https://docs.djangoproject.com/en/2.2/topics/cache/#setting-up-the-cache>
+# <https://docs.djangoproject.com/en/stable/topics/cache/#setting-up-the-cache>
 CACHES = {
     'default': env.cache(default='dummycache://')
 }
 
 # enable the cached session backend
-# <https://docs.djangoproject.com/en/2.2/topics/http/sessions/#using-cached-sessions>
+# <https://docs.djangoproject.com/en/stable/topics/http/sessions/#using-cached-sessions>
 SESSION_ENGINE = "django.contrib.sessions.backends.cached_db"
 
 # django-rq
@@ -262,8 +261,8 @@ OIDC_CLAIMS_SUPPORTED = [
 ]
 
 # Passwords
-# <https://docs.djangoproject.com/en/2.2/topics/auth/passwords/>
-# <https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators>
+# <https://docs.djangoproject.com/en/stable/topics/auth/passwords/>
+# <https://docs.djangoproject.com/en/stable/ref/settings/#auth-password-validators>
 
 AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
@@ -301,7 +300,7 @@ RECAPTCHA_PRIVATE_KEY = env('RECAPTCHA_PRIVATE_KEY', default=TEST_PRIVATE_KEY)
 TAGGIT_CASE_INSENSITIVE = True
 
 # Internationalization
-# <https://docs.djangoproject.com/en/2.2/topics/i18n/>
+# <https://docs.djangoproject.com/en/stable/topics/i18n/>
 
 LANGUAGE_CODE = 'en-au'
 TIME_ZONE = 'Pacific/Auckland'
@@ -323,7 +322,7 @@ if DEBUG:
     MESSAGE_LEVEL = 10
 
 # Static files and media (CSS, JavaScript, Images)
-# <https://docs.djangoproject.com/en/2.2/howto/static-files/>
+# <https://docs.djangoproject.com/en/stable/howto/static-files/>
 # <https://docs.djangoproject.com/en/dev/ref/settings/#media-root>
 
 STATIC_URL = '/static/'
@@ -377,8 +376,8 @@ WEBPACK_LOADER = {
 }
 
 # Security
-# <https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/#https>
-# <https://docs.djangoproject.com/en/2.2/ref/middleware/#x-xss-protection>
+# <https://docs.djangoproject.com/en/stable/howto/deployment/checklist/#https>
+# <https://docs.djangoproject.com/en/stable/ref/middleware/#x-xss-protection>
 
 SESSION_COOKIE_SECURE = True
 SESSION_COOKIE_NAME = '__Host-sessionid'
@@ -501,7 +500,7 @@ LOGGING = {
 }
 
 # Email
-# <https://docs.djangoproject.com/en/2.2/topics/email/>
+# <https://docs.djangoproject.com/en/stable/topics/email/>
 # <https://anymail.readthedocs.io/en/stable/>
 DEFAULT_FROM_EMAIL = env('EMAIL_FROM_USER', default='webmaster@localhost')
 SERVER_EMAIL = env('EMAIL_FROM_SYSTEM', default='root@localhost')

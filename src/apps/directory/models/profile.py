@@ -40,9 +40,6 @@ class Profile(BaseModel):
         if self.country != 'NZ' and self.region:
             raise ValidationError({'region': 'Region may only be selected if country is New Zealand.'})
 
-        if self.country != 'NZ' and self.region:
-            raise ValidationError({'region': 'Region may only be selected if country is New Zealand.'})
-
     @property
     def location(self):
         if not self.country:
