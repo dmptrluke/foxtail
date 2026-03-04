@@ -71,6 +71,75 @@
                 "panel": "shared"
             },
             "problemMatcher": []
+        },
+        {
+            "label": "Django: Create Superuser",
+            "type": "shell",
+            "command": "docker compose run --rm -e DJANGO_SUPERUSER_PASSWORD=${input:superuserPassword} foxtail django-admin createsuperuser --username ${input:superuserUsername} --email ${input:superuserEmail} --no-input",
+            "presentation": {
+                "reveal": "always",
+                "panel": "shared"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Django: Generate Sample Data",
+            "type": "shell",
+            "command": "docker compose run --rm foxtail django-admin generate_sample_data --users ${input:sampleUsers} --posts ${input:samplePosts} --comments ${input:sampleComments} --events ${input:sampleEvents} --pages ${input:samplePages}",
+            "presentation": {
+                "reveal": "always",
+                "panel": "shared"
+            },
+            "problemMatcher": []
+        }
+    ],
+    "inputs": [
+        {
+            "id": "superuserUsername",
+            "type": "promptString",
+            "description": "Superuser username"
+        },
+        {
+            "id": "superuserEmail",
+            "type": "promptString",
+            "description": "Superuser email address",
+            "default": ""
+        },
+        {
+            "id": "superuserPassword",
+            "type": "promptString",
+            "description": "Superuser password",
+            "password": true
+        },
+        {
+            "id": "sampleUsers",
+            "type": "promptString",
+            "description": "Number of users to create",
+            "default": "10"
+        },
+        {
+            "id": "samplePosts",
+            "type": "promptString",
+            "description": "Number of blog posts to create",
+            "default": "20"
+        },
+        {
+            "id": "sampleComments",
+            "type": "promptString",
+            "description": "Number of blog comments to create",
+            "default": "30"
+        },
+        {
+            "id": "sampleEvents",
+            "type": "promptString",
+            "description": "Number of events to create",
+            "default": "10"
+        },
+        {
+            "id": "samplePages",
+            "type": "promptString",
+            "description": "Number of content pages to create",
+            "default": "5"
         }
     ]
 }
