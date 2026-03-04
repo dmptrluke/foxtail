@@ -1,0 +1,16 @@
+# Dev overrides — auto-loaded by "docker compose up".
+# Adds debugpy, Django dev server, and sensible defaults for local development.
+
+services:
+  foxtail:
+    command: >
+      sh -c "django-admin migrate --noinput &&
+      python -m debugpy --listen 0.0.0.0:5678
+      -m django runserver --noreload 0.0.0.0:8000"
+    ports:
+      - "5678:5678"
+    environment:
+      DEBUG: "true"
+      SECRET_KEY: "dev-insecure-key-do-not-use-in-production"
+      SITE_URL: "http://localhost:8000"
+      ALLOWED_HOSTS: "localhost,127.0.0.1"

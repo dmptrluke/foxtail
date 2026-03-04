@@ -2,7 +2,7 @@ const {merge} = require('webpack-merge');
 const CompressionPlugin = require('compression-webpack-plugin');
 const ImageMinimizerPlugin = require('image-minimizer-webpack-plugin');
 const zopfli = require('@gfx/zopfli');
-const common = require('./webpack.common.js');
+const common = require('./common.js');
 
 module.exports = merge(common, {
     mode: 'production',

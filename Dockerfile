@@ -7,15 +7,15 @@ WORKDIR /app
 COPY package.json package-lock.json ./
 RUN npm ci
 
-COPY webpack.* ./
+COPY webpack/ ./webpack/
 COPY assets/ ./assets/
 RUN npm run-script build-${BUILD_MODE}
 
-# Stage 2: Application
+# Stage 2: Production application
 FROM python:3.13-slim AS app
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
-    PYTHONPATH="/app" \
+    PYTHONPATH="/app/src" \
     DJANGO_SETTINGS_MODULE=foxtail.settings \
     GUNICORN_WORKERS=2
 
@@ -24,26 +24,40 @@ WORKDIR /app
 RUN groupadd -r abc -g 5678 && useradd --no-log-init -u 5678 -r -g abc abc
 
 RUN apt-get update \
-    && apt-get install -y --no-install-recommends libpq5 \
+    && apt-get install -y --no-install-recommends libpq5 libmagic1 \
     && rm -rf /var/lib/apt/lists/*
 
-COPY requirements.txt ./
+COPY requirements/base.txt ./requirements/base.txt
 RUN apt-get update \
-    && apt-get install -y --no-install-recommends gcc libpq-dev \
-    && pip install --no-cache-dir -r requirements.txt \
-    && apt-get purge -y --auto-remove gcc libpq-dev \
+    && apt-get install -y --no-install-recommends gcc libc6-dev libpq-dev \
+    && pip install --no-cache-dir -r requirements/base.txt \
+    && apt-get purge -y --auto-remove gcc libc6-dev libpq-dev \
     && rm -rf /var/lib/apt/lists/*
 
-COPY --from=assets /app/assets/generated ./assets/generated
+COPY --from=assets /app/build ./build
 COPY --chown=abc:abc . .
+RUN mkdir -p /app/static && chown abc:abc /app/static
 
 USER abc
 
-EXPOSE 8000
-CMD ["sh", "-c", "django-admin collectstatic --noinput && gunicorn --bind 0.0.0.0:8000 foxtail.wsgi:application"]
+RUN SECRET_KEY=build-placeholder SITE_URL=http://localhost CONTACT_EMAILS=noop@localhost \
+    django-admin collectstatic --noinput
 
-# Stage 3: Test runner (includes Chrome for Selenium tests)
-FROM app AS test
+EXPOSE 8000
+CMD ["gunicorn", "--bind", "0.0.0.0:8000", "foxtail.wsgi:application"]
+
+# Stage 3: Development (adds debug tools)
+FROM app AS dev
+
+USER root
+
+COPY requirements/dev.txt ./requirements/dev.txt
+RUN pip install --no-cache-dir -r requirements/dev.txt
+
+USER abc
+
+# Stage 4: Test runner (includes Chrome for Selenium tests)
+FROM dev AS test
 
 USER root
 
@@ -56,8 +70,10 @@ RUN apt-get update \
     && apt-get install -y --no-install-recommends google-chrome-stable \
     && rm -rf /var/lib/apt/lists/*
 
-COPY tests/requirements.txt ./tests/requirements.txt
-RUN pip install --no-cache-dir -r tests/requirements.txt
+COPY requirements/test.txt ./requirements/test.txt
+RUN pip install --no-cache-dir -r requirements/test.txt
+
+RUN mkdir -p /home/abc/.cache && chown -R abc:abc /home/abc
 
 USER abc
 
