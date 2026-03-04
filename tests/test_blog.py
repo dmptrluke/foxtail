@@ -23,7 +23,7 @@ def test_blog_comments(authenticated_driver, user, live_server, post: Post):
     comment_form = driver.find_element(By.ID, 'comments-form')
 
     # there is already a comment
-    comments = comment_area.find_element(By.CLASS_NAME, 'comment')
+    comments = comment_area.find_elements(By.CLASS_NAME, 'comment')
 
     # only one
     assert len(comments) == 0
@@ -42,7 +42,7 @@ def test_blog_comments(authenticated_driver, user, live_server, post: Post):
 
     # we read the comments again
     comment_area = driver.find_element(By.ID, 'comments')
-    comments = comment_area.find_element(By.CLASS_NAME, 'comment')
+    comments = comment_area.find_elements(By.CLASS_NAME, 'comment')
 
     assert len(comments) == 1
 
@@ -70,7 +70,7 @@ def test_blog_comments(authenticated_driver, user, live_server, post: Post):
 
     # the comment is gone
     comment_area = driver.find_element(By.ID, 'comments')
-    comments = comment_area.find_element(By.CLASS_NAME, 'comment')
+    comments = comment_area.find_elements(By.CLASS_NAME, 'comment')
 
     # now there are none
     assert len(comments) == 0
