@@ -1,0 +1,22 @@
+{% extends 'account_base.html' %}
+{% load i18n %}
+
+{% block title %}Generate Recovery Codes{% endblock %}
+
+{% block content %}
+    <h3>Generate Recovery Codes</h3>
+
+    <p>
+        Are you sure you want to generate new recovery codes?
+        {% if unused_code_count %}
+            This will invalidate your {{ unused_code_count }} remaining existing codes.
+        {% endif %}
+    </p>
+
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-secondary">
+            {% trans 'Generate' %}
+        </button>
+    </form>
+{% endblock %}

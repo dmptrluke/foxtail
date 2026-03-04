@@ -1,0 +1,26 @@
+{% extends 'account_base.html' %}
+{% load i18n %}
+
+{% block title %}Recovery Codes{% endblock %}
+
+{% block content %}
+    <h3>Recovery Codes</h3>
+
+    {% if unused_codes %}
+        <p>These recovery codes will allow you to access your account in case you lose your authenticator.
+            Store them safely!</p>
+        <ul class="list-unstyled">
+            {% for code in unused_codes %}
+                <li class="font-monospace">{{ code }}</li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No recovery codes available. Press the button below to generate some.</p>
+    {% endif %}
+
+    <a href="{% url 'mfa_generate_recovery_codes' %}" class="btn btn-secondary">
+        {% trans 'Generate Recovery Codes' %}
+    </a>
+
+    <a href="{% url 'mfa_index' %}" class="btn btn-outline-secondary ms-2">Back</a>
+{% endblock %}

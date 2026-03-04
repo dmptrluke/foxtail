@@ -1,0 +1,19 @@
+{% extends 'account_base.html' %}
+{% load i18n %}
+
+{% block title %}Two-Factor Authentication{% endblock %}
+
+{% block content %}
+    <h3>Two-factor Authentication</h3>
+
+    {% if authenticators.totp %}
+        <p>Two-factor authentication (2FA) is currently <strong>enabled</strong> on this account.</p>
+
+        <a href="{% url 'mfa_view_recovery_codes' %}" class="btn btn-secondary me-2">Recovery Codes</a>
+        <a href="{% url 'mfa_deactivate_totp' %}" class="btn btn-outline-danger">Disable 2FA</a>
+    {% else %}
+        <p>Two-factor authentication (2FA) is NOT currently enabled on this account.</p>
+
+        <a href="{% url 'mfa_activate_totp' %}" class="btn btn-primary">Enable 2FA</a>
+    {% endif %}
+{% endblock %}

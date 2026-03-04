@@ -1,7 +1,6 @@
-from datetime import date, time
+from datetime import date, time, timezone
 
 import pytest
-from pytz import utc
 
 from ..models import Event
 
@@ -22,6 +21,6 @@ class TestEvent:
 
     def test_is_ended_with_time(self, event: Event):
         event.end = date(2019, 12, 2)
-        event.end_time = time(12, 30, 00, tzinfo=utc)
+        event.end_time = time(12, 30, 00, tzinfo=timezone.utc)
 
         assert event.is_ended

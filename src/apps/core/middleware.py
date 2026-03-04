@@ -1,6 +1,6 @@
-from django.utils import timezone
+import zoneinfo
 
-import pytz
+from django.utils import timezone
 
 
 class TimezoneMiddleware:
@@ -11,8 +11,8 @@ class TimezoneMiddleware:
         tzname = request.session.get('django_timezone')
         if tzname:
             try:
-                timezone.activate(pytz.timezone(tzname))
-            except (ValueError, pytz.UnknownTimeZoneError):
+                timezone.activate(zoneinfo.ZoneInfo(tzname))
+            except (ValueError, KeyError):
                 del request.session['django_timezone']
         else:
             timezone.deactivate()
