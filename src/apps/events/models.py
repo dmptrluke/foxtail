@@ -10,9 +10,10 @@ from django.utils.timezone import now
 
 from markdownfield.models import MarkdownField, RenderedMarkdownField
 from markdownfield.validators import VALIDATOR_CLASSY
-from slugger import AutoSlugField
 from taggit.managers import TaggableManager
 from versatileimagefield.fields import PPOIField, VersatileImageField
+
+from apps.core.fields import AutoSlugField
 
 
 class Event(models.Model):
