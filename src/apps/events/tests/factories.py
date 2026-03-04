@@ -16,3 +16,7 @@ class EventFactory(DjangoModelFactory):
 
     class Meta:
         model = Event
+
+
+class PastEventFactory(EventFactory):
+    start = Faker('past_date')

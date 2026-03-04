@@ -8,7 +8,7 @@ from selenium import webdriver
 from apps.accounts.tests.factories import UserFactory, UserNoPasswordFactory
 from apps.content.tests.factories import PageFactory
 from apps.directory.tests.factories import ProfileFactory
-from apps.events.tests.factories import EventFactory
+from apps.events.tests.factories import EventFactory, PastEventFactory
 from foxtail_blog.tests.factories import PostFactory
 
 # accounts
@@ -30,6 +30,7 @@ register(ProfileFactory)
 
 # events
 register(EventFactory)
+register(PastEventFactory, "past_event")
 
 
 @pytest.fixture
