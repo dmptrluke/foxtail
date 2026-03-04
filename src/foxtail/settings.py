@@ -193,8 +193,8 @@ LOGIN_REDIRECT_URL = '/'
 # allauth
 ACCOUNT_ADAPTER = 'apps.accounts.authentication.AccountAdapter'
 
-ACCOUNT_AUTHENTICATION_METHOD = 'username_email'
-ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_LOGIN_METHODS = {'email', 'username'}
+ACCOUNT_SIGNUP_FIELDS = ['email*', 'username*', 'password1*', 'password2*']
 ACCOUNT_DEFAULT_HTTP_PROTOCOL = 'https'
 
 ACCOUNT_USERNAME_VALIDATORS = 'apps.accounts.validators.username_validators'

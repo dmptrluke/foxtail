@@ -44,7 +44,7 @@
         {
             "label": "Docker: Dev Server",
             "type": "shell",
-            "command": "docker compose up foxtail",
+            "command": "docker compose up --build foxtail",
             "isBackground": true,
             "presentation": {
                 "reveal": "always",
