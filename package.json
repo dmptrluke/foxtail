@@ -6,9 +6,9 @@
     "private": true,
     "author": "",
     "scripts": {
-        "watch": "webpack --config webpack/dev.js --watch",
-        "build-development": "webpack --config webpack/dev.js",
-        "build-production": "webpack --config webpack/prod.js"
+        "watch": "webpack --config webpack/dev.mjs --watch",
+        "build-development": "webpack --config webpack/dev.mjs",
+        "build-production": "webpack --config webpack/prod.mjs"
     },
     "stylelint": {
         "extends": "stylelint-config-recommended-scss"

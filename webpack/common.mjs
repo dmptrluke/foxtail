@@ -1,11 +1,11 @@
-const webpack = require('webpack');
-const path = require('path');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const BundleTracker = require('webpack-bundle-tracker');
+import webpack from 'webpack';
+import path from 'path';
+import MiniCssExtractPlugin from 'mini-css-extract-plugin';
+import BundleTracker from 'webpack-bundle-tracker';
 
-const ROOT_DIR = path.resolve(__dirname, '..');
+const ROOT_DIR = path.resolve(import.meta.dirname, '..');
 
-module.exports = {
+export default {
     entry: {
         main: ['./js/main.js', './scss/index.scss'],
         profile_edit: ['./js/profile_edit.js'],
