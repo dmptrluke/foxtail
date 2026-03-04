@@ -32,7 +32,7 @@ def test_unauthenticated_user_browsing(driver, live_server, settings, post: Post
     assert sign_in_button
 
     # user sees the blog posts on the homepage, and reads the content
-    blog_cards = driver.find_element(By.ID, 'blog-cards').find_element(By.CLASS_NAME, 'index-card')
+    blog_cards = driver.find_element(By.ID, 'blog-cards').find_elements(By.CLASS_NAME, 'index-card')
 
     # there are two blog postss
     assert len(blog_cards) == 2

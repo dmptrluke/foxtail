@@ -20,10 +20,9 @@ gen
 
 # NPM
 node_modules
-webpack-stats.json
 
 # produced assets
-assets/generated/
+assets/generated/*
+!assets/generated/webpack-stats.json
 storage/
 static/
-assets/*.json
