@@ -8,7 +8,9 @@
 
     <p>Please reauthenticate to safeguard your account.</p>
 
-    <form method="post" action="{% url 'account_reauthenticate' %}">
+    <p>Enter an authenticator code:</p>
+
+    <form method="post" action="{% url 'mfa_reauthenticate' %}">
         {% csrf_token %}
         {{ form | crispy }}
         {{ redirect_field }}

@@ -1,19 +1,32 @@
 {% extends 'account_base.html' %}
-{% load i18n %}
 
 {% block title %}Two-Factor Authentication{% endblock %}
 
 {% block content %}
     <h3>Two-factor Authentication</h3>
 
+    <h4>Authenticator App</h4>
     {% if authenticators.totp %}
-        <p>Two-factor authentication (2FA) is currently <strong>enabled</strong> on this account.</p>
+        <p>Authentication using an authenticator app is <strong>active</strong>.</p>
 
         <a href="{% url 'mfa_view_recovery_codes' %}" class="btn btn-secondary me-2">Recovery Codes</a>
-        <a href="{% url 'mfa_deactivate_totp' %}" class="btn btn-outline-danger">Disable 2FA</a>
+        <a href="{% url 'mfa_deactivate_totp' %}" class="btn btn-outline-danger">Disable</a>
     {% else %}
-        <p>Two-factor authentication (2FA) is NOT currently enabled on this account.</p>
+        <p>An authenticator app is not active.</p>
 
-        <a href="{% url 'mfa_activate_totp' %}" class="btn btn-primary">Enable 2FA</a>
+        <a href="{% url 'mfa_activate_totp' %}" class="btn btn-primary">Activate</a>
+    {% endif %}
+
+    <hr class="my-4">
+
+    <h4>Security Keys</h4>
+    {% if authenticators.webauthn|length %}
+        <p>You have added {{ authenticators.webauthn|length }} security key{{ authenticators.webauthn|length|pluralize }}.</p>
+
+        <a href="{% url 'mfa_list_webauthn' %}" class="btn btn-secondary">Manage</a>
+    {% else %}
+        <p>No security keys have been added.</p>
+
+        <a href="{% url 'mfa_add_webauthn' %}" class="btn btn-primary">Add</a>
     {% endif %}
 {% endblock %}

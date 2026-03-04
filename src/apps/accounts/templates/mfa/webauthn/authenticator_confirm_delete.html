@@ -1,0 +1,17 @@
+{% extends 'account_base.html' %}
+
+{% block title %}Remove Security Key{% endblock %}
+
+{% block content %}
+    <h3>Remove Security Key</h3>
+
+    <p>Are you sure you want to remove this security key?</p>
+
+    <form method="post" action="{% url 'mfa_remove_webauthn' pk=authenticator.pk %}">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger">
+            Remove
+        </button>
+        <a href="{% url 'mfa_list_webauthn' %}" class="btn btn-outline-secondary ms-2">Cancel</a>
+    </form>
+{% endblock %}

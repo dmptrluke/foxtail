@@ -1,5 +1,4 @@
 {% extends 'account_base.html' %}
-{% load i18n %}
 
 {% block title %}Generate Recovery Codes{% endblock %}
 
@@ -16,7 +15,7 @@
     <form method="post">
         {% csrf_token %}
         <button type="submit" class="btn btn-secondary">
-            {% trans 'Generate' %}
+            Generate
         </button>
     </form>
 {% endblock %}
