@@ -25,7 +25,7 @@ class CustomUserAdmin(UserAdmin):
 
 class ClientMetadataInline(admin.StackedInline):
     model = ClientMetadata
-    extra = 1
+    extra = 0
     max_num = 1
 
 

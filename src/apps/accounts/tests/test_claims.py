@@ -21,4 +21,4 @@ def test_claims(user):
     assert claims["email_verified"] is False
 
     # test other data
-    assert claims["name"] is user.full_name
+    assert claims["name"] == user.full_name
