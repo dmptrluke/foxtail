@@ -1,0 +1,118 @@
+{% extends "account_base.html" %}
+{% load icon avatar %}
+
+{% block title %}Your Account{% endblock %}
+
+{% block content %}
+    <div class="d-flex align-items-center gap-3 mb-4 pb-4 border-bottom">
+        <img src="{{ user|avatar_url:80 }}" alt="{{ user.username }}" class="rounded-circle flex-shrink-0" width="64" height="64">
+        <div>
+            <h3 class="mb-0">{{ user.username }}</h3>
+            <p class="text-muted mb-0">{{ user.email }}</p>
+        </div>
+    </div>
+
+    <div class="row g-3">
+        <div class="col-md-6">
+            <div class="card bg-dark text-white h-100 border-0">
+                <div class="card-body pb-2">
+                    <div class="mb-2 text-white-50">{% icon "account-cog" size="2rem" %}</div>
+                    <h5 class="card-title mb-1">Account Settings</h5>
+                    <p class="card-text text-white-50 small">Username, name, and personal details</p>
+                </div>
+                <div class="card-footer bg-transparent border-0 pt-0 pb-3">
+                    <a href="{% url 'account_settings' %}" class="btn btn-light btn-sm">Edit Profile</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card bg-dark text-white h-100 border-0">
+                <div class="card-body pb-2">
+                    <div class="mb-2 text-white-50">{% icon "lock" size="2rem" %}</div>
+                    <h5 class="card-title mb-1">Password</h5>
+                    {% if has_password %}
+                        <p class="card-text text-white-50 small">Password is set</p>
+                    {% else %}
+                        <p class="card-text text-warning small">No password set</p>
+                    {% endif %}
+                </div>
+                <div class="card-footer bg-transparent border-0 pt-0 pb-3">
+                    <a href="{% url 'account_change_password' %}" class="btn btn-light btn-sm">Change Password</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card bg-dark text-white h-100 border-0">
+                <div class="card-body pb-2">
+                    <div class="mb-2 text-white-50">{% icon "email" size="2rem" %}</div>
+                    <h5 class="card-title mb-1">Email</h5>
+                    {% if primary_email %}
+                        <p class="card-text text-white-50 small mb-0">{{ primary_email.email }}</p>
+                    {% endif %}
+                </div>
+                <div class="card-footer bg-transparent border-0 pt-0 pb-3">
+                    <a href="{% url 'account_email' %}" class="btn btn-light btn-sm">Manage Email Addresses</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card bg-dark text-white h-100 border-0">
+                <div class="card-body pb-2">
+                    <div class="mb-2 {% if mfa_enabled %}text-success{% else %}text-warning{% endif %}">
+                        {% if mfa_enabled %}
+                            {% icon "shield-lock" size="2rem" %}
+                        {% else %}
+                            {% icon "shield-off" size="2rem" %}
+                        {% endif %}
+                    </div>
+                    <h5 class="card-title mb-1">Two-Factor Authentication</h5>
+                    {% if mfa_enabled %}
+                        <p class="card-text text-white-50 small">
+                            {% if "totp" in mfa_methods %}Authenticator App{% endif %}
+                            {% if "totp" in mfa_methods and "webauthn" in mfa_methods %}, {% endif %}
+                            {% if "webauthn" in mfa_methods %}Security Key{% endif %}
+                        </p>
+                    {% else %}
+                        <p class="card-text text-warning small">Not enabled</p>
+                    {% endif %}
+                </div>
+                <div class="card-footer bg-transparent border-0 pt-0 pb-3">
+                    <a href="{% url 'mfa_index' %}" class="btn btn-light btn-sm">Manage 2FA</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card bg-dark text-white h-100 border-0">
+                <div class="card-body pb-2">
+                    <div class="mb-2 text-white-50">{% icon "application-brackets" size="2rem" %}</div>
+                    <h5 class="card-title mb-1">Applications</h5>
+                    <p class="card-text text-white-50 small">{{ app_count }} authorized app{{ app_count|pluralize }}</p>
+                </div>
+                <div class="card-footer bg-transparent border-0 pt-0 pb-3">
+                    <a href="{% url 'account_application_list' %}" class="btn btn-light btn-sm">Manage Apps</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card bg-dark text-white h-100 border-0">
+                <div class="card-body pb-2">
+                    <div class="mb-2 text-white-50">{% icon "link-variant" size="2rem" %}</div>
+                    <h5 class="card-title mb-1">Connected Accounts</h5>
+                    {% if social_count %}
+                        <p class="card-text text-white-50 small">{{ social_count }} connected: {{ social_providers|join:", " }}</p>
+                    {% else %}
+                        <p class="card-text text-white-50 small">No accounts connected</p>
+                    {% endif %}
+                </div>
+                <div class="card-footer bg-transparent border-0 pt-0 pb-3">
+                    <a href="{% url 'socialaccount_connections' %}" class="btn btn-light btn-sm">Manage Connections</a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

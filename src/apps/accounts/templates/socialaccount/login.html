@@ -5,8 +5,8 @@
 
 {% block content %}
     <div class="text-center py-4" style="max-width: 480px; margin: 0 auto;">
-        <div class="mb-4" style="font-size: 5rem;">
-            {% icon provider.name|lower %}
+        <div class="mb-4">
+            {% icon provider.name|lower size="5rem" %}
         </div>
 
         {% if process == "connect" %}
