@@ -25,13 +25,13 @@ def migrate_otp_to_allauth_mfa(apps, schema_editor):
     with connection.cursor() as cursor:
         # Migrate confirmed TOTP devices
         cursor.execute(
-            "SELECT user_id, key, created_at, last_used_at "
+            "SELECT user_id, key "
             "FROM otp_totp_totpdevice "
             "WHERE confirmed = true"
         )
         totp_rows = cursor.fetchall()
 
-    for user_id, hex_key, created_at, last_used_at in totp_rows:
+    for user_id, hex_key in totp_rows:
         # django-otp stores keys as hex, allauth expects base32
         secret = base64.b32encode(bytes.fromhex(hex_key)).decode("ascii")
 
@@ -40,8 +40,6 @@ def migrate_otp_to_allauth_mfa(apps, schema_editor):
                 user_id=user_id,
                 type="totp",
                 data={"secret": secret},
-                created_at=created_at,
-                last_used_at=last_used_at,
             )
 
     # Migrate recovery codes (static tokens)

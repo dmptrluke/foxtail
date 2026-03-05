@@ -4,38 +4,47 @@
 
 {% block content %}
     <h3>Authorized Applications</h3>
-    <p class="mb-4">You have granted <strong>{{ consent_list|length }}
-        application{{ consent_list|length|pluralize }}</strong> access
-        to your account.</p>
+    <p class="text-muted">These applications have been granted access to your account. You can revoke access at any time by contacting support.</p>
 
-    {% for consent in consent_list %}
-        <div class="d-flex flex-column flex-md-row mb-4">
-            <div class="me-3 mb-3 mb-md-0">
-                <img class="rounded" src="{{ consent.client.logo.url }}" alt="{{ consent.client.name }}">
-            </div>
-
-            <div class="flex-grow-1 border-start ps-3">
-                <h5>{{ consent.client.name }}<small> — <a
-                        href="{{ consent.client.website_url }}" rel="noopener noreferrer"
-                        target="_blank">{{ consent.client.website_url }}</a></small></h5>
-                <p class="text-muted">{{ consent.client.name }} has access to the following information:</p>
-                <dl class="mb-0">
-                    <dt>User Identifier</dt>
-                    <dd>Access to a unique value representing your {{ request.site.name }} account.</dd>
-                    {% if consent.detailed_scopes %}
-                        {% for scope in consent.detailed_scopes %}
-                            <dt>{{ scope.name }}</dt>
-                            <dd>{{ scope.description }}</dd>
-                        {% endfor %}
-                    {% endif %}
-                </dl>
-                {% if consent.client.terms_url %}
-                    <p class="mb-0">
-                        <small><a href="{{ consent.client.terms_url }}" rel="noopener noreferrer" target="_blank">View
-                            Privacy Policy</a></small>
-                    </p>
-                {% endif %}
-            </div>
+    {% if consent_list %}
+        <div class="list-group">
+            {% for consent in consent_list %}
+                <div class="list-group-item py-3">
+                    <div class="d-flex align-items-start gap-3">
+                        {% if consent.client.logo %}
+                            <img class="rounded flex-shrink-0" src="{{ consent.client.logo.url }}"
+                                 alt="{{ consent.client.name }}" width="75" height="75"
+                                 style="object-fit: cover;">
+                        {% else %}
+                            <div class="rounded bg-light d-flex align-items-center justify-content-center flex-shrink-0"
+                                 style="width: 75px; height: 75px;">
+                                <span class="text-muted fs-4">{{ consent.client.name|make_list|first }}</span>
+                            </div>
+                        {% endif %}
+                        <div class="flex-grow-1">
+                            <div class="d-flex align-items-baseline gap-2 mb-1">
+                                <h6 class="mb-0">{{ consent.client.name }}</h6>
+                                {% if consent.client.website_url %}
+                                    <a class="text-muted small" href="{{ consent.client.website_url }}"
+                                       rel="noopener noreferrer" target="_blank">{{ consent.client.website_url }}</a>
+                                {% endif %}
+                            </div>
+                            <div class="d-flex flex-wrap gap-1 mt-2">
+                                <span class="badge bg-secondary bg-opacity-10 text-secondary">User Identifier</span>
+                                {% for scope in consent.detailed_scopes %}
+                                    <span class="badge bg-secondary bg-opacity-10 text-secondary" title="{{ scope.description }}">{{ scope.name }}</span>
+                                {% endfor %}
+                            </div>
+                            {% if consent.client.terms_url %}
+                                <a class="small text-muted mt-2 d-inline-block" href="{{ consent.client.terms_url }}"
+                                   rel="noopener noreferrer" target="_blank">Privacy Policy</a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
         </div>
-    {% endfor %}
-{% endblock content %}
+    {% else %}
+        <p class="text-muted">No applications have been granted access to your account.</p>
+    {% endif %}
+{% endblock %}
