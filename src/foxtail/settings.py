@@ -88,6 +88,7 @@ INSTALLED_APPS = [
     'webpack_loader',
     'crispy_forms',
     'crispy_bootstrap5',
+    'widget_tweaks',
     'oidc_provider',
     'django_recaptcha',
     'versatileimagefield',
@@ -204,10 +205,7 @@ ACCOUNT_USERNAME_VALIDATORS = 'apps.accounts.validators.username_validators'
 
 ACCOUNT_FORMS = {
     'signup': 'apps.accounts.forms.SignupForm',
-    'change_password': 'apps.accounts.forms.ChangePasswordForm',  # nosec B105
-    'set_password': 'apps.accounts.forms.SetPasswordForm',  # nosec B105
     'reset_password': 'apps.accounts.forms.ResetPasswordForm',  # nosec B105
-    'login': 'apps.accounts.forms.LoginForm'
 }
 
 # allauth social

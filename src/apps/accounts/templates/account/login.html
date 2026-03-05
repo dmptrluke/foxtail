@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load crispy_forms_tags account socialaccount %}
+{% load account socialaccount form_tags %}
 
 {% block title %}Sign In{% endblock %}
 
@@ -26,7 +26,9 @@
     <form method="post" action="{% url 'account_login' %}">
         {% csrf_token %}
 
-            {% crispy form %}
+        {% text_field form.login %}
+        {% text_field form.password %}
+        {% if form.remember %}{% check_field form.remember %}{% endif %}
 
         <div class="form-group">
             <p>Forgotten your password? <a href="{% url 'account_reset_password' %}">Click here to reset.</a></p>

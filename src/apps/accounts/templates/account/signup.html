@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load account socialaccount crispy_forms_tags %}
+{% load account socialaccount form_tags %}
 
 {% block title %}Create Account{% endblock %}
 
@@ -19,10 +19,17 @@
 
     {% endif %}
 
-
     <form method="post" id="create_account_form" action="{% url 'account_signup' %}">
         {% csrf_token %}
-        {% crispy form %}
+        <div class="row">
+            <div class="col-md-6">{% text_field form.username autocomplete="username" %}</div>
+            <div class="col-md-6">{% text_field form.email autocomplete="email" %}</div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">{% text_field form.password1 autocomplete="new-password" %}</div>
+            <div class="col-md-6">{% text_field form.password2 autocomplete="new-password" %}</div>
+        </div>
+        {% if form.captcha %}{% captcha_field form.captcha %}{% endif %}
         <input type="submit" id="create_account_submit" class="btn btn-primary" value="Create Account">
         {% if redirect_field_value %}
             <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}"/>

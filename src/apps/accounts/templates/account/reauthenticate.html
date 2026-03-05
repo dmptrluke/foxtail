@@ -1,5 +1,5 @@
 {% extends 'account_base.html' %}
-{% load crispy_forms_filters %}
+{% load form_tags %}
 
 {% block title %}Confirm Access{% endblock %}
 
@@ -10,7 +10,7 @@
 
     <form method="post" action="{% url 'account_reauthenticate' %}">
         {% csrf_token %}
-        {{ form | crispy }}
+        {% text_field form.password autocomplete="current-password" %}
         {{ redirect_field }}
         <button type="submit" class="btn btn-primary">
             Confirm
