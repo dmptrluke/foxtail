@@ -22,10 +22,10 @@ from django.contrib.sitemaps.views import sitemap
 from django.urls import include, path
 from django.views.generic import RedirectView
 
+import apps.blog.sitemaps as blog_sitemaps
 import apps.content.sitemaps as content_sitemaps
 import apps.core.views as core_views
 import apps.events.sitemaps as event_sitemaps
-import foxtail_blog.sitemaps as blog_sitemaps
 
 sitemaps = {
     'static': content_sitemaps.StaticSitemap,
@@ -52,8 +52,8 @@ urlpatterns = [
     path('accounts/', include('allauth.urls')),
     path('directory/', include('apps.directory.urls')),
     path('events/', include('apps.events.urls')),
-    path('contact/', include('foxtail_contact.urls')),
-    path('blog/', include('foxtail_blog.urls')),
+    path('contact/', include('apps.contact.urls')),
+    path('blog/', include('apps.blog.urls')),
     path('', include('apps.content.urls'))
 ]
 

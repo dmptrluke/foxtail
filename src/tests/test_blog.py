@@ -2,7 +2,7 @@ import pytest
 from faker import Faker
 from selenium.webdriver.common.by import By
 
-from foxtail_blog.models import Post
+from apps.blog.models import Post
 
 fake = Faker()
 pytestmark = pytest.mark.django_db

@@ -23,15 +23,24 @@ $spacers: (
 // fonts
 $font-family-sans-serif: -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji" !default;
 
-// change the primary color
-$primary: #006b99; // #0088c2; preferred, workaround
+// dusty plum with steel-blue accent
+$primary: #3d5a80;
+$dark: #281e33;
+$secondary: #7a6490;
+$success: #5a9e6f;
+$info: #5b5e9a;
+$warning: #d4a054;
+$danger: #c75b5b;
 
-// add a neat bit of blueness to the dark
-$dark: #2c3840;
+// soft plum-tinted background
+$body-bg: #fbfafc;
+$body-color: #2d2639;
 
 // link underlines only when hovering
 $link-decoration: none;
 $link-hover-decoration: underline;
+$link-color: #5b5e9a;
+$link-hover-color: #454881;
 
 $navbar-padding-y: $spacer * .75 !default;
 $navbar-dark-color: rgba($white, .65) !default;

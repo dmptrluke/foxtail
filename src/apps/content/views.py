@@ -5,8 +5,8 @@ from django.views.generic import DetailView, TemplateView
 
 from published.utils import queryset_filter
 
+from apps.blog.models import Post
 from apps.events.models import Event
-from foxtail_blog.models import Post
 
 from .models import Page
 

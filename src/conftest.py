@@ -6,10 +6,10 @@ from pytest_factoryboy import register
 from selenium import webdriver
 
 from apps.accounts.tests.factories import UserFactory, UserNoPasswordFactory
+from apps.blog.tests.factories import PostFactory
 from apps.content.tests.factories import PageFactory
 from apps.directory.tests.factories import ProfileFactory
 from apps.events.tests.factories import EventFactory, PastEventFactory
-from foxtail_blog.tests.factories import PostFactory
 
 # accounts
 register(UserFactory, "user")

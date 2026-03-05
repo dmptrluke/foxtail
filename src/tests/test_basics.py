@@ -3,7 +3,7 @@ from datetime import datetime
 import pytest
 from selenium.webdriver.common.by import By
 
-from foxtail_blog.models import Post
+from apps.blog.models import Post
 
 pytestmark = pytest.mark.django_db
 

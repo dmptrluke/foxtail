@@ -1,4 +1,4 @@
-{% load crispy_forms_tags avatar permissions %}
+{% load avatar permissions form_tags %}
 
 <section id="comments" class="mb-4">
     {% if comment_list %}
@@ -29,7 +29,11 @@
     {% if user.is_authenticated %}
         <form method="post" class="mt-3">
             {% csrf_token %}
-            {% crispy form %}
+            {% textarea_field form.text hide_label=True %}
+            {% if form.captcha %}
+                {% captcha_field form.captcha %}
+            {% endif %}
+            <button type="submit" name="post-comment" class="btn btn-primary">Post Comment</button>
         </form>
     {% else %}
         <p>Please <a href="{% url 'account_login' %}">sign in</a> to leave a comment.</p>
