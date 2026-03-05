@@ -9,26 +9,30 @@ register = template.Library()
 
 
 @register.simple_tag(name='icon')
-def icon_tag(icon_id, tag='div'):
+def icon_tag(icon_id, tag='div', size=None):
     # abuse the django slugify function to clean file names
     icon_id = slugify(icon_id)
 
     # see if we've already handled and loaded this icon before
-    cached_icon = cache.get(f'icon3_{icon_id}')
+    cached_icon = cache.get(f'icon4_{icon_id}')
 
     if cached_icon:
         icon_data = cached_icon
     else:
         # no cached icon, damn. now I have to work with files
         icon_path = finders.find(f'icons/{icon_id}.svg')
-
         if not icon_path:
             # yeet
             raise FileNotFoundError(f'No icon found for "{icon_id}".')
 
         with open(icon_path) as icon_file:
             icon_data = icon_file.read()
-            cache.set(f'icon3_{icon_id}', icon_data, None)
+
+            cache.set(f'icon4_{icon_id}', icon_data, None)
+
+    if size:
+        # Inject inline style on the SVG to override SCSS dimensions
+        icon_data = icon_data.replace('<svg ', f'<svg style="width:{size};height:{size}" ', 1)
 
     return format_html("""
         <{0} class='icon icon-{1} svg-baseline'>
