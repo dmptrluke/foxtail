@@ -1,80 +1,58 @@
 {% extends "account_base.html" %}
 {% load form_tags %}
 
-{% block title %}Change Email{% endblock %}
+{% block title %}Email Addresses{% endblock %}
 
 {% block content %}
-    <h3>Manage Email</h3>
+    <h3>Email Addresses</h3>
+    <p class="text-muted">The following email addresses are associated with your account. Your primary email address is used for account notifications and password resets.</p>
+
     {% with emails=user.emailaddress_set.all %}
     {% if emails %}
-        <p>The following email addresses are associated with your account:</p>
-
-        <form action="{% url 'account_email' %}" class="email_list mb-4" method="post">
+        <form action="{% url 'account_email' %}" method="post" class="mb-5">
             {% csrf_token %}
-
-                <div class="form-group">
-                    {% for emailaddress in emails %}
-                        <div class="custom-control custom-radio mb-2">
-                            <input id="email_radio_{{ forloop.counter }}" type="radio" name="email"
-                                   {% if emailaddress.primary or emails.count == 1 %}checked="checked"{% endif %}
-                                   value="{{ emailaddress.email }}" class="custom-control-input">
-                            <label for="email_radio_{{ forloop.counter }}"
-                                   class="{% if emailaddress.primary %}primary_email{% endif %} custom-control-label">
+            <ul class="list-group mb-3">
+                {% for emailaddress in emails %}
+                    <li class="list-group-item{% if emailaddress.primary %} list-group-item-primary{% endif %}">
+                        <div class="d-flex align-items-center gap-2">
+                            <input class="form-check-input flex-shrink-0" type="radio" name="email"
+                                   id="email_radio_{{ forloop.counter }}" value="{{ emailaddress.email }}"
+                                   {% if emailaddress.primary or emails.count == 1 %}checked{% endif %}>
+                            <label class="form-check-label flex-grow-1" for="email_radio_{{ forloop.counter }}">
                                 {{ emailaddress.email }}
-                                {% if emailaddress.verified %}
-                                    <span class="badge bg-success">Verified</span>
-                                {% else %}
-                                    <span class="badge bg-secondary" data-bs-toggle="tooltip" data-bs-placement="top"
-                                          title="An email address can not be set as primary until it is verified.">Unverified</span>
-                                {% endif %}
-                                {% if emailaddress.primary %}
-                                    <span class="badge bg-primary" data-bs-toggle="tooltip" data-bs-placement="top"
-                                          title="All communications will be sent to this address.">Primary</span>
-                                {% endif %}
                             </label>
+                            <span class="d-flex gap-1">
+                                {% if emailaddress.primary %}
+                                    <span class="badge bg-primary">Primary</span>
+                                {% endif %}
+                                {% if emailaddress.verified %}
+                                {% else %}
+                                    <span class="badge bg-warning text-dark" data-bs-toggle="tooltip"
+                                          title="Cannot be set as primary until verified.">Unverified</span>
+                                {% endif %}
+                            </span>
                         </div>
-                    {% endfor %}
-                </div>
-                <div class="form-group">
-                    <button class="btn btn-secondary mb-1" type="submit" name="action_primary">
-                        Make Primary
-                    </button>
-                    <button class="btn btn-secondary mb-1" type="submit" name="action_send">
-                        Resend Verification
-                    </button>
-                    <button class="btn btn-primary mb-1" type="submit" name="action_remove">
-                        Remove
-                    </button>
-                </div>
-
+                    </li>
+                {% endfor %}
+            </ul>
+            <div class="d-flex gap-2">
+                <button class="btn btn-outline-secondary btn-sm" type="submit" name="action_primary">Make Primary</button>
+                <button class="btn btn-outline-secondary btn-sm" type="submit" name="action_send">Re-send Verification</button>
+                <button class="btn btn-outline-danger btn-sm" type="submit" name="action_remove">Remove</button>
+            </div>
         </form>
-
     {% else %}
-        <div class="alert alert-success" role="alert">
-            <h4 class="alert-heading">Warning:</h4>
-            <p>
-
-                You currently have no email addresses associated with your account. An associated email address
-                is required to be able to reset your password and receive notifications.
-            </p>
-            <hr>
-            <p>This is a bad idea!</p>
+        <div class="alert alert-warning mb-4" role="alert">
+            No email address is associated with your account. You will not be able to reset your password without one.
         </div>
-
     {% endif %}
     {% endwith %}
 
-
-    <h4>Add Email</h4>
-
-    <form method="post" action="{% url 'account_email' %}" class="add_email form-inline">
-        <div class="form-group">
-            {% csrf_token %}
-            {% text_field form.email autocomplete="email" %}
-        </div>
-        <div class="form-group">
-            <button name="action_add" class="btn btn-primary" type="submit">Add</button>
-        </div>
+    <h5>Add Email</h5>
+    <form method="post" action="{% url 'account_email' %}" class="d-flex gap-2 align-items-start">
+        {% csrf_token %}
+        {% text_field form.email autocomplete="email" inline=True %}
+        <button name="action_add" class="btn btn-primary flex-shrink-0" type="submit">Add</button>
     </form>
 
 {% endblock %}
@@ -82,16 +60,10 @@
 
 {% block extra_footer %}
     <script type="text/javascript" nonce="{{ request.csp_nonce }}">
-        (function () {
-            var message = "Do you really want to remove the selected email address?";
-            var actions = document.getElementsByName('action_remove');
-            if (actions.length) {
-                actions[0].addEventListener("click", function (e) {
-                    if (!confirm(message)) {
-                        e.preventDefault();
-                    }
-                });
+        document.querySelector('[name="action_remove"]').addEventListener('click', function (e) {
+            if (!confirm('Do you really want to remove this email address?')) {
+                e.preventDefault();
             }
-        })();
+        });
     </script>
 {% endblock %}

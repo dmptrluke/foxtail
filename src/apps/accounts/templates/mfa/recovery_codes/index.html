@@ -4,22 +4,27 @@
 
 {% block content %}
     <h3>Recovery Codes</h3>
+    <p class="text-muted">Recovery codes let you access your account if you ever lose access to your authenticator app. Each code can only be used once.</p>
 
     {% if unused_codes %}
-        <p>These recovery codes will allow you to access your account in case you lose your authenticator.
-            Store them safely!</p>
-        <ul class="list-unstyled">
-            {% for code in unused_codes %}
-                <li class="font-monospace">{{ code }}</li>
-            {% endfor %}
-        </ul>
+        <div class="alert alert-warning">
+            <strong>Keep these codes safe.</strong> Store them in a password manager or print them out and keep them somewhere secure. Do not share them with anyone.
+        </div>
+        <div class="card mb-4">
+            <div class="card-body">
+                <ul class="list-unstyled mb-0 font-monospace">
+                    {% for code in unused_codes %}
+                        <li>{{ code }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
     {% else %}
-        <p>No recovery codes available. Press the button below to generate some.</p>
+        <div class="alert alert-warning mb-4">
+            You have no recovery codes remaining. Generate a new set below.
+        </div>
     {% endif %}
 
-    <a href="{% url 'mfa_generate_recovery_codes' %}" class="btn btn-secondary">
-        Generate Recovery Codes
-    </a>
-
-    <a href="{% url 'mfa_index' %}" class="btn btn-outline-secondary ms-2">Back</a>
+    <a href="{% url 'mfa_generate_recovery_codes' %}" class="btn btn-secondary btn-sm">Generate New Codes</a>
+    <a href="{% url 'mfa_index' %}" class="btn btn-outline-secondary btn-sm ms-2">Back</a>
 {% endblock %}

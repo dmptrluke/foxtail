@@ -5,17 +5,20 @@
 
 {% block content %}
     <h3>Add Security Key</h3>
+    <p class="text-muted">Register a hardware security key (such as a YubiKey) or a passkey saved on your device.</p>
 
-    <form method="post" action="{% url 'mfa_add_webauthn' %}">
-        {% csrf_token %}
-        {% text_field form.name %}
-        {{ form.passwordless }}
-        {{ form.credential }}
-        <button type="button" id="mfa_webauthn_add" class="btn btn-primary">
-            Add
-        </button>
-        <a href="{% url 'mfa_list_webauthn' %}" class="btn btn-outline-secondary ms-2">Cancel</a>
-    </form>
+    <div class="card mb-4">
+        <div class="card-body">
+            <form method="post" action="{% url 'mfa_add_webauthn' %}">
+                {% csrf_token %}
+                {% text_field form.name %}
+                {{ form.passwordless }}
+                {{ form.credential }}
+                <button type="button" id="mfa_webauthn_add" class="btn btn-primary">Register Key</button>
+                <a href="{% url 'mfa_list_webauthn' %}" class="btn btn-outline-secondary ms-2">Cancel</a>
+            </form>
+        </div>
+    </div>
 
     {% include "mfa/webauthn/snippets/scripts.html" %}
     {{ js_data|json_script:"js_data" }}

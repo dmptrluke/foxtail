@@ -5,25 +5,20 @@
 
 {% block content %}
     <h3>Confirm Access</h3>
+    <p class="text-muted">To continue, please verify your identity using your authenticator app.</p>
 
-    <p>Please reauthenticate to safeguard your account.</p>
-
-    <p>Enter an authenticator code:</p>
-
-    <form method="post" action="{% url 'mfa_reauthenticate' %}">
+    <form method="post" action="{% url 'mfa_reauthenticate' %}" class="d-flex gap-2 align-items-start">
         {% csrf_token %}
-        {% text_field form.code %}
+        {% text_field form.code inline=True %}
         {{ redirect_field }}
-        <button type="submit" class="btn btn-primary">
-            Confirm
-        </button>
+        <button type="submit" class="btn btn-primary flex-shrink-0">Confirm</button>
     </form>
 
     {% if reauthentication_alternatives %}
         <hr class="my-4">
-        <h4>Alternative options</h4>
+        <p class="text-muted mb-2">Or verify another way:</p>
         {% for alt in reauthentication_alternatives %}
-            <a href="{{ alt.url }}" class="btn btn-outline-primary me-2">{{ alt.description }}</a>
+            <a href="{{ alt.url }}" class="btn btn-outline-secondary btn-sm me-2">{{ alt.description }}</a>
         {% endfor %}
     {% endif %}
 {% endblock %}

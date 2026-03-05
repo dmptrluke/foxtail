@@ -4,14 +4,15 @@
 
 {% block content %}
     <h3>Remove Security Key</h3>
+    <p class="text-muted">This key will be permanently removed from your account.</p>
 
-    <p>Are you sure you want to remove this security key?</p>
+    <div class="alert alert-warning">
+        <strong>Are you sure?</strong> You will no longer be able to use <strong>{{ authenticator }}</strong> to sign in.
+    </div>
 
     <form method="post" action="{% url 'mfa_remove_webauthn' pk=authenticator.pk %}">
         {% csrf_token %}
-        <button type="submit" class="btn btn-danger">
-            Remove
-        </button>
+        <button type="submit" class="btn btn-danger">Remove</button>
         <a href="{% url 'mfa_list_webauthn' %}" class="btn btn-outline-secondary ms-2">Cancel</a>
     </form>
 {% endblock %}
