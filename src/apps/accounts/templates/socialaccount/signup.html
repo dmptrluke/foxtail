@@ -1,25 +1,30 @@
 {% extends "base.html" %}
-{% load form_tags %}
+{% load form_tags icon %}
 
 {% block title %}Create Account{% endblock %}
 
 {% block content %}
-    <h1>Complete Account Creation</h1>
+    <div style="max-width: 480px; margin: 0 auto;">
+        <div class="text-center mb-4">
+            <div class="mb-3" style="font-size: 5rem;">
+                {% icon account.get_provider.name|lower %}
+            </div>
+            <h2>Complete Account Creation</h2>
+            <p class="text-muted">
+                Finish setting up your furry.nz account using your {{ account.get_provider.name }} details.
+            </p>
+        </div>
 
-    <p>
-        You are about to use your {{ account.get_provider.name }} account to login to
-        {{ site.name }}. As a final step, please complete the following form.
-    </p>
-
-    <form method="post" action="{% url 'socialaccount_signup' %}">
-        {% csrf_token %}
-        {% for field in form %}
-            {% if not field.is_hidden %}
-                {% text_field field %}
-            {% else %}
-                {{ field }}
-            {% endif %}
-        {% endfor %}
-        <input type="submit" class="btn btn-primary" value="Create Account">
-    </form>
-{% endblock content %}
+        <form method="post" action="{% url 'socialaccount_signup' %}">
+            {% csrf_token %}
+            {% for field in form %}
+                {% if not field.is_hidden %}
+                    {% text_field field %}
+                {% else %}
+                    {{ field }}
+                {% endif %}
+            {% endfor %}
+            <button type="submit" class="btn btn-primary w-100">Create Account</button>
+        </form>
+    </div>
+{% endblock %}
