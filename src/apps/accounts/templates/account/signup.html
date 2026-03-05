@@ -22,12 +22,12 @@
     <form method="post" id="create_account_form" action="{% url 'account_signup' %}">
         {% csrf_token %}
         <div class="row">
-            <div class="col-md-6">{% text_field form.username autocomplete="username" %}</div>
-            <div class="col-md-6">{% text_field form.email autocomplete="email" %}</div>
+            <div class="col-md-6">{% text_field form.username autocomplete="username" placeholder=None %}</div>
+            <div class="col-md-6">{% text_field form.email autocomplete="email" placeholder=None %}</div>
         </div>
         <div class="row">
-            <div class="col-md-6">{% text_field form.password1 autocomplete="new-password" %}</div>
-            <div class="col-md-6">{% text_field form.password2 autocomplete="new-password" %}</div>
+            <div class="col-md-6">{% text_field form.password1 autocomplete="new-password" placeholder=None %}</div>
+            <div class="col-md-6">{% text_field form.password2 autocomplete="new-password" placeholder=None %}</div>
         </div>
         {% if form.captcha %}{% captcha_field form.captcha %}{% endif %}
         <input type="submit" id="create_account_submit" class="btn btn-primary" value="Create Account">
