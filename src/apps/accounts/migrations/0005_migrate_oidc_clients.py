@@ -31,7 +31,7 @@ def migrate_clients(apps, schema_editor):
         cursor.execute(
             "SELECT client_id, name, client_secret, client_type, "
             "_redirect_uris, _scope, require_consent, "
-            "website_url, terms_url, contact_email, logo, date_created "
+            "date_created "
             "FROM oidc_provider_client"
         )
         columns = [col[0] for col in cursor.description]
@@ -47,16 +47,6 @@ def migrate_clients(apps, schema_editor):
         else:
             scopes = "openid\nemail\nprofile"
 
-        data = {}
-        if row.get("website_url"):
-            data["website_url"] = row["website_url"]
-        if row.get("terms_url"):
-            data["terms_url"] = row["terms_url"]
-        if row.get("contact_email"):
-            data["contact_email"] = row["contact_email"]
-        if row.get("logo"):
-            data["logo_url"] = f"/media/{row['logo']}"
-
         Client.objects.create(
             id=row["client_id"],
             name=row["name"],
@@ -68,7 +58,6 @@ def migrate_clients(apps, schema_editor):
             response_types="code",
             grant_types="authorization_code\nrefresh_token",
             skip_consent=not row["require_consent"],
-            data=data or None,
             created_at=timezone.make_aware(
                 datetime.datetime.combine(row["date_created"], datetime.time.min)
             ) if isinstance(row["date_created"], datetime.date) else row["date_created"],
