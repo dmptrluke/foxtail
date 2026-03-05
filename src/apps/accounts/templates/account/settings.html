@@ -10,7 +10,6 @@
         {% csrf_token %}
 
         <h5>Basic Details</h5>
-        <p class="text-muted">Your username is used to identify you and cannot contain spaces.</p>
         <div class="row mb-4">
             <div class="col-md-6">
                 {% text_field form.username %}
@@ -18,7 +17,7 @@
         </div>
 
         <h5>Personal Information</h5>
-        <p class="text-muted">This information is optional and may be requested by third-party applications. It will not be shared without your explicit consent.</p>
+        <p class="text-muted small">This information is optional and may be requested by third-party applications. It will not be shared without your explicit consent.</p>
         <div class="row">
             <div class="col-md-6">
                 {% text_field form.full_name autocomplete="name" %}
