@@ -5,7 +5,7 @@
 
 {% block content %}
     <h3>Email Addresses</h3>
-    <p class="text-muted">The following email addresses are associated with your account. Your primary email address is used for account notifications and password resets.</p>
+    <p>The following email addresses are associated with your account. Your primary email address is used for account notifications and password resets.</p>
 
     {% with emails=user.emailaddress_set.all %}
     {% if emails %}
@@ -36,7 +36,9 @@
                 {% endfor %}
             </ul>
             <div class="d-flex gap-2">
-                <button class="btn btn-outline-secondary btn-sm" type="submit" name="action_primary">Make Primary</button>
+                {% if emails.count > 1 %}
+                    <button class="btn btn-outline-secondary btn-sm" type="submit" name="action_primary">Make Primary</button>
+                {% endif %}
                 <button class="btn btn-outline-secondary btn-sm" type="submit" name="action_send">Re-send Verification</button>
                 <button class="btn btn-outline-danger btn-sm" type="submit" name="action_remove">Remove</button>
             </div>

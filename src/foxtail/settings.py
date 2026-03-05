@@ -331,16 +331,27 @@ STATICFILES_DIRS = [
     str(BASE_DIR / 'assets/static')
 ]
 
+AZURE_MEDIA = env.bool('AZURE_MEDIA', default=False)
+
+if AZURE_MEDIA:
+    AZURE_ACCOUNT_NAME = env('AZURE_ACCOUNT')
+    AZURE_ACCOUNT_KEY = env('AZURE_KEY')
+    AZURE_CUSTOM_DOMAIN = env('AZURE_DOMAIN', default=None)
+    AZURE_SSL = env.bool('AZURE_SSL', default=True)
+
 STORAGES = {
     "default": {
-        "BACKEND": "django.core.files.storage.FileSystemStorage",
+        "BACKEND": "apps.core.storages.MediaAzureStorage" if AZURE_MEDIA
+        else "django.core.files.storage.FileSystemStorage",
     },
     "staticfiles": {
         "BACKEND": "whitenoise.storage.CompressedStaticFilesStorage",
     },
 }
 STATIC_ROOT = str(BASE_DIR / 'static')
-MEDIA_ROOT = str(BASE_DIR / 'storage/media')
+
+if not AZURE_MEDIA:
+    MEDIA_ROOT = str(BASE_DIR / 'storage/media')
 
 if TESTING:
     WHITENOISE_AUTOREFRESH = True

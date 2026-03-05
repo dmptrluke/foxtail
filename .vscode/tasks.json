@@ -83,6 +83,26 @@
             "problemMatcher": []
         },
         {
+            "label": "Postgres: Wipe Database",
+            "type": "shell",
+            "command": "docker compose exec -T db psql -U foxtail foxtail -c 'DROP SCHEMA public CASCADE; CREATE SCHEMA public;'",
+            "presentation": {
+                "reveal": "always",
+                "panel": "shared"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Postgres: Load Dump",
+            "type": "shell",
+            "command": "cat ${input:dumpFile} | docker compose exec -T db psql -U foxtail foxtail",
+            "presentation": {
+                "reveal": "always",
+                "panel": "shared"
+            },
+            "problemMatcher": []
+        },
+        {
             "label": "Django: Generate Sample Data",
             "type": "shell",
             "command": "docker compose run --rm foxtail django-admin generate_sample_data --users ${input:sampleUsers} --posts ${input:samplePosts} --comments ${input:sampleComments} --events ${input:sampleEvents} --pages ${input:samplePages}",
@@ -110,6 +130,11 @@
             "type": "promptString",
             "description": "Superuser password",
             "password": true
+        },
+        {
+            "id": "dumpFile",
+            "type": "promptString",
+            "description": "Path to the .sql dump file to load"
         },
         {
             "id": "sampleUsers",
