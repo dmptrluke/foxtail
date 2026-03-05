@@ -48,12 +48,10 @@
                         Use a recovery code instead
                     {% endif %}
                 </summary>
-                <form method="post" action="{% url 'mfa_authenticate' %}">
+                <form method="post" action="{% url 'mfa_authenticate' %}" class="d-flex gap-2 align-items-start">
                     {% csrf_token %}
-                    {% text_field form.code hide_label=True %}
-                    <button type="submit" class="btn btn-outline-primary">
-                        Authenticate
-                    </button>
+                    {% text_field form.code hide_label=True inline=True %}
+                    <button type="submit" class="btn btn-outline-primary flex-shrink-0">Authenticate</button>
                 </form>
             </details>
         {% endif %}
@@ -72,12 +70,10 @@
                     <h5 class="card-title">Recovery Code</h5>
                     <p class="card-text">Enter one of your recovery codes.</p>
                 {% endif %}
-                <form method="post" action="{% url 'mfa_authenticate' %}">
+                <form method="post" action="{% url 'mfa_authenticate' %}" class="d-flex gap-2 align-items-start">
                     {% csrf_token %}
-                    {% text_field form.code %}
-                    <button type="submit" class="btn btn-primary">
-                        Authenticate
-                    </button>
+                    {% text_field form.code hide_label=True inline=True %}
+                    <button type="submit" class="btn btn-primary flex-shrink-0">Authenticate</button>
                 </form>
             </div>
         </div>

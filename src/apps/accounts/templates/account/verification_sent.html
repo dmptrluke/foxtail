@@ -5,9 +5,6 @@
 {% block content %}
     <h1>Verify Your Email Address</h1>
 
-    <p>
-        We have sent an email to you for verification. Follow the link provided to finalize the signup process.
-        Please <a href="{% url 'contact:contact' %}">contact us</a> if you do not receive it within a few minutes.
-    </p>
+    <p class="text-muted">We have sent you a verification email. Follow the link in it to complete your sign up. Please <a href="{% url 'contact:contact' %}">contact us</a> if you do not receive it within a few minutes.</p>
 
 {% endblock %}

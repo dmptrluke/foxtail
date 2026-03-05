@@ -1,17 +1,20 @@
 {% extends 'account_base.html' %}
 {% load form_tags %}
 
-{% block title %}Edit Security Key{% endblock %}
+{% block title %}Rename Security Key{% endblock %}
 
 {% block content %}
-    <h3>Edit Security Key</h3>
+    <h3>Rename Security Key</h3>
+    <p class="text-muted">Give this key a name that helps you identify it — for example, "YubiKey 5" or "MacBook Touch ID".</p>
 
-    <form method="post">
-        {% csrf_token %}
-        {% text_field form.name %}
-        <button type="submit" class="btn btn-primary">
-            Save
-        </button>
-        <a href="{% url 'mfa_list_webauthn' %}" class="btn btn-outline-secondary ms-2">Cancel</a>
-    </form>
+    <div class="card mb-4">
+        <div class="card-body">
+            <form method="post">
+                {% csrf_token %}
+                {% text_field form.name %}
+                <button type="submit" class="btn btn-primary">Save</button>
+                <a href="{% url 'mfa_list_webauthn' %}" class="btn btn-outline-secondary ms-2">Cancel</a>
+            </form>
+        </div>
+    </div>
 {% endblock %}

@@ -4,18 +4,18 @@
 
 {% block content %}
     <h3>Generate Recovery Codes</h3>
+    <p class="text-muted">A new set of one-time recovery codes will be created for your account.</p>
 
-    <p>
-        Are you sure you want to generate new recovery codes?
-        {% if unused_code_count %}
-            This will invalidate your {{ unused_code_count }} remaining existing codes.
-        {% endif %}
-    </p>
+    {% if unused_code_count %}
+        <div class="alert alert-warning">
+            <strong>This will invalidate your {{ unused_code_count }} existing code{{ unused_code_count|pluralize }}.</strong>
+            Any saved codes you have will no longer work — make sure to save the new ones.
+        </div>
+    {% endif %}
 
     <form method="post">
         {% csrf_token %}
-        <button type="submit" class="btn btn-secondary">
-            Generate
-        </button>
+        <button type="submit" class="btn btn-secondary">Generate Codes</button>
+        <a href="{% url 'mfa_view_recovery_codes' %}" class="btn btn-outline-secondary ms-2">Cancel</a>
     </form>
 {% endblock %}

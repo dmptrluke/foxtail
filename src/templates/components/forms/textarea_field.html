@@ -1,11 +1,11 @@
 {% load widget_tweaks %}
-<div class="mb-3">
-    {% if not hide_label %}<label class="form-label" for="{{ field.id_for_label }}">{{ field.label }}</label>{% endif %}
+{% if not inline %}<div class="mb-3">{% endif %}
+    {% if not hide_label and not inline %}<label class="form-label" for="{{ field.id_for_label }}">{{ field.label }}</label>{% endif %}
     {% if field.errors %}
         {% render_field field class="form-control is-invalid" %}
         <div class="invalid-feedback">{{ field.errors }}</div>
     {% else %}
         {% render_field field class="form-control" %}
     {% endif %}
-    {% if field.help_text %}<div class="form-text">{{ field.help_text }}</div>{% endif %}
-</div>
+    {% if not inline and field.help_text %}<div class="form-text">{{ field.help_text }}</div>{% endif %}
+{% if not inline %}</div>{% endif %}

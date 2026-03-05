@@ -3,30 +3,57 @@
 {% block title %}Two-Factor Authentication{% endblock %}
 
 {% block content %}
-    <h3>Two-factor Authentication</h3>
+    <h3>Two-Factor Authentication</h3>
 
-    <h4>Authenticator App</h4>
-    {% if authenticators.totp %}
-        <p>Authentication using an authenticator app is <strong>active</strong>.</p>
-
-        <a href="{% url 'mfa_view_recovery_codes' %}" class="btn btn-secondary me-2">Recovery Codes</a>
-        <a href="{% url 'mfa_deactivate_totp' %}" class="btn btn-outline-danger">Disable</a>
+    {% if authenticators.totp or authenticators.webauthn %}
+        <p>Two-factor authentication is <strong>active</strong> on your account. When you sign in, you will be asked to verify using one of the methods below.</p>
     {% else %}
-        <p>An authenticator app is not active.</p>
-
-        <a href="{% url 'mfa_activate_totp' %}" class="btn btn-primary">Activate</a>
+        <div class="alert alert-warning">
+            <strong>Two-factor authentication is not enabled.</strong>
+            Enable at least one method below to protect your account from unauthorised access.
+        </div>
     {% endif %}
 
-    <hr class="my-4">
+    <div class="card mb-3">
+        <div class="card-body">
+            <h5 class="card-title">Authenticator App</h5>
+            {% if authenticators.totp %}
+                <p class="card-text text-muted">An authenticator app is active. Use it to generate one-time codes when signing in.</p>
+                <a href="{% url 'mfa_deactivate_totp' %}" class="btn btn-outline-danger btn-sm">Disable</a>
+            {% else %}
+                <p class="card-text text-muted">Use an app like Google Authenticator or Authy to generate one-time codes when signing in.</p>
+                <a href="{% url 'mfa_activate_totp' %}" class="btn btn-primary btn-sm">Set Up</a>
+            {% endif %}
+        </div>
+    </div>
 
-    <h4>Security Keys</h4>
-    {% if authenticators.webauthn|length %}
-        <p>You have added {{ authenticators.webauthn|length }} security key{{ authenticators.webauthn|length|pluralize }}.</p>
+    <div class="card mb-3">
+        <div class="card-body">
+            <h5 class="card-title">Security Keys</h5>
+            {% if authenticators.webauthn %}
+                <p class="card-text text-muted">
+                    You have {{ authenticators.webauthn|length }} security key{{ authenticators.webauthn|length|pluralize }} registered.
+                    Security keys provide strong, phishing-resistant authentication.
+                </p>
+                <a href="{% url 'mfa_list_webauthn' %}" class="btn btn-secondary btn-sm">Manage Keys</a>
+            {% else %}
+                <p class="card-text text-muted">Use a hardware security key (such as a YubiKey) or a passkey saved on your device to sign in securely.</p>
+                <a href="{% url 'mfa_add_webauthn' %}" class="btn btn-primary btn-sm">Add a Key</a>
+            {% endif %}
+        </div>
+    </div>
 
-        <a href="{% url 'mfa_list_webauthn' %}" class="btn btn-secondary">Manage</a>
-    {% else %}
-        <p>No security keys have been added.</p>
-
-        <a href="{% url 'mfa_add_webauthn' %}" class="btn btn-primary">Add</a>
+    {% if authenticators.totp or authenticators.webauthn %}
+    <div class="d-flex align-items-center justify-content-between mt-2 px-1">
+        <small class="text-muted">
+            Recovery Codes —
+            {% if authenticators.recovery_codes %}
+                {{ authenticators.recovery_codes.get_unused_codes|length }} remaining
+            {% else %}
+                none generated
+            {% endif %}
+        </small>
+        <a href="{% url 'mfa_view_recovery_codes' %}" class="btn btn-link btn-sm p-0">View</a>
+    </div>
     {% endif %}
 {% endblock %}

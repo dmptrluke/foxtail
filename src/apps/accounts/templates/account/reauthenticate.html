@@ -6,7 +6,7 @@
 {% block content %}
     <h3>Confirm Access</h3>
 
-    <p>Please reauthenticate to safeguard your account.</p>
+    <p class="text-muted">Please reauthenticate to safeguard your account.</p>
 
     <form method="post" action="{% url 'account_reauthenticate' %}">
         {% csrf_token %}
