@@ -5,7 +5,7 @@
 
 {% block content %}
     <h3>Email Addresses</h3>
-    <p class="text-muted">Manage the email addresses linked to your account. Your primary email is used for notifications and password resets and cannot be removed.</p>
+    <p class="text-muted">The email addresses below are associated with your account.</p>
 
     {% with emails=emailaddresses|dictsortreversed:"primary" %}
     {% if emails %}
@@ -18,7 +18,7 @@
                                 <strong>{{ emailaddress.email }}</strong>
                                 <div class="text-muted small">
                                     {% if emailaddress.primary %}
-                                        Primary address
+                                        Primary address - used for notifications and password resets
                                     {% elif emailaddress.verified %}
                                         Verified
                                     {% else %}
