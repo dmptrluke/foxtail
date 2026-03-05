@@ -89,7 +89,8 @@ INSTALLED_APPS = [
     'crispy_forms',
     'crispy_bootstrap5',
     'widget_tweaks',
-    'oidc_provider',
+    'allauth.idp',
+    'allauth.idp.oidc',
     'django_recaptcha',
     'versatileimagefield',
     'django_rq',
@@ -113,7 +114,6 @@ MIDDLEWARE = [
     'allauth.account.middleware.AccountMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.contrib.sites.middleware.CurrentSiteMiddleware',
-    'oidc_provider.middleware.SessionManagementMiddleware',
 ]
 
 if DEBUG:
@@ -242,21 +242,10 @@ MFA_FORMS = {
     'generate_recovery_codes': 'allauth.mfa.recovery_codes.forms.GenerateRecoveryCodesForm',
 }
 
-# OpenID Connect Provider
-# <https://django-oidc-provider.readthedocs.io/en/latest/>
-OIDC_SESSION_MANAGEMENT_ENABLE = True
-OIDC_SESSION_MANAGEMENT_COOKIE_SECURE = True
-OIDC_USERINFO = 'apps.accounts.claims.userinfo'
-
-OIDC_CLAIMS_SUPPORTED = [
-    'sub',
-    'name',
-    'preferred_username',
-    'nickname',
-    'birthdate',
-    'email',
-    'email_verified'
-]
+# OpenID Connect Identity Provider
+# <https://docs.allauth.org/en/latest/idp/oidc/index.html>
+IDP_OIDC_ADAPTER = 'apps.accounts.adapter.FoxtailOIDCAdapter'
+IDP_OIDC_PRIVATE_KEY = env('OIDC_RSA_PRIVATE_KEY', default='')
 
 # Passwords
 # <https://docs.djangoproject.com/en/stable/topics/auth/passwords/>

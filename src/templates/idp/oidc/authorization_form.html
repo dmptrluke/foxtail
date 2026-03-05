@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block title %}Service Authorisation{% endblock %}
+
+{% block content %}
+    <h2 class="mb-4">Authorise Login</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.request }}
+
+        <div class="d-flex flex-column flex-md-row mb-4">
+            {% if client.data.logo_url %}
+                <div class="me-3 mb-3 mb-md-0">
+                    <img class="rounded" src="{{ client.data.logo_url }}" alt="{{ client.name }}">
+                </div>
+            {% endif %}
+
+            <div class="flex-grow-1 border-start ps-3">
+                <h5>{{ client.name }}{% if client.data.website_url %}<small> — <a
+                        href="{{ client.data.website_url }}" rel="noopener noreferrer"
+                        target="_blank">{{ client.data.website_url }}</a></small>{% endif %}</h5>
+                <p>
+                    <strong>{{ client.name }}</strong> would like to access your
+                    <strong>{{ site.name }}</strong> account. The application is requesting the following
+                    information:</p>
+                <ul class="list-unstyled mb-3">
+                    {% for value, label in form.scopes.field.choices %}
+                        <li class="mb-1">
+                            <input type="checkbox" name="scopes" value="{{ value }}" checked class="form-check-input me-1">
+                            {{ label }}
+                        </li>
+                    {% endfor %}
+                </ul>
+                {% if form.email %}
+                    <div class="mb-3">
+                        <label class="form-label">{{ form.email.label }}</label>
+                        {{ form.email }}
+                    </div>
+                {% endif %}
+                {% if client.data.terms_url %}
+                    <p class="mb-0">
+                        <small><a href="{{ client.data.terms_url }}" rel="noopener noreferrer" target="_blank">View
+                            Privacy Policy</a></small>
+                    </p>
+                {% endif %}
+
+            </div>
+        </div>
+
+        <div class="form-group">
+            <button type="submit" name="action" value="cancel" class="btn btn-secondary">Decline</button>
+            <button type="submit" name="action" value="grant" class="btn btn-primary">Authorize</button>
+        </div>
+    </form>
+{% endblock content %}

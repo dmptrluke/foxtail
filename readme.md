@@ -17,15 +17,36 @@ SECRET_KEY=REPLACEME
 CONTACT_EMAILS=admin@example.com
 ```
 
+### OIDC Signing Key
+
+Foxtail acts as an OpenID Connect identity provider, which requires an RSA signing key. Generate one for development:
+
+```bash
+openssl genrsa 2048 | openssl pkcs8 -topk8 -nocrypt
+```
+
+Add the output to your `.env` file as `OIDC_RSA_PRIVATE_KEY`, wrapped in quotes with `\n` for newlines:
+
+```
+OIDC_RSA_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\nMIIEvQIBADA...\n-----END PRIVATE KEY-----"
+```
+
 ### Running
 
 Start the application with Docker Compose:
 
 ```
-docker compose up
+docker compose up --build
 ```
 
-This will start the application along with PostgreSQL and Redis. You can access foxtail at http://127.0.0.1:8000/.
+This will start the application along with PostgreSQL and Redis. Migrations run automatically on startup.
+You can access foxtail at http://127.0.0.1:8000/.
+
+To run migrations manually:
+
+```bash
+docker compose run --rm foxtail django-admin migrate
+```
 
 ### Running the tests
 

@@ -2,7 +2,7 @@ from textwrap import dedent
 
 from django.conf import settings
 from django.http import HttpResponse
-from django.shortcuts import redirect, render
+from django.shortcuts import render
 
 
 def robots(request):
@@ -31,7 +31,3 @@ def handler_500(request, *args, **kwargs):
         context = {}
 
     return render(request, '500.html', context=context, status=500)
-
-
-def redirect_provider_info(request, *args, **kwargs):
-    return redirect('oidc_provider:provider-info')

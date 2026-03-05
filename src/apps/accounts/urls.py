@@ -8,6 +8,6 @@ urlpatterns = [
     path('signup/', views.CSPSignupView.as_view(), name="account_signup"),
     path('password/reset/', views.CSPPasswordResetView.as_view(), name="account_reset_password"),
     path('applications/', views.ConsentList.as_view(), name='account_application_list'),
-    path('applications/<int:pk>/revoke/', views.ConsentRevoke.as_view(), name='account_application_revoke'),
+    path('applications/<str:pk>/revoke/', views.ConsentRevoke.as_view(), name='account_application_revoke'),
     path('2fa/authenticate/', views.MFAAuthenticateView.as_view(), name='mfa_authenticate'),
 ]
