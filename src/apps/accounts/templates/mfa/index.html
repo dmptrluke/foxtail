@@ -6,7 +6,7 @@
     <h3>Two-Factor Authentication</h3>
 
     {% if authenticators.totp or authenticators.webauthn %}
-        <p>Two-factor authentication is <strong>active</strong> on your account. When you sign in, you will be asked to verify using one of the methods below.</p>
+        <p class="text-muted">Two-factor authentication is <strong>active</strong> on your account. When you sign in, you will be asked to verify using one of the methods below.</p>
     {% else %}
         <div class="alert alert-warning">
             <strong>Two-factor authentication is not enabled.</strong>

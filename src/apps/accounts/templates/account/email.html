@@ -5,11 +5,11 @@
 
 {% block content %}
     <h3>Email Addresses</h3>
-    <p>The following email addresses are associated with your account. Your primary email address is used for account notifications and password resets.</p>
+    <p class="text-muted">Manage the email addresses linked to your account. Your primary email is used for notifications and password resets and cannot be removed.</p>
 
-    {% with emails=user.emailaddress_set.all %}
+    {% with emails=emailaddresses|dictsortreversed:"primary" %}
     {% if emails %}
-        <form action="{% url 'account_email' %}" method="post" class="mb-5">
+        <form action="{% url 'account_email' %}" method="post" class="mb-5" id="email-form">
             {% csrf_token %}
             <ul class="list-group mb-3">
                 {% for emailaddress in emails %}
@@ -17,7 +17,9 @@
                         <div class="d-flex align-items-center gap-2">
                             <input class="form-check-input flex-shrink-0" type="radio" name="email"
                                    id="email_radio_{{ forloop.counter }}" value="{{ emailaddress.email }}"
-                                   {% if emailaddress.primary or emails.count == 1 %}checked{% endif %}>
+                                   data-primary="{{ emailaddress.primary|yesno:'true,false' }}"
+                                   data-verified="{{ emailaddress.verified|yesno:'true,false' }}"
+                                   {% if emailaddress.primary or emails|length == 1 %}checked{% endif %}>
                             <label class="form-check-label flex-grow-1" for="email_radio_{{ forloop.counter }}">
                                 {{ emailaddress.email }}
                             </label>
@@ -25,8 +27,7 @@
                                 {% if emailaddress.primary %}
                                     <span class="badge bg-primary">Primary</span>
                                 {% endif %}
-                                {% if emailaddress.verified %}
-                                {% else %}
+                                {% if not emailaddress.verified %}
                                     <span class="badge bg-warning text-dark" data-bs-toggle="tooltip"
                                           title="Cannot be set as primary until verified.">Unverified</span>
                                 {% endif %}
@@ -36,9 +37,7 @@
                 {% endfor %}
             </ul>
             <div class="d-flex gap-2">
-                {% if emails.count > 1 %}
-                    <button class="btn btn-outline-secondary btn-sm" type="submit" name="action_primary">Make Primary</button>
-                {% endif %}
+                <button class="btn btn-outline-secondary btn-sm" type="submit" name="action_primary">Make Primary</button>
                 <button class="btn btn-outline-secondary btn-sm" type="submit" name="action_send">Re-send Verification</button>
                 <button class="btn btn-outline-danger btn-sm" type="submit" name="action_remove">Remove</button>
             </div>
@@ -62,10 +61,36 @@
 
 {% block extra_footer %}
     <script type="text/javascript" nonce="{{ request.csp_nonce }}">
-        document.querySelector('[name="action_remove"]').addEventListener('click', function (e) {
-            if (!confirm('Do you really want to remove this email address?')) {
-                e.preventDefault();
+        (function () {
+            var form = document.getElementById('email-form');
+            if (!form) return;
+
+            var radios = form.querySelectorAll('input[name="email"]');
+            var btnPrimary = form.querySelector('[name="action_primary"]');
+            var btnSend = form.querySelector('[name="action_send"]');
+            var btnRemove = form.querySelector('[name="action_remove"]');
+            var count = radios.length;
+
+            function update() {
+                var selected = form.querySelector('input[name="email"]:checked');
+                if (!selected) return;
+
+                var isPrimary = selected.dataset.primary === 'true';
+                var isVerified = selected.dataset.verified === 'true';
+
+                btnPrimary.hidden = isPrimary || !isVerified || count < 2;
+                btnSend.hidden = isVerified;
+                btnRemove.hidden = isPrimary;
             }
-        });
+
+            radios.forEach(function (r) { r.addEventListener('change', update); });
+            update();
+
+            btnRemove.addEventListener('click', function (e) {
+                if (!confirm('Do you really want to remove this email address?')) {
+                    e.preventDefault();
+                }
+            });
+        })();
     </script>
 {% endblock %}
