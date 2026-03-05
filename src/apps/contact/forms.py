@@ -18,6 +18,7 @@ class ContactForm(CSPFormMixin, Form):
 
     name = CharField(required=True)
     email = EmailField(required=True)
+    website = CharField(required=False)
     message = CharField(
         required=True,
         widget=Textarea
