@@ -1,13 +1,15 @@
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse
+from django.views import View
 from django.views.generic import ListView, UpdateView
 
 from allauth.account.views import PasswordResetView, SignupView
 from allauth.mfa.base.views import AuthenticateView
 from allauth.mfa.models import Authenticator
 from csp_helpers.mixins import CSPViewMixin
-from oidc_provider.models import UserConsent
+from oidc_provider.models import Token, UserConsent
 
 from apps.accounts.forms import UserForm
 
@@ -54,4 +56,13 @@ class ConsentList(LoginRequiredMixin, ListView):
         return self.model.objects.filter(user=self.request.user).select_related('client')
 
 
-__all__ = ['UserView', 'ConsentList']
+class ConsentRevoke(LoginRequiredMixin, View):
+    def post(self, request, pk):
+        consent = get_object_or_404(UserConsent, pk=pk, user=request.user)
+        Token.objects.filter(user=request.user, client=consent.client).delete()
+        consent.delete()
+        messages.success(request, "Application access has been revoked.")
+        return redirect('account_application_list')
+
+
+__all__ = ['UserView', 'ConsentList', 'ConsentRevoke']

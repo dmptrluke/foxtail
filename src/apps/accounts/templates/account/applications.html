@@ -4,7 +4,7 @@
 
 {% block content %}
     <h3>Authorized Applications</h3>
-    <p class="text-muted">These applications have been granted access to your account. You can revoke access at any time by contacting support.</p>
+    <p class="text-muted">These applications have been granted access to your account.</p>
 
     {% if consent_list %}
         <div class="list-group">
@@ -35,10 +35,16 @@
                                     <span class="badge bg-secondary bg-opacity-10 text-secondary" title="{{ scope.description }}">{{ scope.name }}</span>
                                 {% endfor %}
                             </div>
-                            {% if consent.client.terms_url %}
-                                <a class="small text-muted mt-2 d-inline-block" href="{{ consent.client.terms_url }}"
-                                   rel="noopener noreferrer" target="_blank">Privacy Policy</a>
-                            {% endif %}
+                            <div class="d-flex align-items-center gap-2 mt-2">
+                                {% if consent.client.terms_url %}
+                                    <a class="small text-muted" href="{{ consent.client.terms_url }}"
+                                       rel="noopener noreferrer" target="_blank">Privacy Policy</a>
+                                {% endif %}
+                                <form method="post" action="{% url 'account_application_revoke' consent.pk %}" class="ms-auto">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-outline-danger btn-sm">Revoke</button>
+                                </form>
+                            </div>
                         </div>
                     </div>
                 </div>
