@@ -1,5 +1,5 @@
 {% extends 'account_base.html' %}
-{% load crispy_forms_filters %}
+{% load form_tags %}
 
 {% block title %}Two-Factor Authentication{% endblock %}
 
@@ -21,7 +21,7 @@
     <form method="post">
         {% csrf_token %}
         {{ form.non_field_errors }}
-        {{ form | crispy }}
+        {% text_field form.code %}
         <button type="submit" class="btn btn-primary">
             Verify
         </button>

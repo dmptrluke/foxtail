@@ -1,5 +1,4 @@
 {% extends 'account_base.html' %}
-{% load crispy_forms_filters %}
 
 {% block title %}Confirm Access{% endblock %}
 
@@ -10,7 +9,7 @@
 
     <form method="post" action="{% url 'mfa_reauthenticate_webauthn' %}">
         {% csrf_token %}
-        {{ form | crispy }}
+        {{ form.credential }}
         {{ redirect_field }}
         <button type="button" id="mfa_webauthn_reauthenticate" class="btn btn-primary">
             Use a security key

@@ -1,5 +1,5 @@
 {% extends 'account_base.html' %}
-{% load crispy_forms_filters %}
+{% load form_tags %}
 
 {% block title %}Add Security Key{% endblock %}
 
@@ -8,7 +8,9 @@
 
     <form method="post" action="{% url 'mfa_add_webauthn' %}">
         {% csrf_token %}
-        {{ form | crispy }}
+        {% text_field form.name %}
+        {{ form.passwordless }}
+        {{ form.credential }}
         <button type="button" id="mfa_webauthn_add" class="btn btn-primary">
             Add
         </button>

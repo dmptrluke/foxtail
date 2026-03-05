@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load crispy_forms_filters %}
+{% load form_tags %}
 
 {% block title %}Create Account{% endblock %}
 
@@ -13,17 +13,13 @@
 
     <form method="post" action="{% url 'socialaccount_signup' %}">
         {% csrf_token %}
-        <div class="row">
-            <div class="col-md-12">
-                {{ form | crispy }}
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-12">
-                <div class="form-actions">
-                    <input type="submit" class="btn btn-primary" value="Create Account">
-                </div>
-            </div>
-        </div>
+        {% for field in form %}
+            {% if not field.is_hidden %}
+                {% text_field field %}
+            {% else %}
+                {{ field }}
+            {% endif %}
+        {% endfor %}
+        <input type="submit" class="btn btn-primary" value="Create Account">
     </form>
 {% endblock content %}

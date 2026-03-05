@@ -1,5 +1,5 @@
 {% extends 'account_base.html' %}
-{% load crispy_forms_filters %}
+{% load form_tags %}
 
 {% block title %}Confirm Access{% endblock %}
 
@@ -12,7 +12,7 @@
 
     <form method="post" action="{% url 'mfa_reauthenticate' %}">
         {% csrf_token %}
-        {{ form | crispy }}
+        {% text_field form.code %}
         {{ redirect_field }}
         <button type="submit" class="btn btn-primary">
             Confirm

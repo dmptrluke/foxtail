@@ -1,52 +1,90 @@
 {% extends 'base.html' %}
-{% load crispy_forms_filters %}
+{% load form_tags %}
 
 {% block title %}Two-Factor Authentication{% endblock %}
 
 {% block content %}
-    <p>
-        Your account is protected by two-factor authentication.
-    </p>
+    <h1>Two-Factor Authentication</h1>
+    <p class="text-muted">Your account is protected by two-factor authentication. Please authenticate using one of the available methods.</p>
 
-    {% if webauthn_form %}
-        <p>Use your security key to authenticate:</p>
-        <button type="button" id="mfa_webauthn_authenticate" form="webauthn_form" class="btn btn-primary">
-            Use a security key
-        </button>
+    {% if "webauthn" in user_authenticator_types %}
+        {# Primary: security key #}
+        <div class="card mb-4">
+            <div class="card-body">
+                <h5 class="card-title">Security Key</h5>
+                <p class="card-text">Use your security key or passkey to authenticate.</p>
+                <button type="button" id="mfa_webauthn_authenticate" form="webauthn_form"
+                        class="btn btn-primary">
+                    Use a security key
+                </button>
+            </div>
+        </div>
 
         <form id="webauthn_form" method="post" action="{% url 'mfa_authenticate' %}" class="d-none">
             {% csrf_token %}
-            {{ webauthn_form | crispy }}
+            {{ webauthn_form.credential }}
         </form>
 
-        {{ js_data|json_script:"js_data" }}
+        {{ js_data | json_script:"js_data" }}
         {% include "mfa/webauthn/snippets/scripts.html" %}
-        <script data-allauth-onload="allauth.webauthn.forms.authenticateForm" type="application/json">{
-    "ids": {
-        "authenticate": "mfa_webauthn_authenticate",
-        "credential": "{{ webauthn_form.credential.auto_id }}",
-        "data": "js_data"
-    }
-}
+        <script data-allauth-onload="allauth.webauthn.forms.authenticateForm" type="application/json">
+            {
+            "ids": {
+                "authenticate": "mfa_webauthn_authenticate",
+                "credential": "{{ webauthn_form.credential.auto_id }}",
+                "data": "js_data"
+            }
+        }
         </script>
 
-        <hr class="my-4">
-        <h4>Alternative options</h4>
-    {% else %}
-        <p>Please enter an authenticator code:</p>
+        {% if "totp" in user_authenticator_types or "recovery_codes" in user_authenticator_types %}
+            <details class="mb-4">
+                <summary class="text-muted mb-3" role="button">
+                    {% if "totp" in user_authenticator_types and "recovery_codes" in user_authenticator_types %}
+                        Use an authenticator code or recovery code instead
+                    {% elif "totp" in user_authenticator_types %}
+                        Use an authenticator code instead
+                    {% else %}
+                        Use a recovery code instead
+                    {% endif %}
+                </summary>
+                <form method="post" action="{% url 'mfa_authenticate' %}">
+                    {% csrf_token %}
+                    {% text_field form.code hide_label=True %}
+                    <button type="submit" class="btn btn-outline-primary">
+                        Authenticate
+                    </button>
+                </form>
+            </details>
+        {% endif %}
+
+    {% elif "totp" in user_authenticator_types or "recovery_codes" in user_authenticator_types %}
+        {# Primary: authenticator code / recovery code #}
+        <div class="card mb-4">
+            <div class="card-body">
+                {% if "totp" in user_authenticator_types and "recovery_codes" in user_authenticator_types %}
+                    <h5 class="card-title">Authenticator Code</h5>
+                    <p class="card-text">Enter a code from your authenticator app or a recovery code.</p>
+                {% elif "totp" in user_authenticator_types %}
+                    <h5 class="card-title">Authenticator Code</h5>
+                    <p class="card-text">Enter a code from your authenticator app.</p>
+                {% else %}
+                    <h5 class="card-title">Recovery Code</h5>
+                    <p class="card-text">Enter one of your recovery codes.</p>
+                {% endif %}
+                <form method="post" action="{% url 'mfa_authenticate' %}">
+                    {% csrf_token %}
+                    {% text_field form.code %}
+                    <button type="submit" class="btn btn-primary">
+                        Authenticate
+                    </button>
+                </form>
+            </div>
+        </div>
     {% endif %}
 
-    <form method="post" action="{% url 'mfa_authenticate' %}">
-        {% csrf_token %}
-        {{ form | crispy }}
-        <button type="submit" class="btn btn-{% if webauthn_form %}outline-{% endif %}primary">
-            Authenticate
-        </button>
-    </form>
-
-    <hr class="my-3">
-    <button type="submit" form="logout-from-stage" class="btn btn-outline-secondary">
-        Cancel
+    <button type="submit" form="logout-from-stage" class="btn btn-link text-muted p-0">
+        Cancel and return to sign in
     </button>
 
     <form id="logout-from-stage" method="post" action="{% url 'account_logout' %}" class="d-none">

@@ -1,0 +1,13 @@
+{% load widget_tweaks %}
+<div class="mb-3">
+    {% if not hide_label %}<label class="form-label" for="{{ field.id_for_label }}">{{ field.label }}</label>{% endif %}
+    {% if is_multiwidget %}<div class="d-flex flex-column gap-2">{% endif %}
+    {% if field.errors %}
+        {% render_field field class="form-select is-invalid" %}
+        <div class="invalid-feedback">{{ field.errors }}</div>
+    {% else %}
+        {% render_field field class="form-select" %}
+    {% endif %}
+    {% if is_multiwidget %}</div>{% endif %}
+    {% if field.help_text %}<div class="form-text">{{ field.help_text }}</div>{% endif %}
+</div>
