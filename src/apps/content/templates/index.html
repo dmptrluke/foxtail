@@ -34,55 +34,49 @@
     <div class="row mb-2" id="blog-cards">
         {% cache 1800 index_blog %}
             {% for post in post_list %}
-                {# only show two items on smaller devices #}
                 <div class="col-lg-4 col-md-6 {% if forloop.counter == 3 %}d-none d-lg-block{% endif %}">
                     <article class="card mb-4 index-card">
-
-                        {% if post.image %}
-                            <a href="{{ post.get_absolute_url }}">
+                        <a href="{{ post.get_absolute_url }}">
+                            {% if post.image %}
                                 <img class="card-img-top"
                                      src="{{ post.image.crop.350x175 }}"
                                      srcset="{{ post.image.crop.350x175 }} 1x, {{ post.image.crop.700x350 }} 2x"
                                      alt="">
-                            </a>
-                        {% endif %}
-
+                            {% else %}
+                                <div class="card-img-top card-img-placeholder"></div>
+                            {% endif %}
+                        </a>
                         <div class="card-body">
-                            <h5 class="card-title">
-                                {{ post.title }}
-                            </h5>
-                            <h6 class="card-subtitle text-muted">
-                                {{ post.created | date:"F jS, Y" }}
-                            </h6>
-                            <p class="card-text">
-                                {{ post.text_rendered | safe | striptags | truncatechars:100 }}
-                            </p>
+                            <h5 class="card-title">{{ post.title }}</h5>
+                            <h6 class="card-subtitle text-muted">{{ post.created | date:"F jS, Y" }}</h6>
+                            <p class="card-text">{{ post.text_rendered | safe | striptags | truncatechars:100 }}</p>
                             <a href="{{ post.get_absolute_url }}" class="btn btn-primary"
                                aria-label="Read the full post.">Read more</a>
                         </div>
-
                     </article>
                 </div>
             {% endfor %}
         {% endcache %}
     </div>
 
-    <h3 class="mb-3">Upcoming Events</h3>
-    <div class="row mb-2" id="event-cards">
-        {% cache 1800 index_events %}
-            {% for event in event_list %}
-                {# only show two items on smaller devices #}
-                <div class="col-lg-4 col-md-6 {% if forloop.counter == 3 %}d-none d-lg-block{% endif %}">
-                    <article class="card mb-4 bg-light index-card">
-                        <div class="card-body">
-                            <h5 class="card-title">{{ event.title }}</h5>
-                            <p class="card-text">{{ event.description_rendered | safe | striptags | truncatechars:140 }}</p>
-                            <h6 class="mb-3">{{ event.start | date:"F jS, Y" }}</h6>
-                            <a href="{{ event.get_absolute_url }}" class="btn btn-outline-primary">View event</a>
-                        </div>
-                    </article>
-                </div>
-            {% endfor %}
-        {% endcache %}
-    </div>
+    {% if event_list %}
+        <h3 class="mb-3">Upcoming Events</h3>
+        <div class="row mb-2" id="event-cards">
+            {% cache 1800 index_events %}
+                {% for event in event_list %}
+                    {# only show two items on smaller devices #}
+                    <div class="col-lg-4 col-md-6 {% if forloop.counter == 3 %}d-none d-lg-block{% endif %}">
+                        <article class="card mb-4 bg-light index-card">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ event.title }}</h5>
+                                <p class="card-text">{{ event.description_rendered | safe | striptags | truncatechars:140 }}</p>
+                                <h6 class="mb-3">{{ event.start | date:"F jS, Y" }}</h6>
+                                <a href="{{ event.get_absolute_url }}" class="btn btn-outline-primary">View event</a>
+                            </div>
+                        </article>
+                    </div>
+                {% endfor %}
+            {% endcache %}
+        </div>
+    {% endif %}
 {% endblock content %}

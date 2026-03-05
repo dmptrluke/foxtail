@@ -19,6 +19,11 @@
 }
 
 
+.card-img-placeholder {
+	aspect-ratio: 2 / 1;
+	background: linear-gradient(135deg, var(--bs-primary) 0%, var(--bs-secondary, #6c757d) 100%);
+}
+
 #event-cards {
 	.card-text {
 		-webkit-line-clamp: 3;
