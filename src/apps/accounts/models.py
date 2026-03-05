@@ -5,6 +5,7 @@ from django.utils.functional import cached_property
 from django.utils.timezone import now
 
 from allauth.account.models import EmailAddress
+from versatileimagefield.fields import VersatileImageField
 
 from .validators import username_validators
 
@@ -49,4 +50,25 @@ class User(AbstractUser):
         return f"{self.username}"
 
 
-__all__ = ['User']
+class ClientMetadata(models.Model):
+    """Extra metadata for OIDC clients that allauth's Client model doesn't provide."""
+
+    client = models.OneToOneField(
+        "allauth_idp_oidc.Client",
+        on_delete=models.CASCADE,
+        related_name="metadata",
+    )
+    logo = VersatileImageField(upload_to="oidc/clients/", blank=True)
+    website_url = models.URLField(blank=True)
+    terms_url = models.URLField(blank=True)
+    contact_email = models.EmailField(blank=True)
+
+    class Meta:
+        verbose_name = "client metadata"
+        verbose_name_plural = "client metadata"
+
+    def __str__(self):
+        return f"Metadata for {self.client.name}"
+
+
+__all__ = ['User', 'ClientMetadata']

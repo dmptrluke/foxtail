@@ -9,16 +9,16 @@
         {{ form.request }}
 
         <div class="d-flex flex-column flex-md-row mb-4">
-            {% if client.data.logo_url %}
+            {% if client.metadata.logo %}
                 <div class="me-3 mb-3 mb-md-0">
-                    <img class="rounded" src="{{ client.data.logo_url }}" alt="{{ client.name }}">
+                    <img class="rounded" src="{{ client.metadata.logo.url }}" alt="{{ client.name }}">
                 </div>
             {% endif %}
 
             <div class="flex-grow-1 border-start ps-3">
-                <h5>{{ client.name }}{% if client.data.website_url %}<small> — <a
-                        href="{{ client.data.website_url }}" rel="noopener noreferrer"
-                        target="_blank">{{ client.data.website_url }}</a></small>{% endif %}</h5>
+                <h5>{{ client.name }}{% if client.metadata.website_url %}<small> — <a
+                        href="{{ client.metadata.website_url }}" rel="noopener noreferrer"
+                        target="_blank">{{ client.metadata.website_url }}</a></small>{% endif %}</h5>
                 <p>
                     <strong>{{ client.name }}</strong> would like to access your
                     <strong>{{ site.name }}</strong> account. The application is requesting the following
@@ -37,9 +37,9 @@
                         {{ form.email }}
                     </div>
                 {% endif %}
-                {% if client.data.terms_url %}
+                {% if client.metadata.terms_url %}
                     <p class="mb-0">
-                        <small><a href="{{ client.data.terms_url }}" rel="noopener noreferrer" target="_blank">View
+                        <small><a href="{{ client.metadata.terms_url }}" rel="noopener noreferrer" target="_blank">View
                             Privacy Policy</a></small>
                     </p>
                 {% endif %}

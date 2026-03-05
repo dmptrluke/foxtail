@@ -1,7 +1,10 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 
-from .models import User
+from allauth.idp.oidc.admin import ClientAdmin as BaseClientAdmin
+from allauth.idp.oidc.models import Client
+
+from .models import ClientMetadata, User
 
 
 class CustomUserAdmin(UserAdmin):
@@ -20,4 +23,16 @@ class CustomUserAdmin(UserAdmin):
     )
 
 
+class ClientMetadataInline(admin.StackedInline):
+    model = ClientMetadata
+    extra = 1
+    max_num = 1
+
+
+class CustomClientAdmin(BaseClientAdmin):
+    inlines = [ClientMetadataInline]
+
+
 admin.site.register(User, CustomUserAdmin)
+admin.site.unregister(Client)
+admin.site.register(Client, CustomClientAdmin)

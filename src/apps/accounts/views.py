@@ -91,7 +91,7 @@ class ConsentList(LoginRequiredMixin, ListView):
     def get_queryset(self):
         return OIDCClient.objects.filter(
             token__user=self.request.user,
-        ).distinct()
+        ).select_related("metadata").distinct()
 
 
 class ConsentRevoke(LoginRequiredMixin, View):
