@@ -73,8 +73,8 @@ INSTALLED_APPS = [
     'apps.content',
     'apps.events',
     'apps.directory',
-    'foxtail_blog',
-    'foxtail_contact',
+    'apps.blog',
+    'apps.contact',
     'allauth',
     'allauth.account',
     'allauth.mfa',
@@ -562,16 +562,12 @@ DEFAULT_STRUCTURED_DATA = {
 }
 
 
-# Foxtail Blog
-# <https://github.com/dmptrluke/foxtail-blog>
-
+# Blog
 BLOG_COMMENTS = True
 BLOG_FEED_TITLE = "Latest News"
 BLOG_FEED_DESCRIPTION = "The latest furry news."
 
-# Foxtail Contact
-# <https://github.com/dmptrluke/foxtail-contact>
-
+# Contact
 CONTACT_EMAILS = env.list('CONTACT_EMAILS')
 
 # Foxtail

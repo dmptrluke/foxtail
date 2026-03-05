@@ -1,10 +1,10 @@
 from django.core.management.base import BaseCommand
 
 from apps.accounts.tests.factories import UserFactory
+from apps.blog.tests.factories import CommentFactory, PostFactory
 from apps.content.tests.factories import PageFactory
 from apps.directory.tests.factories import ProfileFactory
 from apps.events.tests.factories import EventFactory
-from foxtail_blog.tests.factories import CommentFactory, PostFactory
 
 
 class Command(BaseCommand):

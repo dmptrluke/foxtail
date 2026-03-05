@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load crispy_forms_tags %}
+{% load form_tags %}
 
 {% block title %}Contact Us{% endblock %}
 
@@ -18,7 +18,23 @@
     {% endif %}
 
     <form method="post" action="{% url 'contact:contact' %}">
-        {% crispy form %}
+        {% csrf_token %}
+        <div class="row">
+            <div class="col-md-6">
+                {% text_field form.name %}
+            </div>
+            <div class="col-md-6">
+                {% text_field form.email %}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                {% textarea_field form.message %}
+            </div>
+        </div>
+        {% if form.captcha %}
+            {% captcha_field form.captcha %}
+        {% endif %}
         <input id="contact_submit" class="btn btn-lg btn-primary" type="submit" value="Send">
     </form>
 {% endblock content %}

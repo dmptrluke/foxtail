@@ -3,8 +3,8 @@ from django.test import RequestFactory
 import pytest
 from structured_data.util import json_encode
 
+from apps.blog.models import Post
 from apps.events.models import Event
-from foxtail_blog.models import Post
 
 from ..models import Page
 from ..views import IndexView, PageView
