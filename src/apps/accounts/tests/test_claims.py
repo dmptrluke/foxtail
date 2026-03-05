@@ -1,24 +1,24 @@
-from copy import deepcopy
-
 import pytest
-from oidc_provider.lib.claims import STANDARD_CLAIMS
 
-from ..claims import userinfo
+from apps.accounts.adapter import FoxtailOIDCAdapter
 
 pytestmark = pytest.mark.django_db
 
 
 def test_claims(user):
-    claims = userinfo(deepcopy(STANDARD_CLAIMS), user)
+    adapter = FoxtailOIDCAdapter()
+    claims = adapter.get_claims(
+        "userinfo", user, client=None, scopes=["openid", "profile", "email"]
+    )
 
-    # test overridden defaults
-    assert claims['given_name'] is None
-    assert claims['family_name'] is None
+    # given_name and family_name should NOT be present
+    assert "given_name" not in claims
+    assert "family_name" not in claims
 
     # test provided data
-    assert claims['nickname'] == user.username
-    assert claims['email'] == user.email
-    assert claims['email_verified'] is False
+    assert claims["nickname"] == user.username
+    assert claims["email"] == user.email
+    assert claims["email_verified"] is False
 
     # test other data
-    assert claims['name'] is user.full_name
+    assert claims["name"] is user.full_name

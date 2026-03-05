@@ -20,6 +20,7 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.contrib.sitemaps.views import sitemap
 from django.urls import include, path
+from django.views.generic import RedirectView
 
 import apps.content.sitemaps as content_sitemaps
 import apps.core.views as core_views
@@ -37,10 +38,16 @@ urlpatterns = [
     path('sitemap.xml', sitemap, {'sitemaps': sitemaps},
          name='django.contrib.sitemaps.views.sitemap'),
     path('robots.txt', core_views.robots, name='robots'),
-    path('.well-known/openid-configuration/', core_views.redirect_provider_info),
     path('admin/django-rq/', include('django_rq.urls')),
     path('admin/', admin.site.urls),
-    path('openid/', include('oidc_provider.urls', namespace='oidc_provider')),
+    path('', include('allauth.idp.urls')),
+
+    # Backward-compatible redirects for old oidc_provider paths
+    path('openid/authorize', RedirectView.as_view(pattern_name='idp:oidc:authorization', query_string=True)),
+    path('openid/token', RedirectView.as_view(pattern_name='idp:oidc:token')),
+    path('openid/userinfo', RedirectView.as_view(pattern_name='idp:oidc:userinfo')),
+    path('openid/jwks', RedirectView.as_view(pattern_name='idp:oidc:jwks')),
+    path('openid/end-session', RedirectView.as_view(pattern_name='idp:oidc:logout', query_string=True)),
     path('accounts/', include('apps.accounts.urls')),
     path('accounts/', include('allauth.urls')),
     path('directory/', include('apps.directory.urls')),

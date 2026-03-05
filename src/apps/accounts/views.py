@@ -1,5 +1,6 @@
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.http import Http404
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse
 from django.views import View
@@ -7,11 +8,12 @@ from django.views.generic import ListView, TemplateView, UpdateView
 
 from allauth.account.models import EmailAddress
 from allauth.account.views import PasswordResetView, SignupView
+from allauth.idp.oidc.models import Client as OIDCClient
+from allauth.idp.oidc.models import Token as OIDCToken
 from allauth.mfa.base.views import AuthenticateView
 from allauth.mfa.models import Authenticator
 from allauth.socialaccount.models import SocialAccount
 from csp_helpers.mixins import CSPViewMixin
-from oidc_provider.models import Token, UserConsent
 
 from apps.accounts.forms import UserForm
 
@@ -53,7 +55,10 @@ class DashboardView(LoginRequiredMixin, TemplateView):
         ctx['mfa_enabled'] = len(authenticator_types) > 0
         ctx['mfa_methods'] = authenticator_types
 
-        ctx['app_count'] = UserConsent.objects.filter(user=user).count()
+        ctx['app_count'] = (
+            OIDCToken.objects.filter(user=user)
+            .values('client').distinct().count()
+        )
 
         social_accounts = SocialAccount.objects.filter(user=user)
         ctx['social_count'] = social_accounts.count()
@@ -81,18 +86,20 @@ class UserView(LoginRequiredMixin, UpdateView):
 
 class ConsentList(LoginRequiredMixin, ListView):
     template_name = 'account/applications.html'
-    context_object_name = 'consent_list'
-    model = UserConsent
+    context_object_name = 'client_list'
 
     def get_queryset(self):
-        return self.model.objects.filter(user=self.request.user).select_related('client')
+        return OIDCClient.objects.filter(
+            token__user=self.request.user,
+        ).distinct()
 
 
 class ConsentRevoke(LoginRequiredMixin, View):
     def post(self, request, pk):
-        consent = get_object_or_404(UserConsent, pk=pk, user=request.user)
-        Token.objects.filter(user=request.user, client=consent.client).delete()
-        consent.delete()
+        client = get_object_or_404(OIDCClient, pk=pk)
+        deleted, _ = OIDCToken.objects.filter(user=request.user, client=client).delete()
+        if not deleted:
+            raise Http404
         messages.success(request, "Application access has been revoked.")
         return redirect('account_application_list')
 
