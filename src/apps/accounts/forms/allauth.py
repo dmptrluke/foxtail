@@ -15,8 +15,8 @@ class SignupForm(CSPFormMixin, auth_forms.SignupForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['username'].help_text = "Required. 150 characters or fewer."
-        self.fields['email'].help_text = "Required. This must be a valid email address for account activation."
+        self.fields['username'].help_text = 'Required. 150 characters or fewer.'
+        self.fields['email'].help_text = 'Required. This must be a valid email address for account activation.'
         if settings.RECAPTCHA_ENABLED:
             self.fields['captcha'].label = False
 

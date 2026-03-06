@@ -29,11 +29,17 @@ class AutoSlugField(models.SlugField):
 
         if not value:
             from_field_value = getattr(model_instance, self.populate_from)
-            value = slugify(from_field_value)[:self.max_length]
+            value = slugify(from_field_value)[: self.max_length]
 
-            if any((self.unique, self.unique_for_date,
-                    self.unique_for_month, self.unique_for_year,
-                    self.model._meta.unique_together)):
+            if any(
+                (
+                    self.unique,
+                    self.unique_for_date,
+                    self.unique_for_month,
+                    self.unique_for_year,
+                    self.model._meta.unique_together,
+                )
+            ):
                 value = self._get_unique_slug(value, model_instance)
 
             setattr(model_instance, self.attname, value)
@@ -48,31 +54,39 @@ class AutoSlugField(models.SlugField):
 
         if self.unique_for_date:
             lookup_value = getattr(instance, self.unique_for_date)
-            lookups.append({
-                f'{self.unique_for_date}__day': lookup_value.day,
-                f'{self.unique_for_date}__month': lookup_value.month,
-                f'{self.unique_for_date}__year': lookup_value.year,
-            })
+            lookups.append(
+                {
+                    f'{self.unique_for_date}__day': lookup_value.day,
+                    f'{self.unique_for_date}__month': lookup_value.month,
+                    f'{self.unique_for_date}__year': lookup_value.year,
+                }
+            )
 
         if self.unique_for_month:
             lookup_value = getattr(instance, self.unique_for_month)
-            lookups.append({
-                f'{self.unique_for_month}__month': lookup_value.month,
-            })
+            lookups.append(
+                {
+                    f'{self.unique_for_month}__month': lookup_value.month,
+                }
+            )
 
         if self.unique_for_year:
             lookup_value = getattr(instance, self.unique_for_year)
-            lookups.append({
-                f'{self.unique_for_year}__year': lookup_value.year,
-            })
+            lookups.append(
+                {
+                    f'{self.unique_for_year}__year': lookup_value.year,
+                }
+            )
 
         for field_group in self.model._meta.unique_together:
             if self.attname in field_group:
-                lookups.append({
-                    field_name: getattr(instance, field_name)
-                    for field_name in field_group
-                    if field_name != self.attname
-                })
+                lookups.append(
+                    {
+                        field_name: getattr(instance, field_name)
+                        for field_name in field_group
+                        if field_name != self.attname
+                    }
+                )
 
         return reduce(or_, (Q(**lookup) for lookup in lookups), Q())
 
@@ -82,9 +96,9 @@ class AutoSlugField(models.SlugField):
             self._get_unique_lookups(instance),
         )
 
-        taken_slugs = sorted(conflicts.filter(
-            **{f'{self.attname}__regex': rf'^{slug}(-\d+)?$'}
-        ).values_list(self.attname, flat=True))
+        taken_slugs = sorted(
+            conflicts.filter(**{f'{self.attname}__regex': rf'^{slug}(-\d+)?$'}).values_list(self.attname, flat=True)
+        )
 
         if slug not in taken_slugs:
             return slug

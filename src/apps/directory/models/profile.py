@@ -14,8 +14,7 @@ from .base import BaseModel
 
 class Profile(BaseModel):
     user = models.OneToOneField(get_user_model(), primary_key=True, on_delete=models.CASCADE)
-    profile_URL = models.CharField(max_length=25, validators=[validate_url, validate_blacklist],
-                                   unique=True)
+    profile_URL = models.CharField(max_length=25, validators=[validate_url, validate_blacklist], unique=True)
 
     description = models.TextField(blank=True)
     description_privacy = PrivacyField()
@@ -28,7 +27,7 @@ class Profile(BaseModel):
     location_privacy = PrivacyField()
 
     def __str__(self):
-        return f"{self.profile_URL}"
+        return f'{self.profile_URL}'
 
     def get_absolute_url(self):
         return reverse('directory:profile', kwargs={'slug': self.profile_URL})
@@ -43,7 +42,7 @@ class Profile(BaseModel):
     @property
     def location(self):
         if not self.country:
-            return " - "
+            return ' - '
 
         loc = self.get_region_display() or self.get_country_display()
 
@@ -51,18 +50,11 @@ class Profile(BaseModel):
             return loc
         else:
             flag = static(f'flags/{self.country.lower()}.png')
-            return format_html(
-                '<img src="{}" /> {}',
-                flag, loc
-            )
+            return format_html('<img src="{}" /> {}', flag, loc)
 
     @cached_property
     def structured_data(self):
-        return {
-            '@type': 'Person',
-            '@id': 'https://furry.nz/' + self.get_absolute_url(),
-            'name': self.user.username
-        }
+        return {'@type': 'Person', '@id': 'https://furry.nz/' + self.get_absolute_url(), 'name': self.user.username}
 
 
 __all__ = ['Profile']

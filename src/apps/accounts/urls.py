@@ -5,8 +5,8 @@ from apps.accounts import views
 urlpatterns = [
     path('', views.DashboardView.as_view(), name='account_profile'),
     path('settings/', views.UserView.as_view(), name='account_settings'),
-    path('signup/', views.CSPSignupView.as_view(), name="account_signup"),
-    path('password/reset/', views.CSPPasswordResetView.as_view(), name="account_reset_password"),
+    path('signup/', views.CSPSignupView.as_view(), name='account_signup'),
+    path('password/reset/', views.CSPPasswordResetView.as_view(), name='account_reset_password'),
     path('applications/', views.ConsentList.as_view(), name='account_application_list'),
     path('applications/<str:pk>/revoke/', views.ConsentRevoke.as_view(), name='account_application_revoke'),
     path('2fa/authenticate/', views.MFAAuthenticateView.as_view(), name='mfa_authenticate'),

@@ -28,11 +28,12 @@ class BaseModel(RulesModelMixin, Model, metaclass=RulesModelBase):
 
         # make sure it actually exists, and is valid
         if rule is None:
-            logger.error('Tried to call can_view with an invalid field "%s" on model "%s"',
-                         field, self.__class__.__name__)
+            logger.error(
+                'Tried to call can_view with an invalid field "%s" on model "%s"', field, self.__class__.__name__
+            )
             return False
 
-        if user.has_perm(self.get_perm("change")):
+        if user.has_perm(self.get_perm('change')):
             # if you can edit the model, you can see everything
             return True
 

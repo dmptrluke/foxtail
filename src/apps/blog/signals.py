@@ -10,8 +10,6 @@ from .models import Post
 def warm_post_images(sender, instance, **kwargs):
     if instance.image:
         warmer = VersatileImageFieldWarmer(
-            instance_or_queryset=instance,
-            rendition_key_set='post_image',
-            image_attr='image'
+            instance_or_queryset=instance, rendition_key_set='post_image', image_attr='image'
         )
         warmer.warm()

@@ -10,8 +10,6 @@ from .models import Event
 def warm_event_images(sender, instance, **kwargs):
     if instance.image:
         warmer = VersatileImageFieldWarmer(
-            instance_or_queryset=instance,
-            rendition_key_set='event_image',
-            image_attr='image'
+            instance_or_queryset=instance, rendition_key_set='event_image', image_attr='image'
         )
         warmer.warm()

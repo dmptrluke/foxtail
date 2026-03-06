@@ -15,13 +15,17 @@
 *.yaml text
 *.svg text
 *.yml text
+*.toml text
+*.cfg text
 *.ini text
 *.js text
 
-Procfile text
+Dockerfile* text
+.dockerignore text
 .gitignore text
 .gitattributes text
 .editorconfig text
+.env* text
 
 # Explicitly declare binary files.
 *.png binary
@@ -32,6 +36,7 @@ Procfile text
 *.ico binary
 *.webp binary
 *.webm binary
+*.pdf binary
 
 # Correct Github language graph.
 *.tpl linguist-language=HTML+Django

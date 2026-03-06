@@ -2,7 +2,7 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Dev Server",
+            "name": "Run: Dev Server",
             "type": "debugpy",
             "request": "attach",
             "connect": {
@@ -15,16 +15,16 @@
                     "remoteRoot": "/app"
                 }
             ],
-            "preLaunchTask": "Docker: Dev Server"
+            "preLaunchTask": "Docker: Start Dev Server"
         },
         {
-            "name": "Test (apps)",
+            "name": "Test: Apps Only",
             "type": "node-terminal",
             "request": "launch",
             "command": "docker compose -f compose.yaml -f compose.test.yaml run --rm test pytest src/apps/ -v"
         },
         {
-            "name": "Test (all)",
+            "name": "Test: All",
             "type": "node-terminal",
             "request": "launch",
             "command": "docker compose -f compose.yaml -f compose.test.yaml run --rm test pytest src/apps/ src/tests/ -v"

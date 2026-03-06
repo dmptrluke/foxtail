@@ -26,8 +26,8 @@ def test_feed(client, post: Post, second_post: Post, hidden_post: Post):
     feed = atoma.parse_rss_bytes(response.content)
 
     # check the title and description match those in the config
-    assert feed.title == "Latest News"
-    assert feed.description == "The latest furry news."
+    assert feed.title == 'Latest News'
+    assert feed.description == 'The latest furry news.'
 
     # check the link is correct
     assert urlparse(feed.link).path == reverse('blog:list')

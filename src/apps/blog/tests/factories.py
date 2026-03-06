@@ -11,7 +11,7 @@ class PostFactory(DjangoModelFactory):
     title = Faker('name')
     slug = Faker('slug')
 
-    tags = f"{Faker('words')}, {Faker('words')}"
+    tags = f'{Faker("words")}, {Faker("words")}'
 
     allow_comments = True
     publish_status = AVAILABLE

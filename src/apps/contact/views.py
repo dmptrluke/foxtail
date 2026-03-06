@@ -31,7 +31,7 @@ class ContactView(CSPViewMixin, FormView):
     def form_valid(self, form):
         if form.cleaned_data.get('website'):
             logger.warning(
-                "Honeypot triggered on contact form from %s",
+                'Honeypot triggered on contact form from %s',
                 self.request.META.get('REMOTE_ADDR', 'unknown'),
             )
             return self._fake_success()
@@ -41,7 +41,7 @@ class ContactView(CSPViewMixin, FormView):
             'authentication': False,
             'email': form.cleaned_data['email'],
             'message': form.cleaned_data['message'],
-            'SITE_URL': settings.SITE_URL
+            'SITE_URL': settings.SITE_URL,
         }
         if self.request.user.is_authenticated:
             context['authentication'] = self.request.user.username

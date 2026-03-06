@@ -19,24 +19,33 @@ def sortable_heading(context, **kwargs):
         else:
             query['ordering'] = 'desc'
 
-        html = format_html("""
+        html = format_html(
+            """
          <th scope="col" class="active {0}">
              <a href="?{1}" class="text-reset">
                  {2}
              </a>
          </th>
-             """, ordering, urlencode(query), kwargs['name'])
+             """,
+            ordering,
+            urlencode(query),
+            kwargs['name'],
+        )
     else:
         # We are NOT currently sorting by this column!
         query['ordering'] = 'asc'
 
-        html = format_html("""
+        html = format_html(
+            """
          <th scope="col">
              <a href="?{0}" class="text-reset">
                  {1}
              </a>
          </th>
-             """, urlencode(query), kwargs['name'])
+             """,
+            urlencode(query),
+            kwargs['name'],
+        )
 
     # Output HTML
     return html

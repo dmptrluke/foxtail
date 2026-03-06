@@ -1,7 +1,7 @@
 # Python
 __pycache__/
+*.pyc
 .pytest_cache
-.tox
 .venv
 .coverage
 htmlcov/
@@ -9,19 +9,21 @@ htmlcov/
 # Django
 *.log
 *.env
-.env
 db.sqlite3
 
-# IntelliJ
-.idea
-*.iml
-out
-gen
+# Ruff
+.ruff_cache/
 
 # NPM
 node_modules
 
-# produced assets
+# IDE
+.vscode/*
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# Produced assets
 build/*
 !build/webpack-stats.json
 storage/

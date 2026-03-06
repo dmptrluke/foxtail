@@ -19,16 +19,8 @@ class EventList(ListView):
         context = super().get_context_data(**kwargs)
         today = date.today()
         upcoming_filter = Q(start__gte=today) | Q(end__gte=today)
-        context['upcoming_events'] = (
-            Event.objects.filter(upcoming_filter)
-            .prefetch_related('tags')
-            .order_by('start')
-        )
-        context['past_events'] = (
-            Event.objects.exclude(upcoming_filter)
-            .prefetch_related('tags')
-            .order_by('-start')
-        )
+        context['upcoming_events'] = Event.objects.filter(upcoming_filter).prefetch_related('tags').order_by('start')
+        context['past_events'] = Event.objects.exclude(upcoming_filter).prefetch_related('tags').order_by('-start')
         return context
 
 
@@ -44,7 +36,7 @@ class EventListYear(YearMixin, ListView):
         try:
             year = datetime.strptime(str(self.get_year()), self.get_year_format()).year
         except ValueError:
-            raise Http404()
+            raise Http404() from None
 
         context['year'] = str(year)
         today = date.today()
@@ -63,12 +55,9 @@ class EventDetail(YearMixin, DetailView):
         try:
             date = datetime.strptime(str(self.get_year()), self.get_year_format())
         except ValueError:
-            raise Http404()
+            raise Http404() from None
 
-        return Event.objects.filter(
-            start__year=date.year,
-            slug=self.kwargs['slug']
-        )
+        return Event.objects.filter(start__year=date.year, slug=self.kwargs['slug'])
 
 
-__all__ = ['EventList', 'EventDetail']
+__all__ = ['EventDetail', 'EventList']

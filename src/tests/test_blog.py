@@ -38,7 +38,7 @@ def test_blog_comments(authenticated_driver, user, live_server, post: Post):
 
     # the user sees a green alert
     alert = driver.find_element(By.CLASS_NAME, 'alert-success')
-    assert "Your comment has been posted!" in alert.text
+    assert 'Your comment has been posted!' in alert.text
 
     # we read the comments again
     comment_area = driver.find_element(By.ID, 'comments')

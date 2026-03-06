@@ -19,7 +19,7 @@ def robots(request):
             Disallow: /
             """)
 
-    return HttpResponse(text, content_type="text/plain")
+    return HttpResponse(text, content_type='text/plain')
 
 
 def handler_500(request, *args, **kwargs):

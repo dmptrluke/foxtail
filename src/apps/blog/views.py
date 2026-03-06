@@ -28,9 +28,9 @@ class BlogListView(PublishedListMixin, ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['sidebar_post_list'] = queryset_filter(Post.objects).all()[:3]
-        context['sidebar_tag_list'] = Post.tags.annotate(
-            num_times=Count('taggit_taggeditem_items')
-        ).order_by('-num_times')[:8]
+        context['sidebar_tag_list'] = Post.tags.annotate(num_times=Count('taggit_taggeditem_items')).order_by(
+            '-num_times'
+        )[:8]
         return context
 
     def get_queryset(self):
@@ -40,22 +40,18 @@ class BlogListView(PublishedListMixin, ListView):
         tag = self.request.GET.get('tag')
 
         if q:
-            vector = SearchVector('title', weight='A', config='english') + \
-                SearchVector('text', weight='B', config='english')
+            vector = SearchVector('title', weight='A', config='english') + SearchVector(
+                'text', weight='B', config='english'
+            )
 
             query = SearchQuery(q, config='english')
             rank = SearchRank(vector, query, weights=[0.2, 0.4, 0.6, 0.8])
 
-            queryset = queryset.annotate(rank=rank) \
-                .filter(rank__gte=0.01) \
-                .prefetch_related('tags') \
-                .order_by('-rank')
+            queryset = queryset.annotate(rank=rank).filter(rank__gte=0.01).prefetch_related('tags').order_by('-rank')
 
         elif tag:
             # user is doing a tag query
-            queryset = queryset \
-                .prefetch_related('tags') \
-                .filter(tags__slug__in=[tag])
+            queryset = queryset.prefetch_related('tags').filter(tags__slug__in=[tag])
         else:
             queryset = queryset.prefetch_related('tags').all()
 
@@ -131,4 +127,4 @@ class CommentDeleteView(AutoPermissionRequiredMixin, LoginRequiredMixin, DeleteV
         return reverse('blog:detail', kwargs={'slug': self.object.post.slug})
 
 
-__all__ = ['BlogListView', 'BlogDetailView', 'CommentDeleteView']
+__all__ = ['BlogDetailView', 'BlogListView', 'CommentDeleteView']

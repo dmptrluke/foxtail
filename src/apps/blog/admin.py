@@ -20,23 +20,25 @@ class PostAdminForm(ModelForm):
 class PostAdmin(PublishedAdmin):
     form = PostAdminForm
     fieldsets = (
-        ('Metadata', {
-            'fields': ('title', 'author', 'tags', 'description')
-        }),
-        ('Content', {
-            'fields': ('text',)
-        }),
+        ('Metadata', {'fields': ('title', 'author', 'tags', 'description')}),
+        ('Content', {'fields': ('text',)}),
         add_to_fieldsets(section=True, collapse=False),
-        ('Image', {
-            'fields': ('image',),
-        }),
-        ('Advanced options', {
-            'classes': ('collapse',),
-            'fields': ('slug', 'allow_comments'),
-        }),
+        (
+            'Image',
+            {
+                'fields': ('image',),
+            },
+        ),
+        (
+            'Advanced options',
+            {
+                'classes': ('collapse',),
+                'fields': ('slug', 'allow_comments'),
+            },
+        ),
     )
 
-    prepopulated_fields = {"slug": ("title",)}
+    prepopulated_fields = {'slug': ('title',)}
     search_fields = ['title']
     readonly_fields = add_to_readonly_fields()
     list_filter = ('created', 'tags', 'author')
@@ -44,7 +46,7 @@ class PostAdmin(PublishedAdmin):
 
     @staticmethod
     def tag_list(obj):
-        return ", ".join(o.name for o in obj.tags.all().order_by('name'))
+        return ', '.join(o.name for o in obj.tags.all().order_by('name'))
 
 
 class CommentAdmin(ModelAdmin):
@@ -52,15 +54,15 @@ class CommentAdmin(ModelAdmin):
     raw_id_fields = ('author',)
 
     def post_link(self, obj):
-        return format_html('<a href="{}">{}</a>',
-                           reverse("admin:foxtail_blog_post_change", args=(obj.post.pk,)),
-                           obj.post.title)
+        return format_html(
+            '<a href="{}">{}</a>', reverse('admin:foxtail_blog_post_change', args=(obj.post.pk,)), obj.post.title
+        )
 
     def text_preview(self, obj):
         return truncatechars(obj.text, 50)
 
-    text_preview.short_description = "Comment"
-    post_link.short_description = "Post"
+    text_preview.short_description = 'Comment'
+    post_link.short_description = 'Post'
 
 
 admin.site.register(Post, PostAdmin)

@@ -2,7 +2,7 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "Docker: Build",
+            "label": "Docker: Build Dev",
             "type": "shell",
             "command": "docker compose build",
             "presentation": {
@@ -22,7 +22,7 @@
             "problemMatcher": []
         },
         {
-            "label": "Docker: Run Migrations",
+            "label": "Django: Run Migrations",
             "type": "shell",
             "command": "docker compose run --rm foxtail django-admin migrate",
             "presentation": {
@@ -32,7 +32,7 @@
             "problemMatcher": []
         },
         {
-            "label": "Docker: Open Shell",
+            "label": "Django: Open Shell",
             "type": "shell",
             "command": "docker compose run --rm foxtail bash",
             "presentation": {
@@ -42,7 +42,7 @@
             "problemMatcher": []
         },
         {
-            "label": "Docker: Dev Server",
+            "label": "Docker: Start Dev Server",
             "type": "shell",
             "command": "docker compose down && docker compose up --build foxtail",
             "isBackground": true,
@@ -63,7 +63,7 @@
             }
         },
         {
-            "label": "Docker: Test Build",
+            "label": "Docker: Build Tests",
             "type": "shell",
             "command": "docker compose -f compose.yaml -f compose.test.yaml build test",
             "presentation": {

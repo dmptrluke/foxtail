@@ -26,10 +26,7 @@ class AccountAdapter(DefaultAccountAdapter):
         full_name = user_field(user, 'full_name')
         email = user_email(user)
         username = user_username(user)
-        user_username(
-            user,
-            username or self.generate_unique_username([full_name, email, username, 'user'])
-        )
+        user_username(user, username or self.generate_unique_username([full_name, email, username, 'user']))
 
 
 class SocialAccountAdapter(DefaultSocialAccountAdapter):
@@ -45,7 +42,7 @@ class SocialAccountAdapter(DefaultSocialAccountAdapter):
         date_of_birth = data.get('birthdate')
         if date_of_birth:
             try:
-                parsed = datetime.strptime(date_of_birth, "%Y-%m-%d")
+                parsed = datetime.strptime(date_of_birth, '%Y-%m-%d')
                 user.date_of_birth = parsed
             except ValueError:
                 pass

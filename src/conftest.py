@@ -12,15 +12,15 @@ from apps.directory.tests.factories import ProfileFactory
 from apps.events.tests.factories import EventFactory, PastEventFactory
 
 # accounts
-register(UserFactory, "user")
-register(UserFactory, "second_user")
-register(UserFactory, "third_user")
-register(UserNoPasswordFactory, "user_without_password")
+register(UserFactory, 'user')
+register(UserFactory, 'second_user')
+register(UserFactory, 'third_user')
+register(UserNoPasswordFactory, 'user_without_password')
 
 # blog
-register(PostFactory, "post")
-register(PostFactory, "second_post")
-register(PostFactory, "hidden_post", publish_status=NEVER_AVAILABLE)
+register(PostFactory, 'post')
+register(PostFactory, 'second_post')
+register(PostFactory, 'hidden_post', publish_status=NEVER_AVAILABLE)
 
 # content
 register(PageFactory)
@@ -30,7 +30,7 @@ register(ProfileFactory)
 
 # events
 register(EventFactory)
-register(PastEventFactory, "past_event")
+register(PastEventFactory, 'past_event')
 
 
 @pytest.fixture

@@ -4,12 +4,8 @@ from ..url_transform import url_transform
 
 
 def test_basic_transform(request_factory: RequestFactory):
-    context = {
-        'request': request_factory.get("/accounts/")
-    }
-    transformation = {
-        'page': 1
-    }
+    context = {'request': request_factory.get('/accounts/')}
+    transformation = {'page': 1}
 
     transformed = url_transform(context, **transformation)
 
@@ -17,12 +13,8 @@ def test_basic_transform(request_factory: RequestFactory):
 
 
 def test_replace_transform(request_factory: RequestFactory):
-    context = {
-        'request': request_factory.get("/accounts/?page=1")
-    }
-    transformation = {
-        'page': 2
-    }
+    context = {'request': request_factory.get('/accounts/?page=1')}
+    transformation = {'page': 2}
 
     transformed = url_transform(context, **transformation)
 
@@ -30,12 +22,8 @@ def test_replace_transform(request_factory: RequestFactory):
 
 
 def test_merge_transform(request_factory: RequestFactory):
-    context = {
-        'request': request_factory.get("/accounts/?page=2")
-    }
-    transformation = {
-        'view': 'list'
-    }
+    context = {'request': request_factory.get('/accounts/?page=2')}
+    transformation = {'view': 'list'}
 
     transformed = url_transform(context, **transformation)
 
@@ -43,12 +31,8 @@ def test_merge_transform(request_factory: RequestFactory):
 
 
 def test_clear_transform(request_factory: RequestFactory):
-    context = {
-        'request': request_factory.get("/accounts/?page=2&view=list")
-    }
-    transformation = {
-        'view': None
-    }
+    context = {'request': request_factory.get('/accounts/?page=2&view=list')}
+    transformation = {'view': None}
 
     transformed = url_transform(context, **transformation)
 

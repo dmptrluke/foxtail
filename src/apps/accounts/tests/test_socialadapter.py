@@ -11,14 +11,11 @@ class FakeSocialLogin:
 
 
 def test_minimal():
-    """ test if populate_user works with the minimum set of data """
+    """test if populate_user works with the minimum set of data"""
     user = get_user_model()()
     login = FakeSocialLogin(user)
 
-    data = {
-        'username': 'testface',
-        'email': 'testface@example.com'
-    }
+    data = {'username': 'testface', 'email': 'testface@example.com'}
 
     processed_user = test_adapter.populate_user(None, login, data)
 
@@ -26,7 +23,7 @@ def test_minimal():
 
 
 def test_full():
-    """ test if populate_user works with the maximum set of data """
+    """test if populate_user works with the maximum set of data"""
     user = get_user_model()()
     login = FakeSocialLogin(user)
 
@@ -40,7 +37,7 @@ def test_full():
     processed_user = test_adapter.populate_user(None, login, data)
 
     assert processed_user.username == 'testface'
-    assert processed_user.full_name == "Test Face"
+    assert processed_user.full_name == 'Test Face'
 
     assert processed_user.date_of_birth.year == 2006
     assert processed_user.date_of_birth.month == 5
@@ -48,7 +45,7 @@ def test_full():
 
 
 def test_split_names():
-    """ test if populate_user works with split names """
+    """test if populate_user works with split names"""
     user = get_user_model()()
     login = FakeSocialLogin(user)
 
@@ -62,11 +59,11 @@ def test_split_names():
     processed_user = test_adapter.populate_user(None, login, data)
 
     assert processed_user.username == 'testface'
-    assert processed_user.full_name == "Test Face"
+    assert processed_user.full_name == 'Test Face'
 
 
 def test_both_names():
-    """ test if populate_user works with both kinds of name """
+    """test if populate_user works with both kinds of name"""
     user = get_user_model()()
     login = FakeSocialLogin(user)
 
@@ -81,4 +78,4 @@ def test_both_names():
     processed_user = test_adapter.populate_user(None, login, data)
 
     assert processed_user.username == 'testface'
-    assert processed_user.full_name == "John Doe"
+    assert processed_user.full_name == 'John Doe'

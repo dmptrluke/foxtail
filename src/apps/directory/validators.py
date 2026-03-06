@@ -7,7 +7,7 @@ from the_big_username_blacklist import validate
 def validate_blacklist(value):
     if validate(value) is False:
         raise ValidationError(
-            "This profile URL is not allowed.",
+            'This profile URL is not allowed.',
             params={'value': value},
         )
 

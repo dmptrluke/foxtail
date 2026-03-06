@@ -7,7 +7,7 @@ from .models import Post
 
 class PostSitemap(Sitemap):
     priority = 0.5
-    changefreq = "daily"
+    changefreq = 'daily'
 
     def items(self):
         return queryset_filter(Post.objects).all()

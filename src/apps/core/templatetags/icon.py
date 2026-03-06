@@ -34,8 +34,13 @@ def icon_tag(icon_id, tag='div', size=None):
         # Inject inline style on the SVG to override SCSS dimensions
         icon_data = icon_data.replace('<svg ', f'<svg style="width:{size};height:{size}" ', 1)
 
-    return format_html("""
+    return format_html(
+        """
         <{0} class='icon icon-{1} svg-baseline'>
             {2}
         </{0}>
-        """, tag, icon_id, mark_safe(icon_data))  # nosec
+        """,
+        tag,
+        icon_id,
+        mark_safe(icon_data),  # noqa: S308
+    )

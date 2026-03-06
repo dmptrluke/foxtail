@@ -22,9 +22,7 @@ class MFAAuthenticateView(AuthenticateView):
     def get_context_data(self, **kwargs):
         ret = super().get_context_data(**kwargs)
         user = self.stage.login.user
-        ret["user_authenticator_types"] = set(
-            Authenticator.objects.filter(user=user).values_list("type", flat=True)
-        )
+        ret['user_authenticator_types'] = set(Authenticator.objects.filter(user=user).values_list('type', flat=True))
         return ret
 
 
@@ -55,10 +53,7 @@ class DashboardView(LoginRequiredMixin, TemplateView):
         ctx['mfa_enabled'] = len(authenticator_types) > 0
         ctx['mfa_methods'] = authenticator_types
 
-        ctx['app_count'] = (
-            OIDCToken.objects.filter(user=user)
-            .values('client').distinct().count()
-        )
+        ctx['app_count'] = OIDCToken.objects.filter(user=user).values('client').distinct().count()
 
         social_accounts = SocialAccount.objects.filter(user=user)
         ctx['social_count'] = social_accounts.count()
@@ -77,7 +72,7 @@ class UserView(LoginRequiredMixin, UpdateView):
         return self.request.user
 
     def form_valid(self, form):
-        messages.success(self.request, "Your account details have been updated.")
+        messages.success(self.request, 'Your account details have been updated.')
         return super().form_valid(form)
 
     def get_success_url(self):
@@ -89,9 +84,13 @@ class ConsentList(LoginRequiredMixin, ListView):
     context_object_name = 'client_list'
 
     def get_queryset(self):
-        return OIDCClient.objects.filter(
-            token__user=self.request.user,
-        ).select_related("metadata").distinct()
+        return (
+            OIDCClient.objects.filter(
+                token__user=self.request.user,
+            )
+            .select_related('metadata')
+            .distinct()
+        )
 
 
 class ConsentRevoke(LoginRequiredMixin, View):
@@ -100,8 +99,8 @@ class ConsentRevoke(LoginRequiredMixin, View):
         deleted, _ = OIDCToken.objects.filter(user=request.user, client=client).delete()
         if not deleted:
             raise Http404
-        messages.success(request, "Application access has been revoked.")
+        messages.success(request, 'Application access has been revoked.')
         return redirect('account_application_list')
 
 
-__all__ = ['DashboardView', 'UserView', 'ConsentList', 'ConsentRevoke']
+__all__ = ['ConsentList', 'ConsentRevoke', 'DashboardView', 'UserView']

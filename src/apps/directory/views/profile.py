@@ -41,4 +41,4 @@ class ProfileCreateView(CSPViewMixin, SuccessMessageMixin, LoginRequiredMixin, C
             return super().get(*args, **kwargs)
 
 
-__all__ = ["ProfileView", "ProfileEditView", "ProfileCreateView"]
+__all__ = ['ProfileCreateView', 'ProfileEditView', 'ProfileView']
