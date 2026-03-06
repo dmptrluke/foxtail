@@ -45,24 +45,6 @@ export default {
     module: {
         rules: [
             {
-                test: /\.m?js$/,
-                exclude: /node_modules/,
-                use: {
-                    loader: 'babel-loader',
-                    options: {
-                        presets: [
-                            [
-                                '@babel/preset-env',
-                                {
-                                    useBuiltIns: 'usage',
-                                    corejs: '3.38',
-                                },
-                            ],
-                        ],
-                    },
-                },
-            },
-            {
                 test: /\.(sa|sc|c)ss$/,
                 use: [
                     MiniCssExtractPlugin.loader,
