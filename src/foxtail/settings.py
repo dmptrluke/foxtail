@@ -192,6 +192,16 @@ ACCOUNT_FORMS = {
     'reset_password': 'apps.accounts.forms.ResetPasswordForm',  # nosec B105
 }
 
+ACCOUNT_RATE_LIMITS = {
+    'login': '30/m/ip',
+    'login_failed': '10/m/ip,5/5m/key',
+    'signup': '20/m/ip',
+    'confirm_email': '1/3m/key',
+    'reset_password': '20/m/ip,5/m/key',
+    'reset_password_from_key': '20/m/ip',
+    'change_password': '5/m/user',
+}
+
 # allauth social
 SOCIALACCOUNT_ADAPTER = 'apps.accounts.authentication.SocialAccountAdapter'
 SOCIALACCOUNT_AUTO_SIGNUP = False
