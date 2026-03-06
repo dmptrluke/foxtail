@@ -3,18 +3,18 @@
 
 {% block title %}Two-Factor Authentication{% endblock %}
 
-{% block breadcrumbs %}{% url 'account_profile' as a %}{% breadcrumbs a "Account" "Two-Factor Auth" %}{% endblock %}
+{% block hero_breadcrumbs %}{% url 'account_profile' as a %}{% breadcrumbs a "Account" "Two-Factor Auth" %}{% endblock %}
+
+{% block hero_heading %}Two-Factor Authentication{% endblock %}
+{% block hero_sub %}
+    {% if authenticators.totp or authenticators.webauthn %}
+        <h2>Two-factor authentication is active. You'll be asked to verify when signing in.</h2>
+    {% else %}
+        <h2>Add an extra layer of security to your account.</h2>
+    {% endif %}
+{% endblock %}
 
 {% block content %}
-    <div class="account-header">
-        <h3>Two-Factor Authentication</h3>
-        {% if authenticators.totp or authenticators.webauthn %}
-            <p>Two-factor authentication is active. You'll be asked to verify when signing in.</p>
-        {% else %}
-            <p>Add an extra layer of security to your account.</p>
-        {% endif %}
-    </div>
-
     {% if not authenticators.totp and not authenticators.webauthn %}
         <div class="alert alert-warning mb-4">
             <strong>Two-factor authentication is not enabled.</strong>

@@ -2,14 +2,13 @@
 {% load breadcrumbs humanize %}
 
 {% block title %}Security Keys{% endblock %}
-{% block breadcrumbs %}{% url 'account_profile' as a %}{% url 'mfa_index' as m %}{% breadcrumbs a "Account" m "Two-Factor Auth" "Security Keys" %}{% endblock %}
+
+{% block hero_breadcrumbs %}{% url 'account_profile' as a %}{% url 'mfa_index' as m %}{% breadcrumbs a "Account" m "Two-Factor Auth" "Security Keys" %}{% endblock %}
+
+{% block hero_heading %}Security Keys{% endblock %}
+{% block hero_sub %}<h2>Security keys and passkeys registered to your account. You can add as many as you like.</h2>{% endblock %}
 
 {% block content %}
-    <div class="account-header">
-        <h3>Security Keys</h3>
-        <p>Security keys and passkeys registered to your account. You can add as many as you like.</p>
-    </div>
-
     {% if authenticators %}
         <div class="account-item-list mb-4">
             {% for authenticator in authenticators %}
@@ -40,7 +39,7 @@
             {% endfor %}
         </div>
     {% else %}
-        <div class="account-empty mb-4">
+        <div class="empty-state mb-4">
             No security keys have been added yet.
         </div>
     {% endif %}

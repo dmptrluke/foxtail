@@ -3,8 +3,15 @@
 {% block title %}Manage Account{% endblock %}
 
 {% block base_content %}
-    <main id="main-content" class="container px-3 py-4 px-md-4">
-        {% block breadcrumbs %}{% endblock breadcrumbs %}
+    <div class="hero hero-detail">
+        <div class="container px-3 px-md-4">
+            {% block hero_breadcrumbs %}{% endblock %}
+            <h1>{% block hero_heading %}Manage Account{% endblock %}</h1>
+            {% block hero_sub %}{% endblock %}
+        </div>
+    </div>
+
+    <main id="main-content" class="container px-3 px-md-4 pt-4">
         {% include "components/messages.html" %}
         {% block content %}
         {% endblock content %}

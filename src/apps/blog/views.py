@@ -1,11 +1,14 @@
+from datetime import datetime
+
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.postgres.search import SearchQuery, SearchRank, SearchVector
 from django.db.models import Count
-from django.http import HttpResponseForbidden
+from django.http import Http404, HttpResponseForbidden
 from django.shortcuts import redirect
 from django.views.generic import DeleteView, DetailView, ListView
+from django.views.generic.dates import YearMixin
 
 from published.mixins import PublishedDetailMixin, PublishedListMixin
 from published.utils import queryset_filter
@@ -19,6 +22,17 @@ if COMMENTS_ENABLED:
     from .forms import CommentForm
 
 
+def _blog_years():
+    return queryset_filter(Post.objects).dates('created', 'year', order='DESC').values_list('created__year', flat=True)
+
+
+def _sidebar_context():
+    return {
+        'sidebar_post_list': queryset_filter(Post.objects).all()[:3],
+        'sidebar_tag_list': Post.tags.annotate(num_times=Count('taggit_taggeditem_items')).order_by('-num_times')[:8],
+    }
+
+
 class BlogListView(PublishedListMixin, ListView):
     model = Post
     paginate_by = 10
@@ -27,10 +41,8 @@ class BlogListView(PublishedListMixin, ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['sidebar_post_list'] = queryset_filter(Post.objects).all()[:3]
-        context['sidebar_tag_list'] = Post.tags.annotate(num_times=Count('taggit_taggeditem_items')).order_by(
-            '-num_times'
-        )[:8]
+        context.update(_sidebar_context())
+        context['blog_years'] = _blog_years()
         return context
 
     def get_queryset(self):
@@ -50,12 +62,33 @@ class BlogListView(PublishedListMixin, ListView):
             queryset = queryset.annotate(rank=rank).filter(rank__gte=0.01).prefetch_related('tags').order_by('-rank')
 
         elif tag:
-            # user is doing a tag query
             queryset = queryset.prefetch_related('tags').filter(tags__slug__in=[tag])
         else:
             queryset = queryset.prefetch_related('tags').all()
 
         return queryset
+
+
+class BlogListYearView(PublishedListMixin, YearMixin, ListView):
+    model = Post
+    paginate_by = 10
+    context_object_name = 'posts'
+    template_name = 'blog/list.html'
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        try:
+            year = datetime.strptime(str(self.get_year()), self.get_year_format()).year
+        except ValueError:
+            raise Http404() from None
+        return queryset.filter(created__year=year).prefetch_related('tags')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context.update(_sidebar_context())
+        context['blog_years'] = _blog_years()
+        context['year'] = str(self.get_year())
+        return context
 
 
 class BlogDetailView(PublishedDetailMixin, DetailView):
@@ -65,8 +98,7 @@ class BlogDetailView(PublishedDetailMixin, DetailView):
 
     def get_context_data(self, form=None, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['sidebar_post_list'] = queryset_filter(Post.objects.all())[:3]
-        context['sidebar_tag_list'] = Post.tags.most_common()[:8]
+        context.update(_sidebar_context())
 
         if COMMENTS_ENABLED:
             context['comment_list'] = self.object.comments.all()
@@ -127,4 +159,4 @@ class CommentDeleteView(AutoPermissionRequiredMixin, LoginRequiredMixin, DeleteV
         return reverse('blog:detail', kwargs={'slug': self.object.post.slug})
 
 
-__all__ = ['BlogDetailView', 'BlogListView', 'CommentDeleteView']
+__all__ = ['BlogDetailView', 'BlogListView', 'BlogListYearView', 'CommentDeleteView']

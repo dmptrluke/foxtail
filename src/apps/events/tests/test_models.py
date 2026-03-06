@@ -97,6 +97,31 @@ class TestEventStructuredData:
         sd = event.structured_data
         assert sd['location']['address'] == '123 Main St'
 
+    # geo coordinates included when lat/lng are set
+    def test_geo_included(self, event: Event):
+        from decimal import Decimal
+
+        event.location = 'Test Venue'
+        event.latitude = Decimal('-41.286460')
+        event.longitude = Decimal('174.776236')
+        if 'structured_data' in event.__dict__:
+            del event.__dict__['structured_data']
+        sd = event.structured_data
+        geo = sd['location']['geo']
+        assert geo['@type'] == 'GeoCoordinates'
+        assert geo['latitude'] == pytest.approx(-41.28646)
+        assert geo['longitude'] == pytest.approx(174.776236)
+
+    # geo coordinates omitted when lat/lng are null
+    def test_geo_omitted(self, event: Event):
+        event.location = 'Test Venue'
+        event.latitude = None
+        event.longitude = None
+        if 'structured_data' in event.__dict__:
+            del event.__dict__['structured_data']
+        sd = event.structured_data
+        assert 'geo' not in sd['location']
+
 
 class TestEvent:
     """Test Event model basics."""

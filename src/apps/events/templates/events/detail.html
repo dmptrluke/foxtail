@@ -1,0 +1,144 @@
+{% extends "base.html" %}
+{% load icon cache jsonld opengraph meta breadcrumbs event_calendar %}
+
+{% block extra_head %}
+    <link rel="canonical" href="{{ SITE_URL }}{{ event.get_absolute_url }}"/>
+    <meta name="twitter:card" content="summary_large_image"/>
+    {% json_ld_for event %}
+    {% og_for event %}
+    {% meta_for event %}
+    <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+                {
+                    "@type": "ListItem",
+                    "position": 1,
+                    "name": "Events",
+                    "item": "{{ SITE_URL }}{% url 'events:list' %}"
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 2,
+                    "name": "{{ event.start.year }}",
+                    "item": "{{ SITE_URL }}{% url 'events:list_year' year=event.start.year %}"
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 3,
+                    "name": "{{ event.title }}",
+                    "item": "{{ SITE_URL }}{{ event.get_absolute_url }}"
+                }
+            ]
+        }
+    </script>
+{% endblock %}
+
+{% block title %}{{ event.title }}{% endblock %}
+
+{% block base_content %}
+    {# Hero #}
+    <div class="hero hero-detail">
+        <div class="container px-3 px-md-4">
+            <div class="hero-topline">
+                {% url 'events:list' as events_url %}{% breadcrumbs events_url "Events" event.title %}
+                {% if user.is_staff %}
+                    <a href="{% url 'admin:events_event_change' event.pk %}" class="hero-admin-link">{% icon "pencil" "span" "0.75em" %} Edit</a>
+                {% endif %}
+            </div>
+
+            {% if event.tags.all %}
+                <div class="tag-row">
+                    {% for tag in event.tags.all %}
+                        <span class="tag-pill">{{ tag.name | title }}</span>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            <h1>{{ event.title }}</h1>
+            <h2>{{ event.location }}</h2>
+
+            <div class="hero-bottom">
+                <dl class="event-hero-dates">
+                    <div>
+                        <dt>Starts</dt>
+                        <dd>{{ event.start | date:"l, F jS Y" }}{{ event.start_time | time:" \a\t g:i A" }}</dd>
+                    </div>
+                    {% if event.end or event.end_time %}
+                        <div>
+                            <dt>Ends</dt>
+                            <dd>
+                                {% if event.end and event.end != event.start %}
+                                    {{ event.end | date:"l, F jS Y" }}{{ event.end_time | time:" \a\t g:i A" }}
+                                {% elif event.end_time %}
+                                    Same day at {{ event.end_time | time:"g:i A" }}
+                                {% endif %}
+                            </dd>
+                        </div>
+                    {% endif %}
+                </dl>
+            </div>
+        </div>
+    </div>
+
+    {# Banner image #}
+    {% if event.image %}
+        <div class="hero-banner">
+            <img src="{{ event.image.crop.1200x350 }}"
+                 srcset="{{ event.image.crop.1200x350 }} 1x, {{ event.image.crop.2400x700 }} 2x"
+                 alt="{{ event.title }}">
+        </div>
+    {% endif %}
+
+    {# Two-column content #}
+    <div class="container px-3 px-md-4">
+        {% include "components/messages.html" %}
+
+        <div class="sidebar-layout">
+            <main id="main-content">
+                <div class="rendered-markdown">
+                    {{ event.description_rendered | safe }}
+                </div>
+
+                {% event_calendar event %}
+            </main>
+
+            <aside class="sidebar">
+                {# Location card #}
+                <section>
+                    <h6>Location</h6>
+                    <div class="sidebar-body">
+                        <p><strong>{{ event.location }}</strong></p>
+                        {% if event.address %}
+                            <p class="sidebar-address">{{ event.address }}</p>
+                        {% endif %}
+                    </div>
+                    {% if event.map_image %}
+                        <img class="sidebar-image" style="aspect-ratio: 16 / 9" src="{{ event.map_image.url }}" alt="Map of {{ event.location }}">
+                    {% endif %}
+                </section>
+
+                {# Cost card (dummy data - field doesn't exist yet) #}
+                <section>
+                    <h6>Cost</h6>
+                    <div class="sidebar-body">
+                        <p><strong>Check event website</strong></p>
+                        <p>Pricing varies by registration type and date.</p>
+                    </div>
+                </section>
+
+                {# CTA #}
+                {% if event.url %}
+                    <section>
+                        <div class="sidebar-cta">
+                            <a class="btn btn-primary" href="{{ event.url }}" rel="noopener noreferrer" target="_blank">
+                                Visit Event Website
+                            </a>
+                        </div>
+                    </section>
+                {% endif %}
+            </aside>
+        </div>
+    </div>
+{% endblock base_content %}

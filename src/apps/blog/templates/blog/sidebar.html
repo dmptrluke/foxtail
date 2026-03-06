@@ -1,43 +1,42 @@
-{% load cache humanize static icon %}
-<div class="sidebar">
-    <section id="search">
+{% load cache humanize icon %}
+
+<section>
+    <h6>Search</h6>
+    <div class="sidebar-body">
         <form action="{% url 'blog:list' %}">
             <label class="visually-hidden" for="search-field">Search</label>
             <div class="input-group">
-                <input type="search" name="q" id="search-field" class="form-control" placeholder="Search...">
-                <button type="submit" class="btn btn-outline-secondary" id="search-button"
-                            aria-label="Submit Search Query">{% icon "search" %}</button>
+                <input type="search" name="q" id="search-field" class="form-control" placeholder="Search news...">
+                <button type="submit" class="btn btn-outline-secondary" aria-label="Submit Search Query">{% icon "search" %}</button>
             </div>
         </form>
-    </section>
-    {% cache 1800 sidebarposts %}
-        <section id="recent-posts">
-            <h4>Recent Posts <small><a title="RSS Feed" href="{% url 'blog:feed'  %}">{% icon 'rss-square' tag='span' %}</a></small></h4>
-            <div class="list-group list-group-flush">
-                {% for post in sidebar_post_list %}
-                    <a href="{{ post.get_absolute_url }}" class="list-group-item list-group-item-action">
-                        <header>
-                            <h5>{{ post.title }}</h5>
-                            <small>{{ post.created | naturaltime }}</small>
-                        </header>
-                        <p class="mb-1">{{ post.text_rendered | safe | striptags | truncatechars:80 }}</p>
-                    </a>
-                {% endfor %}
-            </div>
-        </section>
-    {% endcache %}
-    <section id="categories">
-        <h4>Categories</h4>
-        <div class="list-group">
-            {% for tag in sidebar_tag_list %}
-                <a href="{% url 'blog:list' %}?tag={{ tag.slug }}" class="list-group-item list-group-item-action
-                    d-flex justify-content-between align-items-center{% if request.GET.tag == tag.slug %} active{% endif %}">
-                    {{ tag.name | capfirst }}
-                    <span class="badge badge-pill {% if request.GET.tag == tag.slug %}bg-light text-primary{% else %}bg-secondary{% endif %}">
-                            {{ tag.num_times }}
-                        </span>
+    </div>
+</section>
+
+{% cache 1800 sidebarposts %}
+    <section>
+        <h6>Recent Posts <small><a title="RSS Feed" href="{% url 'blog:feed' %}">{% icon 'rss-square' tag='span' %}</a></small></h6>
+        <div class="sidebar-body">
+            {% for post in sidebar_post_list %}
+                <a href="{{ post.get_absolute_url }}" class="sidebar-recent-item">
+                    <strong>{{ post.title }}</strong>
+                    <span class="sidebar-recent-time">{{ post.created|naturaltime }}</span>
+                    <p>{{ post.text_rendered|safe|striptags|truncatechars:80 }}</p>
                 </a>
             {% endfor %}
         </div>
     </section>
-</div>
+{% endcache %}
+
+<section>
+    <h6>Categories</h6>
+    <div class="sidebar-body">
+        {% for tag in sidebar_tag_list %}
+            <a href="{% url 'blog:list' %}?tag={{ tag.slug }}"
+               class="sidebar-category-item{% if request.GET.tag == tag.slug %} active{% endif %}">
+                {{ tag.name|capfirst }}
+                <span class="sidebar-category-count">{{ tag.num_times }}</span>
+            </a>
+        {% endfor %}
+    </div>
+</section>

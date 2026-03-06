@@ -3,14 +3,12 @@
 
 {% block title %}Email Addresses{% endblock %}
 
-{% block breadcrumbs %}{% url 'account_profile' as a %}{% breadcrumbs a "Account" "Email" %}{% endblock %}
+{% block hero_breadcrumbs %}{% url 'account_profile' as a %}{% breadcrumbs a "Account" "Email" %}{% endblock %}
+
+{% block hero_heading %}Email Addresses{% endblock %}
+{% block hero_sub %}<h2>Manage the email addresses associated with your account.</h2>{% endblock %}
 
 {% block content %}
-    <div class="account-header">
-        <h3>Email Addresses</h3>
-        <p>Manage the email addresses associated with your account.</p>
-    </div>
-
     <div class="account-section">
         {% with emails=emailaddresses|dictsortreversed:"primary" %}
         {% if emails %}
@@ -56,7 +54,7 @@
                 {% endfor %}
             </div>
         {% else %}
-            <div class="account-empty">
+            <div class="empty-state">
                 No email address is associated with your account. You will not be able to reset your password without one.
             </div>
         {% endif %}

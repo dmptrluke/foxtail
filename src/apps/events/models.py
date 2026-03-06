@@ -27,6 +27,9 @@ class Event(models.Model):
 
     location = models.CharField(max_length=200)
     address = models.TextField(blank=True)
+    latitude = models.DecimalField(max_digits=9, decimal_places=6, null=True, blank=True)
+    longitude = models.DecimalField(max_digits=9, decimal_places=6, null=True, blank=True)
+    map_image = models.ImageField(upload_to='events/maps', blank=True)
 
     start = models.DateField()
     start_time = models.TimeField(null=True, blank=True, help_text='Time is optional.')
@@ -81,11 +84,18 @@ class Event(models.Model):
             data['endDate'] = self.end.strftime('%Y-%m-%d')
 
         if self.location:
-            data['location'] = {
+            place = {
                 '@type': 'Place',
                 'name': self.location,
                 'address': self.address or self.location,
             }
+            if self.latitude and self.longitude:
+                place['geo'] = {
+                    '@type': 'GeoCoordinates',
+                    'latitude': float(self.latitude),
+                    'longitude': float(self.longitude),
+                }
+            data['location'] = place
 
         if self.image:
             data['image'] = {

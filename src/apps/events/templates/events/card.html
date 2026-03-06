@@ -1,0 +1,28 @@
+<div class="event-card{% if not event.image %} event-card-noimage{% endif %}">
+    {% if event.image %}
+        <a href="{{ event.get_absolute_url }}" class="event-card-image">
+            <img src="{{ event.image.crop.400x200 }}"
+                 srcset="{{ event.image.crop.400x200 }} 1x, {{ event.image.crop.800x400 }} 2x"
+                 alt="">
+        </a>
+    {% endif %}
+
+    <div class="event-card-body">
+        {% if not event.image %}
+            <div class="event-card-hero-date">{{ event.start | date:"M j, Y" }}</div>
+        {% endif %}
+        <h5><a href="{{ event.get_absolute_url }}">{{ event.title }}</a></h5>
+        <div class="event-card-location">{{ event.location }}</div>
+        <p class="event-card-excerpt">{{ event.description_rendered | safe | striptags | truncatechars:120 }}</p>
+        {% if event.image %}
+            <div class="event-card-date">{{ event.start | date:"F jS, Y" }}</div>
+        {% endif %}
+    </div>
+    {% if event.tags.all %}
+        <div class="event-card-footer tag-row">
+            {% for tag in event.tags.all %}
+                <span class="tag-pill">{{ tag.name | title }}</span>
+            {% endfor %}
+        </div>
+    {% endif %}
+</div>

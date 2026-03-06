@@ -46,8 +46,10 @@ $hero-gradient: linear-gradient(135deg, $dark 0%, darken($secondary, 15%) 100%);
 @import "~bootstrap/scss/utilities";
 @import "~bootstrap/scss/utilities/api";
 
+@import "mixins";
 @import "layout";
 @import "sidebar";
+@import "hero";
 @import "components";
 @import "blog";
 @import "tables";

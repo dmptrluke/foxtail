@@ -13,7 +13,7 @@
 
 {% block base_content %}
     <main id="main-content">
-        <section class="hero{% if user.is_authenticated %} hero-compact{% endif %}">
+        <section class="hero hero-home{% if user.is_authenticated %} hero-compact{% endif %}">
             <div class="container px-3 px-md-4">
                 {% if user.is_authenticated %}
                     <h1>Welcome back, {{ user.get_short_name }}</h1>
@@ -67,8 +67,8 @@
                                 <article class="news-compact">
                                     <a href="{{ post.get_absolute_url }}">
                                         {% if post.image %}
-                                            <img src="{{ post.image.crop.350x175 }}"
-                                                 srcset="{{ post.image.crop.350x175 }} 1x, {{ post.image.crop.700x350 }} 2x"
+                                            <img src="{{ post.image.crop.600x300 }}"
+                                                 srcset="{{ post.image.crop.600x300 }} 1x, {{ post.image.crop.1200x600 }} 2x"
                                                  alt="{{ post.title }}">
                                         {% else %}
                                             <div class="card-img-placeholder"></div>

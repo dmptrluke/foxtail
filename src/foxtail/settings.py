@@ -498,16 +498,23 @@ VERSATILEIMAGEFIELD_SETTINGS = {
 
 VERSATILEIMAGEFIELD_RENDITION_KEY_SETS = {
     'event_image': [
-        ('mini', 'crop__350x175'),
-        ('mini2x', 'crop__700x350'),
-        ('banner', 'crop__1150x300'),
+        ('card', 'crop__400x200'),
+        ('card_2x', 'crop__800x400'),
+        ('featured', 'crop__700x350'),
+        ('featured_2x', 'crop__1400x700'),
+        ('banner', 'crop__1200x350'),
+        ('banner_2x', 'crop__2400x700'),
         ('admin', 'thumbnail__300x300'),
     ],
     'post_image': [
-        ('mini', 'crop__350x175'),
-        ('mini2x', 'crop__700x350'),
-        ('banner', 'crop__800x350'),
-        ('banner2x', 'crop__1200x525'),
+        ('compact', 'crop__600x300'),
+        ('compact_2x', 'crop__1200x600'),
+        ('card', 'crop__800x400'),
+        ('card_2x', 'crop__1600x800'),
+        ('featured', 'crop__700x350'),
+        ('featured_2x', 'crop__1400x700'),
+        ('banner', 'crop__1200x350'),
+        ('banner_2x', 'crop__2400x700'),
         ('admin', 'thumbnail__300x300'),
     ],
 }
@@ -544,11 +551,10 @@ DEFAULT_STRUCTURED_DATA = {
 
 # Blog
 BLOG_COMMENTS = True
-BLOG_FEED_TITLE = 'Latest News'
-BLOG_FEED_DESCRIPTION = 'The latest furry news.'
 
 # Contact
 CONTACT_EMAILS = env.list('CONTACT_EMAILS')
 
 # Foxtail
 DIRECTORY_ENABLED = env.bool('DIRECTORY_ENABLED', default=False)
+MAPBOX_ACCESS_TOKEN = env('MAPBOX_ACCESS_TOKEN', default='')

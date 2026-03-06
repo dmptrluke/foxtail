@@ -103,6 +103,16 @@
             "problemMatcher": []
         },
         {
+            "label": "Django: Warm Images",
+            "type": "shell",
+            "command": "docker compose run --rm foxtail django-admin warm_images",
+            "presentation": {
+                "reveal": "always",
+                "panel": "shared"
+            },
+            "problemMatcher": []
+        },
+        {
             "label": "Django: Generate Sample Data",
             "type": "shell",
             "command": "docker compose run --rm foxtail django-admin generate_sample_data --users ${input:sampleUsers} --posts ${input:samplePosts} --comments ${input:sampleComments} --events ${input:sampleEvents} --pages ${input:samplePages}",

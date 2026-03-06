@@ -1,14 +1,27 @@
-{% load tz %}
+{% load tz icon %}
 {% get_current_timezone as TIME_ZONE %}
 <footer id="footer">
-    <div class="container">
-        <p>{{ request.site.name }} —
-            <a href="https://github.com/dmptrluke/foxtail" target="_blank" rel="noopener noreferrer">source</a>,
-            <a href="{% url 'content:page' slug='privacy' %}">privacy</a>,
-            <a href="{% url 'contact:contact'%}">contact</a>,
-
-            <a role="button" data-bs-toggle="popover" data-bs-placement="top"
-            data-bs-content="'{{ DEBUG_DATA | escape }}'">?</a>
-        </p>
+    <div class="container px-3 px-md-4">
+        <div>
+            <nav class="footer-links">
+                <a href="https://github.com/dmptrluke/foxtail" target="_blank" rel="noopener noreferrer">Source</a>
+                <a href="{% url 'content:page' slug='privacy' %}">Privacy</a>
+                <a href="{% url 'contact:contact' %}">Contact</a>
+            </nav>
+            <p class="footer-credit">Made with {% icon "paw" "span" "0.85em" %} by <a href="https://bsky.app/profile/kapthefox.bsky.social" target="_blank" rel="noopener noreferrer">Kap</a></p>
+        </div>
+        <div class="footer-social">
+            <a href="https://t.me/furrynz" target="_blank" rel="noopener noreferrer" title="Telegram">
+                {% icon "telegram" "span" "1.1em" %}
+            </a>
+            <a href="https://bsky.app/profile/furry.nz" target="_blank" rel="noopener noreferrer" title="Bluesky">
+                {% icon "bluesky" "span" "1.1em" %}
+            </a>
+            <a href="https://x.com/furrynz" target="_blank" rel="noopener noreferrer" title="X">
+                {% icon "twitter" "span" "1.1em" %}
+            </a>
+            <a class="footer-debug" role="button" tabindex="0" data-bs-toggle="popover" data-bs-trigger="focus"
+               data-bs-placement="top" data-bs-content="{{ DEBUG_DATA | escape }}" title="Debug info">?</a>
+        </div>
     </div>
 </footer>

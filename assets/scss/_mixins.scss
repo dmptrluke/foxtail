@@ -1,0 +1,26 @@
+// Shared mixins
+
+// The Label: small uppercase structural markers used throughout the site
+@mixin label-style {
+	font-size: 0.7rem;
+	font-weight: 600;
+	text-transform: uppercase;
+	letter-spacing: 0.06em;
+}
+
+// Image zoom on hover (apply to img element inside overflow:hidden container)
+@mixin img-zoom {
+	transition: transform 0.3s ease;
+
+	&:hover {
+		transform: scale(1.03);
+	}
+}
+
+// Multi-line text truncation
+@mixin line-clamp($lines: 3) {
+	display: -webkit-box;
+	-webkit-line-clamp: $lines;
+	-webkit-box-orient: vertical;
+	overflow: hidden;
+}

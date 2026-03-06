@@ -1,7 +1,15 @@
-.alert ul {
-	list-style-type: none;
-	padding-left: 0;
-	margin: 0;
+// Alerts - left-border accent
+
+.alert {
+	border: none;
+	border-left: 3px solid;
+	font-size: 0.9rem;
+
+	ul {
+		list-style-type: none;
+		padding-left: 0;
+		margin: 0;
+	}
 }
 
 p a {
@@ -27,21 +35,41 @@ p a {
 	}
 }
 
-.nav-lines {
-	border-bottom: 2px solid #f5f5f5;
+// Tag system
 
-	.nav-item {
-		border-bottom: 2px solid #f5f5f5;
-		margin-bottom: -2px;
-		color: $secondary;
-	}
+.tag-row {
+	display: flex;
+	gap: 0.5rem;
+}
 
-	.nav-item:hover {
-		border-bottom-color: #dbdbdb !important;
-	}
+.tag-row-dark .tag-pill {
+	background: rgba($dark, 0.08);
+	color: $dark;
+}
 
-	.nav-item.active {
-		border-bottom-color: $primary !important;
-		color: $primary;
+.tag-pill {
+	display: inline-block;
+	font-size: 0.75rem;
+	font-weight: 500;
+	padding: 0.2rem 0.6rem;
+	background: rgba($white, 0.15);
+	border-radius: 2px;
+	color: rgba($white, 0.85);
+	text-decoration: none;
+
+	&:hover {
+		text-decoration: none;
 	}
+}
+
+
+// Empty states
+.empty-state {
+	padding: 2rem 1.25rem;
+	text-align: center;
+	color: lighten($body-color, 25%);
+	background: rgba($secondary, 0.03);
+	border: 1px dashed rgba($secondary, 0.2);
+	border-radius: $card-border-radius;
+	font-size: 0.925rem;
 }

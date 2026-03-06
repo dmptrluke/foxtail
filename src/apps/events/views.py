@@ -8,8 +8,12 @@ from django.views.generic.dates import YearMixin
 from .models import Event
 
 
-class EventList(ListView):
-    template_name = 'event_list.html'
+def _event_years():
+    return Event.objects.dates('start', 'year', order='DESC').values_list('start__year', flat=True)
+
+
+class EventListView(ListView):
+    template_name = 'events/list.html'
     context_object_name = 'event_list'
 
     def get_queryset(self):
@@ -19,13 +23,16 @@ class EventList(ListView):
         context = super().get_context_data(**kwargs)
         today = date.today()
         upcoming_filter = Q(start__gte=today) | Q(end__gte=today)
-        context['upcoming_events'] = Event.objects.filter(upcoming_filter).prefetch_related('tags').order_by('start')
+        upcoming = Event.objects.filter(upcoming_filter).prefetch_related('tags').order_by('start')
+        context['upcoming_events'] = upcoming
         context['past_events'] = Event.objects.exclude(upcoming_filter).prefetch_related('tags').order_by('-start')
+        context['featured_event'] = upcoming.first()
+        context['event_years'] = _event_years()
         return context
 
 
-class EventListYear(YearMixin, ListView):
-    template_name = 'event_list.html'
+class EventListYearView(YearMixin, ListView):
+    template_name = 'events/list.html'
     context_object_name = 'event_list'
 
     def get_queryset(self):
@@ -44,12 +51,13 @@ class EventListYear(YearMixin, ListView):
         year_qs = Event.objects.filter(start__year=year).prefetch_related('tags')
         context['upcoming_events'] = year_qs.filter(upcoming_filter).order_by('start')
         context['past_events'] = year_qs.exclude(upcoming_filter).order_by('-start')
+        context['event_years'] = _event_years()
         return context
 
 
-class EventDetail(YearMixin, DetailView):
+class EventDetailView(YearMixin, DetailView):
     model = Event
-    template_name = 'event_detail.html'
+    template_name = 'events/detail.html'
 
     def get_queryset(self):
         try:
@@ -60,4 +68,4 @@ class EventDetail(YearMixin, DetailView):
         return Event.objects.filter(start__year=date.year, slug=self.kwargs['slug'])
 
 
-__all__ = ['EventDetail', 'EventList']
+__all__ = ['EventDetailView', 'EventListView', 'EventListYearView']

@@ -3,14 +3,12 @@
 
 {% block title %}Authorized Applications{% endblock %}
 
-{% block breadcrumbs %}{% url 'account_profile' as a %}{% breadcrumbs a "Account" "Applications" %}{% endblock %}
+{% block hero_breadcrumbs %}{% url 'account_profile' as a %}{% breadcrumbs a "Account" "Applications" %}{% endblock %}
+
+{% block hero_heading %}Authorized Applications{% endblock %}
+{% block hero_sub %}<h2>Third-party applications that have been granted access to your account.</h2>{% endblock %}
 
 {% block content %}
-    <div class="account-header">
-        <h3>Authorized Applications</h3>
-        <p>Third-party applications that have been granted access to your account.</p>
-    </div>
-
     {% if client_list %}
         <div class="account-item-list">
             {% for client in client_list %}
@@ -47,7 +45,7 @@
             {% endfor %}
         </div>
     {% else %}
-        <div class="account-empty">
+        <div class="empty-state">
             No applications have been granted access to your account.
         </div>
     {% endif %}
