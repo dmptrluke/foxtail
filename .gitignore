@@ -24,7 +24,6 @@ node_modules
 !.vscode/extensions.json
 
 # Produced assets
-build/*
-!build/webpack-stats.json
+build/
 storage/
 static/

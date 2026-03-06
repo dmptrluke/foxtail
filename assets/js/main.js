@@ -1,3 +1,10 @@
+import '@fontsource/roboto/300.css';
+import '@fontsource/roboto/400.css';
+import '@fontsource/roboto/400-italic.css';
+import '@fontsource/roboto/500.css';
+import '@fontsource/roboto/700.css';
+import '../scss/index.scss';
+
 import Dropdown from 'bootstrap/js/dist/dropdown';
 import Collapse from 'bootstrap/js/dist/collapse';
 import Alert from 'bootstrap/js/dist/alert';
@@ -17,14 +24,15 @@ function on_load() {
       return new Popover(popoverTriggerEl)
     })
 
-    $('#id_text').keyup(function () {
-        let length = $(this).val().length;
-        let limit = $(this).attr('maxlength');
-
-        length = limit - length;
-        let plural = (length === 1) ? "" : "s";
-        $('#hint_id_text').text(length + ' character' + plural + ' remaining.');
-    });
+    const textInput = document.getElementById('id_text');
+    if (textInput) {
+        textInput.addEventListener('keyup', function () {
+            const remaining = this.maxLength - this.value.length;
+            const plural = remaining === 1 ? '' : 's';
+            document.getElementById('hint_id_text').textContent =
+                remaining + ' character' + plural + ' remaining.';
+        });
+    }
 }
 
 if (document.readyState === 'loading') {
