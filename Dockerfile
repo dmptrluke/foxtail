@@ -1,4 +1,5 @@
-# Stage 1: Build frontend assets
+# Dependencies
+
 FROM node:22-slim AS assets
 ARG BUILD_MODE=production
 ENV NODE_ENV=$BUILD_MODE
@@ -11,13 +12,11 @@ COPY webpack/ ./webpack/
 COPY assets/ ./assets/
 RUN npm run-script build-${BUILD_MODE}
 
-# Stage 2: Production application
-FROM python:3.13-slim AS app
+FROM python:3.13-slim AS deps
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
     PYTHONPATH="/app/src" \
-    DJANGO_SETTINGS_MODULE=foxtail.settings \
-    GUNICORN_WORKERS=2
+    DJANGO_SETTINGS_MODULE=foxtail.settings
 
 WORKDIR /app
 
@@ -34,33 +33,12 @@ RUN apt-get update \
     && apt-get purge -y --auto-remove gcc libc6-dev libpq-dev \
     && rm -rf /var/lib/apt/lists/*
 
-COPY --from=assets /app/build ./build
-COPY --chown=abc:abc . .
-RUN mkdir -p /app/static /app/storage/media \
-    && chown -R abc:abc /app/static /app/storage
-
-USER abc
-
-RUN SECRET_KEY=build-placeholder SITE_URL=http://localhost CONTACT_EMAILS=noop@localhost \
-    django-admin collectstatic --noinput
-
-EXPOSE 8000
-CMD ["gunicorn", "--bind", "0.0.0.0:8000", "foxtail.wsgi:application"]
-
-# Stage 3: Development (adds debug tools)
-FROM app AS dev
-
-USER root
+FROM deps AS dev-deps
 
 COPY requirements/dev.txt ./requirements/dev.txt
 RUN pip install --no-cache-dir -r requirements/dev.txt
 
-USER abc
-
-# Stage 4: Test runner (includes Chrome for Selenium tests)
-FROM dev AS test
-
-USER root
+FROM dev-deps AS test-deps
 
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
@@ -75,6 +53,40 @@ COPY requirements/test.txt ./requirements/test.txt
 RUN pip install --no-cache-dir -r requirements/test.txt
 
 RUN mkdir -p /home/abc/.cache && chown -R abc:abc /home/abc
+
+# Applications
+
+FROM deps AS app
+ENV GUNICORN_WORKERS=2
+
+COPY --from=assets /app/build ./build
+COPY --chown=abc:abc . .
+RUN mkdir -p /app/static /app/storage/media \
+    && chown -R abc:abc /app/static /app/storage
+
+USER abc
+
+RUN SECRET_KEY=build-placeholder SITE_URL=http://localhost CONTACT_EMAILS=noop@localhost \
+    django-admin collectstatic --noinput
+
+EXPOSE 8000
+CMD ["gunicorn", "--bind", "0.0.0.0:8000", "foxtail.wsgi:application"]
+
+FROM dev-deps AS dev
+
+COPY --from=assets /app/build ./build
+COPY --chown=abc:abc . .
+RUN mkdir -p /app/static /app/storage/media \
+    && chown -R abc:abc /app/static /app/storage
+
+USER abc
+
+FROM test-deps AS test
+
+COPY --from=assets /app/build ./build
+COPY --chown=abc:abc . .
+RUN mkdir -p /app/static /app/storage/media \
+    && chown -R abc:abc /app/static /app/storage
 
 USER abc
 
