@@ -1,21 +1,28 @@
 name: Test
 on:
   push:
+    branches-ignore:
+      - 'dependabot**'
+  pull_request:
+
+concurrency:
+  group: test-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   generate_assets:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Cache Node dependencies
         id: node-cache
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: node_modules
           key: ${{ runner.OS }}-npm-${{ hashFiles('**/package-lock.json') }}
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v6
         with:
           node-version: '22.x'
 
@@ -27,7 +34,7 @@ jobs:
         run: npm run-script build-development
 
       - name: Store assets for testing
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: generated
           path: build
@@ -57,16 +64,16 @@ jobs:
         options: --entrypoint redis-server
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: '3.13'
 
       - name: Cache Python dependencies
         id: py-cache
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: ~/.local/lib/
           key: ${{ runner.OS }}-pip-3.13-${{ hashFiles('requirements/*.txt') }}
@@ -82,7 +89,7 @@ jobs:
           pip install --user -r requirements/test.txt
 
       - name: Get assets
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v7
         with:
           name: generated
           path: build
