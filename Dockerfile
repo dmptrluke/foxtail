@@ -8,7 +8,7 @@ WORKDIR /app
 COPY package.json package-lock.json ./
 RUN npm ci
 
-COPY webpack/ ./webpack/
+COPY vite.config.mjs ./
 COPY assets/ ./assets/
 RUN npm run-script build-${BUILD_MODE}
 

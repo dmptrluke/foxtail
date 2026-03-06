@@ -1,10 +1,10 @@
 {% extends "base.html" %}
-{% load crispy_forms_tags render_bundle_csp %}
+{% load crispy_forms_tags static %}
 
 {% block title %}Edit Profile{% endblock %}
 
 {% block extra_head %}
-    {% render_bundle_csp 'profile_edit' attrs='defer' %}
+    <script src="{% static 'profile_edit.js' %}" defer nonce="{{ request.csp_nonce }}"></script>
 {% endblock extra_head %}
 
 {% block content %}

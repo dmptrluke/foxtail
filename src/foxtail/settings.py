@@ -14,7 +14,6 @@ https://docs.djangoproject.com/en/stable/ref/settings/
 """
 
 import logging
-import os
 from pathlib import Path
 
 from django.contrib.messages import constants as messages
@@ -85,7 +84,6 @@ INSTALLED_APPS = [
     'anymail',
     'mail_templated_simple',
     'taggit',
-    'webpack_loader',
     'crispy_forms',
     'crispy_bootstrap5',
     'widget_tweaks',
@@ -306,7 +304,7 @@ STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
 
 # noinspection PyUnresolvedReferences
-STATICFILES_DIRS = [('webpack_bundles', str(BASE_DIR / 'build/webpack_bundles')), str(BASE_DIR / 'assets/static')]
+STATICFILES_DIRS = [str(BASE_DIR / 'build/static'), str(BASE_DIR / 'assets/static')]
 
 AZURE_MEDIA = env.bool('AZURE_MEDIA', default=False)
 
@@ -323,7 +321,7 @@ STORAGES = {
         else 'django.core.files.storage.FileSystemStorage',
     },
     'staticfiles': {
-        'BACKEND': 'whitenoise.storage.CompressedStaticFilesStorage',
+        'BACKEND': 'whitenoise.storage.CompressedManifestStaticFilesStorage',
     },
 }
 STATIC_ROOT = str(BASE_DIR / 'static')
@@ -333,20 +331,6 @@ if not AZURE_MEDIA:
 
 if TESTING:
     WHITENOISE_AUTOREFRESH = True
-
-# Webpack Loader
-# <https://github.com/owais/django-webpack-loader>
-WEBPACK_STATS_PATH = 'build/webpack-stats.json'
-
-WEBPACK_LOADER = {
-    'DEFAULT': {
-        'CACHE': not DEBUG,
-        'STATS_FILE': os.path.join(BASE_DIR, WEBPACK_STATS_PATH),
-        'POLL_INTERVAL': 0.1,
-        'TIMEOUT': None,
-        'IGNORE': [r'.+\.hot-update.js', r'.+\.map'],
-    }
-}
 
 # Security
 # <https://docs.djangoproject.com/en/stable/howto/deployment/checklist/#https>
@@ -365,7 +349,7 @@ X_FRAME_OPTIONS = 'DENY'
 # CSP Headers
 # <https://django-csp.readthedocs.io/en/latest/>
 
-CSP_INCLUDE_NONCE_IN = ['script-src', 'style-src']
+CSP_INCLUDE_NONCE_IN = ['script-src']
 CSP_UPGRADE_INSECURE_REQUESTS = True
 
 ASSET_HOSTS = env.list('ASSET_HOSTS', default=[])
@@ -380,9 +364,9 @@ CSP_SCRIPT_SRC = [
     'https://www.google.com/recaptcha/',
     'https://www.gstatic.com/recaptcha/',
 ] + ASSET_HOSTS
-CSP_STYLE_SRC = ["'unsafe-inline'", 'fonts.googleapis.com', "'self'"] + ASSET_HOSTS
+CSP_STYLE_SRC = ["'unsafe-inline'", "'self'"] + ASSET_HOSTS
 CSP_FRAME_SRC = ['https://www.google.com/recaptcha/']
-CSP_FONT_SRC = ["'self'", 'data:', 'fonts.gstatic.com'] + ASSET_HOSTS
+CSP_FONT_SRC = ["'self'", 'data:'] + ASSET_HOSTS
 CSP_IMG_SRC = ["'self'", 'data:', 'ui-avatars.com', '*.wp.com', 'www.gravatar.com'] + ASSET_HOSTS
 CSP_OBJECT_SRC = ["'none'"]
 CSP_CONNECT_SRC = ["'self'", 'https://sentry.io']
@@ -458,6 +442,7 @@ LOGGING = {
     'root': {'level': 'INFO', 'handlers': ['console']},
     'loggers': {
         'sentry_sdk': {'level': 'ERROR', 'handlers': ['console']},
+        'azure': {'level': 'WARNING'},
     },
 }
 

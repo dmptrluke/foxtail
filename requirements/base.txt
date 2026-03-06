@@ -21,7 +21,6 @@ django-storages[azure]==1.14.6
 django-structured-data==0.7.0
 django-taggit==6.1.0
 django-versatileimagefield==3.1
-django-webpack-loader==3.2.3
 django-widget-tweaks==1.5.0
 fido2==2.0.0
 whitenoise==6.12.0

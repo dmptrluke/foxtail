@@ -6,31 +6,20 @@
     "private": true,
     "author": "",
     "scripts": {
-        "watch": "webpack --config webpack/dev.mjs --watch",
-        "build-development": "webpack --config webpack/dev.mjs",
-        "build-production": "webpack --config webpack/prod.mjs"
+        "watch": "vite build --watch",
+        "build-development": "vite build --mode development",
+        "build-production": "vite build"
     },
     "stylelint": {
         "extends": "stylelint-config-recommended-scss"
     },
-    "browserslist": "defaults",
     "dependencies": {
+        "@fontsource/roboto": "^5.2.10",
         "@popperjs/core": "^2.11.8",
-        "autoprefixer": "^10.4.20",
         "bootstrap": "^5.3.8",
         "colcade": "^0.2.0",
-        "css-loader": "^7.1.2",
-        "css-minimizer-webpack-plugin": "^7.0.0",
-        "jquery": "^3.7.1",
-        "mini-css-extract-plugin": "^2.9.1",
-        "postcss": "^8.4.44",
-        "postcss-loader": "^8.1.1",
         "sass": "^1.85.0",
-        "sass-loader": "^16.0.1",
-        "webpack": "^5.94.0",
-        "webpack-bundle-tracker": "^3.1.1",
-        "webpack-cli": "^5.1.4",
-        "webpack-merge": "^6.0.1"
+        "vite": "^6.2.0"
     },
     "devDependencies": {
         "stylelint": "^16.9.0",
