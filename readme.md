@@ -17,20 +17,6 @@ SECRET_KEY=REPLACEME
 CONTACT_EMAILS=admin@example.com
 ```
 
-### OIDC Signing Key
-
-Foxtail acts as an OpenID Connect identity provider, which requires an RSA signing key. Generate one for development:
-
-```bash
-openssl genrsa 2048 | openssl pkcs8 -topk8 -nocrypt
-```
-
-Add the output to your `.env` file as `OIDC_RSA_PRIVATE_KEY`, wrapped in quotes with `\n` for newlines:
-
-```
-OIDC_RSA_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\nMIIEvQIBADA...\n-----END PRIVATE KEY-----"
-```
-
 ### Running
 
 Start the application with Docker Compose:
@@ -57,6 +43,10 @@ To run the full test suite (including Selenium browser tests) in Docker:
 ```
 docker compose run --rm test
 ```
+
+## Deployment
+
+See [deploy/](deploy/) for a production-ready compose file and configuration template.
 
 ## License
 ```

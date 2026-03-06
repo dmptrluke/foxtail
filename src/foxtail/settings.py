@@ -42,7 +42,7 @@ SITE_URL = env('SITE_URL').rstrip('/')
 SITE_ID = 1
 
 ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=[])
-INTERNAL_IPS = env.list('INTERNAL_IPS', default=[])
+INTERNAL_IPS = []
 USE_X_FORWARDED_HOST = env.bool('USE_X_FORWARDED_HOST', default=False)
 
 ROOT_URLCONF = 'foxtail.urls'
@@ -314,7 +314,7 @@ if AZURE_MEDIA:
     AZURE_ACCOUNT_NAME = env('AZURE_ACCOUNT')
     AZURE_ACCOUNT_KEY = env('AZURE_KEY')
     AZURE_CUSTOM_DOMAIN = env('AZURE_DOMAIN', default=None)
-    AZURE_SSL = env.bool('AZURE_SSL', default=True)
+    AZURE_SSL = True
 
 STORAGES = {
     'default': {
@@ -336,7 +336,7 @@ if TESTING:
 
 # Webpack Loader
 # <https://github.com/owais/django-webpack-loader>
-WEBPACK_STATS_PATH = env('WEBPACK_STATS_PATH', default='build/webpack-stats.json')
+WEBPACK_STATS_PATH = 'build/webpack-stats.json'
 
 WEBPACK_LOADER = {
     'DEFAULT': {
@@ -389,7 +389,6 @@ CSP_CONNECT_SRC = ["'self'", 'https://sentry.io']
 
 CSP_BASE_URI = ["'none'"]
 CSP_FRAME_ANCESTORS = ["'none'"]
-# CSP_FORM_ACTION = ["'self'"] + env.list('CSP_FORM_ACTION', default=[])
 
 CSP_EXCLUDE_URL_PREFIXES = ('/admin',)
 
@@ -418,7 +417,7 @@ if SENTRY_ENABLED:
     }
 
     # attach environment
-    SENTRY_ENVIRONMENT = env('sentry_environment', default=False)
+    SENTRY_ENVIRONMENT = env('SENTRY_ENVIRONMENT', default='')
     if SENTRY_ENVIRONMENT:
         _vars['environment'] = SENTRY_ENVIRONMENT
 
@@ -432,7 +431,7 @@ if SENTRY_ENABLED:
         repo.close()
 
     # set CSP report URI
-    if env('SENTRY_CSP', default=False):
+    if env.bool('SENTRY_CSP', default=False):
         CSP_REPORT_URI = 'https://sentry.io/api/{}/security/?sentry_key={}'.format(
             urlparse(SENTRY_DSN).path.strip('/'), urlparse(SENTRY_DSN).username
         )
@@ -529,7 +528,7 @@ MARKDOWN_EXTENSIONS = [
 
 MARKDOWN_EXTENSION_CONFIGS = {'pymdownx.emoji': {'emoji_generator': pymdownx.emoji.to_alt}}
 
-MARKDOWN_LINKIFY_BLACKLIST = env.list('MARKDOWN_LINKIFY_BLACKLIST', default=[])
+MARKDOWN_LINKIFY_BLACKLIST = []
 
 # robots.txt
 ROBOTS_ALLOWED = env.bool('ROBOTS_ALLOWED', default=True)

@@ -30,7 +30,6 @@ services:
         BUILD_MODE: development
     ports:
       - "8000:8000"
-    env_file: .env
     environment:
       DATABASE_URL: "postgres://foxtail:foxtail@db/foxtail"
       CACHE_URL: "redis://redis/1"
@@ -41,6 +40,23 @@ services:
         condition: service_healthy
       redis:
         condition: service_started
+
+  worker:
+    image: dmptrluke/foxtail:latest
+    build:
+      context: .
+      target: dev
+      args:
+        BUILD_MODE: development
+    environment:
+      DATABASE_URL: "postgres://foxtail:foxtail@db/foxtail"
+      CACHE_URL: "redis://redis/1"
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    command: django-admin rqworker default
 
 volumes:
   storage:

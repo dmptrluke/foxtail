@@ -12,7 +12,7 @@ node_modules
 compose.yaml
 compose.override.yaml
 compose.test.yaml
-compose.prod.yaml
+deploy
 build
 storage
 static
