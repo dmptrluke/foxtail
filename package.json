@@ -22,7 +22,7 @@
         "vite": "^6.2.0"
     },
     "devDependencies": {
-        "stylelint": "^16.9.0",
+        "stylelint": "^17.4.0",
         "stylelint-config-recommended-scss": "^14.1.0",
         "stylelint-scss": "^6.5.1"
     }
