@@ -46,7 +46,7 @@ jobs:
 
     services:
       postgres:
-        image: postgres:16
+        image: postgres:17
         env:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: hunter2
@@ -58,7 +58,7 @@ jobs:
         options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
 
       redis:
-        image: redis
+        image: redis:8
         ports:
           - 6379/tcp
         options: --entrypoint redis-server
