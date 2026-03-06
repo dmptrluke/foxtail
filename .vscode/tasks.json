@@ -63,6 +63,27 @@
             }
         },
         {
+            "label": "Docker: Start Prod Server",
+            "type": "shell",
+            "command": "docker compose -f compose.yaml -f compose.prod-local.yaml down && docker compose -f compose.yaml -f compose.prod-local.yaml up --build foxtail",
+            "isBackground": true,
+            "presentation": {
+                "reveal": "always",
+                "panel": "dedicated"
+            },
+            "problemMatcher": {
+                "owner": "docker-gunicorn",
+                "pattern": {
+                    "regexp": "^$"
+                },
+                "background": {
+                    "activeOnStart": true,
+                    "beginsPattern": "Attaching to",
+                    "endsPattern": "\\[INFO\\] Listening at"
+                }
+            }
+        },
+        {
             "label": "Docker: Build Tests",
             "type": "shell",
             "command": "docker compose -f compose.yaml -f compose.test.yaml build test",

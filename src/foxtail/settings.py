@@ -349,7 +349,7 @@ X_FRAME_OPTIONS = 'DENY'
 # CSP Headers
 # <https://django-csp.readthedocs.io/en/latest/>
 
-CSP_INCLUDE_NONCE_IN = ['script-src']
+CSP_INCLUDE_NONCE_IN = ['script-src', 'style-src']
 CSP_UPGRADE_INSECURE_REQUESTS = True
 
 ASSET_HOSTS = env.list('ASSET_HOSTS', default=[])
@@ -367,13 +367,15 @@ CSP_SCRIPT_SRC = [
 CSP_STYLE_SRC = ["'unsafe-inline'", "'self'"] + ASSET_HOSTS
 CSP_FRAME_SRC = ['https://www.google.com/recaptcha/']
 CSP_FONT_SRC = ["'self'", 'data:'] + ASSET_HOSTS
-CSP_IMG_SRC = ["'self'", 'data:', 'ui-avatars.com', '*.wp.com', 'www.gravatar.com'] + ASSET_HOSTS
+CSP_IMG_SRC = ["'self'", 'data:', 'https://ui-avatars.com', 'https://www.gravatar.com'] + ASSET_HOSTS
 CSP_OBJECT_SRC = ["'none'"]
 CSP_CONNECT_SRC = ["'self'", 'https://sentry.io']
 
 CSP_BASE_URI = ["'none'"]
 CSP_FRAME_ANCESTORS = ["'none'"]
+CSP_FORM_ACTION = ["'self'"]
 
+# admin is excluded because Django admin requires 'unsafe-eval' for JSONField widgets
 CSP_EXCLUDE_URL_PREFIXES = ('/admin',)
 
 # we don't use strict-dynamic in debug because it breaks django-debug-toolbar

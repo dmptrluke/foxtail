@@ -1,0 +1,23 @@
+# Run locally with production-like static file handling (WhiteNoise manifest hashing).
+# Uses the production Docker stage (collectstatic at build, gunicorn to serve).
+# Usage: docker compose -f compose.yaml -f compose.prod-local.yaml up --build foxtail
+
+services:
+  foxtail:
+    build:
+      target: app
+      args:
+        BUILD_MODE: production
+    command: >
+      sh -c "django-admin migrate --noinput &&
+      gunicorn --bind 0.0.0.0:8000 foxtail.wsgi:application"
+    environment:
+      DEBUG: "false"
+      SECRET_KEY: "dev-insecure-key-do-not-use-in-production"
+      CONTACT_EMAILS: "admin@example.com"
+      SITE_URL: "http://localhost:8000"
+      TESTING: "true"
+      ALLOWED_HOSTS: "localhost,127.0.0.1"
+    env_file:
+      - path: .env
+        required: false
