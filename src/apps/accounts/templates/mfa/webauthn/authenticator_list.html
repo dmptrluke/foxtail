@@ -1,47 +1,49 @@
 {% extends 'account_base.html' %}
-{% load humanize %}
+{% load breadcrumbs humanize %}
 
 {% block title %}Security Keys{% endblock %}
+{% block breadcrumbs %}{% url 'account_profile' as a %}{% url 'mfa_index' as m %}{% breadcrumbs a "Account" m "Two-Factor Auth" "Security Keys" %}{% endblock %}
 
 {% block content %}
-    <h3>Security Keys</h3>
-    <p class="text-muted">Security keys and passkeys registered to your account. You can add as many as you like.</p>
+    <div class="account-header">
+        <h3>Security Keys</h3>
+        <p>Security keys and passkeys registered to your account. You can add as many as you like.</p>
+    </div>
 
     {% if authenticators %}
-        <div class="list-group mb-4">
+        <div class="account-item-list mb-4">
             {% for authenticator in authenticators %}
-                <div class="list-group-item">
-                    <div class="d-flex align-items-center gap-3">
-                        <div class="flex-grow-1">
-                            <div class="fw-semibold">
-                                {{ authenticator }}
-                                {% if authenticator.wrap.is_passwordless is True %}
-                                    <span class="badge bg-primary ms-1">Passkey</span>
-                                {% elif authenticator.wrap.is_passwordless is False %}
-                                    <span class="badge bg-secondary ms-1">Security Key</span>
-                                {% endif %}
-                            </div>
-                            <small class="text-muted">
-                                Added {{ authenticator.created_at|date:"SHORT_DATE_FORMAT" }}.
-                                {% if authenticator.last_used_at %}
-                                    Last used {{ authenticator.last_used_at|naturaltime }}.
-                                {% else %}
-                                    Never used.
-                                {% endif %}
-                            </small>
-                        </div>
-                        <div class="d-flex gap-1">
-                            <a href="{% url 'mfa_edit_webauthn' pk=authenticator.pk %}" class="btn btn-sm btn-outline-secondary">Rename</a>
-                            <a href="{% url 'mfa_remove_webauthn' pk=authenticator.pk %}" class="btn btn-sm btn-outline-danger">Remove</a>
-                        </div>
+                <div class="account-item">
+                    <div class="account-item-body">
+                        <strong>
+                            {{ authenticator }}
+                            {% if authenticator.wrap.is_passwordless is True %}
+                                <span class="badge bg-primary ms-1">Passkey</span>
+                            {% elif authenticator.wrap.is_passwordless is False %}
+                                <span class="badge bg-secondary ms-1">Security Key</span>
+                            {% endif %}
+                        </strong>
+                        <p class="account-item-meta">
+                            Added {{ authenticator.created_at|date:"SHORT_DATE_FORMAT" }}.
+                            {% if authenticator.last_used_at %}
+                                Last used {{ authenticator.last_used_at|naturaltime }}.
+                            {% else %}
+                                Never used.
+                            {% endif %}
+                        </p>
+                    </div>
+                    <div class="account-item-actions">
+                        <a href="{% url 'mfa_edit_webauthn' pk=authenticator.pk %}" class="btn btn-sm btn-outline-secondary">Rename</a>
+                        <a href="{% url 'mfa_remove_webauthn' pk=authenticator.pk %}" class="btn btn-sm btn-outline-danger">Remove</a>
                     </div>
                 </div>
             {% endfor %}
         </div>
     {% else %}
-        <p class="text-muted mb-4">No security keys have been added yet.</p>
+        <div class="account-empty mb-4">
+            No security keys have been added yet.
+        </div>
     {% endif %}
 
     <a href="{% url 'mfa_add_webauthn' %}" class="btn btn-primary btn-sm">Add a Key</a>
-    <a href="{% url 'mfa_index' %}" class="btn btn-outline-secondary btn-sm ms-2">Back</a>
 {% endblock %}

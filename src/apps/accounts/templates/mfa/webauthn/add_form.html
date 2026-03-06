@@ -1,23 +1,24 @@
 {% extends 'account_base.html' %}
-{% load form_tags %}
+{% load breadcrumbs form_tags %}
 
 {% block title %}Add Security Key{% endblock %}
+{% block breadcrumbs %}{% url 'account_profile' as a %}{% url 'mfa_index' as m %}{% url 'mfa_list_webauthn' as k %}{% breadcrumbs a "Account" m "Two-Factor Auth" k "Security Keys" "Add Key" %}{% endblock %}
 
 {% block content %}
-    <h3>Add Security Key</h3>
-    <p class="text-muted">Register a hardware security key (such as a YubiKey) or a passkey saved on your device.</p>
+    <div class="account-header">
+        <h3>Add Security Key</h3>
+        <p>Register a hardware security key (such as a YubiKey) or a passkey saved on your device.</p>
+    </div>
 
-    <div class="card mb-4">
-        <div class="card-body">
-            <form method="post" action="{% url 'mfa_add_webauthn' %}">
-                {% csrf_token %}
-                {% text_field form.name %}
-                {{ form.passwordless }}
-                {{ form.credential }}
-                <button type="button" id="mfa_webauthn_add" class="btn btn-primary">Register Key</button>
-                <a href="{% url 'mfa_list_webauthn' %}" class="btn btn-outline-secondary ms-2">Cancel</a>
-            </form>
-        </div>
+    <div class="account-section">
+        <form method="post" action="{% url 'mfa_add_webauthn' %}">
+            {% csrf_token %}
+            {% text_field form.name %}
+            {{ form.passwordless }}
+            {{ form.credential }}
+            <button type="button" id="mfa_webauthn_add" class="btn btn-primary">Register Key</button>
+            <a href="{% url 'mfa_list_webauthn' %}" class="btn btn-outline-secondary ms-2">Cancel</a>
+        </form>
     </div>
 
     {% include "mfa/webauthn/snippets/scripts.html" %}

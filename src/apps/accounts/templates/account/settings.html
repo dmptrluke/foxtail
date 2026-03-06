@@ -1,31 +1,40 @@
 {% extends "account_base.html" %}
-{% load icon form_tags %}
+{% load breadcrumbs form_tags %}
 
 {% block title %}Account Settings{% endblock %}
 
+{% block breadcrumbs %}{% url 'account_profile' as a %}{% breadcrumbs a "Account" "Settings" %}{% endblock %}
+
 {% block content %}
-    <h3>Account Settings</h3>
+    <div class="account-header">
+        <h3>Account Settings</h3>
+        <p>Manage your username, name, and personal details.</p>
+    </div>
 
     <form method="post">
         {% csrf_token %}
 
-        <h5>Basic Details</h5>
-        <div class="row mb-4">
-            <div class="col-md-6">
-                {% text_field form.username %}
+        <div class="account-section">
+            <h5>Basic Details</h5>
+            <div class="row">
+                <div class="col-md-6">
+                    {% text_field form.username %}
+                </div>
             </div>
         </div>
 
-        <h5>Personal Information</h5>
-        <p class="text-muted small">This information is optional and may be requested by third-party applications. It will not be shared without your explicit consent.</p>
-        <div class="row">
-            <div class="col-md-6">
-                {% text_field form.full_name autocomplete="name" %}
+        <div class="account-section">
+            <h5>Personal Information</h5>
+            <p class="account-section-desc">This information is optional and may be requested by third-party applications. It will not be shared without your explicit consent.</p>
+            <div class="row">
+                <div class="col-md-6">
+                    {% text_field form.full_name autocomplete="name" %}
+                </div>
             </div>
-        </div>
-        <div class="row mb-4">
-            <div class="col-md-6">
-                {% select_field form.date_of_birth %}
+            <div class="row">
+                <div class="col-md-6">
+                    {% select_field form.date_of_birth %}
+                </div>
             </div>
         </div>
 

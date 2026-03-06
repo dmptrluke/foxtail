@@ -1,70 +1,74 @@
 {% extends "account_base.html" %}
-{% load form_tags %}
+{% load breadcrumbs form_tags %}
 
 {% block title %}Email Addresses{% endblock %}
 
-{% block content %}
-    <h3>Email Addresses</h3>
-    <p class="text-muted">The following email addresses are associated with your account:</p>
+{% block breadcrumbs %}{% url 'account_profile' as a %}{% breadcrumbs a "Account" "Email" %}{% endblock %}
 
-    {% with emails=emailaddresses|dictsortreversed:"primary" %}
-    {% if emails %}
-        <div class="mb-5">
-            {% for emailaddress in emails %}
-                <div class="card mb-2{% if not emailaddress.verified %} border-warning{% endif %}">
-                    <div class="card-body py-3 px-3">
-                        <div class="d-flex align-items-center gap-2">
-                            <div class="flex-grow-1">
-                                <strong>{{ emailaddress.email }}</strong>
-                                <div class="text-muted small">
-                                    {% if emailaddress.primary %}
-                                        Primary address - used for notifications and password resets
-                                    {% elif emailaddress.verified %}
-                                        Verified
-                                    {% else %}
-                                        Awaiting verification
-                                    {% endif %}
-                                </div>
-                            </div>
-                            <div class="d-flex gap-1 flex-shrink-0">
-                                {% if not emailaddress.primary and emailaddress.verified %}
-                                    <form method="post" action="{% url 'account_email' %}">
-                                        {% csrf_token %}
-                                        <input type="hidden" name="email" value="{{ emailaddress.email }}">
-                                        <button type="submit" name="action_primary" class="btn btn-outline-secondary btn-sm">Make Primary</button>
-                                    </form>
+{% block content %}
+    <div class="account-header">
+        <h3>Email Addresses</h3>
+        <p>Manage the email addresses associated with your account.</p>
+    </div>
+
+    <div class="account-section">
+        {% with emails=emailaddresses|dictsortreversed:"primary" %}
+        {% if emails %}
+            <div class="account-item-list">
+                {% for emailaddress in emails %}
+                    <div class="account-item{% if not emailaddress.verified %} account-item-warn{% endif %}">
+                        <div class="account-item-body">
+                            <strong>{{ emailaddress.email }}</strong>
+                            <p class="account-item-meta">
+                                {% if emailaddress.primary %}
+                                    Primary address — used for notifications and password resets
+                                {% elif emailaddress.verified %}
+                                    Verified
+                                {% else %}
+                                    Awaiting verification
                                 {% endif %}
-                                {% if not emailaddress.verified %}
-                                    <form method="post" action="{% url 'account_email' %}">
-                                        {% csrf_token %}
-                                        <input type="hidden" name="email" value="{{ emailaddress.email }}">
-                                        <button type="submit" name="action_send" class="btn btn-outline-secondary btn-sm">Resend Verification</button>
-                                    </form>
-                                {% endif %}
-                                {% if not emailaddress.primary %}
-                                    <form method="post" action="{% url 'account_email' %}" onsubmit="return confirm('Remove this email address?')">
-                                        {% csrf_token %}
-                                        <input type="hidden" name="email" value="{{ emailaddress.email }}">
-                                        <button type="submit" name="action_remove" class="btn btn-outline-danger btn-sm">Remove</button>
-                                    </form>
-                                {% endif %}
-                            </div>
+                            </p>
+                        </div>
+                        <div class="account-item-actions">
+                            {% if not emailaddress.primary and emailaddress.verified %}
+                                <form method="post" action="{% url 'account_email' %}">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="email" value="{{ emailaddress.email }}">
+                                    <button type="submit" name="action_primary" class="btn btn-outline-secondary btn-sm">Make Primary</button>
+                                </form>
+                            {% endif %}
+                            {% if not emailaddress.verified %}
+                                <form method="post" action="{% url 'account_email' %}">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="email" value="{{ emailaddress.email }}">
+                                    <button type="submit" name="action_send" class="btn btn-outline-secondary btn-sm">Resend Verification</button>
+                                </form>
+                            {% endif %}
+                            {% if not emailaddress.primary %}
+                                <form method="post" action="{% url 'account_email' %}" onsubmit="return confirm('Remove this email address?')">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="email" value="{{ emailaddress.email }}">
+                                    <button type="submit" name="action_remove" class="btn btn-outline-danger btn-sm">Remove</button>
+                                </form>
+                            {% endif %}
                         </div>
                     </div>
-                </div>
-            {% endfor %}
-        </div>
-    {% else %}
-        <div class="alert alert-warning mb-4" role="alert">
-            No email address is associated with your account. You will not be able to reset your password without one.
-        </div>
-    {% endif %}
-    {% endwith %}
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="account-empty">
+                No email address is associated with your account. You will not be able to reset your password without one.
+            </div>
+        {% endif %}
+        {% endwith %}
+    </div>
 
-    <h5>Add Email</h5>
-    <form method="post" action="{% url 'account_email' %}" class="d-flex gap-2 align-items-start">
-        {% csrf_token %}
-        {% text_field form.email autocomplete="email" inline=True %}
-        <button name="action_add" class="btn btn-primary flex-shrink-0" type="submit">Add</button>
-    </form>
+    <div class="account-section">
+        <h5>Add Email</h5>
+        <form method="post" action="{% url 'account_email' %}" class="d-flex gap-2 align-items-start">
+            {% csrf_token %}
+            {% text_field form.email autocomplete="email" inline=True %}
+            <button name="action_add" class="btn btn-primary flex-shrink-0" type="submit">Add</button>
+        </form>
+    </div>
 {% endblock %}

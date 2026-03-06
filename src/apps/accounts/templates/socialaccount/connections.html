@@ -1,11 +1,15 @@
 {% extends "account_base.html" %}
-{% load icon %}
+{% load breadcrumbs icon %}
 
 {% block title %}Connected Accounts{% endblock %}
 
+{% block breadcrumbs %}{% url 'account_profile' as a %}{% breadcrumbs a "Account" "Connections" %}{% endblock %}
+
 {% block content %}
-    <h3>Connected Accounts</h3>
-    <p class="text-muted">You can sign in to your account using any of the following services:</p>
+    <div class="account-header">
+        <h3>Connected Accounts</h3>
+        <p>Sign in to your account using any of the following services.</p>
+    </div>
 
     {% if form.non_field_errors %}
         <div class="alert alert-danger" role="alert">
@@ -13,34 +17,40 @@
         </div>
     {% endif %}
 
-    {% if form.accounts %}
-        <div class="list-group mb-5">
-            {% for base_account in form.accounts %}
-                {% with base_account.get_provider_account as account %}
-                    <div class="list-group-item py-3">
-                        <div class="d-flex align-items-center gap-3">
-                            <div class="flex-grow-1">
+    <div class="account-section">
+        {% if form.accounts %}
+            <div class="account-item-list">
+                {% for base_account in form.accounts %}
+                    {% with base_account.get_provider_account as account %}
+                        <div class="account-item">
+                            <div class="account-item-body">
                                 <strong>{% icon account.get_brand.name|lower %} {{ account.get_brand.name }}</strong>
-                                <div class="text-muted small">{{ account }}</div>
+                                <p class="account-item-meta">{{ account }}</p>
                             </div>
-                            <form method="post" action="{% url 'socialaccount_connections' %}" class="flex-shrink-0">
-                                {% csrf_token %}
-                                <input type="hidden" name="account" value="{{ base_account.id }}">
-                                <button type="submit" class="btn btn-outline-danger btn-sm">Disconnect</button>
-                            </form>
+                            <div class="account-item-actions">
+                                <form method="post" action="{% url 'socialaccount_connections' %}">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="account" value="{{ base_account.id }}">
+                                    <button type="submit" class="btn btn-outline-danger btn-sm">Disconnect</button>
+                                </form>
+                            </div>
                         </div>
-                    </div>
-                {% endwith %}
-            {% endfor %}
-        </div>
-    {% else %}
-        <p class="text-muted mb-5">No external accounts are linked to your furry.nz account.</p>
-    {% endif %}
+                    {% endwith %}
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="account-empty">
+                No external accounts are linked to your furry.nz account.
+            </div>
+        {% endif %}
+    </div>
 
-    <h5>Link an Account</h5>
-    <p>
-        {% include "components/provider_list.html" with process="connect" %}
-    </p>
+    <div class="account-section">
+        <h5>Link an Account</h5>
+        <p>
+            {% include "components/provider_list.html" with process="connect" %}
+        </p>
+    </div>
 
     {% include "socialaccount/snippets/login_extra.html" %}
 {% endblock %}
