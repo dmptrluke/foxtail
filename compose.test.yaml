@@ -12,7 +12,6 @@ services:
       TESTING: "true"
       SECRET_KEY: "test-secret-key"
       SITE_URL: "http://localhost:8000"
-      EMAIL_ASYNC: "false"
       RQ_ASYNC: "false"
       DIRECTORY_ENABLED: "true"
       CONTACT_EMAILS: "test@example.com"

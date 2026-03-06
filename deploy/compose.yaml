@@ -1,10 +1,10 @@
-# Production compose file — standalone, copy and customize for your deployment.
+# Foxtail production compose file.
+# Copy this folder and customize for your deployment.
 #
 # Usage:
-#   docker compose -f compose.prod.yaml up -d
+#   docker compose up -d
 #
-# Requires a .env file with at minimum:
-#   SECRET_KEY, SITE_URL, ALLOWED_HOSTS, CONTACT_EMAILS
+# Requires a .env file — see .env.example for all available settings.
 
 services:
   db:
@@ -40,6 +40,19 @@ services:
         condition: service_healthy
       redis:
         condition: service_started
+
+  worker:
+    image: ghcr.io/dmptrluke/foxtail:latest
+    env_file: .env
+    environment:
+      DATABASE_URL: "postgres://foxtail:foxtail@db/foxtail"
+      CACHE_URL: "redis://redis/1"
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    command: django-admin rqworker default
 
 volumes:
   storage:
