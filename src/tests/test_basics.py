@@ -54,7 +54,7 @@ def test_unauthenticated_user_browsing(driver, live_server, settings, post: Post
     assert str(event_date.day) in event_item.text
     assert 'Auckland, New Zealand' in event_item.text
 
-    # the user clicks the event to read more
+    # the user clicks the event to read more (JS click required: element is near page bottom)
     driver.execute_script('arguments[0].click()', event_item)
 
     # the event detail page shows the event title and details

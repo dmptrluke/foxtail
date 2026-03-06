@@ -48,6 +48,16 @@ def driver(request):
     options.add_argument('--window-size=1920,1080')
     browser = webdriver.Chrome(options=options)
 
+    # Make the fixed navbar static so it doesn't intercept Selenium clicks
+    browser.execute_cdp_cmd(
+        'Page.addScriptToEvaluateOnNewDocument',
+        {
+            'source': 'document.addEventListener("DOMContentLoaded",'
+            '() => document.querySelectorAll(".fixed-top")'
+            '.forEach(el => el.style.setProperty("position", "static", "important")));'
+        },
+    )
+
     yield browser
 
     browser.quit()

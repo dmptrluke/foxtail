@@ -1,11 +1,15 @@
 from django.urls import resolve, reverse
 
 
-def test_index():
-    assert reverse('content:index') == '/'
-    assert resolve('/').view_name == 'content:index'
+class TestContentUrls:
+    """Test content URL routing."""
 
+    # index resolves to root
+    def test_index(self):
+        assert reverse('content:index') == '/'
+        assert resolve('/').view_name == 'content:index'
 
-def test_page():
-    assert reverse('content:page', kwargs={'slug': 'randompage'}) == '/randompage/'
-    assert resolve('/randompage/').view_name == 'content:page'
+    # page resolves with slug
+    def test_page(self):
+        assert reverse('content:page', kwargs={'slug': 'about'}) == '/about/'
+        assert resolve('/about/').view_name == 'content:page'

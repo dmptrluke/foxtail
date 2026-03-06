@@ -10,6 +10,9 @@ pytestmark = pytest.mark.django_db
 
 
 class TestSignupForm:
+    """Test SignupForm username, email, and password rules."""
+
+    # form accepts valid data with all fields populated
     def test_valid_form(self):
         proto_user = UserFactory.build()
 
@@ -24,6 +27,7 @@ class TestSignupForm:
 
         assert form.is_valid()
 
+    # reserved usernames like 'root' are rejected
     def test_banned_username(self):
         proto_user = UserFactory.build()
 
@@ -40,6 +44,7 @@ class TestSignupForm:
         assert len(form.errors) == 1
         assert 'username' in form.errors
 
+    # duplicate username is rejected
     def test_duplicate_username(self, user):
         proto_user = UserFactory.build()
 
@@ -56,6 +61,7 @@ class TestSignupForm:
         assert len(form.errors) == 1
         assert 'username' in form.errors
 
+    # duplicate email is rejected
     def test_duplicate_email(self, user):
         proto_user = UserFactory.build()
 
@@ -72,6 +78,7 @@ class TestSignupForm:
         assert len(form.errors) == 1
         assert 'email' in form.errors
 
+    # malformed email address is rejected
     def test_invalid_email(self):
         proto_user = UserFactory.build()
 
@@ -88,6 +95,7 @@ class TestSignupForm:
         assert len(form.errors) == 1
         assert 'email' in form.errors
 
+    # empty email is rejected (required field)
     def test_missing_email(self):
         proto_user = UserFactory.build()
 
@@ -104,6 +112,7 @@ class TestSignupForm:
         assert len(form.errors) == 1
         assert 'email' in form.errors
 
+    # weak passwords are rejected
     def test_poor_password(self):
         proto_user = UserFactory.build()
 
@@ -120,6 +129,7 @@ class TestSignupForm:
         assert len(form.errors) == 1
         assert 'password1' in form.errors
 
+    # mismatched password confirmation is rejected
     def test_mismatched_password(self):
         proto_user = UserFactory.build()
 
@@ -138,6 +148,9 @@ class TestSignupForm:
 
 
 class TestUserForm:
+    """Test UserForm username and date-of-birth rules."""
+
+    # form accepts valid data with all fields populated
     def test_full_form(self):
         proto_user = UserFactory.build()
 
@@ -151,6 +164,7 @@ class TestUserForm:
 
         assert form.is_valid()
 
+    # valid with only required fields (optional fields null)
     def test_minimal_form(self):
         proto_user = UserFactory.build()
 
@@ -164,6 +178,7 @@ class TestUserForm:
 
         assert form.is_valid()
 
+    # reserved usernames are rejected
     def test_banned_username(self, user):
         form = UserForm(
             {
@@ -177,6 +192,7 @@ class TestUserForm:
         assert len(form.errors) == 1
         assert 'username' in form.errors
 
+    # duplicate username is rejected
     def test_duplicate_username(self, user):
         form = UserForm(
             {
@@ -190,6 +206,7 @@ class TestUserForm:
         assert len(form.errors) == 1
         assert 'username' in form.errors
 
+    # special characters in username are rejected
     def test_invalid_username(self):
         form = UserForm(
             {
@@ -203,6 +220,7 @@ class TestUserForm:
         assert len(form.errors) == 1
         assert 'username' in form.errors
 
+    # blank username is rejected
     def test_blank_username(self):
         form = UserForm(
             {
@@ -216,6 +234,7 @@ class TestUserForm:
         assert len(form.errors) == 1
         assert 'username' in form.errors
 
+    # future date of birth is rejected
     def test_future_dob(self):
         proto_user = UserFactory.build()
 
