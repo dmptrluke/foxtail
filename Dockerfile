@@ -22,16 +22,8 @@ WORKDIR /app
 
 RUN groupadd -r abc -g 5678 && useradd --no-log-init -u 5678 -r -g abc abc
 
-RUN apt-get update \
-    && apt-get install -y --no-install-recommends libpq5 libmagic1 \
-    && rm -rf /var/lib/apt/lists/*
-
 COPY requirements/base.txt ./requirements/base.txt
-RUN apt-get update \
-    && apt-get install -y --no-install-recommends gcc libc6-dev libpq-dev \
-    && pip install --no-cache-dir -r requirements/base.txt \
-    && apt-get purge -y --auto-remove gcc libc6-dev libpq-dev \
-    && rm -rf /var/lib/apt/lists/*
+RUN pip install --no-cache-dir -r requirements/base.txt
 
 FROM deps AS dev-deps
 
