@@ -1,15 +1,10 @@
 {% extends "base.html" %}
-{% load icon %}
 
 {% block title %}Manage Account{% endblock %}
 
 {% block base_content %}
     <main id="main-content" class="container px-3 py-4 px-md-4">
-        {% if request.resolver_match.url_name != "account_profile" %}
-            <a href="{% url 'account_profile' %}" class="text-muted text-decoration-none mb-3 d-inline-flex align-items-center gap-1">
-                {% icon "arrow-left" tag="span" %} Back to Account
-            </a>
-        {% endif %}
+        {% block breadcrumbs %}{% endblock breadcrumbs %}
         {% include "components/messages.html" %}
         {% block content %}
         {% endblock content %}

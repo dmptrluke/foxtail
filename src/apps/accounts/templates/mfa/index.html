@@ -1,59 +1,68 @@
 {% extends 'account_base.html' %}
+{% load breadcrumbs %}
 
 {% block title %}Two-Factor Authentication{% endblock %}
 
-{% block content %}
-    <h3>Two-Factor Authentication</h3>
+{% block breadcrumbs %}{% url 'account_profile' as a %}{% breadcrumbs a "Account" "Two-Factor Auth" %}{% endblock %}
 
-    {% if authenticators.totp or authenticators.webauthn %}
-        <p class="text-muted">Two-factor authentication is <strong>active</strong> on your account. When you sign in, you will be asked to verify using one of the methods below.</p>
-    {% else %}
-        <div class="alert alert-warning">
+{% block content %}
+    <div class="account-header">
+        <h3>Two-Factor Authentication</h3>
+        {% if authenticators.totp or authenticators.webauthn %}
+            <p>Two-factor authentication is active. You'll be asked to verify when signing in.</p>
+        {% else %}
+            <p>Add an extra layer of security to your account.</p>
+        {% endif %}
+    </div>
+
+    {% if not authenticators.totp and not authenticators.webauthn %}
+        <div class="alert alert-warning mb-4">
             <strong>Two-factor authentication is not enabled.</strong>
             Enable at least one method below to protect your account from unauthorised access.
         </div>
     {% endif %}
 
-    <div class="card mb-3">
-        <div class="card-body">
-            <h5 class="card-title">Authenticator App</h5>
+    <div class="account-section">
+        <h5>Authentication Methods</h5>
+
+        <div class="account-method-card">
+            <h5>Authenticator App</h5>
             {% if authenticators.totp %}
-                <p class="card-text text-muted">An authenticator app is active. Use it to generate one-time codes when signing in.</p>
+                <p>An authenticator app is active. Use it to generate one-time codes when signing in.</p>
                 <a href="{% url 'mfa_deactivate_totp' %}" class="btn btn-outline-danger btn-sm">Disable</a>
             {% else %}
-                <p class="card-text text-muted">Use an app like Google Authenticator or Authy to generate one-time codes when signing in.</p>
+                <p>Use an app like Google Authenticator or Authy to generate one-time codes when signing in.</p>
                 <a href="{% url 'mfa_activate_totp' %}" class="btn btn-primary btn-sm">Set Up</a>
             {% endif %}
         </div>
-    </div>
 
-    <div class="card mb-3">
-        <div class="card-body">
-            <h5 class="card-title">Security Keys</h5>
+        <div class="account-method-card">
+            <h5>Security Keys</h5>
             {% if authenticators.webauthn %}
-                <p class="card-text text-muted">
+                <p>
                     You have {{ authenticators.webauthn|length }} security key{{ authenticators.webauthn|length|pluralize }} registered.
                     Security keys provide strong, phishing-resistant authentication.
                 </p>
                 <a href="{% url 'mfa_list_webauthn' %}" class="btn btn-secondary btn-sm">Manage Keys</a>
             {% else %}
-                <p class="card-text text-muted">Use a hardware security key (such as a YubiKey) or a passkey saved on your device to sign in securely.</p>
+                <p>Use a hardware security key (such as a YubiKey) or a passkey saved on your device to sign in securely.</p>
                 <a href="{% url 'mfa_add_webauthn' %}" class="btn btn-primary btn-sm">Add a Key</a>
             {% endif %}
         </div>
     </div>
 
     {% if authenticators.totp or authenticators.webauthn %}
-    <div class="d-flex align-items-center justify-content-between mt-2 px-1">
-        <small class="text-muted">
-            Recovery Codes —
-            {% if authenticators.recovery_codes %}
-                {{ authenticators.recovery_codes.get_unused_codes|length }} remaining
-            {% else %}
-                none generated
-            {% endif %}
-        </small>
-        <a href="{% url 'mfa_view_recovery_codes' %}" class="btn btn-link btn-sm p-0">View</a>
-    </div>
+        <div class="account-section">
+            <h5>Recovery</h5>
+            <div class="account-method-card">
+                <h5>Recovery Codes</h5>
+                {% if authenticators.recovery_codes %}
+                    <p>{{ authenticators.recovery_codes.get_unused_codes|length }} codes remaining. Use these if you lose access to your authentication methods.</p>
+                {% else %}
+                    <p>No recovery codes have been generated yet. Generate codes as a backup in case you lose your device.</p>
+                {% endif %}
+                <a href="{% url 'mfa_view_recovery_codes' %}" class="btn btn-outline-secondary btn-sm">View Codes</a>
+            </div>
+        </div>
     {% endif %}
 {% endblock %}

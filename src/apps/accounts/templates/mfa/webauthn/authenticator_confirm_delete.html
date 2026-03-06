@@ -1,19 +1,23 @@
 {% extends 'account_base.html' %}
+{% load breadcrumbs %}
 
 {% block title %}Remove Security Key{% endblock %}
+{% block breadcrumbs %}{% url 'account_profile' as a %}{% url 'mfa_index' as m %}{% url 'mfa_list_webauthn' as k %}{% breadcrumbs a "Account" m "Two-Factor Auth" k "Security Keys" "Remove" %}{% endblock %}
 
 {% block content %}
-    <h3>Remove Security Key</h3>
-    <p class="text-muted">This key will be permanently removed from your account.</p>
-
-    <div class="alert alert-warning">
-        <strong>Are you sure?</strong> You will no longer be able to use <strong>{{ authenticator }}</strong> to sign in.
+    <div class="account-header">
+        <h3>Remove Security Key</h3>
+        <p>This key will be permanently removed from your account.</p>
     </div>
 
-    <form method="post" action="{% url 'mfa_remove_webauthn' pk=authenticator.pk %}">
-        {% csrf_token %}
-        <button type="submit" class="btn btn-danger">Remove</button>
-        <a href="{% url 'mfa_list_webauthn' %}" class="btn btn-outline-secondary ms-2">Cancel</a>
-    </form>
+    <div class="account-confirm">
+        <p><strong>Are you sure?</strong> You will no longer be able to use <strong>{{ authenticator }}</strong> to sign in.</p>
+        <div class="account-confirm-actions">
+            <form method="post" action="{% url 'mfa_remove_webauthn' pk=authenticator.pk %}">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger">Remove</button>
+                <a href="{% url 'mfa_list_webauthn' %}" class="btn btn-outline-secondary ms-2">Cancel</a>
+            </form>
+        </div>
+    </div>
 {% endblock %}
-fox

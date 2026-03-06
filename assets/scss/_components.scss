@@ -9,6 +9,24 @@ p a {
 }
 
 
+.breadcrumb {
+	font-size: 0.825rem;
+	font-weight: 500;
+	margin-bottom: 1.25rem;
+
+	a {
+		color: $secondary;
+
+		&:hover {
+			color: $primary;
+		}
+	}
+
+	.breadcrumb-item.active {
+		color: lighten($body-color, 10%);
+	}
+}
+
 .nav-lines {
 	border-bottom: 2px solid #f5f5f5;
 

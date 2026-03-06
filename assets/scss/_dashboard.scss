@@ -1,0 +1,254 @@
+// Account subpage components
+.account-header {
+	margin-bottom: 1.5rem;
+	padding-bottom: 1rem;
+	border-bottom: 2px solid rgba($secondary, 0.2);
+
+	h3 {
+		font-size: 1.5rem;
+		font-weight: 500;
+		margin: 0;
+	}
+
+	p {
+		font-size: 0.925rem;
+		color: lighten($body-color, 15%);
+		margin: 0.35rem 0 0;
+	}
+}
+
+.account-section {
+	margin-bottom: 2rem;
+
+	h5 {
+		font-size: 0.8rem;
+		font-weight: 600;
+		text-transform: uppercase;
+		letter-spacing: 0.06em;
+		color: $secondary;
+		margin-bottom: 0.75rem;
+	}
+
+	p.account-section-desc {
+		font-size: 0.9rem;
+		color: lighten($body-color, 15%);
+		margin-bottom: 1rem;
+	}
+}
+
+.account-item-list {
+	display: flex;
+	flex-direction: column;
+}
+
+.account-item {
+	display: flex;
+	align-items: center;
+	gap: 1rem;
+	padding: 1rem 1.25rem;
+	background: $white;
+	border: 1px solid rgba($secondary, 0.12);
+	border-radius: $card-border-radius;
+	margin-bottom: 0.5rem;
+	transition: box-shadow 0.15s ease;
+
+	&:hover {
+		box-shadow: 0 2px 8px rgba($dark, 0.05);
+	}
+
+	&.account-item-warn {
+		border-color: rgba($warning, 0.35);
+	}
+
+	.account-item-body {
+		flex: 1;
+		min-width: 0;
+
+		strong {
+			display: block;
+			font-size: 0.95rem;
+		}
+
+		.account-item-meta {
+			font-size: 0.825rem;
+			color: lighten($body-color, 20%);
+			margin: 0;
+		}
+	}
+
+	.account-item-actions {
+		display: flex;
+		gap: 0.5rem;
+		flex-shrink: 0;
+	}
+}
+
+.account-empty {
+	padding: 2rem 1.25rem;
+	text-align: center;
+	color: lighten($body-color, 25%);
+	background: rgba($secondary, 0.03);
+	border: 1px dashed rgba($secondary, 0.2);
+	border-radius: $card-border-radius;
+	font-size: 0.925rem;
+}
+
+.account-method-card {
+	background: $white;
+	border: 1px solid rgba($secondary, 0.12);
+	border-radius: $card-border-radius;
+	padding: 1.25rem 1.5rem;
+	margin-bottom: 0.75rem;
+	transition: box-shadow 0.15s ease;
+
+	&:hover {
+		box-shadow: 0 2px 8px rgba($dark, 0.05);
+	}
+
+	h5 {
+		font-size: 1rem;
+		font-weight: 600;
+		text-transform: none;
+		letter-spacing: normal;
+		color: $body-color;
+		margin-bottom: 0.35rem;
+	}
+
+	p {
+		font-size: 0.875rem;
+		color: lighten($body-color, 15%);
+		margin-bottom: 0.75rem;
+	}
+}
+
+.account-confirm {
+	background: $white;
+	border: 1px solid rgba($warning, 0.3);
+	border-radius: $card-border-radius;
+	padding: 1.25rem 1.5rem;
+	margin-bottom: 1.5rem;
+
+	p {
+		font-size: 0.925rem;
+		color: lighten($body-color, 10%);
+		margin-bottom: 0;
+
+		strong {
+			color: $body-color;
+		}
+	}
+
+	.account-confirm-actions {
+		margin-top: 1.25rem;
+	}
+}
+
+// Dashboard
+.dashboard-hero {
+	background: $hero-gradient;
+	color: $white;
+	padding: 2rem 0 2.5rem;
+
+	.dashboard-identity {
+		display: flex;
+		align-items: center;
+		gap: 1.25rem;
+	}
+
+	.dashboard-avatar {
+		width: 72px;
+		height: 72px;
+		border-radius: 50%;
+		border: 3px solid rgba($white, 0.2);
+		flex-shrink: 0;
+	}
+
+	h1 {
+		font-size: 1.75rem;
+		font-weight: 700;
+		margin-bottom: 0.15rem;
+		letter-spacing: -0.02em;
+	}
+
+	p {
+		font-size: 0.95rem;
+		font-weight: 300;
+		opacity: 0.7;
+		margin-bottom: 0;
+	}
+}
+
+.dashboard-grid {
+	display: grid;
+	grid-template-columns: 1fr;
+	gap: 1rem;
+
+	@media (min-width: 576px) {
+		grid-template-columns: 1fr 1fr;
+	}
+
+	@media (min-width: 992px) {
+		grid-template-columns: 1fr 1fr 1fr;
+	}
+}
+
+.dashboard-tile {
+	display: flex;
+	flex-direction: column;
+	background: $white;
+	border-radius: $card-border-radius;
+	border: 1px solid rgba($secondary, 0.12);
+	padding: 1.25rem 1.5rem;
+	text-decoration: none;
+	color: $body-color;
+	transition: box-shadow 0.2s ease, transform 0.2s ease;
+
+	&:hover {
+		box-shadow: 0 4px 16px rgba($dark, 0.08);
+		transform: translateY(-2px);
+		text-decoration: none;
+		color: $body-color;
+	}
+
+	.tile-icon {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 2.75rem;
+		height: 2.75rem;
+		border-radius: 0.5rem;
+		background: rgba($primary, 0.08);
+		color: $primary;
+		margin-bottom: 1rem;
+		flex-shrink: 0;
+	}
+
+	h3 {
+		font-size: 1rem;
+		font-weight: 600;
+		margin-bottom: 0.25rem;
+	}
+
+	.tile-detail {
+		font-size: 0.85rem;
+		color: lighten($body-color, 20%);
+		margin-bottom: 0;
+		flex: 1;
+	}
+
+	.tile-status {
+		font-size: 0.8rem;
+		font-weight: 500;
+		margin-top: 0.75rem;
+		padding-top: 0.75rem;
+		border-top: 1px solid rgba($secondary, 0.1);
+	}
+
+	.tile-status-ok {
+		color: $success;
+	}
+
+	.tile-status-warn {
+		color: $warning;
+	}
+}

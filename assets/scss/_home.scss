@@ -1,6 +1,6 @@
 // Hero
 .hero {
-	background: linear-gradient(135deg, $dark 0%, darken($secondary, 15%) 100%);
+	background: $hero-gradient;
 	color: $white;
 	padding: 3.5rem 0 4rem;
 	margin-bottom: 0;

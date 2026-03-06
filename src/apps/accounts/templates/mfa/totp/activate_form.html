@@ -1,31 +1,30 @@
 {% extends 'account_base.html' %}
-{% load form_tags %}
+{% load breadcrumbs form_tags %}
 
 {% block title %}Set Up Authenticator App{% endblock %}
+{% block breadcrumbs %}{% url 'account_profile' as a %}{% url 'mfa_index' as m %}{% breadcrumbs a "Account" m "Two-Factor Auth" "Set Up App" %}{% endblock %}
 
 {% block content %}
-    <h3>Set Up Authenticator App</h3>
-    <p class="text-muted">Use any authenticator app — such as Google Authenticator, Authy, or 1Password — to scan the code below.</p>
-
-    <div class="card mb-3">
-        <div class="card-body">
-            <h5 class="card-title">Step 1 — Scan the QR code</h5>
-            <p class="card-text text-muted">Open your authenticator app and scan this code to add your account.</p>
-            {{ totp_svg | safe }}
-        </div>
+    <div class="account-header">
+        <h3>Set Up Authenticator App</h3>
+        <p>Use any authenticator app — such as Google Authenticator, Authy, or 1Password — to scan the code below.</p>
     </div>
 
-    <div class="card mb-4">
-        <div class="card-body">
-            <h5 class="card-title">Step 2 — Enter a code to verify</h5>
-            <p class="card-text text-muted">Enter the 6-digit code shown in your app to confirm the setup worked.</p>
-            <form method="post">
-                {% csrf_token %}
-                {{ form.non_field_errors }}
-                {% text_field form.code %}
-                <button type="submit" class="btn btn-primary">Verify and Enable</button>
-                <a href="{% url 'mfa_index' %}" class="btn btn-outline-secondary ms-2">Cancel</a>
-            </form>
-        </div>
+    <div class="account-section">
+        <h5>Step 1 — Scan the QR code</h5>
+        <p class="account-section-desc">Open your authenticator app and scan this code to add your account.</p>
+        {{ totp_svg | safe }}
+    </div>
+
+    <div class="account-section">
+        <h5>Step 2 — Enter a code to verify</h5>
+        <p class="account-section-desc">Enter the 6-digit code shown in your app to confirm the setup worked.</p>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.non_field_errors }}
+            {% text_field form.code %}
+            <button type="submit" class="btn btn-primary">Verify and Enable</button>
+            <a href="{% url 'mfa_index' %}" class="btn btn-outline-secondary ms-2">Cancel</a>
+        </form>
     </div>
 {% endblock %}

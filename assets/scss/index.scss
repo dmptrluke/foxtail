@@ -7,6 +7,12 @@
 @import "~bootstrap/scss/mixins";
 @import "~bootstrap/scss/maps";
 
+$theme-colors: map-merge($theme-colors, (
+	"darker": $darker,
+));
+
+$hero-gradient: linear-gradient(135deg, $dark 0%, darken($secondary, 15%) 100%);
+
 @import "~bootstrap/scss/root";
 @import "~bootstrap/scss/reboot";
 @import "~bootstrap/scss/type";
@@ -46,6 +52,8 @@
 @import "blog";
 @import "tables";
 @import "home";
+@import "dashboard";
+@import "events";
 @import "markdown";
 @import "forms";
 @import "icons";
