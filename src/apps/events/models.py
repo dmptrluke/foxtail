@@ -57,7 +57,11 @@ class Event(models.Model):
                 else datetime.combine(self.end, datetime.min.time(), tzinfo=UTC)
             )
         else:
-            end = datetime.combine(self.start, self.end_time) if self.end_time else (self.start + timedelta(days=1))
+            end = (
+                datetime.combine(self.start, self.end_time)
+                if self.end_time
+                else datetime.combine(self.start + timedelta(days=1), datetime.min.time(), tzinfo=UTC)
+            )
 
         return end < now()
 
