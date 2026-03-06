@@ -11,14 +11,21 @@ x-dev-env: &dev-env
 services:
   foxtail:
     command: >
-      sh -c "django-admin migrate --noinput &&
+      sh -c "django-admin shell -c 'from django.core.cache import cache; cache.clear()' &&
+      django-admin migrate --noinput &&
       python -m debugpy --listen 0.0.0.0:5678
       -m django runserver --noreload 0.0.0.0:8000"
     ports:
       - "5678:5678"
     environment:
       <<: *dev-env
+    env_file:
+      - path: .env
+        required: false
 
   worker:
     environment:
       <<: *dev-env
+    env_file:
+      - path: .env
+        required: false
