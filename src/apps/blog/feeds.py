@@ -6,13 +6,13 @@ from published.utils import queryset_filter
 
 from .models import Post
 
-FEED_TITLE = getattr(settings, 'BLOG_FEED_TITLE', "Blog")
-FEED_DESCRIPTION = getattr(settings, 'BLOG_FEED_DESCRIPTION', "Updates from our blog.")
+FEED_TITLE = getattr(settings, 'BLOG_FEED_TITLE', 'Blog')
+FEED_DESCRIPTION = getattr(settings, 'BLOG_FEED_DESCRIPTION', 'Updates from our blog.')
 
 
 class LatestEntriesFeed(Feed):
     title = FEED_TITLE
-    link = "/blog/"
+    link = '/blog/'
     description = FEED_DESCRIPTION
 
     def items(self):

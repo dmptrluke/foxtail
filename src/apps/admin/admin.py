@@ -18,7 +18,5 @@ class CustomAdminSite(AdminSite):
             return HttpResponseRedirect(admin_path)
         else:
             url = reverse('account_login')
-            params = urlencode({
-                'next': admin_path
-            })
+            params = urlencode({'next': admin_path})
             return HttpResponseRedirect(f'{url}?{params}')

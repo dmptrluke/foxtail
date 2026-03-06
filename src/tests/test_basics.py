@@ -20,7 +20,7 @@ def test_unauthenticated_user_browsing(driver, live_server, settings, post: Post
     second_post.created = datetime(2019, 11, 1)
     event_date = date.today() + timedelta(days=30)
     event.start = event_date
-    event.location = "Auckland, New Zealand"
+    event.location = 'Auckland, New Zealand'
 
     post.save()
     second_post.save()
@@ -33,13 +33,13 @@ def test_unauthenticated_user_browsing(driver, live_server, settings, post: Post
     assert 'example.com' in driver.title
 
     # user sees the hero section with welcome message
-    hero = driver.find_element(By.CLASS_NAME, "hero")
-    assert "Welcome to furry.nz" in hero.text
+    hero = driver.find_element(By.CLASS_NAME, 'hero')
+    assert 'Welcome to furry.nz' in hero.text
 
     # user sees the sign in and create account buttons
-    sign_in_button = driver.find_element(By.LINK_TEXT, "Sign In")
+    sign_in_button = driver.find_element(By.LINK_TEXT, 'Sign In')
     assert sign_in_button
-    create_account_button = driver.find_element(By.LINK_TEXT, "Create Account")
+    create_account_button = driver.find_element(By.LINK_TEXT, 'Create Account')
     assert create_account_button
 
     # user scrolls down and sees the upcoming events section
@@ -50,19 +50,19 @@ def test_unauthenticated_user_browsing(driver, live_server, settings, post: Post
     # the event shows the title, date badge, and location
     event_item = event_items[0]
     assert event.title in event_item.text
-    assert event_date.strftime("%b").upper() in event_item.text
+    assert event_date.strftime('%b').upper() in event_item.text
     assert str(event_date.day) in event_item.text
-    assert "Auckland, New Zealand" in event_item.text
+    assert 'Auckland, New Zealand' in event_item.text
 
     # the user clicks the event to read more
-    driver.execute_script("arguments[0].click()", event_item)
+    driver.execute_script('arguments[0].click()', event_item)
 
     # the event detail page shows the event title and details
     assert event.title in driver.title
     event_body = driver.find_element(By.CLASS_NAME, 'card-body')
     assert event.title in event_body.text
-    assert "Auckland, New Zealand" in event_body.text
-    assert event_date.strftime("%B") in event_body.text
+    assert 'Auckland, New Zealand' in event_body.text
+    assert event_date.strftime('%B') in event_body.text
 
     # the user navigates back to the homepage
     driver.back()
@@ -80,7 +80,7 @@ def test_unauthenticated_user_browsing(driver, live_server, settings, post: Post
     assert second_post.text[0:15] in compact.text
 
     # the user sees the "Read more" button on the featured post
-    read_more = feature.find_element(By.LINK_TEXT, "Read more")
+    read_more = feature.find_element(By.LINK_TEXT, 'Read more')
     assert read_more
 
     # the user clicks it
@@ -98,4 +98,4 @@ def test_unauthenticated_user_browsing(driver, live_server, settings, post: Post
     # the user reads the title, then the article, noticing when the post was published
     assert post.title in blog_body.text
     assert post.text in blog_body.text
-    assert "December 2nd, 2019" in blog_body.text
+    assert 'December 2nd, 2019' in blog_body.text

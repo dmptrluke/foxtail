@@ -12,4 +12,4 @@ class ProfileFactory(DjangoModelFactory):
 
     class Meta:
         model = Profile
-        django_get_or_create = ["user"]
+        django_get_or_create = ['user']

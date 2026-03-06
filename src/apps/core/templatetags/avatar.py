@@ -6,11 +6,13 @@ from django import template
 register = template.Library()
 
 
-# TEMPLATE USE:  {{ user|avatar_url:150 }}
+# TEMPLATE USE:  {{ user|avatar_url:150 }}
 @register.filter
 def avatar_url(user, size=40):
     email = user.email
 
-    default = "https://ui-avatars.com/api/" + urlencode({'length': 1, 'name': user.get_short_name()})
-    return "https://www.gravatar.com/avatar/{}?{}".format(
-        md5(email.lower().encode('utf-8')).hexdigest(), urlencode({'d': default, 's': str(size)}))  # nosec
+    default = 'https://ui-avatars.com/api/' + urlencode({'length': 1, 'name': user.get_short_name()})
+    return 'https://www.gravatar.com/avatar/{}?{}'.format(
+        md5(email.lower().encode('utf-8')).hexdigest(),  # noqa: S324
+        urlencode({'d': default, 's': str(size)}),
+    )

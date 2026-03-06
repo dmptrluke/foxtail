@@ -14,6 +14,4 @@ urlpatterns = [
 ]
 
 if COMMENTS_ENABLED:
-    urlpatterns += [
-        path('comment/delete/<int:pk>/', CommentDeleteView.as_view(), name='comment_delete')
-    ]
+    urlpatterns += [path('comment/delete/<int:pk>/', CommentDeleteView.as_view(), name='comment_delete')]

@@ -10,4 +10,4 @@ def test_string_representation(page: Page):
 
 
 def test_get_absolute_url(page: Page):
-    assert page.get_absolute_url() == f"/{page.slug}/"
+    assert page.get_absolute_url() == f'/{page.slug}/'

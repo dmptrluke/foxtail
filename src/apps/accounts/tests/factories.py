@@ -9,15 +9,15 @@ from faker import Faker as StockFaker
 
 
 class UserNoPasswordFactory(DjangoModelFactory):
-    username = Faker("user_name")
-    email = Faker("email")
-    date_of_birth = Faker("date_between", start_date="-50y", end_date="-18y")
-    full_name = Faker("name")
-    password = "!NONE"
+    username = Faker('user_name')
+    email = Faker('email')
+    date_of_birth = Faker('date_between', start_date='-50y', end_date='-18y')
+    full_name = Faker('name')
+    password = '!NONE'
 
     class Meta:
         model = get_user_model()
-        django_get_or_create = ["username"]
+        django_get_or_create = ['username']
 
 
 class UserFactory(UserNoPasswordFactory):

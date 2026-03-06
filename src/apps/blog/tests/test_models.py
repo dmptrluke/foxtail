@@ -10,4 +10,4 @@ class TestPost:
         assert str(post) == post.title
 
     def test_get_absolute_url(self, post: Post):
-        assert post.get_absolute_url() == f"/blog/{post.slug}/"
+        assert post.get_absolute_url() == f'/blog/{post.slug}/'

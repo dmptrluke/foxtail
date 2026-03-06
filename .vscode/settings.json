@@ -1,6 +1,0 @@
-{
-    "python.envFile": "${workspaceFolder}/.env",
-    "chat.tools.terminal.autoApprove": {
-        "docker compose": true
-    }
-}

@@ -12,8 +12,16 @@ from .models import Profile
 class ProfileForm(CSPFormMixin, ModelForm):
     class Meta:
         model = Profile
-        fields = ('profile_URL', 'description', 'description_privacy',
-                  'country', 'region', 'location_privacy', 'age_privacy', 'birthday_privacy')
+        fields = (
+            'profile_URL',
+            'description',
+            'description_privacy',
+            'country',
+            'region',
+            'location_privacy',
+            'age_privacy',
+            'birthday_privacy',
+        )
 
         widgets = {
             'country': CJSWidget(options={'shouldSort': False}),
@@ -34,11 +42,7 @@ class ProfileForm(CSPFormMixin, ModelForm):
                 'Basic Details',
                 PrependedText('profile_URL', 'furry.nz/directory/'),
             ),
-            Fieldset(
-                'About',
-                'description',
-                'description_privacy'
-            ),
+            Fieldset('About', 'description', 'description_privacy'),
             Fieldset(
                 'Age and Birthday',
                 'age_privacy',
@@ -47,14 +51,9 @@ class ProfileForm(CSPFormMixin, ModelForm):
         <div class="alert alert-warning" role="alert">
             Sharing both your age and birthday will allow others to determine your full date of birth.
         </div></div></div>
-        """)
+        """),
             ),
-            Fieldset(
-                'Location',
-                'country',
-                'region',
-                'location_privacy'
-            ),
+            Fieldset('Location', 'country', 'region', 'location_privacy'),
             Submit('submit', 'Save Changes'),
         )
 

@@ -12,7 +12,7 @@ from .models import Page
 
 
 class IndexView(TemplateView):
-    template_name = "index.html"
+    template_name = 'index.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -32,7 +32,7 @@ class IndexView(TemplateView):
             'author': {
                 '@type': 'Organization',
                 '@id': 'https://furry.nz/#organization',
-            }
+            },
         }
 
 

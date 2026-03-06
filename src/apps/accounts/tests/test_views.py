@@ -12,7 +12,7 @@ class TestUserView:
     def test_authenticated(self, user, request_factory: RequestFactory):
         view = UserView()
 
-        request = request_factory.get("/accounts/")
+        request = request_factory.get('/accounts/')
         request.user = user
 
         view.request = request
@@ -44,7 +44,7 @@ class TestChangePassword:
         assert response.status_code == 200
 
     def test_change_to_set(self, client, user_without_password):
-        """ user has no password set, so this should redirect to set_password """
+        """user has no password set, so this should redirect to set_password"""
         client.force_login(user_without_password)
 
         url = reverse('account_change_password')
@@ -54,7 +54,7 @@ class TestChangePassword:
         assert response['Location'] == reverse('account_set_password')
 
     def test_set_to_change(self, client, user):
-        """ user has a password set, so this should redirect to change_password """
+        """user has a password set, so this should redirect to change_password"""
         client.force_login(user)
 
         url = reverse('account_set_password')

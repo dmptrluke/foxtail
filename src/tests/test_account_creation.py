@@ -23,7 +23,7 @@ def test_account_creation(driver, live_server, settings):
     driver.get(live_server.url)
 
     # user sees the create account button, and clicks it
-    create_account_btn = driver.find_element(By.LINK_TEXT, "Create Account")
+    create_account_btn = driver.find_element(By.LINK_TEXT, 'Create Account')
     assert create_account_btn
 
     create_account_btn.click()
@@ -51,16 +51,12 @@ def test_account_creation(driver, live_server, settings):
     password2_field.send_keys(proto_user._password)
 
     # and hits submit, creating their account
-    submit_btn = WebDriverWait(driver, 10).until(
-        EC.element_to_be_clickable((By.ID, "create_account_submit"))
-    )
+    submit_btn = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.ID, 'create_account_submit')))
     submit_btn.click()
 
     # we should now be back at the homepage
     WebDriverWait(driver, 10).until(EC.url_to_be(live_server.url + reverse('content:index')))
 
     # the user sees a green alert
-    alert = WebDriverWait(driver, 10).until(
-        EC.presence_of_element_located((By.CLASS_NAME, 'alert-success'))
-    )
-    assert f"Successfully signed in as {proto_user.username}" in alert.text
+    alert = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.CLASS_NAME, 'alert-success')))
+    assert f'Successfully signed in as {proto_user.username}' in alert.text

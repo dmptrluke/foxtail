@@ -9,5 +9,5 @@ dummy_instance = DummyModel()
 
 
 def test_model_name():
-    assert get_model_name(dummy_instance) == "DummyModel"
-    assert get_model_name(dummy_instance) != "IncorrectName"
+    assert get_model_name(dummy_instance) == 'DummyModel'
+    assert get_model_name(dummy_instance) != 'IncorrectName'

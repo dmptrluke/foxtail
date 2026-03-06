@@ -1,6 +1,7 @@
 """
 Modified versions of the standard django_rules template tags.
 """
+
 from django import template
 
 from ..models.base import BaseModel

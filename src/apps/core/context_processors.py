@@ -5,11 +5,7 @@ from django.utils.timezone import now
 
 
 def site(request):
-    response = {
-        'DEBUG': settings.DEBUG,
-        'DIRECTORY_ENABLED': settings.DIRECTORY_ENABLED,
-        'SITE_URL': settings.SITE_URL
-    }
+    response = {'DEBUG': settings.DEBUG, 'DIRECTORY_ENABLED': settings.DIRECTORY_ENABLED, 'SITE_URL': settings.SITE_URL}
 
     if settings.SENTRY_ENABLED:
         response['SENTRY_DSN'] = settings.SENTRY_DSN
@@ -27,6 +23,4 @@ def debug(request):
         info['user'] = request.user.username
     info['time'] = now().isoformat()
 
-    return {
-        'DEBUG_DATA': json.dumps(info)
-    }
+    return {'DEBUG_DATA': json.dumps(info)}

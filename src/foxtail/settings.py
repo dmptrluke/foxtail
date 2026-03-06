@@ -98,9 +98,7 @@ INSTALLED_APPS = [
 ]
 
 if DEBUG:
-    INSTALLED_APPS += [
-        'debug_toolbar'
-    ]
+    INSTALLED_APPS += ['debug_toolbar']
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -117,9 +115,7 @@ MIDDLEWARE = [
 ]
 
 if DEBUG:
-    MIDDLEWARE += [
-        'debug_toolbar.middleware.DebugToolbarMiddleware'
-    ]
+    MIDDLEWARE += ['debug_toolbar.middleware.DebugToolbarMiddleware']
     DEBUG_TOOLBAR_CONFIG = {
         'SHOW_TOOLBAR_CALLBACK': lambda _request: DEBUG,
     }
@@ -140,7 +136,7 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
                 'apps.core.context_processors.site',
                 'apps.core.context_processors.debug',
-                'csp.context_processors.nonce'
+                'csp.context_processors.nonce',
             ],
         },
     },
@@ -153,33 +149,21 @@ SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 # Database
 # <https://docs.djangoproject.com/en/stable/ref/settings/#databases>
 
-DATABASES = {
-    'default': env.db(
-        'DATABASE_URL',
-        default='sqlite:///' + str(BASE_DIR / 'db.sqlite3')
-    )
-}
+DATABASES = {'default': env.db('DATABASE_URL', default='sqlite:///' + str(BASE_DIR / 'db.sqlite3'))}
 
 # Cache
 # <https://docs.djangoproject.com/en/stable/topics/cache/#setting-up-the-cache>
-CACHES = {
-    'default': env.cache(default='dummycache://')
-}
+CACHES = {'default': env.cache(default='dummycache://')}
 
 # enable the cached session backend
 # <https://docs.djangoproject.com/en/stable/topics/http/sessions/#using-cached-sessions>
-SESSION_ENGINE = "django.contrib.sessions.backends.cached_db"
+SESSION_ENGINE = 'django.contrib.sessions.backends.cached_db'
 
 # django-rq
 # <https://github.com/rq/django-rq>
 RQ_ASYNC = env.bool('RQ_ASYNC', default=True)
 
-RQ_QUEUES = {
-    'default': {
-        'USE_REDIS_CACHE': 'default',
-        'ASYNC': RQ_ASYNC
-    }
-}
+RQ_QUEUES = {'default': {'USE_REDIS_CACHE': 'default', 'ASYNC': RQ_ASYNC}}
 
 # Authentication
 # <https://django-allauth.readthedocs.io/en/latest/>
@@ -213,10 +197,7 @@ SOCIALACCOUNT_ADAPTER = 'apps.accounts.authentication.SocialAccountAdapter'
 SOCIALACCOUNT_AUTO_SIGNUP = False
 SOCIALACCOUNT_PROVIDERS = {
     'github': {
-        'SCOPE': [
-            'read:user',
-            'user:email'
-        ],
+        'SCOPE': ['read:user', 'user:email'],
     },
     'google': {
         'SCOPE': [
@@ -225,13 +206,13 @@ SOCIALACCOUNT_PROVIDERS = {
         ],
         'AUTH_PARAMS': {
             'access_type': 'online',
-        }
-    }
+        },
+    },
 }
 
 # allauth-mfa
 
-MFA_SUPPORTED_TYPES = ["recovery_codes", "totp", "webauthn"]
+MFA_SUPPORTED_TYPES = ['recovery_codes', 'totp', 'webauthn']
 MFA_WEBAUTHN_ALLOW_INSECURE_ORIGIN = DEBUG
 
 MFA_FORMS = {
@@ -270,8 +251,8 @@ PASSWORD_HASHERS = [
 
 # I used to pull these from captcha.constants, but it does some annoying stuff
 # and seems to run all of the Django system checks if I even touch that module
-TEST_PUBLIC_KEY = "6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"
-TEST_PRIVATE_KEY = "6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe"
+TEST_PUBLIC_KEY = '6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI'
+TEST_PRIVATE_KEY = '6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe'
 
 if DEBUG or TESTING:
     SILENCED_SYSTEM_CHECKS = ['django_recaptcha.recaptcha_test_key_error']
@@ -315,10 +296,7 @@ STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
 
 # noinspection PyUnresolvedReferences
-STATICFILES_DIRS = [
-    ("webpack_bundles", str(BASE_DIR / 'build/webpack_bundles')),
-    str(BASE_DIR / 'assets/static')
-]
+STATICFILES_DIRS = [('webpack_bundles', str(BASE_DIR / 'build/webpack_bundles')), str(BASE_DIR / 'assets/static')]
 
 AZURE_MEDIA = env.bool('AZURE_MEDIA', default=False)
 
@@ -329,12 +307,13 @@ if AZURE_MEDIA:
     AZURE_SSL = env.bool('AZURE_SSL', default=True)
 
 STORAGES = {
-    "default": {
-        "BACKEND": "apps.core.storages.MediaAzureStorage" if AZURE_MEDIA
-        else "django.core.files.storage.FileSystemStorage",
+    'default': {
+        'BACKEND': 'apps.core.storages.MediaAzureStorage'
+        if AZURE_MEDIA
+        else 'django.core.files.storage.FileSystemStorage',
     },
-    "staticfiles": {
-        "BACKEND": "whitenoise.storage.CompressedStaticFilesStorage",
+    'staticfiles': {
+        'BACKEND': 'whitenoise.storage.CompressedStaticFilesStorage',
     },
 }
 STATIC_ROOT = str(BASE_DIR / 'static')
@@ -355,7 +334,7 @@ WEBPACK_LOADER = {
         'STATS_FILE': os.path.join(BASE_DIR, WEBPACK_STATS_PATH),
         'POLL_INTERVAL': 0.1,
         'TIMEOUT': None,
-        'IGNORE': [r'.+\.hot-update.js', r'.+\.map']
+        'IGNORE': [r'.+\.hot-update.js', r'.+\.map'],
     }
 }
 
@@ -386,8 +365,12 @@ CSP_DEFAULT_SRC = ["'self'"]
 
 CSP_REPORT_URI = env('CSP_REPORT_URI', default=None)
 
-CSP_SCRIPT_SRC = ["'unsafe-inline'", "'self'", 'https://www.google.com/recaptcha/',
-                  'https://www.gstatic.com/recaptcha/'] + ASSET_HOSTS
+CSP_SCRIPT_SRC = [
+    "'unsafe-inline'",
+    "'self'",
+    'https://www.google.com/recaptcha/',
+    'https://www.gstatic.com/recaptcha/',
+] + ASSET_HOSTS
 CSP_STYLE_SRC = ["'unsafe-inline'", 'fonts.googleapis.com', "'self'"] + ASSET_HOSTS
 CSP_FRAME_SRC = ['https://www.google.com/recaptcha/']
 CSP_FONT_SRC = ["'self'", 'data:', 'fonts.gstatic.com'] + ASSET_HOSTS
@@ -422,7 +405,7 @@ if SENTRY_ENABLED:
     _vars = {
         'dsn': SENTRY_DSN,
         'send_default_pii': env.bool('SENTRY_PII', default=False),
-        'integrations': [DjangoIntegration(), RedisIntegration()]
+        'integrations': [DjangoIntegration(), RedisIntegration()],
     }
 
     # attach environment
@@ -433,6 +416,7 @@ if SENTRY_ENABLED:
     # attach version
     if env.bool('SENTRY_GIT', default=False):
         import git
+
         repo = git.Repo(search_parent_directories=True)
         sha = repo.head.object.hexsha
         _vars['release'] = sha
@@ -440,13 +424,12 @@ if SENTRY_ENABLED:
 
     # set CSP report URI
     if env('SENTRY_CSP', default=False):
-        CSP_REPORT_URI = "https://sentry.io/api/{}/security/?sentry_key={}".format(
-            urlparse(SENTRY_DSN).path.strip('/'),
-            urlparse(SENTRY_DSN).username
+        CSP_REPORT_URI = 'https://sentry.io/api/{}/security/?sentry_key={}'.format(
+            urlparse(SENTRY_DSN).path.strip('/'), urlparse(SENTRY_DSN).username
         )
 
         if _vars.get('release'):
-            CSP_REPORT_URI += f"&sentry_release={_vars['release']}"
+            CSP_REPORT_URI += f'&sentry_release={_vars["release"]}'
 
     sentry_sdk.init(**_vars)
 
@@ -454,26 +437,19 @@ if SENTRY_ENABLED:
 # <https://docs.djangoproject.com/en/dev/ref/settings/#logging>
 # <https://docs.djangoproject.com/en/dev/topics/logging>
 LOGGING = {
-    "version": 1,
-    "disable_existing_loggers": False,
-    "formatters": {
-        "verbose": {
-            "format": "[%(asctime)s] [%(process)d] [%(levelname)s] (%(module)s) %(message)s"
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {'verbose': {'format': '[%(asctime)s] [%(process)d] [%(levelname)s] (%(module)s) %(message)s'}},
+    'handlers': {
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+            'formatter': 'verbose',
         }
     },
-    "handlers": {
-        "console": {
-            "level": "DEBUG",
-            "class": "logging.StreamHandler",
-            "formatter": "verbose",
-        }
-    },
-    "root": {"level": "INFO", "handlers": ["console"]},
-    "loggers": {
-        "sentry_sdk": {
-            "level": "ERROR",
-            "handlers": ["console"]
-        },
+    'root': {'level': 'INFO', 'handlers': ['console']},
+    'loggers': {
+        'sentry_sdk': {'level': 'ERROR', 'handlers': ['console']},
     },
 }
 
@@ -484,7 +460,7 @@ DEFAULT_FROM_EMAIL = env('EMAIL_FROM_USER', default='webmaster@localhost')
 SERVER_EMAIL = env('EMAIL_FROM_SYSTEM', default='root@localhost')
 
 if 'MAILGUN_API_KEY' in env:
-    EMAIL_BACKEND = "anymail.backends.mailgun.EmailBackend"
+    EMAIL_BACKEND = 'anymail.backends.mailgun.EmailBackend'
     ANYMAIL_MAILGUN_API_KEY = env('MAILGUN_API_KEY')
 
     if 'MAILGUN_SENDER_DOMAIN' in env:
@@ -509,7 +485,7 @@ VERSATILEIMAGEFIELD_SETTINGS = {
     'cache_name': 'vif',
     'create_images_on_demand': False,
     'sized_directory_name': '_s',
-    'filtered_directory_name': '_f'
+    'filtered_directory_name': '_f',
 }
 
 VERSATILEIMAGEFIELD_RENDITION_KEY_SETS = {
@@ -517,15 +493,15 @@ VERSATILEIMAGEFIELD_RENDITION_KEY_SETS = {
         ('mini', 'crop__350x175'),
         ('mini2x', 'crop__700x350'),
         ('banner', 'crop__1150x300'),
-        ('admin', 'thumbnail__300x300')
+        ('admin', 'thumbnail__300x300'),
     ],
     'post_image': [
         ('mini', 'crop__350x175'),
         ('mini2x', 'crop__700x350'),
         ('banner', 'crop__800x350'),
         ('banner2x', 'crop__1200x525'),
-        ('admin', 'thumbnail__300x300')
-    ]
+        ('admin', 'thumbnail__300x300'),
+    ],
 }
 
 # Markdown
@@ -539,14 +515,10 @@ MARKDOWN_EXTENSIONS = [
     'def_list',
     'nl2br',
     'abbr',
-    'smarty'
+    'smarty',
 ]
 
-MARKDOWN_EXTENSION_CONFIGS = {
-    'pymdownx.emoji': {
-        'emoji_generator': pymdownx.emoji.to_alt
-    }
-}
+MARKDOWN_EXTENSION_CONFIGS = {'pymdownx.emoji': {'emoji_generator': pymdownx.emoji.to_alt}}
 
 MARKDOWN_LINKIFY_BLACKLIST = env.list('MARKDOWN_LINKIFY_BLACKLIST', default=[])
 
@@ -556,16 +528,16 @@ ROBOTS_ALLOWED = env.bool('ROBOTS_ALLOWED', default=True)
 # Django Structured Data
 # <https://github.com/dmptrluke/django-structured-data>
 DEFAULT_STRUCTURED_DATA = {
-    "publisher": {
-        "@id": "https://furry.nz/#organization",
+    'publisher': {
+        '@id': 'https://furry.nz/#organization',
     }
 }
 
 
 # Blog
 BLOG_COMMENTS = True
-BLOG_FEED_TITLE = "Latest News"
-BLOG_FEED_DESCRIPTION = "The latest furry news."
+BLOG_FEED_TITLE = 'Latest News'
+BLOG_FEED_DESCRIPTION = 'The latest furry news.'
 
 # Contact
 CONTACT_EMAILS = env.list('CONTACT_EMAILS')

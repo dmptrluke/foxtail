@@ -11,4 +11,4 @@ class CharacterEditView(DetailView):
     model = Character
 
 
-__all__ = ["CharacterView", "CharacterEditView"]
+__all__ = ['CharacterEditView', 'CharacterView']

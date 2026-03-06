@@ -6,7 +6,7 @@ from ..models import Event
 
 class EventFactory(DjangoModelFactory):
     title = Faker('name')
-    tags = f"{Faker('words')}, {Faker('words')}"
+    tags = f'{Faker("words")}, {Faker("words")}'
 
     description = Faker('paragraph')
     location = Faker('sentence')

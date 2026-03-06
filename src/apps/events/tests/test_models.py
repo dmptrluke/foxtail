@@ -1,4 +1,4 @@
-from datetime import date, time, timezone
+from datetime import UTC, date, time
 
 import pytest
 
@@ -12,7 +12,7 @@ class TestEvent:
         assert str(event) == event.title
 
     def test_get_absolute_url(self, event: Event):
-        assert event.get_absolute_url() == f"/events/{event.start.year}/{event.slug}/"
+        assert event.get_absolute_url() == f'/events/{event.start.year}/{event.slug}/'
 
     def test_is_ended(self, event: Event):
         event.end = date(2019, 12, 2)
@@ -21,6 +21,6 @@ class TestEvent:
 
     def test_is_ended_with_time(self, event: Event):
         event.end = date(2019, 12, 2)
-        event.end_time = time(12, 30, 00, tzinfo=timezone.utc)
+        event.end_time = time(12, 30, 00, tzinfo=UTC)
 
         assert event.is_ended

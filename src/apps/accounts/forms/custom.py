@@ -6,8 +6,7 @@ class UserForm(ModelForm):
     class Meta:
         model = get_user_model()
         widgets = {
-            'date_of_birth': SelectDateWidget(years=range(1920, 2011),
-                                              empty_label=("Year", "Month", "Day")),
+            'date_of_birth': SelectDateWidget(years=range(1920, 2011), empty_label=('Year', 'Month', 'Day')),
         }
         fields = ('username', 'date_of_birth', 'full_name')
 

@@ -7,15 +7,14 @@ from the_big_username_blacklist import validate
 def validate_blacklist(value):
     if validate(value) is False:
         raise ValidationError(
-            "This username is not allowed.",
+            'This username is not allowed.',
             params={'value': value},
         )
 
 
 class UsernameValidator(RegexValidator):
     regex = r'^[\w.@ +-]+\Z'
-    message = 'Enter a valid username. This value may contain only letters, spaces, ' \
-              'numbers, and @/./+/-/_ characters.'
+    message = 'Enter a valid username. This value may contain only letters, spaces, numbers, and @/./+/-/_ characters.'
 
     flags = 0
 

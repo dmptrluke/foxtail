@@ -38,7 +38,7 @@ def test_unauthenticated_user_contact(driver, live_server, settings):
 
     driver.implicitly_wait(4)
 
-    driver.find_element(By.ID, "contact_submit").click()
+    driver.find_element(By.ID, 'contact_submit').click()
 
     driver.implicitly_wait(1)
 
@@ -47,7 +47,7 @@ def test_unauthenticated_user_contact(driver, live_server, settings):
 
     # the user sees a green alert
     alert = driver.find_element(By.CLASS_NAME, 'alert-success')
-    assert "Your message has been sent" in alert.text
+    assert 'Your message has been sent' in alert.text
 
     # we have an email sent!
     assert len(mail.outbox) == 1

@@ -17,10 +17,10 @@ class StaticSitemap(Sitemap):
 
 class PageSitemap(Sitemap):
     priority = 0.5
-    changefreq = "daily"
+    changefreq = 'daily'
 
     def items(self):
         return Page.objects.all()
 
 
-__all__ = ['StaticSitemap', 'PageSitemap']
+__all__ = ['PageSitemap', 'StaticSitemap']

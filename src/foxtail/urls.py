@@ -15,6 +15,7 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
@@ -35,13 +36,11 @@ sitemaps = {
 }
 
 urlpatterns = [
-    path('sitemap.xml', sitemap, {'sitemaps': sitemaps},
-         name='django.contrib.sitemaps.views.sitemap'),
+    path('sitemap.xml', sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
     path('robots.txt', core_views.robots, name='robots'),
     path('admin/django-rq/', include('django_rq.urls')),
     path('admin/', admin.site.urls),
     path('', include('allauth.idp.urls')),
-
     # Backward-compatible redirects for old oidc_provider paths
     path('openid/authorize', RedirectView.as_view(pattern_name='idp:oidc:authorization', query_string=True)),
     path('openid/token', RedirectView.as_view(pattern_name='idp:oidc:token')),
@@ -54,7 +53,7 @@ urlpatterns = [
     path('events/', include('apps.events.urls')),
     path('contact/', include('apps.contact.urls')),
     path('blog/', include('apps.blog.urls')),
-    path('', include('apps.content.urls'))
+    path('', include('apps.content.urls')),
 ]
 
 handler500 = 'apps.core.views.handler_500'

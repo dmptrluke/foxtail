@@ -18,7 +18,7 @@ class User(AbstractUser):
         help_text='Required. 30 characters or fewer. Letters, digits, spaces, and @/./+/-/_ only.',
         validators=username_validators,
         error_messages={
-            'unique': "A user with that username already exists.",
+            'unique': 'A user with that username already exists.',
         },
     )
 
@@ -28,9 +28,8 @@ class User(AbstractUser):
     date_of_birth = models.DateField(null=True, blank=True)
 
     def clean(self):
-        if self.date_of_birth:
-            if self.date_of_birth >= now().date():
-                raise ValidationError({'date_of_birth': 'Date of birth can not be in the future.'})
+        if self.date_of_birth and self.date_of_birth >= now().date():
+            raise ValidationError({'date_of_birth': 'Date of birth can not be in the future.'})
 
     def get_full_name(self):
         return self.full_name
@@ -40,35 +39,32 @@ class User(AbstractUser):
 
     @cached_property
     def email_verified(self):
-        """ check if the users main email is verified """
-        return EmailAddress.objects.filter(user=self,
-                                           email=self.email,
-                                           verified=True,
-                                           primary=True).exists()
+        """check if the users main email is verified"""
+        return EmailAddress.objects.filter(user=self, email=self.email, verified=True, primary=True).exists()
 
     def __str__(self):
-        return f"{self.username}"
+        return f'{self.username}'
 
 
 class ClientMetadata(models.Model):
     """Extra metadata for OIDC clients that allauth's Client model doesn't provide."""
 
     client = models.OneToOneField(
-        "allauth_idp_oidc.Client",
+        'allauth_idp_oidc.Client',
         on_delete=models.CASCADE,
-        related_name="metadata",
+        related_name='metadata',
     )
-    logo = VersatileImageField(upload_to="oidc/clients/", blank=True)
+    logo = VersatileImageField(upload_to='oidc/clients/', blank=True)
     website_url = models.URLField(blank=True)
     terms_url = models.URLField(blank=True)
     contact_email = models.EmailField(blank=True)
 
     class Meta:
-        verbose_name = "client metadata"
-        verbose_name_plural = "client metadata"
+        verbose_name = 'client metadata'
+        verbose_name_plural = 'client metadata'
 
     def __str__(self):
-        return f"Metadata for {self.client.name}"
+        return f'Metadata for {self.client.name}'
 
 
-__all__ = ['User', 'ClientMetadata']
+__all__ = ['ClientMetadata', 'User']

@@ -45,7 +45,7 @@ def send_messages_async(messages, **kwargs):
     try:
         conn.open()
     except Exception:
-        logger.exception("Cannot reach email backend %s", settings.EMAIL_REAL_BACKEND)
+        logger.exception('Cannot reach email backend %s', settings.EMAIL_REAL_BACKEND)
 
     messages_sent = 0
 
@@ -54,13 +54,12 @@ def send_messages_async(messages, **kwargs):
             sent = conn.send_messages([message])
             if sent is not None:
                 messages_sent += sent
-            logger.info("Successfully sent email message to %r.", message.to)
+            logger.info('Successfully sent email message to %r.', message.to)
         except Exception as e:
             # Not expecting any specific kind of exception here because it
             # could be any number of things, depending on the backend
             # TODO: We need to handle this properly.
-            logger.exception("Failed to send email message to %r (%r)",
-                             message.to, e)
+            logger.exception('Failed to send email message to %r (%r)', message.to, e)
 
     conn.close()
     return messages_sent

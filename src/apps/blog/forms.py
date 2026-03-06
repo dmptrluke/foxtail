@@ -21,6 +21,4 @@ class CommentForm(CSPFormMixin, ModelForm):
     class Meta:
         model = Comment
         fields = ('text',)
-        widgets = {
-            'text': Textarea(attrs={'rows': 4})
-        }
+        widgets = {'text': Textarea(attrs={'rows': 4})}
