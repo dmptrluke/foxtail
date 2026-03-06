@@ -22,6 +22,10 @@ WORKDIR /app
 
 RUN groupadd -r abc -g 5678 && useradd --no-log-init -u 5678 -r -g abc abc
 
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends libmagic1 \
+    && rm -rf /var/lib/apt/lists/*
+
 COPY requirements/base.txt ./requirements/base.txt
 RUN pip install --no-cache-dir -r requirements/base.txt
 
