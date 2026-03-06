@@ -5,12 +5,7 @@ from django.utils.timezone import now
 
 
 def site(request):
-    response = {'DEBUG': settings.DEBUG, 'DIRECTORY_ENABLED': settings.DIRECTORY_ENABLED, 'SITE_URL': settings.SITE_URL}
-
-    if settings.SENTRY_ENABLED:
-        response['SENTRY_DSN'] = settings.SENTRY_DSN
-
-    return response
+    return {'DEBUG': settings.DEBUG, 'DIRECTORY_ENABLED': settings.DIRECTORY_ENABLED, 'SITE_URL': settings.SITE_URL}
 
 
 def debug(request):

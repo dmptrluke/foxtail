@@ -68,21 +68,6 @@
 
 {% include "components/footer.html" %}
 
-{% comment %}
-{# this had to be commented out because Sentry does not support our nonce-based CSP correctly #}
-{% if sentry_event_id %}
-    <script src="https://browser.sentry-cdn.com/5.7.1/bundle.min.js"
-            integrity="sha384-KMv6bBTABABhv0NI+rVWly6PIRvdippFEgjpKyxUcpEmDWZTkDOiueL5xW+cztZZ"
-            crossorigin="anonymous"
-            nonce="{{ request.csp_nonce }}"></script>
-
-    <script nonce="{{ request.csp_nonce }}">
-        Sentry.init({dsn: '{{ SENTRY_DSN }}'});
-        Sentry.showReportDialog({eventId: '{{ sentry_event_id }}'})
-    </script>
-{% endif %}
-{% endcomment %}
-
 {% block extra_footer %}{% endblock extra_footer %}
 </body>
 </html>

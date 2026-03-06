@@ -358,8 +358,7 @@ SESSION_COOKIE_NAME = '__Host-sessionid'
 CSRF_COOKIE_SECURE = True
 CSRF_COOKIE_NAME = '__Host-csrftoken'
 
-# this header is applied with nginx
-SECURE_CONTENT_TYPE_NOSNIFF = False
+SECURE_CONTENT_TYPE_NOSNIFF = True
 
 X_FRAME_OPTIONS = 'DENY'
 
