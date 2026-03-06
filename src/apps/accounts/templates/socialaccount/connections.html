@@ -3,14 +3,12 @@
 
 {% block title %}Connected Accounts{% endblock %}
 
-{% block breadcrumbs %}{% url 'account_profile' as a %}{% breadcrumbs a "Account" "Connections" %}{% endblock %}
+{% block hero_breadcrumbs %}{% url 'account_profile' as a %}{% breadcrumbs a "Account" "Connections" %}{% endblock %}
+
+{% block hero_heading %}Connected Accounts{% endblock %}
+{% block hero_sub %}<h2>Sign in to your account using any of the following services.</h2>{% endblock %}
 
 {% block content %}
-    <div class="account-header">
-        <h3>Connected Accounts</h3>
-        <p>Sign in to your account using any of the following services.</p>
-    </div>
-
     {% if form.non_field_errors %}
         <div class="alert alert-danger" role="alert">
             {{ form.non_field_errors }}
@@ -39,7 +37,7 @@
                 {% endfor %}
             </div>
         {% else %}
-            <div class="account-empty">
+            <div class="empty-state">
                 No external accounts are linked to your furry.nz account.
             </div>
         {% endif %}

@@ -2,14 +2,13 @@
 {% load breadcrumbs %}
 
 {% block title %}Recovery Codes{% endblock %}
-{% block breadcrumbs %}{% url 'account_profile' as a %}{% url 'mfa_index' as m %}{% breadcrumbs a "Account" m "Two-Factor Auth" "Recovery Codes" %}{% endblock %}
+
+{% block hero_breadcrumbs %}{% url 'account_profile' as a %}{% url 'mfa_index' as m %}{% breadcrumbs a "Account" m "Two-Factor Auth" "Recovery Codes" %}{% endblock %}
+
+{% block hero_heading %}Recovery Codes{% endblock %}
+{% block hero_sub %}<h2>Recovery codes let you access your account if you ever lose access to your authenticator app. Each code can only be used once.</h2>{% endblock %}
 
 {% block content %}
-    <div class="account-header">
-        <h3>Recovery Codes</h3>
-        <p>Recovery codes let you access your account if you ever lose access to your authenticator app. Each code can only be used once.</p>
-    </div>
-
     {% if unused_codes %}
         <div class="account-confirm">
             <p><strong>Keep these codes safe.</strong> Store them in a password manager or print them out and keep them somewhere secure. Do not share them with anyone.</p>
@@ -24,7 +23,7 @@
             </div>
         </div>
     {% else %}
-        <div class="account-empty mb-4">
+        <div class="empty-state mb-4">
             You have no recovery codes remaining. Generate a new set below.
         </div>
     {% endif %}

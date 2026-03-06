@@ -38,6 +38,25 @@ $danger: #c75b5b;
 $body-bg: #fbfafc;
 $body-color: #2d2639;
 
+// hover shadows
+$shadow-sm: 0 2px 8px rgba($dark, 0.05);
+$shadow-md: 0 4px 16px rgba($dark, 0.08);
+$shadow-lg: 0 6px 20px rgba($dark, 0.25);
+
+// sharp edges to match design language
+$border-radius: 2px;
+$border-radius-sm: 1px;
+$border-radius-lg: 3px;
+$border-radius-xl: 4px;
+$border-radius-xxl: 4px;
+$card-border-radius: 0;
+
+// subtle alerts - left-border accent, muted backgrounds
+$alert-border-radius: 0;
+$alert-bg-scale: -92%;
+$alert-border-scale: -50%;
+$alert-color-scale: 30%;
+
 // link underlines only when hovering
 $link-decoration: none;
 $link-hover-decoration: underline;

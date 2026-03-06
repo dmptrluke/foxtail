@@ -1,0 +1,134 @@
+{% extends "base.html" %}
+{% load icon breadcrumbs %}
+
+{% block extra_head %}
+    {% if year %}
+        <script type="application/ld+json">
+            {
+                "@context": "https://schema.org",
+                "@type": "BreadcrumbList",
+                "itemListElement": [
+                    {
+                        "@type": "ListItem",
+                        "position": 1,
+                        "name": "Events",
+                        "item": "{{ SITE_URL }}{% url 'events:list' %}"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 2,
+                        "name": "{{ year }}",
+                        "item": "{{ SITE_URL }}{% url 'events:list_year' year=year %}"
+                    }
+                ]
+            }
+        </script>
+    {% else %}
+        <script type="application/ld+json">
+            {
+                "@context": "https://schema.org",
+                "@type": "BreadcrumbList",
+                "itemListElement": [
+                    {
+                        "@type": "ListItem",
+                        "position": 1,
+                        "name": "Events",
+                        "item": "{{ SITE_URL }}{% url 'events:list' %}"
+                    }
+                ]
+            }
+        </script>
+    {% endif %}
+{% endblock %}
+
+{% block title %}{% if year %}Events in {{ year }}{% else %}Furry Events{% endif %}{% endblock %}
+
+{% block base_content %}
+    {# Hero #}
+    <div class="hero hero-detail">
+        <div class="container px-3 px-md-4">
+            {% if year %}
+                {% url 'events:list' as events_url %}{% breadcrumbs events_url "Events" year %}
+            {% endif %}
+
+            <h1>{% if year %}Events in {{ year }}{% else %}Events{% endif %}</h1>
+            <h2 class="hero-sub-narrow">Furry conventions, meets, and community gatherings across New Zealand and beyond.</h2>
+
+            {% if event_years %}
+                <div class="hero-bottom">
+                    <nav class="hero-nav">
+                        <a href="{% url 'events:list' %}" class="hero-pill{% if not year %} active{% endif %}">All</a>
+                        {% for y in event_years %}
+                            <a href="{% url 'events:list_year' year=y %}"
+                               class="hero-pill{% if year == y|stringformat:'d' %} active{% endif %}">{{ y }}</a>
+                        {% endfor %}
+                    </nav>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    {# Featured next event #}
+    {% if featured_event and not year %}
+        <div class="container px-3 px-md-4">
+            <div class="event-featured">
+                {% if featured_event.image %}
+                    <a href="{{ featured_event.get_absolute_url }}" class="event-featured-image">
+                        <img src="{{ featured_event.image.crop.700x350 }}"
+                             srcset="{{ featured_event.image.crop.700x350 }} 1x, {{ featured_event.image.crop.1400x700 }} 2x"
+                             alt="">
+                    </a>
+                {% endif %}
+                <div class="event-featured-body">
+                    <div class="event-featured-label">Next Up</div>
+                    <h2><a href="{{ featured_event.get_absolute_url }}">{{ featured_event.title }}</a></h2>
+                    <div class="event-featured-meta">
+                        <span>{{ featured_event.start | date:"F jS, Y" }}</span>
+                        <span>{{ featured_event.location }}</span>
+                    </div>
+                    <p>{{ featured_event.description_rendered | safe | striptags | truncatechars:200 }}</p>
+                    {% if featured_event.tags.all %}
+                        <div class="tag-row tag-row-dark">
+                            {% for tag in featured_event.tags.all %}
+                                <span class="tag-pill">{{ tag.name | title }}</span>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    {% endif %}
+
+    {# Event grid #}
+    <main id="main-content" class="container px-3 px-md-4 pt-4">
+        {% include "components/messages.html" %}
+
+        {% if upcoming_events %}
+            <div class="event-section-label">Upcoming</div>
+            <div class="row narrow-gutters event-masonry" data-colcade="columns: .grid-col, items: .event-card">
+                <div class="grid-col col-md-6 col-lg-4"></div>
+                <div class="grid-col d-none d-md-block col-md-6 col-lg-4"></div>
+                <div class="grid-col d-none d-lg-block col-md-6 col-lg-4"></div>
+                {% for event in upcoming_events %}
+                    {% include "events/card.html" %}
+                {% endfor %}
+            </div>
+        {% elif not past_events %}
+            <div class="empty-state">
+                <p>No events found{% if year %} for {{ year }}{% endif %}.</p>
+            </div>
+        {% endif %}
+
+        {% if past_events %}
+            <div class="event-section-label{% if upcoming_events %} mt-5{% endif %}">Past Events</div>
+            <div class="row narrow-gutters event-masonry" data-colcade="columns: .grid-col, items: .event-card">
+                <div class="grid-col col-md-6 col-lg-4"></div>
+                <div class="grid-col d-none d-md-block col-md-6 col-lg-4"></div>
+                <div class="grid-col d-none d-lg-block col-md-6 col-lg-4"></div>
+                {% for event in past_events %}
+                    {% include "events/card.html" %}
+                {% endfor %}
+            </div>
+        {% endif %}
+    </main>
+{% endblock base_content %}

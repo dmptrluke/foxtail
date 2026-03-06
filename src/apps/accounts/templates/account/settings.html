@@ -3,14 +3,12 @@
 
 {% block title %}Account Settings{% endblock %}
 
-{% block breadcrumbs %}{% url 'account_profile' as a %}{% breadcrumbs a "Account" "Settings" %}{% endblock %}
+{% block hero_breadcrumbs %}{% url 'account_profile' as a %}{% breadcrumbs a "Account" "Settings" %}{% endblock %}
+
+{% block hero_heading %}Account Settings{% endblock %}
+{% block hero_sub %}<h2>Manage your username, name, and personal details.</h2>{% endblock %}
 
 {% block content %}
-    <div class="account-header">
-        <h3>Account Settings</h3>
-        <p>Manage your username, name, and personal details.</p>
-    </div>
-
     <form method="post">
         {% csrf_token %}
 

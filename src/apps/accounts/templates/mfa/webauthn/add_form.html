@@ -2,14 +2,13 @@
 {% load breadcrumbs form_tags %}
 
 {% block title %}Add Security Key{% endblock %}
-{% block breadcrumbs %}{% url 'account_profile' as a %}{% url 'mfa_index' as m %}{% url 'mfa_list_webauthn' as k %}{% breadcrumbs a "Account" m "Two-Factor Auth" k "Security Keys" "Add Key" %}{% endblock %}
+
+{% block hero_breadcrumbs %}{% url 'account_profile' as a %}{% url 'mfa_index' as m %}{% url 'mfa_list_webauthn' as k %}{% breadcrumbs a "Account" m "Two-Factor Auth" k "Security Keys" "Add Key" %}{% endblock %}
+
+{% block hero_heading %}Add Security Key{% endblock %}
+{% block hero_sub %}<h2>Register a hardware security key (such as a YubiKey) or a passkey saved on your device.</h2>{% endblock %}
 
 {% block content %}
-    <div class="account-header">
-        <h3>Add Security Key</h3>
-        <p>Register a hardware security key (such as a YubiKey) or a passkey saved on your device.</p>
-    </div>
-
     <div class="account-section">
         <form method="post" action="{% url 'mfa_add_webauthn' %}">
             {% csrf_token %}

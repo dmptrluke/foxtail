@@ -1,25 +1,36 @@
 {% extends "base.html" %}
+{% load breadcrumbs %}
 
-{% block title %}Confirm Deletion{% endblock %}
+{% block title %}Delete Comment{% endblock %}
 
-{% block content %}
-    <h1>Confirm Deletion</h1>
+{% block base_content %}
+    <div class="hero hero-blog">
+        <div class="container px-3 px-md-4">
+            {% url 'blog:list' as news_url %}
+            {% url 'blog:detail' slug=object.post.slug as post_url %}
+            {% breadcrumbs news_url "News" post_url object.post.title "Delete Comment" %}
+            <h1>Delete Comment</h1>
+        </div>
+    </div>
 
-    <p>
-        Are you sure you want to delete the following comment?
-    </p>
-    <p class="border p-4 bg-light">
-        <strong>{{ object.author.get_short_name }}</strong><br/>
-        {{ object.text }}
-    </p>
+    <main id="main-content" class="container px-3 px-md-4 py-4">
+        {% include "components/messages.html" %}
 
-    <form method="post">
-        {% csrf_token %}
-        {% if redirect_field_value %}
-            <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}"/>
-        {% endif %}
-        <button id="delete-button" type="submit" class="btn btn-lg btn-primary">
-            Confirm
-        </button>
-    </form>
-{% endblock content %}
+        <div class="account-confirm">
+            <p>Are you sure you want to delete this comment?</p>
+            <div class="comment-item" style="border: none; padding-top: 0.5rem;">
+                <div class="comment-body">
+                    <strong>{{ object.author.get_short_name }}</strong>
+                    <p>{{ object.text }}</p>
+                </div>
+            </div>
+            <div class="account-confirm-actions">
+                <form method="post">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger">Delete Comment</button>
+                    <a href="{{ post_url }}" class="btn btn-outline-secondary ms-2">Cancel</a>
+                </form>
+            </div>
+        </div>
+    </main>
+{% endblock base_content %}

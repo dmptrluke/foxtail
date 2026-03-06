@@ -1,0 +1,21 @@
+<article class="blog-card">
+    {% if post.image %}
+        <a href="{{ post.get_absolute_url }}" class="blog-card-image">
+            <img src="{{ post.image.crop.800x400 }}"
+                 srcset="{{ post.image.crop.800x400 }} 1x, {{ post.image.crop.1600x800 }} 2x"
+                 alt="">
+        </a>
+    {% endif %}
+    <div class="blog-card-body">
+        <div class="blog-card-date">{{ post.created|date:"F jS, Y" }}</div>
+        <h3><a href="{{ post.get_absolute_url }}">{{ post.title }}</a></h3>
+        <p class="blog-card-excerpt">{{ post.description|default:post.text_rendered|safe|striptags|truncatechars:200 }}</p>
+        {% if post.tags.all %}
+            <div class="tag-row tag-row-dark">
+                {% for tag in post.tags.all %}
+                    <a href="{% url 'blog:list' %}?tag={{ tag.slug }}" class="tag-pill">{{ tag.name|capfirst }}</a>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+</article>

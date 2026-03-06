@@ -2,14 +2,13 @@
 {% load breadcrumbs %}
 
 {% block title %}Remove Security Key{% endblock %}
-{% block breadcrumbs %}{% url 'account_profile' as a %}{% url 'mfa_index' as m %}{% url 'mfa_list_webauthn' as k %}{% breadcrumbs a "Account" m "Two-Factor Auth" k "Security Keys" "Remove" %}{% endblock %}
+
+{% block hero_breadcrumbs %}{% url 'account_profile' as a %}{% url 'mfa_index' as m %}{% url 'mfa_list_webauthn' as k %}{% breadcrumbs a "Account" m "Two-Factor Auth" k "Security Keys" "Remove" %}{% endblock %}
+
+{% block hero_heading %}Remove Security Key{% endblock %}
+{% block hero_sub %}<h2>This key will be permanently removed from your account.</h2>{% endblock %}
 
 {% block content %}
-    <div class="account-header">
-        <h3>Remove Security Key</h3>
-        <p>This key will be permanently removed from your account.</p>
-    </div>
-
     <div class="account-confirm">
         <p><strong>Are you sure?</strong> You will no longer be able to use <strong>{{ authenticator }}</strong> to sign in.</p>
         <div class="account-confirm-actions">

@@ -7,18 +7,18 @@ from django.utils.timezone import now
 import pytest
 
 from ..models import Event
-from ..views import EventDetail, EventList, EventListYear
+from ..views import EventDetailView, EventListView, EventListYearView
 from .factories import EventFactory
 
 pytestmark = pytest.mark.django_db
 
 
-class TestEventList:
-    """Test EventList upcoming/past split."""
+class TestEventListView:
+    """Test EventListView upcoming/past split."""
 
     # future events appear in upcoming, past events appear in past
     def test_upcoming_and_past_split(self, event: Event, past_event: Event, request_factory: RequestFactory):
-        view = EventList()
+        view = EventListView()
         view.setup(request_factory.get('/events/'))
         view.object_list = view.get_queryset()
         context = view.get_context_data()
@@ -32,7 +32,7 @@ class TestEventList:
             start=now().date() - timedelta(days=2),
             end=now().date() + timedelta(days=2),
         )
-        view = EventList()
+        view = EventListView()
         view.setup(request_factory.get('/events/'))
         view.object_list = view.get_queryset()
         context = view.get_context_data()
@@ -41,14 +41,14 @@ class TestEventList:
         assert ongoing not in context['past_events']
 
 
-class TestEventListYear:
-    """Test EventListYear year-scoped filtering."""
+class TestEventListYearView:
+    """Test EventListYearView year-scoped filtering."""
 
     # events are filtered to the requested year
     def test_filters_by_year(self, db, request_factory: RequestFactory):
         this_year = now().date().year
         event = EventFactory(start=now().date() + timedelta(days=30))
-        view = EventListYear()
+        view = EventListYearView()
         view.setup(request_factory.get(f'/events/{this_year}/'))
         view.kwargs = {'year': str(this_year)}
         view.object_list = view.get_queryset()
@@ -62,7 +62,7 @@ class TestEventListYear:
         this_year = now().date().year
         other_year = this_year + 2
         EventFactory(start=now().date() + timedelta(days=30))
-        view = EventListYear()
+        view = EventListYearView()
         view.setup(request_factory.get(f'/events/{other_year}/'))
         view.kwargs = {'year': str(other_year)}
         view.object_list = view.get_queryset()
@@ -73,7 +73,7 @@ class TestEventListYear:
 
     # invalid year raises 404
     def test_invalid_year_404(self, db, request_factory: RequestFactory):
-        view = EventListYear()
+        view = EventListYearView()
         view.setup(request_factory.get('/events/notayear/'))
         view.kwargs = {'year': 'notayear'}
         view.object_list = view.get_queryset()
@@ -82,12 +82,12 @@ class TestEventListYear:
             view.get_context_data()
 
 
-class TestEventDetail:
-    """Test EventDetail year+slug lookup."""
+class TestEventDetailView:
+    """Test EventDetailView year+slug lookup."""
 
     # detail view finds event by year and slug
     def test_finds_event(self, event: Event, request_factory: RequestFactory):
-        view = EventDetail()
+        view = EventDetailView()
         view.setup(request_factory.get(event.get_absolute_url()))
         view.kwargs = {'year': str(event.start.year), 'slug': event.slug}
         qs = view.get_queryset()
@@ -96,7 +96,7 @@ class TestEventDetail:
 
     # invalid year raises 404
     def test_invalid_year_404(self, event: Event, request_factory: RequestFactory):
-        view = EventDetail()
+        view = EventDetailView()
         view.setup(request_factory.get('/events/notayear/test/'))
         view.kwargs = {'year': 'notayear', 'slug': event.slug}
 

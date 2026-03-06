@@ -1,9 +1,6 @@
-// Hero
-.hero {
-	background: $hero-gradient;
-	color: $white;
+// Hero: homepage
+.hero-home {
 	padding: 3.5rem 0 4rem;
-	margin-bottom: 0;
 
 	&.hero-compact {
 		padding: 2rem 0 2.5rem;
@@ -11,9 +8,7 @@
 
 	h1 {
 		font-size: 2.25rem;
-		font-weight: 700;
 		margin-bottom: 0.5rem;
-		letter-spacing: -0.02em;
 	}
 
 	p {
@@ -83,12 +78,8 @@
 			width: 100%;
 			height: 100%;
 			object-fit: cover;
-			transition: transform 0.3s ease;
+			@include img-zoom;
 			border-radius: $card-border-radius;
-		}
-
-		&:hover img {
-			transform: scale(1.03);
 		}
 	}
 
@@ -127,10 +118,7 @@
 			color: lighten($body-color, 15%);
 			line-height: 1.6;
 			margin-bottom: 1.25rem;
-			display: -webkit-box;
-			-webkit-line-clamp: 4;
-			-webkit-box-orient: vertical;
-			overflow: hidden;
+			@include line-clamp(4);
 		}
 	}
 }
@@ -156,7 +144,7 @@
 	transition: box-shadow 0.2s ease, transform 0.2s ease;
 
 	&:hover {
-		box-shadow: 0 4px 16px rgba($dark, 0.08);
+		box-shadow: $shadow-md;
 		transform: translateY(-2px);
 	}
 
@@ -168,11 +156,7 @@
 			width: 100%;
 			aspect-ratio: 2 / 1;
 			object-fit: cover;
-			transition: transform 0.3s ease;
-		}
-
-		&:hover img {
-			transform: scale(1.03);
+			@include img-zoom;
 		}
 	}
 
@@ -193,10 +177,7 @@
 			font-size: 1.05rem;
 			font-weight: 600;
 			margin-bottom: 0.5rem;
-			display: -webkit-box;
-			-webkit-line-clamp: 2;
-			-webkit-box-orient: vertical;
-			overflow: hidden;
+			@include line-clamp(2);
 
 			a {
 				color: $body-color;
@@ -211,10 +192,7 @@
 		p {
 			font-size: 0.9rem;
 			color: lighten($body-color, 15%);
-			display: -webkit-box;
-			-webkit-line-clamp: 2;
-			-webkit-box-orient: vertical;
-			overflow: hidden;
+			@include line-clamp(2);
 			margin-bottom: 0;
 		}
 	}
@@ -289,10 +267,7 @@
 		font-size: 0.875rem;
 		color: lighten($body-color, 15%);
 		margin: 0;
-		display: -webkit-box;
-		-webkit-line-clamp: 2;
-		-webkit-box-orient: vertical;
-		overflow: hidden;
+		@include line-clamp(2);
 	}
 
 	.event-location {

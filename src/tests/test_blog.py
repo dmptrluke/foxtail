@@ -18,14 +18,12 @@ def test_blog_comments(authenticated_driver, user, live_server, post: Post):
     # the title contains the website name
     assert 'example.com' in driver.title
 
-    # get some things!
-    comment_area = driver.find_element(By.ID, 'comments')
-    comment_form = driver.find_element(By.ID, 'comments-form')
+    # the comments section is visible with a form
+    comment_section = driver.find_element(By.CLASS_NAME, 'comments-section')
+    comment_form = comment_section.find_element(By.CLASS_NAME, 'comment-form')
 
-    # there is already a comment
-    comments = comment_area.find_elements(By.CLASS_NAME, 'comment')
-
-    # only one
+    # no comments yet
+    comments = comment_section.find_elements(By.CLASS_NAME, 'comment-item')
     assert len(comments) == 0
 
     # lets make a comment!
@@ -41,20 +39,20 @@ def test_blog_comments(authenticated_driver, user, live_server, post: Post):
     assert 'Your comment has been posted!' in alert.text
 
     # we read the comments again
-    comment_area = driver.find_element(By.ID, 'comments')
-    comments = comment_area.find_elements(By.CLASS_NAME, 'comment')
+    comment_section = driver.find_element(By.CLASS_NAME, 'comments-section')
+    comments = comment_section.find_elements(By.CLASS_NAME, 'comment-item')
 
     assert len(comments) == 1
 
     my_comment = comments[0]
 
     # we make sure the comment is all good
-    assert user.username in my_comment.text
+    assert user.get_short_name() in my_comment.text
     assert comment_text in my_comment.text
 
     # we don't like it, delete it!
-    delete_button = my_comment.find_element(By.LINK_TEXT, 'delete comment')
-    delete_button.click()
+    delete_link = my_comment.find_element(By.LINK_TEXT, 'delete')
+    delete_link.click()
 
     # we see the deletion page...
     body = driver.find_element(By.ID, 'main-content')
@@ -62,18 +60,18 @@ def test_blog_comments(authenticated_driver, user, live_server, post: Post):
     assert comment_text in body.text
 
     # ...and hit delete
-    delete_button = driver.find_element(By.ID, 'delete-button')
+    delete_button = body.find_element(By.CSS_SELECTOR, 'button.btn-danger')
     delete_button.click()
 
     # we should now be back at the post page
     assert driver.current_url == live_server.url + post.get_absolute_url()
 
     # the comment is gone
-    comment_area = driver.find_element(By.ID, 'comments')
-    comments = comment_area.find_elements(By.CLASS_NAME, 'comment')
+    comment_section = driver.find_element(By.CLASS_NAME, 'comments-section')
+    comments = comment_section.find_elements(By.CLASS_NAME, 'comment-item')
 
     # now there are none
     assert len(comments) == 0
 
     # we make sure the comment is not here
-    assert comment_text not in comment_area.text
+    assert comment_text not in comment_section.text

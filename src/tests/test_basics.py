@@ -59,10 +59,10 @@ def test_unauthenticated_user_browsing(driver, live_server, settings, post: Post
 
     # the event detail page shows the event title and details
     assert event.title in driver.title
-    event_body = driver.find_element(By.CLASS_NAME, 'card-body')
-    assert event.title in event_body.text
-    assert 'Auckland, New Zealand' in event_body.text
-    assert event_date.strftime('%B') in event_body.text
+    hero = driver.find_element(By.CLASS_NAME, 'hero-detail')
+    assert event.title in hero.text
+    assert 'Auckland, New Zealand' in hero.text
+    assert event_date.strftime('%B') in hero.text
 
     # the user navigates back to the homepage
     driver.back()
@@ -92,10 +92,11 @@ def test_unauthenticated_user_browsing(driver, live_server, settings, post: Post
     # but it still also has the site name
     assert 'example.com' in driver.title
 
-    # the user reads the blog post
-    blog_body = driver.find_element(By.CLASS_NAME, 'blog-post')
+    # the user sees the post title and date in the hero
+    hero = driver.find_element(By.CLASS_NAME, 'hero-detail')
+    assert post.title in hero.text
+    assert 'December 2nd, 2019' in hero.text
 
-    # the user reads the title, then the article, noticing when the post was published
-    assert post.title in blog_body.text
-    assert post.text in blog_body.text
-    assert 'December 2nd, 2019' in blog_body.text
+    # the user reads the article body
+    article = driver.find_element(By.CLASS_NAME, 'rendered-markdown')
+    assert post.text in article.text

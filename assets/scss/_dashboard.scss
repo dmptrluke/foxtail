@@ -1,30 +1,10 @@
 // Account subpage components
-.account-header {
-	margin-bottom: 1.5rem;
-	padding-bottom: 1rem;
-	border-bottom: 2px solid rgba($secondary, 0.2);
-
-	h3 {
-		font-size: 1.5rem;
-		font-weight: 500;
-		margin: 0;
-	}
-
-	p {
-		font-size: 0.925rem;
-		color: lighten($body-color, 15%);
-		margin: 0.35rem 0 0;
-	}
-}
-
 .account-section {
 	margin-bottom: 2rem;
 
 	h5 {
+		@include label-style;
 		font-size: 0.8rem;
-		font-weight: 600;
-		text-transform: uppercase;
-		letter-spacing: 0.06em;
 		color: $secondary;
 		margin-bottom: 0.75rem;
 	}
@@ -53,7 +33,7 @@
 	transition: box-shadow 0.15s ease;
 
 	&:hover {
-		box-shadow: 0 2px 8px rgba($dark, 0.05);
+		box-shadow: $shadow-sm;
 	}
 
 	&.account-item-warn {
@@ -83,16 +63,6 @@
 	}
 }
 
-.account-empty {
-	padding: 2rem 1.25rem;
-	text-align: center;
-	color: lighten($body-color, 25%);
-	background: rgba($secondary, 0.03);
-	border: 1px dashed rgba($secondary, 0.2);
-	border-radius: $card-border-radius;
-	font-size: 0.925rem;
-}
-
 .account-method-card {
 	background: $white;
 	border: 1px solid rgba($secondary, 0.12);
@@ -102,7 +72,7 @@
 	transition: box-shadow 0.15s ease;
 
 	&:hover {
-		box-shadow: 0 2px 8px rgba($dark, 0.05);
+		box-shadow: $shadow-sm;
 	}
 
 	h5 {
@@ -144,9 +114,7 @@
 }
 
 // Dashboard
-.dashboard-hero {
-	background: $hero-gradient;
-	color: $white;
+.hero-dashboard {
 	padding: 2rem 0 2.5rem;
 
 	.dashboard-identity {
@@ -165,9 +133,7 @@
 
 	h1 {
 		font-size: 1.75rem;
-		font-weight: 700;
 		margin-bottom: 0.15rem;
-		letter-spacing: -0.02em;
 	}
 
 	p {
@@ -204,7 +170,7 @@
 	transition: box-shadow 0.2s ease, transform 0.2s ease;
 
 	&:hover {
-		box-shadow: 0 4px 16px rgba($dark, 0.08);
+		box-shadow: $shadow-md;
 		transform: translateY(-2px);
 		text-decoration: none;
 		color: $body-color;
@@ -216,7 +182,7 @@
 		justify-content: center;
 		width: 2.75rem;
 		height: 2.75rem;
-		border-radius: 0.5rem;
+		border-radius: 2px;
 		background: rgba($primary, 0.08);
 		color: $primary;
 		margin-bottom: 1rem;
@@ -231,14 +197,13 @@
 
 	.tile-detail {
 		font-size: 0.85rem;
-		color: lighten($body-color, 20%);
+		color: lighten($body-color, 15%);
 		margin-bottom: 0;
 		flex: 1;
 	}
 
 	.tile-status {
-		font-size: 0.8rem;
-		font-weight: 500;
+		@include label-style;
 		margin-top: 0.75rem;
 		padding-top: 0.75rem;
 		border-top: 1px solid rgba($secondary, 0.1);

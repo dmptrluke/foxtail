@@ -1,0 +1,120 @@
+// Shared base
+.hero {
+	background: $hero-gradient;
+	color: $white;
+	padding: 2rem 0;
+
+	h1 {
+		font-weight: 700;
+		letter-spacing: -0.02em;
+	}
+
+	.hero-topline {
+		display: flex;
+		align-items: flex-start;
+		justify-content: space-between;
+	}
+
+	.hero-admin-link {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.3rem;
+		font-size: 0.75rem;
+		font-weight: 500;
+		color: rgba($white, 0.5);
+		text-decoration: none;
+		margin-top: 0.35rem;
+		margin-left: auto;
+		flex-shrink: 0;
+
+		&:hover {
+			color: rgba($white, 0.85);
+		}
+	}
+
+	.breadcrumb {
+		a {
+			color: rgba($white, 0.5);
+
+			&:hover {
+				color: rgba($white, 0.8);
+			}
+		}
+
+		.breadcrumb-item.active {
+			color: rgba($white, 0.7);
+		}
+
+		.breadcrumb-item + .breadcrumb-item::before {
+			color: rgba($white, 0.3);
+		}
+	}
+}
+
+// Detail and list pages
+.hero-detail {
+	h1 {
+		font-size: 2rem;
+		margin-bottom: 0.35rem;
+	}
+
+	.tag-row {
+		margin-bottom: 1rem;
+	}
+
+	h2 {
+		font-size: 1.05rem;
+		font-weight: 300;
+		line-height: var(--bs-body-line-height);
+		opacity: 0.75;
+		margin-bottom: 0;
+	}
+
+	.hero-sub-narrow {
+		max-width: 480px;
+	}
+
+	.hero-bottom {
+		margin-top: 1.25rem;
+		padding-top: 1.25rem;
+		border-top: 1px solid rgba($white, 0.12);
+	}
+
+	.hero-nav {
+		display: flex;
+		gap: 0.5rem;
+		flex-wrap: wrap;
+	}
+
+	.hero-pill {
+		display: inline-block;
+		font-size: 0.8rem;
+		font-weight: 500;
+		padding: 0.3rem 0.85rem;
+		color: rgba($white, 0.65);
+		background: rgba($white, 0.08);
+		border-radius: 2px;
+		text-decoration: none;
+		transition: background 0.15s ease, color 0.15s ease;
+
+		&:hover {
+			color: $white;
+			background: rgba($white, 0.15);
+			text-decoration: none;
+		}
+
+		&.active {
+			color: $white;
+			background: rgba($white, 0.2);
+			font-weight: 600;
+		}
+	}
+}
+
+// Banner image (below hero on detail pages)
+.hero-banner img {
+	width: 100%;
+	max-height: 300px;
+	object-fit: cover;
+	display: block;
+}
