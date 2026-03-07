@@ -8,6 +8,7 @@
 
 services:
   db:
+    container_name: foxtail-db
     image: postgres:17
     restart: unless-stopped
     environment:
@@ -22,6 +23,7 @@ services:
       retries: 5
 
   redis:
+    container_name: foxtail-redis
     image: redis:8
     restart: unless-stopped
     volumes:
@@ -33,6 +35,7 @@ services:
       retries: 5
 
   caddy:
+    container_name: foxtail-caddy
     image: caddy:2
     restart: unless-stopped
     ports:
@@ -50,6 +53,7 @@ services:
         condition: service_healthy
 
   foxtail:
+    container_name: foxtail-app
     image: ghcr.io/dmptrluke/foxtail:latest
     restart: unless-stopped
     env_file: .env
@@ -71,6 +75,7 @@ services:
       start_period: 15s
 
   worker:
+    container_name: foxtail-worker
     image: ghcr.io/dmptrluke/foxtail:latest
     restart: unless-stopped
     env_file: .env
@@ -85,8 +90,8 @@ services:
     command: django-admin rqworker default
 
 volumes:
-  storage:
-  db:
-  redis:
-  caddy_data:
-  caddy_config:
+  storage:   # User-uploaded media (avatars, blog images, event images)
+  db:        # PostgreSQL data
+  redis:     # Redis persistence (sessions, cache, task queue)
+  caddy_data:    # TLS certificates and ACME account keys
+  caddy_config:  # Caddy runtime configuration
