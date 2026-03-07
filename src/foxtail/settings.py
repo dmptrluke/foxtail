@@ -422,13 +422,9 @@ if SENTRY_ENABLED:
         _vars['environment'] = SENTRY_ENVIRONMENT
 
     # attach version
-    if env.bool('SENTRY_GIT', default=False):
-        import git
-
-        repo = git.Repo(search_parent_directories=True)
-        sha = repo.head.object.hexsha
-        _vars['release'] = sha
-        repo.close()
+    SENTRY_RELEASE = env('SENTRY_RELEASE', default='')
+    if SENTRY_RELEASE:
+        _vars['release'] = SENTRY_RELEASE
 
     # set CSP report URI
     if env.bool('SENTRY_CSP', default=False):
