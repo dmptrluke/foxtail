@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load humanize account cache jsonld opengraph meta %}
+{% load humanize account jsonld opengraph meta %}
 
 {% block title_full %}{{ request.site.name }} — the resource for New Zealand furries{% endblock title_full %}
 
@@ -42,8 +42,7 @@
                     <a href="{% url 'blog:list' %}" class="section-link">View all &rarr;</a>
                 </header>
 
-                {% cache 1800 index_blog %}
-                    {% for post in post_list %}
+                {% for post in post_list %}
                         {% if forloop.first %}
                             <article class="news-feature">
                                 <a href="{{ post.get_absolute_url }}">
@@ -82,8 +81,7 @@
                                 </article>
                             {% if forloop.last %}</div>{% endif %}
                         {% endif %}
-                    {% endfor %}
-                {% endcache %}
+                {% endfor %}
             </section>
 
             {# ── Events ── #}
@@ -95,8 +93,7 @@
                     </header>
 
                     <div class="event-list">
-                        {% cache 1800 index_events %}
-                            {% for event in event_list %}
+                        {% for event in event_list %}
                                 <a href="{{ event.get_absolute_url }}" class="event-item">
                                     <div class="event-date-badge">
                                         <span class="event-date-month">{{ event.start|date:"M" }}</span>
@@ -110,8 +107,7 @@
                                         {% endif %}
                                     </div>
                                 </a>
-                            {% endfor %}
-                        {% endcache %}
+                        {% endfor %}
                     </div>
                 </section>
             {% endif %}
