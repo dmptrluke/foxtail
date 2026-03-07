@@ -64,6 +64,11 @@ RUN mkdir -p /home/abc/.cache && chown -R abc:abc /home/abc
 
 FROM deps AS app
 
+ARG GIT_SHA
+ENV SENTRY_RELEASE=$GIT_SHA
+
+RUN rm /usr/local/bin/uv
+
 COPY --from=assets /app/build ./build
 COPY --chown=abc:abc . .
 
