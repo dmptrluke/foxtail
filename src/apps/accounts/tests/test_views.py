@@ -56,7 +56,7 @@ class TestUserView:
     def test_form_valid_updates_user(self, client, user):
         client.force_login(user)
         response = client.post(
-            reverse('account_settings'),
+            reverse('account_profile_edit'),
             {
                 'username': user.username,
                 'full_name': 'New Name',
@@ -70,19 +70,19 @@ class TestUserView:
     def test_form_valid_redirects_to_settings(self, client, user):
         client.force_login(user)
         response = client.post(
-            reverse('account_settings'),
+            reverse('account_profile_edit'),
             {
                 'username': user.username,
                 'full_name': 'New Name',
             },
         )
-        assert response['Location'] == reverse('account_settings')
+        assert response['Location'] == reverse('account_profile_edit')
 
     # valid POST shows a success message
     def test_form_valid_shows_success_message(self, client, user):
         client.force_login(user)
         response = client.post(
-            reverse('account_settings'),
+            reverse('account_profile_edit'),
             {
                 'username': user.username,
                 'full_name': 'New Name',
@@ -96,7 +96,7 @@ class TestUserView:
     def test_form_invalid_rerenders(self, client, user):
         client.force_login(user)
         response = client.post(
-            reverse('account_settings'),
+            reverse('account_profile_edit'),
             {
                 'username': 'root',
             },

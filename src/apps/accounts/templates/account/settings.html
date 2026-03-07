@@ -1,11 +1,11 @@
 {% extends "account_base.html" %}
 {% load breadcrumbs form_tags %}
 
-{% block title %}Account Settings{% endblock %}
+{% block title %}Profile{% endblock %}
 
-{% block hero_breadcrumbs %}{% url 'account_profile' as a %}{% breadcrumbs a "Account" "Settings" %}{% endblock %}
+{% block hero_breadcrumbs %}{% url 'account_profile' as a %}{% breadcrumbs a "Account" "Profile" %}{% endblock %}
 
-{% block hero_heading %}Account Settings{% endblock %}
+{% block hero_heading %}Profile{% endblock %}
 {% block hero_sub %}<h2>Manage your username, name, and personal details.</h2>{% endblock %}
 
 {% block content %}
@@ -26,6 +26,10 @@
             <div class="row">
                 <div class="col-md-6">
                     {% text_field form.username %}
+                    <div class="d-flex gap-2 mt-2">
+                        <a href="{% url 'account_change_password' %}" class="btn btn-sm btn-outline-secondary">Change Password</a>
+                        <a href="{% url 'account_email' %}" class="btn btn-sm btn-outline-secondary">Manage Email</a>
+                    </div>
                 </div>
             </div>
         </div>
