@@ -1,0 +1,13 @@
+# Add a site block for each app stack.
+# The reverse_proxy target should be <COMPOSE_PROJECT_NAME>-app-1.
+#
+# Example:
+#
+# furry.nz {
+# 	header {
+# 		Strict-Transport-Security "max-age=31536000"
+# 		X-XSS-Protection "0"
+# 	}
+# 	encode zstd gzip
+# 	reverse_proxy foxtail-app-1:8000
+# }

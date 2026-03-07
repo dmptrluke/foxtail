@@ -1,0 +1,28 @@
+# Shared Caddy reverse proxy.
+# Manages TLS certificates and routes traffic to app stacks.
+#
+# Usage:
+#   docker compose up -d
+
+services:
+  caddy:
+    image: caddy:2
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data      # TLS certificates and ACME account keys
+      - caddy_config:/config   # Caddy runtime configuration
+    networks:
+      - caddy
+
+networks:
+  caddy:
+    name: caddy
+
+volumes:
+  caddy_data:
+  caddy_config:

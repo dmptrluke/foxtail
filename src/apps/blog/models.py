@@ -8,10 +8,11 @@ from django.utils.text import Truncator
 
 from imagefield.fields import ImageField as ProcessedImageField
 from markdownfield.models import MarkdownField, RenderedMarkdownField
-from markdownfield.validators import VALIDATOR_CLASSY
 from published.models import PublishedModel
 from rules.contrib.models import RulesModel
 from taggit.managers import TaggableManager
+
+from apps.core.validators import VALIDATOR_EXTENDED
 
 from . import rules
 
@@ -34,7 +35,7 @@ class Post(PublishedModel):
 
     description = models.TextField(max_length=140, blank=True, help_text='140 characters or fewer.')
 
-    text = MarkdownField(rendered_field='text_rendered', validator=VALIDATOR_CLASSY)
+    text = MarkdownField(rendered_field='text_rendered', validator=VALIDATOR_EXTENDED)
     text_rendered = RenderedMarkdownField()
 
     class Meta:

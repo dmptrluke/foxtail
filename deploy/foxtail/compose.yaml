@@ -5,10 +5,10 @@
 #   docker compose up -d
 #
 # Requires a .env file — see .env.example for all available settings.
+# Set COMPOSE_PROJECT_NAME in .env to namespace containers and volumes.
 
 services:
   db:
-    container_name: foxtail-db
     image: postgres:17
     restart: unless-stopped
     environment:
@@ -23,7 +23,6 @@ services:
       retries: 5
 
   redis:
-    container_name: foxtail-redis
     image: redis:8
     restart: unless-stopped
     volumes:
@@ -34,26 +33,7 @@ services:
       timeout: 5s
       retries: 5
 
-  caddy:
-    container_name: foxtail-caddy
-    image: caddy:2
-    restart: unless-stopped
-    ports:
-      - "80:80"
-      - "443:443"
-      - "443:443/udp"
-    environment:
-      SITE_DOMAIN: ${SITE_DOMAIN:-localhost}
-    volumes:
-      - ./Caddyfile:/etc/caddy/Caddyfile:ro
-      - caddy_data:/data
-      - caddy_config:/config
-    depends_on:
-      foxtail:
-        condition: service_healthy
-
-  foxtail:
-    container_name: foxtail-app
+  app:
     image: ghcr.io/dmptrluke/foxtail:latest
     restart: unless-stopped
     env_file: .env
@@ -73,9 +53,11 @@ services:
       timeout: 5s
       retries: 5
       start_period: 15s
+    networks:
+      - default
+      - caddy
 
   worker:
-    container_name: foxtail-worker
     image: ghcr.io/dmptrluke/foxtail:latest
     restart: unless-stopped
     env_file: .env
@@ -89,9 +71,11 @@ services:
         condition: service_healthy
     command: django-admin rqworker default
 
+networks:
+  caddy:
+    external: true
+
 volumes:
   storage:   # User-uploaded media (avatars, blog images, event images)
   db:        # PostgreSQL data
   redis:     # Redis persistence (sessions, cache, task queue)
-  caddy_data:    # TLS certificates and ACME account keys
-  caddy_config:  # Caddy runtime configuration
