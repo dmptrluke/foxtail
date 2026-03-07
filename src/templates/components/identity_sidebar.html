@@ -1,0 +1,21 @@
+<div class="sidebar-card">
+    <div class="content identity">
+        {% if author.avatar %}
+            <img src="{{ author.avatar.small }}"
+                 srcset="{{ author.avatar.small }} 1x, {{ author.avatar.small_2x }} 2x"
+                 alt="{{ author.name }}"
+                 class="avatar">
+        {% endif %}
+        <div class="info">
+            <strong class="name">{{ author.name }}</strong>
+            {% if author.description %}
+                <p>{{ author.description }}</p>
+            {% endif %}
+        </div>
+    </div>
+    {% if author.link %}
+        <div class="footer">
+            <a href="{{ author.link }}" rel="noopener" target="_blank">{{ author.link }}</a>
+        </div>
+    {% endif %}
+</div>
