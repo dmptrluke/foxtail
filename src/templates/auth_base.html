@@ -1,0 +1,45 @@
+{% load static %}
+<!doctype html>
+<html lang="en" class="no-js">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <meta name="application-name" content="{{ request.site.name }}">
+    <meta name="theme-color" content="#281e33">
+    <link rel="icon" type="image/png" sizes="32x32" href="{% static "favicon-32x32.png" %}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{% static "favicon-16x16.png" %}">
+
+    <title>{% block title %}{% endblock title %} | {{ request.site.name }}</title>
+
+    <link rel="stylesheet" href="{% static 'main.css' %}" nonce="{{ request.csp_nonce }}">
+    <script src="{% static 'main.js' %}" type="module" nonce="{{ request.csp_nonce }}"></script>
+
+    <script nonce="{{ request.csp_nonce }}">
+        (function (a) {
+            a.remove("no-js");
+            a.add("js")
+        })(document.documentElement.classList);
+    </script>
+
+    {% block extra_head %}{% endblock extra_head %}
+</head>
+
+<body class="auth-shell">
+    <div class="auth-card">
+        {% include "components/messages.html" %}
+        <h1 class="auth-heading">{% block heading %}{% endblock heading %}</h1>
+        {% block subheading %}{% endblock subheading %}
+        {% block content %}{% endblock content %}
+    </div>
+
+    <div class="auth-page-footer">
+        <a href="{% url 'content:page' slug='privacy' %}">Privacy</a> &middot;
+        <a href="{% url 'contact:contact' %}">Contact</a> &middot;
+        <a href="https://github.com/dmptrluke/foxtail">Source</a>
+    </div>
+
+    {% block extra_body %}{% endblock extra_body %}
+</body>
+</html>

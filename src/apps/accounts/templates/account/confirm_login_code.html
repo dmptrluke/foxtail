@@ -1,0 +1,60 @@
+{% extends "auth_base.html" %}
+{% load form_tags %}
+
+{% block title %}Sign In{% endblock %}
+
+{% block heading %}Enter your code{% endblock %}
+{% block subheading %}
+    <p class="auth-subheading">
+        Check your email for a sign-in code.
+        {% if email %}Sent to <strong>{{ email }}</strong>.{% endif %}
+    </p>
+{% endblock %}
+
+{% block content %}
+    <form method="post" action="{% url 'account_confirm_login_code' %}" class="auth-form">
+        {% csrf_token %}
+        {% non_field_errors verify_form %}
+
+        <div class="form-group">
+            <input type="text" name="code" class="form-control auth-code-input"
+                   maxlength="6" placeholder="000000"
+                   autocomplete="one-time-code" inputmode="numeric" autofocus
+                   id="id_code">
+        </div>
+
+        {{ redirect_field }}
+        <button type="submit" class="auth-btn-primary">Verify</button>
+    </form>
+
+    {% if can_resend %}
+        <form id="resend" method="post" action="{% url 'account_confirm_login_code' %}" class="d-inline">
+            <input type="hidden" name="action" value="resend">
+            {{ redirect_field }}
+            {% csrf_token %}
+        </form>
+        <div class="auth-footer mt-3">
+            <button type="submit" form="resend" class="auth-link-btn">
+                Request new code
+            </button>
+        </div>
+    {% endif %}
+
+    <div class="mt-3">
+        {% if cancel_url %}
+            <a href="{{ cancel_url }}" class="auth-back">
+        {% else %}
+            <a href="#" class="auth-back" onclick="document.getElementById('logout-from-stage').submit(); return false;">
+        {% endif %}
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+            Cancel
+        </a>
+    </div>
+
+    {% if not cancel_url %}
+        <form id="logout-from-stage" method="post" action="{% url 'account_logout' %}" class="d-none">
+            <input type="hidden" name="next" value="{% url 'account_login' %}">
+            {% csrf_token %}
+        </form>
+    {% endif %}
+{% endblock %}

@@ -1,25 +1,40 @@
-{% extends 'account_base.html' %}
-{% load form_tags %}
+{% extends "auth_base.html" %}
+{% load form_tags widget_tweaks %}
 
 {% block title %}Confirm Access{% endblock %}
 
-{% block content %}
-    <h3>Confirm Access</h3>
-    <p class="text-muted">To continue, please verify your identity using your authenticator app.</p>
+{% block heading %}Confirm your identity{% endblock %}
+{% block subheading %}<p class="auth-subheading">Enter a code from your authenticator app to continue.</p>{% endblock %}
 
-    {% non_field_errors form %}
-    <form method="post" action="{% url 'mfa_reauthenticate' %}" class="d-flex gap-2 align-items-start">
+{% block content %}
+    <form method="post" action="{% url 'mfa_reauthenticate' %}" class="auth-form">
         {% csrf_token %}
-        {% text_field form.code inline=True %}
+
+        {% non_field_errors form %}
+
+        <div class="form-group">
+            <label for="{{ form.code.id_for_label }}">Authenticator code</label>
+            {% render_field form.code class="form-control" %}
+        </div>
         {{ redirect_field }}
-        <button type="submit" class="btn btn-primary flex-shrink-0">Confirm</button>
+
+        <button type="submit" class="auth-btn-primary">Confirm</button>
     </form>
 
     {% if reauthentication_alternatives %}
-        <hr class="my-4">
-        <p class="text-muted mb-2">Or verify another way:</p>
-        {% for alt in reauthentication_alternatives %}
-            <a href="{{ alt.url }}" class="btn btn-outline-secondary btn-sm me-2">{{ alt.description }}</a>
-        {% endfor %}
+        <div class="auth-divider mt-4">or verify with</div>
+
+        <div class="auth-method-cards">
+            {% for alt in reauthentication_alternatives %}
+                <a href="{{ alt.url }}" class="auth-method-card">
+                    <div class="method-icon">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="11" width="20" height="11" rx="2" ry="2"/><circle cx="12" cy="16.5" r="1.5"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
+                    </div>
+                    <div>
+                        <div class="method-label">{{ alt.description }}</div>
+                    </div>
+                </a>
+            {% endfor %}
+        </div>
     {% endif %}
 {% endblock %}

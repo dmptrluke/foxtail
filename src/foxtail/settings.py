@@ -204,11 +204,15 @@ ACCOUNT_RATE_LIMITS = {
     'reset_password': '20/m/ip,5/m/key',
     'reset_password_from_key': '20/m/ip',
     'change_password': '5/m/user',
+    'login_by_code': '5/m/ip',
 }
+
+ACCOUNT_LOGIN_BY_CODE_ENABLED = True
 
 # allauth social
 SOCIALACCOUNT_ADAPTER = 'apps.accounts.authentication.SocialAccountAdapter'
 SOCIALACCOUNT_AUTO_SIGNUP = False
+SOCIALACCOUNT_LOGIN_ON_GET = True
 SOCIALACCOUNT_PROVIDERS = {
     'github': {
         'SCOPE': ['read:user', 'user:email'],
@@ -227,6 +231,7 @@ SOCIALACCOUNT_PROVIDERS = {
 # allauth-mfa
 
 MFA_SUPPORTED_TYPES = ['recovery_codes', 'totp', 'webauthn']
+MFA_PASSKEY_LOGIN_ENABLED = True
 MFA_WEBAUTHN_ALLOW_INSECURE_ORIGIN = DEBUG
 
 MFA_FORMS = {

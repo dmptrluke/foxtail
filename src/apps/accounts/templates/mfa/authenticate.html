@@ -1,23 +1,23 @@
-{% extends 'base.html' %}
-{% load form_tags %}
+{% extends "auth_base.html" %}
+{% load form_tags widget_tweaks %}
 
 {% block title %}Two-Factor Authentication{% endblock %}
 
-{% block content %}
-    <h1>Two-Factor Authentication</h1>
-    <p class="text-muted">Your account is protected by two-factor authentication. Please authenticate using one of the available methods.</p>
+{% block heading %}Two-factor authentication{% endblock %}
+{% block subheading %}<p class="auth-subheading">Choose a verification method to continue signing in.</p>{% endblock %}
 
+{% block content %}
     {% if "webauthn" in user_authenticator_types %}
-        {# Primary: security key #}
-        <div class="card mb-4">
-            <div class="card-body">
-                <h5 class="card-title">Security Key</h5>
-                <p class="card-text">Use your security key or passkey to authenticate.</p>
-                <button type="button" id="mfa_webauthn_authenticate" form="webauthn_form"
-                        class="btn btn-primary">
-                    Use a security key
-                </button>
-            </div>
+        <div class="auth-method-cards">
+            <a href="#" class="auth-method-card" id="mfa_webauthn_authenticate">
+                <div class="method-icon">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="11" width="20" height="11" rx="2" ry="2"/><circle cx="12" cy="16.5" r="1.5"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
+                </div>
+                <div>
+                    <div class="method-label">Security key or passkey</div>
+                    <div class="method-desc">Use a physical security key or device passkey</div>
+                </div>
+            </a>
         </div>
 
         <form id="webauthn_form" method="post" action="{% url 'mfa_authenticate' %}" class="d-none">
@@ -26,6 +26,49 @@
         </form>
 
         {{ js_data | json_script:"js_data" }}
+    {% endif %}
+
+    {% if "totp" in user_authenticator_types or "recovery_codes" in user_authenticator_types %}
+        {% if "webauthn" in user_authenticator_types %}
+            <div class="auth-divider">or</div>
+        {% endif %}
+
+        <form method="post" action="{% url 'mfa_authenticate' %}" class="auth-form">
+            {% csrf_token %}
+            {% non_field_errors form %}
+
+            <div class="form-group">
+                <label for="{{ form.code.id_for_label }}">
+                    {% if "totp" in user_authenticator_types and "recovery_codes" in user_authenticator_types %}
+                        Authenticator or recovery code
+                    {% elif "totp" in user_authenticator_types %}
+                        Authenticator code
+                    {% else %}
+                        Recovery code
+                    {% endif %}
+                </label>
+                {% render_field form.code class="form-control" %}
+            </div>
+
+            <button type="submit" class="auth-btn-primary">Verify</button>
+        </form>
+    {% endif %}
+
+    <div class="mt-4">
+        <a href="#" class="auth-back" onclick="document.getElementById('logout-from-stage').submit(); return false;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+            Cancel sign in
+        </a>
+    </div>
+
+    <form id="logout-from-stage" method="post" action="{% url 'account_logout' %}" class="d-none">
+        <input type="hidden" name="next" value="{% url 'account_login' %}">
+        {% csrf_token %}
+    </form>
+{% endblock %}
+
+{% block extra_body %}
+    {% if "webauthn" in user_authenticator_types %}
         {% include "mfa/webauthn/snippets/scripts.html" %}
         <script data-allauth-onload="allauth.webauthn.forms.authenticateForm" type="application/json">
             {
@@ -36,57 +79,5 @@
             }
         }
         </script>
-
-        {% if "totp" in user_authenticator_types or "recovery_codes" in user_authenticator_types %}
-            <details class="mb-4">
-                <summary class="text-muted mb-3" role="button">
-                    {% if "totp" in user_authenticator_types and "recovery_codes" in user_authenticator_types %}
-                        Use an authenticator code or recovery code instead
-                    {% elif "totp" in user_authenticator_types %}
-                        Use an authenticator code instead
-                    {% else %}
-                        Use a recovery code instead
-                    {% endif %}
-                </summary>
-                {% non_field_errors form %}
-                <form method="post" action="{% url 'mfa_authenticate' %}" class="d-flex gap-2 align-items-start">
-                    {% csrf_token %}
-                    {% text_field form.code hide_label=True inline=True %}
-                    <button type="submit" class="btn btn-outline-primary flex-shrink-0">Authenticate</button>
-                </form>
-            </details>
-        {% endif %}
-
-    {% elif "totp" in user_authenticator_types or "recovery_codes" in user_authenticator_types %}
-        {# Primary: authenticator code / recovery code #}
-        <div class="card mb-4">
-            <div class="card-body">
-                {% if "totp" in user_authenticator_types and "recovery_codes" in user_authenticator_types %}
-                    <h5 class="card-title">Authenticator Code</h5>
-                    <p class="card-text">Enter a code from your authenticator app or a recovery code.</p>
-                {% elif "totp" in user_authenticator_types %}
-                    <h5 class="card-title">Authenticator Code</h5>
-                    <p class="card-text">Enter a code from your authenticator app.</p>
-                {% else %}
-                    <h5 class="card-title">Recovery Code</h5>
-                    <p class="card-text">Enter one of your recovery codes.</p>
-                {% endif %}
-                {% non_field_errors form %}
-                <form method="post" action="{% url 'mfa_authenticate' %}" class="d-flex gap-2 align-items-start">
-                    {% csrf_token %}
-                    {% text_field form.code hide_label=True inline=True %}
-                    <button type="submit" class="btn btn-primary flex-shrink-0">Authenticate</button>
-                </form>
-            </div>
-        </div>
     {% endif %}
-
-    <button type="submit" form="logout-from-stage" class="btn btn-link text-muted p-0">
-        Cancel and return to sign in
-    </button>
-
-    <form id="logout-from-stage" method="post" action="{% url 'account_logout' %}" class="d-none">
-        <input type="hidden" name="next" value="{% url 'account_login' %}">
-        {% csrf_token %}
-    </form>
-{% endblock %}
+{% endblock extra_body %}

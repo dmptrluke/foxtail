@@ -1,5 +1,5 @@
-{% extends "base.html" %}
-{% load account socialaccount form_tags %}
+{% extends "auth_base.html" %}
+{% load account socialaccount form_tags widget_tweaks %}
 
 {% block title %}Sign In{% endblock %}
 
@@ -7,40 +7,60 @@
     <link rel="canonical" href="{{ SITE_URL }}{% url 'account_login' %}"/>
 {% endblock %}
 
+{% block heading %}Sign in{% endblock %}
+{% block subheading %}<p class="auth-subheading">Welcome back. Sign in to your account.</p>{% endblock %}
+
 {% block content %}
-    <h1>Sign In</h1>
+    {% include "components/auth_provider_list.html" with process="login" %}
 
     {% get_providers as socialaccount_providers %}
     {% if socialaccount_providers %}
-        <p class="text-muted">You can sign in with one of the following services, or with the form below.</p>
-
-        <div class="socialaccount_ballot">
-            {% include "components/provider_list.html" with process="login" %}
-            <hr class="my-4">
-        </div>
-        {% include "socialaccount/snippets/login_extra.html" %}
-    {% else %}
-        <p>Please sign in or <a href="{{ signup_url }}">create an account</a> to continue.</p>
+        <div class="auth-divider">or</div>
     {% endif %}
 
-    <form method="post" action="{% url 'account_login' %}">
+    <form method="post" action="{% url 'account_login' %}" class="auth-form">
         {% csrf_token %}
 
         {% non_field_errors form %}
 
         {% text_field form.login %}
-        {% text_field form.password %}
-        {% if form.remember %}{% check_field form.remember %}{% endif %}
 
         <div class="form-group">
-            <input type="submit" class="btn btn-primary" value="Sign In">
-
-            <a class="btn btn-secondary" href="{{ signup_url }}">Create Account</a>
-
-            {% if redirect_field_value %}
-                <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}"/>
-            {% endif %}
+            <label for="{{ form.password.id_for_label }}">
+                {{ form.password.label }}
+                <a href="{% url 'account_reset_password' %}" class="inline-link">Forgot password?</a>
+            </label>
+            {% render_field form.password class="form-control" %}
         </div>
 
+        {% if form.remember %}{% check_field form.remember %}{% endif %}
+
+        <button type="submit" class="auth-btn-primary">Sign in</button>
+
+        {% if redirect_field_value %}
+            <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}"/>
+        {% endif %}
     </form>
+
+    {% if PASSKEY_LOGIN_ENABLED %}
+        <div class="mt-3">
+            <button type="button" id="passkey_login" class="auth-btn-secondary">Sign in with a passkey</button>
+        </div>
+    {% endif %}
+
+    {% if LOGIN_BY_CODE_ENABLED %}
+        <div class="auth-footer mt-3">
+            <a href="{{ request_login_code_url }}">Sign in with email code</a>
+        </div>
+    {% endif %}
+
+    <div class="auth-footer">
+        Don't have an account? <a href="{{ signup_url }}">Create one</a>
+    </div>
 {% endblock content %}
+
+{% block extra_body %}
+    {% if PASSKEY_LOGIN_ENABLED %}
+        {% include "mfa/webauthn/snippets/login_script.html" %}
+    {% endif %}
+{% endblock extra_body %}
