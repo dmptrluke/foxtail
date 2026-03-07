@@ -53,7 +53,6 @@ RUN mkdir -p /home/abc/.cache && chown -R abc:abc /home/abc
 # Applications
 
 FROM deps AS app
-ENV GUNICORN_WORKERS=2
 
 COPY --from=assets /app/build ./build
 COPY --chown=abc:abc . .
@@ -66,7 +65,7 @@ RUN SECRET_KEY=build-placeholder SITE_URL=http://localhost CONTACT_EMAILS=noop@l
     django-admin collectstatic --noinput
 
 EXPOSE 8000
-CMD ["gunicorn", "--bind", "0.0.0.0:8000", "foxtail.wsgi:application"]
+CMD ["gunicorn", "--bind", "0.0.0.0:8000", "--worker-tmp-dir", "/dev/shm", "--access-logfile", "-", "foxtail.wsgi:application"]
 
 FROM dev-deps AS dev
 

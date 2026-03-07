@@ -32,10 +32,11 @@ docker compose exec foxtail django-admin createsuperuser
 
 ## Services
 
-- **foxtail** — Gunicorn web server on port 8000
+- **caddy** — Reverse proxy with automatic TLS (ports 80, 443)
+- **foxtail** — Gunicorn web server (internal port 8000)
 - **worker** — RQ background worker (processes async email)
-- **db** — PostgreSQL 16
-- **redis** — Redis 7 (cache + job queue)
+- **db** — PostgreSQL 17
+- **redis** — Redis 8 (cache + job queue)
 
 ## OIDC Signing Key
 
@@ -51,9 +52,13 @@ Add the output to your `.env` file as `OIDC_RSA_PRIVATE_KEY`, wrapped in quotes 
 OIDC_RSA_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\nMIIEvQIBADA...\n-----END PRIVATE KEY-----"
 ```
 
-## Reverse Proxy
+## TLS / Caddy
 
-The app listens on port 8000. Put a web server in front of it to handle TLS termination. Set `USE_X_FORWARDED_HOST=true` in `.env` if your proxy sets that header.
+Caddy is included as a reverse proxy and automatically obtains TLS certificates via Let's Encrypt. Set `SITE_DOMAIN` in `.env` to your domain name — Caddy uses this to request certificates.
+
+Make sure ports 80 and 443 are open and DNS points to your server before starting the stack.
+
+If you need to use the Cloudflare DNS challenge (e.g. the server isn't publicly reachable on port 80), you'll need to build a custom Caddy image with the `caddy-dns/cloudflare` plugin — see the [caddy-dns/cloudflare](https://github.com/caddy-dns/cloudflare) docs.
 
 ## Updating
 

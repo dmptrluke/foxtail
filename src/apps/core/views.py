@@ -5,6 +5,10 @@ from django.http import HttpResponse
 from django.shortcuts import render
 
 
+def health(request):
+    return HttpResponse('ok')
+
+
 def robots(request):
     if settings.ROBOTS_ALLOWED:
         text = dedent(f"""\
