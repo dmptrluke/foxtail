@@ -13,6 +13,7 @@ from django.views.generic.dates import YearMixin
 from published.mixins import PublishedDetailMixin, PublishedListMixin
 from published.utils import queryset_filter
 from rules.contrib.views import AutoPermissionRequiredMixin
+from taggit.models import Tag
 
 from .models import Comment, Post, reverse
 
@@ -43,6 +44,14 @@ class BlogListView(PublishedListMixin, ListView):
         context = super().get_context_data(**kwargs)
         context.update(_sidebar_context())
         context['blog_years'] = _blog_years()
+
+        tag_slug = self.request.GET.get('tag')
+        if tag_slug:
+            try:
+                context['tag'] = Tag.objects.get(slug=tag_slug)
+            except Tag.DoesNotExist:
+                raise Http404() from None
+
         return context
 
     def get_queryset(self):
