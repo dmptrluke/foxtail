@@ -6,7 +6,8 @@ ENV NODE_ENV=$BUILD_MODE
 
 WORKDIR /app
 COPY package.json package-lock.json ./
-RUN npm ci
+RUN --mount=type=cache,target=/root/.npm \
+    npm ci
 
 COPY vite.config.mjs ./
 COPY assets/ ./assets/
@@ -24,33 +25,38 @@ COPY --from=ghcr.io/astral-sh/uv:0.6 /uv /usr/local/bin/uv
 
 RUN groupadd -r abc -g 5678 && useradd --no-log-init -u 5678 -r -g abc abc
 
-RUN apt-get update \
-    && apt-get install -y --no-install-recommends libmagic1 libvips \
-    && rm -rf /var/lib/apt/lists/*
+RUN --mount=type=cache,target=/var/lib/apt/lists \
+    --mount=type=cache,target=/var/cache/apt \
+    apt-get update \
+    && apt-get install -y --no-install-recommends libmagic1 libvips
 
 RUN mkdir -p /app/static /app/storage/media \
     && chown -R abc:abc /app/static /app/storage
 
 COPY pyproject.toml uv.lock ./
-RUN uv sync --frozen --no-install-project --no-dev
+RUN --mount=type=cache,target=/root/.cache/uv \
+    uv sync --frozen --no-install-project --no-dev
 
 ENV PATH="/app/.venv/bin:$PATH"
 
 FROM deps AS dev-deps
-RUN uv sync --frozen --no-install-project
+RUN --mount=type=cache,target=/root/.cache/uv \
+    uv sync --frozen --no-install-project
 
 FROM dev-deps AS test-deps
 
-RUN apt-get update \
+RUN --mount=type=cache,target=/var/lib/apt/lists \
+    --mount=type=cache,target=/var/cache/apt \
+    apt-get update \
     && apt-get install -y --no-install-recommends \
         wget gnupg2 \
     && wget -qO- https://dl.google.com/linux/linux_signing_key.pub | gpg --dearmor -o /usr/share/keyrings/google-chrome.gpg \
     && echo "deb [arch=amd64 signed-by=/usr/share/keyrings/google-chrome.gpg] http://dl.google.com/linux/chrome/deb/ stable main" > /etc/apt/sources.list.d/google-chrome.list \
     && apt-get update \
-    && apt-get install -y --no-install-recommends google-chrome-stable \
-    && rm -rf /var/lib/apt/lists/*
+    && apt-get install -y --no-install-recommends google-chrome-stable
 
-RUN uv sync --frozen --no-install-project --group test
+RUN --mount=type=cache,target=/root/.cache/uv \
+    uv sync --frozen --no-install-project --group test
 
 RUN mkdir -p /home/abc/.cache && chown -R abc:abc /home/abc
 
