@@ -1,29 +1,42 @@
 {% extends "base.html" %}
-{% load permissions %}
+{% load icon breadcrumbs permissions avatar %}
 
-{% block title %}Furry Directory{% endblock %}
+{% block title %}{{ profile.user.username }}{% endblock %}
 
-{% block content %}
-    <section id="page-title">
-        <h1>Profile for {{ profile.user.username }}</h1>
-    </section>
+{% block base_content %}
+    <div class="hero hero-detail">
+        <div class="container px-3 px-md-4">
+            <div class="hero-topline">
+                {% url 'directory:index' as dir_url %}{% breadcrumbs dir_url "Directory" profile.user.username %}
+                {% has_perm 'directory.change_profile' on=profile as can_edit %}
+                {% if can_edit %}
+                    <a href="{{ profile.get_modify_url }}" class="hero-admin-link">{% icon "pencil" "span" "0.75em" %} Edit</a>
+                {% endif %}
+            </div>
 
-    <section id="page-content">
-        <p>My username is: {{ profile.user.username }}</p>
-        <p>My real name is: {{ profile.user.full_name }}</p>
+            <div class="hero-identity">
+                <img src="{{ profile.user|avatar_url:160 }}" alt="{{ profile.user.username }}" class="hero-avatar">
+                <div>
+                    <h1>
+                        {{ profile.user.username }}
+                        {% can_view 'age' as show_age %}
+                        {% if show_age and profile.age %}<span class="hero-age">{{ profile.age }}</span>{% endif %}
+                    </h1>
+                    {% can_view 'location' as show_location %}
+                    {% if show_location and profile.country %}<h2>{{ profile.location }}</h2>{% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <main id="main-content" class="container px-3 px-md-4 mt-5">
+        {% include "components/messages.html" %}
 
         {% can_view 'description' as show_description %}
-        {% if show_description %}
-            <h4>Description</h4>
-            <p>
+        {% if show_description and profile.description %}
+            <div class="rendered-markdown">
                 {{ profile.description }}
-            </p>
+            </div>
         {% endif %}
-
-        {% has_perm 'directory.change_profile' on=profile as can_edit %}
-        {% if can_edit %}
-            <a href="{{ profile.get_modify_url }}" class="btn btn-dark btn-lg mb-2 mr-1">Edit this profile</a>
-        {% endif %}
-    </section>
-
-{% endblock content %}
+    </main>
+{% endblock base_content %}

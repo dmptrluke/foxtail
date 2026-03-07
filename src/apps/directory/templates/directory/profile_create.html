@@ -1,27 +1,31 @@
 {% extends "base.html" %}
+{% load breadcrumbs form_tags %}
 
 {% block title %}Create Profile{% endblock %}
 
-{% block content %}
-    <form method="post">
-        {% csrf_token %}
+{% block base_content %}
+    <div class="hero hero-detail">
+        <div class="container px-3 px-md-4">
+            {% url 'directory:index' as dir_url %}{% breadcrumbs dir_url "Directory" "Create Profile" %}
 
-        <div class="row">
-            <div class="col-md-6">
-                <div class="mb-3">
-                    <label class="form-label" for="{{ form.profile_URL.id_for_label }}">{{ form.profile_URL.label }}</label>
-                    <div class="input-group">
-                        <span class="input-group-text">furry.nz/directory/</span>
-                        <input type="text" name="{{ form.profile_URL.html_name }}" value="{{ form.profile_URL.value|default:'' }}"
-                               id="{{ form.profile_URL.id_for_label }}"
-                               class="form-control{% if form.profile_URL.errors %} is-invalid{% endif %}"
-                               maxlength="{{ form.profile_URL.field.max_length }}">
-                        {% if form.profile_URL.errors %}<div class="invalid-feedback">{{ form.profile_URL.errors }}</div>{% endif %}
-                    </div>
+            <h1>Create Profile</h1>
+            <h2>Choose a URL for your directory profile.</h2>
+        </div>
+    </div>
+
+    <main id="main-content" class="container px-3 px-md-4 mt-5">
+        {% include "components/messages.html" %}
+
+        <form method="post">
+            {% csrf_token %}
+
+            <div class="row">
+                <div class="col-md-6">
+                    {% prefix_field form.profile_URL "furry.nz/directory/" %}
                 </div>
             </div>
-        </div>
 
-        <button type="submit" class="btn btn-primary">Create Profile</button>
-    </form>
-{% endblock content %}
+            <button type="submit" class="btn btn-primary">Create Profile</button>
+        </form>
+    </main>
+{% endblock base_content %}

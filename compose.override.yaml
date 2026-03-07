@@ -18,6 +18,8 @@ services:
       -m django runserver --noreload 0.0.0.0:8000"
     ports:
       - "5678:5678"
+    volumes:
+      - ./src:/app/src
     environment:
       <<: *dev-env
     env_file:
@@ -25,6 +27,8 @@ services:
         required: false
 
   worker:
+    volumes:
+      - ./src:/app/src
     environment:
       <<: *dev-env
     env_file:

@@ -6,9 +6,9 @@
 {% block base_content %}
     <section class="hero hero-dashboard">
         <div class="container px-3 px-md-4">
-            <div class="dashboard-identity">
+            <div class="hero-identity">
                 <a href="{% url 'account_settings' %}" class="dashboard-avatar-link" title="Change avatar">
-                    <img src="{{ user|avatar_url:80 }}" alt="{{ user.username }}" class="dashboard-avatar" width="72" height="72">
+                    <img src="{{ user|avatar_url:160 }}" alt="{{ user.username }}" class="hero-avatar">
                     <span class="dashboard-avatar-edit">{% icon "pencil" "span" "1rem" %}</span>
                 </a>
                 <div>

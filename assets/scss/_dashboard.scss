@@ -5,8 +5,7 @@
 	margin-bottom: 2rem;
 
 	h5 {
-		@include label-style;
-		font-size: 0.8rem;
+		@include label-style-lg;
 		color: $secondary;
 		margin-bottom: 0.75rem;
 	}
@@ -119,12 +118,6 @@
 .hero-dashboard {
 	padding: 2rem 0 2.5rem;
 
-	.dashboard-identity {
-		display: flex;
-		align-items: center;
-		gap: 1.25rem;
-	}
-
 	.dashboard-avatar-link {
 		position: relative;
 		display: block;
@@ -135,14 +128,6 @@
 		&:hover .dashboard-avatar-edit {
 			opacity: 1;
 		}
-	}
-
-	.dashboard-avatar {
-		width: 72px;
-		height: 72px;
-		border-radius: 50%;
-		border: 3px solid rgba($white, 0.2);
-		display: block;
 	}
 
 	.dashboard-avatar-edit {

@@ -1,10 +1,10 @@
+from datetime import date
+
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 from django.db import models
-from django.templatetags.static import static
 from django.urls import reverse
 from django.utils.functional import cached_property
-from django.utils.html import format_html
 
 from ..constants import COUNTRY_CHOICES, REGION_CHOICES, PrivacyChoices
 from ..fields import PrivacyField
@@ -40,17 +40,24 @@ class Profile(BaseModel):
             raise ValidationError({'region': 'Region may only be selected if country is New Zealand.'})
 
     @property
+    def age(self):
+        dob = self.user.date_of_birth
+        if not dob:
+            return None
+        today = date.today()
+        return today.year - dob.year - ((today.month, today.day) < (dob.month, dob.day))
+
+    @property
     def location(self):
         if not self.country:
             return ' - '
 
-        loc = self.get_region_display() or self.get_country_display()
+        country = self.get_country_display()
+        region = self.get_region_display()
 
-        if self.country == 'NZ':
-            return loc
-        else:
-            flag = static(f'flags/{self.country.lower()}.png')
-            return format_html('<img src="{}" /> {}', flag, loc)
+        if region:
+            return f'{region}, {country}'
+        return country
 
     @cached_property
     def structured_data(self):

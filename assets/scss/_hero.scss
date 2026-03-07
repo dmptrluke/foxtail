@@ -121,6 +121,29 @@
 	}
 }
 
+// Hero with avatar identity block (reusable)
+.hero-identity {
+	display: flex;
+	align-items: center;
+	gap: 1.25rem;
+}
+
+.hero-age {
+	font-size: 1.25rem;
+	font-weight: 400;
+	opacity: 0.6;
+	margin-left: 0.25rem;
+}
+
+.hero-avatar {
+	width: 88px;
+	height: 88px;
+	border-radius: 50%;
+	border: 3px solid rgba($white, 0.2);
+	display: block;
+	flex-shrink: 0;
+}
+
 // Banner image (below hero on detail pages)
 .hero-banner img {
 	width: 100%;
