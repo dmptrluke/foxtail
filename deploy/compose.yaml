@@ -9,6 +9,7 @@
 services:
   db:
     image: postgres:17
+    restart: unless-stopped
     environment:
       POSTGRES_USER: foxtail
       POSTGRES_PASSWORD: foxtail
@@ -22,13 +23,35 @@ services:
 
   redis:
     image: redis:8
+    restart: unless-stopped
     volumes:
       - redis:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  caddy:
+    image: caddy:2
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+    environment:
+      SITE_DOMAIN: ${SITE_DOMAIN:-localhost}
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      foxtail:
+        condition: service_healthy
 
   foxtail:
     image: ghcr.io/dmptrluke/foxtail:latest
-    ports:
-      - "8000:8000"
+    restart: unless-stopped
     env_file: .env
     environment:
       DATABASE_URL: "postgres://foxtail:foxtail@db/foxtail"
@@ -39,10 +62,17 @@ services:
       db:
         condition: service_healthy
       redis:
-        condition: service_started
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "python -c 'import urllib.request; urllib.request.urlopen(\"http://localhost:8000/health/\")'"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 15s
 
   worker:
     image: ghcr.io/dmptrluke/foxtail:latest
+    restart: unless-stopped
     env_file: .env
     environment:
       DATABASE_URL: "postgres://foxtail:foxtail@db/foxtail"
@@ -51,10 +81,12 @@ services:
       db:
         condition: service_healthy
       redis:
-        condition: service_started
+        condition: service_healthy
     command: django-admin rqworker default
 
 volumes:
   storage:
   db:
   redis:
+  caddy_data:
+  caddy_config:
