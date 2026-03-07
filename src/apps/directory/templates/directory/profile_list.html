@@ -1,13 +1,19 @@
 {% extends "base.html" %}
-{% load sortable %}
+{% load sortable avatar %}
 
 {% block title %}Furry Directory{% endblock %}
 
-{% block content %}
-    <section id="page-title">
-        <h1>Furry Directory</h1>
-    </section>
-    <section>
+{% block base_content %}
+    <div class="hero hero-detail">
+        <div class="container px-3 px-md-4">
+            <h1>Furry Directory</h1>
+            <h2 class="hero-sub-narrow">Find and connect with furries across New Zealand.</h2>
+        </div>
+    </div>
+
+    <main id="main-content" class="container px-3 px-md-4 mt-5">
+        {% include "components/messages.html" %}
+
         <table class="table table-hover table-sortable">
             <thead>
             <tr>
@@ -19,12 +25,17 @@
             <tbody>
             {% for profile in profile_list %}
                 <tr>
-                    <th scope="row"><a href="{{ profile.get_absolute_url }}">{{ profile.user.username }}</a></th>
+                    <th scope="row">
+                        <a href="{{ profile.get_absolute_url }}" class="d-flex align-items-center gap-2 text-decoration-none">
+                            <img src="{{ profile.user|avatar_url:40 }}" alt="" width="32" height="32" class="rounded-circle">
+                            {{ profile.user.username }}
+                        </a>
+                    </th>
                     <td>{{ profile.location }}</td>
                     <td>Otto</td>
                 </tr>
             {% endfor %}
             </tbody>
         </table>
-    </section>
-{% endblock content %}
+    </main>
+{% endblock base_content %}

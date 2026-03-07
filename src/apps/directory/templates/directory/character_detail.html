@@ -1,12 +1,25 @@
 {% extends "base.html" %}
-{% load icon %}
+{% load breadcrumbs %}
 
-{% block title %}Character Detail{% endblock %}
+{% block title %}{{ character.name }}{% endblock %}
 
-{% block content %}
-    <div class="row">
-        <ul>
-            <li>{{ character.name }}</li>
-        </ul>
+{% block base_content %}
+    <div class="hero hero-detail">
+        <div class="container px-3 px-md-4">
+            {% url 'directory:index' as dir_url %}{% breadcrumbs dir_url "Directory" character.name %}
+
+            <h1>{{ character.name }}</h1>
+            <h2>{{ character.species }}</h2>
+        </div>
     </div>
-{% endblock content %}
+
+    <main id="main-content" class="container px-3 px-md-4 mt-5">
+        {% include "components/messages.html" %}
+
+        {% if character.description %}
+            <div class="rendered-markdown">
+                {{ character.description }}
+            </div>
+        {% endif %}
+    </main>
+{% endblock base_content %}

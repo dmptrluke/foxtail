@@ -1,0 +1,14 @@
+{% load widget_tweaks %}
+<div class="mb-3">
+    {% if not hide_label %}<label class="form-label" for="{{ field.id_for_label }}">{{ field.label }}</label>{% endif %}
+    <div class="input-group">
+        <span class="input-group-text">{{ prefix }}</span>
+        {% if field.errors %}
+            {% render_field field class="form-control is-invalid" %}
+            <div class="invalid-feedback">{{ field.errors }}</div>
+        {% else %}
+            {% render_field field class="form-control" %}
+        {% endif %}
+    </div>
+    {% if field.help_text %}<div class="form-text">{{ field.help_text }}</div>{% endif %}
+</div>

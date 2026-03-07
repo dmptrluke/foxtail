@@ -31,7 +31,7 @@ class Post(PublishedModel):
     created = models.DateTimeField(auto_now_add=True, verbose_name='date created')
     modified = models.DateTimeField(auto_now=True, verbose_name='date modified')
 
-    image = ProcessedImageField(upload_to='blog', blank=True, null=True, auto_add_fields=True)
+    image = ProcessedImageField(upload_to='blog', blank=True, auto_add_fields=True)
 
     description = models.TextField(max_length=140, blank=True, help_text='140 characters or fewer.')
 
