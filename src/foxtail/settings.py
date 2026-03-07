@@ -336,6 +336,9 @@ if not AZURE_MEDIA:
 
 if TESTING:
     WHITENOISE_AUTOREFRESH = True
+    STORAGES['staticfiles'] = {
+        'BACKEND': 'whitenoise.storage.CompressedStaticFilesStorage',
+    }
 
 # Security
 # <https://docs.djangoproject.com/en/stable/howto/deployment/checklist/#https>

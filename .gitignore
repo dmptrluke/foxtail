@@ -26,4 +26,4 @@ node_modules
 # Produced assets
 build/
 storage/
-static/
+/static/
