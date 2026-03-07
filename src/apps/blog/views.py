@@ -106,10 +106,7 @@ class BlogDetailView(PublishedDetailMixin, DetailView):
             if form:
                 context['form'] = form
             else:
-                if hasattr(self.request, 'csp_nonce'):
-                    context['form'] = CommentForm(csp_nonce=self.request.csp_nonce)
-                else:
-                    context['form'] = CommentForm()
+                context['form'] = CommentForm()
         else:
             context['comments_enabled'] = False
 
@@ -128,10 +125,7 @@ class BlogDetailView(PublishedDetailMixin, DetailView):
         if not self.object.allow_comments:
             return HttpResponseForbidden()
 
-        if hasattr(self.request, 'csp_nonce'):
-            form = CommentForm(request.POST, csp_nonce=self.request.csp_nonce)
-        else:
-            form = CommentForm(request.POST)
+        form = CommentForm(request.POST)
 
         if form.is_valid():
             comment = form.save(commit=False)

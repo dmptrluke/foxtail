@@ -61,19 +61,11 @@ def on_post_save(sender, instance, **kwargs):
         return
 
     def _enqueue():
-        try:
-            django_rq.enqueue(
-                process_imagefields,
-                instance._meta.app_label,
-                instance._meta.model_name,
-                instance.pk,
-            )
-        except NotImplementedError:
-            # DummyCache backend in tests - fall back to synchronous processing
-            process_imagefields(
-                instance._meta.app_label,
-                instance._meta.model_name,
-                instance.pk,
-            )
+        django_rq.enqueue(
+            process_imagefields,
+            instance._meta.app_label,
+            instance._meta.model_name,
+            instance.pk,
+        )
 
     transaction.on_commit(_enqueue)

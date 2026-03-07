@@ -23,7 +23,7 @@ WORKDIR /app
 RUN groupadd -r abc -g 5678 && useradd --no-log-init -u 5678 -r -g abc abc
 
 RUN apt-get update \
-    && apt-get install -y --no-install-recommends libmagic1 \
+    && apt-get install -y --no-install-recommends libmagic1 libvips \
     && rm -rf /var/lib/apt/lists/*
 
 COPY requirements/base.txt ./requirements/base.txt

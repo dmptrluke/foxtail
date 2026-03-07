@@ -9,13 +9,7 @@ from apps.events.models import Event
 pytestmark = pytest.mark.django_db
 
 
-def test_unauthenticated_user_browsing(driver, live_server, settings, post: Post, second_post: Post, event: Event):
-    settings.CACHES = {
-        'default': {
-            'BACKEND': 'django.core.cache.backends.dummy.DummyCache',
-        }
-    }
-
+def test_unauthenticated_user_browsing(driver, live_server, post: Post, second_post: Post, event: Event):
     post.created = datetime(2019, 12, 2)
     second_post.created = datetime(2019, 11, 1)
     event_date = date.today() + timedelta(days=30)

@@ -66,8 +66,8 @@
                                 <article class="news-compact">
                                     <a href="{{ post.get_absolute_url }}">
                                         {% if post.image %}
-                                            <img src="{{ post.image.compact }}"
-                                                 srcset="{{ post.image.compact }} 1x, {{ post.image.compact_2x }} 2x"
+                                            <img src="{{ post.image.card }}"
+                                                 srcset="{{ post.image.card }} 1x, {{ post.image.card_2x }} 2x"
                                                  alt="{{ post.title }}">
                                         {% else %}
                                             <div class="card-img-placeholder"></div>
