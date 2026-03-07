@@ -100,8 +100,8 @@ class Event(models.Model):
             data['image'] = {
                 '@type': 'ImageObject',
                 'url': self.image.url,
-                'height': self.image.height,
-                'width': self.image.width,
+                'height': self.image_height,
+                'width': self.image_width,
             }
 
         return data

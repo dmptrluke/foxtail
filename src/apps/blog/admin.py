@@ -26,7 +26,7 @@ class PostAdmin(PublishedAdmin):
         (
             'Image',
             {
-                'fields': ('image',),
+                'fields': ('image', 'image_ppoi'),
             },
         ),
         (

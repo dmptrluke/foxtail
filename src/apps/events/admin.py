@@ -24,7 +24,7 @@ class EventAdmin(ModelAdmin):
         (
             'Image',
             {
-                'fields': ('image', 'map_image'),
+                'fields': ('image', 'image_ppoi', 'map_image'),
             },
         ),
     )

@@ -3,4 +3,18 @@
 		margin-bottom: $spacer;
 		@include font-size($blockquote-font-size);
 	}
+
+	iframe {
+		max-width: 100%;
+		height: auto;
+		aspect-ratio: 16 / 9;
+
+		&.ratio-4x3 {
+			aspect-ratio: 4 / 3;
+		}
+
+		&.ratio-21x9 {
+			aspect-ratio: 21 / 9;
+		}
+	}
 }

@@ -502,6 +502,7 @@ CRISPY_TEMPLATE_PACK = 'bootstrap5'
 
 # django-imagefield
 # <https://django-imagefield.readthedocs.io/en/latest/>
+IMAGEFIELD_BACKEND = 'vips'
 IMAGEFIELD_AUTOGENERATE = False
 IMAGEFIELD_FORMATS = {
     'accounts.user.avatar': {
@@ -516,14 +517,14 @@ IMAGEFIELD_FORMATS = {
         'admin': ['default', ('thumbnail', (300, 300))],
     },
     'foxtail_blog.post.image': {
-        'compact': ['default', ('crop', (600, 300))],
-        'compact_2x': ['default', ('crop', (1200, 600))],
         'card': ['default', ('crop', (800, 400))],
         'card_2x': ['default', ('crop', (1600, 800))],
         'featured': ['default', ('crop', (700, 350))],
         'featured_2x': ['default', ('crop', (1400, 700))],
-        'banner': ['default', ('crop', (1200, 350))],
-        'banner_2x': ['default', ('crop', (2400, 700))],
+        'banner': ['default', ('crop', (1440, 443))],
+        'banner_2x': ['default', ('crop', (2880, 886))],
+        'banner_mobile': ['default', ('crop', (768, 1024))],
+        'banner_mobile_2x': ['default', ('crop', (1536, 2048))],
         'admin': ['default', ('thumbnail', (300, 300))],
     },
     'events.event.image': {
@@ -531,8 +532,8 @@ IMAGEFIELD_FORMATS = {
         'card_2x': ['default', ('crop', (800, 400))],
         'featured': ['default', ('crop', (700, 350))],
         'featured_2x': ['default', ('crop', (1400, 700))],
-        'banner': ['default', ('crop', (1200, 350))],
-        'banner_2x': ['default', ('crop', (2400, 700))],
+        'banner': ['default', ('crop', (1440, 350))],
+        'banner_2x': ['default', ('crop', (2880, 700))],
         'admin': ['default', ('thumbnail', (300, 300))],
     },
 }

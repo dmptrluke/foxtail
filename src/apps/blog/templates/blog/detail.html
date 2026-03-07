@@ -57,10 +57,16 @@
 
     {# Banner image #}
     {% if post.image %}
-        <div class="hero-banner">
-            <img src="{{ post.image.banner }}"
-                 srcset="{{ post.image.banner }} 1x, {{ post.image.banner_2x }} 2x"
-                 alt="{{ post.title }}">
+        <div class="hero-banner-tall">
+            <picture>
+                <source media="(max-width: 991px)"
+                        srcset="{{ post.image.banner_mobile }} 768w, {{ post.image.banner_mobile_2x }} 1536w"
+                        sizes="100vw">
+                <img src="{{ post.image.banner }}"
+                     srcset="{{ post.image.banner }} 1440w, {{ post.image.banner_2x }} 2880w"
+                     sizes="100vw"
+                     alt="{{ post.title }}">
+            </picture>
         </div>
     {% endif %}
 

@@ -65,8 +65,8 @@ class Post(PublishedModel):
             data['image'] = {
                 '@type': 'ImageObject',
                 'url': settings.SITE_URL + self.image.url,
-                'height': self.image.height,
-                'width': self.image.width,
+                'height': self.image_height,
+                'width': self.image_width,
             }
 
         return data
