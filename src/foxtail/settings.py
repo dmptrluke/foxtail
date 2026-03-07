@@ -20,6 +20,7 @@ from django.contrib.messages import constants as messages
 
 import environ
 import pymdownx.emoji
+from csp.constants import NONCE, NONE, SELF
 
 logger = logging.getLogger(__name__)
 
@@ -66,6 +67,7 @@ INSTALLED_APPS = [
     'cjswidget',
     'published',
     'structured_data',
+    'csp',
     'csp_helpers',
     'apps.core',
     'apps.email',
@@ -356,38 +358,43 @@ X_FRAME_OPTIONS = 'DENY'
 # CSP Headers
 # <https://django-csp.readthedocs.io/en/latest/>
 
-CSP_INCLUDE_NONCE_IN = ['script-src', 'style-src']
-CSP_UPGRADE_INSECURE_REQUESTS = True
-
 ASSET_HOSTS = env.list('ASSET_HOSTS', default=[])
 
-CSP_DEFAULT_SRC = ["'self'"]
-
-CSP_REPORT_URI = env('CSP_REPORT_URI', default=None)
-
-CSP_SCRIPT_SRC = [
+_csp_script_src = [
     "'unsafe-inline'",
-    "'self'",
+    SELF,
+    NONCE,
     'https://www.google.com/recaptcha/',
     'https://www.gstatic.com/recaptcha/',
 ] + ASSET_HOSTS
-CSP_STYLE_SRC = ["'unsafe-inline'", "'self'"] + ASSET_HOSTS
-CSP_FRAME_SRC = ['https://www.google.com/recaptcha/', 'https://www.youtube.com', 'https://www.youtube-nocookie.com']
-CSP_FONT_SRC = ["'self'", 'data:'] + ASSET_HOSTS
-CSP_IMG_SRC = ["'self'", 'data:'] + ASSET_HOSTS
-CSP_OBJECT_SRC = ["'none'"]
-CSP_CONNECT_SRC = ["'self'", 'https://sentry.io']
-
-CSP_BASE_URI = ["'none'"]
-CSP_FRAME_ANCESTORS = ["'none'"]
-CSP_FORM_ACTION = ["'self'"]
-
-# admin is excluded because Django admin requires 'unsafe-eval' for JSONField widgets
-CSP_EXCLUDE_URL_PREFIXES = ('/admin',)
 
 # we don't use strict-dynamic in debug because it breaks django-debug-toolbar
 if not DEBUG:
-    CSP_SCRIPT_SRC += ["'strict-dynamic'"]
+    _csp_script_src += ["'strict-dynamic'"]
+
+CONTENT_SECURITY_POLICY = {
+    # admin is excluded because Django admin requires 'unsafe-eval' for JSONField widgets
+    'EXCLUDE_URL_PREFIXES': ['/admin'],
+    'DIRECTIVES': {
+        'default-src': [SELF],
+        'script-src': _csp_script_src,
+        'style-src': ["'unsafe-inline'", SELF, NONCE] + ASSET_HOSTS,
+        'frame-src': [
+            'https://www.google.com/recaptcha/',
+            'https://www.youtube.com',
+            'https://www.youtube-nocookie.com',
+        ],
+        'font-src': [SELF, 'data:'] + ASSET_HOSTS,
+        'img-src': [SELF, 'data:'] + ASSET_HOSTS,
+        'object-src': [NONE],
+        'connect-src': [SELF, 'https://sentry.io'],
+        'base-uri': [NONE],
+        'frame-ancestors': [NONE],
+        'form-action': [SELF],
+        'upgrade-insecure-requests': True,
+        'report-uri': env('CSP_REPORT_URI', default=None),
+    },
+}
 
 # Sentry.io
 # <https://docs.sentry.io/platforms/python/django/>
