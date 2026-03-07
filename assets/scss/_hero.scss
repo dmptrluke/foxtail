@@ -144,6 +144,17 @@
 	flex-shrink: 0;
 }
 
+// Scroll wrapper: hero stays sticky while banner scrolls behind it
+.hero-scroll-wrapper {
+	position: relative;
+}
+
+.hero-sticky {
+	position: sticky;
+	top: 4rem;
+	z-index: 2;
+}
+
 // Banner image (below hero on detail pages)
 .hero-banner img {
 	width: 100%;
