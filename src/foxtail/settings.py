@@ -432,12 +432,14 @@ if SENTRY_ENABLED:
 
     # set CSP report URI
     if env.bool('SENTRY_CSP', default=False):
-        CSP_REPORT_URI = 'https://sentry.io/api/{}/security/?sentry_key={}'.format(
+        _csp_report_uri = 'https://sentry.io/api/{}/security/?sentry_key={}'.format(
             urlparse(SENTRY_DSN).path.strip('/'), urlparse(SENTRY_DSN).username
         )
 
         if _vars.get('release'):
-            CSP_REPORT_URI += f'&sentry_release={_vars["release"]}'
+            _csp_report_uri += f'&sentry_release={_vars["release"]}'
+
+        CONTENT_SECURITY_POLICY['DIRECTIVES']['report-uri'] = _csp_report_uri
 
     sentry_sdk.init(**_vars)
 
