@@ -40,6 +40,7 @@ services:
     environment:
       DATABASE_URL: "postgres://foxtail:foxtail@db/foxtail"
       CACHE_URL: "redis://redis/1"
+      SERVICE_NAME: "app"
     volumes:
       - storage:/app/storage
     depends_on:
@@ -64,6 +65,9 @@ services:
     environment:
       DATABASE_URL: "postgres://foxtail:foxtail@db/foxtail"
       CACHE_URL: "redis://redis/1"
+      SERVICE_NAME: "worker"
+    volumes:
+      - storage:/app/storage
     depends_on:
       db:
         condition: service_healthy

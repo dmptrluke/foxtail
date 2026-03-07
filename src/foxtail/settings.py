@@ -441,7 +441,14 @@ if SENTRY_ENABLED:
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
-    'formatters': {'verbose': {'format': '[%(asctime)s] [%(process)d] [%(levelname)s] (%(module)s) %(message)s'}},
+    'formatters': {
+        'verbose': {
+            'format': '[%(asctime)s] ['
+            + env('SERVICE_NAME', default='app')
+            + '/%(process)d] [%(levelname)s] (%(module)s) %(message)s',
+            'datefmt': '%d/%b/%Y %H:%M:%S',
+        },
+    },
     'handlers': {
         'console': {
             'level': 'DEBUG',
@@ -483,6 +490,7 @@ CRISPY_TEMPLATE_PACK = 'bootstrap5'
 
 # django-imagefield
 # <https://django-imagefield.readthedocs.io/en/latest/>
+IMAGEFIELD_AUTOGENERATE = False
 IMAGEFIELD_FORMATS = {
     'accounts.user.avatar': {
         'small': ['default', ('crop', (80, 80))],
