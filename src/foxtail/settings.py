@@ -519,8 +519,6 @@ IMAGEFIELD_FORMATS = {
     'foxtail_blog.author.avatar': {
         'small': ['default', ('crop', (80, 80))],
         'small_2x': ['default', ('crop', (160, 160))],
-        'sidebar': ['default', ('crop', (280, 280))],
-        'sidebar_2x': ['default', ('crop', (560, 560))],
         'admin': ['default', ('thumbnail', (300, 300))],
     },
     'foxtail_blog.post.image': {
