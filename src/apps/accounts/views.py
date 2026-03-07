@@ -76,7 +76,7 @@ class UserView(LoginRequiredMixin, UpdateView):
         return super().form_valid(form)
 
     def get_success_url(self):
-        return reverse('account_settings')
+        return reverse('account_profile_edit')
 
 
 class ConsentList(LoginRequiredMixin, ListView):

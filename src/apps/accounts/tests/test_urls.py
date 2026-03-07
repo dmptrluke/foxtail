@@ -25,10 +25,10 @@ def test_application_list():
     assert resolve('/accounts/applications/').view_name == 'account_application_list'
 
 
-# account_settings resolves to /accounts/settings/
+# account_profile_edit resolves to /accounts/profile/
 def test_settings():
-    assert reverse('account_settings') == '/accounts/settings/'
-    assert resolve('/accounts/settings/').view_name == 'account_settings'
+    assert reverse('account_profile_edit') == '/accounts/profile/'
+    assert resolve('/accounts/profile/').view_name == 'account_profile_edit'
 
 
 # account_application_revoke resolves with pk parameter
