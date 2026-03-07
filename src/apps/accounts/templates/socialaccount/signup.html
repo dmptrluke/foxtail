@@ -1,31 +1,33 @@
-{% extends "base.html" %}
-{% load form_tags icon %}
+{% extends "auth_base.html" %}
+{% load form_tags %}
 
 {% block title %}Create Account{% endblock %}
 
-{% block content %}
-    <div style="max-width: 480px; margin: 0 auto;">
-        <div class="text-center mb-4">
-            <div class="mb-3">
-                {% icon account.get_provider.name|lower size="5rem" %}
-            </div>
-            <h2>Complete Account Creation</h2>
-            <p class="text-muted">
-                Finish setting up your furry.nz account using your {{ account.get_provider.name }} details.
-            </p>
-        </div>
+{% block heading %}Almost there{% endblock %}
+{% block subheading %}<p class="auth-subheading">Complete your registration to finish signing up with <strong>{{ account.get_provider.name }}</strong>.</p>{% endblock %}
 
-        <form method="post" action="{% url 'socialaccount_signup' %}">
-            {% csrf_token %}
-            {% non_field_errors form %}
-            {% for field in form %}
-                {% if not field.is_hidden %}
-                    {% text_field field %}
-                {% else %}
-                    {{ field }}
-                {% endif %}
-            {% endfor %}
-            <button type="submit" class="btn btn-primary w-100">Create Account</button>
-        </form>
+{% block content %}
+    <div class="auth-alert auth-alert-info">
+        We've pre-filled some details from your {{ account.get_provider.name }} account. Please review and choose a username.
+    </div>
+
+    <form method="post" action="{% url 'socialaccount_signup' %}" class="auth-form">
+        {% csrf_token %}
+        {% non_field_errors form %}
+        {% for field in form %}
+            {% if not field.is_hidden %}
+                {% text_field field %}
+            {% else %}
+                {{ field }}
+            {% endif %}
+        {% endfor %}
+        <button type="submit" class="auth-btn-primary">Complete registration</button>
+    </form>
+
+    <div class="mt-4">
+        <a href="{% url 'account_login' %}" class="auth-back">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+            Cancel
+        </a>
     </div>
 {% endblock %}

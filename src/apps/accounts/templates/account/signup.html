@@ -1,41 +1,39 @@
-{% extends "base.html" %}
+{% extends "auth_base.html" %}
 {% load account socialaccount form_tags %}
 
 {% block title %}Create Account{% endblock %}
 
+{% block heading %}Create account{% endblock %}
+{% block subheading %}<p class="auth-subheading">Get started. Create your account.</p>{% endblock %}
+
 {% block content %}
-    <h1>Create Account</h1>
+    {% include "components/auth_provider_list.html" with process="account_signup" %}
 
     {% get_providers as socialaccount_providers %}
     {% if socialaccount_providers %}
-        <p>You can create a new account with one of the following services, or with the form below.</p>
-
-        <div class="socialaccount_ballot">
-            {% include "components/provider_list.html" with process="account_signup" %}
-            <hr class="my-4">
-        </div>
-
-        {% include "socialaccount/snippets/login_extra.html" %}
-
+        <div class="auth-divider">or</div>
     {% endif %}
 
-    <form method="post" id="create_account_form" action="{% url 'account_signup' %}">
+    <form method="post" id="create_account_form" action="{% url 'account_signup' %}" class="auth-form">
         {% csrf_token %}
 
         {% non_field_errors form %}
 
-        <div class="row">
-            <div class="col-md-6">{% text_field form.username autocomplete="username" placeholder=None %}</div>
-            <div class="col-md-6">{% text_field form.email autocomplete="email" placeholder=None %}</div>
-        </div>
-        <div class="row">
-            <div class="col-md-6">{% text_field form.password1 autocomplete="new-password" placeholder=None %}</div>
-            <div class="col-md-6">{% text_field form.password2 autocomplete="new-password" placeholder=None %}</div>
-        </div>
+        {% text_field form.username autocomplete="username" placeholder=None %}
+        {% text_field form.email autocomplete="email" placeholder=None %}
+        {% text_field form.password1 autocomplete="new-password" placeholder=None %}
+        {% text_field form.password2 autocomplete="new-password" placeholder=None %}
+
         {% if form.captcha %}{% captcha_field form.captcha %}{% endif %}
-        <input type="submit" id="create_account_submit" class="btn btn-primary" value="Create Account">
+
+        <button type="submit" id="create_account_submit" class="auth-btn-primary">Create account</button>
+
         {% if redirect_field_value %}
             <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}"/>
         {% endif %}
     </form>
+
+    <div class="auth-footer">
+        Already have an account? <a href="{% url 'account_login' %}">Sign in</a>
+    </div>
 {% endblock content %}

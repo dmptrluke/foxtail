@@ -1,23 +1,21 @@
-{% extends "base.html" %}
+{% extends "auth_base.html" %}
 {% load account %}
 
 {% block title %}Confirm Email{% endblock %}
 
-{% block content %}
-    <h1>Confirm Email</h1>
+{% block heading %}Confirm email{% endblock %}
 
+{% block content %}
     {% if confirmation %}
         {% user_display confirmation.email_address.user as user_display %}
 
-        <p class="text-muted">You are about to confirm <strong>{{ confirmation.email_address.email }}</strong> as an email address for <strong>{{ user_display }}</strong>.</p>
+        <p class="auth-subheading">
+            Confirm <strong>{{ confirmation.email_address.email }}</strong> as an email address for <strong>{{ user_display }}</strong>.
+        </p>
 
         <form method="post" action="{% url 'account_confirm_email' confirmation.key %}">
             {% csrf_token %}
-            <div class="form-group">
-                <input type="submit" class="btn btn-primary btn-lg" value="Confirm">
-            </div>
+            <button type="submit" class="auth-btn-primary">Confirm</button>
         </form>
-
-    {% else %}
     {% endif %}
 {% endblock content %}
