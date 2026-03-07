@@ -10,6 +10,13 @@
 
     <form method="post" action="{% url 'account_reauthenticate' %}">
         {% csrf_token %}
+
+        {% if form.non_field_errors %}
+            <div class="alert alert-danger" role="alert">
+                {{ form.non_field_errors }}
+            </div>
+        {% endif %}
+
         {% text_field form.password autocomplete="current-password" %}
         {{ redirect_field }}
         <button type="submit" class="btn btn-primary">
