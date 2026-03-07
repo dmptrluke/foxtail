@@ -22,8 +22,7 @@ def icon_tag(icon_id, tag='div', size=None):
         # no cached icon, damn. now I have to work with files
         icon_path = finders.find(f'icons/{icon_id}.svg')
         if not icon_path:
-            # yeet
-            raise FileNotFoundError(f'No icon found for "{icon_id}".')
+            return ''
 
         with open(icon_path) as icon_file:
             icon_data = icon_file.read()
