@@ -75,13 +75,13 @@ jobs:
         id: py-cache
         uses: actions/cache@v5
         with:
-          path: ~/.local/lib/
+          path: ~/.local
           key: ${{ runner.OS }}-pip-3.13-${{ hashFiles('requirements/*.txt') }}
           restore-keys: |
             ${{ runner.OS }}-pip-3.13-
 
       - name: Install system dependencies
-        run: sudo apt-get -y install libpq-dev
+        run: sudo apt-get -y install libpq5
 
       - name: Install Python dependencies
         run: |
@@ -108,4 +108,4 @@ jobs:
           CACHE_URL: redis://localhost:${{ job.services.redis.ports[6379] }}/1
           SITE_URL: test
         run: |
-          python -m pytest
+          python -m pytest -n auto
