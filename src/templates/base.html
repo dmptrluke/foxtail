@@ -34,7 +34,7 @@
     </title>
 
     <link rel="stylesheet" href="{% static 'main.css' %}" nonce="{{ request.csp_nonce }}">
-    <script src="{% static 'main.js' %}" defer nonce="{{ request.csp_nonce }}"></script>
+    <script src="{% static 'main.js' %}" type="module" nonce="{{ request.csp_nonce }}"></script>
 
     <script nonce="{{ request.csp_nonce }}">
         (function (a) {

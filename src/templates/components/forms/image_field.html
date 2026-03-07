@@ -1,0 +1,6 @@
+<div class="mb-3">
+    {% if not hide_label %}<label class="form-label" for="{{ field.id_for_label }}">{{ field.label }}</label>{% endif %}
+    {{ field }}
+    {% if field.errors %}<div class="invalid-feedback d-block">{{ field.errors }}</div>{% endif %}
+    {% if field.help_text %}<div class="form-text">{{ field.help_text }}</div>{% endif %}
+</div>

@@ -6,12 +6,12 @@ from django.utils.functional import cached_property
 from django.utils.html import strip_tags
 from django.utils.text import Truncator
 
+from imagefield.fields import ImageField as ProcessedImageField
 from markdownfield.models import MarkdownField, RenderedMarkdownField
 from markdownfield.validators import VALIDATOR_CLASSY
 from published.models import PublishedModel
 from rules.contrib.models import RulesModel
 from taggit.managers import TaggableManager
-from versatileimagefield.fields import PPOIField, VersatileImageField
 
 from . import rules
 
@@ -30,8 +30,7 @@ class Post(PublishedModel):
     created = models.DateTimeField(auto_now_add=True, verbose_name='date created')
     modified = models.DateTimeField(auto_now=True, verbose_name='date modified')
 
-    image = VersatileImageField(upload_to='blog', blank=True, null=True, ppoi_field='image_ppoi')
-    image_ppoi = PPOIField()
+    image = ProcessedImageField(upload_to='blog', blank=True, null=True, auto_add_fields=True)
 
     description = models.TextField(max_length=140, blank=True, help_text='140 characters or fewer.')
 

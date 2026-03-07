@@ -58,8 +58,8 @@
     {# Banner image #}
     {% if post.image %}
         <div class="hero-banner">
-            <img src="{{ post.image.crop.1200x350 }}"
-                 srcset="{{ post.image.crop.1200x350 }} 1x, {{ post.image.crop.2400x700 }} 2x"
+            <img src="{{ post.image.banner }}"
+                 srcset="{{ post.image.banner }} 1x, {{ post.image.banner_2x }} 2x"
                  alt="{{ post.title }}">
         </div>
     {% endif %}

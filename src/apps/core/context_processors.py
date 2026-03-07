@@ -1,5 +1,3 @@
-import json
-
 from django.conf import settings
 from django.utils.timezone import now
 
@@ -18,4 +16,4 @@ def debug(request):
         info['user'] = request.user.username
     info['time'] = now().isoformat()
 
-    return {'DEBUG_DATA': json.dumps(info)}
+    return {'DEBUG_DATA': ' | '.join(f'{k}: {v}' for k, v in info.items())}

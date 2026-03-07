@@ -1,11 +1,12 @@
 from django.contrib.auth.models import AbstractUser
 from django.core.exceptions import ValidationError
+from django.core.validators import FileExtensionValidator
 from django.db import models
 from django.utils.functional import cached_property
 from django.utils.timezone import now
 
 from allauth.account.models import EmailAddress
-from versatileimagefield.fields import VersatileImageField
+from imagefield.fields import ImageField as ProcessedImageField
 
 from .validators import username_validators
 
@@ -26,6 +27,13 @@ class User(AbstractUser):
 
     full_name = models.CharField(max_length=120, blank=True)
     date_of_birth = models.DateField(null=True, blank=True)
+
+    avatar = ProcessedImageField(
+        upload_to='avatars',
+        blank=True,
+        auto_add_fields=True,
+        validators=[FileExtensionValidator(['jpg', 'jpeg', 'png', 'webp'])],
+    )
 
     def clean(self):
         if self.date_of_birth and self.date_of_birth >= now().date():
@@ -54,7 +62,7 @@ class ClientMetadata(models.Model):
         on_delete=models.CASCADE,
         related_name='metadata',
     )
-    logo = VersatileImageField(upload_to='oidc/clients/', blank=True)
+    logo = ProcessedImageField(upload_to='oidc/clients/', blank=True, auto_add_fields=True)
     website_url = models.URLField(blank=True)
     terms_url = models.URLField(blank=True)
     contact_email = models.EmailField(blank=True)

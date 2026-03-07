@@ -1,0 +1,24 @@
+<div class="image-crop-widget"
+     data-crop-widget
+     data-crop-aspect-ratio="{{ widget.aspect_ratio }}"
+     data-crop-max-size="{{ widget.max_file_size }}">
+
+    {% if widget.is_initial %}
+        <div class="image-crop-preview mb-2">
+            <img src="{{ widget.value.url }}" alt="" class="rounded">
+        </div>
+    {% endif %}
+
+    <input type="{{ widget.type }}" name="{{ widget.name }}"{% include "django/forms/widgets/attrs.html" %}
+           accept="image/jpeg,image/png,image/webp">
+
+    {% if widget.is_initial and not widget.required %}
+        <div class="form-check mt-2">
+            <input type="checkbox"
+                   name="{{ widget.checkbox_name }}"
+                   id="{{ widget.checkbox_id }}"
+                   class="form-check-input">
+            <label class="form-check-label" for="{{ widget.checkbox_id }}">Remove</label>
+        </div>
+    {% endif %}
+</div>

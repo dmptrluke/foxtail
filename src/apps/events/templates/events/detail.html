@@ -85,8 +85,8 @@
     {# Banner image #}
     {% if event.image %}
         <div class="hero-banner">
-            <img src="{{ event.image.crop.1200x350 }}"
-                 srcset="{{ event.image.crop.1200x350 }} 1x, {{ event.image.crop.2400x700 }} 2x"
+            <img src="{{ event.image.banner }}"
+                 srcset="{{ event.image.banner }} 1x, {{ event.image.banner_2x }} 2x"
                  alt="{{ event.title }}">
         </div>
     {% endif %}

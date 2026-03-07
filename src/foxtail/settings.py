@@ -57,6 +57,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.sites',
     'django.contrib.staticfiles',
+    'django.forms',
     'django.contrib.humanize',
     'django.contrib.postgres',
     'django.contrib.sitemaps',
@@ -90,7 +91,7 @@ INSTALLED_APPS = [
     'allauth.idp',
     'allauth.idp.oidc',
     'django_recaptcha',
-    'versatileimagefield',
+    'imagefield',
     'django_rq',
     'django_cleanup.apps.CleanupConfig',
 ]
@@ -140,12 +141,16 @@ TEMPLATES = [
     },
 ]
 
+FORM_RENDERER = 'django.forms.renderers.TemplatesSetting'
+
 # Recognise upstream proxy SSL
 # <https://docs.djangoproject.com/en/stable/ref/settings/#secure-proxy-ssl-header>
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 # Database
 # <https://docs.djangoproject.com/en/stable/ref/settings/#databases>
+
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 
 DATABASES = {'default': env.db('DATABASE_URL', default='sqlite:///' + str(BASE_DIR / 'db.sqlite3'))}
 
@@ -367,7 +372,7 @@ CSP_SCRIPT_SRC = [
 CSP_STYLE_SRC = ["'unsafe-inline'", "'self'"] + ASSET_HOSTS
 CSP_FRAME_SRC = ['https://www.google.com/recaptcha/']
 CSP_FONT_SRC = ["'self'", 'data:'] + ASSET_HOSTS
-CSP_IMG_SRC = ["'self'", 'data:', 'https://ui-avatars.com', 'https://www.gravatar.com'] + ASSET_HOSTS
+CSP_IMG_SRC = ["'self'", 'data:'] + ASSET_HOSTS
 CSP_OBJECT_SRC = ["'none'"]
 CSP_CONNECT_SRC = ["'self'", 'https://sentry.io']
 
@@ -473,37 +478,40 @@ EMAIL_BACKEND = 'apps.email.engine.AsyncEmailBackend'
 CRISPY_ALLOWED_TEMPLATE_PACKS = 'bootstrap5'
 CRISPY_TEMPLATE_PACK = 'bootstrap5'
 
-# VersatileImageField
-# <https://django-versatileimagefield.readthedocs.io/en/latest/installation.html#versatileimagefield-settings>
-VERSATILEIMAGEFIELD_SETTINGS = {
-    'jpeg_resize_quality': 80,
-    'cache_name': 'vif',
-    'create_images_on_demand': False,
-    'sized_directory_name': '_s',
-    'filtered_directory_name': '_f',
-}
-
-VERSATILEIMAGEFIELD_RENDITION_KEY_SETS = {
-    'event_image': [
-        ('card', 'crop__400x200'),
-        ('card_2x', 'crop__800x400'),
-        ('featured', 'crop__700x350'),
-        ('featured_2x', 'crop__1400x700'),
-        ('banner', 'crop__1200x350'),
-        ('banner_2x', 'crop__2400x700'),
-        ('admin', 'thumbnail__300x300'),
-    ],
-    'post_image': [
-        ('compact', 'crop__600x300'),
-        ('compact_2x', 'crop__1200x600'),
-        ('card', 'crop__800x400'),
-        ('card_2x', 'crop__1600x800'),
-        ('featured', 'crop__700x350'),
-        ('featured_2x', 'crop__1400x700'),
-        ('banner', 'crop__1200x350'),
-        ('banner_2x', 'crop__2400x700'),
-        ('admin', 'thumbnail__300x300'),
-    ],
+# django-imagefield
+# <https://django-imagefield.readthedocs.io/en/latest/>
+IMAGEFIELD_FORMATS = {
+    'accounts.user.avatar': {
+        'small': ['default', ('crop', (80, 80))],
+        'small_2x': ['default', ('crop', (160, 160))],
+        'medium': ['default', ('crop', (160, 160))],
+        'medium_2x': ['default', ('crop', (320, 320))],
+        'large': ['default', ('crop', (400, 400))],
+        'admin': ['default', ('thumbnail', (300, 300))],
+    },
+    'accounts.clientmetadata.logo': {
+        'admin': ['default', ('thumbnail', (300, 300))],
+    },
+    'foxtail_blog.post.image': {
+        'compact': ['default', ('crop', (600, 300))],
+        'compact_2x': ['default', ('crop', (1200, 600))],
+        'card': ['default', ('crop', (800, 400))],
+        'card_2x': ['default', ('crop', (1600, 800))],
+        'featured': ['default', ('crop', (700, 350))],
+        'featured_2x': ['default', ('crop', (1400, 700))],
+        'banner': ['default', ('crop', (1200, 350))],
+        'banner_2x': ['default', ('crop', (2400, 700))],
+        'admin': ['default', ('thumbnail', (300, 300))],
+    },
+    'events.event.image': {
+        'card': ['default', ('crop', (400, 200))],
+        'card_2x': ['default', ('crop', (800, 400))],
+        'featured': ['default', ('crop', (700, 350))],
+        'featured_2x': ['default', ('crop', (1400, 700))],
+        'banner': ['default', ('crop', (1200, 350))],
+        'banner_2x': ['default', ('crop', (2400, 700))],
+        'admin': ['default', ('thumbnail', (300, 300))],
+    },
 }
 
 # Markdown

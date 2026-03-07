@@ -1,7 +1,7 @@
 import django.db.models.deletion
 from django.db import migrations, models
 
-import versatileimagefield.fields
+import imagefield.fields
 
 
 class Migration(migrations.Migration):
@@ -25,7 +25,7 @@ class Migration(migrations.Migration):
                 ),
                 (
                     "logo",
-                    versatileimagefield.fields.VersatileImageField(
+                    imagefield.fields.ImageField(
                         blank=True, upload_to="oidc/clients/"
                     ),
                 ),

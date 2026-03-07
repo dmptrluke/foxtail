@@ -9,8 +9,17 @@
 {% block hero_sub %}<h2>Manage your username, name, and personal details.</h2>{% endblock %}
 
 {% block content %}
-    <form method="post">
+    <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
+
+        <div class="account-section">
+            <h5>Avatar</h5>
+            <div class="row">
+                <div class="col-md-6">
+                    {% image_field form.avatar hide_label=True %}
+                </div>
+            </div>
+        </div>
 
         <div class="account-section">
             <h5>Basic Details</h5>
