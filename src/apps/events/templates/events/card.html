@@ -1,17 +1,17 @@
 <div class="event-card{% if not event.image %} event-card-noimage{% endif %}">
     {% if event.image %}
-        <a href="{{ event.get_absolute_url }}" class="event-card-image">
+        <div class="event-card-image">
             <img src="{{ event.image.card }}"
                  srcset="{{ event.image.card }} 1x, {{ event.image.card_2x }} 2x"
                  alt="">
-        </a>
+        </div>
     {% endif %}
 
     <div class="event-card-body">
         {% if not event.image %}
             <div class="event-card-hero-date">{{ event.start | date:"M j, Y" }}</div>
         {% endif %}
-        <h5><a href="{{ event.get_absolute_url }}">{{ event.title }}</a></h5>
+        <h5><a href="{{ event.get_absolute_url }}" class="stretched-link">{{ event.title }}</a></h5>
         <div class="event-card-location">{{ event.location }}</div>
         <p class="event-card-excerpt">{{ event.description_rendered | safe | striptags | truncatechars:120 }}</p>
         {% if event.image %}
