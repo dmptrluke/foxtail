@@ -3,7 +3,6 @@ from django.contrib.messages.views import SuccessMessageMixin
 from django.shortcuts import redirect
 from django.views.generic import CreateView, DetailView, UpdateView
 
-from csp_helpers.mixins import CSPViewMixin
 from rules.contrib.views import AutoPermissionRequiredMixin
 
 from ..forms import ProfileCreateForm, ProfileForm
@@ -15,7 +14,7 @@ class ProfileView(DetailView):
     slug_field = 'profile_URL'
 
 
-class ProfileEditView(AutoPermissionRequiredMixin, CSPViewMixin, SuccessMessageMixin, LoginRequiredMixin, UpdateView):
+class ProfileEditView(AutoPermissionRequiredMixin, SuccessMessageMixin, LoginRequiredMixin, UpdateView):
     model = Profile
     success_message = 'Your profile has been updated'
     slug_field = 'profile_URL'
@@ -23,7 +22,7 @@ class ProfileEditView(AutoPermissionRequiredMixin, CSPViewMixin, SuccessMessageM
     form_class = ProfileForm
 
 
-class ProfileCreateView(CSPViewMixin, SuccessMessageMixin, LoginRequiredMixin, CreateView):
+class ProfileCreateView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
     model = Profile
     success_message = 'Your profile has been updated'
     slug_field = 'profile_URL'
