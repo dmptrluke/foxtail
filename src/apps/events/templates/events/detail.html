@@ -95,7 +95,7 @@
     <div class="container px-3 px-md-4 mt-5">
         {% include "components/messages.html" %}
 
-        <div class="sidebar-layout">
+        <div class="layout-sidebar">
             <main id="main-content">
                 <div class="rendered-markdown">
                     {{ event.description_rendered | safe }}
@@ -106,37 +106,37 @@
 
             <aside class="sidebar">
                 {# Location card #}
-                <section>
-                    <h6>Location</h6>
-                    <div class="sidebar-body">
+                <div class="sidebar-card">
+                    <h6 class="header">Location</h6>
+                    <div class="content">
                         <p><strong>{{ event.location }}</strong></p>
                         {% if event.address %}
-                            <p class="sidebar-address">{{ event.address }}</p>
+                            <p class="meta">{{ event.address }}</p>
                         {% endif %}
                     </div>
                     {% if event.map_image %}
-                        <img class="sidebar-image" style="aspect-ratio: 16 / 9" src="{{ event.map_image.url }}" alt="Map of {{ event.location }}">
+                        <img class="image" style="aspect-ratio: 16 / 9" src="{{ event.map_image.url }}" alt="Map of {{ event.location }}">
                     {% endif %}
-                </section>
+                </div>
 
                 {# Cost card (dummy data - field doesn't exist yet) #}
-                <section>
-                    <h6>Cost</h6>
-                    <div class="sidebar-body">
+                <div class="sidebar-card">
+                    <h6 class="header">Cost</h6>
+                    <div class="content">
                         <p><strong>Check event website</strong></p>
                         <p>Pricing varies by registration type and date.</p>
                     </div>
-                </section>
+                </div>
 
                 {# CTA #}
                 {% if event.url %}
-                    <section>
-                        <div class="sidebar-cta">
+                    <div class="sidebar-card">
+                        <div class="footer">
                             <a class="btn btn-primary" href="{{ event.url }}" rel="noopener noreferrer" target="_blank">
                                 Visit Event Website
                             </a>
                         </div>
-                    </section>
+                    </div>
                 {% endif %}
             </aside>
         </div>
