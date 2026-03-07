@@ -1,5 +1,0 @@
--r base.txt
-debugpy==1.8.20
-django-debug-toolbar==6.2.0
-factory-boy==3.3.3
-faker==38.2.0
