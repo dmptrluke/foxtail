@@ -57,6 +57,11 @@ def captcha_field(field):
     return _field_context(field)
 
 
+@register.inclusion_tag('components/forms/image_field.html')
+def image_field(field, hide_label=False):
+    return _field_context(field, hide_label=hide_label)
+
+
 @register.inclusion_tag('components/forms/honeypot_field.html')
 def honeypot_field(field):
     _set_widget_attrs(field, tabindex='-1', autocomplete='one-time-code')

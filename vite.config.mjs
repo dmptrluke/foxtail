@@ -11,7 +11,6 @@ export default defineConfig({
         rollupOptions: {
             input: {
                 main: resolve(__dirname, 'assets/js/main.js'),
-                profile_edit: resolve(__dirname, 'assets/js/profile_edit.js'),
             },
             output: {
                 entryFileNames: '[name].js',

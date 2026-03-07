@@ -1,8 +1,8 @@
 <article class="blog-card">
     {% if post.image %}
         <a href="{{ post.get_absolute_url }}" class="blog-card-image">
-            <img src="{{ post.image.crop.800x400 }}"
-                 srcset="{{ post.image.crop.800x400 }} 1x, {{ post.image.crop.1600x800 }} 2x"
+            <img src="{{ post.image.card }}"
+                 srcset="{{ post.image.card }} 1x, {{ post.image.card_2x }} 2x"
                  alt="">
         </a>
     {% endif %}

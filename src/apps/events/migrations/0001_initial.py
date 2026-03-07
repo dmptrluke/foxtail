@@ -3,7 +3,7 @@
 from django.db import migrations, models
 
 import taggit.managers
-import versatileimagefield.fields
+import imagefield.fields
 from markdownfield.models import MarkdownField, RenderedMarkdownField
 
 
@@ -28,8 +28,8 @@ class Migration(migrations.Migration):
                 ('end', models.DateTimeField()),
                 ('created', models.DateTimeField(auto_now_add=True, verbose_name='date created')),
                 ('modified', models.DateTimeField(auto_now=True, verbose_name='date modified')),
-                ('image', versatileimagefield.fields.VersatileImageField(blank=True, null=True, upload_to='events')),
-                ('image_ppoi', versatileimagefield.fields.PPOIField(default='0.5x0.5', editable=False, max_length=20)),
+                ('image', imagefield.fields.ImageField(blank=True, null=True, upload_to='events')),
+                ('image_ppoi', imagefield.fields.PPOIField(default='0.5x0.5', editable=False, max_length=20)),
                 ('tags', taggit.managers.TaggableManager(blank=True, help_text='A comma-separated list of tags.', through='taggit.TaggedItem', to='taggit.Tag', verbose_name='Tags')),
             ],
         ),

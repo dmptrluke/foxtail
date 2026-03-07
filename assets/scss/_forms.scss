@@ -36,6 +36,16 @@ form {
 	margin-bottom: ($spacer * .5);
 }
 
+.image-crop-preview img {
+	max-width: 160px;
+	max-height: 160px;
+	border-radius: $border-radius;
+}
+
+.image-crop-container img {
+	max-width: 100%;
+}
+
 .form-assist {
 	opacity: 0;
 	position: absolute;

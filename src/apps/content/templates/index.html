@@ -48,8 +48,8 @@
                             <article class="news-feature">
                                 <a href="{{ post.get_absolute_url }}">
                                     {% if post.image %}
-                                        <img src="{{ post.image.crop.700x350 }}"
-                                             srcset="{{ post.image.crop.700x350 }} 1x, {{ post.image.crop.1400x700 }} 2x"
+                                        <img src="{{ post.image.featured }}"
+                                             srcset="{{ post.image.featured }} 1x, {{ post.image.featured_2x }} 2x"
                                              alt="{{ post.title }}">
                                     {% else %}
                                         <div class="card-img-placeholder"></div>
@@ -67,8 +67,8 @@
                                 <article class="news-compact">
                                     <a href="{{ post.get_absolute_url }}">
                                         {% if post.image %}
-                                            <img src="{{ post.image.crop.600x300 }}"
-                                                 srcset="{{ post.image.crop.600x300 }} 1x, {{ post.image.crop.1200x600 }} 2x"
+                                            <img src="{{ post.image.compact }}"
+                                                 srcset="{{ post.image.compact }} 1x, {{ post.image.compact_2x }} 2x"
                                                  alt="{{ post.title }}">
                                         {% else %}
                                             <div class="card-img-placeholder"></div>

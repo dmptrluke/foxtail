@@ -7,7 +7,10 @@
     <section class="hero hero-dashboard">
         <div class="container px-3 px-md-4">
             <div class="dashboard-identity">
-                <img src="{{ user|avatar_url:80 }}" alt="{{ user.username }}" class="dashboard-avatar" width="72" height="72">
+                <a href="{% url 'account_settings' %}" class="dashboard-avatar-link" title="Change avatar">
+                    <img src="{{ user|avatar_url:80 }}" alt="{{ user.username }}" class="dashboard-avatar" width="72" height="72">
+                    <span class="dashboard-avatar-edit">{% icon "pencil" "span" "1rem" %}</span>
+                </a>
                 <div>
                     <h1>{{ user.get_short_name }}</h1>
                     <p>{{ user.email }}</p>
@@ -22,7 +25,7 @@
             <a href="{% url 'account_settings' %}" class="dashboard-tile">
                 <div class="tile-icon">{% icon "account-cog" size="1.5rem" %}</div>
                 <h3>Account Settings</h3>
-                <p class="tile-detail">Username, name, and personal details</p>
+                <p class="tile-detail">Avatar, username, name, and personal details</p>
             </a>
 
             <a href="{% url 'account_change_password' %}" class="dashboard-tile">

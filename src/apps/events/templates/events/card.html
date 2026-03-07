@@ -1,8 +1,8 @@
 <div class="event-card{% if not event.image %} event-card-noimage{% endif %}">
     {% if event.image %}
         <a href="{{ event.get_absolute_url }}" class="event-card-image">
-            <img src="{{ event.image.crop.400x200 }}"
-                 srcset="{{ event.image.crop.400x200 }} 1x, {{ event.image.crop.800x400 }} 2x"
+            <img src="{{ event.image.card }}"
+                 srcset="{{ event.image.card }} 1x, {{ event.image.card_2x }} 2x"
                  alt="">
         </a>
     {% endif %}

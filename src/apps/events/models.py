@@ -8,10 +8,10 @@ from django.utils.html import strip_tags
 from django.utils.text import Truncator
 from django.utils.timezone import now
 
+from imagefield.fields import ImageField as ProcessedImageField
 from markdownfield.models import MarkdownField, RenderedMarkdownField
 from markdownfield.validators import VALIDATOR_CLASSY
 from taggit.managers import TaggableManager
-from versatileimagefield.fields import PPOIField, VersatileImageField
 
 from apps.core.fields import AutoSlugField
 
@@ -36,8 +36,7 @@ class Event(models.Model):
     end = models.DateField(null=True, blank=True, help_text='End date and time are optional.')
     end_time = models.TimeField(null=True, blank=True, help_text='End date and time are optional.')
 
-    image = VersatileImageField(upload_to='events', blank=True, null=True, ppoi_field='image_ppoi')
-    image_ppoi = PPOIField()
+    image = ProcessedImageField(upload_to='events', blank=True, null=True, auto_add_fields=True)
 
     created = models.DateTimeField(auto_now_add=True, verbose_name='date created')
     modified = models.DateTimeField(auto_now=True, verbose_name='date modified')

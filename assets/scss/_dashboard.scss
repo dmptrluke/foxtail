@@ -123,12 +123,37 @@
 		gap: 1.25rem;
 	}
 
+	.dashboard-avatar-link {
+		position: relative;
+		display: block;
+		flex-shrink: 0;
+		border-radius: 50%;
+		text-decoration: none;
+
+		&:hover .dashboard-avatar-edit {
+			opacity: 1;
+		}
+	}
+
 	.dashboard-avatar {
 		width: 72px;
 		height: 72px;
 		border-radius: 50%;
 		border: 3px solid rgba($white, 0.2);
-		flex-shrink: 0;
+		display: block;
+	}
+
+	.dashboard-avatar-edit {
+		position: absolute;
+		inset: 0;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		border-radius: 50%;
+		background: rgba($black, 0.45);
+		color: $white;
+		opacity: 0;
+		transition: opacity 0.15s ease;
 	}
 
 	h1 {
