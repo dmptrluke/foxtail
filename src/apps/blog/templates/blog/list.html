@@ -53,18 +53,26 @@
 
             <h1>
                 {% if request.GET.q %}
-                    Search: "{{ request.GET.q }}"
-                {% elif request.GET.tag %}
-                    Tagged: "{{ request.GET.tag|capfirst }}"
+                    Search results for {{ request.GET.q }}
+                {% elif tag %}
+                    Posts tagged {{ tag.name }}
                 {% elif year %}
                     News from {{ year }}
                 {% else %}
                     News
                 {% endif %}
             </h1>
-            <h2 class="hero-sub-narrow">Community news and updates from furry.nz</h2>
+            <h2 class="hero-sub-narrow">
+                {% if request.GET.q %}
+                    Showing news posts matching your search query
+                {% elif tag %}
+                    Showing news posts tagged with {{ tag.name }}
+                {% else %}
+                    Community news and updates from furry.nz
+                {% endif %}
+            </h2>
 
-            {% if blog_years and not request.GET.tag and not request.GET.q %}
+            {% if blog_years and not tag and not request.GET.q %}
                 <div class="hero-bottom">
                     <nav class="hero-nav">
                         <a href="{% url 'blog:list' %}" class="hero-pill{% if not year %} active{% endif %}">All</a>
