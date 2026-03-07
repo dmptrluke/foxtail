@@ -1,3 +1,5 @@
+@use "sass:color";
+
 #footer {
 	background: rgba($secondary, 0.06);
 	border-top: 1px solid rgba($secondary, 0.12);
@@ -21,7 +23,7 @@
 	a {
 		font-size: 0.825rem;
 		font-weight: 500;
-		color: lighten($body-color, 15%);
+		color: color.adjust($body-color, $lightness: 15%);
 		text-decoration: none;
 
 		&:hover {
@@ -32,7 +34,7 @@
 
 .footer-credit {
 	font-size: 0.75rem;
-	color: lighten($body-color, 30%);
+	color: color.adjust($body-color, $lightness: 30%);
 	margin: 0;
 
 	.icon {
@@ -40,7 +42,7 @@
 	}
 
 	a {
-		color: lighten($body-color, 20%);
+		color: color.adjust($body-color, $lightness: 20%);
 		text-decoration: none;
 
 		&:hover {
@@ -55,7 +57,7 @@
 	gap: 0.75rem;
 
 	a {
-		color: lighten($body-color, 25%);
+		color: color.adjust($body-color, $lightness: 25%);
 		transition: color 0.15s ease;
 
 		&:hover {
@@ -72,7 +74,7 @@
 	height: 1.5rem;
 	font-size: 0.7rem;
 	font-weight: 600;
-	color: lighten($body-color, 35%);
+	color: color.adjust($body-color, $lightness: 35%);
 	background: rgba($secondary, 0.06);
 	border-radius: 50%;
 	cursor: pointer;

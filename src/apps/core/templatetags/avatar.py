@@ -1,5 +1,9 @@
+import logging
+
 from django import template
 from django.utils.html import escape
+
+logger = logging.getLogger(__name__)
 
 register = template.Library()
 
@@ -15,10 +19,13 @@ _RENDITION_MAP = [
 def avatar_url(user, size=40):
     size = int(size)
     if user.avatar:
-        for threshold, format_name in _RENDITION_MAP:
-            if size <= threshold:
-                return getattr(user.avatar, format_name)
-        return user.avatar.large
+        try:
+            for threshold, format_name in _RENDITION_MAP:
+                if size <= threshold:
+                    return getattr(user.avatar, format_name)
+            return user.avatar.large
+        except Exception:
+            logger.warning('Failed to load avatar for user %s', user.pk)
     return _default_avatar(user, size)
 
 

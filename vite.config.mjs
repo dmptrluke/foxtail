@@ -22,7 +22,10 @@ export default defineConfig({
     },
     css: {
         preprocessorOptions: {
-            scss: { quietDeps: true },
+            scss: {
+                quietDeps: true,
+                silenceDeprecations: ['import', 'global-builtin'],
+            },
         },
     },
 });

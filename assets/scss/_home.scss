@@ -1,3 +1,5 @@
+@use "sass:color";
+
 // Hero: homepage
 .hero-home {
 	padding: 3.5rem 0 4rem;
@@ -115,7 +117,7 @@
 		}
 
 		p {
-			color: lighten($body-color, 15%);
+			color: color.adjust($body-color, $lightness: 15%);
 			line-height: 1.6;
 			margin-bottom: 1.25rem;
 			@include line-clamp(4);
@@ -191,7 +193,7 @@
 
 		p {
 			font-size: 0.9rem;
-			color: lighten($body-color, 15%);
+			color: color.adjust($body-color, $lightness: 15%);
 			@include line-clamp(2);
 			margin-bottom: 0;
 		}
@@ -265,7 +267,7 @@
 
 	p {
 		font-size: 0.875rem;
-		color: lighten($body-color, 15%);
+		color: color.adjust($body-color, $lightness: 15%);
 		margin: 0;
 		@include line-clamp(2);
 	}

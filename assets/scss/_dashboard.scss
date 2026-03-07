@@ -1,3 +1,5 @@
+@use "sass:color";
+
 // Account subpage components
 .account-section {
 	margin-bottom: 2rem;
@@ -11,7 +13,7 @@
 
 	p.account-section-desc {
 		font-size: 0.9rem;
-		color: lighten($body-color, 15%);
+		color: color.adjust($body-color, $lightness: 15%);
 		margin-bottom: 1rem;
 	}
 }
@@ -51,7 +53,7 @@
 
 		.account-item-meta {
 			font-size: 0.825rem;
-			color: lighten($body-color, 20%);
+			color: color.adjust($body-color, $lightness: 20%);
 			margin: 0;
 		}
 	}
@@ -86,7 +88,7 @@
 
 	p {
 		font-size: 0.875rem;
-		color: lighten($body-color, 15%);
+		color: color.adjust($body-color, $lightness: 15%);
 		margin-bottom: 0.75rem;
 	}
 }
@@ -100,7 +102,7 @@
 
 	p {
 		font-size: 0.925rem;
-		color: lighten($body-color, 10%);
+		color: color.adjust($body-color, $lightness: 10%);
 		margin-bottom: 0;
 
 		strong {
@@ -222,7 +224,7 @@
 
 	.tile-detail {
 		font-size: 0.85rem;
-		color: lighten($body-color, 15%);
+		color: color.adjust($body-color, $lightness: 15%);
 		margin-bottom: 0;
 		flex: 1;
 	}

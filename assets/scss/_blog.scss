@@ -1,3 +1,5 @@
+@use "sass:color";
+
 // Blog post cards (list page)
 
 .blog-card {
@@ -49,7 +51,7 @@
 
 	.blog-card-excerpt {
 		font-size: 0.925rem;
-		color: lighten($body-color, 15%);
+		color: color.adjust($body-color, $lightness: 15%);
 		line-height: 1.6;
 		margin-bottom: 0.75rem;
 		@include line-clamp(3);
@@ -68,7 +70,7 @@
 
 .comments-heading {
 	@include label-style;
-	color: lighten($body-color, 25%);
+	color: color.adjust($body-color, $lightness: 25%);
 	margin-bottom: 1.5rem;
 }
 
@@ -102,14 +104,14 @@
 
 	p {
 		font-size: 0.9rem;
-		color: lighten($body-color, 10%);
+		color: color.adjust($body-color, $lightness: 10%);
 		margin-bottom: 0.25rem;
 		word-break: break-word;
 	}
 
 	small a {
 		font-size: 0.75rem;
-		color: lighten($body-color, 30%);
+		color: color.adjust($body-color, $lightness: 30%);
 
 		&:hover {
 			color: $danger;
@@ -122,7 +124,7 @@
 
 	.comment-form-heading {
 		@include label-style;
-		color: lighten($body-color, 25%);
+		color: color.adjust($body-color, $lightness: 25%);
 		margin-bottom: 1rem;
 	}
 }
