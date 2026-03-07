@@ -2,6 +2,7 @@ node_modules
 .env
 *.env
 .venv
+.git
 .github
 .vscode
 .editorconfig
@@ -9,9 +10,15 @@ node_modules
 .gitattributes
 .pre-commit-config.yaml
 .ruff_cache
+.pytest_cache
+.coverage
+htmlcov
+__pycache__
+*.pyc
 compose.yaml
 compose.override.yaml
 compose.test.yaml
+compose.prod-local.yaml
 deploy
 build
 storage

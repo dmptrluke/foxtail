@@ -26,6 +26,9 @@ RUN apt-get update \
     && apt-get install -y --no-install-recommends libmagic1 libvips \
     && rm -rf /var/lib/apt/lists/*
 
+RUN mkdir -p /app/static /app/storage/media \
+    && chown -R abc:abc /app/static /app/storage
+
 COPY requirements/base.txt ./requirements/base.txt
 RUN pip install --no-cache-dir -r requirements/base.txt
 
@@ -56,8 +59,6 @@ FROM deps AS app
 
 COPY --from=assets /app/build ./build
 COPY --chown=abc:abc . .
-RUN mkdir -p /app/static /app/storage/media \
-    && chown -R abc:abc /app/static /app/storage
 
 USER abc
 
@@ -71,8 +72,6 @@ FROM dev-deps AS dev
 
 COPY --from=assets /app/build ./build
 COPY --chown=abc:abc . .
-RUN mkdir -p /app/static /app/storage/media \
-    && chown -R abc:abc /app/static /app/storage
 
 USER abc
 
@@ -80,8 +79,6 @@ FROM test-deps AS test
 
 COPY --from=assets /app/build ./build
 COPY --chown=abc:abc . .
-RUN mkdir -p /app/static /app/storage/media \
-    && chown -R abc:abc /app/static /app/storage
 
 USER abc
 

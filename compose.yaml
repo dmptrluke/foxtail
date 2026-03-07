@@ -46,11 +46,6 @@ services:
 
   worker:
     image: dmptrluke/foxtail:latest
-    build:
-      context: .
-      target: dev
-      args:
-        BUILD_MODE: development
     environment:
       DATABASE_URL: "postgres://foxtail:foxtail@db/foxtail"
       CACHE_URL: "redis://redis/1"
