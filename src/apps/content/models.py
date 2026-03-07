@@ -2,7 +2,8 @@ from django.db import models
 from django.urls import reverse
 
 from markdownfield.models import MarkdownField, RenderedMarkdownField
-from markdownfield.validators import VALIDATOR_CLASSY
+
+from apps.core.validators import VALIDATOR_EXTENDED
 
 
 class Page(models.Model):
@@ -15,7 +16,7 @@ class Page(models.Model):
         help_text='Changing this value after initial creation will break existing page URLs. Must be unique.',
     )
 
-    body = MarkdownField(rendered_field='body_rendered', validator=VALIDATOR_CLASSY)
+    body = MarkdownField(rendered_field='body_rendered', validator=VALIDATOR_EXTENDED)
     body_rendered = RenderedMarkdownField()
 
     class Meta:

@@ -373,7 +373,7 @@ CSP_SCRIPT_SRC = [
     'https://www.gstatic.com/recaptcha/',
 ] + ASSET_HOSTS
 CSP_STYLE_SRC = ["'unsafe-inline'", "'self'"] + ASSET_HOSTS
-CSP_FRAME_SRC = ['https://www.google.com/recaptcha/']
+CSP_FRAME_SRC = ['https://www.google.com/recaptcha/', 'https://www.youtube.com', 'https://www.youtube-nocookie.com']
 CSP_FONT_SRC = ["'self'", 'data:'] + ASSET_HOSTS
 CSP_IMG_SRC = ["'self'", 'data:'] + ASSET_HOSTS
 CSP_OBJECT_SRC = ["'none'"]
