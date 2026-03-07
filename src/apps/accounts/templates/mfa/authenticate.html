@@ -48,6 +48,7 @@
                         Use a recovery code instead
                     {% endif %}
                 </summary>
+                {% non_field_errors form %}
                 <form method="post" action="{% url 'mfa_authenticate' %}" class="d-flex gap-2 align-items-start">
                     {% csrf_token %}
                     {% text_field form.code hide_label=True inline=True %}
@@ -70,6 +71,7 @@
                     <h5 class="card-title">Recovery Code</h5>
                     <p class="card-text">Enter one of your recovery codes.</p>
                 {% endif %}
+                {% non_field_errors form %}
                 <form method="post" action="{% url 'mfa_authenticate' %}" class="d-flex gap-2 align-items-start">
                     {% csrf_token %}
                     {% text_field form.code hide_label=True inline=True %}

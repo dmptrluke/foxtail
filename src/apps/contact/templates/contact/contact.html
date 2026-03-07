@@ -19,6 +19,7 @@
 
     <form method="post" action="{% url 'contact:contact' %}">
         {% csrf_token %}
+        {% non_field_errors form %}
         <div class="row">
             <div class="col-md-6">
                 {% text_field form.name %}

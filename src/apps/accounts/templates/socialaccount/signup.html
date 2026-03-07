@@ -17,6 +17,7 @@
 
         <form method="post" action="{% url 'socialaccount_signup' %}">
             {% csrf_token %}
+            {% non_field_errors form %}
             {% for field in form %}
                 {% if not field.is_hidden %}
                     {% text_field field %}

@@ -23,6 +23,7 @@
         {% if user.is_authenticated %}
             <form method="post">
                 {% csrf_token %}
+                {% non_field_errors form %}
                 {% textarea_field form.text hide_label=True %}
                 {% if form.captcha %}
                     {% captcha_field form.captcha %}

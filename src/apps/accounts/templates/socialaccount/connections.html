@@ -1,5 +1,5 @@
 {% extends "account_base.html" %}
-{% load breadcrumbs icon %}
+{% load breadcrumbs icon form_tags %}
 
 {% block title %}Connected Accounts{% endblock %}
 
@@ -9,11 +9,7 @@
 {% block hero_sub %}<h2>Sign in to your account using any of the following services.</h2>{% endblock %}
 
 {% block content %}
-    {% if form.non_field_errors %}
-        <div class="alert alert-danger" role="alert">
-            {{ form.non_field_errors }}
-        </div>
-    {% endif %}
+    {% non_field_errors form %}
 
     <div class="account-section">
         {% if form.accounts %}

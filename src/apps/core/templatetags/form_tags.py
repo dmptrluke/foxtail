@@ -68,6 +68,11 @@ def prefix_field(field, prefix, hide_label=False, autocomplete=_UNSET, placehold
     return _field_context(field, hide_label=hide_label, prefix=prefix)
 
 
+@register.inclusion_tag('components/forms/non_field_errors.html')
+def non_field_errors(form):
+    return {'form': form}
+
+
 @register.inclusion_tag('components/forms/honeypot_field.html')
 def honeypot_field(field):
     _set_widget_attrs(field, tabindex='-1', autocomplete='one-time-code')

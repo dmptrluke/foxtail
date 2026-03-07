@@ -11,6 +11,7 @@
 {% block content %}
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
+        {% non_field_errors form %}
 
         <div class="account-section">
             <h5>Avatar</h5>

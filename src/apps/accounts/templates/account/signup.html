@@ -22,11 +22,7 @@
     <form method="post" id="create_account_form" action="{% url 'account_signup' %}">
         {% csrf_token %}
 
-        {% if form.non_field_errors %}
-            <div class="alert alert-danger" role="alert">
-                {{ form.non_field_errors }}
-            </div>
-        {% endif %}
+        {% non_field_errors form %}
 
         <div class="row">
             <div class="col-md-6">{% text_field form.username autocomplete="username" placeholder=None %}</div>
