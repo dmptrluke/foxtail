@@ -65,7 +65,7 @@ RUN SECRET_KEY=build-placeholder SITE_URL=http://localhost CONTACT_EMAILS=noop@l
     django-admin collectstatic --noinput
 
 EXPOSE 8000
-CMD ["gunicorn", "--bind", "0.0.0.0:8000", "--worker-tmp-dir", "/dev/shm", "--access-logfile", "-", "foxtail.wsgi:application"]
+CMD ["gunicorn", "--bind", "0.0.0.0:8000", "--worker-tmp-dir", "/dev/shm", "--access-logfile", "-", "--forwarded-allow-ips", "*", "foxtail.wsgi:application"]
 
 FROM dev-deps AS dev
 
