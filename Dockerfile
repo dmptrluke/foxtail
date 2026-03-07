@@ -20,6 +20,8 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
 
 WORKDIR /app
 
+COPY --from=ghcr.io/astral-sh/uv:0.6 /uv /usr/local/bin/uv
+
 RUN groupadd -r abc -g 5678 && useradd --no-log-init -u 5678 -r -g abc abc
 
 RUN apt-get update \
@@ -29,13 +31,13 @@ RUN apt-get update \
 RUN mkdir -p /app/static /app/storage/media \
     && chown -R abc:abc /app/static /app/storage
 
-COPY requirements/base.txt ./requirements/base.txt
-RUN pip install --no-cache-dir -r requirements/base.txt
+COPY pyproject.toml uv.lock ./
+RUN uv sync --frozen --no-install-project --no-dev
+
+ENV PATH="/app/.venv/bin:$PATH"
 
 FROM deps AS dev-deps
-
-COPY requirements/dev.txt ./requirements/dev.txt
-RUN pip install --no-cache-dir -r requirements/dev.txt
+RUN uv sync --frozen --no-install-project
 
 FROM dev-deps AS test-deps
 
@@ -48,8 +50,7 @@ RUN apt-get update \
     && apt-get install -y --no-install-recommends google-chrome-stable \
     && rm -rf /var/lib/apt/lists/*
 
-COPY requirements/test.txt ./requirements/test.txt
-RUN pip install --no-cache-dir -r requirements/test.txt
+RUN uv sync --frozen --no-install-project --group test
 
 RUN mkdir -p /home/abc/.cache && chown -R abc:abc /home/abc
 

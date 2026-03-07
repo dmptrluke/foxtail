@@ -1,3 +1,69 @@
+[project]
+name = "foxtail"
+version = "0.0.0"
+requires-python = ">=3.13"
+dependencies = [
+    "argon2-cffi==25.1.0",
+    "django==5.2.12",
+    "django-allauth[mfa,idp-oidc]==65.14.0",
+    "django-anymail[mailgun]==14.0",
+    "django-cjswidget==0.5.0",
+    "django-cleanup==8.1.0",
+    "django-csp==4.0",
+    "django-csp-helpers>=0.8.0",
+    "django-environ==0.13.0",
+    "django-imagefield[vips]==0.23.0a3",
+    "django-mail-templated-simple==3.2",
+    "django-markdownfield==0.11.0",
+    "django-published>=0.9.0",
+    "django-recaptcha==4.1.0",
+    "django-redis==6.0.0",
+    "django-rq==3.0.1",
+    "django-storages[azure]==1.14.6",
+    "django-structured-data==0.7.0",
+    "django-taggit==6.1.0",
+    "django-widget-tweaks==1.5.0",
+    "fido2==2.0.0",
+    "gitpython==3.1.46",
+    "gunicorn==25.1.0",
+    "markdown==3.10.2",
+    "psycopg[binary]==3.3.3",
+    "pyjwt==2.11.0",
+    "pymdown-extensions==10.21",
+    "requests==2.32.5",
+    "requests-oauthlib==2.0.0",
+    "rq==2.7.0",
+    "rules==3.5",
+    "sentry-sdk==2.54.0",
+    "the-big-username-blacklist==1.5.4",
+    "whitenoise==6.12.0",
+]
+
+[dependency-groups]
+dev = [
+    "debugpy==1.8.20",
+    "django-debug-toolbar==6.2.0",
+    "factory-boy==3.3.3",
+    "faker==38.2.0",
+]
+test = [
+    { include-group = "dev" },
+    "atoma==0.0.17",
+    "coverage==7.13.4",
+    "pytest==9.0.2",
+    "pytest-cov==7.0.0",
+    "pytest-django==4.11.1",
+    "pytest-factoryboy==2.8.1",
+    "pytest-xdist==3.8.0",
+    "selenium==4.41.0",
+]
+
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "foxtail.settings"
+pythonpath = ["src"]
+python_files = ["tests.py", "test_*.py", "*_tests.py"]
+norecursedirs = ["node_modules", ".git", ".tox", "storage"]
+
 [tool.ruff]
 target-version = "py313"
 line-length = 120
