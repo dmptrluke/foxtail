@@ -1,6 +1,8 @@
 import pytest
 from faker import Faker
 from selenium.webdriver.common.by import By
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.ui import WebDriverWait
 
 from apps.blog.models import Post
 
@@ -35,7 +37,7 @@ def test_blog_comments(authenticated_driver, user, live_server, post: Post):
     comment_form.find_element(By.NAME, 'post-comment').click()
 
     # the user sees a green alert
-    alert = driver.find_element(By.CLASS_NAME, 'alert-success')
+    alert = WebDriverWait(driver, 5).until(EC.presence_of_element_located((By.CLASS_NAME, 'alert-success')))
     assert 'Your comment has been posted!' in alert.text
 
     # we read the comments again
