@@ -1,6 +1,9 @@
+import logging
 import zoneinfo
 
 from django.utils import timezone
+
+logger = logging.getLogger('apps.core.access')
 
 
 class TimezoneMiddleware:
@@ -17,3 +20,21 @@ class TimezoneMiddleware:
         else:
             timezone.deactivate()
         return self.get_response(request)
+
+
+class RequestLoggingMiddleware:
+    def __init__(self, get_response):
+        self.get_response = get_response
+
+    def __call__(self, request):
+        response = self.get_response(request)
+        path = request.get_full_path()
+        if not path.startswith(('/static/', '/health/')):
+            logger.info(
+                '"%s %s" %s %s',
+                request.method,
+                path,
+                response.status_code,
+                response.get('Content-Length', '-'),
+            )
+        return response
