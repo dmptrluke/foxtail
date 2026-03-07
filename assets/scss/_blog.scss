@@ -69,9 +69,9 @@
 }
 
 .comments-heading {
-	@include label-style;
+	@include label-style-lg;
 	color: color.adjust($body-color, $lightness: 25%);
-	margin-bottom: 1.5rem;
+	margin-bottom: 1rem;
 }
 
 .comment-item {
@@ -85,8 +85,8 @@
 	}
 
 	img {
-		width: 40px;
-		height: 40px;
+		width: 65px;
+		height: 65px;
 		border-radius: 50%;
 		flex-shrink: 0;
 	}

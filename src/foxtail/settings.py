@@ -85,8 +85,6 @@ INSTALLED_APPS = [
     'anymail',
     'mail_templated_simple',
     'taggit',
-    'crispy_forms',
-    'crispy_bootstrap5',
     'widget_tweaks',
     'allauth.idp',
     'allauth.idp.oidc',
@@ -494,11 +492,6 @@ else:
 
 EMAIL_REAL_BACKEND = EMAIL_BACKEND
 EMAIL_BACKEND = 'apps.email.engine.AsyncEmailBackend'
-
-# Crispy Forms
-# <https://django-crispy-forms.readthedocs.io/en/latest/>
-CRISPY_ALLOWED_TEMPLATE_PACKS = 'bootstrap5'
-CRISPY_TEMPLATE_PACK = 'bootstrap5'
 
 # django-imagefield
 # <https://django-imagefield.readthedocs.io/en/latest/>

@@ -7,6 +7,7 @@ x-dev-env: &dev-env
   CONTACT_EMAILS: "admin@example.com"
   SITE_URL: "http://localhost:8000"
   ALLOWED_HOSTS: "localhost,127.0.0.1"
+  DIRECTORY_ENABLED: "true"
 
 services:
   foxtail:
