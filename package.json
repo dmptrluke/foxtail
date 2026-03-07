@@ -10,9 +10,6 @@
         "build-development": "vite build --mode development",
         "build-production": "vite build"
     },
-    "stylelint": {
-        "extends": "stylelint-config-recommended-scss"
-    },
     "dependencies": {
         "@fontsource/roboto": "^5.2.10",
         "@popperjs/core": "^2.11.8",
@@ -20,11 +17,6 @@
         "colcade": "^0.2.0",
         "cropperjs": "^1.6.2",
         "sass": "^1.85.0",
-        "vite": "^6.2.0"
-    },
-    "devDependencies": {
-        "stylelint": "^16.9.0",
-        "stylelint-config-recommended-scss": "^14.1.0",
-        "stylelint-scss": "^6.5.1"
+        "vite": "^7.3.1"
     }
 }
