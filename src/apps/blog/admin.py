@@ -7,7 +7,7 @@ from django.utils.html import format_html
 
 from published.admin import PublishedAdmin, add_to_fieldsets, add_to_list_display, add_to_readonly_fields
 
-from .models import Comment, Post
+from .models import Author, Comment, Post
 
 
 class PostAdminForm(ModelForm):
@@ -40,6 +40,7 @@ class PostAdmin(PublishedAdmin):
 
     prepopulated_fields = {'slug': ('title',)}
     search_fields = ['title']
+    raw_id_fields = ('author',)
     readonly_fields = add_to_readonly_fields()
     list_filter = ('created', 'tags', 'author')
     list_display = ['title', 'tag_list', 'created', 'modified', 'author'] + add_to_list_display()
@@ -65,5 +66,16 @@ class CommentAdmin(ModelAdmin):
     post_link.short_description = 'Post'
 
 
+class AuthorAdmin(ModelAdmin):
+    list_display = ('name', 'user', 'link')
+    search_fields = ('name',)
+    raw_id_fields = ('user',)
+    fieldsets = (
+        (None, {'fields': ('name', 'user', 'description', 'link')}),
+        ('Avatar', {'fields': ('avatar', 'avatar_ppoi')}),
+    )
+
+
+admin.site.register(Author, AuthorAdmin)
 admin.site.register(Post, PostAdmin)
 admin.site.register(Comment, CommentAdmin)

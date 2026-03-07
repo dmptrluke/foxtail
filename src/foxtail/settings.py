@@ -509,6 +509,13 @@ IMAGEFIELD_FORMATS = {
     'accounts.clientmetadata.logo': {
         'admin': ['default', ('thumbnail', (300, 300))],
     },
+    'foxtail_blog.author.avatar': {
+        'small': ['default', ('crop', (80, 80))],
+        'small_2x': ['default', ('crop', (160, 160))],
+        'sidebar': ['default', ('crop', (280, 280))],
+        'sidebar_2x': ['default', ('crop', (560, 560))],
+        'admin': ['default', ('thumbnail', (300, 300))],
+    },
     'foxtail_blog.post.image': {
         'card': ['default', ('crop', (800, 400))],
         'card_2x': ['default', ('crop', (1600, 800))],

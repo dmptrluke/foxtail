@@ -17,6 +17,26 @@ from apps.core.validators import VALIDATOR_EXTENDED
 from . import rules
 
 
+class Author(models.Model):
+    name = models.CharField(max_length=100)
+    user = models.OneToOneField(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='blog_author',
+    )
+    description = models.TextField(blank=True, help_text='Short bio or tagline.')
+    link = models.URLField(blank=True, help_text='Website, social media, etc.')
+    avatar = ProcessedImageField(upload_to='blog/authors', blank=True, auto_add_fields=True)
+
+    class Meta:
+        ordering = ['name']
+
+    def __str__(self):
+        return self.name
+
+
 class Post(PublishedModel):
     title = models.CharField(max_length=100, help_text='100 characters or fewer.')
     slug = models.SlugField(
@@ -27,7 +47,13 @@ class Post(PublishedModel):
 
     allow_comments = models.BooleanField(default=True)
 
-    author = models.CharField(max_length=50, help_text='50 characters or fewer.')
+    author = models.ForeignKey(
+        'foxtail_blog.Author',
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='posts',
+    )
     created = models.DateTimeField(auto_now_add=True, verbose_name='date created')
     modified = models.DateTimeField(auto_now=True, verbose_name='date modified')
 
@@ -54,7 +80,7 @@ class Post(PublishedModel):
             '@type': 'BlogPosting',
             'headline': self.title,
             'description': self.description or Truncator(strip_tags(self.text_rendered)).chars(200),
-            'author': {'@type': 'Person', 'name': self.author},
+            'author': {'@type': 'Person', 'name': self.author.name} if self.author else None,
             'datePublished': self.created.strftime('%Y-%m-%d'),
             'dateModified': self.modified.strftime('%Y-%m-%d'),
             'publisher': None,
