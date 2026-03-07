@@ -12,6 +12,7 @@
     <div class="account-section">
         <form method="post">
             {% csrf_token %}
+            {% non_field_errors form %}
             {% text_field form.name %}
             <button type="submit" class="btn btn-primary">Save</button>
             <a href="{% url 'mfa_list_webauthn' %}" class="btn btn-outline-secondary ms-2">Cancel</a>

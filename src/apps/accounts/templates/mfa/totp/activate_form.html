@@ -20,7 +20,7 @@
         <p class="account-section-desc">Enter the 6-digit code shown in your app to confirm the setup worked.</p>
         <form method="post">
             {% csrf_token %}
-            {{ form.non_field_errors }}
+            {% non_field_errors form %}
             {% text_field form.code %}
             <button type="submit" class="btn btn-primary">Verify and Enable</button>
             <a href="{% url 'mfa_index' %}" class="btn btn-outline-secondary ms-2">Cancel</a>

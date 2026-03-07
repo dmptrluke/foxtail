@@ -12,6 +12,7 @@
     <div class="account-section">
         <form method="post" action="{% url 'mfa_add_webauthn' %}">
             {% csrf_token %}
+            {% non_field_errors form %}
             {% text_field form.name %}
             {{ form.passwordless }}
             {{ form.credential }}

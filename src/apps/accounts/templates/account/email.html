@@ -65,6 +65,7 @@
         <h5>Add Email</h5>
         <form method="post" action="{% url 'account_email' %}" class="d-flex gap-2 align-items-start">
             {% csrf_token %}
+            {% non_field_errors form %}
             {% text_field form.email autocomplete="email" inline=True %}
             <button name="action_add" class="btn btn-primary flex-shrink-0" type="submit">Add</button>
         </form>

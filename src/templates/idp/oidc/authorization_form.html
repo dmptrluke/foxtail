@@ -1,28 +1,41 @@
 {% extends "base.html" %}
+{% load form_tags %}
 
 {% block title %}Service Authorisation{% endblock %}
 
-{% block content %}
-    <h2 class="mb-4">Authorise Login</h2>
-    <form method="post">
-        {% csrf_token %}
-        {{ form.request }}
+{% block base_content %}
+    <div class="hero hero-detail">
+        <div class="container px-3 px-md-4">
+            <h1>Authorise Login</h1>
+            <h2>Review and approve access for {{ client.name }}.</h2>
+        </div>
+    </div>
 
-        <div class="d-flex flex-column flex-md-row mb-4">
-            {% if client.metadata.logo %}
-                <div class="me-3 mb-3 mb-md-0">
-                    <img class="rounded" src="{{ client.metadata.logo.url }}" alt="{{ client.name }}">
+    <main id="main-content" class="container px-3 px-md-4 pt-4">
+        <form method="post">
+            {% csrf_token %}
+            {% non_field_errors form %}
+            {{ form.request }}
+
+            <div class="account-confirm mb-4">
+                <div class="d-flex align-items-start mb-3">
+                    {% if client.metadata.logo %}
+                        <img class="me-3" src="{{ client.metadata.logo.url }}" alt="{{ client.name }}" style="max-height: 48px;">
+                    {% endif %}
+                    <div>
+                        <h5 class="mb-1">{{ client.name }}</h5>
+                        {% if client.metadata.website_url %}
+                            <a href="{{ client.metadata.website_url }}" rel="noopener noreferrer" target="_blank" class="small">{{ client.metadata.website_url }}</a>
+                        {% endif %}
+                    </div>
                 </div>
-            {% endif %}
 
-            <div class="flex-grow-1 border-start ps-3">
-                <h5>{{ client.name }}{% if client.metadata.website_url %}<small> — <a
-                        href="{{ client.metadata.website_url }}" rel="noopener noreferrer"
-                        target="_blank">{{ client.metadata.website_url }}</a></small>{% endif %}</h5>
                 <p>
                     <strong>{{ client.name }}</strong> would like to access your
                     <strong>{{ site.name }}</strong> account. The application is requesting the following
-                    information:</p>
+                    information:
+                </p>
+
                 <ul class="list-unstyled mb-3">
                     {% for value, label in form.scopes.field.choices %}
                         <li class="mb-1">
@@ -31,25 +44,25 @@
                         </li>
                     {% endfor %}
                 </ul>
+
                 {% if form.email %}
                     <div class="mb-3">
                         <label class="form-label">{{ form.email.label }}</label>
                         {{ form.email }}
                     </div>
                 {% endif %}
+
                 {% if client.metadata.terms_url %}
                     <p class="mb-0">
-                        <small><a href="{{ client.metadata.terms_url }}" rel="noopener noreferrer" target="_blank">View
-                            Privacy Policy</a></small>
+                        <small><a href="{{ client.metadata.terms_url }}" rel="noopener noreferrer" target="_blank">View Privacy Policy</a></small>
                     </p>
                 {% endif %}
-
             </div>
-        </div>
 
-        <div class="form-group">
-            <button type="submit" name="action" value="cancel" class="btn btn-secondary">Decline</button>
-            <button type="submit" name="action" value="grant" class="btn btn-primary">Authorize</button>
-        </div>
-    </form>
-{% endblock content %}
+            <div class="d-flex gap-2">
+                <button type="submit" name="action" value="cancel" class="btn btn-danger">Decline</button>
+                <button type="submit" name="action" value="grant" class="btn btn-primary">Authorise</button>
+            </div>
+        </form>
+    </main>
+{% endblock base_content %}

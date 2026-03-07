@@ -7,6 +7,7 @@
     <h3>Confirm Access</h3>
     <p class="text-muted">To continue, please verify your identity using your authenticator app.</p>
 
+    {% non_field_errors form %}
     <form method="post" action="{% url 'mfa_reauthenticate' %}" class="d-flex gap-2 align-items-start">
         {% csrf_token %}
         {% text_field form.code inline=True %}
