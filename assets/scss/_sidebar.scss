@@ -1,3 +1,5 @@
+@use "sass:color";
+
 // Shared content + sidebar layout
 
 .sidebar-layout {
@@ -42,7 +44,7 @@
 		margin-bottom: 0.5rem;
 
 		small a {
-			color: lighten($body-color, 20%);
+			color: color.adjust($body-color, $lightness: 20%);
 
 			&:hover {
 				color: $warning;
@@ -57,7 +59,7 @@
 
 	p {
 		margin-bottom: 0.35rem;
-		color: lighten($body-color, 10%);
+		color: color.adjust($body-color, $lightness: 10%);
 	}
 
 	strong {
@@ -97,12 +99,12 @@
 
 	.sidebar-recent-time {
 		font-size: 0.75rem;
-		color: lighten($body-color, 25%);
+		color: color.adjust($body-color, $lightness: 25%);
 	}
 
 	p {
 		font-size: 0.8rem;
-		color: lighten($body-color, 15%);
+		color: color.adjust($body-color, $lightness: 15%);
 		margin: 0.25rem 0 0;
 		@include line-clamp(2);
 	}
@@ -142,7 +144,7 @@
 
 .sidebar-address {
 	font-size: 0.825rem;
-	color: lighten($body-color, 20%);
+	color: color.adjust($body-color, $lightness: 20%);
 	margin-top: 0.25rem;
 }
 
@@ -166,7 +168,7 @@
 .sidebar-category-count {
 	font-size: 0.75rem;
 	font-weight: 600;
-	color: lighten($body-color, 25%);
+	color: color.adjust($body-color, $lightness: 25%);
 	background: rgba($secondary, 0.08);
 	padding: 0.1rem 0.5rem;
 	border-radius: 2px;

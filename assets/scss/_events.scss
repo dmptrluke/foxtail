@@ -1,3 +1,5 @@
+@use "sass:color";
+
 // Featured event spotlight
 
 .event-featured {
@@ -61,7 +63,7 @@
 	}
 
 	p {
-		color: lighten($body-color, 15%);
+		color: color.adjust($body-color, $lightness: 15%);
 		line-height: 1.6;
 		margin-bottom: 1rem;
 		@include line-clamp(3);
@@ -73,7 +75,7 @@
 
 .event-section-label {
 	@include label-style;
-	color: lighten($body-color, 25%);
+	color: color.adjust($body-color, $lightness: 25%);
 	padding-bottom: 0.75rem;
 	margin-bottom: 1rem;
 	border-bottom: 2px solid rgba($secondary, 0.15);
@@ -195,7 +197,7 @@
 
 .event-cal-label {
 	@include label-style;
-	color: lighten($body-color, 25%);
+	color: color.adjust($body-color, $lightness: 25%);
 	margin-bottom: 0.5rem;
 }
 
@@ -220,7 +222,7 @@
 		font-weight: 600;
 		text-transform: uppercase;
 		letter-spacing: 0.04em;
-		color: lighten($body-color, 30%);
+		color: color.adjust($body-color, $lightness: 30%);
 		line-height: 1;
 		margin-bottom: 0.2rem;
 	}
@@ -228,7 +230,7 @@
 	.event-cal-num {
 		font-size: 1rem;
 		font-weight: 700;
-		color: lighten($body-color, 20%);
+		color: color.adjust($body-color, $lightness: 20%);
 		line-height: 1.2;
 	}
 
