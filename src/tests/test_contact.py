@@ -6,7 +6,7 @@ from faker import Faker
 from selenium.webdriver.common.by import By
 
 fake = Faker()
-pytestmark = [pytest.mark.django_db, pytest.mark.xfail]
+pytestmark = [pytest.mark.django_db]
 
 
 def test_unauthenticated_user_contact(driver, live_server, settings):
