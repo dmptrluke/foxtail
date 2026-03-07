@@ -1,46 +1,25 @@
 @use "sass:color";
 
-// Shared content + sidebar layout
-
-.sidebar-layout {
-	display: grid;
-	grid-template-columns: 1fr;
-	gap: 2.5rem;
-	padding-bottom: 3rem;
-
-	@media (min-width: 768px) {
-		grid-template-columns: 1fr 320px;
-	}
-
-	> main {
-		min-width: 0;
-
-		.rendered-markdown {
-			font-size: 0.95rem;
-			line-height: 1.7;
-		}
-	}
-}
-
-// Shared sidebar components
-
+// Sidebar container — flex column of cards
 .sidebar {
 	display: flex;
 	flex-direction: column;
 	gap: 1.5rem;
 }
 
-.sidebar section {
+// Sidebar card — white box with border, holds all card elements
+.sidebar-card {
 	background: $white;
 	border: 1px solid rgba($secondary, 0.12);
 	border-radius: 0;
 	overflow: hidden;
 
-	h6 {
+	// Label heading at top of card
+	.header {
 		@include label-style;
 		color: $secondary;
 		padding: 1rem 1.25rem 0;
-		margin-bottom: 0.5rem;
+		margin-bottom: 0.75rem;
 
 		small a {
 			color: color.adjust($body-color, $lightness: 20%);
@@ -50,125 +29,175 @@
 			}
 		}
 	}
-}
 
-.sidebar-body {
-	padding: 0 1.25rem 1.25rem;
-	font-size: 0.9rem;
+	// Padded content area
+	.content {
+		padding: 0 1.25rem 1.25rem;
+		font-size: 0.9rem;
 
-	p {
-		margin-bottom: 0.35rem;
-		color: color.adjust($body-color, $lightness: 10%);
+		p {
+			margin-bottom: 0.35rem;
+			color: color.adjust($body-color, $lightness: 10%);
+		}
+
+		strong {
+			color: $body-color;
+		}
 	}
 
-	strong {
-		color: $body-color;
-	}
-}
-
-.sidebar-recent-item {
-	display: block;
-	padding: 0.65rem 0;
-	border-bottom: 1px solid rgba($secondary, 0.08);
-	text-decoration: none;
-	color: $body-color;
-	transition: background 0.15s ease;
-
-	&:first-child {
-		padding-top: 0;
-	}
-
-	&:last-child {
-		border-bottom: none;
-		padding-bottom: 0;
-	}
-
-	&:hover {
-		color: $primary;
-		text-decoration: none;
-	}
-
-	strong {
+	// Full-width image (maps, banners)
+	.image {
+		width: 100%;
+		object-fit: cover;
 		display: block;
-		font-size: 0.875rem;
-		font-weight: 600;
-		margin-bottom: 0.1rem;
-		@include line-clamp(2);
+		background: rgba($secondary, 0.08);
 	}
 
-	.sidebar-recent-time {
+	// Bottom bar with border-top (links, CTA buttons)
+	.footer {
+		padding: 0.75rem 1.25rem;
+		border-top: 1px solid rgba($secondary, 0.08);
+		font-size: 0.8rem;
+
+		a {
+			word-break: break-all;
+		}
+
+		.btn {
+			border-radius: 0;
+			width: 100%;
+			font-size: 0.9rem;
+		}
+	}
+
+	// Search — fills entire card, no header
+	&.search {
+		padding: 1rem 1.25rem;
+
+		.form-control {
+			font-size: 0.875rem;
+		}
+	}
+
+	// Preview - linked content item with title, meta, and excerpt
+	.preview {
+		display: block;
+		padding: 0.65rem 0;
+		border-bottom: 1px solid rgba($secondary, 0.08);
+		text-decoration: none;
+		color: $body-color;
+		transition: background 0.15s ease;
+
+		&:first-child {
+			padding-top: 0;
+		}
+
+		&:last-child {
+			border-bottom: none;
+			padding-bottom: 0;
+		}
+
+		&:hover {
+			color: $primary;
+			text-decoration: none;
+		}
+
+		strong {
+			display: block;
+			font-size: 0.875rem;
+			font-weight: 600;
+			margin-bottom: 0.1rem;
+			@include line-clamp(2);
+		}
+
+		p {
+			font-size: 0.8rem;
+			color: color.adjust($body-color, $lightness: 15%);
+			margin: 0.25rem 0 0;
+			@include line-clamp(2);
+		}
+	}
+
+	// Filter - label + count row for tags/categories
+	.filter {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		padding: 0.45rem 0;
+		border-bottom: 1px solid rgba($secondary, 0.06);
+		font-size: 0.875rem;
+		font-weight: 500;
+		color: $body-color;
+		text-decoration: none;
+		transition: color 0.15s ease;
+
+		&:last-child {
+			border-bottom: none;
+			padding-bottom: 0;
+		}
+
+		&:first-child {
+			padding-top: 0;
+		}
+
+		&:hover {
+			color: $primary;
+			text-decoration: none;
+		}
+
+		&.active {
+			color: $primary;
+			font-weight: 600;
+		}
+	}
+
+	// Small muted text (timestamps, addresses)
+	.meta {
 		font-size: 0.75rem;
 		color: color.adjust($body-color, $lightness: 25%);
 	}
 
-	p {
-		font-size: 0.8rem;
-		color: color.adjust($body-color, $lightness: 15%);
-		margin: 0.25rem 0 0;
-		@include line-clamp(2);
-	}
-}
-
-.sidebar-category-item {
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-	padding: 0.45rem 0;
-	border-bottom: 1px solid rgba($secondary, 0.06);
-	font-size: 0.875rem;
-	font-weight: 500;
-	color: $body-color;
-	text-decoration: none;
-	transition: color 0.15s ease;
-
-	&:last-child {
-		border-bottom: none;
-		padding-bottom: 0;
-	}
-
-	&:first-child {
-		padding-top: 0;
-	}
-
-	&:hover {
-		color: $primary;
-		text-decoration: none;
-	}
-
-	&.active {
-		color: $primary;
+	// Count pill (tag/category counts)
+	.count {
+		font-size: 0.75rem;
 		font-weight: 600;
+		color: color.adjust($body-color, $lightness: 25%);
+		background: rgba($secondary, 0.08);
+		padding: 0.1rem 0.5rem;
+		border-radius: 2px;
 	}
-}
 
-.sidebar-address {
-	font-size: 0.825rem;
-	color: color.adjust($body-color, $lightness: 20%);
-	margin-top: 0.25rem;
-}
+	// Identity — avatar + name/description layout (modifier on .content)
+	.identity {
+		display: flex;
+		gap: 1rem;
+		padding: 0 1.25rem 0 0;
 
-.sidebar-image {
-	width: 100%;
-	object-fit: cover;
-	display: block;
-	background: rgba($secondary, 0.08);
-}
+		.avatar {
+			width: 80px;
+			height: 80px;
+			object-fit: cover;
+			flex-shrink: 0;
+			background: rgba($secondary, 0.08);
+		}
 
-.sidebar-cta {
-	padding: 1rem 1.25rem;
-	border-top: 1px solid rgba($secondary, 0.08);
+		.info {
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			min-width: 0;
 
-	.btn {
-		border-radius: 0;
-		width: 100%;
+			p {
+				font-size: 0.85rem;
+				color: color.adjust($body-color, $lightness: 10%);
+				margin: 0;
+			}
+		}
+
+		.name {
+			display: block;
+			font-size: 0.95rem;
+			margin-bottom: 0.2rem;
+		}
 	}
-}
-
-.sidebar-category-count {
-	font-size: 0.75rem;
-	font-weight: 600;
-	color: color.adjust($body-color, $lightness: 25%);
-	background: rgba($secondary, 0.08);
-	padding: 0.1rem 0.5rem;
-	border-radius: 2px;
 }

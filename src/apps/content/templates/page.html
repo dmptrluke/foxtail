@@ -23,9 +23,11 @@
         </div>
     </div>
 
-    <main id="main-content" class="container px-3 px-md-4 py-4">
-        <div class="rendered-markdown">
-            {{ page.body_rendered | safe }}
+    <main id="main-content" class="container px-3 px-md-4 mt-5">
+        <div class="layout-content">
+            <div class="rendered-markdown">
+                {{ page.body_rendered | safe }}
+            </div>
         </div>
     </main>
 {% endblock base_content %}

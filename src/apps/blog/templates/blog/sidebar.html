@@ -1,42 +1,37 @@
 {% load cache humanize icon %}
 
-<section>
-    <h6>Search</h6>
-    <div class="sidebar-body">
-        <form action="{% url 'blog:list' %}">
-            <label class="visually-hidden" for="search-field">Search</label>
-            <div class="input-group">
-                <input type="search" name="q" id="search-field" class="form-control" placeholder="Search news...">
-                <button type="submit" class="btn btn-outline-secondary" aria-label="Submit Search Query">{% icon "search" %}</button>
-            </div>
-        </form>
+<form action="{% url 'blog:list' %}" class="sidebar-card search">
+    <label class="visually-hidden" for="search-field">Search</label>
+    <div class="input-group">
+        <input type="search" name="q" id="search-field" class="form-control" placeholder="Search news...">
+        <button type="submit" class="btn btn-outline-secondary" aria-label="Submit Search Query">{% icon "search" %}</button>
     </div>
-</section>
+</form>
 
 {% cache 1800 sidebarposts %}
-    <section>
-        <h6>Recent Posts <small><a title="RSS Feed" href="{% url 'blog:feed' %}">{% icon 'rss-square' tag='span' %}</a></small></h6>
-        <div class="sidebar-body">
+    <div class="sidebar-card">
+        <h6 class="header">Recent Posts <small><a title="RSS Feed" href="{% url 'blog:feed' %}">{% icon 'rss-square' tag='span' %}</a></small></h6>
+        <div class="content">
             {% for post in sidebar_post_list %}
-                <a href="{{ post.get_absolute_url }}" class="sidebar-recent-item">
+                <a href="{{ post.get_absolute_url }}" class="preview">
                     <strong>{{ post.title }}</strong>
-                    <span class="sidebar-recent-time">{{ post.created|naturaltime }}</span>
+                    <span class="meta">{{ post.created|naturaltime }}</span>
                     <p>{{ post.text_rendered|safe|striptags|truncatechars:80 }}</p>
                 </a>
             {% endfor %}
         </div>
-    </section>
+    </div>
 {% endcache %}
 
-<section>
-    <h6>Categories</h6>
-    <div class="sidebar-body">
+<div class="sidebar-card">
+    <h6 class="header">Categories</h6>
+    <div class="content">
         {% for tag in sidebar_tag_list %}
             <a href="{% url 'blog:list' %}?tag={{ tag.slug }}"
-               class="sidebar-category-item{% if request.GET.tag == tag.slug %} active{% endif %}">
+               class="filter{% if request.GET.tag == tag.slug %} active{% endif %}">
                 {{ tag.name|capfirst }}
-                <span class="sidebar-category-count">{{ tag.num_times }}</span>
+                <span class="count">{{ tag.num_times }}</span>
             </a>
         {% endfor %}
     </div>
-</section>
+</div>
