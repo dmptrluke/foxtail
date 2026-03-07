@@ -100,6 +100,7 @@ if DEBUG:
     INSTALLED_APPS += ['debug_toolbar']
 
 MIDDLEWARE = [
+    'apps.core.middleware.RequestLoggingMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'csp.middleware.CSPMiddleware',
@@ -448,18 +449,29 @@ LOGGING = {
             + '/%(process)d] [%(levelname)s] (%(module)s) %(message)s',
             'datefmt': '%d/%b/%Y %H:%M:%S',
         },
+        'access': {
+            'format': '[%(asctime)s] %(message)s',
+            'datefmt': '%d/%b/%Y %H:%M:%S',
+        },
     },
     'handlers': {
         'console': {
             'level': 'DEBUG',
             'class': 'logging.StreamHandler',
             'formatter': 'verbose',
-        }
+        },
+        'access': {
+            'level': 'INFO',
+            'class': 'logging.StreamHandler',
+            'formatter': 'access',
+        },
     },
     'root': {'level': 'INFO', 'handlers': ['console']},
     'loggers': {
         'sentry_sdk': {'level': 'ERROR', 'handlers': ['console']},
         'azure': {'level': 'WARNING'},
+        'django.request': {'level': 'ERROR', 'handlers': ['console'], 'propagate': False},
+        'apps.core.access': {'level': 'INFO', 'handlers': ['access'], 'propagate': False},
     },
 }
 

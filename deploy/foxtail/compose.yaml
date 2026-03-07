@@ -74,6 +74,11 @@ services:
       redis:
         condition: service_healthy
     command: django-admin rqworker default
+    healthcheck:
+      test: ["CMD-SHELL", "django-admin rqstats --json | python -c 'import sys,json; json.load(sys.stdin)'"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
 
 networks:
   caddy:

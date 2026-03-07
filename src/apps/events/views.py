@@ -65,7 +65,7 @@ class EventDetailView(YearMixin, DetailView):
         except ValueError:
             raise Http404() from None
 
-        return Event.objects.filter(start__year=date.year, slug=self.kwargs['slug'])
+        return Event.objects.filter(start__year=date.year, slug=self.kwargs['slug']).prefetch_related('tags')
 
 
 __all__ = ['EventDetailView', 'EventListView', 'EventListYearView']
