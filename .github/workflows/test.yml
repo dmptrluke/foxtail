@@ -60,8 +60,8 @@ jobs:
 
       - name: Lint
         run: |
-          uv run ruff check src/
-          uv run ruff format --check src/
+          uvx ruff check src/
+          uvx ruff format --check src/
 
       - name: Test with pytest
         env:
