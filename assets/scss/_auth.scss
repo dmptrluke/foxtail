@@ -41,7 +41,7 @@
   box-shadow: 0 8px 40px rgba(40, 30, 51, 0.35), 0 2px 8px rgba(40, 30, 51, 0.15);
   border-radius: 2px;
 
-  @media (min-width: 1920px) {
+  @media (min-width: 1921px) {
     zoom: 1.1;
   }
 }
@@ -112,18 +112,10 @@
   }
 
   .icon {
-    display: flex;
-    flex-shrink: 0;
     width: 18px;
     height: 18px;
-
-    svg {
-      width: 18px;
-      height: 18px;
-      fill: none;
-      top: 0;
-      position: static;
-    }
+    vertical-align: 0;
+    fill: none;
   }
 }
 

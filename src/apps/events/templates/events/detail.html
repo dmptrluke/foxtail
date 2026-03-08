@@ -44,7 +44,7 @@
             <div class="hero-topline">
                 {% url 'events:list' as events_url %}{% breadcrumbs events_url "Events" event.title %}
                 {% if user.is_staff %}
-                    <a href="{% url 'admin:events_event_change' event.pk %}" class="hero-admin-link">{% icon "pencil" "span" "0.75em" %} Edit</a>
+                    <a href="{% url 'admin:events_event_change' event.pk %}" class="hero-admin-link">{% icon "pencil" size="0.75em" %} Edit</a>
                 {% endif %}
             </div>
 

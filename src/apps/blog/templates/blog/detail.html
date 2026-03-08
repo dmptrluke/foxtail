@@ -42,7 +42,7 @@
                 <div class="hero-topline">
                     {% url 'blog:list' as news_url %}{% breadcrumbs news_url "News" post.title %}
                     {% if user.is_staff %}
-                        <a href="{% url 'admin:foxtail_blog_post_change' post.pk %}" class="hero-admin-link">{% icon "pencil" "span" "0.75em" %} Edit</a>
+                        <a href="{% url 'admin:foxtail_blog_post_change' post.pk %}" class="hero-admin-link">{% icon "pencil" size="0.75em" %} Edit</a>
                     {% endif %}
                 </div>
 
