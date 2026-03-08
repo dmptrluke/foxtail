@@ -58,6 +58,11 @@ jobs:
       - name: Install Python dependencies
         run: uv sync --frozen --no-install-project --group test
 
+      - name: Lint
+        run: |
+          uv run ruff check src/
+          uv run ruff format --check src/
+
       - name: Test with pytest
         env:
           PYTHONPATH: src
