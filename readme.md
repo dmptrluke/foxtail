@@ -64,7 +64,7 @@ defined by the Mozilla Public License, v. 2.0.
 
 * [Django](https://www.djangoproject.com/) - The backend, the star of the whole show.
 * [Bootstrap](https://getbootstrap.com/) - Front-end CSS framework.
-* [Webpack](https://webpack.js.org/) - Front-end bundling and asset management.
+* [Vite](https://vite.dev/) - Front-end bundling and asset management.
 * [RQ (Redis Queue)](https://python-rq.org/) - Job queueing and background tasks.
 
 

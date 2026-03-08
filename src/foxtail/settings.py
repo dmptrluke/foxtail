@@ -1,19 +1,14 @@
 """
-Base settings for the foxtail project.
-You shouldn't need to edit this file in most cases.
+Django settings for Foxtail. Configured via environment variables and optional
+.env file (django-environ).
 
-Custom/instance specific settings can be customised using a
-<.env> file placed in the project root, or with environment
-variables (see https://django-environ.readthedocs.io/)
+Most settings should be configured via environment variables, not by editing
+this file.
 
-For Django documentation on this file, see
-https://docs.djangoproject.com/en/stable/topics/settings/
-
-For the full list of settings and their values, see
-https://docs.djangoproject.com/en/stable/ref/settings/
+Sections: Core > Django > Third-party > Foxtail
+Environment reference: deploy/foxtail/.env.example
 """
 
-import logging
 from pathlib import Path
 
 from django.contrib.messages import constants as messages
@@ -22,34 +17,24 @@ import environ
 import pymdownx.emoji
 from csp.constants import NONCE, NONE, SELF
 
-logger = logging.getLogger(__name__)
-
-# Build paths inside the project like this: str(BASE_DIR / 'subdir').
 SRC_DIR = Path(__file__).resolve(strict=True).parents[1]
 BASE_DIR = SRC_DIR.parent
 
 env = environ.Env()
-environ.Env.read_env(str(BASE_DIR / '.env'))
+environ.Env.read_env(BASE_DIR / '.env')
 
-# SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = env('SECRET_KEY')
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = env.bool('DEBUG', default=False)
-TESTING = env.bool('TESTING', default=False)
+DEBUG = env.bool('DEBUG', default=False)  # debug toolbar, relaxed CSP, verbose messages, no conn pooling
+TESTING = env.bool('TESTING', default=False)  # simplified staticfiles, silenced reCAPTCHA check
 
 SITE_URL = env('SITE_URL').rstrip('/')
 SITE_ID = 1
-
-ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=[])
-INTERNAL_IPS = []
-USE_X_FORWARDED_HOST = env.bool('USE_X_FORWARDED_HOST', default=False)
 
 ROOT_URLCONF = 'foxtail.urls'
 
 WSGI_APPLICATION = 'foxtail.wsgi.application'
 
-# Application definition
 INSTALLED_APPS = [
     'apps.admin.apps.CustomAdminConfig',
     'django.contrib.auth',
@@ -121,8 +106,19 @@ if DEBUG:
         'SHOW_TOOLBAR_CALLBACK': lambda _request: DEBUG,
     }
 
+# =============================================================================
+# Django
+# =============================================================================
+
+# Hosting
+# <https://docs.djangoproject.com/en/stable/ref/settings/#allowed-hosts>
+
+ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=[])
+USE_X_FORWARDED_HOST = env.bool('USE_X_FORWARDED_HOST', default=False)
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
 # Template Engine
-# <https://docs.djangoproject.com/en/dev/topics/templates/>
+# <https://docs.djangoproject.com/en/stable/topics/templates/>
 
 TEMPLATES = [
     {
@@ -145,36 +141,29 @@ TEMPLATES = [
 
 FORM_RENDERER = 'django.forms.renderers.TemplatesSetting'
 
-# Recognise upstream proxy SSL
-# <https://docs.djangoproject.com/en/stable/ref/settings/#secure-proxy-ssl-header>
-SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-
 # Database
 # <https://docs.djangoproject.com/en/stable/ref/settings/#databases>
 
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 
 DATABASES = {'default': env.db('DATABASE_URL', default='sqlite:///' + str(BASE_DIR / 'db.sqlite3'))}
+DATABASES['default']['CONN_MAX_AGE'] = 0 if DEBUG else env.int('CONN_MAX_AGE', default=600)
+DATABASES['default']['CONN_HEALTH_CHECKS'] = True
 
 # Cache
 # <https://docs.djangoproject.com/en/stable/topics/cache/#setting-up-the-cache>
+
 CACHES = {'default': env.cache(default='dummycache://')}
 
-# enable the cached session backend
+# Sessions
 # <https://docs.djangoproject.com/en/stable/topics/http/sessions/#using-cached-sessions>
+
 SESSION_ENGINE = 'django.contrib.sessions.backends.cached_db'
 SESSION_COOKIE_AGE = 2592000  # 30 days
 
-# django-rq
-# <https://github.com/rq/django-rq>
-RQ_ASYNC = env.bool('RQ_ASYNC', default=True)
-
-RQ_QUEUES = {'default': {'USE_REDIS_CACHE': 'default', 'ASYNC': RQ_ASYNC}}
-
 # Authentication
-# <https://django-allauth.readthedocs.io/en/latest/>
+# <https://docs.djangoproject.com/en/stable/topics/auth/>
 
-# django
 AUTH_USER_MODEL = 'accounts.User'
 
 AUTHENTICATION_BACKENDS = [
@@ -184,13 +173,174 @@ AUTHENTICATION_BACKENDS = [
 
 LOGIN_REDIRECT_URL = '/'
 
+# Passwords
+# <https://docs.djangoproject.com/en/stable/topics/auth/passwords/>
+# <https://docs.djangoproject.com/en/stable/ref/settings/#auth-password-validators>
+
+AUTH_PASSWORD_VALIDATORS = [
+    {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
+]
+
+PASSWORD_HASHERS = [
+    'django.contrib.auth.hashers.Argon2PasswordHasher',
+    'django.contrib.auth.hashers.PBKDF2PasswordHasher',
+    'django.contrib.auth.hashers.PBKDF2SHA1PasswordHasher',
+    'django.contrib.auth.hashers.BCryptSHA256PasswordHasher',
+]
+
+# Internationalization
+# <https://docs.djangoproject.com/en/stable/topics/i18n/>
+
+LANGUAGE_CODE = 'en-au'
+TIME_ZONE = 'Pacific/Auckland'
+USE_I18N = True
+USE_TZ = True
+FORMS_URLFIELD_ASSUME_HTTPS = True
+
+# Messages
+# <https://docs.djangoproject.com/en/stable/ref/contrib/messages/>
+
+MESSAGE_TAGS = {
+    messages.DEBUG: 'alert-secondary',
+    messages.INFO: 'alert-info',
+    messages.SUCCESS: 'alert-success',
+    messages.WARNING: 'alert-warning',
+    messages.ERROR: 'alert-danger',
+}
+
+if DEBUG:
+    MESSAGE_LEVEL = 10
+
+# Static files and media (CSS, JavaScript, Images)
+# <https://docs.djangoproject.com/en/stable/howto/static-files/>
+# <https://docs.djangoproject.com/en/stable/ref/settings/#media-root>
+
+STATIC_URL = '/static/'
+MEDIA_URL = '/media/'
+
+# noinspection PyUnresolvedReferences
+STATICFILES_DIRS = [str(BASE_DIR / 'build/static'), str(BASE_DIR / 'assets/static')]
+
+AZURE_MEDIA = env.bool('AZURE_MEDIA', default=False)
+
+if AZURE_MEDIA:
+    AZURE_ACCOUNT_NAME = env('AZURE_ACCOUNT')
+    AZURE_ACCOUNT_KEY = env('AZURE_KEY')
+    AZURE_CUSTOM_DOMAIN = env('AZURE_DOMAIN', default=None)
+    AZURE_SSL = True
+
+STORAGES = {
+    'default': {
+        'BACKEND': 'apps.core.storages.MediaAzureStorage'
+        if AZURE_MEDIA
+        else 'django.core.files.storage.FileSystemStorage',
+    },
+    'staticfiles': {
+        'BACKEND': 'whitenoise.storage.CompressedManifestStaticFilesStorage',
+    },
+}
+STATIC_ROOT = str(BASE_DIR / 'static')
+
+if not AZURE_MEDIA:
+    MEDIA_ROOT = str(BASE_DIR / 'storage/media')
+
+if TESTING:
+    WHITENOISE_AUTOREFRESH = True
+    STORAGES['staticfiles'] = {
+        'BACKEND': 'whitenoise.storage.CompressedStaticFilesStorage',
+    }
+
+# Security
+# <https://docs.djangoproject.com/en/stable/howto/deployment/checklist/#https>
+
+CSRF_TRUSTED_ORIGINS = [SITE_URL]
+CSRF_COOKIE_NAME = '__Host-csrftoken'
+CSRF_COOKIE_SECURE = True
+
+SESSION_COOKIE_NAME = '__Host-sessionid'
+SESSION_COOKIE_SECURE = True
+
+X_FRAME_OPTIONS = 'DENY'
+
+# Email
+# <https://docs.djangoproject.com/en/stable/topics/email/>
+# <https://anymail.readthedocs.io/en/stable/>
+
+DEFAULT_FROM_EMAIL = env('EMAIL_FROM_USER', default='webmaster@localhost')
+SERVER_EMAIL = env('EMAIL_FROM_SYSTEM', default='root@localhost')
+
+if 'MAILGUN_API_KEY' in env:
+    EMAIL_BACKEND = 'anymail.backends.mailgun.EmailBackend'
+    ANYMAIL_MAILGUN_API_KEY = env('MAILGUN_API_KEY')
+
+    if 'MAILGUN_SENDER_DOMAIN' in env:
+        ANYMAIL_MAILGUN_SENDER_DOMAIN = env('MAILGUN_SENDER_DOMAIN')
+
+else:
+    EMAIL_CONFIG = env.email_url('EMAIL_URL', default='consolemail://')
+    vars().update(EMAIL_CONFIG)
+
+EMAIL_REAL_BACKEND = EMAIL_BACKEND
+EMAIL_BACKEND = 'apps.email.engine.AsyncEmailBackend'
+
+# Logging
+# <https://docs.djangoproject.com/en/stable/ref/settings/#logging>
+# <https://docs.djangoproject.com/en/stable/topics/logging>
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '[%(asctime)s] ['
+            + env('SERVICE_NAME', default='app')
+            + '/%(process)d] [%(levelname)s] (%(module)s) %(message)s',
+            'datefmt': '%d/%b/%Y %H:%M:%S',
+        },
+        'access': {
+            'format': '[%(asctime)s] %(message)s',
+            'datefmt': '%d/%b/%Y %H:%M:%S',
+        },
+    },
+    'handlers': {
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+            'formatter': 'verbose',
+        },
+        'access': {
+            'level': 'INFO',
+            'class': 'logging.StreamHandler',
+            'formatter': 'access',
+        },
+    },
+    'root': {'level': 'INFO', 'handlers': ['console']},
+    'loggers': {
+        'sentry_sdk': {'level': 'ERROR', 'handlers': ['console']},
+        'azure': {'level': 'WARNING'},
+        'django.request': {'level': 'ERROR', 'handlers': ['console'], 'propagate': False},
+        'apps.core.access': {'level': 'INFO', 'handlers': ['access'], 'propagate': False},
+    },
+}
+
+# =============================================================================
+# Third-party
+# =============================================================================
+
 # allauth
+# <https://docs.allauth.org/en/latest/account/configuration.html>
+
 ACCOUNT_ADAPTER = 'apps.accounts.authentication.AccountAdapter'
+ACCOUNT_DEFAULT_HTTP_PROTOCOL = 'https'
+ACCOUNT_SESSION_REMEMBER = True
 
 ACCOUNT_LOGIN_METHODS = {'email', 'username'}
-ACCOUNT_SIGNUP_FIELDS = ['email*', 'username*', 'password1*', 'password2*']
-ACCOUNT_DEFAULT_HTTP_PROTOCOL = 'https'
+ACCOUNT_LOGIN_BY_CODE_ENABLED = False
 
+ACCOUNT_SIGNUP_FIELDS = ['email*', 'username*', 'password1*', 'password2*']
 ACCOUNT_USERNAME_VALIDATORS = 'apps.accounts.validators.username_validators'
 
 ACCOUNT_FORMS = {
@@ -209,13 +359,12 @@ ACCOUNT_RATE_LIMITS = {
     'login_by_code': '5/m/ip',
 }
 
-ACCOUNT_LOGIN_BY_CODE_ENABLED = False
-ACCOUNT_SESSION_REMEMBER = True
-
 # allauth social
+# <https://docs.allauth.org/en/latest/socialaccount/configuration.html>
+
 SOCIALACCOUNT_ADAPTER = 'apps.accounts.authentication.SocialAccountAdapter'
 SOCIALACCOUNT_AUTO_SIGNUP = False
-SOCIALACCOUNT_LOGIN_ON_GET = False
+
 SOCIALACCOUNT_PROVIDERS = {}
 
 _github_client_id = env('GITHUB_CLIENT_ID', default='')
@@ -259,137 +408,17 @@ if _telegram_client_id:
     }
 
 # allauth-mfa
+# <https://docs.allauth.org/en/latest/mfa/index.html>
 
 MFA_SUPPORTED_TYPES = ['recovery_codes', 'totp', 'webauthn']
 MFA_PASSKEY_LOGIN_ENABLED = True
 MFA_WEBAUTHN_ALLOW_INSECURE_ORIGIN = DEBUG
 
-MFA_FORMS = {
-    'authenticate': 'allauth.mfa.base.forms.AuthenticateForm',
-    'reauthenticate': 'allauth.mfa.base.forms.AuthenticateForm',
-    'activate_totp': 'allauth.mfa.totp.forms.ActivateTOTPForm',
-    'deactivate_totp': 'allauth.mfa.totp.forms.DeactivateTOTPForm',
-    'generate_recovery_codes': 'allauth.mfa.recovery_codes.forms.GenerateRecoveryCodesForm',
-}
-
-# OpenID Connect Identity Provider
+# allauth idp
 # <https://docs.allauth.org/en/latest/idp/oidc/index.html>
+
 IDP_OIDC_ADAPTER = 'apps.accounts.adapter.FoxtailOIDCAdapter'
 IDP_OIDC_PRIVATE_KEY = env('OIDC_RSA_PRIVATE_KEY', default='')
-
-# Passwords
-# <https://docs.djangoproject.com/en/stable/topics/auth/passwords/>
-# <https://docs.djangoproject.com/en/stable/ref/settings/#auth-password-validators>
-
-AUTH_PASSWORD_VALIDATORS = [
-    {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
-    {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'},
-    {'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator'},
-    {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
-]
-
-PASSWORD_HASHERS = [
-    'django.contrib.auth.hashers.Argon2PasswordHasher',
-    'django.contrib.auth.hashers.PBKDF2PasswordHasher',
-    'django.contrib.auth.hashers.PBKDF2SHA1PasswordHasher',
-    'django.contrib.auth.hashers.BCryptSHA256PasswordHasher',
-]
-
-# ReCAPTCHA
-# <https://pypi.org/project/django-recaptcha/>
-
-# I used to pull these from captcha.constants, but it does some annoying stuff
-# and seems to run all of the Django system checks if I even touch that module
-TEST_PUBLIC_KEY = '6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI'
-TEST_PRIVATE_KEY = '6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe'
-
-if DEBUG or TESTING:
-    SILENCED_SYSTEM_CHECKS = ['django_recaptcha.recaptcha_test_key_error']
-
-RECAPTCHA_ENABLED = env.bool('RECAPTCHA_ENABLED', default=True)
-RECAPTCHA_INVISIBLE = env.bool('RECAPTCHA_INVISIBLE', default=True)
-
-RECAPTCHA_PUBLIC_KEY = env('RECAPTCHA_PUBLIC_KEY', default=TEST_PUBLIC_KEY)
-RECAPTCHA_PRIVATE_KEY = env('RECAPTCHA_PRIVATE_KEY', default=TEST_PRIVATE_KEY)
-
-# Taggit
-# <https://django-taggit.readthedocs.io/en/latest/getting_started.html>
-TAGGIT_CASE_INSENSITIVE = True
-
-# Internationalization
-# <https://docs.djangoproject.com/en/stable/topics/i18n/>
-
-LANGUAGE_CODE = 'en-au'
-TIME_ZONE = 'Pacific/Auckland'
-
-USE_I18N = True
-USE_TZ = True
-FORMS_URLFIELD_ASSUME_HTTPS = True
-
-# Messages
-MESSAGE_TAGS = {
-    messages.DEBUG: 'alert-secondary',
-    messages.INFO: 'alert-info',
-    messages.SUCCESS: 'alert-success',
-    messages.WARNING: 'alert-warning',
-    messages.ERROR: 'alert-danger',
-}
-
-if DEBUG:
-    MESSAGE_LEVEL = 10
-
-# Static files and media (CSS, JavaScript, Images)
-# <https://docs.djangoproject.com/en/stable/howto/static-files/>
-# <https://docs.djangoproject.com/en/dev/ref/settings/#media-root>
-
-STATIC_URL = '/static/'
-MEDIA_URL = '/media/'
-
-# noinspection PyUnresolvedReferences
-STATICFILES_DIRS = [str(BASE_DIR / 'build/static'), str(BASE_DIR / 'assets/static')]
-
-AZURE_MEDIA = env.bool('AZURE_MEDIA', default=False)
-
-if AZURE_MEDIA:
-    AZURE_ACCOUNT_NAME = env('AZURE_ACCOUNT')
-    AZURE_ACCOUNT_KEY = env('AZURE_KEY')
-    AZURE_CUSTOM_DOMAIN = env('AZURE_DOMAIN', default=None)
-    AZURE_SSL = True
-
-STORAGES = {
-    'default': {
-        'BACKEND': 'apps.core.storages.MediaAzureStorage'
-        if AZURE_MEDIA
-        else 'django.core.files.storage.FileSystemStorage',
-    },
-    'staticfiles': {
-        'BACKEND': 'whitenoise.storage.CompressedManifestStaticFilesStorage',
-    },
-}
-STATIC_ROOT = str(BASE_DIR / 'static')
-
-if not AZURE_MEDIA:
-    MEDIA_ROOT = str(BASE_DIR / 'storage/media')
-
-if TESTING:
-    WHITENOISE_AUTOREFRESH = True
-    STORAGES['staticfiles'] = {
-        'BACKEND': 'whitenoise.storage.CompressedStaticFilesStorage',
-    }
-
-# Security
-# <https://docs.djangoproject.com/en/stable/howto/deployment/checklist/#https>
-# <https://docs.djangoproject.com/en/stable/ref/middleware/#x-xss-protection>
-
-SESSION_COOKIE_SECURE = True
-SESSION_COOKIE_NAME = '__Host-sessionid'
-
-CSRF_COOKIE_SECURE = True
-CSRF_COOKIE_NAME = '__Host-csrftoken'
-
-SECURE_CONTENT_TYPE_NOSNIFF = True
-
-X_FRAME_OPTIONS = 'DENY'
 
 # CSP Headers
 # <https://django-csp.readthedocs.io/en/latest/>
@@ -432,110 +461,9 @@ CONTENT_SECURITY_POLICY = {
     },
 }
 
-# Sentry.io
-# <https://docs.sentry.io/platforms/python/django/>
-
-SENTRY_ENABLED = env.bool('SENTRY_ENABLED', default=False)
-
-if SENTRY_ENABLED:
-    SENTRY_DSN = env('SENTRY_DSN')
-
-    from urllib.parse import urlparse
-
-    import sentry_sdk
-    from sentry_sdk.integrations.django import DjangoIntegration
-    from sentry_sdk.integrations.redis import RedisIntegration
-
-    _vars = {
-        'dsn': SENTRY_DSN,
-        'send_default_pii': env.bool('SENTRY_PII', default=False),
-        'integrations': [DjangoIntegration(), RedisIntegration()],
-    }
-
-    # attach environment
-    SENTRY_ENVIRONMENT = env('SENTRY_ENVIRONMENT', default='')
-    if SENTRY_ENVIRONMENT:
-        _vars['environment'] = SENTRY_ENVIRONMENT
-
-    # attach version
-    SENTRY_RELEASE = env('SENTRY_RELEASE', default='')
-    if SENTRY_RELEASE:
-        _vars['release'] = SENTRY_RELEASE
-
-    # set CSP report URI
-    if env.bool('SENTRY_CSP', default=False):
-        _csp_report_uri = 'https://sentry.io/api/{}/security/?sentry_key={}'.format(
-            urlparse(SENTRY_DSN).path.strip('/'), urlparse(SENTRY_DSN).username
-        )
-
-        if _vars.get('release'):
-            _csp_report_uri += f'&sentry_release={_vars["release"]}'
-
-        CONTENT_SECURITY_POLICY['DIRECTIVES']['report-uri'] = _csp_report_uri
-
-    sentry_sdk.init(**_vars)
-
-# Logging
-# <https://docs.djangoproject.com/en/dev/ref/settings/#logging>
-# <https://docs.djangoproject.com/en/dev/topics/logging>
-LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'formatters': {
-        'verbose': {
-            'format': '[%(asctime)s] ['
-            + env('SERVICE_NAME', default='app')
-            + '/%(process)d] [%(levelname)s] (%(module)s) %(message)s',
-            'datefmt': '%d/%b/%Y %H:%M:%S',
-        },
-        'access': {
-            'format': '[%(asctime)s] %(message)s',
-            'datefmt': '%d/%b/%Y %H:%M:%S',
-        },
-    },
-    'handlers': {
-        'console': {
-            'level': 'DEBUG',
-            'class': 'logging.StreamHandler',
-            'formatter': 'verbose',
-        },
-        'access': {
-            'level': 'INFO',
-            'class': 'logging.StreamHandler',
-            'formatter': 'access',
-        },
-    },
-    'root': {'level': 'INFO', 'handlers': ['console']},
-    'loggers': {
-        'sentry_sdk': {'level': 'ERROR', 'handlers': ['console']},
-        'azure': {'level': 'WARNING'},
-        'django.request': {'level': 'ERROR', 'handlers': ['console'], 'propagate': False},
-        'apps.core.access': {'level': 'INFO', 'handlers': ['access'], 'propagate': False},
-    },
-}
-
-# Email
-# <https://docs.djangoproject.com/en/stable/topics/email/>
-# <https://anymail.readthedocs.io/en/stable/>
-DEFAULT_FROM_EMAIL = env('EMAIL_FROM_USER', default='webmaster@localhost')
-SERVER_EMAIL = env('EMAIL_FROM_SYSTEM', default='root@localhost')
-
-if 'MAILGUN_API_KEY' in env:
-    EMAIL_BACKEND = 'anymail.backends.mailgun.EmailBackend'
-    ANYMAIL_MAILGUN_API_KEY = env('MAILGUN_API_KEY')
-
-    if 'MAILGUN_SENDER_DOMAIN' in env:
-        ANYMAIL_MAILGUN_SENDER_DOMAIN = env('MAILGUN_SENDER_DOMAIN')
-
-else:
-    EMAIL_CONFIG = env.email_url('EMAIL_URL', default='consolemail://')
-    vars().update(EMAIL_CONFIG)
-
-EMAIL_REAL_BACKEND = EMAIL_BACKEND
-EMAIL_BACKEND = 'apps.email.engine.AsyncEmailBackend'
-
 # django-imagefield
 # <https://django-imagefield.readthedocs.io/en/latest/>
+
 IMAGEFIELD_BACKEND = 'vips'
 IMAGEFIELD_AUTOGENERATE = False
 IMAGEFIELD_BIN_DEPTH = 2
@@ -578,7 +506,16 @@ IMAGEFIELD_FORMATS = {
     },
 }
 
+# django-rq
+# <https://github.com/rq/django-rq>
+
+RQ_ASYNC = env.bool('RQ_ASYNC', default=True)
+
+RQ_QUEUES = {'default': {'USE_REDIS_CACHE': 'default', 'ASYNC': RQ_ASYNC}}
+
 # Markdown
+# <https://github.com/jamesturk/django-markdownfield>
+
 MARKDOWN_EXTENSIONS = [
     'pymdownx.smartsymbols',
     'pymdownx.betterem',
@@ -594,26 +531,83 @@ MARKDOWN_EXTENSIONS = [
 
 MARKDOWN_EXTENSION_CONFIGS = {'pymdownx.emoji': {'emoji_generator': pymdownx.emoji.to_alt}}
 
-MARKDOWN_LINKIFY_BLACKLIST = []
+MARKDOWN_LINKIFY_BLACKLIST = ['furry.nz', 'furry.org.nz']
 
-# robots.txt
-ROBOTS_ALLOWED = env.bool('ROBOTS_ALLOWED', default=True)
+# ReCAPTCHA
+# <https://pypi.org/project/django-recaptcha/>
+
+TEST_PUBLIC_KEY = '6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI'
+TEST_PRIVATE_KEY = '6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe'
+
+if DEBUG or TESTING:
+    SILENCED_SYSTEM_CHECKS = ['django_recaptcha.recaptcha_test_key_error']
+
+RECAPTCHA_ENABLED = env.bool('RECAPTCHA_ENABLED', default=True)
+RECAPTCHA_INVISIBLE = env.bool('RECAPTCHA_INVISIBLE', default=True)
+RECAPTCHA_PUBLIC_KEY = env('RECAPTCHA_PUBLIC_KEY', default=TEST_PUBLIC_KEY)
+RECAPTCHA_PRIVATE_KEY = env('RECAPTCHA_PRIVATE_KEY', default=TEST_PRIVATE_KEY)
+
+# Sentry.io
+# <https://docs.sentry.io/platforms/python/django/>
+
+SENTRY_ENABLED = env.bool('SENTRY_ENABLED', default=False)
+
+if SENTRY_ENABLED:
+    SENTRY_DSN = env('SENTRY_DSN')
+
+    from urllib.parse import urlparse
+
+    import sentry_sdk
+    from sentry_sdk.integrations.django import DjangoIntegration
+    from sentry_sdk.integrations.redis import RedisIntegration
+
+    _vars = {
+        'dsn': SENTRY_DSN,
+        'send_default_pii': env.bool('SENTRY_PII', default=False),
+        'integrations': [DjangoIntegration(), RedisIntegration()],
+    }
+
+    SENTRY_ENVIRONMENT = env('SENTRY_ENVIRONMENT', default='')
+    if SENTRY_ENVIRONMENT:
+        _vars['environment'] = SENTRY_ENVIRONMENT
+
+    SENTRY_RELEASE = env('SENTRY_RELEASE', default='')
+    if SENTRY_RELEASE:
+        _vars['release'] = SENTRY_RELEASE
+
+    # set CSP report URI
+    if env.bool('SENTRY_CSP', default=False):
+        _csp_report_uri = 'https://sentry.io/api/{}/security/?sentry_key={}'.format(
+            urlparse(SENTRY_DSN).path.strip('/'), urlparse(SENTRY_DSN).username
+        )
+
+        if _vars.get('release'):
+            _csp_report_uri += f'&sentry_release={_vars["release"]}'
+
+        CONTENT_SECURITY_POLICY['DIRECTIVES']['report-uri'] = _csp_report_uri
+
+    sentry_sdk.init(**_vars)
 
 # Django Structured Data
 # <https://github.com/dmptrluke/django-structured-data>
+
 DEFAULT_STRUCTURED_DATA = {
     'publisher': {
         '@id': 'https://furry.nz/#organization',
     }
 }
 
+# Taggit
+# <https://django-taggit.readthedocs.io/en/latest/getting_started.html>
 
-# Blog
-BLOG_COMMENTS = True
+TAGGIT_CASE_INSENSITIVE = True
 
-# Contact
-CONTACT_EMAILS = env.list('CONTACT_EMAILS')
-
+# =============================================================================
 # Foxtail
+# =============================================================================
+
+BLOG_COMMENTS = True
+CONTACT_EMAILS = env.list('CONTACT_EMAILS')
 DIRECTORY_ENABLED = env.bool('DIRECTORY_ENABLED', default=False)
 MAPBOX_ACCESS_TOKEN = env('MAPBOX_ACCESS_TOKEN', default='')
+ROBOTS_ALLOWED = env.bool('ROBOTS_ALLOWED', default=True)
