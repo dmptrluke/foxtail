@@ -6,12 +6,12 @@
 {% block hero_breadcrumbs %}{% url 'account_profile' as a %}{% url 'mfa_index' as m %}{% breadcrumbs a "Account" m "Two-Factor Auth" "Recovery Codes" %}{% endblock %}
 
 {% block hero_heading %}Recovery Codes{% endblock %}
-{% block hero_sub %}<h2>Recovery codes let you access your account if you ever lose access to your authenticator app. Each code can only be used once.</h2>{% endblock %}
+{% block hero_sub %}<h2>Recovery codes let you access your account if you ever lose access to your authenticator app.</h2>{% endblock %}
 
 {% block content %}
     {% if unused_codes %}
         <div class="account-confirm">
-            <p><strong>Keep these codes safe.</strong> Store them in a password manager or print them out and keep them somewhere secure. Do not share them with anyone.</p>
+            <p><strong>Keep these codes safe.</strong> Store them in a password manager or print them out and keep them somewhere secure. Each code can only be used once.</p>
         </div>
         <div class="card mb-4">
             <div class="card-body">
