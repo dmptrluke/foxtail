@@ -1,4 +1,4 @@
-from datetime import date, datetime, timedelta
+from datetime import UTC, date, datetime, timedelta
 
 import pytest
 from selenium.webdriver.common.by import By
@@ -10,8 +10,8 @@ pytestmark = pytest.mark.django_db
 
 
 def test_unauthenticated_user_browsing(driver, live_server, post: Post, second_post: Post, event: Event):
-    post.created = datetime(2019, 12, 2)
-    second_post.created = datetime(2019, 11, 1)
+    post.created = datetime(2019, 12, 2, tzinfo=UTC)
+    second_post.created = datetime(2019, 11, 1, tzinfo=UTC)
     event_date = date.today() + timedelta(days=30)
     event.start = event_date
     event.location = 'Auckland, New Zealand'

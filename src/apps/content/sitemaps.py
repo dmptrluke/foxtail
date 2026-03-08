@@ -20,7 +20,7 @@ class PageSitemap(Sitemap):
     changefreq = 'daily'
 
     def items(self):
-        return Page.objects.all()
+        return Page.objects.order_by('pk')
 
 
 __all__ = ['PageSitemap', 'StaticSitemap']

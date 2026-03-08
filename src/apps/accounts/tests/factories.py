@@ -18,6 +18,7 @@ class UserNoPasswordFactory(DjangoModelFactory):
     class Meta:
         model = get_user_model()
         django_get_or_create = ['username']
+        skip_postgeneration_save = True
 
 
 class UserFactory(UserNoPasswordFactory):
@@ -31,3 +32,5 @@ class UserFactory(UserNoPasswordFactory):
             lower_case=True,
         )
         self.set_password(password)
+        if create:
+            self.save()

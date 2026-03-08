@@ -324,6 +324,7 @@ TIME_ZONE = 'Pacific/Auckland'
 
 USE_I18N = True
 USE_TZ = True
+FORMS_URLFIELD_ASSUME_HTTPS = True
 
 # Messages
 MESSAGE_TAGS = {
@@ -537,6 +538,7 @@ EMAIL_BACKEND = 'apps.email.engine.AsyncEmailBackend'
 # <https://django-imagefield.readthedocs.io/en/latest/>
 IMAGEFIELD_BACKEND = 'vips'
 IMAGEFIELD_AUTOGENERATE = False
+IMAGEFIELD_BIN_DEPTH = 2
 IMAGEFIELD_FORMATS = {
     'accounts.user.avatar': {
         'small': ['default', ('crop', (80, 80))],
