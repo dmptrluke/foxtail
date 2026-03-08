@@ -49,6 +49,13 @@
                         Manage your email addresses
                     {% endif %}
                 </p>
+                {% if primary_email.verified %}
+                    <div class="tile-status tile-status-ok">Verified</div>
+                {% elif primary_email %}
+                    <div class="tile-status tile-status-warn">Not verified</div>
+                {% else %}
+                    <div class="tile-status tile-status-warn">No email</div>
+                {% endif %}
             </a>
 
             <a href="{% url 'mfa_index' %}" class="dashboard-tile">
