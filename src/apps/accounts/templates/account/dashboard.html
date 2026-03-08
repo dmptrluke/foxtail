@@ -25,13 +25,13 @@
             <a href="{% url 'account_profile_edit' %}" class="dashboard-tile">
                 <div class="tile-icon">{% icon "account-cog" size="1.5rem" %}</div>
                 <h3>Profile</h3>
-                <p class="tile-detail">Avatar, username, name, and personal details</p>
+                <p class="tile-detail">Avatar, username, and personal details</p>
             </a>
 
             <a href="{% url 'account_change_password' %}" class="dashboard-tile">
                 <div class="tile-icon">{% icon "lock" size="1.5rem" %}</div>
                 <h3>Password</h3>
-                <p class="tile-detail">Manage your login password</p>
+                <p class="tile-detail">Change your password</p>
                 {% if has_password %}
                     <div class="tile-status tile-status-ok">Password set</div>
                 {% else %}
@@ -68,11 +68,7 @@
                 </div>
                 <h3>Two-Factor Authentication</h3>
                 {% if mfa_enabled %}
-                    <p class="tile-detail">
-                        {% if "totp" in mfa_methods %}Authenticator App{% endif %}
-                        {% if "totp" in mfa_methods and "webauthn" in mfa_methods %}, {% endif %}
-                        {% if "webauthn" in mfa_methods %}Security Key{% endif %}
-                    </p>
+                    <p class="tile-detail">{% if "totp" in mfa_methods %}Authenticator App{% endif %}{% if "totp" in mfa_methods and "webauthn" in mfa_methods %}, {% endif %}{% if "webauthn" in mfa_methods %}Security Key{% endif %}</p>
                     <div class="tile-status tile-status-ok">Enabled</div>
                 {% else %}
                     <p class="tile-detail">Add an extra layer of security</p>
