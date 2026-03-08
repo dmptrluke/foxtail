@@ -1,14 +1,25 @@
 {% extends "account_base.html" %}
 {% load breadcrumbs %}
 
-{% block title %}Authorized Applications{% endblock %}
+{% block title %}Apps & Connections{% endblock %}
 
-{% block hero_breadcrumbs %}{% url 'account_profile' as a %}{% breadcrumbs a "Account" "Applications" %}{% endblock %}
+{% block hero_breadcrumbs %}{% url 'account_profile' as a %}{% breadcrumbs a "Account" "Apps & Connections" %}{% endblock %}
 
-{% block hero_heading %}Authorized Applications{% endblock %}
-{% block hero_sub %}<h2>Third-party applications that have been granted access to your account.</h2>{% endblock %}
+{% block hero_heading %}Apps & Connections{% endblock %}
+{% block hero_sub %}<h2>Manage third-party apps and external sign-in services linked to your account.</h2>{% endblock %}
 
 {% block content %}
+    <ul class="nav nav-tabs mb-4">
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'socialaccount_connections' %}">Sign-in Methods</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link active" href="{% url 'account_application_list' %}">Authorized Apps</a>
+        </li>
+    </ul>
+
+    <p class="text-body-secondary mb-3">Apps you've signed into using your furry.nz account. They can access your profile information.</p>
+
     {% if client_list %}
         <div class="account-item-list">
             {% for client in client_list %}

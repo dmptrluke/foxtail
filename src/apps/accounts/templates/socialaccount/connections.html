@@ -1,14 +1,25 @@
 {% extends "account_base.html" %}
 {% load breadcrumbs icon form_tags %}
 
-{% block title %}Connected Accounts{% endblock %}
+{% block title %}Apps & Connections{% endblock %}
 
-{% block hero_breadcrumbs %}{% url 'account_profile' as a %}{% breadcrumbs a "Account" "Connections" %}{% endblock %}
+{% block hero_breadcrumbs %}{% url 'account_profile' as a %}{% breadcrumbs a "Account" "Apps & Connections" %}{% endblock %}
 
-{% block hero_heading %}Connected Accounts{% endblock %}
-{% block hero_sub %}<h2>Sign in to your account using any of the following services.</h2>{% endblock %}
+{% block hero_heading %}Apps & Connections{% endblock %}
+{% block hero_sub %}<h2>Manage third-party apps and external sign-in services linked to your account.</h2>{% endblock %}
 
 {% block content %}
+    <ul class="nav nav-tabs mb-4">
+        <li class="nav-item">
+            <a class="nav-link active" href="{% url 'socialaccount_connections' %}">Sign-in Methods</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'account_application_list' %}">Authorized Apps</a>
+        </li>
+    </ul>
+
+    <p class="text-body-secondary mb-3">External accounts you use to sign in to furry.nz.</p>
+
     {% non_field_errors form %}
 
     <div class="account-section">
