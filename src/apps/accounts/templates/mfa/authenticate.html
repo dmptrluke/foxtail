@@ -3,8 +3,10 @@
 
 {% block title %}Two-Factor Authentication{% endblock %}
 
-{% block heading %}Two-factor authentication{% endblock %}
-{% block subheading %}<p class="auth-subheading">Choose a verification method to continue signing in.</p>{% endblock %}
+{% block heading %}
+    <h1>Two-factor authentication</h1>
+    <h2>Choose a verification method to continue signing in.</h2>
+{% endblock %}
 
 {% block content %}
     {% if "webauthn" in user_authenticator_types %}

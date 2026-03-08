@@ -42,19 +42,25 @@
   border-radius: 2px;
 }
 
-.auth-heading {
+.auth-header {
+  margin-bottom: 1.75rem;
+}
+
+.auth-card h1 {
   text-align: left;
-  margin-bottom: 0.35rem;
+  margin-bottom: 0;
   font-size: 1.5rem;
   font-weight: 700;
   color: #2d2639;
 }
 
-.auth-subheading {
+.auth-card h2 {
   text-align: left;
   font-size: 0.875rem;
+  font-weight: 400;
   color: #6b5f7a;
-  margin-bottom: 1.75rem;
+  margin-top: 0.35rem;
+  margin-bottom: 0;
   line-height: 1.4;
 }
 

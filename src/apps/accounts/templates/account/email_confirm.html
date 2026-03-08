@@ -3,15 +3,15 @@
 
 {% block title %}Confirm Email{% endblock %}
 
-{% block heading %}Confirm email{% endblock %}
+{% block heading %}<h1>Confirm email</h1>{% endblock %}
 
 {% block content %}
     {% if confirmation %}
         {% user_display confirmation.email_address.user as user_display %}
 
-        <p class="auth-subheading">
+        <h2>
             Confirm <strong>{{ confirmation.email_address.email }}</strong> as an email address for <strong>{{ user_display }}</strong>.
-        </p>
+        </h2>
 
         <form method="post" action="{% url 'account_confirm_email' confirmation.key %}">
             {% csrf_token %}

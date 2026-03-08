@@ -3,8 +3,10 @@
 
 {% block title %}Sign In{% endblock %}
 
-{% block heading %}Sign in with email{% endblock %}
-{% block subheading %}<p class="auth-subheading">We'll send you a one-time code.</p>{% endblock %}
+{% block heading %}
+    <h1>Sign in with email</h1>
+    <h2>We'll send you a one-time code.</h2>
+{% endblock %}
 
 {% block content %}
     <form method="post" action="{% url 'account_request_login_code' %}" class="auth-form">
