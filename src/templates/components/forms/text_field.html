@@ -1,9 +1,9 @@
-{% load widget_tweaks %}
+{% load widget_tweaks form_tags %}
 {% if not inline %}<div class="mb-3">{% endif %}
     {% if not hide_label and not inline %}<label class="form-label" for="{{ field.id_for_label }}">{{ field.label }}</label>{% endif %}
     {% if field.errors %}
         {% render_field field class="form-control is-invalid" %}
-        <div class="invalid-feedback">{{ field.errors }}</div>
+        <div class="invalid-feedback">{{ field.errors|plain_errors }}</div>
     {% else %}
         {% render_field field class="form-control" %}
     {% endif %}
