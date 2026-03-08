@@ -1,0 +1,68 @@
+{% extends "account_base.html" %}
+{% load breadcrumbs icon %}
+
+{% block title %}Verification{% endblock %}
+
+{% block hero_breadcrumbs %}{% url 'account_profile' as a %}{% breadcrumbs a "Account" "Verification" %}{% endblock %}
+
+{% block hero_heading %}Verification{% endblock %}
+{% block hero_sub %}<h2>Identity verification by a trusted community member.</h2>{% endblock %}
+
+{% block content %}
+    <div class="alert alert-info"><strong>Verification will always be optional!</strong> Down the line, it may be used to unlock features like submitting events, or by third-party apps as an extra layer of trust.</div>
+
+    <div class="account-section">
+        <h5>Status</h5>
+        {% if verification %}
+            <p>
+                {% icon "check-decagram" size="1.25rem" %}
+                <strong>Verified</strong>
+                {% if verification.verified_by %}
+                    by {{ verification.verified_by.username }}
+                {% endif %}
+                on {{ verification.verified_at|date:"j M Y" }}
+            </p>
+        {% else %}
+            <p>Your identity has not been verified yet. To get verified, generate a code below and show it to a trusted verifier.</p>
+
+            {% if token %}
+                <div class="card mb-3" style="max-width: 20rem;">
+                    <div class="card-body text-center">
+                        <p class="fs-2 fw-bold font-monospace mb-1">{{ token }}</p>
+                        <p class="text-body-secondary mb-3">Expires in {{ token_ttl|floatformat:0 }}s</p>
+                        {% if qr_data_uri %}
+                            <img src="{{ qr_data_uri }}" alt="QR code for {{ token }}" class="mb-3" style="max-width: 160px;">
+                        {% endif %}
+                    </div>
+                </div>
+            {% endif %}
+
+            <form method="post" action="{% url 'account_verification_generate' %}">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-outline-primary">
+                    {% if token %}Generate New Code{% else %}Generate Code{% endif %}
+                </button>
+            </form>
+        {% endif %}
+    </div>
+
+    {% if is_verifier %}
+        <hr>
+        <div class="account-section">
+            <h5>Verify Someone</h5>
+            <p>Enter the verification code shown on another member's page.</p>
+            <div class="row">
+                <div class="col-md-6">
+                    <form method="post" action="{% url 'account_verification_confirm' %}" class="d-flex gap-2 align-items-end">
+                        {% csrf_token %}
+                        <div class="flex-grow-1">
+                            <label for="id_token" class="form-label">Verification code</label>
+                            <input type="text" name="token" id="id_token" class="form-control font-monospace" placeholder="XXXX-XXXX" maxlength="9" required value="{{ prefilled_code }}">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Look Up</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+{% endblock content %}

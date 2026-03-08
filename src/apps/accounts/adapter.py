@@ -6,6 +6,7 @@ class FoxtailOIDCAdapter(DefaultOIDCAdapter):
         'openid': 'User Identifier',
         'email': 'Email Address',
         'profile': 'Profile Information',
+        'verification': 'Verification Status',
     }
 
     def get_issuer(self):
@@ -26,5 +27,8 @@ class FoxtailOIDCAdapter(DefaultOIDCAdapter):
             claims['nickname'] = user.username
             if user.date_of_birth:
                 claims['birthdate'] = user.date_of_birth.isoformat()
+
+        if 'verification' in scopes:
+            claims['verified'] = user.is_verified
 
         return claims

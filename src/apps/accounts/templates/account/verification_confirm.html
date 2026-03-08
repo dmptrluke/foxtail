@@ -1,0 +1,49 @@
+{% extends "account_base.html" %}
+{% load breadcrumbs icon avatar %}
+
+{% block title %}Confirm Verification{% endblock %}
+
+{% block hero_breadcrumbs %}
+    {% url 'account_profile' as a %}{% url 'account_verification' as v %}
+    {% breadcrumbs a "Account" v "Verification" "Confirm" %}
+{% endblock %}
+
+{% block hero_heading %}Confirm Verification{% endblock %}
+
+{% block content %}
+    <div class="account-section">
+        <div class="d-flex align-items-center gap-3 mb-3">
+            <img src="{{ target_user|avatar_url:80 }}" alt="{{ target_user.username }}" class="rounded-circle" width="80" height="80">
+            <div>
+                <h5 class="mb-0">{{ target_user.username }}</h5>
+                {% if already_verified %}
+                    <span class="text-success">{% icon "check-decagram" size="1rem" %} Already verified</span>
+                {% else %}
+                    <span class="text-body-secondary">Not yet verified</span>
+                {% endif %}
+            </div>
+        </div>
+
+        {% if already_verified %}
+            <p>This user is already verified. You can remove their verification if needed.</p>
+            <div class="d-flex gap-2">
+                <form method="post" action="{% url 'account_verification_unverify' %}">
+                    {% csrf_token %}
+                    <input type="hidden" name="token" value="{{ token }}">
+                    <button type="submit" class="btn btn-outline-danger">Remove Verification</button>
+                </form>
+                <a href="{% url 'account_verification' %}" class="btn btn-outline-secondary">Cancel</a>
+            </div>
+        {% else %}
+            <p>Are you sure you want to verify this user's identity?</p>
+            <div class="d-flex gap-2">
+                <form method="post" action="{% url 'account_verification_verify' %}">
+                    {% csrf_token %}
+                    <input type="hidden" name="token" value="{{ token }}">
+                    <button type="submit" class="btn btn-success">Verify {{ target_user.username }}</button>
+                </form>
+                <a href="{% url 'account_verification' %}" class="btn btn-outline-secondary">Cancel</a>
+            </div>
+        {% endif %}
+    </div>
+{% endblock content %}
