@@ -28,6 +28,24 @@
                 <p class="tile-detail">Avatar, username, and personal details</p>
             </a>
 
+            <a href="{% url 'account_verification' %}" class="dashboard-tile">
+                <div class="tile-icon">
+                    {% if user.is_verified %}
+                        {% icon "check-decagram" size="1.5rem" %}
+                    {% else %}
+                        {% icon "shield-off" size="1.5rem" %}
+                    {% endif %}
+                </div>
+                <h3>Verification</h3>
+                {% if user.is_verified %}
+                    <p class="tile-detail">Identity confirmed</p>
+                    <div class="tile-status tile-status-ok">Verified</div>
+                {% else %}
+                    <p class="tile-detail">Get verified by a trusted member</p>
+                    <div class="tile-status tile-status-neutral">Not verified</div>
+                {% endif %}
+            </a>
+
             <a href="{% url 'account_change_password' %}" class="dashboard-tile">
                 <div class="tile-icon">{% icon "lock" size="1.5rem" %}</div>
                 <h3>Password</h3>
@@ -76,20 +94,10 @@
                 {% endif %}
             </a>
 
-            <a href="{% url 'account_application_list' %}" class="dashboard-tile">
-                <div class="tile-icon">{% icon "application-brackets" size="1.5rem" %}</div>
-                <h3>Applications</h3>
-                <p class="tile-detail">{{ app_count }} authorized app{{ app_count|pluralize }}</p>
-            </a>
-
             <a href="{% url 'socialaccount_connections' %}" class="dashboard-tile">
-                <div class="tile-icon">{% icon "link-variant" size="1.5rem" %}</div>
-                <h3>Connected Accounts</h3>
-                {% if social_count %}
-                    <p class="tile-detail">{{ social_count }} connected: {{ social_providers|join:", " }}</p>
-                {% else %}
-                    <p class="tile-detail">Link external accounts for easy sign-in</p>
-                {% endif %}
+                <div class="tile-icon">{% icon "application-brackets" size="1.5rem" %}</div>
+                <h3>Apps & Connections</h3>
+                <p class="tile-detail">{{ social_count }} sign-in method{{ social_count|pluralize }}, {{ app_count }} authorized app{{ app_count|pluralize }}</p>
             </a>
         </div>
     </main>
