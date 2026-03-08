@@ -10,8 +10,7 @@ register = template.Library()
 def event_calendar(event):
     """Render a mini calendar strip centered around the event dates.
 
-    Shows ~9 days with event days highlighted. If start/end times exist,
-    renders a time bar showing partial-day coverage within each active day.
+    Shows ~9 days with event days highlighted.
     """
     start = event.start
     end = event.end or start
@@ -48,27 +47,15 @@ def event_calendar(event):
         if is_last:
             cls += ' last'
 
-        time_bar = ''
-        if is_active and (event.start_time or event.end_time):
-            time_bar = _build_time_bar(
-                day,
-                start,
-                end,
-                event.start_time,
-                event.end_time,
-            )
-
         days_html.append(
             format_html(
                 '<div class="{cls}">'
                 '<span class="event-cal-name">{name}</span>'
                 '<span class="event-cal-num">{num}</span>'
-                '{time_bar}'
                 '</div>',
                 cls=cls,
                 name=day.strftime('%a'),
                 num=day.day,
-                time_bar=time_bar,
             )
         )
 
@@ -87,30 +74,4 @@ def event_calendar(event):
         '</div>',
         label=month_label,
         days=inner,
-    )
-
-
-def _build_time_bar(day, start, end, start_time, end_time):
-    """Build a time bar showing partial-day coverage as a percentage offset."""
-    # Default: full day
-    left_pct = 0
-    right_pct = 100
-
-    is_first_day = day == start
-    is_last_day = day == (end or start)
-
-    if is_first_day and start_time:
-        minutes = start_time.hour * 60 + start_time.minute
-        left_pct = round((minutes / 1440) * 100)
-
-    if is_last_day and end_time:
-        minutes = end_time.hour * 60 + end_time.minute
-        right_pct = round((minutes / 1440) * 100)
-
-    width_pct = max(right_pct - left_pct, 5)
-
-    return format_html(
-        '<div class="event-cal-timebar"><div class="event-cal-timefill" style="left:{}%;width:{}%"></div></div>',
-        left_pct,
-        width_pct,
     )
