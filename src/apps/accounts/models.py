@@ -8,6 +8,7 @@ from django.utils.timezone import now
 from allauth.account.models import EmailAddress
 from imagefield.fields import ImageField as ProcessedImageField
 
+from . import rules  # noqa: F401
 from .validators import username_validators
 
 
@@ -47,11 +48,32 @@ class User(AbstractUser):
 
     @cached_property
     def email_verified(self):
-        """check if the users main email is verified"""
         return EmailAddress.objects.filter(user=self, email=self.email, verified=True, primary=True).exists()
+
+    @cached_property
+    def is_verified(self):
+        return Verification.objects.filter(user=self).exists()
 
     def __str__(self):
         return f'{self.username}'
+
+
+class Verification(models.Model):
+    user = models.OneToOneField(
+        'accounts.User',
+        on_delete=models.CASCADE,
+        related_name='verification',
+    )
+    verified_by = models.ForeignKey(
+        'accounts.User',
+        on_delete=models.SET_NULL,
+        null=True,
+        related_name='verifications_given',
+    )
+    verified_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f'{self.user} verified by {self.verified_by}'
 
 
 class ClientMetadata(models.Model):
@@ -75,4 +97,4 @@ class ClientMetadata(models.Model):
         return f'Metadata for {self.client.name}'
 
 
-__all__ = ['ClientMetadata', 'User']
+__all__ = ['ClientMetadata', 'User', 'Verification']
