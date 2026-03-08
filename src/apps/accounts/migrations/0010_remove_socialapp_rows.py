@@ -9,6 +9,7 @@ def remove_socialapp_rows(apps, schema_editor):
 class Migration(migrations.Migration):
     dependencies = [
         ('accounts', '0009_switch_to_imagefield'),
+        ('socialaccount', '0006_alter_socialaccount_extra_data'),
     ]
 
     operations = [
