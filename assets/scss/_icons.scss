@@ -1,43 +1,9 @@
 .icon {
-	display: inline-flex;
-	align-self: center;
-
-	svg {
-		height: 1em;
-		width: 1em;
-		stroke-width: 0;
-		stroke: currentColor;
-		fill: currentColor;
-	}
-}
-
-.icon.svg-baseline svg {
-	top: .125em;
-	position: relative;
-}
-
-.icon-search {
-	width: 0.9285714285714285em;
-}
-
-.icon-refresh {
-	width: 0.8571428571428571em;
-}
-
-.icon-twitter {
-	width: 0.9285714285714285em;
-}
-
-.icon-facebook {
-	width: 0.5881428571428571em;
-}
-
-.icon-rss-square {
-	width: 0.8571428571428571em;
-}
-
-.icon-github {
-	width: 0.8571428571428571em;
+	display: inline-block;
+	vertical-align: -0.125em;
+	height: 1em;
+	width: 1em;
+	fill: currentColor;
 }
 
 .icon-angle-left {
@@ -46,10 +12,6 @@
 
 .icon-angle-right {
 	width: 0.33928571428571425em;
-}
-
-.icon-google {
-	width: 0.8398571428571427em;
 }
 
 .icon-paw {

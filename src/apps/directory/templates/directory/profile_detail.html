@@ -10,7 +10,7 @@
                 {% url 'directory:index' as dir_url %}{% breadcrumbs dir_url "Directory" profile.user.username %}
                 {% has_perm 'directory.change_profile' on=profile as can_edit %}
                 {% if can_edit %}
-                    <a href="{{ profile.get_modify_url }}" class="hero-admin-link">{% icon "pencil" "span" "0.75em" %} Edit</a>
+                    <a href="{{ profile.get_modify_url }}" class="hero-admin-link">{% icon "pencil" size="0.75em" %} Edit</a>
                 {% endif %}
             </div>
 

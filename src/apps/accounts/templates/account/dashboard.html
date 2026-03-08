@@ -9,7 +9,7 @@
             <div class="hero-identity">
                 <a href="{% url 'account_profile_edit' %}" class="dashboard-avatar-link" title="Change avatar">
                     <img src="{{ user|avatar_url:160 }}" alt="{{ user.username }}" class="hero-avatar">
-                    <span class="dashboard-avatar-edit">{% icon "pencil" "span" "1rem" %}</span>
+                    <span class="dashboard-avatar-edit">{% icon "pencil" size="1rem" %}</span>
                 </a>
                 <div>
                     <h1>{{ user.get_short_name }}</h1>

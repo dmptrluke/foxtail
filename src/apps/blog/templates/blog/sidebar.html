@@ -10,7 +10,7 @@
 
 {% cache 1800 sidebarposts %}
     <div class="sidebar-card">
-        <h6 class="header">Recent Posts <small><a title="RSS Feed" href="{% url 'blog:feed' %}">{% icon 'rss-square' tag='span' %}</a></small></h6>
+        <h6 class="header">Recent Posts <small><a title="RSS Feed" href="{% url 'blog:feed' %}">{% icon 'rss-square' %}</a></small></h6>
         <div class="content">
             {% for post in sidebar_post_list %}
                 <a href="{{ post.get_absolute_url }}" class="preview">

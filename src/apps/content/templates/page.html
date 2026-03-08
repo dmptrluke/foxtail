@@ -12,7 +12,7 @@
         <div class="container px-3 px-md-4">
             {% if user.is_staff %}
                 <div class="hero-topline">
-                    <a href="{% url 'admin:content_page_change' page.pk %}" class="hero-admin-link">{% icon "pencil" "span" "0.75em" %} Edit</a>
+                    <a href="{% url 'admin:content_page_change' page.pk %}" class="hero-admin-link">{% icon "pencil" size="0.75em" %} Edit</a>
                 </div>
             {% endif %}
 

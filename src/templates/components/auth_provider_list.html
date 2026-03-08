@@ -5,7 +5,7 @@
 <div class="auth-providers">
     {% for provider in socialaccount_providers %}
         <a href="{% provider_login_url provider process=process %}" class="auth-provider-btn">
-            {% icon provider.sub_id tag="span" colored=True %}
+            {% icon provider.sub_id colored=True %}
             {{ provider.name }}
         </a>
     {% endfor %}
