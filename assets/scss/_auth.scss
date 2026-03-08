@@ -106,10 +106,19 @@
     text-decoration: none;
   }
 
-  svg {
+  .icon {
+    display: flex;
+    flex-shrink: 0;
     width: 18px;
     height: 18px;
-    flex-shrink: 0;
+
+    svg {
+      width: 18px;
+      height: 18px;
+      fill: none;
+      top: 0;
+      position: static;
+    }
   }
 }
 
