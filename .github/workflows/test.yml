@@ -79,7 +79,7 @@ jobs:
         run: uv sync --frozen --no-install-project --group test
 
       - name: Get assets
-        uses: actions/download-artifact@v7
+        uses: actions/download-artifact@v8
         with:
           name: generated
           path: build
