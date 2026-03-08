@@ -66,7 +66,7 @@ def test_blog_comments(authenticated_driver, user, live_server, post: Post):
     delete_button.click()
 
     # we should now be back at the post page
-    assert driver.current_url == live_server.url + post.get_absolute_url()
+    WebDriverWait(driver, 5).until(EC.url_to_be(live_server.url + post.get_absolute_url()))
 
     # the comment is gone
     comment_section = driver.find_element(By.CLASS_NAME, 'comments-section')
