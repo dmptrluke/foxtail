@@ -250,6 +250,7 @@ if _telegram_client_id:
                 'settings': {
                     'server_url': 'https://oauth.telegram.org',
                     'scope': ['openid', 'profile'],
+                    'fetch_userinfo': False,
                 },
             },
         ],
