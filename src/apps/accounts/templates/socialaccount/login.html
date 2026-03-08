@@ -2,13 +2,12 @@
 
 {% block title %}{% if process == "connect" %}Connect {{ provider.name }}{% else %}Sign In{% endif %}{% endblock %}
 
-{% block heading %}{% if process == "connect" %}Connect {{ provider.name }}{% else %}Continue with {{ provider.name }}{% endif %}{% endblock %}
-
-{% block subheading %}
+{% block heading %}
+    <h1>{% if process == "connect" %}Connect {{ provider.name }}{% else %}Continue with {{ provider.name }}{% endif %}</h1>
     {% if process == "connect" %}
-        <p class="auth-subheading">Link your {{ provider.name }} account to your furry.nz account for easier sign-in.</p>
+        <h2>Link your {{ provider.name }} account to your furry.nz account for easier sign-in.</h2>
     {% else %}
-        <p class="auth-subheading">You are about to sign in using your {{ provider.name }} account.</p>
+        <h2>You are about to sign in using your {{ provider.name }} account.</h2>
     {% endif %}
 {% endblock %}
 

@@ -3,12 +3,12 @@
 
 {% block title %}Sign In{% endblock %}
 
-{% block heading %}Enter your code{% endblock %}
-{% block subheading %}
-    <p class="auth-subheading">
+{% block heading %}
+    <h1>Enter your code</h1>
+    <h2>
         Check your email for a sign-in code.
         {% if email %}Sent to <strong>{{ email }}</strong>.{% endif %}
-    </p>
+    </h2>
 {% endblock %}
 
 {% block content %}

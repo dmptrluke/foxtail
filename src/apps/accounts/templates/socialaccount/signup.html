@@ -3,8 +3,10 @@
 
 {% block title %}Create Account{% endblock %}
 
-{% block heading %}Almost there{% endblock %}
-{% block subheading %}<p class="auth-subheading">Complete your registration to finish signing up with <strong>{{ account.get_provider.name }}</strong>.</p>{% endblock %}
+{% block heading %}
+    <h1>Almost there</h1>
+    <h2>Complete your registration to finish signing up with <strong>{{ account.get_provider.name }}</strong>.</h2>
+{% endblock %}
 
 {% block content %}
     <div class="auth-alert auth-alert-info">

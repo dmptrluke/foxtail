@@ -3,8 +3,10 @@
 
 {% block title %}Confirm Access{% endblock %}
 
-{% block heading %}Confirm your identity{% endblock %}
-{% block subheading %}<p class="auth-subheading">Enter a code from your authenticator app to continue.</p>{% endblock %}
+{% block heading %}
+    <h1>Confirm your identity</h1>
+    <h2>Enter a code from your authenticator app to continue.</h2>
+{% endblock %}
 
 {% block content %}
     <form method="post" action="{% url 'mfa_reauthenticate' %}" class="auth-form">

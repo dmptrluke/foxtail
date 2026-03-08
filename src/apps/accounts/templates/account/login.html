@@ -7,8 +7,7 @@
     <link rel="canonical" href="{{ SITE_URL }}{% url 'account_login' %}"/>
 {% endblock %}
 
-{% block heading %}Sign in{% endblock %}
-{% block subheading %}<p class="auth-subheading">Welcome back. Sign in to your account.</p>{% endblock %}
+{% block heading %}<h1>Sign in</h1>{% endblock %}
 
 {% block content %}
     {% include "components/auth_provider_list.html" with process="login" %}
@@ -44,7 +43,7 @@
 
     {% if PASSKEY_LOGIN_ENABLED %}
         <div class="mt-3">
-            <button type="button" id="passkey_login" class="auth-btn-secondary">Sign in with a passkey</button>
+            <button type="button" id="passkey_login" form="mfa_login" class="auth-btn-secondary">Sign in with a passkey</button>
         </div>
     {% endif %}
 

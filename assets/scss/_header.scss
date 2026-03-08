@@ -1,6 +1,23 @@
 #navigation {
 	z-index: $zindex-dropdown + 1;
 
+	.navbar-toggler {
+		border: none;
+		padding: 0.5rem;
+		font-size: 1.5rem;
+
+		&:focus {
+			box-shadow: none;
+		}
+
+		&:active,
+		&[aria-expanded="true"] {
+			.navbar-toggler-icon {
+				opacity: 1;
+			}
+		}
+	}
+P
 	.navbar-brand .icon {
 		vertical-align: top;
 		width: 29px;
@@ -25,6 +42,7 @@
 		&[data-bs-popper] {
 			margin-top: .75rem;
 		}
+
 
 		.dropdown-item {
 			color: rgba($white, .7);

@@ -29,8 +29,9 @@
 <body class="auth-shell">
     <div class="auth-card">
         {% include "components/messages.html" %}
-        <h1 class="auth-heading">{% block heading %}{% endblock heading %}</h1>
-        {% block subheading %}{% endblock subheading %}
+        <header class="auth-header">
+            {% block heading %}{% endblock heading %}
+        </header>
         {% block content %}{% endblock content %}
     </div>
 
