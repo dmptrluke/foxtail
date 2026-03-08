@@ -209,13 +209,13 @@ ACCOUNT_RATE_LIMITS = {
     'login_by_code': '5/m/ip',
 }
 
-ACCOUNT_LOGIN_BY_CODE_ENABLED = True
+ACCOUNT_LOGIN_BY_CODE_ENABLED = False
 ACCOUNT_SESSION_REMEMBER = True
 
 # allauth social
 SOCIALACCOUNT_ADAPTER = 'apps.accounts.authentication.SocialAccountAdapter'
 SOCIALACCOUNT_AUTO_SIGNUP = False
-SOCIALACCOUNT_LOGIN_ON_GET = True
+SOCIALACCOUNT_LOGIN_ON_GET = False
 SOCIALACCOUNT_PROVIDERS = {}
 
 _github_client_id = env('GITHUB_CLIENT_ID', default='')

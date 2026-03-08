@@ -31,7 +31,7 @@ def icon_tag(icon_id, size=None, colored=False):
 
     attrs = f'class="icon icon-{icon_id}"'
     if size:
-        attrs += f' style="width:{size};height:{size}"'
+        attrs += f' width="{size}" height="{size}"'
 
     icon_data = icon_data.replace('<svg ', f'<svg {attrs} ', 1)
 
