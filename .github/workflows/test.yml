@@ -5,6 +5,9 @@ on:
       - 'dependabot**'
   pull_request:
 
+permissions:
+  contents: read
+
 concurrency:
   group: test-${{ github.ref }}
   cancel-in-progress: true
