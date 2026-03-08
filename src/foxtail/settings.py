@@ -84,6 +84,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.google',
     'allauth.socialaccount.providers.discord',
     'allauth.socialaccount.providers.github',
+    'allauth.socialaccount.providers.openid_connect',
     'anymail',
     'mail_templated_simple',
     'taggit',
@@ -213,20 +214,46 @@ ACCOUNT_LOGIN_BY_CODE_ENABLED = True
 SOCIALACCOUNT_ADAPTER = 'apps.accounts.authentication.SocialAccountAdapter'
 SOCIALACCOUNT_AUTO_SIGNUP = False
 SOCIALACCOUNT_LOGIN_ON_GET = True
-SOCIALACCOUNT_PROVIDERS = {
-    'github': {
+SOCIALACCOUNT_PROVIDERS = {}
+
+_github_client_id = env('GITHUB_CLIENT_ID', default='')
+if _github_client_id:
+    SOCIALACCOUNT_PROVIDERS['github'] = {
         'SCOPE': ['read:user', 'user:email'],
-    },
-    'google': {
-        'SCOPE': [
-            'profile',
-            'email',
+        'APPS': [{'client_id': _github_client_id, 'secret': env('GITHUB_CLIENT_SECRET')}],
+    }
+
+_google_client_id = env('GOOGLE_CLIENT_ID', default='')
+if _google_client_id:
+    SOCIALACCOUNT_PROVIDERS['google'] = {
+        'SCOPE': ['profile', 'email'],
+        'AUTH_PARAMS': {'access_type': 'online'},
+        'APPS': [{'client_id': _google_client_id, 'secret': env('GOOGLE_CLIENT_SECRET')}],
+    }
+
+_discord_client_id = env('DISCORD_CLIENT_ID', default='')
+if _discord_client_id:
+    SOCIALACCOUNT_PROVIDERS['discord'] = {
+        'APPS': [{'client_id': _discord_client_id, 'secret': env('DISCORD_CLIENT_SECRET')}],
+    }
+
+_telegram_client_id = env('TELEGRAM_CLIENT_ID', default='')
+if _telegram_client_id:
+    SOCIALACCOUNT_PROVIDERS['openid_connect'] = {
+        'OAUTH_PKCE_ENABLED': True,
+        'APPS': [
+            {
+                'provider_id': 'telegram',
+                'name': 'Telegram',
+                'client_id': _telegram_client_id,
+                'secret': env('TELEGRAM_CLIENT_SECRET'),
+                'settings': {
+                    'server_url': 'https://oauth.telegram.org',
+                    'scope': ['openid', 'profile'],
+                },
+            },
         ],
-        'AUTH_PARAMS': {
-            'access_type': 'online',
-        },
-    },
-}
+    }
 
 # allauth-mfa
 
