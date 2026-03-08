@@ -28,24 +28,6 @@
                 <p class="tile-detail">Avatar, username, and personal details</p>
             </a>
 
-            <a href="{% url 'account_verification' %}" class="dashboard-tile">
-                <div class="tile-icon">
-                    {% if user.is_verified %}
-                        {% icon "check-decagram" size="1.5rem" %}
-                    {% else %}
-                        {% icon "shield-off" size="1.5rem" %}
-                    {% endif %}
-                </div>
-                <h3>Verification</h3>
-                {% if user.is_verified %}
-                    <p class="tile-detail">Identity confirmed</p>
-                    <div class="tile-status tile-status-ok">Verified</div>
-                {% else %}
-                    <p class="tile-detail">Get verified by a trusted member</p>
-                    <div class="tile-status tile-status-neutral">Not verified</div>
-                {% endif %}
-            </a>
-
             <a href="{% url 'account_change_password' %}" class="dashboard-tile">
                 <div class="tile-icon">{% icon "lock" size="1.5rem" %}</div>
                 <h3>Password</h3>
@@ -73,6 +55,24 @@
                     <div class="tile-status tile-status-warn">Not verified</div>
                 {% else %}
                     <div class="tile-status tile-status-warn">No email</div>
+                {% endif %}
+            </a>
+
+            <a href="{% url 'account_verification' %}" class="dashboard-tile">
+                <div class="tile-icon">
+                    {% if user.is_verified %}
+                        {% icon "check-decagram" size="1.5rem" %}
+                    {% else %}
+                        {% icon "shield-off" size="1.5rem" %}
+                    {% endif %}
+                </div>
+                <h3>Verification</h3>
+                {% if user.is_verified %}
+                    <p class="tile-detail">Identity confirmed</p>
+                    <div class="tile-status tile-status-ok">Verified</div>
+                {% else %}
+                    <p class="tile-detail">Verify you're a real person</p>
+                    <div class="tile-status tile-status-neutral">Not verified</div>
                 {% endif %}
             </a>
 

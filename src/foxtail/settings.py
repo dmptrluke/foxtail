@@ -163,6 +163,7 @@ CACHES = {'default': env.cache(default='dummycache://')}
 # enable the cached session backend
 # <https://docs.djangoproject.com/en/stable/topics/http/sessions/#using-cached-sessions>
 SESSION_ENGINE = 'django.contrib.sessions.backends.cached_db'
+SESSION_COOKIE_AGE = 2592000  # 30 days
 
 # django-rq
 # <https://github.com/rq/django-rq>
@@ -209,6 +210,7 @@ ACCOUNT_RATE_LIMITS = {
 }
 
 ACCOUNT_LOGIN_BY_CODE_ENABLED = True
+ACCOUNT_SESSION_REMEMBER = True
 
 # allauth social
 SOCIALACCOUNT_ADAPTER = 'apps.accounts.authentication.SocialAccountAdapter'

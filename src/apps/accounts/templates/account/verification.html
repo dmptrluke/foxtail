@@ -6,7 +6,7 @@
 {% block hero_breadcrumbs %}{% url 'account_profile' as a %}{% breadcrumbs a "Account" "Verification" %}{% endblock %}
 
 {% block hero_heading %}Verification{% endblock %}
-{% block hero_sub %}<h2>Identity verification by a trusted community member.</h2>{% endblock %}
+{% block hero_sub %}<h2>Get verified by a trusted community member.</h2>{% endblock %}
 
 {% block content %}
     <div class="alert alert-info"><strong>Verification will always be optional!</strong> Down the line, it may be used to unlock features like submitting events, or by third-party apps as an extra layer of trust.</div>
@@ -23,7 +23,7 @@
                 on {{ verification.verified_at|date:"j M Y" }}
             </p>
         {% else %}
-            <p>Your identity has not been verified yet. To get verified, generate a code below and show it to a trusted verifier.</p>
+            <p>You have not been verified yet. To get verified, generate a code below and show it to a trusted verifier.</p>
 
             {% if token %}
                 <div class="card mb-3" style="max-width: 20rem;">
@@ -50,7 +50,7 @@
         <hr>
         <div class="account-section">
             <h5>Verify Someone</h5>
-            <p>Enter the verification code shown on another member's page.</p>
+            <p>Enter the verification code shown on another member's page. You can also scan their QR code with your phone camera.</p>
             <div class="row">
                 <div class="col-md-6">
                     <form method="post" action="{% url 'account_verification_confirm' %}" class="d-flex gap-2 align-items-end">
