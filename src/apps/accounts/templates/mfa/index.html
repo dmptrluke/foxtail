@@ -41,7 +41,6 @@
             {% if authenticators.webauthn %}
                 <p>
                     You have {{ authenticators.webauthn|length }} security key{{ authenticators.webauthn|length|pluralize }} registered.
-                    Security keys provide strong, phishing-resistant authentication.
                 </p>
                 <a href="{% url 'mfa_list_webauthn' %}" class="btn btn-secondary btn-sm">Manage Keys</a>
             {% else %}
