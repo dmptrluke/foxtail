@@ -550,11 +550,9 @@ RECAPTCHA_PRIVATE_KEY = env('RECAPTCHA_PRIVATE_KEY', default=TEST_PRIVATE_KEY)
 # Sentry.io
 # <https://docs.sentry.io/platforms/python/django/>
 
-SENTRY_ENABLED = env.bool('SENTRY_ENABLED', default=False)
+SENTRY_DSN = env('SENTRY_DSN', default='')
 
-if SENTRY_ENABLED:
-    SENTRY_DSN = env('SENTRY_DSN')
-
+if SENTRY_DSN:
     from urllib.parse import urlparse
 
     import sentry_sdk

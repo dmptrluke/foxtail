@@ -27,7 +27,7 @@ def robots(request):
 
 
 def handler_500(request, *args, **kwargs):
-    if settings.SENTRY_ENABLED:
+    if settings.SENTRY_DSN:
         from sentry_sdk import last_event_id
 
         context = {'sentry_event_id': last_event_id()}
