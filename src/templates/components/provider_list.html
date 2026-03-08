@@ -2,10 +2,10 @@
 {% get_providers as socialaccount_providers %}
 
 {% for provider in socialaccount_providers %}
-    <div class="btn-group">
-        <a title="{{ provider.name }}" class="socialaccount_provider {{ provider.sub_id }} btn btn-outline-primary mb-1"
-           href="{% provider_login_url provider process=process scope=scope auth_params=auth_params %}">
+    <form method="post" action="{% provider_login_url provider process=process scope=scope auth_params=auth_params %}" class="d-inline">
+        {% csrf_token %}
+        <button type="submit" title="{{ provider.name }}" class="socialaccount_provider {{ provider.sub_id }} btn btn-outline-primary mb-1">
             {% icon provider.sub_id colored=True %} {{ provider.name }}
-        </a>
-    </div>
+        </button>
+    </form>
 {% endfor %}

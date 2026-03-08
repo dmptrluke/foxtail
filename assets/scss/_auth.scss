@@ -83,6 +83,11 @@
   flex-wrap: wrap;
   gap: 0.5rem;
   margin-bottom: 1.5rem;
+
+  form {
+    flex: 1 1 calc(50% - 0.5rem);
+    min-width: 0;
+  }
 }
 
 .auth-provider-btn {
@@ -90,8 +95,7 @@
   align-items: center;
   justify-content: center;
   gap: 0.45rem;
-  flex: 1 1 calc(50% - 0.5rem);
-  min-width: 0;
+  width: 100%;
   padding: 0.55rem 0.75rem;
   border: 1px solid #d8d2de;
   border-radius: 2px;

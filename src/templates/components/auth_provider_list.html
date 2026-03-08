@@ -4,10 +4,13 @@
 {% if socialaccount_providers %}
 <div class="auth-providers">
     {% for provider in socialaccount_providers %}
-        <a href="{% provider_login_url provider process=process %}" class="auth-provider-btn">
-            {% icon provider.sub_id colored=True %}
-            {{ provider.name }}
-        </a>
+        <form method="post" action="{% provider_login_url provider process=process %}">
+            {% csrf_token %}
+            <button type="submit" class="auth-provider-btn">
+                {% icon provider.sub_id colored=True %}
+                {{ provider.name }}
+            </button>
+        </form>
     {% endfor %}
 </div>
 {% endif %}
