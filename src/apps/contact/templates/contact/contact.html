@@ -1,42 +1,37 @@
-{% extends "base.html" %}
+{% extends "shell_base.html" %}
 {% load form_tags %}
 
 {% block title %}Contact Us{% endblock %}
 
-{% block content %}
-    <h1>Contact Us</h1>
-    <p>If you'd like to get in contact with us, you can use the form below to send us an email. We
-        will
-        try to get back to you as soon as possible. If the form doesn't work for you, you can email us
-        at <a href="mailto:website@furry.nz">website@furry.nz</a>.
-    </p>
+{% block heading %}
+    <h1>Contact us</h1>
+    <h2>
+        Send us a message and we'll get back to you as soon as possible.
+        You can also email us at <a href="mailto:website@furry.nz">website@furry.nz</a>.
+    </h2>
+{% endblock %}
 
+{% block content %}
     {% if user.is_authenticated %}
-        <p>
-            Since you're signed in, your username <strong>{{ user.username }}</strong> will be included with your message.
-        </p>
+        <div class="auth-alert auth-alert-info">
+            Signed in as <strong>{{ user.username }}</strong> &mdash; your username will be included with your message.
+        </div>
     {% endif %}
 
-    <form method="post" action="{% url 'contact:contact' %}">
+    <form method="post" action="{% url 'contact:contact' %}" class="auth-form">
         {% csrf_token %}
         {% non_field_errors form %}
-        <div class="row">
-            <div class="col-md-6">
-                {% text_field form.name %}
-            </div>
-            <div class="col-md-6">
-                {% text_field form.email %}
-            </div>
-        </div>
+        {% text_field form.name %}
+        {% text_field form.email %}
         {% honeypot_field form.website %}
-        <div class="row">
-            <div class="col-md-12">
-                {% textarea_field form.message %}
-            </div>
-        </div>
+        {% textarea_field form.message rows=5 %}
         {% if form.captcha %}
             {% captcha_field form.captcha %}
         {% endif %}
-        <input id="contact_submit" class="btn btn-lg btn-primary" type="submit" value="Send">
+        <button type="submit" class="auth-btn-primary">Send message</button>
     </form>
+
+    <div class="auth-footer">
+        <a href="/">&larr; Back to {{ request.site.name }}</a>
+    </div>
 {% endblock content %}
