@@ -40,6 +40,10 @@
   padding: 2.5rem 2.5rem 2rem;
   box-shadow: 0 8px 40px rgba(40, 30, 51, 0.35), 0 2px 8px rgba(40, 30, 51, 0.15);
   border-radius: 2px;
+
+  @media (min-width: 1920px) {
+    zoom: 1.1;
+  }
 }
 
 .auth-header {
@@ -76,7 +80,7 @@
 // Social provider buttons
 .auth-providers {
   display: flex;
-  flex-direction: row;
+  flex-wrap: wrap;
   gap: 0.5rem;
   margin-bottom: 1.5rem;
 }
@@ -86,7 +90,8 @@
   align-items: center;
   justify-content: center;
   gap: 0.45rem;
-  flex: 1;
+  flex: 1 1 calc(50% - 0.5rem);
+  min-width: 0;
   padding: 0.55rem 0.75rem;
   border: 1px solid #d8d2de;
   border-radius: 2px;
