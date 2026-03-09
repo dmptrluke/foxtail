@@ -11,6 +11,7 @@ from django.urls import reverse_lazy
 from django.views.generic import CreateView, DeleteView, DetailView, ListView, UpdateView
 from django.views.generic.dates import YearMixin
 
+from csp_helpers.mixins import CSPViewMixin
 from published.mixins import PublishedDetailMixin, PublishedListMixin
 from published.utils import queryset_filter
 from rules.contrib.views import AutoPermissionRequiredMixin
@@ -179,7 +180,7 @@ class PostManageListView(PermissionMixin, ListView):
         return Post.objects.select_related('author').prefetch_related('tags').order_by('-created')
 
 
-class PostCreateView(PermissionMixin, CreateView):
+class PostCreateView(CSPViewMixin, PermissionMixin, CreateView):
     permission_required = 'blog.manage_posts'
     model = Post
     template_name = 'blog/post_form.html'
@@ -202,7 +203,7 @@ class PostCreateView(PermissionMixin, CreateView):
         return HttpResponseRedirect(self.get_success_url())
 
 
-class PostUpdateView(PermissionMixin, UpdateView):
+class PostUpdateView(CSPViewMixin, PermissionMixin, UpdateView):
     permission_required = 'blog.manage_posts'
     model = Post
     template_name = 'blog/post_form.html'

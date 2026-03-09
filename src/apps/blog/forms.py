@@ -6,6 +6,8 @@ from django.forms import (
     Textarea,
 )
 
+from csp_helpers.mixins import CSPFormMixin
+from markdownfield.widgets import MDEWidget
 from taggit.forms import TagField
 
 from apps.core.widgets import CroppedImageWidget
@@ -20,7 +22,7 @@ class CommentForm(ModelForm):
         widgets = {'text': Textarea(attrs={'rows': 4})}
 
 
-class PostForm(ModelForm):
+class PostForm(CSPFormMixin, ModelForm):
     tags = TagField(required=False, help_text='Comma-separated list of tags.')
     image = ImageField(required=False, widget=CroppedImageWidget(aspect_ratio=2))
     live_as_of = DateTimeField(
@@ -36,7 +38,7 @@ class PostForm(ModelForm):
         fields = ['title', 'slug', 'author', 'description', 'text', 'allow_comments', 'publish_status', 'live_as_of']
         widgets = {
             'description': Textarea(attrs={'rows': 3}),
-            'text': Textarea(attrs={'rows': 20}),
+            'text': MDEWidget(),
         }
 
     def __init__(self, *args, user=None, **kwargs):

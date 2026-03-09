@@ -3,6 +3,8 @@
 
 {% block title %}{% if object %}Edit: {{ object.title }}{% else %}New Post{% endif %}{% endblock %}
 
+{% block extra_head %}{{ form.media }}{% endblock %}
+
 {% block base_content %}
     <div class="hero hero-detail">
         <div class="container px-3 px-md-4">
