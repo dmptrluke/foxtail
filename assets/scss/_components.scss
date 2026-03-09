@@ -65,6 +65,13 @@ p a {
 }
 
 
+// Aspect ratio utilities
+
+.ratio-16x9 { aspect-ratio: 16 / 9; }
+.ratio-4x3 { aspect-ratio: 4 / 3; }
+.ratio-21x9 { aspect-ratio: 21 / 9; }
+.ratio-2x1 { aspect-ratio: 2 / 1; }
+
 // Empty states
 .empty-state {
 	padding: 2rem 1.25rem;

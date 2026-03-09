@@ -3,7 +3,7 @@
 // Flow: file selected → validate → open Bootstrap modal with Cropper.js →
 // user confirms → crop to blob → replace file input → show inline preview.
 //
-// If ppoi_field is set, also shows a draggable focus-point dot on the preview
+// If ppoi_field is set, also shows a clickable focus-point dot on the preview
 // that writes "x y" coordinates to a hidden image_ppoi form field.
 
 import Cropper from 'cropperjs';
@@ -12,8 +12,6 @@ import Modal from 'bootstrap/js/dist/modal';
 
 const ACCEPTED_TYPES = ['image/jpeg', 'image/png', 'image/webp'];
 
-// Creates and appends a crop modal to the document body.
-// Created lazily on first file selection and reused for subsequent crops within the same widget.
 function createCropModal() {
     const modal = document.createElement('div');
     modal.className = 'modal fade';
@@ -40,10 +38,8 @@ function createCropModal() {
     return modal;
 }
 
-// Attaches a clickable PPOI dot to an existing preview image.
-// Reads the current PPOI from ppoiInput (two floats separated by "x", e.g. "0.3x0.7")
-// and positions the dot accordingly. Clicking the preview updates both the dot
-// and the hidden input. Called on page load (existing image) and after each crop.
+// Attaches a clickable PPOI dot to a preview image.
+// PPOI format is two floats separated by "x", e.g. "0.3x0.7".
 function initPpoi(container, ppoiInput) {
     const preview = container.querySelector('.image-crop-preview');
     if (!preview) return;
@@ -84,14 +80,13 @@ export function initCropWidgets() {
         const maxSize = parseInt(container.dataset.cropMaxSize, 10) || 5 * 1024 * 1024;
         const ppoiFieldName = container.dataset.ppoiField || null;
 
-        // Modal state is shared across file selections for this widget instance
+        // --- State ---
         let modalEl = null;
         let bsModal = null;
-        let confirmBtn = null;
         let cropper = null;
+        let pendingFile = null;
 
-        // Resolve the hidden PPOI input upfront (even if there's no preview yet,
-        // so it's available after a fresh crop on a new image)
+        // Resolved upfront so it's available after a fresh crop on a new image
         const ppoiInput = ppoiFieldName
             ? container.closest('form').querySelector(`[name="${ppoiFieldName}"]`)
             : null;
@@ -100,6 +95,85 @@ export function initCropWidgets() {
             initPpoi(container, ppoiInput);
         }
 
+        // --- Cropper lifecycle ---
+        function destroyCropper() {
+            if (cropper) {
+                cropper.destroy();
+                cropper = null;
+            }
+        }
+
+        function initCropper() {
+            destroyCropper();
+            const img = modalEl.querySelector('.crop-source');
+            cropper = new Cropper(img, {
+                aspectRatio,
+                viewMode: 1,
+                autoCropArea: 1,
+                responsive: true,
+            });
+        }
+
+        // --- Modal (created lazily, listeners registered once to avoid stacking) ---
+        function initModal() {
+            modalEl = createCropModal();
+            bsModal = new Modal(modalEl);
+            const confirmBtn = modalEl.querySelector('.crop-confirm');
+
+            // Cropper must be initialised after the modal is visible so it
+            // can measure the image dimensions correctly
+            modalEl.addEventListener('shown.bs.modal', initCropper);
+            modalEl.addEventListener('hidden.bs.modal', () => {
+                destroyCropper();
+                // If the user cancelled (no crop confirmed), clear the file input
+                // so the form doesn't submit the uncropped original
+                if (pendingFile) {
+                    fileInput.value = '';
+                    pendingFile = null;
+                }
+            });
+
+            confirmBtn.addEventListener('click', () => {
+                if (!cropper || !pendingFile) return;
+                const canvas = cropper.getCroppedCanvas({ maxWidth: 1024, maxHeight: 1024 });
+
+                const mimeType = pendingFile.type === 'image/png' ? 'image/png'
+                    : pendingFile.type === 'image/webp' ? 'image/webp'
+                    : 'image/jpeg';
+                canvas.toBlob(blob => {
+                    if (!blob) return;
+
+                    // Swap the file input to the cropped blob via DataTransfer
+                    const extMap = { 'image/png': '.png', 'image/webp': '.webp', 'image/jpeg': '.jpg' };
+                    const ext = extMap[blob.type] || '.jpg';
+                    const name = (pendingFile.name.replace(/\.[^.]+$/, '') || 'image') + ext;
+                    const dt = new DataTransfer();
+                    dt.items.add(new File([blob], name, { type: blob.type }));
+                    fileInput.files = dt.files;
+
+                    let preview = container.querySelector('.image-crop-preview');
+                    if (!preview) {
+                        preview = document.createElement('div');
+                        preview.className = 'image-crop-preview mb-2';
+                        container.prepend(preview);
+                    }
+                    preview.innerHTML = `<img src="${canvas.toDataURL(mimeType)}" alt="" class="rounded">`;
+
+                    // After crop the focus point resets to centre; user can click to adjust
+                    if (ppoiInput) {
+                        ppoiInput.value = '0.5x0.5';
+                        initPpoi(container, ppoiInput);
+                    }
+
+                    // Null pendingFile before hide so the hidden handler
+                    // knows this was a confirmed crop, not a cancel
+                    pendingFile = null;
+                    bsModal.hide();
+                }, mimeType, 0.9);
+            });
+        }
+
+        // --- File selection handler ---
         fileInput.addEventListener('change', () => {
             const file = fileInput.files[0];
             if (!file) return;
@@ -117,87 +191,28 @@ export function initCropWidgets() {
                 return;
             }
 
-            if (!modalEl) {
-                modalEl = createCropModal();
-                bsModal = new Modal(modalEl);
-                confirmBtn = modalEl.querySelector('.crop-confirm');
-            }
+            if (!modalEl) initModal();
 
-            // Read file as data URL to set as Cropper source.
-            // Blob URLs are avoided here as they require blob: in img-src CSP.
+            pendingFile = file;
+
+            // Destroy before re-read so re-selection while modal is open works
+            destroyCropper();
+
+            // Data URLs avoid needing blob: in img-src CSP
             const reader = new FileReader();
             reader.onload = e => {
                 const img = modalEl.querySelector('.crop-source');
                 img.src = e.target.result;
 
-                // Cropper must be initialised after the modal is visible so it
-                // can measure the image dimensions correctly
-                modalEl.addEventListener('shown.bs.modal', () => {
-                    if (cropper) cropper.destroy();
-                    cropper = new Cropper(img, {
-                        aspectRatio,
-                        viewMode: 1,       // crop box stays within the canvas
-                        autoCropArea: 1,   // crop box fills the canvas initially
-                        responsive: true,
-                    });
-                }, { once: true });
-
-                bsModal.show();
+                // If the modal is already visible, re-init the cropper directly
+                // since shown.bs.modal won't fire again.
+                if (modalEl.classList.contains('show')) {
+                    initCropper();
+                } else {
+                    bsModal.show();
+                }
             };
             reader.readAsDataURL(file);
-
-            const onCrop = () => {
-                const canvas = cropper.getCroppedCanvas({ maxWidth: 1024, maxHeight: 1024 });
-
-                // toBlob is async; encoding format matches the source file type.
-                // If the browser doesn't support WebP canvas export it falls back to PNG.
-                const mimeType = file.type === 'image/png' ? 'image/png'
-                    : file.type === 'image/webp' ? 'image/webp'
-                    : 'image/jpeg';
-                canvas.toBlob(blob => {
-                    if (!blob) return;
-
-                    // Replace the file input's value with the cropped blob so the
-                    // form submits the cropped image rather than the original
-                    const extMap = { 'image/png': '.png', 'image/webp': '.webp', 'image/jpeg': '.jpg' };
-                    const ext = extMap[blob.type] || '.jpg';
-                    const name = (file.name.replace(/\.[^.]+$/, '') || 'image') + ext;
-                    const dt = new DataTransfer();
-                    dt.items.add(new File([blob], name, { type: blob.type }));
-                    fileInput.files = dt.files;
-
-                    // Show inline preview; create the wrapper if this is a fresh upload
-                    let preview = container.querySelector('.image-crop-preview');
-                    if (!preview) {
-                        preview = document.createElement('div');
-                        preview.className = 'image-crop-preview mb-2';
-                        container.prepend(preview);
-                    }
-                    preview.innerHTML = `<img src="${canvas.toDataURL(mimeType)}" alt="" class="rounded">`;
-
-                    // After crop the focus point resets to centre; user can click to adjust
-                    if (ppoiInput) {
-                        ppoiInput.value = '0.5x0.5';
-                        initPpoi(container, ppoiInput);
-                    }
-
-                    cropper.destroy();
-                    cropper = null;
-                    bsModal.hide();
-                }, mimeType, 0.9);
-            };
-            // { once: true } prevents double-crop if the user re-selects a file
-            // while the modal is open
-            confirmBtn.addEventListener('click', onCrop, { once: true });
-
-            // Clean up if the modal is dismissed without confirming
-            modalEl.addEventListener('hidden.bs.modal', () => {
-                confirmBtn.removeEventListener('click', onCrop);
-                if (cropper) {
-                    cropper.destroy();
-                    cropper = null;
-                }
-            }, { once: true });
         });
     });
 }

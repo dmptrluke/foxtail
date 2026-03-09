@@ -104,9 +104,11 @@ class EventCreateView(CSPViewMixin, PermissionMixin, CreateView):
         return EventForm
 
     def form_valid(self, form):
-        self.object = form.save()
-        self.object.tags.set(form.cleaned_data.get('tags', []))
+        self.object = form.save(commit=False)
         _apply_geocoding(self.object, form.changed_data, self.request)
+        self.object.save()
+        form.save_m2m()
+        self.object.tags.set(form.cleaned_data.get('tags', []))
         messages.success(self.request, f'Event "{self.object.title}" created.')
         return HttpResponseRedirect(reverse('events:event_edit', kwargs={'pk': self.object.pk}))
 
@@ -122,9 +124,11 @@ class EventUpdateView(CSPViewMixin, PermissionMixin, UpdateView):
         return EventForm
 
     def form_valid(self, form):
-        self.object = form.save()
-        self.object.tags.set(form.cleaned_data.get('tags', []))
+        self.object = form.save(commit=False)
         _apply_geocoding(self.object, form.changed_data, self.request)
+        self.object.save()
+        form.save_m2m()
+        self.object.tags.set(form.cleaned_data.get('tags', []))
         messages.success(self.request, f'Event "{self.object.title}" saved.')
         return HttpResponseRedirect(reverse('events:event_edit', kwargs={'pk': self.object.pk}))
 
@@ -146,27 +150,25 @@ def _apply_geocoding(obj, changed_data, request):
     token = getattr(settings, 'MAPBOX_ACCESS_TOKEN', None)
     if not token or 'address' not in changed_data:
         return
-    if obj.address:
-        from .mapbox import geocode, static_map
-
-        coords = geocode(obj.address, token)
-        if coords:
-            obj.latitude, obj.longitude = coords
-            map_bytes = static_map(obj.latitude, obj.longitude, token)
-            if map_bytes:
-                filename = f'{obj.slug or "event"}-map.png'
-                if obj.map_image:
-                    obj.map_image.delete(save=False)
-                obj.map_image.save(filename, ContentFile(map_bytes), save=False)
-            obj.save()
-        else:
-            messages.warning(request, 'Address could not be geocoded.')
-    else:
+    if not obj.address:
         obj.latitude = None
         obj.longitude = None
         if obj.map_image:
             obj.map_image.delete(save=False)
-        obj.save()
+        return
+    from .mapbox import geocode, static_map
+
+    coords = geocode(obj.address, token)
+    if coords:
+        obj.latitude, obj.longitude = coords
+        map_bytes = static_map(obj.latitude, obj.longitude, token)
+        if map_bytes:
+            filename = f'{obj.slug or "event"}-map.png'
+            if obj.map_image:
+                obj.map_image.delete(save=False)
+            obj.map_image.save(filename, ContentFile(map_bytes), save=False)
+    else:
+        messages.warning(request, 'Address could not be geocoded.')
 
 
 __all__ = [

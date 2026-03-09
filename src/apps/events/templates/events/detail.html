@@ -95,6 +95,7 @@
     {# Two-column content #}
     <div class="container px-3 px-md-4 mt-5">
         {% include "components/messages.html" %}
+        {% include "components/publish_status.html" with object=event %}
 
         <div class="layout-sidebar">
             <main id="main-content">
@@ -116,7 +117,7 @@
                         {% endif %}
                     </div>
                     {% if event.map_image %}
-                        <img class="image" style="aspect-ratio: 16 / 9" src="{{ event.map_image.url }}" alt="Map of {{ event.location }}">
+                        <img class="image ratio-16x9" src="{{ event.map_image.url }}" alt="Map of {{ event.location }}">
                     {% endif %}
                 </div>
 

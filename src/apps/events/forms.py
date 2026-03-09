@@ -33,6 +33,7 @@ class EventForm(CSPFormMixin, ModelForm):
         model = Event
         fields = [
             'title',
+            'slug',
             'description',
             'url',
             'location',
