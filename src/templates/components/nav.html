@@ -16,14 +16,15 @@
             <a class="nav-item nav-link{% if request.resolver_match.app_name == "directory" %} active{% endif %}"
            href="{% url 'directory:index' %}">Directory</a>
         {% endif %}
-        {% has_perm 'blog.manage_posts' user as can_manage %}
-        {% if can_manage %}
+        {% has_perm 'blog.manage_posts' user as can_manage_posts %}
+        {% has_perm 'events.manage_events' user as can_manage_events %}
+        {% if can_manage_posts or can_manage_events %}
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle{% if vn == 'blog:manage_list' or vn == 'blog:post_create' or vn == 'blog:post_edit' or vn == 'blog:post_delete' or vn == 'events:manage_list' or vn == 'events:event_create' or vn == 'events:event_edit' or vn == 'events:event_delete' %} active{% endif %}"
                    href="#" data-bs-toggle="dropdown" aria-expanded="false">Manage</a>
                 <div class="dropdown-menu">
-                    <a class="dropdown-item" href="{% url 'blog:manage_list' %}">Posts</a>
-                    <a class="dropdown-item" href="{% url 'events:manage_list' %}">Events</a>
+                    {% if can_manage_posts %}<a class="dropdown-item" href="{% url 'blog:manage_list' %}">Posts</a>{% endif %}
+                    {% if can_manage_events %}<a class="dropdown-item" href="{% url 'events:manage_list' %}">Events</a>{% endif %}
                 </div>
             </li>
         {% endif %}
