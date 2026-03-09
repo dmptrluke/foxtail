@@ -2,7 +2,7 @@ from django.conf import settings
 from django.core.files.base import ContentFile
 from django.core.management.base import BaseCommand, CommandError
 
-from apps.events.mapbox import geocode, static_map
+from apps.events.mapbox import geocode, map_filename, static_map
 from apps.events.models import Event
 
 
@@ -50,7 +50,7 @@ class Command(BaseCommand):
 
             map_bytes = static_map(event.latitude, event.longitude, token)
             if map_bytes:
-                filename = f'{event.slug or "event"}-map.png'
+                filename = map_filename(event.address)
                 if event.map_image:
                     event.map_image.delete(save=False)
                 event.map_image.save(filename, ContentFile(map_bytes), save=False)

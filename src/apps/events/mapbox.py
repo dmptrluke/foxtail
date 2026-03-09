@@ -1,3 +1,4 @@
+import hashlib
 import logging
 from decimal import Decimal
 
@@ -28,17 +29,22 @@ def geocode(address, token):
         return None
 
 
-def static_map(latitude, longitude, token, *, zoom=14, pin=True, pin_color='e74c3c'):
+def static_map(latitude, longitude, token, *, zoom=15, pin=True, pin_color='e74c3c'):
     """Fetch a static map image from Mapbox. Returns PNG bytes or None."""
     try:
         parts = [STATIC_MAP_BASE]
         if pin:
             parts.append(f'pin-l+{pin_color}({longitude},{latitude})')
         parts.append(f'{longitude},{latitude},{zoom},0')
-        parts.append('640x360@2x')
+        parts.append('320x180@2x')
         response = requests.get('/'.join(parts), params={'access_token': token}, timeout=10)
         response.raise_for_status()
         return response.content
     except requests.RequestException:
         logger.warning('Mapbox static map failed for %s,%s', latitude, longitude, exc_info=True)
         return None
+
+
+def map_filename(address):
+    digest = hashlib.md5(address.encode(), usedforsecurity=False).hexdigest()[:12]
+    return f'map-{digest}.png'

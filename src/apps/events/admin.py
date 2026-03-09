@@ -66,11 +66,11 @@ class EventAdmin(ModelAdmin):
 
     @staticmethod
     def _fetch_map(request, obj, token):
-        from .mapbox import static_map
+        from .mapbox import map_filename, static_map
 
         map_bytes = static_map(obj.latitude, obj.longitude, token)
         if map_bytes:
-            filename = f'{obj.slug or "event"}-map.png'
+            filename = map_filename(obj.address)
             if obj.map_image:
                 obj.map_image.delete(save=False)
             obj.map_image.save(filename, ContentFile(map_bytes), save=False)

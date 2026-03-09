@@ -117,7 +117,9 @@
                         {% endif %}
                     </div>
                     {% if event.map_image %}
-                        <img class="image ratio-16x9" src="{{ event.map_image.url }}" alt="Map of {{ event.location }}">
+                        <a href="https://www.google.com/maps/search/?api=1&query={{ event.address|urlencode }}" target="_blank" rel="noopener">
+                            <img class="image ratio-16x9" src="{{ event.map_image.url }}" alt="Map of {{ event.location }}">
+                        </a>
                     {% endif %}
                 </div>
 

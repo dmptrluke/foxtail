@@ -156,14 +156,14 @@ def _apply_geocoding(obj, changed_data, request):
         if obj.map_image:
             obj.map_image.delete(save=False)
         return
-    from .mapbox import geocode, static_map
+    from .mapbox import geocode, map_filename, static_map
 
     coords = geocode(obj.address, token)
     if coords:
         obj.latitude, obj.longitude = coords
         map_bytes = static_map(obj.latitude, obj.longitude, token)
         if map_bytes:
-            filename = f'{obj.slug or "event"}-map.png'
+            filename = map_filename(obj.address)
             if obj.map_image:
                 obj.map_image.delete(save=False)
             obj.map_image.save(filename, ContentFile(map_bytes), save=False)
