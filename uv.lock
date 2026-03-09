@@ -431,7 +431,7 @@ sdist = { url = "https://files.pythonhosted.org/packages/a3/7e/90424eab65d6674bf
 
 [[package]]
 name = "django-markdownfield"
-version = "0.13.0"
+version = "0.13.2"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "django" },
@@ -439,9 +439,9 @@ dependencies = [
     { name = "nh3" },
     { name = "shortuuid" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/1d/90/abdbbc40091a9075bd10fea1598a3f98ec2a09c29eeb4358d4c7cd7cdc48/django_markdownfield-0.13.0.tar.gz", hash = "sha256:8200e3941551911e6d8cacd50463e17a7eb6fdfaca0ae1f4b1f6b929e33fca02", size = 789926, upload-time = "2026-03-09T02:11:46.779Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/3d/b9/d92a67e768645f373fb98e5e0fc0407051017eb2df1c0062bbf3f352e365/django_markdownfield-0.13.2.tar.gz", hash = "sha256:aa3cc557b5bd691c144ccde18d8cdb409facf35b4b43d24e16a6a24189d9273f", size = 790485, upload-time = "2026-03-09T05:09:24.573Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/03/36/983d206ecbaef492523b4fe435629138fb123fc584e07e7321886b0115b8/django_markdownfield-0.13.0-py3-none-any.whl", hash = "sha256:7ae6590607dc57b87666e14529d72c59eb3e097fedcf5a421b4f38a52572e71c", size = 748927, upload-time = "2026-03-09T02:11:51.785Z" },
+    { url = "https://files.pythonhosted.org/packages/46/07/95c3165903355be26ac06f3b101e302fe1552d0faa9dc525b0e2e1bcb88c/django_markdownfield-0.13.2-py3-none-any.whl", hash = "sha256:1a2700e2308889133004df4a854416d53a96a92f562bc4f86e3f2210868bcdb8", size = 749305, upload-time = "2026-03-09T05:09:22.803Z" },
 ]
 
 [[package]]
@@ -667,7 +667,7 @@ requires-dist = [
     { name = "django-environ", specifier = "==0.13.0" },
     { name = "django-imagefield", extras = ["vips"], specifier = "==0.23.0a3" },
     { name = "django-mail-templated-simple", specifier = "==3.2" },
-    { name = "django-markdownfield", specifier = "==0.13.0" },
+    { name = "django-markdownfield", specifier = "==0.13.2" },
     { name = "django-published", specifier = ">=0.9.0" },
     { name = "django-recaptcha", specifier = "==4.1.0" },
     { name = "django-redis", specifier = "==6.0.0" },
