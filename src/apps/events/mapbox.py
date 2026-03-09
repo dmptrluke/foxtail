@@ -6,7 +6,7 @@ import requests
 logger = logging.getLogger(__name__)
 
 GEOCODE_URL = 'https://api.mapbox.com/search/geocode/v6/forward'
-STATIC_MAP_URL = 'https://api.mapbox.com/styles/v1/mapbox/streets-v12/static/{lng},{lat},14,0/640x360@2x'
+STATIC_MAP_BASE = 'https://api.mapbox.com/styles/v1/mapbox/streets-v12/static'
 
 
 def geocode(address, token):
@@ -14,7 +14,7 @@ def geocode(address, token):
     try:
         response = requests.get(
             GEOCODE_URL,
-            params={'q': address, 'country': 'nz', 'limit': 1, 'access_token': token},
+            params={'q': address, 'country': 'nz,au', 'limit': 1, 'permanent': 'true', 'access_token': token},
             timeout=10,
         )
         response.raise_for_status()
@@ -28,11 +28,15 @@ def geocode(address, token):
         return None
 
 
-def static_map(latitude, longitude, token):
+def static_map(latitude, longitude, token, *, zoom=14, pin=True, pin_color='e74c3c'):
     """Fetch a static map image from Mapbox. Returns PNG bytes or None."""
     try:
-        url = STATIC_MAP_URL.format(lat=latitude, lng=longitude)
-        response = requests.get(url, params={'access_token': token}, timeout=10)
+        parts = [STATIC_MAP_BASE]
+        if pin:
+            parts.append(f'pin-l+{pin_color}({longitude},{latitude})')
+        parts.append(f'{longitude},{latitude},{zoom},0')
+        parts.append('640x360@2x')
+        response = requests.get('/'.join(parts), params={'access_token': token}, timeout=10)
         response.raise_for_status()
         return response.content
     except requests.RequestException:
