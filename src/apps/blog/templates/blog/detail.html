@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load icon cache jsonld opengraph meta breadcrumbs rules %}
+{% load icon cache jsonld opengraph meta breadcrumbs rules image %}
 
 {% block extra_head %}
     <link rel="canonical" href="{{ SITE_URL }}{{ post.get_absolute_url }}"/>
@@ -65,12 +65,13 @@
             <div class="hero-banner-tall">
                 <picture>
                     <source media="(max-width: 991px)"
-                            srcset="{{ post.image.banner_mobile }} 768w, {{ post.image.banner_mobile_2x }} 1536w"
+                            srcset="{{ post.image.tall }} 768w, {{ post.image.tall_2x }} 1536w"
                             sizes="100vw">
                     <img src="{{ post.image.banner }}"
                          srcset="{{ post.image.banner }} 1440w, {{ post.image.banner_2x }} 2880w"
                          sizes="100vw"
-                         alt="{{ post.title }}">
+                         alt="{{ post.title }}"
+                         style="object-position: {{ post.image_ppoi|ppoi_position }}">
                 </picture>
             </div>
     </div>

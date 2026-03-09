@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load icon breadcrumbs %}
+{% load icon breadcrumbs image %}
 
 {% block extra_head %}
     {% if year %}
@@ -74,9 +74,10 @@
             <div class="event-featured">
                 {% if featured_event.image %}
                     <a href="{{ featured_event.get_absolute_url }}" class="event-featured-image">
-                        <img src="{{ featured_event.image.featured }}"
-                             srcset="{{ featured_event.image.featured }} 1x, {{ featured_event.image.featured_2x }} 2x"
-                             alt="">
+                        <img src="{{ featured_event.image.card }}"
+                             srcset="{{ featured_event.image.card }} 1x, {{ featured_event.image.card_2x }} 2x"
+                             alt=""
+                             style="object-position: {{ featured_event.image_ppoi|ppoi_position }}">
                     </a>
                 {% endif %}
                 <div class="event-featured-body">

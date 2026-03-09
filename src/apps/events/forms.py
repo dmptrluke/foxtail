@@ -20,7 +20,7 @@ from .models import Event
 
 class EventForm(CSPFormMixin, ModelForm):
     tags = TagField(required=False, help_text='Comma-separated list of tags.')
-    image = ImageField(required=False, widget=CroppedImageWidget(aspect_ratio=2, ppoi_field='image_ppoi'))
+    image = ImageField(required=False, widget=CroppedImageWidget(aspect_ratio=1200 / 630, ppoi_field='image_ppoi'))
     live_as_of = DateTimeField(
         required=False,
         label='Publish Date',

@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load humanize account jsonld opengraph meta %}
+{% load humanize account jsonld opengraph meta image %}
 
 {% block title_full %}{{ request.site.name }} — the resource for New Zealand furries{% endblock title_full %}
 
@@ -47,9 +47,10 @@
                             <article class="news-feature">
                                 <a href="{{ post.get_absolute_url }}">
                                     {% if post.image %}
-                                        <img src="{{ post.image.featured }}"
-                                             srcset="{{ post.image.featured }} 1x, {{ post.image.featured_2x }} 2x"
-                                             alt="{{ post.title }}">
+                                        <img src="{{ post.image.card }}"
+                                             srcset="{{ post.image.card }} 1x, {{ post.image.card_2x }} 2x"
+                                             alt="{{ post.title }}"
+                                             style="object-position: {{ post.image_ppoi|ppoi_position }}">
                                     {% else %}
                                         <div class="card-img-placeholder"></div>
                                     {% endif %}
@@ -68,7 +69,8 @@
                                         {% if post.image %}
                                             <img src="{{ post.image.card }}"
                                                  srcset="{{ post.image.card }} 1x, {{ post.image.card_2x }} 2x"
-                                                 alt="{{ post.title }}">
+                                                 alt="{{ post.title }}"
+                                                 style="object-position: {{ post.image_ppoi|ppoi_position }}">
                                         {% else %}
                                             <div class="card-img-placeholder"></div>
                                         {% endif %}

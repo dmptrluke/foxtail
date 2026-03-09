@@ -10,7 +10,6 @@ register = template.Library()
 _RENDITION_MAP = [
     (80, 'small'),
     (160, 'medium'),
-    (320, 'medium_2x'),
     (400, 'large'),
 ]
 

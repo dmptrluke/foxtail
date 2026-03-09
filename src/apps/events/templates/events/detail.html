@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load icon cache jsonld opengraph meta breadcrumbs event_calendar rules %}
+{% load icon cache jsonld opengraph meta breadcrumbs event_calendar rules image %}
 
 {% block extra_head %}
     <link rel="canonical" href="{{ SITE_URL }}{{ event.get_absolute_url }}"/>
@@ -85,10 +85,17 @@
 
     {# Banner image #}
     {% if event.image %}
-        <div class="hero-banner">
-            <img src="{{ event.image.banner }}"
-                 srcset="{{ event.image.banner }} 1x, {{ event.image.banner_2x }} 2x"
-                 alt="{{ event.title }}">
+        <div class="hero-banner-tall">
+            <picture>
+                <source media="(max-width: 991px)"
+                        srcset="{{ event.image.tall }} 768w, {{ event.image.tall_2x }} 1536w"
+                        sizes="100vw">
+                <img src="{{ event.image.banner }}"
+                     srcset="{{ event.image.banner }} 1440w, {{ event.image.banner_2x }} 2880w"
+                     sizes="100vw"
+                     alt="{{ event.title }}"
+                     style="object-position: {{ event.image_ppoi|ppoi_position }}">
+            </picture>
         </div>
     {% endif %}
 

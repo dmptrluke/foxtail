@@ -100,9 +100,9 @@ class Event(PublishedModel):
         if self.image:
             data['image'] = {
                 '@type': 'ImageObject',
-                'url': self.image.url,
-                'height': self.image_height,
-                'width': self.image_width,
+                'url': settings.SITE_URL + self.image.card_2x,
+                'width': 1200,
+                'height': 630,
             }
 
         return data

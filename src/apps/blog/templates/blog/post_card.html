@@ -1,9 +1,11 @@
+{% load image %}
 <article class="blog-card">
     {% if post.image %}
         <a href="{{ post.get_absolute_url }}" class="blog-card-image">
             <img src="{{ post.image.card }}"
                  srcset="{{ post.image.card }} 1x, {{ post.image.card_2x }} 2x"
-                 alt="">
+                 alt=""
+                 style="object-position: {{ post.image_ppoi|ppoi_position }}">
         </a>
     {% endif %}
     <div class="blog-card-body">
