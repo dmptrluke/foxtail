@@ -105,7 +105,7 @@ class EventCreateView(PermissionMixin, CreateView):
 
     def form_valid(self, form):
         self.object = form.save()
-        self.object.tags.set(*form.cleaned_data.get('tags', []))
+        self.object.tags.set(form.cleaned_data.get('tags', []))
         _apply_geocoding(self.object, form.changed_data, self.request)
         messages.success(self.request, f'Event "{self.object.title}" created.')
         return HttpResponseRedirect(self.get_success_url())
@@ -116,9 +116,6 @@ class EventUpdateView(PermissionMixin, UpdateView):
     model = Event
     template_name = 'events/event_form.html'
 
-    def get_object(self, queryset=None):
-        return Event.objects.get(start__year=self.kwargs['year'], slug=self.kwargs['slug'])
-
     def get_form_class(self):
         from .forms import EventForm
 
@@ -126,7 +123,7 @@ class EventUpdateView(PermissionMixin, UpdateView):
 
     def form_valid(self, form):
         self.object = form.save()
-        self.object.tags.set(*form.cleaned_data.get('tags', []))
+        self.object.tags.set(form.cleaned_data.get('tags', []))
         _apply_geocoding(self.object, form.changed_data, self.request)
         messages.success(self.request, f'Event "{self.object.title}" saved.')
         return HttpResponseRedirect(self.object.get_absolute_url())
@@ -137,9 +134,6 @@ class EventDeleteView(PermissionMixin, DeleteView):
     model = Event
     template_name = 'events/event_confirm_delete.html'
     success_url = reverse_lazy('events:manage_list')
-
-    def get_object(self, queryset=None):
-        return Event.objects.get(start__year=self.kwargs['year'], slug=self.kwargs['slug'])
 
     def form_valid(self, form):
         title = self.object.title

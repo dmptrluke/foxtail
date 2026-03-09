@@ -7,7 +7,7 @@ from django.contrib.postgres.search import SearchQuery, SearchRank, SearchVector
 from django.db.models import Count
 from django.http import Http404, HttpResponseForbidden, HttpResponseRedirect
 from django.shortcuts import redirect
-from django.urls import reverse_lazy
+from django.urls import reverse, reverse_lazy
 from django.views.generic import CreateView, DeleteView, DetailView, ListView, UpdateView
 from django.views.generic.dates import YearMixin
 
@@ -19,7 +19,7 @@ from taggit.models import Tag
 
 from apps.core.mixins import PermissionMixin
 
-from .models import Comment, Post, reverse
+from .models import Comment, Post
 
 COMMENTS_ENABLED = getattr(settings, 'BLOG_COMMENTS', False)
 
@@ -198,7 +198,7 @@ class PostCreateView(CSPViewMixin, PermissionMixin, CreateView):
 
     def form_valid(self, form):
         self.object = form.save()
-        self.object.tags.set(*form.cleaned_data.get('tags', []))
+        self.object.tags.set(form.cleaned_data.get('tags', []))
         messages.success(self.request, f'Post "{self.object.title}" created.')
         return HttpResponseRedirect(self.get_success_url())
 
@@ -220,7 +220,7 @@ class PostUpdateView(CSPViewMixin, PermissionMixin, UpdateView):
 
     def form_valid(self, form):
         self.object = form.save()
-        self.object.tags.set(*form.cleaned_data.get('tags', []))
+        self.object.tags.set(form.cleaned_data.get('tags', []))
         messages.success(self.request, f'Post "{self.object.title}" saved.')
         return HttpResponseRedirect(self.object.get_absolute_url())
 

@@ -36,13 +36,13 @@ class EventForm(ModelForm):
         widgets = {
             'description': Textarea(attrs={'rows': 10}),
             'address': Textarea(attrs={'rows': 5}),
-            'start': DateInput(attrs={'type': 'date'}),
-            'end': DateInput(attrs={'type': 'date'}),
-            'start_time': TimeInput(attrs={'type': 'time'}),
-            'end_time': TimeInput(attrs={'type': 'time'}),
+            'start': DateInput(attrs={'type': 'date'}, format='%Y-%m-%d'),
+            'end': DateInput(attrs={'type': 'date'}, format='%Y-%m-%d'),
+            'start_time': TimeInput(attrs={'type': 'time'}, format='%H:%M'),
+            'end_time': TimeInput(attrs={'type': 'time'}, format='%H:%M'),
         }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         if self.instance and self.instance.pk:
-            self.fields['tags'].initial = ', '.join(self.instance.tags.values_list('name', flat=True))
+            self.fields['tags'].initial = self.instance.tags.all()

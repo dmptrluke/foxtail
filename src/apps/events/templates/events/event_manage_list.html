@@ -53,8 +53,8 @@
                                     {% endif %}
                                 </td>
                                 <td class="text-end text-nowrap">
-                                    <a href="{% url 'events:event_edit' year=event.start.year slug=event.slug %}" class="btn btn-sm btn-outline-secondary">Edit</a>
-                                    <a href="{% url 'events:event_delete' year=event.start.year slug=event.slug %}" class="btn btn-sm btn-outline-danger ms-1">Delete</a>
+                                    <a href="{% url 'events:event_edit' event.pk %}" class="btn btn-sm btn-outline-secondary">Edit</a>
+                                    <a href="{% url 'events:event_delete' event.pk %}" class="btn btn-sm btn-outline-danger ms-1">Delete</a>
                                 </td>
                             </tr>
                         {% endfor %}

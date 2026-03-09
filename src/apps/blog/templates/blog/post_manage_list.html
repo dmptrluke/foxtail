@@ -53,8 +53,8 @@
                                 </td>
                                 <td class="text-secondary text-nowrap">{{ post.created|date:"d M Y" }}</td>
                                 <td class="text-end text-nowrap">
-                                    <a href="{% url 'blog:post_edit' post.slug %}" class="btn btn-sm btn-outline-secondary">Edit</a>
-                                    <a href="{% url 'blog:post_delete' post.slug %}" class="btn btn-sm btn-outline-danger ms-1">Delete</a>
+                                    <a href="{% url 'blog:post_edit' post.pk %}" class="btn btn-sm btn-outline-secondary">Edit</a>
+                                    <a href="{% url 'blog:post_delete' post.pk %}" class="btn btn-sm btn-outline-danger ms-1">Delete</a>
                                 </td>
                             </tr>
                         {% endfor %}

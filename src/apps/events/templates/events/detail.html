@@ -45,7 +45,7 @@
                 {% url 'events:list' as events_url %}{% breadcrumbs events_url "Events" event.title %}
                 {% has_perm 'events.manage_events' user as can_manage %}
                 {% if can_manage %}
-                    <a href="{% url 'events:event_edit' year=event.start.year slug=event.slug %}" class="hero-admin-link">{% icon "pencil" size="0.75em" %} Edit</a>
+                    <a href="{% url 'events:event_edit' event.pk %}" class="hero-admin-link">{% icon "pencil" size="0.75em" %} Edit</a>
                 {% endif %}
             </div>
 

@@ -48,4 +48,4 @@ class PostForm(CSPFormMixin, ModelForm):
         if user and hasattr(user, 'blog_author'):
             self.fields['author'].initial = user.blog_author
         if self.instance and self.instance.pk:
-            self.fields['tags'].initial = ', '.join(self.instance.tags.values_list('name', flat=True))
+            self.fields['tags'].initial = self.instance.tags.all()
