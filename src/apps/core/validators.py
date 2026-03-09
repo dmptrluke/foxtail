@@ -1,7 +1,7 @@
 from markdownfield.validators import MARKDOWN_ATTRS, MARKDOWN_TAGS, Validator
 
 VALIDATOR_EXTENDED = Validator(
-    allowed_tags=[
+    allowed_tags={
         *MARKDOWN_TAGS,
         'figure',
         'figcaption',
@@ -12,11 +12,11 @@ VALIDATOR_EXTENDED = Validator(
         'th',
         'td',
         'iframe',
-    ],
+    },
     allowed_attrs={
         **MARKDOWN_ATTRS,
-        '*': ['id', 'class'],
-        'a': ['href', 'alt', 'title', 'name'],
-        'iframe': ['src', 'width', 'height', 'title', 'frameborder', 'allow', 'allowfullscreen', 'referrerpolicy'],
+        '*': {'id', 'class'},
+        'a': {'href', 'alt', 'title', 'name'},
+        'iframe': {'src', 'width', 'height', 'title', 'frameborder', 'allow', 'allowfullscreen', 'referrerpolicy'},
     },
 )

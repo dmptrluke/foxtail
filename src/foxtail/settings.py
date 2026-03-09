@@ -522,6 +522,7 @@ MARKDOWN_EXTENSIONS = [
     'pymdownx.tilde',
     'pymdownx.caret',
     'pymdownx.emoji',
+    'pymdownx.magiclink',
     'sane_lists',
     'def_list',
     'nl2br',
@@ -531,7 +532,7 @@ MARKDOWN_EXTENSIONS = [
 
 MARKDOWN_EXTENSION_CONFIGS = {'pymdownx.emoji': {'emoji_generator': pymdownx.emoji.to_alt}}
 
-MARKDOWN_LINKIFY_BLACKLIST = ['furry.nz', 'furry.org.nz']
+MARKDOWN_LINK_BLACKLIST = ['furry.nz', 'furry.org.nz']
 
 # ReCAPTCHA
 # <https://pypi.org/project/django-recaptcha/>
