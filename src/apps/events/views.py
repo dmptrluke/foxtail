@@ -5,7 +5,7 @@ from django.contrib import messages
 from django.core.files.base import ContentFile
 from django.db.models import Q
 from django.http import Http404, HttpResponseRedirect
-from django.urls import reverse_lazy
+from django.urls import reverse, reverse_lazy
 from django.views.generic import CreateView, DeleteView, DetailView, ListView, UpdateView
 from django.views.generic.dates import YearMixin
 
@@ -97,7 +97,6 @@ class EventCreateView(CSPViewMixin, PermissionMixin, CreateView):
     permission_required = 'events.manage_events'
     model = Event
     template_name = 'events/event_form.html'
-    success_url = reverse_lazy('events:manage_list')
 
     def get_form_class(self):
         from .forms import EventForm
@@ -109,7 +108,7 @@ class EventCreateView(CSPViewMixin, PermissionMixin, CreateView):
         self.object.tags.set(form.cleaned_data.get('tags', []))
         _apply_geocoding(self.object, form.changed_data, self.request)
         messages.success(self.request, f'Event "{self.object.title}" created.')
-        return HttpResponseRedirect(self.get_success_url())
+        return HttpResponseRedirect(reverse('events:event_edit', kwargs={'pk': self.object.pk}))
 
 
 class EventUpdateView(CSPViewMixin, PermissionMixin, UpdateView):
@@ -127,7 +126,7 @@ class EventUpdateView(CSPViewMixin, PermissionMixin, UpdateView):
         self.object.tags.set(form.cleaned_data.get('tags', []))
         _apply_geocoding(self.object, form.changed_data, self.request)
         messages.success(self.request, f'Event "{self.object.title}" saved.')
-        return HttpResponseRedirect(self.object.get_absolute_url())
+        return HttpResponseRedirect(reverse('events:event_edit', kwargs={'pk': self.object.pk}))
 
 
 class EventDeleteView(PermissionMixin, DeleteView):

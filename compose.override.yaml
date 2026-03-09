@@ -15,7 +15,7 @@ services:
       sh -c "django-admin shell -c 'from django.core.cache import cache; cache.clear()' &&
       django-admin migrate --noinput &&
       python -m debugpy --listen 0.0.0.0:5678
-      -m django runserver --noreload 0.0.0.0:8000"
+      -m django runserver 0.0.0.0:8000"
     ports:
       - "5678:5678"
     volumes:

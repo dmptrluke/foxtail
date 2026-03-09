@@ -184,7 +184,6 @@ class PostCreateView(CSPViewMixin, PermissionMixin, CreateView):
     permission_required = 'blog.manage_posts'
     model = Post
     template_name = 'blog/post_form.html'
-    success_url = reverse_lazy('blog:manage_list')
 
     def get_form_class(self):
         from .forms import PostForm
@@ -200,7 +199,7 @@ class PostCreateView(CSPViewMixin, PermissionMixin, CreateView):
         self.object = form.save()
         self.object.tags.set(form.cleaned_data.get('tags', []))
         messages.success(self.request, f'Post "{self.object.title}" created.')
-        return HttpResponseRedirect(self.get_success_url())
+        return HttpResponseRedirect(reverse('blog:post_edit', kwargs={'pk': self.object.pk}))
 
 
 class PostUpdateView(CSPViewMixin, PermissionMixin, UpdateView):
@@ -222,7 +221,7 @@ class PostUpdateView(CSPViewMixin, PermissionMixin, UpdateView):
         self.object = form.save()
         self.object.tags.set(form.cleaned_data.get('tags', []))
         messages.success(self.request, f'Post "{self.object.title}" saved.')
-        return HttpResponseRedirect(self.object.get_absolute_url())
+        return HttpResponseRedirect(reverse('blog:post_edit', kwargs={'pk': self.object.pk}))
 
 
 class PostDeleteView(PermissionMixin, DeleteView):
