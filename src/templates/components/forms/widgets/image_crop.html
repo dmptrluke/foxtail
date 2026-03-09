@@ -1,11 +1,11 @@
 <div class="image-crop-widget"
      data-crop-widget
      data-crop-aspect-ratio="{{ widget.aspect_ratio }}"
-     data-crop-max-size="{{ widget.max_file_size }}">
+     data-crop-max-size="{{ widget.max_file_size }}"{% if widget.ppoi_field %} data-ppoi-field="{{ widget.ppoi_field }}"{% endif %}>
 
     {% if widget.is_initial %}
         <div class="image-crop-preview mb-2">
-            <img src="{{ widget.value.url }}" alt="" class="rounded-circle">
+            <img src="{{ widget.value.url }}" alt="" class="rounded">
         </div>
     {% endif %}
 

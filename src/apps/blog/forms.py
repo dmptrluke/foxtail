@@ -1,6 +1,7 @@
 from django.forms import (
     DateTimeField,
     DateTimeInput,
+    HiddenInput,
     ImageField,
     ModelForm,
     Textarea,
@@ -24,7 +25,7 @@ class CommentForm(ModelForm):
 
 class PostForm(CSPFormMixin, ModelForm):
     tags = TagField(required=False, help_text='Comma-separated list of tags.')
-    image = ImageField(required=False, widget=CroppedImageWidget(aspect_ratio=2))
+    image = ImageField(required=False, widget=CroppedImageWidget(aspect_ratio=None, ppoi_field='image_ppoi'))
     live_as_of = DateTimeField(
         required=False,
         label='Publish Date',
@@ -45,10 +46,12 @@ class PostForm(CSPFormMixin, ModelForm):
             'publish_status',
             'live_as_of',
             'image',
+            'image_ppoi',
         ]
         widgets = {
             'description': Textarea(attrs={'rows': 3}),
             'text': MDEWidget(),
+            'image_ppoi': HiddenInput(),
         }
 
     def __init__(self, *args, user=None, **kwargs):

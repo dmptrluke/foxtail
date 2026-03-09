@@ -36,10 +36,32 @@ form {
 	margin-bottom: ($spacer * .5);
 }
 
-.image-crop-preview img {
-	max-width: 160px;
-	max-height: 160px;
-	border-radius: $border-radius;
+.image-crop-preview {
+	position: relative;
+	display: inline-block;
+
+	img {
+		max-width: 160px;
+		max-height: 160px;
+		border-radius: $border-radius;
+		display: block;
+	}
+
+	&[data-ppoi] img {
+		cursor: crosshair;
+	}
+
+	.image-crop-ppoi-dot {
+		position: absolute;
+		width: 14px;
+		height: 14px;
+		border-radius: 50%;
+		background: rgba(255, 255, 255, 0.85);
+		border: 2px solid $primary;
+		box-shadow: 0 0 4px rgba(0, 0, 0, 0.4);
+		transform: translate(-50%, -50%);
+		pointer-events: none;
+	}
 }
 
 .image-crop-container img {
