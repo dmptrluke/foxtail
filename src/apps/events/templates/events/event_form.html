@@ -3,6 +3,8 @@
 
 {% block title %}{% if object %}Edit: {{ object.title }}{% else %}New Event{% endif %}{% endblock %}
 
+{% block extra_head %}{{ form.media }}{% endblock %}
+
 {% block base_content %}
     <div class="hero hero-detail">
         <div class="container px-3 px-md-4">
@@ -25,24 +27,30 @@
             {% non_field_errors form %}
 
             <div class="row g-4 mb-4">
-                {# Left column: title + description + image #}
+                {# Left column: title + image #}
                 <div class="col-lg-7">
                     <fieldset class="mb-4">
                         <legend>Details</legend>
                         {% text_field form.title %}
-                        {% textarea_field form.description %}
                         {% text_field form.tags %}
                         {% text_field form.url %}
                     </fieldset>
 
                     <fieldset>
-                        <legend>Image</legend>
-                        <p class="form-text">2:1 aspect ratio recommended (e.g. 1200×600).</p>
-                        {% image_field form.image %}
+                        <legend>Location</legend>
+                        {% text_field form.location %}
+                        {% textarea_field form.address %}
+                        {% if object and object.latitude and object.longitude %}
+                            <p class="form-text">
+                                Map: {{ object.latitude }}, {{ object.longitude }}
+                                {% if object.map_image %}— <a href="{{ object.map_image.url }}" target="_blank">view map</a>{% endif %}
+                            </p>
+                        {% endif %}
+                        <p class="form-text">Address is geocoded automatically when saved (if configured).</p>
                     </fieldset>
                 </div>
 
-                {# Right column: dates + location + publishing #}
+                {# Right column: dates + publishing + image #}
                 <div class="col-lg-5">
                     <fieldset class="mb-4">
                         <legend>Dates &amp; Times</legend>
@@ -57,25 +65,25 @@
                     </fieldset>
 
                     <fieldset class="mb-4">
-                        <legend>Location</legend>
-                        {% text_field form.location %}
-                        {% textarea_field form.address %}
-                        {% if object and object.latitude and object.longitude %}
-                            <p class="form-text">
-                                Map: {{ object.latitude }}, {{ object.longitude }}
-                                {% if object.map_image %}— <a href="{{ object.map_image.url }}" target="_blank">view map</a>{% endif %}
-                            </p>
-                        {% endif %}
-                        <p class="form-text">Address is geocoded automatically when saved (if configured).</p>
-                    </fieldset>
-
-                    <fieldset>
                         <legend>Publishing</legend>
                         {% select_field form.publish_status %}
                         {% text_field form.live_as_of %}
                     </fieldset>
+
+                    <fieldset>
+                        <legend>Image</legend>
+                        <p class="form-text">2:1 aspect ratio recommended (e.g. 1200×600).</p>
+                        {% image_field form.image %}
+                    </fieldset>
                 </div>
             </div>
+
+            {# Description — full width #}
+            <fieldset class="mb-4">
+                <legend>Description</legend>
+                <p class="form-text">Markdown supported.</p>
+                {% textarea_field form.description hide_label=True %}
+            </fieldset>
 
             <div class="d-flex gap-2">
                 <button type="submit" class="btn btn-primary">

@@ -35,7 +35,17 @@ class PostForm(CSPFormMixin, ModelForm):
 
     class Meta:
         model = Post
-        fields = ['title', 'slug', 'author', 'description', 'text', 'allow_comments', 'publish_status', 'live_as_of']
+        fields = [
+            'title',
+            'slug',
+            'author',
+            'description',
+            'text',
+            'allow_comments',
+            'publish_status',
+            'live_as_of',
+            'image',
+        ]
         widgets = {
             'description': Textarea(attrs={'rows': 3}),
             'text': MDEWidget(),

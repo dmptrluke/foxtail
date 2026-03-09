@@ -1,5 +1,7 @@
 from django.forms import DateInput, DateTimeField, DateTimeInput, ImageField, ModelForm, Textarea, TimeInput
 
+from csp_helpers.mixins import CSPFormMixin
+from markdownfield.widgets import MDEWidget
 from taggit.forms import TagField
 
 from apps.core.widgets import CroppedImageWidget
@@ -7,7 +9,7 @@ from apps.core.widgets import CroppedImageWidget
 from .models import Event
 
 
-class EventForm(ModelForm):
+class EventForm(CSPFormMixin, ModelForm):
     tags = TagField(required=False, help_text='Comma-separated list of tags.')
     image = ImageField(required=False, widget=CroppedImageWidget(aspect_ratio=2))
     live_as_of = DateTimeField(
@@ -32,9 +34,10 @@ class EventForm(ModelForm):
             'end_time',
             'publish_status',
             'live_as_of',
+            'image',
         ]
         widgets = {
-            'description': Textarea(attrs={'rows': 10}),
+            'description': MDEWidget(),
             'address': Textarea(attrs={'rows': 5}),
             'start': DateInput(attrs={'type': 'date'}, format='%Y-%m-%d'),
             'end': DateInput(attrs={'type': 'date'}, format='%Y-%m-%d'),

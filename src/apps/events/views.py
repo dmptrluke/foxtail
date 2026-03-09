@@ -9,6 +9,7 @@ from django.urls import reverse_lazy
 from django.views.generic import CreateView, DeleteView, DetailView, ListView, UpdateView
 from django.views.generic.dates import YearMixin
 
+from csp_helpers.mixins import CSPViewMixin
 from published.mixins import PublishedDetailMixin
 from published.utils import queryset_filter
 
@@ -92,7 +93,7 @@ class EventManageListView(PermissionMixin, ListView):
         return Event.objects.prefetch_related('tags').order_by('-start')
 
 
-class EventCreateView(PermissionMixin, CreateView):
+class EventCreateView(CSPViewMixin, PermissionMixin, CreateView):
     permission_required = 'events.manage_events'
     model = Event
     template_name = 'events/event_form.html'
@@ -111,7 +112,7 @@ class EventCreateView(PermissionMixin, CreateView):
         return HttpResponseRedirect(self.get_success_url())
 
 
-class EventUpdateView(PermissionMixin, UpdateView):
+class EventUpdateView(CSPViewMixin, PermissionMixin, UpdateView):
     permission_required = 'events.manage_events'
     model = Event
     template_name = 'events/event_form.html'
