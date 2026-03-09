@@ -5,16 +5,30 @@
 
 <div class="collapse navbar-collapse" id="navbar">
     {# main navigation #}
+    {% load rules %}
+    {% with vn=request.resolver_match.view_name %}
     <div class="navbar-nav me-auto mb-2 mb-lg-0">
-        <a class="nav-item nav-link{% if request.resolver_match.app_name == "blog" %} active{% endif %}"
+        <a class="nav-item nav-link{% if vn == 'blog:list' or vn == 'blog:list_year' or vn == 'blog:detail' %} active{% endif %}"
            href="{% url 'blog:list' %}">News</a>
-        <a class="nav-item nav-link{% if request.resolver_match.app_name == "events" %} active{% endif %}"
+        <a class="nav-item nav-link{% if vn == 'events:list' or vn == 'events:list_year' or vn == 'events:detail' %} active{% endif %}"
            href="{% url 'events:list' %}">Events</a>
         {% if DIRECTORY_ENABLED %}
             <a class="nav-item nav-link{% if request.resolver_match.app_name == "directory" %} active{% endif %}"
            href="{% url 'directory:index' %}">Directory</a>
         {% endif %}
+        {% has_perm 'blog.manage_posts' user as can_manage %}
+        {% if can_manage %}
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle{% if vn == 'blog:manage_list' or vn == 'blog:post_create' or vn == 'blog:post_edit' or vn == 'blog:post_delete' or vn == 'events:manage_list' or vn == 'events:event_create' or vn == 'events:event_edit' or vn == 'events:event_delete' %} active{% endif %}"
+                   href="#" data-bs-toggle="dropdown" aria-expanded="false">Manage</a>
+                <div class="dropdown-menu">
+                    <a class="dropdown-item" href="{% url 'blog:manage_list' %}">Posts</a>
+                    <a class="dropdown-item" href="{% url 'events:manage_list' %}">Events</a>
+                </div>
+            </li>
+        {% endif %}
     </div>
+    {% endwith %}
     {# user menu #}
     <div class="navbar-nav">
         {% if user.is_authenticated %}

@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% load breadcrumbs %}
+
+{% block title %}Delete Event{% endblock %}
+
+{% block base_content %}
+    <div class="hero hero-detail">
+        <div class="container px-3 px-md-4">
+            {% url 'events:manage_list' as manage_url %}
+            {% breadcrumbs manage_url "Manage Events" "Delete Event" %}
+            <h1>Delete Event</h1>
+        </div>
+    </div>
+
+    <main id="main-content" class="container px-3 px-md-4 py-4">
+        {% include "components/messages.html" %}
+
+        <div class="account-confirm">
+            <p>Are you sure you want to permanently delete <strong>{{ object.title }}</strong>?</p>
+            <p class="text-secondary">This cannot be undone.</p>
+            <div class="account-confirm-actions">
+                <form method="post">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger">Delete Event</button>
+                    <a href="{% url 'events:manage_list' %}" class="btn btn-outline-secondary ms-2">Cancel</a>
+                </form>
+            </div>
+        </div>
+    </main>
+{% endblock base_content %}

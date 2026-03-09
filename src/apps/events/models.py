@@ -11,12 +11,13 @@ from django.utils.timezone import now
 from imagefield.fields import ImageField as ProcessedImageField
 from markdownfield.models import MarkdownField, RenderedMarkdownField
 from markdownfield.validators import VALIDATOR_CLASSY
+from published.models import PublishedModel
 from taggit.managers import TaggableManager
 
 from apps.core.fields import AutoSlugField
 
 
-class Event(models.Model):
+class Event(PublishedModel):
     title = models.CharField(max_length=100, help_text='100 characters or fewer.')
     slug = AutoSlugField(populate_from='title', unique_for_year='start')
     tags = TaggableManager(blank=True)

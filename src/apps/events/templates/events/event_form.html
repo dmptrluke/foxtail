@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+{% load form_tags breadcrumbs %}
+
+{% block title %}{% if object %}Edit: {{ object.title }}{% else %}New Event{% endif %}{% endblock %}
+
+{% block base_content %}
+    <div class="hero hero-detail">
+        <div class="container px-3 px-md-4">
+            {% url 'events:list' as events_url %}{% url 'events:manage_list' as manage_url %}
+            {% if object %}
+                {% breadcrumbs events_url "Events" manage_url "Manage Events" "Edit Event" %}
+                <h1>Edit Event</h1>
+            {% else %}
+                {% breadcrumbs events_url "Events" manage_url "Manage Events" "New Event" %}
+                <h1>New Event</h1>
+            {% endif %}
+        </div>
+    </div>
+
+    <main id="main-content" class="container px-3 px-md-4 mt-5 mb-5">
+        {% include "components/messages.html" %}
+
+        <form method="post" enctype="multipart/form-data" novalidate>
+            {% csrf_token %}
+            {% non_field_errors form %}
+
+            <div class="row g-4 mb-4">
+                {# Left column: title + description + image #}
+                <div class="col-lg-7">
+                    <fieldset class="mb-4">
+                        <legend>Details</legend>
+                        {% text_field form.title %}
+                        {% textarea_field form.description %}
+                        {% text_field form.tags %}
+                        {% text_field form.url %}
+                    </fieldset>
+
+                    <fieldset>
+                        <legend>Image</legend>
+                        <p class="form-text">2:1 aspect ratio recommended (e.g. 1200×600).</p>
+                        {% image_field form.image %}
+                    </fieldset>
+                </div>
+
+                {# Right column: dates + location + publishing #}
+                <div class="col-lg-5">
+                    <fieldset class="mb-4">
+                        <legend>Dates &amp; Times</legend>
+                        <div class="row">
+                            <div class="col-sm-6">{% text_field form.start %}</div>
+                            <div class="col-sm-6">{% text_field form.start_time %}</div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-6">{% text_field form.end %}</div>
+                            <div class="col-sm-6">{% text_field form.end_time %}</div>
+                        </div>
+                    </fieldset>
+
+                    <fieldset class="mb-4">
+                        <legend>Location</legend>
+                        {% text_field form.location %}
+                        {% textarea_field form.address %}
+                        {% if object and object.latitude and object.longitude %}
+                            <p class="form-text">
+                                Map: {{ object.latitude }}, {{ object.longitude }}
+                                {% if object.map_image %}— <a href="{{ object.map_image.url }}" target="_blank">view map</a>{% endif %}
+                            </p>
+                        {% endif %}
+                        <p class="form-text">Address is geocoded automatically when saved (if configured).</p>
+                    </fieldset>
+
+                    <fieldset>
+                        <legend>Publishing</legend>
+                        {% select_field form.publish_status %}
+                        {% text_field form.live_as_of %}
+                    </fieldset>
+                </div>
+            </div>
+
+            <div class="d-flex gap-2">
+                <button type="submit" class="btn btn-primary">
+                    {% if object %}Save Changes{% else %}Create Event{% endif %}
+                </button>
+                <a href="{% url 'events:manage_list' %}" class="btn btn-outline-secondary">Cancel</a>
+                {% if object %}
+                    <a href="{{ object.get_absolute_url }}" class="btn btn-link ms-auto">View event</a>
+                {% endif %}
+            </div>
+        </form>
+    </main>
+{% endblock base_content %}

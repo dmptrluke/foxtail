@@ -1,5 +1,6 @@
 from datetime import timedelta
 
+from django.contrib.auth.models import AnonymousUser
 from django.http import Http404
 from django.test import RequestFactory
 from django.utils.timezone import now
@@ -18,8 +19,10 @@ class TestEventListView:
 
     # future events appear in upcoming, past events appear in past
     def test_upcoming_and_past_split(self, event: Event, past_event: Event, request_factory: RequestFactory):
+        request = request_factory.get('/events/')
+        request.user = AnonymousUser()
         view = EventListView()
-        view.setup(request_factory.get('/events/'))
+        view.setup(request)
         view.object_list = view.get_queryset()
         context = view.get_context_data()
 
@@ -32,8 +35,10 @@ class TestEventListView:
             start=now().date() - timedelta(days=2),
             end=now().date() + timedelta(days=2),
         )
+        request = request_factory.get('/events/')
+        request.user = AnonymousUser()
         view = EventListView()
-        view.setup(request_factory.get('/events/'))
+        view.setup(request)
         view.object_list = view.get_queryset()
         context = view.get_context_data()
 
@@ -48,8 +53,10 @@ class TestEventListYearView:
     def test_filters_by_year(self, db, request_factory: RequestFactory):
         this_year = now().date().year
         event = EventFactory(start=now().date() + timedelta(days=30))
+        request = request_factory.get(f'/events/{this_year}/')
+        request.user = AnonymousUser()
         view = EventListYearView()
-        view.setup(request_factory.get(f'/events/{this_year}/'))
+        view.setup(request)
         view.kwargs = {'year': str(this_year)}
         view.object_list = view.get_queryset()
         context = view.get_context_data()
@@ -62,8 +69,10 @@ class TestEventListYearView:
         this_year = now().date().year
         other_year = this_year + 2
         EventFactory(start=now().date() + timedelta(days=30))
+        request = request_factory.get(f'/events/{other_year}/')
+        request.user = AnonymousUser()
         view = EventListYearView()
-        view.setup(request_factory.get(f'/events/{other_year}/'))
+        view.setup(request)
         view.kwargs = {'year': str(other_year)}
         view.object_list = view.get_queryset()
         context = view.get_context_data()

@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load icon cache jsonld opengraph meta breadcrumbs event_calendar %}
+{% load icon cache jsonld opengraph meta breadcrumbs event_calendar rules %}
 
 {% block extra_head %}
     <link rel="canonical" href="{{ SITE_URL }}{{ event.get_absolute_url }}"/>
@@ -43,8 +43,9 @@
         <div class="container px-3 px-md-4">
             <div class="hero-topline">
                 {% url 'events:list' as events_url %}{% breadcrumbs events_url "Events" event.title %}
-                {% if user.is_staff %}
-                    <a href="{% url 'admin:events_event_change' event.pk %}" class="hero-admin-link">{% icon "pencil" size="0.75em" %} Edit</a>
+                {% has_perm 'events.manage_events' user as can_manage %}
+                {% if can_manage %}
+                    <a href="{% url 'events:event_edit' year=event.start.year slug=event.slug %}" class="hero-admin-link">{% icon "pencil" size="0.75em" %} Edit</a>
                 {% endif %}
             </div>
 

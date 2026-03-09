@@ -8,7 +8,7 @@ from .models import Event
 
 class EventAdmin(ModelAdmin):
     fieldsets = (
-        (None, {'fields': ('title', 'tags', 'description', 'url')}),
+        (None, {'fields': ('title', 'tags', 'description', 'url', 'publish_status', 'live_as_of')}),
         (
             'Location',
             {
