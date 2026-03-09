@@ -1,17 +1,19 @@
+import rules
 from rules import is_group_member, predicate
 
 
-# BASIC ACCESS RULES
 @predicate
 def is_author(user, obj=None):
-    if obj:
-        return obj.author == user
-    else:
+    if obj is None:
         return False
+    author = getattr(obj, 'author', None)
+    if author is None:
+        return False
+    # Post.author is an Author model (has .user); Comment.author is a User directly
+    return getattr(author, 'user', author) == user
 
 
-is_moderator = is_group_member('moderators')
-is_editor = is_group_member('editors')
-
-is_owner_or_moderator = is_author | is_editor | is_moderator
+is_editor = is_group_member('moderators') | rules.is_staff
 is_owner_or_editor = is_author | is_editor
+
+rules.add_perm('blog.manage_posts', is_editor)

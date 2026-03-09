@@ -5,15 +5,18 @@ from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.postgres.search import SearchQuery, SearchRank, SearchVector
 from django.db.models import Count
-from django.http import Http404, HttpResponseForbidden
+from django.http import Http404, HttpResponseForbidden, HttpResponseRedirect
 from django.shortcuts import redirect
-from django.views.generic import DeleteView, DetailView, ListView
+from django.urls import reverse_lazy
+from django.views.generic import CreateView, DeleteView, DetailView, ListView, UpdateView
 from django.views.generic.dates import YearMixin
 
 from published.mixins import PublishedDetailMixin, PublishedListMixin
 from published.utils import queryset_filter
 from rules.contrib.views import AutoPermissionRequiredMixin
 from taggit.models import Tag
+
+from apps.core.mixins import PermissionMixin
 
 from .models import Comment, Post, reverse
 
@@ -162,4 +165,85 @@ class CommentDeleteView(AutoPermissionRequiredMixin, LoginRequiredMixin, DeleteV
         return reverse('blog:detail', kwargs={'slug': self.object.post.slug})
 
 
-__all__ = ['BlogDetailView', 'BlogListView', 'BlogListYearView', 'CommentDeleteView']
+# --- Management views ---
+
+
+class PostManageListView(PermissionMixin, ListView):
+    permission_required = 'blog.manage_posts'
+    model = Post
+    template_name = 'blog/post_manage_list.html'
+    context_object_name = 'posts'
+    paginate_by = 20
+
+    def get_queryset(self):
+        return Post.objects.select_related('author').prefetch_related('tags').order_by('-created')
+
+
+class PostCreateView(PermissionMixin, CreateView):
+    permission_required = 'blog.manage_posts'
+    model = Post
+    template_name = 'blog/post_form.html'
+    success_url = reverse_lazy('blog:manage_list')
+
+    def get_form_class(self):
+        from .forms import PostForm
+
+        return PostForm
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['user'] = self.request.user
+        return kwargs
+
+    def form_valid(self, form):
+        self.object = form.save()
+        self.object.tags.set(*form.cleaned_data.get('tags', []))
+        messages.success(self.request, f'Post "{self.object.title}" created.')
+        return HttpResponseRedirect(self.get_success_url())
+
+
+class PostUpdateView(PermissionMixin, UpdateView):
+    permission_required = 'blog.manage_posts'
+    model = Post
+    template_name = 'blog/post_form.html'
+
+    def get_form_class(self):
+        from .forms import PostForm
+
+        return PostForm
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['user'] = self.request.user
+        return kwargs
+
+    def form_valid(self, form):
+        self.object = form.save()
+        self.object.tags.set(*form.cleaned_data.get('tags', []))
+        messages.success(self.request, f'Post "{self.object.title}" saved.')
+        return HttpResponseRedirect(self.object.get_absolute_url())
+
+
+class PostDeleteView(PermissionMixin, DeleteView):
+    permission_required = 'blog.manage_posts'
+    model = Post
+    template_name = 'blog/post_confirm_delete.html'
+    success_url = reverse_lazy('blog:manage_list')
+
+    def form_valid(self, form):
+        title = self.object.title
+        result = super().form_valid(form)
+        messages.success(self.request, f'Post "{title}" deleted.')
+        return result
+
+
+__all__ = [
+    'BlogDetailView',
+    'BlogListView',
+    'BlogListYearView',
+    'CommentDeleteView',
+    'PostCreateView',
+    'PostDeleteView',
+    'PostManageListView',
+    'PostUpdateView',
+]

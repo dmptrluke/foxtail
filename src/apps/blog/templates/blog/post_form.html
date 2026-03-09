@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+{% load form_tags breadcrumbs %}
+
+{% block title %}{% if object %}Edit: {{ object.title }}{% else %}New Post{% endif %}{% endblock %}
+
+{% block base_content %}
+    <div class="hero hero-detail">
+        <div class="container px-3 px-md-4">
+            {% url 'blog:list' as news_url %}{% url 'blog:manage_list' as manage_url %}
+            {% if object %}
+                {% breadcrumbs news_url "News" manage_url "Manage Posts" "Edit Post" %}
+                <h1>Edit Post</h1>
+            {% else %}
+                {% breadcrumbs news_url "News" manage_url "Manage Posts" "New Post" %}
+                <h1>New Post</h1>
+            {% endif %}
+        </div>
+    </div>
+
+    <main id="main-content" class="container px-3 px-md-4 mt-5 mb-5">
+        {% include "components/messages.html" %}
+
+        <form method="post" enctype="multipart/form-data" novalidate>
+            {% csrf_token %}
+            {% non_field_errors form %}
+
+            <div class="row g-4 mb-4">
+                {# Left column: details #}
+                <div class="col-lg-7">
+                    <fieldset>
+                        <legend>Details</legend>
+                        {% text_field form.title %}
+                        {% text_field form.slug %}
+                        {% select_field form.author %}
+                        {% textarea_field form.description %}
+                        {% text_field form.tags %}
+                    </fieldset>
+                </div>
+
+                {# Right column: publishing + image #}
+                <div class="col-lg-5">
+                    <fieldset class="mb-4">
+                        <legend>Publishing</legend>
+                        {% select_field form.publish_status %}
+                        {% text_field form.live_as_of %}
+                        {% check_field form.allow_comments %}
+                    </fieldset>
+
+                    <fieldset>
+                        <legend>Image</legend>
+                        <p class="form-text">2:1 aspect ratio recommended (e.g. 1600×800).</p>
+                        {% image_field form.image %}
+                    </fieldset>
+                </div>
+            </div>
+
+            {# Content — full width #}
+            <fieldset class="mb-4">
+                <legend>Content</legend>
+                <p class="form-text">Markdown supported.</p>
+                {% textarea_field form.text hide_label=True %}
+            </fieldset>
+
+            <div class="d-flex gap-2">
+                <button type="submit" class="btn btn-primary">
+                    {% if object %}Save Changes{% else %}Create Post{% endif %}
+                </button>
+                <a href="{% url 'blog:manage_list' %}" class="btn btn-outline-secondary">Cancel</a>
+                {% if object %}
+                    <a href="{{ object.get_absolute_url }}" class="btn btn-link ms-auto">View post</a>
+                {% endif %}
+            </div>
+        </form>
+    </main>
+{% endblock base_content %}

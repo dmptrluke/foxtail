@@ -107,7 +107,7 @@ class Comment(RulesModel):
     approved = models.BooleanField(default=False)
 
     class Meta:
-        rules_permissions = {'change': rules.is_owner_or_editor, 'delete': rules.is_owner_or_moderator}
+        rules_permissions = {'change': rules.is_owner_or_editor, 'delete': rules.is_owner_or_editor}
 
     def __str__(self):
         return self.text
