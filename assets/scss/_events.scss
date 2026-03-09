@@ -87,7 +87,7 @@
 	position: relative;
 	background: $dark;
 	color: $white;
-	border-radius: 0;
+	border-radius: $card-border-radius;
 	overflow: hidden;
 	display: flex;
 	flex-direction: column;
@@ -144,6 +144,7 @@
 	}
 
 	.event-card-date {
+		font-family: $font-family-display;
 		font-size: 0.85rem;
 		font-weight: 600;
 		margin-top: 0.75rem;
@@ -249,14 +250,14 @@
 	}
 
 	&.first {
-		border-radius: 3px 0 0 3px;
+		border-radius: 6px 0 0 6px;
 	}
 
 	&.last {
-		border-radius: 0 3px 3px 0;
+		border-radius: 0 6px 6px 0;
 	}
 
 	&.first.last {
-		border-radius: 3px;
+		border-radius: 6px;
 	}
 }

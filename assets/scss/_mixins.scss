@@ -2,6 +2,7 @@
 
 // The Label: small uppercase structural markers used throughout the site
 @mixin label-style {
+	font-family: $font-family-display;
 	font-size: 0.75rem;
 	font-weight: 600;
 	text-transform: uppercase;
@@ -9,6 +10,7 @@
 }
 
 @mixin label-style-lg {
+	font-family: $font-family-display;
 	font-size: 1rem;
 	font-weight: 600;
 	text-transform: uppercase;

@@ -116,6 +116,7 @@
 
 // Dashboard
 .hero-dashboard {
+	font-family: $font-family-display;
 	padding: 2rem 0 2.5rem;
 
 	.dashboard-avatar-link {
@@ -194,7 +195,7 @@
 		justify-content: center;
 		width: 2.75rem;
 		height: 2.75rem;
-		border-radius: 2px;
+		border-radius: 10px;
 		background: rgba($primary, 0.08);
 		color: $primary;
 		margin-bottom: 1rem;

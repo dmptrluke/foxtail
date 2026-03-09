@@ -14,7 +14,7 @@ $theme-colors: map.merge($theme-colors, (
 	"darker": $darker,
 ));
 
-$hero-gradient: linear-gradient(135deg, $dark 0%, color.adjust($secondary, $lightness: -15%) 100%);
+$hero-gradient: linear-gradient(135deg, $dark 0%, color.adjust($primary, $lightness: -8%) 50%, color.adjust($secondary, $lightness: -12%) 100%);
 
 @import "bootstrap/scss/root";
 @import "bootstrap/scss/reboot";
@@ -65,3 +65,4 @@ $hero-gradient: linear-gradient(135deg, $dark 0%, color.adjust($secondary, $ligh
 @import "header";
 @import "footer";
 @import "auth";
+@import "theme-sharp";

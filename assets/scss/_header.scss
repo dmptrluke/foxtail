@@ -1,5 +1,9 @@
 #navigation {
+	font-family: $font-family-display;
 	z-index: $zindex-dropdown + 1;
+	backdrop-filter: blur(16px) saturate(180%);
+	background: rgba($dark, 0.92) !important;
+	border-bottom: 1px solid rgba($white, 0.06);
 
 	.navbar-toggler {
 		border: none;
@@ -17,7 +21,7 @@
 			}
 		}
 	}
-P
+
 	.navbar-brand .icon {
 		vertical-align: top;
 		width: 29px;
@@ -26,20 +30,22 @@ P
 	}
 
 	.dropdown-menu {
-		border-radius: 0;
-		border: none;
-		background-color: #2a2a2a;
-		padding: 0;
-		box-shadow: $box-shadow;
+		border-radius: 10px;
+		border: 1px solid rgba($white, 0.08);
+		background: rgba(34, 28, 42, 0.95);
+		backdrop-filter: blur(20px);
+		padding: 0.35rem;
+		box-shadow: 0 8px 32px rgba($dark, 0.4), 0 2px 8px rgba($dark, 0.2);
 
 		&[data-bs-popper] {
-			margin-top: .75rem;
+			margin-top: .5rem;
 		}
-
 
 		.dropdown-item {
 			color: rgba($white, .7);
-			padding: .9rem 1.5rem;
+			padding: .65rem 1rem;
+			border-radius: 6px;
+			transition: background 0.12s ease, color 0.12s ease;
 
 			&:hover,
 			&:focus {
@@ -50,12 +56,12 @@ P
 
 		> :first-child,
 		> :first-child .dropdown-item {
-			padding-top: 1.1rem;
+			padding-top: .65rem;
 		}
 
 		.dropdown-divider {
-			border-color: rgba($white, .15);
-			margin: 0;
+			border-color: rgba($white, .1);
+			margin: 0.25rem 0;
 		}
 	}
 }

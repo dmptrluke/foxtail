@@ -3,7 +3,7 @@
 // Alerts - left-border accent
 
 .alert {
-	border: none;
+	border: 1px solid rgba($secondary, 0.12);
 	border-left: 3px solid;
 	font-size: 0.9rem;
 
@@ -55,7 +55,7 @@ p a {
 	font-weight: 500;
 	padding: 0.2rem 0.6rem;
 	background: rgba($white, 0.15);
-	border-radius: 2px;
+	border-radius: 6px;
 	color: rgba($white, 0.85);
 	text-decoration: none;
 

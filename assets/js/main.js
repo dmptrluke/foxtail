@@ -1,8 +1,5 @@
-import '@fontsource/roboto/300.css';
-import '@fontsource/roboto/400.css';
-import '@fontsource/roboto/400-italic.css';
-import '@fontsource/roboto/500.css';
-import '@fontsource/roboto/700.css';
+import '@fontsource-variable/plus-jakarta-sans';
+import '@fontsource-variable/plus-jakarta-sans/wght-italic.css';
 import '../scss/index.scss';
 
 import 'bootstrap/js/dist/dropdown';
@@ -38,9 +35,25 @@ function initCharCounter() {
     }
 }
 
+// --- Theme toggle ---
+
+function initThemeToggle() {
+    if (localStorage.getItem('theme') === 'sharp') {
+        document.documentElement.classList.add('theme-sharp');
+    }
+    const btn = document.querySelector('.footer-theme-toggle');
+    if (btn) {
+        btn.addEventListener('click', () => {
+            const isSharp = document.documentElement.classList.toggle('theme-sharp');
+            localStorage.setItem('theme', isSharp ? 'sharp' : 'default');
+        });
+    }
+}
+
 // --- Init ---
 
 function onLoad() {
+    initThemeToggle();
     initBootstrap();
     initCharCounter();
     initProfileEdit();

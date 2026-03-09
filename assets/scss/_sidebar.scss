@@ -11,7 +11,7 @@
 .sidebar-card {
 	background: $white;
 	border: 1px solid rgba($secondary, 0.12);
-	border-radius: 0;
+	border-radius: $card-border-radius;
 	overflow: hidden;
 
 	// Label heading at top of card

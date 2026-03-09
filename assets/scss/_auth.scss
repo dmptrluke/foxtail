@@ -38,8 +38,8 @@
   width: 100%;
   max-width: 560px;
   padding: 2.5rem 2.5rem 2rem;
-  box-shadow: 0 8px 40px rgba(40, 30, 51, 0.35), 0 2px 8px rgba(40, 30, 51, 0.15);
-  border-radius: 2px;
+  box-shadow: 0 12px 48px rgba(40, 30, 51, 0.25), 0 4px 12px rgba(40, 30, 51, 0.1);
+  border-radius: 12px;
 
   @media (min-width: 1921px) {
     zoom: 1.1;
@@ -98,7 +98,7 @@
   width: 100%;
   padding: 0.55rem 0.75rem;
   border: 1px solid #d8d2de;
-  border-radius: 2px;
+  border-radius: 8px;
   background: #fff;
   color: #2d2639;
   font-size: 0.8rem;
@@ -161,7 +161,7 @@
     width: 100%;
     padding: 0.55rem 0.75rem;
     border: 1px solid #d8d2de;
-    border-radius: 2px;
+    border-radius: 8px;
     font-size: 0.9rem;
     color: #2d2639;
     background: #fff;
@@ -216,7 +216,7 @@
   width: 100%;
   padding: 0.65rem 1.5rem;
   border: none;
-  border-radius: 2px;
+  border-radius: 8px;
   background: #4a3d55;
   color: #fff;
   font-size: 0.9rem;
@@ -240,7 +240,7 @@
   width: 100%;
   padding: 0.65rem 1.5rem;
   border: 1px solid #d8d2de;
-  border-radius: 2px;
+  border-radius: 8px;
   background: #fff;
   color: #4a3d55;
   font-size: 0.9rem;
@@ -295,7 +295,7 @@
 .auth-alert {
   padding: 0.6rem 0.85rem;
   margin-bottom: 1.25rem;
-  border-radius: 2px;
+  border-radius: 8px;
   font-size: 0.825rem;
   line-height: 1.4;
   border-left: 3px solid;
@@ -396,7 +396,7 @@
   gap: 0.85rem;
   padding: 0.75rem 1rem;
   border: 1px solid #d8d2de;
-  border-radius: 2px;
+  border-radius: 8px;
   cursor: pointer;
   transition: border-color 0.15s, box-shadow 0.15s;
   text-decoration: none;
@@ -459,7 +459,7 @@
   gap: 0.35rem 1.5rem;
   background: #f8f6fa;
   border: 1px solid #e8e4ed;
-  border-radius: 2px;
+  border-radius: 8px;
   padding: 1rem 1.25rem;
   margin-bottom: 1.25rem;
   font-family: 'SF Mono', 'Cascadia Code', 'Fira Code', monospace;

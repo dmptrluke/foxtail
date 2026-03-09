@@ -3,8 +3,8 @@
 #footer {
 	background: rgba($secondary, 0.06);
 	border-top: 1px solid rgba($secondary, 0.12);
-	padding: 1.75rem 0;
-	margin-top: auto !important;
+	padding: 2rem 0;
+	margin-top: 3rem !important;
 
 	> .container {
 		display: flex;
@@ -64,6 +64,43 @@
 			color: $primary;
 		}
 	}
+}
+
+.footer-theme-toggle {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 1.5rem;
+	height: 1.5rem;
+	font-size: 0.7rem;
+	color: color.adjust($body-color, $lightness: 35%);
+	background: rgba($secondary, 0.06);
+	border-radius: 50%;
+	border: none;
+	cursor: pointer;
+	transition: color 0.15s ease, background 0.15s ease, opacity 0.15s ease;
+	opacity: 0;
+	padding: 0;
+
+	&::before {
+		content: '\25CF';
+	}
+
+	.theme-sharp & {
+		&::before {
+			content: '\25A0';
+		}
+	}
+
+	&:hover {
+		opacity: 1;
+		color: $secondary;
+		background: rgba($secondary, 0.12);
+	}
+}
+
+.footer-social:hover .footer-theme-toggle {
+	opacity: 1;
 }
 
 .footer-debug {
