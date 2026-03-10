@@ -66,7 +66,7 @@
 	}
 }
 
-.footer-theme-toggle {
+@mixin footer-icon-btn {
 	display: inline-flex;
 	align-items: center;
 	justify-content: center;
@@ -76,10 +76,20 @@
 	color: color.adjust($body-color, $lightness: 35%);
 	background: rgba($secondary, 0.06);
 	border-radius: 50%;
-	border: none;
 	cursor: pointer;
 	transition: color 0.15s ease, background 0.15s ease, opacity 0.15s ease;
 	opacity: 0;
+
+	&:hover {
+		opacity: 1;
+		color: $secondary;
+		background: rgba($secondary, 0.12);
+	}
+}
+
+.footer-theme-toggle {
+	@include footer-icon-btn;
+	border: none;
 	padding: 0;
 
 	&::before {
@@ -91,41 +101,15 @@
 			content: '\25A0';
 		}
 	}
-
-	&:hover {
-		opacity: 1;
-		color: $secondary;
-		background: rgba($secondary, 0.12);
-	}
-}
-
-.footer-social:hover .footer-theme-toggle {
-	opacity: 1;
 }
 
 .footer-debug {
-	display: inline-flex;
-	align-items: center;
-	justify-content: center;
-	width: 1.5rem;
-	height: 1.5rem;
-	font-size: 0.7rem;
+	@include footer-icon-btn;
 	font-weight: 600;
-	color: color.adjust($body-color, $lightness: 35%);
-	background: rgba($secondary, 0.06);
-	border-radius: 50%;
-	cursor: pointer;
-	transition: color 0.15s ease, background 0.15s ease, opacity 0.15s ease;
 	text-decoration: none;
-	opacity: 0;
-
-	&:hover {
-		opacity: 1;
-		color: $secondary;
-		background: rgba($secondary, 0.12);
-	}
 }
 
+.footer-social:hover .footer-theme-toggle,
 .footer-social:hover .footer-debug {
 	opacity: 1;
 }

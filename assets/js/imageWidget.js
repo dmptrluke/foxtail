@@ -1,5 +1,20 @@
 const ACCEPTED_TYPES = ['image/jpeg', 'image/png', 'image/webp'];
 
+function validateImageFile(file, maxSize, fileInput) {
+    if (!ACCEPTED_TYPES.includes(file.type)) {
+        alert('Please select a JPEG, PNG, or WebP image.');
+        fileInput.value = '';
+        return false;
+    }
+    if (file.size > maxSize) {
+        const sizeMB = (maxSize / (1024 * 1024)).toFixed(0);
+        alert(`File is too large. Maximum size is ${sizeMB} MB.`);
+        fileInput.value = '';
+        return false;
+    }
+    return true;
+}
+
 function initPpoi(container, ppoiInput) {
     const preview = container.querySelector('.image-preview');
     if (!preview) return;
@@ -63,18 +78,7 @@ export function initImageWidgets() {
             const file = fileInput.files[0];
             if (!file) return;
 
-            if (!ACCEPTED_TYPES.includes(file.type)) {
-                alert('Please select a JPEG, PNG, or WebP image.');
-                fileInput.value = '';
-                return;
-            }
-
-            if (file.size > maxSize) {
-                const sizeMB = (maxSize / (1024 * 1024)).toFixed(0);
-                alert(`File is too large. Maximum size is ${sizeMB} MB.`);
-                fileInput.value = '';
-                return;
-            }
+            if (!validateImageFile(file, maxSize, fileInput)) return;
 
             const reader = new FileReader();
             reader.onload = e => {
@@ -90,4 +94,4 @@ export function initImageWidgets() {
     });
 }
 
-export { ACCEPTED_TYPES, initPpoi, showPreview };
+export { validateImageFile, initPpoi, showPreview };

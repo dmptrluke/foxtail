@@ -2,7 +2,7 @@ import Cropper from 'cropperjs';
 import 'cropperjs/dist/cropper.css';
 import Modal from 'bootstrap/js/dist/modal';
 
-import { ACCEPTED_TYPES, initPpoi, showPreview } from './imageWidget.js';
+import { validateImageFile, initPpoi, showPreview } from './imageWidget.js';
 
 function createCropModal() {
     const modal = document.createElement('div');
@@ -118,18 +118,7 @@ export function initCropWidgets() {
             const file = fileInput.files[0];
             if (!file) return;
 
-            if (!ACCEPTED_TYPES.includes(file.type)) {
-                alert('Please select a JPEG, PNG, or WebP image.');
-                fileInput.value = '';
-                return;
-            }
-
-            if (file.size > maxSize) {
-                const sizeMB = (maxSize / (1024 * 1024)).toFixed(0);
-                alert(`File is too large. Maximum size is ${sizeMB} MB.`);
-                fileInput.value = '';
-                return;
-            }
+            if (!validateImageFile(file, maxSize, fileInput)) return;
 
             if (!modalEl) initModal();
 
