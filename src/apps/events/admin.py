@@ -30,9 +30,12 @@ class EventAdmin(ModelAdmin):
 
     list_display = ('title', 'start', 'tag_list')
 
+    def get_queryset(self, request):
+        return super().get_queryset(request).prefetch_related('tags')
+
     @staticmethod
     def tag_list(obj):
-        return ', '.join(o.name for o in obj.tags.all().order_by('name'))
+        return ', '.join(sorted(t.name for t in obj.tags.all()))
 
     def save_model(self, request, obj, form, change):
         api_key = settings.MAPTILER_API_KEY

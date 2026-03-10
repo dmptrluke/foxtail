@@ -34,9 +34,9 @@ class ProfileCreateView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
         return super().form_valid(form)
 
     def get(self, *args, **kwargs):
-        if self.model.objects.filter(user=self.request.user).exists():
+        try:
             return redirect(self.request.user.profile.get_modify_url())
-        else:
+        except Profile.DoesNotExist:
             return super().get(*args, **kwargs)
 
 

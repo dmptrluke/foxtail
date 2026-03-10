@@ -45,9 +45,12 @@ class PostAdmin(PublishedAdmin):
     list_filter = ('created', 'tags', 'author')
     list_display = ['title', 'tag_list', 'created', 'modified', 'author'] + add_to_list_display()
 
+    def get_queryset(self, request):
+        return super().get_queryset(request).prefetch_related('tags')
+
     @staticmethod
     def tag_list(obj):
-        return ', '.join(o.name for o in obj.tags.all().order_by('name'))
+        return ', '.join(sorted(t.name for t in obj.tags.all()))
 
 
 class CommentAdmin(ModelAdmin):
