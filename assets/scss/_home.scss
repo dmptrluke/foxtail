@@ -14,7 +14,6 @@
 	}
 
 	p {
-		font-family: $font-family-display;
 		font-size: 1.15rem;
 		font-weight: 300;
 		opacity: 0.85;
@@ -93,7 +92,7 @@
 
 		time {
 			display: block;
-			font-family: $font-family-display;
+			font-family: $font-family-accent;
 			font-size: 0.8rem;
 			font-weight: 500;
 			color: $secondary;
@@ -169,7 +168,7 @@
 
 		time {
 			display: block;
-			font-family: $font-family-display;
+			font-family: $font-family-accent;
 			font-size: 0.8rem;
 			font-weight: 500;
 			color: $secondary;
@@ -231,7 +230,7 @@
 }
 
 .event-date-badge {
-	font-family: $font-family-display;
+	font-family: $font-family-accent;
 	display: flex;
 	flex-direction: column;
 	align-items: center;

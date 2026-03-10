@@ -21,8 +21,16 @@ $spacers: (
 	6: ($spacer * 3)
 );
 // fonts
-$font-family-sans-serif: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-$font-family-display: 'Plus Jakarta Sans Variable', $font-family-sans-serif;
+
+// base - used for most things
+$font-family-sans-serif: -apple-system, BlinkMacSystemFont, 'Roboto Variable', Roboto, "Segoe UI", "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+
+// display - used for headings, nav
+$font-family-display: $font-family-sans-serif;
+
+// accent - used for small text, tags, pills
+$font-family-accent: 'Plus Jakarta Sans Variable', $font-family-sans-serif;
+
 $headings-font-family: $font-family-display;
 $btn-font-family: $font-family-display;
 
