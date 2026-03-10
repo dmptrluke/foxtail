@@ -1,7 +1,3 @@
-import '@fontsource-variable/inter';
-import '@fontsource-variable/roboto';
-import '@fontsource-variable/plus-jakarta-sans';
-import '@fontsource-variable/plus-jakarta-sans/wght-italic.css';
 import '../scss/index.scss';
 
 import 'bootstrap/js/dist/dropdown';

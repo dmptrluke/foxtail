@@ -1,0 +1,12 @@
+@use '@fontsource-variable/inter/scss/mixins' as inter;
+@use '@fontsource-variable/roboto/scss/mixins' as roboto;
+@use '@fontsource-variable/plus-jakarta-sans/scss/mixins' as jakarta;
+
+$inter-dir: '@fontsource-variable/inter/files';
+$roboto-dir: '@fontsource-variable/roboto/files';
+$jakarta-dir: '@fontsource-variable/plus-jakarta-sans/files';
+
+@include inter.faces($subsets: (latin, latin-ext), $directory: $inter-dir);
+@include inter.faces($subsets: (latin, latin-ext), $styles: italic, $directory: $inter-dir);
+@include roboto.faces($subsets: (latin, latin-ext), $directory: $roboto-dir);
+@include jakarta.faces($subsets: (latin, latin-ext), $directory: $jakarta-dir);

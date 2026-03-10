@@ -33,6 +33,7 @@ export default defineConfig(({ mode }) => ({
             scss: {
                 quietDeps: true,
                 silenceDeprecations: ['import', 'global-builtin'],
+                loadPaths: [resolve(__dirname, 'node_modules')],
             },
         },
     },

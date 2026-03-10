@@ -446,7 +446,6 @@ IDP_OIDC_PRIVATE_KEY = env('OIDC_RSA_PRIVATE_KEY', default='')
 ASSET_HOSTS = env.list('ASSET_HOSTS', default=[])
 
 _csp_script_src = [
-    "'unsafe-inline'",
     SELF,
     NONCE,
     'https://www.google.com/recaptcha/',
@@ -463,13 +462,14 @@ CONTENT_SECURITY_POLICY = {
     'DIRECTIVES': {
         'default-src': [SELF],
         'script-src': _csp_script_src,
-        'style-src': ["'unsafe-inline'", SELF, NONCE] + ASSET_HOSTS,
+        'style-src': [SELF, NONCE] + ASSET_HOSTS,
+        'style-src-attr': ["'unsafe-inline'"],
         'frame-src': [
             'https://www.google.com/recaptcha/',
             'https://www.youtube.com',
             'https://www.youtube-nocookie.com',
         ],
-        'font-src': [SELF, 'data:'] + ASSET_HOSTS,
+        'font-src': [SELF] + ASSET_HOSTS,
         'img-src': [SELF, 'data:', 'https://api.maptiler.com'] + ASSET_HOSTS,
         'object-src': [NONE],
         'worker-src': [SELF, 'blob:'],
