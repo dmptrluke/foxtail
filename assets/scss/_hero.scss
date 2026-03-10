@@ -5,8 +5,8 @@
 	padding: 2rem 0;
 
 	h1 {
-		font-weight: 700;
-        letter-spacing: -.04em;
+		font-weight: 550;
+        letter-spacing: -.02em;
 	}
 
 	.hero-topline {
@@ -148,12 +148,14 @@
 // Scroll wrapper: hero stays sticky while banner scrolls behind it
 .hero-scroll-wrapper {
 	position: relative;
+	background: $dark;
 }
 
 .hero-sticky {
 	position: sticky;
-	top: 4rem;
+	backdrop-filter: blur(16px) saturate(180%);
 	z-index: 2;
+	background: linear-gradient(135deg, #281e33eb, #352c3deb, #5b4b6ceb);
 }
 
 // Banner image (below hero on detail pages)

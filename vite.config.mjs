@@ -1,7 +1,7 @@
 import { defineConfig } from 'vite';
 import { resolve } from 'path';
 
-export default defineConfig({
+export default defineConfig(({ mode }) => ({
     base: '/static/',
     root: 'assets',
     build: {
@@ -18,7 +18,9 @@ export default defineConfig({
                 assetFileNames: '[name][extname]',
             },
         },
-        sourcemap: 'hidden',
+        sourcemap: true,
+        cssMinify: mode !== 'development',
+        minify: mode !== 'development',
     },
     css: {
         preprocessorOptions: {
@@ -28,4 +30,4 @@ export default defineConfig({
             },
         },
     },
-});
+}));
