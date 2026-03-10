@@ -1,0 +1,24 @@
+html {
+	height: 100% !important;
+
+	@media (min-width: 1921px) {
+		font-size: 17px;
+	}
+}
+
+body {
+	padding-top: 4rem;
+	display: flex;
+	flex-direction: column;
+	height: 100% !important;
+	background-image: linear-gradient($dark 4rem, transparent 4rem);
+	background-attachment: fixed;
+}
+
+main {
+	flex-shrink: 0 !important;
+}
+
+h3, .h3 {
+	letter-spacing: -0.015em;
+}

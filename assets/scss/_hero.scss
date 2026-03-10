@@ -6,7 +6,7 @@
 
 	h1 {
 		font-weight: 700;
-		letter-spacing: -0.02em;
+        letter-spacing: -.04em;
 	}
 
 	.hero-topline {
@@ -72,12 +72,12 @@
 	}
 
 	h2 {
-		font-family: $font-family-display;
 		font-size: 1.05rem;
 		font-weight: 300;
 		line-height: var(--bs-body-line-height);
 		opacity: 0.75;
 		margin-bottom: 0;
+		letter-spacing: -.01em;
 	}
 
 	.hero-sub-narrow {

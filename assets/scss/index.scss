@@ -50,6 +50,7 @@ $hero-gradient: linear-gradient(135deg, $dark 0%, color.adjust($primary, $lightn
 @import "bootstrap/scss/utilities/api";
 
 @import "mixins";
+@import "base";
 @import "layout";
 @import "sidebar";
 @import "hero";

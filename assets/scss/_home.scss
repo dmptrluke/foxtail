@@ -92,7 +92,7 @@
 
 		time {
 			display: block;
-			font-family: $font-family-accent;
+			font-family: $label-font-family;
 			font-size: 0.8rem;
 			font-weight: 500;
 			color: $secondary;
@@ -168,7 +168,7 @@
 
 		time {
 			display: block;
-			font-family: $font-family-accent;
+			font-family: $label-font-family;
 			font-size: 0.8rem;
 			font-weight: 500;
 			color: $secondary;
@@ -230,7 +230,7 @@
 }
 
 .event-date-badge {
-	font-family: $font-family-accent;
+	font-family: $label-font-family;
 	display: flex;
 	flex-direction: column;
 	align-items: center;

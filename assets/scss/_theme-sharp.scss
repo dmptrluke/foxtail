@@ -1,15 +1,6 @@
 // Theme: Sharp
 
 .theme-sharp {
-	// Original font stack (Roboto for everything)
-	--bs-body-font-family: -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-
-	h1, h2, h3, h4, h5, h6,
-	.navbar,
-	.btn {
-		font-family: inherit;
-	}
-
 	// Global radius overrides
 	--bs-border-radius: 2px;
 	--bs-border-radius-sm: 1px;

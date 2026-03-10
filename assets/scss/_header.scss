@@ -1,5 +1,5 @@
 #navigation {
-	font-family: $font-family-display;
+	font-family: $navbar-font-family;
 	z-index: $zindex-dropdown + 1;
 	backdrop-filter: blur(16px) saturate(180%);
 	background: rgba($dark, 0.92) !important;
