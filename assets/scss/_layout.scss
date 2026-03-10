@@ -13,26 +13,12 @@
 		min-width: 0;
 		display: flex;
 		flex-direction: column;
-
-		.rendered-markdown {
-			font-size: 0.95rem;
-			line-height: 1.7;
-		}
-
-		.event-cal {
-			margin-top: auto;
-		}
 	}
 }
 
 .layout-content {
 	max-width: 48rem;
 	padding-bottom: 3rem;
-
-	.rendered-markdown {
-		font-size: 0.95rem;
-		line-height: 1.7;
-	}
 }
 
 .row.narrow-gutters {

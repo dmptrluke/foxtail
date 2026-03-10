@@ -122,6 +122,11 @@
 	}
 }
 
+// Event detail: compact hero
+.hero-event {
+	padding: 1.5rem 0;
+}
+
 // Hero with avatar identity block (reusable)
 .hero-identity {
 	display: flex;
@@ -153,6 +158,7 @@
 
 .hero-sticky {
 	position: sticky;
+	top: calc(4rem + env(safe-area-inset-top, 0px));
 	backdrop-filter: blur(16px) saturate(180%);
 	z-index: 2;
 	background: linear-gradient(135deg, #281e33eb, #352c3deb, #5b4b6ceb);

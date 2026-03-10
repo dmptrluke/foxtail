@@ -179,7 +179,7 @@
 	aspect-ratio: 16 / 9;
 	border-radius: $card-border-radius;
 	overflow: hidden;
-	margin-top: 2rem;
+	margin-top: 1.5rem;
 }
 
 // Event detail page
@@ -188,6 +188,10 @@
 	display: flex;
 	gap: 2rem;
 	font-size: 0.9rem;
+	margin-top: 1.25rem;
+	padding-top: 1.25rem;
+	border-top: 1px solid rgba($white, 0.12);
+	margin-bottom: 0.5rem;
 
 	dt {
 		@include label-style;
@@ -204,7 +208,7 @@
 // Mini calendar strip
 
 .event-cal {
-	margin-top: 1.5rem;
+	margin-top: 2rem;
 }
 
 .event-cal-label {

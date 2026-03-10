@@ -38,29 +38,29 @@
 {% block title %}{{ event.title }}{% endblock %}
 
 {% block base_content %}
-    {# Hero #}
-    <div class="hero hero-detail">
-        <div class="container px-3 px-md-4">
-            <div class="hero-topline">
-                {% url 'events:list' as events_url %}{% breadcrumbs events_url "Events" event.title %}
-                {% has_perm 'events.manage_events' user as can_manage %}
-                {% if can_manage %}
-                    <a href="{% url 'events:event_edit' event.pk %}" class="hero-admin-link">{% icon "pencil" size="0.75em" %} Edit</a>
-                {% endif %}
-            </div>
-
-            {% if event.tags.all %}
-                <div class="tag-row">
-                    {% for tag in event.tags.all %}
-                        <span class="tag-pill">{{ tag.name | title }}</span>
-                    {% endfor %}
+    {# Hero + banner #}
+    <div class="hero-scroll-wrapper">
+        <div class="hero hero-detail hero-event{% if event.image %} hero-sticky{% endif %}">
+            <div class="container px-3 px-md-4">
+                <div class="hero-topline">
+                    {% url 'events:list' as events_url %}{% breadcrumbs events_url "Events" event.title %}
+                    {% has_perm 'events.manage_events' user as can_manage %}
+                    {% if can_manage %}
+                        <a href="{% url 'events:event_edit' event.pk %}" class="hero-admin-link">{% icon "pencil" size="0.75em" %} Edit</a>
+                    {% endif %}
                 </div>
-            {% endif %}
 
-            <h1>{{ event.title }}</h1>
-            <h2>{{ event.location }}</h2>
+                {% if event.tags.all %}
+                    <div class="tag-row">
+                        {% for tag in event.tags.all %}
+                            <span class="tag-pill">{{ tag.name | title }}</span>
+                        {% endfor %}
+                    </div>
+                {% endif %}
 
-            <div class="hero-bottom">
+                <h1>{{ event.title }}</h1>
+                <h2>{{ event.location }}</h2>
+
                 <dl class="event-hero-dates">
                     <div>
                         <dt>Starts</dt>
@@ -81,23 +81,22 @@
                 </dl>
             </div>
         </div>
-    </div>
 
-    {# Banner image #}
-    {% if event.image %}
-        <div class="hero-banner-tall">
-            <picture>
-                <source media="(max-width: 991px)"
-                        srcset="{{ event.image.tall }} 768w, {{ event.image.tall_2x }} 1536w"
-                        sizes="100vw">
-                <img src="{{ event.image.banner }}"
-                     srcset="{{ event.image.banner }} 1440w, {{ event.image.banner_2x }} 2880w"
-                     sizes="100vw"
-                     alt="{{ event.title }}"
-                     style="object-position: {{ event.image_ppoi|ppoi_position }}">
-            </picture>
-        </div>
-    {% endif %}
+        {% if event.image %}
+            <div class="hero-banner-tall">
+                <picture>
+                    <source media="(max-width: 991px)"
+                            srcset="{{ event.image.tall }} 768w, {{ event.image.tall_2x }} 1536w"
+                            sizes="100vw">
+                    <img src="{{ event.image.banner }}"
+                         srcset="{{ event.image.banner }} 1440w, {{ event.image.banner_2x }} 2880w"
+                         sizes="100vw"
+                         alt="{{ event.title }}"
+                         style="object-position: {{ event.image_ppoi|ppoi_position }}">
+                </picture>
+            </div>
+        {% endif %}
+    </div>
 
     {# Two-column content #}
     <div class="container px-3 px-md-4 mt-5">
