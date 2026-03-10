@@ -10,6 +10,7 @@ dependencies = [
     "django-cjswidget==0.5.0",
     "django-cleanup==8.1.0",
     "django-csp==4.0",
+    "django-vite==3.1.0",
     "django-csp-helpers>=0.8.0",
     "django-environ==0.13.0",
     "django-imagefield[vips]==0.23.0a3",

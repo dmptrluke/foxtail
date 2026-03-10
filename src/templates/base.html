@@ -1,4 +1,4 @@
-{% load static %}
+{% load static django_vite %}
 <!doctype html>
 <html lang="en" class="no-js" prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# article: http://ogp.me/ns/article#">
 <head>
@@ -33,8 +33,8 @@
         {% block title_full %}{% block title %}{% endblock title %} | {{ request.site.name }}{% endblock title_full %}
     </title>
 
-    <link rel="stylesheet" href="{% static 'main.css' %}" nonce="{{ request.csp_nonce }}">
-    <script src="{% static 'main.js' %}" type="module" nonce="{{ request.csp_nonce }}"></script>
+    {% vite_hmr_client nonce=request.csp_nonce %}
+    {% vite_asset 'js/main.js' nonce=request.csp_nonce %}
 
     <script nonce="{{ request.csp_nonce }}">
         (function (a) {

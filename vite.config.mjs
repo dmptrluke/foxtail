@@ -4,18 +4,18 @@ import { resolve } from 'path';
 export default defineConfig(({ mode }) => ({
     base: '/static/',
     root: 'assets',
+    server: {
+        host: '0.0.0.0',
+        port: 5173,
+        strictPort: true,
+    },
     build: {
         outDir: resolve(__dirname, 'build/static'),
         emptyOutDir: true,
-        manifest: false,
+        manifest: true,
         rollupOptions: {
             input: {
                 main: resolve(__dirname, 'assets/js/main.js'),
-            },
-            output: {
-                entryFileNames: '[name].js',
-                chunkFileNames: '[name]-[hash].js',
-                assetFileNames: '[name][extname]',
             },
         },
         sourcemap: true,

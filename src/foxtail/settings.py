@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.sites',
     'django.contrib.staticfiles',
+    'django_vite',
     'django.forms',
     'django.contrib.humanize',
     'django.contrib.postgres',
@@ -253,6 +254,20 @@ if TESTING:
         'BACKEND': 'whitenoise.storage.CompressedStaticFilesStorage',
     }
 
+# django-vite
+# <https://github.com/MrBin99/django-vite>
+
+VITE_DEV_MODE = env.bool('VITE_DEV_MODE', default=False)
+
+DJANGO_VITE = {
+    'default': {
+        'dev_mode': VITE_DEV_MODE,
+        'dev_server_host': 'localhost',
+        'dev_server_port': 5173,
+        'manifest_path': str(BASE_DIR / 'build' / 'static' / '.vite' / 'manifest.json'),
+    },
+}
+
 # Security
 # <https://docs.djangoproject.com/en/stable/howto/deployment/checklist/#https>
 
@@ -462,6 +477,13 @@ CONTENT_SECURITY_POLICY = {
         'report-uri': env('CSP_REPORT_URI', default=None),
     },
 }
+
+if VITE_DEV_MODE:
+    CONTENT_SECURITY_POLICY['DIRECTIVES']['script-src'] += ['http://localhost:5173']
+    CONTENT_SECURITY_POLICY['DIRECTIVES']['connect-src'] += ['ws://localhost:5173']
+
+if DEBUG:
+    CONTENT_SECURITY_POLICY['DIRECTIVES']['style-src'] = ["'unsafe-inline'", SELF] + ASSET_HOSTS
 
 # django-imagefield
 # <https://django-imagefield.readthedocs.io/en/latest/>

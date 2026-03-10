@@ -8,6 +8,7 @@ x-dev-env: &dev-env
   SITE_URL: "http://localhost:8000"
   ALLOWED_HOSTS: "localhost,127.0.0.1"
   DIRECTORY_ENABLED: "true"
+  VITE_DEV_MODE: "true"
 
 services:
   foxtail:
@@ -25,6 +26,9 @@ services:
     env_file:
       - path: .env
         required: false
+    depends_on:
+      vite:
+        condition: service_started
 
   worker:
     volumes:
@@ -34,3 +38,16 @@ services:
     env_file:
       - path: .env
         required: false
+
+  vite:
+    build:
+      context: .
+      target: assets
+      args:
+        BUILD_MODE: development
+    command: npx vite
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./assets:/app/assets
+      - ./vite.config.mjs:/app/vite.config.mjs
