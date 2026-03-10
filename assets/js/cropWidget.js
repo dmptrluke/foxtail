@@ -2,9 +2,7 @@ import Cropper from 'cropperjs';
 import 'cropperjs/dist/cropper.css';
 import Modal from 'bootstrap/js/dist/modal';
 
-import { initPpoi, showPreview } from './imageWidget.js';
-
-const ACCEPTED_TYPES = ['image/jpeg', 'image/png', 'image/webp'];
+import { ACCEPTED_TYPES, initPpoi, showPreview } from './imageWidget.js';
 
 function createCropModal() {
     const modal = document.createElement('div');
@@ -94,7 +92,7 @@ export function initCropWidgets() {
                     : pendingFile.type === 'image/webp' ? 'image/webp'
                     : 'image/jpeg';
                 canvas.toBlob(blob => {
-                    if (!blob) return;
+                    if (!blob || !pendingFile) return;
 
                     const extMap = { 'image/png': '.png', 'image/webp': '.webp', 'image/jpeg': '.jpg' };
                     const ext = extMap[blob.type] || '.jpg';
@@ -149,6 +147,7 @@ export function initCropWidgets() {
                     bsModal.show();
                 }
             };
+            reader.onerror = () => alert('Could not read the selected file.');
             reader.readAsDataURL(file);
         });
     });

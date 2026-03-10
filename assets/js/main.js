@@ -11,8 +11,6 @@ import Tooltip from 'bootstrap/js/dist/tooltip';
 
 import 'colcade';
 
-import { initProfileEdit } from './profileEdit.js';
-
 // --- Bootstrap component initialization ---
 
 function initBootstrap() {
@@ -24,15 +22,14 @@ function initBootstrap() {
 
 function initCharCounter() {
     const textInput = document.getElementById('id_text');
-    if (textInput) {
-        textInput.addEventListener('keyup', () => {
-            const hint = document.getElementById('hint_id_text');
-            if (!hint) return;
-            const remaining = textInput.maxLength - textInput.value.length;
-            const plural = remaining === 1 ? '' : 's';
-            hint.textContent = `${remaining} character${plural} remaining.`;
-        });
-    }
+    const hint = document.getElementById('hint_id_text');
+    if (!textInput || !hint) return;
+
+    textInput.addEventListener('keyup', () => {
+        const remaining = textInput.maxLength - textInput.value.length;
+        const plural = remaining === 1 ? '' : 's';
+        hint.textContent = `${remaining} character${plural} remaining.`;
+    });
 }
 
 // --- Theme toggle ---
@@ -56,7 +53,9 @@ function onLoad() {
     initThemeToggle();
     initBootstrap();
     initCharCounter();
-    initProfileEdit();
+    if (document.getElementById('id_age_privacy')) {
+        import('./profileEdit.js').then(m => m.initProfileEdit());
+    }
 
     if (document.querySelector('[data-image-widget]')) {
         import('./imageWidget.js').then(m => m.initImageWidgets());

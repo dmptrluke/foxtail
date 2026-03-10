@@ -84,9 +84,10 @@ export function initImageWidgets() {
                     initPpoi(container, ppoiInput);
                 }
             };
+            reader.onerror = () => alert('Could not read the selected file.');
             reader.readAsDataURL(file);
         });
     });
 }
 
-export { initPpoi, showPreview };
+export { ACCEPTED_TYPES, initPpoi, showPreview };
