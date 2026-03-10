@@ -13,14 +13,14 @@ from csp_helpers.mixins import CSPFormMixin
 from markdownfield.widgets import MDEWidget
 from taggit.forms import TagField
 
-from apps.core.widgets import CroppedImageWidget
+from apps.core.widgets import ImageWidget
 
 from .models import Event
 
 
 class EventForm(CSPFormMixin, ModelForm):
     tags = TagField(required=False, help_text='Comma-separated list of tags.')
-    image = ImageField(required=False, widget=CroppedImageWidget(aspect_ratio=1200 / 630, ppoi_field='image_ppoi'))
+    image = ImageField(required=False, widget=ImageWidget(ppoi_field='image_ppoi'))
     live_as_of = DateTimeField(
         required=False,
         label='Publish Date',

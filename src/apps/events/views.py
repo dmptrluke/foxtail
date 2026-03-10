@@ -2,7 +2,6 @@ from datetime import date, datetime
 
 from django.conf import settings
 from django.contrib import messages
-from django.core.files.base import ContentFile
 from django.db.models import Q
 from django.http import Http404, HttpResponseRedirect
 from django.urls import reverse, reverse_lazy
@@ -78,6 +77,13 @@ class EventDetailView(PublishedDetailMixin, YearMixin, DetailView):
 
         return Event.objects.filter(start__year=date.year, slug=self.kwargs['slug']).prefetch_related('tags')
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        api_key = settings.MAPTILER_API_KEY
+        if api_key:
+            context['map_style_url'] = f'https://api.maptiler.com/maps/streets-v2/style.json?key={api_key}'
+        return context
+
 
 # --- Management views ---
 
@@ -147,26 +153,18 @@ class EventDeleteView(PermissionMixin, DeleteView):
 
 
 def _apply_geocoding(obj, changed_data, request):
-    token = getattr(settings, 'MAPBOX_ACCESS_TOKEN', None)
-    if not token or 'address' not in changed_data:
+    api_key = getattr(settings, 'MAPTILER_API_KEY', None)
+    if not api_key or 'address' not in changed_data:
         return
     if not obj.address:
         obj.latitude = None
         obj.longitude = None
-        if obj.map_image:
-            obj.map_image.delete(save=False)
         return
-    from .mapbox import geocode, map_filename, static_map
+    from .maptiler import geocode
 
-    coords = geocode(obj.address, token)
+    coords = geocode(obj.address, api_key)
     if coords:
         obj.latitude, obj.longitude = coords
-        map_bytes = static_map(obj.latitude, obj.longitude, token)
-        if map_bytes:
-            filename = map_filename(obj.address)
-            if obj.map_image:
-                obj.map_image.delete(save=False)
-            obj.map_image.save(filename, ContentFile(map_bytes), save=False)
     else:
         messages.warning(request, 'Address could not be geocoded.')
 

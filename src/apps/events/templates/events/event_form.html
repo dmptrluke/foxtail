@@ -43,8 +43,7 @@
                         {% textarea_field form.address %}
                         {% if object and object.latitude and object.longitude %}
                             <p class="form-text">
-                                Map: {{ object.latitude }}, {{ object.longitude }}
-                                {% if object.map_image %}— <a href="{{ object.map_image.url }}" target="_blank">view map</a>{% endif %}
+                                Coordinates: {{ object.latitude }}, {{ object.longitude }}
                             </p>
                         {% endif %}
                         <p class="form-text">Address is geocoded automatically when saved (if configured).</p>

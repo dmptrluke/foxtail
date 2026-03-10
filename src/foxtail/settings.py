@@ -451,9 +451,10 @@ CONTENT_SECURITY_POLICY = {
             'https://www.youtube-nocookie.com',
         ],
         'font-src': [SELF, 'data:'] + ASSET_HOSTS,
-        'img-src': [SELF, 'data:'] + ASSET_HOSTS,
+        'img-src': [SELF, 'data:', 'https://api.maptiler.com'] + ASSET_HOSTS,
         'object-src': [NONE],
-        'connect-src': [SELF, 'https://sentry.io'],
+        'worker-src': [SELF, 'blob:'],
+        'connect-src': [SELF, 'https://sentry.io', 'https://api.maptiler.com'],
         'base-uri': [NONE],
         'frame-ancestors': [NONE],
         'form-action': [SELF],
@@ -605,5 +606,5 @@ TAGGIT_CASE_INSENSITIVE = True
 BLOG_COMMENTS = True
 CONTACT_EMAILS = env.list('CONTACT_EMAILS')
 DIRECTORY_ENABLED = env.bool('DIRECTORY_ENABLED', default=False)
-MAPBOX_ACCESS_TOKEN = env('MAPBOX_ACCESS_TOKEN', default='')
+MAPTILER_API_KEY = env('MAPTILER_API_KEY', default='')
 ROBOTS_ALLOWED = env.bool('ROBOTS_ALLOWED', default=True)

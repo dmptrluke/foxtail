@@ -110,6 +110,16 @@
                     {{ event.description_rendered | safe }}
                 </div>
 
+                {% if event.latitude and event.longitude and map_style_url %}
+                    <div class="event-map-container"
+                         data-map
+                         data-lat="{{ event.latitude }}"
+                         data-lng="{{ event.longitude }}"
+                         data-zoom="15"
+                         data-style="{{ map_style_url }}">
+                    </div>
+                {% endif %}
+
                 {% event_calendar event %}
             </main>
 
@@ -123,11 +133,6 @@
                             <p class="meta">{{ event.address }}</p>
                         {% endif %}
                     </div>
-                    {% if event.map_image %}
-                        <a href="https://www.google.com/maps/search/?api=1&query={{ event.address|urlencode }}" target="_blank" rel="noopener">
-                            <img class="image ratio-16x9" src="{{ event.map_image.url }}" alt="Map of {{ event.location }}">
-                        </a>
-                    {% endif %}
                 </div>
 
                 {# Cost card (dummy data - field doesn't exist yet) #}
