@@ -7,6 +7,7 @@ export default defineConfig(({ mode }) => ({
     server: {
         host: '0.0.0.0',
         port: 5173,
+        origin: 'http://localhost:5173',
         strictPort: true,
         hmr: {
             host: 'localhost',

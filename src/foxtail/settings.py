@@ -225,6 +225,7 @@ MEDIA_URL = '/media/'
 # noinspection PyUnresolvedReferences
 STATICFILES_DIRS = [str(BASE_DIR / 'build/static'), str(BASE_DIR / 'assets/static')]
 
+
 AZURE_MEDIA = env.bool('AZURE_MEDIA', default=False)
 
 if AZURE_MEDIA:
@@ -485,6 +486,8 @@ CONTENT_SECURITY_POLICY = {
 if VITE_DEV_MODE:
     CONTENT_SECURITY_POLICY['DIRECTIVES']['script-src'] += ['http://localhost:5173']
     CONTENT_SECURITY_POLICY['DIRECTIVES']['connect-src'] += ['ws://localhost:5173']
+    CONTENT_SECURITY_POLICY['DIRECTIVES']['font-src'] += ['http://localhost:5173']
+    CONTENT_SECURITY_POLICY['DIRECTIVES']['img-src'] += ['http://localhost:5173']
 
 if DEBUG:
     CONTENT_SECURITY_POLICY['DIRECTIVES']['style-src'] = ["'unsafe-inline'", SELF] + ASSET_HOSTS
