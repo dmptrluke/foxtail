@@ -30,8 +30,6 @@ class Event(PublishedModel):
     address = models.TextField(blank=True)
     latitude = models.DecimalField(max_digits=9, decimal_places=6, null=True, blank=True)
     longitude = models.DecimalField(max_digits=9, decimal_places=6, null=True, blank=True)
-    map_image = models.ImageField(upload_to='events/maps', blank=True)
-
     start = models.DateField()
     start_time = models.TimeField(null=True, blank=True, help_text='Time is optional.')
     end = models.DateField(null=True, blank=True, help_text='End date and time are optional.')
