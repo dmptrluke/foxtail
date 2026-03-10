@@ -161,10 +161,13 @@
 	top: calc(4rem + env(safe-area-inset-top, 0px));
 	backdrop-filter: blur(16px) saturate(180%);
 	z-index: 2;
-	background: linear-gradient(135deg, #281e33eb, #352c3deb, #5b4b6ceb);
+	background:
+		linear-gradient(135deg, #281e33eb, #352c3deb, #5b4b6ceb),
+		linear-gradient(to bottom, $dark, transparent);
 }
 
 // Banner image (below hero on detail pages)
+
 .hero-banner img {
 	width: 100%;
 	max-height: 300px;

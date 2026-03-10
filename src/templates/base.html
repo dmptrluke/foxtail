@@ -46,7 +46,7 @@
     {% block extra_head %}{% endblock extra_head %}
 </head>
 
-<body>
+<body class="{% block body_class %}{% endblock %}">
 <a class="visually-hidden-focusable" href="#main-content">Skip to main content</a>
 
 {% block header %}

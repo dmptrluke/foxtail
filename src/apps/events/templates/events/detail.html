@@ -1,6 +1,8 @@
 {% extends "base.html" %}
 {% load icon cache jsonld opengraph meta breadcrumbs event_calendar rules image %}
 
+{% if event.image %}{% block body_class %}has-hero-banner{% endblock %}{% endif %}
+
 {% block extra_head %}
     <link rel="canonical" href="{{ SITE_URL }}{{ event.get_absolute_url }}"/>
     <meta name="twitter:card" content="summary_large_image"/>
