@@ -1,3 +1,4 @@
+import '@fontsource-variable/roboto';
 import '@fontsource-variable/plus-jakarta-sans';
 import '@fontsource-variable/plus-jakarta-sans/wght-italic.css';
 import '../scss/index.scss';
@@ -10,7 +11,6 @@ import Tooltip from 'bootstrap/js/dist/tooltip';
 
 import 'colcade';
 
-import { initCropWidgets } from './cropWidget.js';
 import { initProfileEdit } from './profileEdit.js';
 
 // --- Bootstrap component initialization ---
@@ -57,8 +57,18 @@ function onLoad() {
     initBootstrap();
     initCharCounter();
     initProfileEdit();
-    initCropWidgets();
+
+    if (document.querySelector('[data-image-widget]')) {
+        import('./imageWidget.js').then(m => m.initImageWidgets());
+    }
+
+    if (document.querySelector('[data-crop-widget]')) {
+        import('./cropWidget.js').then(m => m.initCropWidgets());
+    }
+
+    if (document.querySelector('[data-map]')) {
+        import('./map.js').then(m => m.initMaps());
+    }
 }
 
-// ES module scripts are deferred — DOM is always ready by the time this runs
 onLoad();

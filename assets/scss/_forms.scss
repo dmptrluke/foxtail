@@ -36,7 +36,7 @@ form {
 	margin-bottom: ($spacer * .5);
 }
 
-.image-crop-preview {
+.image-preview {
 	position: relative;
 	display: inline-block;
 
@@ -51,7 +51,7 @@ form {
 		cursor: crosshair;
 	}
 
-	.image-crop-ppoi-dot {
+	.image-ppoi-dot {
 		position: absolute;
 		width: 14px;
 		height: 14px;
