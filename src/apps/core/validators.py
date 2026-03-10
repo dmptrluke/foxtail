@@ -1,9 +1,13 @@
+from django.conf import settings
 from django.core.exceptions import ValidationError
 
 from markdownfield.validators import MARKDOWN_ATTRS, MARKDOWN_TAGS, Validator
 
 
-def file_size_validator(max_bytes=5 * 1024 * 1024):
+def file_size_validator(max_bytes=None):
+    if max_bytes is None:
+        max_bytes = settings.MAX_IMAGE_FILE_SIZE
+
     def validate(value):
         if value and hasattr(value, 'size') and value.size > max_bytes:
             mb = max_bytes / (1024 * 1024)

@@ -1,10 +1,13 @@
+from django.conf import settings
 from django.forms.widgets import ClearableFileInput
 
 
 class ImageWidget(ClearableFileInput):
     template_name = 'components/forms/widgets/image_widget.html'
 
-    def __init__(self, max_file_size=5 * 1024 * 1024, ppoi_field=None, attrs=None, **kwargs):
+    def __init__(self, max_file_size=None, ppoi_field=None, attrs=None, **kwargs):
+        if max_file_size is None:
+            max_file_size = settings.MAX_IMAGE_FILE_SIZE
         defaults = {'class': 'form-control'}
         if attrs:
             defaults.update(attrs)
