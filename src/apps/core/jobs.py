@@ -24,5 +24,15 @@ def process_imagefields(app_label, model_name, pk):
                 'Processing %d renditions for %s.%s pk=%s field=%s', len(specs), app_label, model_name, pk, field.name
             )
             for spec in specs:
-                f.process(spec)
+                try:
+                    f.process(spec)
+                except Exception:
+                    logger.exception(
+                        'Failed to process rendition %s for %s.%s pk=%s field=%s',
+                        spec,
+                        app_label,
+                        model_name,
+                        pk,
+                        field.name,
+                    )
             logger.info('Finished processing %s.%s pk=%s field=%s', app_label, model_name, pk, field.name)

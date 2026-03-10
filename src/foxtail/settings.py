@@ -279,6 +279,7 @@ SESSION_COOKIE_NAME = '__Host-sessionid'
 SESSION_COOKIE_SECURE = True
 
 X_FRAME_OPTIONS = 'DENY'
+SECURE_REFERRER_POLICY = 'strict-origin-when-cross-origin'
 
 # Email
 # <https://docs.djangoproject.com/en/stable/topics/email/>
@@ -373,6 +374,9 @@ ACCOUNT_RATE_LIMITS = {
     'reset_password_from_key': '20/m/ip',
     'change_password': '5/m/user',
     'login_by_code': '5/m/ip',
+    'verify_generate': '5/m/user',
+    'verify_submit': '10/m/ip',
+    'verify_unverify': '5/m/user',
 }
 
 # allauth social

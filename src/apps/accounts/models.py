@@ -8,6 +8,8 @@ from django.utils.timezone import now
 from allauth.account.models import EmailAddress
 from imagefield.fields import ImageField as ProcessedImageField
 
+from apps.core.validators import file_size_validator
+
 from . import rules  # noqa: F401
 from .validators import username_validators
 
@@ -33,7 +35,7 @@ class User(AbstractUser):
         upload_to='avatars',
         blank=True,
         auto_add_fields=True,
-        validators=[FileExtensionValidator(['jpg', 'jpeg', 'png', 'webp'])],
+        validators=[FileExtensionValidator(['jpg', 'jpeg', 'png', 'webp']), file_size_validator()],
     )
 
     def clean(self):

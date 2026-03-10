@@ -15,6 +15,7 @@ from django.views.generic import ListView, TemplateView, UpdateView
 import segno
 from allauth.account.models import EmailAddress
 from allauth.account.views import PasswordResetView, SignupView
+from allauth.core.ratelimit import consume_or_429
 from allauth.idp.oidc.models import Client as OIDCClient
 from allauth.idp.oidc.models import Token as OIDCToken
 from allauth.mfa.base.views import AuthenticateView
@@ -180,6 +181,9 @@ class VerificationView(LoginRequiredMixin, TemplateView):
 
 class GenerateTokenView(LoginRequiredMixin, View):
     def post(self, request):
+        resp = consume_or_429(request, action='verify_generate')
+        if resp:
+            return resp
         user = request.user
 
         old_token = cache.get(_cache_key_for_user(user.pk))
@@ -241,20 +245,25 @@ class VerifyUserView(PermissionRequiredMixin, LoginRequiredMixin, View):
     permission_required = 'accounts.verify_user'
 
     def post(self, request):
+        resp = consume_or_429(request, action='verify_submit')
+        if resp:
+            return resp
 
         token_raw = request.POST.get('token', '').strip()
         target_user, formatted = _resolve_token(request, token_raw)
         if not target_user:
             return redirect('account_verification')
 
-        if Verification.objects.filter(user=target_user).exists():
-            messages.info(request, f'{target_user.username} is already verified.')
-            return redirect('account_verification')
-
-        Verification.objects.create(user=target_user, verified_by=request.user)
+        _, created = Verification.objects.get_or_create(
+            user=target_user,
+            defaults={'verified_by': request.user},
+        )
         cache.delete(_cache_key_for_token(formatted))
         cache.delete(_cache_key_for_user(target_user.pk))
-        messages.success(request, f'{target_user.username} has been verified.')
+        if created:
+            messages.success(request, f'{target_user.username} has been verified.')
+        else:
+            messages.info(request, f'{target_user.username} is already verified.')
         return redirect('account_verification')
 
 
@@ -262,6 +271,9 @@ class UnverifyUserView(PermissionRequiredMixin, LoginRequiredMixin, View):
     permission_required = 'accounts.verify_user'
 
     def post(self, request):
+        resp = consume_or_429(request, action='verify_unverify')
+        if resp:
+            return resp
 
         token_raw = request.POST.get('token', '').strip()
         target_user, formatted = _resolve_token(request, token_raw)

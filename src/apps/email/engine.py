@@ -18,7 +18,7 @@ def send_message_async(message, **kwargs):
     conn.open()
     try:
         conn.send_messages([message])
-        logger.info('Sent email to %r', message.to)
+        logger.info('Sent email to %d recipient(s)', len(message.to))
     finally:
         conn.close()
 
@@ -35,11 +35,11 @@ class AsyncEmailBackend(BaseEmailBackend):
                     send_message_async,
                     message,
                     retry=Retry(max=3, interval=[10, 60, 300]),
-                    description=f'Email to {message.to}',
+                    description=f'Email to {len(message.to)} recipient(s)',
                     **self.init_kwargs,
                 )
             except Exception:
                 if not self.fail_silently:
                     raise
-                logger.exception('Failed to enqueue email to %r', message.to)
+                logger.exception('Failed to enqueue email to %d recipient(s)', len(message.to))
         return len(messages)

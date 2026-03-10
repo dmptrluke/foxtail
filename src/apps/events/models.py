@@ -1,6 +1,7 @@
 from datetime import UTC, datetime, timedelta
 
 from django.conf import settings
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.urls import reverse
 from django.utils.functional import cached_property
@@ -15,6 +16,7 @@ from published.models import PublishedModel
 from taggit.managers import TaggableManager
 
 from apps.core.fields import AutoSlugField
+from apps.core.validators import file_size_validator
 
 
 class Event(PublishedModel):
@@ -35,13 +37,19 @@ class Event(PublishedModel):
     end = models.DateField(null=True, blank=True, help_text='End date and time are optional.')
     end_time = models.TimeField(null=True, blank=True, help_text='End date and time are optional.')
 
-    image = ProcessedImageField(upload_to='events', blank=True, auto_add_fields=True)
+    image = ProcessedImageField(
+        upload_to='events', blank=True, auto_add_fields=True, validators=[file_size_validator()]
+    )
 
     created = models.DateTimeField(auto_now_add=True, verbose_name='date created')
     modified = models.DateTimeField(auto_now=True, verbose_name='date modified')
 
     class Meta:
         ordering = ['start']
+
+    def clean(self):
+        if self.end and self.end < self.start:
+            raise ValidationError({'end': 'End date cannot be before start date.'})
 
     def __str__(self):
         return self.title
