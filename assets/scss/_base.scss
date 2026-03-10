@@ -7,11 +7,13 @@ html {
 }
 
 body {
-	padding-top: 4rem;
+	padding-top: calc(4rem + env(safe-area-inset-top, 0px));
+	padding-left: env(safe-area-inset-left, 0px);
+	padding-right: env(safe-area-inset-right, 0px);
 	display: flex;
 	flex-direction: column;
 	height: 100% !important;
-	background-image: linear-gradient($dark 4rem, transparent 4rem);
+	background-image: linear-gradient($dark calc(4rem + env(safe-area-inset-top, 0px)), transparent calc(4rem + env(safe-area-inset-top, 0px)));
 	background-attachment: fixed;
 }
 

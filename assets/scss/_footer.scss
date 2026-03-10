@@ -3,7 +3,7 @@
 #footer {
 	background: rgba($secondary, 0.06);
 	border-top: 1px solid rgba($secondary, 0.12);
-	padding: 2rem 0;
+	padding: 2rem 0 calc(2rem + env(safe-area-inset-bottom, 0px));
 	margin-top: 3rem !important;
 
 	> .container {
