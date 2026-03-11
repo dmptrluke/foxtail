@@ -1,41 +1,36 @@
-{% extends "base.html" %}
-{% load sortable avatar %}
+{% extends "base/page.html" %}
+{% load cotton sortable avatar %}
 
 {% block title %}Furry Directory{% endblock %}
 
-{% block base_content %}
-    <div class="hero hero-detail">
-        <div class="container px-3 px-md-4">
-            <h1>Furry Directory</h1>
-            <h2 class="hero-sub-narrow">Find and connect with furries across New Zealand.</h2>
-        </div>
-    </div>
+{% block hero %}
+    <c-hero title="Furry Directory">
+        <h2 class="hero-sub-narrow">Find and connect with furries across New Zealand.</h2>
+    </c-hero>
+{% endblock hero %}
 
-    <main id="main-content" class="container px-3 px-md-4 mt-5">
-        {% include "components/messages.html" %}
-
-        <table class="table table-hover table-sortable">
-            <thead>
+{% block content %}
+    <table class="table table-hover table-sortable">
+        <thead>
+        <tr>
+            {% sortable_heading name='Name' column='name' %}
+            {% sortable_heading name='Location' column='location' %}
+            <th scope="col">Fursona</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for profile in profile_list %}
             <tr>
-                {% sortable_heading name='Name' column='name' %}
-                {% sortable_heading name='Location' column='location' %}
-                <th scope="col">Fursona</th>
+                <th scope="row">
+                    <a href="{{ profile.get_absolute_url }}" class="d-flex align-items-center gap-2 text-decoration-none">
+                        <img src="{{ profile.user|avatar_url:40 }}" alt="" width="32" height="32" class="rounded-circle">
+                        {{ profile.user.username }}
+                    </a>
+                </th>
+                <td>{{ profile.location }}</td>
+                <td>Otto</td>
             </tr>
-            </thead>
-            <tbody>
-            {% for profile in profile_list %}
-                <tr>
-                    <th scope="row">
-                        <a href="{{ profile.get_absolute_url }}" class="d-flex align-items-center gap-2 text-decoration-none">
-                            <img src="{{ profile.user|avatar_url:40 }}" alt="" width="32" height="32" class="rounded-circle">
-                            {{ profile.user.username }}
-                        </a>
-                    </th>
-                    <td>{{ profile.location }}</td>
-                    <td>Otto</td>
-                </tr>
-            {% endfor %}
-            </tbody>
-        </table>
-    </main>
-{% endblock base_content %}
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock content %}

@@ -1,82 +1,79 @@
-{% extends "base.html" %}
-{% load icon breadcrumbs %}
+{% extends "base/page.html" %}
+{% load cotton icon breadcrumbs %}
 
 {% block title %}Manage Events{% endblock %}
 
-{% block base_content %}
-    <div class="hero hero-detail">
-        <div class="container px-3 px-md-4">
+{% block hero %}
+    <c-hero title="Manage Events">
+        <c-slot name="topline">
             {% url 'events:list' as events_url %}{% breadcrumbs events_url "Events" "Manage Events" %}
-            <h1>Manage Events</h1>
-        </div>
+        </c-slot>
+    </c-hero>
+{% endblock %}
+
+{% block content %}
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <p class="mb-0 text-secondary">{{ paginator.count }} event{{ paginator.count|pluralize }}</p>
+        <a href="{% url 'events:event_create' %}" class="btn btn-primary">{% icon "plus" size="1rem" %} New Event</a>
     </div>
 
-    <main id="main-content" class="container px-3 px-md-4 py-4">
-        {% include "components/messages.html" %}
-
-        <div class="d-flex justify-content-between align-items-center mb-3">
-            <p class="mb-0 text-secondary">{{ paginator.count }} event{{ paginator.count|pluralize }}</p>
-            <a href="{% url 'events:event_create' %}" class="btn btn-primary">{% icon "plus" size="1rem" %} New Event</a>
+    {% if events %}
+        <div class="table-responsive">
+            <table class="table table-hover align-middle">
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Start</th>
+                        <th>Location</th>
+                        <th>Tags</th>
+                        <th>Status</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for event in events %}
+                        <tr>
+                            <td>
+                                <a href="{{ event.get_absolute_url }}" class="fw-semibold text-decoration-none">{{ event.title }}</a>
+                            </td>
+                            <td class="text-secondary text-nowrap">{{ event.start|date:"d M Y" }}</td>
+                            <td class="text-secondary">{{ event.location }}</td>
+                            <td class="text-secondary">
+                                {% for tag in event.tags.all %}{{ tag.name }}{% if not forloop.last %}, {% endif %}{% empty %}—{% endfor %}
+                            </td>
+                            <td>
+                                {% if event.available_to_public %}
+                                    <span class="badge text-bg-success">Published</span>
+                                {% elif event.publish_status == 2 %}
+                                    <span class="badge text-bg-warning">Scheduled</span>
+                                {% else %}
+                                    <span class="badge text-bg-secondary">Draft</span>
+                                {% endif %}
+                            </td>
+                            <td class="text-end text-nowrap">
+                                <a href="{% url 'events:event_edit' event.pk %}" class="btn btn-sm btn-outline-secondary">Edit</a>
+                                <a href="{% url 'events:event_delete' event.pk %}" class="btn btn-sm btn-outline-danger ms-1">Delete</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
         </div>
 
-        {% if events %}
-            <div class="table-responsive">
-                <table class="table table-hover align-middle">
-                    <thead>
-                        <tr>
-                            <th>Title</th>
-                            <th>Start</th>
-                            <th>Location</th>
-                            <th>Tags</th>
-                            <th>Status</th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for event in events %}
-                            <tr>
-                                <td>
-                                    <a href="{{ event.get_absolute_url }}" class="fw-semibold text-decoration-none">{{ event.title }}</a>
-                                </td>
-                                <td class="text-secondary text-nowrap">{{ event.start|date:"d M Y" }}</td>
-                                <td class="text-secondary">{{ event.location }}</td>
-                                <td class="text-secondary">
-                                    {% for tag in event.tags.all %}{{ tag.name }}{% if not forloop.last %}, {% endif %}{% empty %}—{% endfor %}
-                                </td>
-                                <td>
-                                    {% if event.available_to_public %}
-                                        <span class="badge text-bg-success">Published</span>
-                                    {% elif event.publish_status == 2 %}
-                                        <span class="badge text-bg-warning">Scheduled</span>
-                                    {% else %}
-                                        <span class="badge text-bg-secondary">Draft</span>
-                                    {% endif %}
-                                </td>
-                                <td class="text-end text-nowrap">
-                                    <a href="{% url 'events:event_edit' event.pk %}" class="btn btn-sm btn-outline-secondary">Edit</a>
-                                    <a href="{% url 'events:event_delete' event.pk %}" class="btn btn-sm btn-outline-danger ms-1">Delete</a>
-                                </td>
-                            </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
-
-            {% if is_paginated %}
-                <nav aria-label="Event list pagination">
-                    <ul class="pagination">
-                        {% if page_obj.has_previous %}
-                            <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a></li>
-                        {% endif %}
-                        <li class="page-item disabled"><span class="page-link">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span></li>
-                        {% if page_obj.has_next %}
-                            <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a></li>
-                        {% endif %}
-                    </ul>
-                </nav>
-            {% endif %}
-        {% else %}
-            <p class="text-secondary">No events yet. <a href="{% url 'events:event_create' %}">Create the first one.</a></p>
+        {% if is_paginated %}
+            <nav aria-label="Event list pagination">
+                <ul class="pagination">
+                    {% if page_obj.has_previous %}
+                        <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a></li>
+                    {% endif %}
+                    <li class="page-item disabled"><span class="page-link">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span></li>
+                    {% if page_obj.has_next %}
+                        <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a></li>
+                    {% endif %}
+                </ul>
+            </nav>
         {% endif %}
-    </main>
-{% endblock base_content %}
+    {% else %}
+        <p class="text-secondary">No events yet. <a href="{% url 'events:event_create' %}">Create the first one.</a></p>
+    {% endif %}
+{% endblock content %}

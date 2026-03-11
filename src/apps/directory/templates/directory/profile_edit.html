@@ -1,80 +1,76 @@
-{% extends "base.html" %}
-{% load form_tags breadcrumbs %}
+{% extends "base/page.html" %}
+{% load cotton form_tags breadcrumbs %}
 
 {% block title %}Edit Profile{% endblock %}
 
-{% block base_content %}
-    <div class="hero hero-detail">
-        <div class="container px-3 px-md-4">
+{% block hero %}
+    <c-hero title="Edit Profile">
+        <c-slot name="topline">
             {% url 'directory:index' as dir_url %}{% url 'directory:profile' slug=object.profile_URL as profile_url %}{% breadcrumbs dir_url "Directory" profile_url object.user.username "Edit" %}
+        </c-slot>
+    </c-hero>
+{% endblock hero %}
 
-            <h1>Edit Profile</h1>
-        </div>
-    </div>
+{% block content %}
+    <form method="post">
+        {% csrf_token %}
+        {% non_field_errors form %}
 
-    <main id="main-content" class="container px-3 px-md-4 mt-5">
-        {% include "components/messages.html" %}
-
-        <form method="post">
-            {% csrf_token %}
-            {% non_field_errors form %}
-
-            <fieldset class="mb-4">
-                <legend>Basic Details</legend>
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="mb-3">
-                            <label class="form-label" for="{{ form.profile_URL.id_for_label }}">{{ form.profile_URL.label }}</label>
-                            <div class="input-group">
-                                <span class="input-group-text">furry.nz/directory/</span>
-                                <input type="text" name="{{ form.profile_URL.html_name }}" value="{{ form.profile_URL.value|default:'' }}"
-                                       id="{{ form.profile_URL.id_for_label }}"
-                                       class="form-control{% if form.profile_URL.errors %} is-invalid{% endif %}"
-                                       maxlength="{{ form.profile_URL.field.max_length }}">
-                                {% if form.profile_URL.errors %}<div class="invalid-feedback">{{ form.profile_URL.errors }}</div>{% endif %}
-                            </div>
+        <fieldset class="mb-4">
+            <legend>Basic Details</legend>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label class="form-label" for="{{ form.profile_URL.id_for_label }}">{{ form.profile_URL.label }}</label>
+                        <div class="input-group">
+                            <span class="input-group-text">furry.nz/directory/</span>
+                            <input type="text" name="{{ form.profile_URL.html_name }}" value="{{ form.profile_URL.value|default:'' }}"
+                                   id="{{ form.profile_URL.id_for_label }}"
+                                   class="form-control{% if form.profile_URL.errors %} is-invalid{% endif %}"
+                                   maxlength="{{ form.profile_URL.field.max_length }}">
+                            {% if form.profile_URL.errors %}<div class="invalid-feedback">{{ form.profile_URL.errors }}</div>{% endif %}
                         </div>
                     </div>
                 </div>
-            </fieldset>
+            </div>
+        </fieldset>
 
-            <fieldset class="mb-4">
-                <legend>About</legend>
-                <div class="row">
-                    <div class="col-md-8">
-                        {% textarea_field form.description %}
-                        {% select_field form.description_privacy %}
-                    </div>
+        <fieldset class="mb-4">
+            <legend>About</legend>
+            <div class="row">
+                <div class="col-md-8">
+                    {% textarea_field form.description %}
+                    {% select_field form.description_privacy %}
                 </div>
-            </fieldset>
+            </div>
+        </fieldset>
 
-            <fieldset class="mb-4">
-                <legend>Age and Birthday</legend>
-                <div class="row">
-                    <div class="col-md-6">
-                        {% select_field form.age_privacy %}
-                        {% select_field form.birthday_privacy %}
-                    </div>
+        <fieldset class="mb-4">
+            <legend>Age and Birthday</legend>
+            <div class="row">
+                <div class="col-md-6">
+                    {% select_field form.age_privacy %}
+                    {% select_field form.birthday_privacy %}
                 </div>
-                <div hidden id="dob_warning">
-                    <div class="alert alert-warning" role="alert">
-                        Sharing both your age and birthday will allow others to determine your full date of birth.
-                    </div>
+            </div>
+            <div hidden id="dob_warning">
+                <div class="alert alert-warning" role="alert">
+                    Sharing both your age and birthday will allow others to determine your full date of birth.
                 </div>
-            </fieldset>
+            </div>
+        </fieldset>
 
-            <fieldset class="mb-4">
-                <legend>Location</legend>
-                <div class="row">
-                    <div class="col-md-6">
-                        {% select_field form.country %}
-                        {% select_field form.region %}
-                        {% select_field form.location_privacy %}
-                    </div>
+        <fieldset class="mb-4">
+            <legend>Location</legend>
+            <div class="row">
+                <div class="col-md-6">
+                    {% select_field form.country %}
+                    {% select_field form.region %}
+                    {% select_field form.location_privacy %}
                 </div>
-            </fieldset>
+            </div>
+        </fieldset>
 
-            <button type="submit" class="btn btn-primary">Save Changes</button>
-        </form>
-    </main>
-{% endblock base_content %}
+        <button type="submit" class="btn btn-primary">Save Changes</button>
+    </form>
+{% endblock content %}

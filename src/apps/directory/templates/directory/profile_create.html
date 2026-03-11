@@ -1,32 +1,27 @@
-{% extends "base.html" %}
-{% load breadcrumbs form_tags %}
+{% extends "base/page.html" %}
+{% load cotton breadcrumbs form_tags %}
 
 {% block title %}Create Profile{% endblock %}
 
-{% block base_content %}
-    <div class="hero hero-detail">
-        <div class="container px-3 px-md-4">
+{% block hero %}
+    <c-hero title="Create Profile" subtitle="Choose a URL for your directory profile.">
+        <c-slot name="topline">
             {% url 'directory:index' as dir_url %}{% breadcrumbs dir_url "Directory" "Create Profile" %}
+        </c-slot>
+    </c-hero>
+{% endblock hero %}
 
-            <h1>Create Profile</h1>
-            <h2>Choose a URL for your directory profile.</h2>
-        </div>
-    </div>
+{% block content %}
+    <form method="post">
+        {% csrf_token %}
+        {% non_field_errors form %}
 
-    <main id="main-content" class="container px-3 px-md-4 mt-5">
-        {% include "components/messages.html" %}
-
-        <form method="post">
-            {% csrf_token %}
-            {% non_field_errors form %}
-
-            <div class="row">
-                <div class="col-md-6">
-                    {% prefix_field form.profile_URL "furry.nz/directory/" %}
-                </div>
+        <div class="row">
+            <div class="col-md-6">
+                {% prefix_field form.profile_URL "furry.nz/directory/" %}
             </div>
+        </div>
 
-            <button type="submit" class="btn btn-primary">Create Profile</button>
-        </form>
-    </main>
-{% endblock base_content %}
+        <button type="submit" class="btn btn-primary">Create Profile</button>
+    </form>
+{% endblock content %}

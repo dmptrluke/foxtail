@@ -1,100 +1,100 @@
-{% extends "base.html" %}
-{% load form_tags breadcrumbs %}
+{% extends "base/page.html" %}
+{% load cotton form_tags breadcrumbs %}
 
 {% block title %}{% if object %}Edit: {{ object.title }}{% else %}New Event{% endif %}{% endblock %}
 
 {% block extra_head %}{{ form.media }}{% endblock %}
 
-{% block base_content %}
-    <div class="hero hero-detail">
-        <div class="container px-3 px-md-4">
-            {% url 'events:list' as events_url %}{% url 'events:manage_list' as manage_url %}
-            {% if object %}
+{% block hero %}
+    {% url 'events:list' as events_url %}{% url 'events:manage_list' as manage_url %}
+    {% if object %}
+        <c-hero title="Edit Event">
+            <c-slot name="topline">
                 {% breadcrumbs events_url "Events" manage_url "Manage Events" "Edit Event" %}
-                <h1>Edit Event</h1>
-            {% else %}
+            </c-slot>
+        </c-hero>
+    {% else %}
+        <c-hero title="New Event">
+            <c-slot name="topline">
                 {% breadcrumbs events_url "Events" manage_url "Manage Events" "New Event" %}
-                <h1>New Event</h1>
+            </c-slot>
+        </c-hero>
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+    <form method="post" enctype="multipart/form-data" novalidate>
+        {% csrf_token %}
+        {% non_field_errors form %}
+
+        <div class="row g-4 mb-4">
+            {# Left column: title + image #}
+            <div class="col-lg-7">
+                <fieldset class="mb-4">
+                    <legend>Details</legend>
+                    {% text_field form.title %}
+                    {% text_field form.slug %}
+                    {% text_field form.tags %}
+                    {% text_field form.url %}
+                </fieldset>
+
+                <fieldset>
+                    <legend>Location</legend>
+                    {% text_field form.location %}
+                    {% textarea_field form.address %}
+                    {% if object and object.latitude and object.longitude %}
+                        <p class="form-text">
+                            Coordinates: {{ object.latitude }}, {{ object.longitude }}
+                        </p>
+                    {% endif %}
+                    <p class="form-text">Address is geocoded automatically when saved (if configured).</p>
+                </fieldset>
+            </div>
+
+            {# Right column: dates + publishing + image #}
+            <div class="col-lg-5">
+                <fieldset class="mb-4">
+                    <legend>Dates &amp; Times</legend>
+                    <div class="row">
+                        <div class="col-sm-6">{% text_field form.start %}</div>
+                        <div class="col-sm-6">{% text_field form.start_time %}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6">{% text_field form.end %}</div>
+                        <div class="col-sm-6">{% text_field form.end_time %}</div>
+                    </div>
+                </fieldset>
+
+                <fieldset class="mb-4">
+                    <legend>Publishing</legend>
+                    {% select_field form.publish_status %}
+                    {% text_field form.live_as_of %}
+                </fieldset>
+
+                <fieldset>
+                    <legend>Image</legend>
+                    <p class="form-text">1.91:1 aspect ratio recommended (e.g. 1200x630). Click image to set focus point.</p>
+                    {% image_field form.image %}
+                    {{ form.image_ppoi }}
+                </fieldset>
+            </div>
+        </div>
+
+        {# Description — full width #}
+        <fieldset class="mb-4">
+            <legend>Description</legend>
+            <p class="form-text">Markdown supported.</p>
+            {% textarea_field form.description hide_label=True %}
+        </fieldset>
+
+        <div class="d-flex gap-2">
+            <button type="submit" class="btn btn-primary">
+                {% if object %}Save Changes{% else %}Create Event{% endif %}
+            </button>
+            <a href="{% url 'events:manage_list' %}" class="btn btn-outline-secondary">Cancel</a>
+            {% if object %}
+                <a href="{{ object.get_absolute_url }}" class="btn btn-link ms-auto">View event</a>
             {% endif %}
         </div>
-    </div>
-
-    <main id="main-content" class="container px-3 px-md-4 mt-5 mb-5">
-        {% include "components/messages.html" %}
-
-        <form method="post" enctype="multipart/form-data" novalidate>
-            {% csrf_token %}
-            {% non_field_errors form %}
-
-            <div class="row g-4 mb-4">
-                {# Left column: title + image #}
-                <div class="col-lg-7">
-                    <fieldset class="mb-4">
-                        <legend>Details</legend>
-                        {% text_field form.title %}
-                        {% text_field form.slug %}
-                        {% text_field form.tags %}
-                        {% text_field form.url %}
-                    </fieldset>
-
-                    <fieldset>
-                        <legend>Location</legend>
-                        {% text_field form.location %}
-                        {% textarea_field form.address %}
-                        {% if object and object.latitude and object.longitude %}
-                            <p class="form-text">
-                                Coordinates: {{ object.latitude }}, {{ object.longitude }}
-                            </p>
-                        {% endif %}
-                        <p class="form-text">Address is geocoded automatically when saved (if configured).</p>
-                    </fieldset>
-                </div>
-
-                {# Right column: dates + publishing + image #}
-                <div class="col-lg-5">
-                    <fieldset class="mb-4">
-                        <legend>Dates &amp; Times</legend>
-                        <div class="row">
-                            <div class="col-sm-6">{% text_field form.start %}</div>
-                            <div class="col-sm-6">{% text_field form.start_time %}</div>
-                        </div>
-                        <div class="row">
-                            <div class="col-sm-6">{% text_field form.end %}</div>
-                            <div class="col-sm-6">{% text_field form.end_time %}</div>
-                        </div>
-                    </fieldset>
-
-                    <fieldset class="mb-4">
-                        <legend>Publishing</legend>
-                        {% select_field form.publish_status %}
-                        {% text_field form.live_as_of %}
-                    </fieldset>
-
-                    <fieldset>
-                        <legend>Image</legend>
-                        <p class="form-text">1.91:1 aspect ratio recommended (e.g. 1200×630). Click image to set focus point.</p>
-                        {% image_field form.image %}
-                        {{ form.image_ppoi }}
-                    </fieldset>
-                </div>
-            </div>
-
-            {# Description — full width #}
-            <fieldset class="mb-4">
-                <legend>Description</legend>
-                <p class="form-text">Markdown supported.</p>
-                {% textarea_field form.description hide_label=True %}
-            </fieldset>
-
-            <div class="d-flex gap-2">
-                <button type="submit" class="btn btn-primary">
-                    {% if object %}Save Changes{% else %}Create Event{% endif %}
-                </button>
-                <a href="{% url 'events:manage_list' %}" class="btn btn-outline-secondary">Cancel</a>
-                {% if object %}
-                    <a href="{{ object.get_absolute_url }}" class="btn btn-link ms-auto">View event</a>
-                {% endif %}
-            </div>
-        </form>
-    </main>
-{% endblock base_content %}
+    </form>
+{% endblock content %}

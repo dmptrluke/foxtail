@@ -1,5 +1,5 @@
-{% extends "base.html" %}
-{% load icon %}
+{% extends "base/page.html" %}
+{% load cotton icon %}
 
 {% block title %}{{ page.title }}{% endblock %}
 
@@ -7,27 +7,20 @@
     <link rel="canonical" href="{{ SITE_URL }}{{ page.get_absolute_url }}"/>
 {% endblock %}
 
-{% block base_content %}
-    <div class="hero hero-detail">
-        <div class="container px-3 px-md-4">
-            {% if user.is_staff %}
-                <div class="hero-topline">
-                    <a href="{% url 'admin:content_page_change' page.pk %}" class="hero-admin-link">{% icon "pencil" size="0.75em" %} Edit</a>
-                </div>
-            {% endif %}
+{% block hero %}
+    <c-hero title="{{ page.title }}" subtitle="{{ page.subtitle }}">
+        {% if user.is_staff %}
+            <c-slot name="topline">
+                <a href="{% url 'admin:content_page_change' page.pk %}" class="hero-admin-link">{% icon "pencil" size="0.75em" %} Edit</a>
+            </c-slot>
+        {% endif %}
+    </c-hero>
+{% endblock hero %}
 
-            <h1>{{ page.title }}</h1>
-            {% if page.subtitle %}
-                <h2>{{ page.subtitle }}</h2>
-            {% endif %}
+{% block content %}
+    <div class="layout-content">
+        <div class="rendered-markdown">
+            {{ page.body_rendered | safe }}
         </div>
     </div>
-
-    <main id="main-content" class="container px-3 px-md-4 mt-5">
-        <div class="layout-content">
-            <div class="rendered-markdown">
-                {{ page.body_rendered | safe }}
-            </div>
-        </div>
-    </main>
-{% endblock base_content %}
+{% endblock content %}

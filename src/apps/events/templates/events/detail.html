@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "base/page.html" %}
 {% load icon cache jsonld opengraph meta breadcrumbs event_calendar rules image %}
 
 {% if event.image %}{% block body_class %}has-hero-banner{% endblock %}{% endif %}
@@ -39,8 +39,7 @@
 
 {% block title %}{{ event.title }}{% endblock %}
 
-{% block base_content %}
-    {# Hero + banner #}
+{% block hero %}
     <div class="hero-scroll-wrapper">
         <div class="hero hero-detail hero-event{% if event.image %} hero-sticky{% endif %}">
             <div class="container px-3 px-md-4">
@@ -82,55 +81,53 @@
             <c-hero-banner :image="event.image" :ppoi="event.image_ppoi" :alt="event.title" />
         {% endif %}
     </div>
+{% endblock hero %}
 
-    {# Two-column content #}
-    <div class="container px-3 px-md-4 mt-5">
-        {% include "components/messages.html" %}
-        <c-publish-status :object="event" />
+{% block content %}
+    <c-publish-status :object="event" />
 
-        <c-layout-sidebar>
-            <c-slot name="content">
-                <div class="rendered-markdown">
-                    {{ event.description_rendered | safe }}
+    <c-layout-sidebar>
+        <c-slot name="content">
+            <div class="rendered-markdown">
+                {{ event.description_rendered | safe }}
+            </div>
+
+            <c-map :latitude="event.latitude" :longitude="event.longitude" />
+
+            {% event_calendar event %}
+        </c-slot>
+
+        <c-slot name="sidebar">
+            {# Location card #}
+            <div class="sidebar-card">
+                <h6 class="header">Location</h6>
+                <div class="content">
+                    <p><strong>{{ event.location }}</strong></p>
+                    {% if event.address %}
+                        <p class="meta">{{ event.address }}</p>
+                    {% endif %}
                 </div>
+            </div>
 
-                <c-map :latitude="event.latitude" :longitude="event.longitude" />
+            {# Cost card (dummy data - field doesn't exist yet) #}
+            <div class="sidebar-card">
+                <h6 class="header">Cost</h6>
+                <div class="content">
+                    <p><strong>Check event website</strong></p>
+                    <p>Pricing varies by registration type and date.</p>
+                </div>
+            </div>
 
-                {% event_calendar event %}
-            </c-slot>
-
-            <c-slot name="sidebar">
-                {# Location card #}
+            {# CTA #}
+            {% if event.url %}
                 <div class="sidebar-card">
-                    <h6 class="header">Location</h6>
-                    <div class="content">
-                        <p><strong>{{ event.location }}</strong></p>
-                        {% if event.address %}
-                            <p class="meta">{{ event.address }}</p>
-                        {% endif %}
+                    <div class="footer">
+                        <a class="btn btn-primary" href="{{ event.url }}" rel="noopener noreferrer" target="_blank">
+                            Visit Event Website
+                        </a>
                     </div>
                 </div>
-
-                {# Cost card (dummy data - field doesn't exist yet) #}
-                <div class="sidebar-card">
-                    <h6 class="header">Cost</h6>
-                    <div class="content">
-                        <p><strong>Check event website</strong></p>
-                        <p>Pricing varies by registration type and date.</p>
-                    </div>
-                </div>
-
-                {# CTA #}
-                {% if event.url %}
-                    <div class="sidebar-card">
-                        <div class="footer">
-                            <a class="btn btn-primary" href="{{ event.url }}" rel="noopener noreferrer" target="_blank">
-                                Visit Event Website
-                            </a>
-                        </div>
-                    </div>
-                {% endif %}
-            </c-slot>
-        </c-layout-sidebar>
-    </div>
-{% endblock base_content %}
+            {% endif %}
+        </c-slot>
+    </c-layout-sidebar>
+{% endblock content %}

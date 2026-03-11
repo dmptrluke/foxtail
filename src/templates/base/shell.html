@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block body_class %}auth-shell{% endblock %}
+
+{% block body %}
+    <div class="auth-card">
+        {% include "components/messages.html" %}
+        <header class="auth-header">
+            {% block heading %}{% endblock heading %}
+        </header>
+        {% block content %}{% endblock content %}
+    </div>
+
+    <div class="auth-page-footer">
+        <a href="{% url 'content:page' slug='privacy' %}">Privacy</a> &middot;
+        <a href="{% url 'contact:contact' %}">Contact</a> &middot;
+        <a href="https://github.com/dmptrluke/foxtail">Source</a>
+    </div>
+
+    {% block extra_body %}{% endblock extra_body %}
+{% endblock body %}

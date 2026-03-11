@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block body %}
+    <a class="visually-hidden-focusable" href="#main-content">Skip to main content</a>
+    {% include "components/header.html" %}
+
+    {% block hero %}{% endblock hero %}
+
+    <main id="main-content" class="container px-3 px-md-4 mt-5">
+        {% include "components/messages.html" %}
+        {% block content %}{% endblock content %}
+    </main>
+
+    {% include "components/footer.html" %}
+{% endblock body %}

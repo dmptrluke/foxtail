@@ -1,30 +1,27 @@
-{% extends "base.html" %}
-{% load breadcrumbs %}
+{% extends "base/page.html" %}
+{% load cotton breadcrumbs %}
 
 {% block title %}Delete Post{% endblock %}
 
-{% block base_content %}
-    <div class="hero hero-detail">
-        <div class="container px-3 px-md-4">
+{% block hero %}
+    <c-hero title="Delete Post">
+        <c-slot name="topline">
             {% url 'blog:manage_list' as manage_url %}
             {% breadcrumbs manage_url "Manage Posts" "Delete Post" %}
-            <h1>Delete Post</h1>
+        </c-slot>
+    </c-hero>
+{% endblock hero %}
+
+{% block content %}
+    <div class="account-confirm">
+        <p>Are you sure you want to permanently delete <strong>{{ object.title }}</strong>?</p>
+        <p class="text-secondary">This cannot be undone.</p>
+        <div class="account-confirm-actions">
+            <form method="post">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger">Delete Post</button>
+                <a href="{% url 'blog:manage_list' %}" class="btn btn-outline-secondary ms-2">Cancel</a>
+            </form>
         </div>
     </div>
-
-    <main id="main-content" class="container px-3 px-md-4 py-4">
-        {% include "components/messages.html" %}
-
-        <div class="account-confirm">
-            <p>Are you sure you want to permanently delete <strong>{{ object.title }}</strong>?</p>
-            <p class="text-secondary">This cannot be undone.</p>
-            <div class="account-confirm-actions">
-                <form method="post">
-                    {% csrf_token %}
-                    <button type="submit" class="btn btn-danger">Delete Post</button>
-                    <a href="{% url 'blog:manage_list' %}" class="btn btn-outline-secondary ms-2">Cancel</a>
-                </form>
-            </div>
-        </div>
-    </main>
-{% endblock base_content %}
+{% endblock content %}

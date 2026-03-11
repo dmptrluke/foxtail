@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "base/page.html" %}
 {% load breadcrumbs %}
 
 {% block extra_head %}
@@ -43,8 +43,7 @@
 
 {% block title %}{% if year %}News from {{ year }}{% else %}News{% endif %}{% endblock %}
 
-{% block base_content %}
-    {# Hero #}
+{% block hero %}
     <div class="hero hero-detail">
         <div class="container px-3 px-md-4">
             {% if year %}
@@ -77,31 +76,28 @@
             {% endif %}
         </div>
     </div>
+{% endblock hero %}
 
-    {# Content grid #}
-    <div class="container px-3 px-md-4 mt-5">
-        {% include "components/messages.html" %}
+{% block content %}
+    <c-layout-sidebar>
+        <c-slot name="content">
+            {% if posts %}
+                {% for post in page_obj %}
+                    <c-post-card :post="post" />
+                {% endfor %}
+            {% else %}
+                <div class="empty-state">
+                    <p>No posts found{% if year %} for {{ year }}{% endif %}{% if request.GET.q %} matching "{{ request.GET.q }}"{% endif %}.</p>
+                </div>
+            {% endif %}
 
-        <c-layout-sidebar>
-            <c-slot name="content">
-                {% if posts %}
-                    {% for post in page_obj %}
-                        <c-post-card :post="post" />
-                    {% endfor %}
-                {% else %}
-                    <div class="empty-state">
-                        <p>No posts found{% if year %} for {{ year }}{% endif %}{% if request.GET.q %} matching "{{ request.GET.q }}"{% endif %}.</p>
-                    </div>
-                {% endif %}
+            {% if is_paginated %}
+                <c-pagination :page_obj="page_obj" :paginator="paginator" />
+            {% endif %}
+        </c-slot>
 
-                {% if is_paginated %}
-                    <c-pagination :page_obj="page_obj" :paginator="paginator" />
-                {% endif %}
-            </c-slot>
-
-            <c-slot name="sidebar">
-                {% include "blog/sidebar.html" %}
-            </c-slot>
-        </c-layout-sidebar>
-    </div>
-{% endblock base_content %}
+        <c-slot name="sidebar">
+            {% include "blog/sidebar.html" %}
+        </c-slot>
+    </c-layout-sidebar>
+{% endblock content %}

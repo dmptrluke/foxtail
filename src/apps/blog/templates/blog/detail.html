@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "base/page.html" %}
 {% load icon cache jsonld opengraph meta breadcrumbs rules image %}
 
 {% if post.image %}{% block body_class %}has-hero-banner{% endblock %}{% endif %}
@@ -33,8 +33,7 @@
 
 {% block title %}{{ post.title }}{% endblock %}
 
-{% block base_content %}
-    {# Hero + Banner scroll wrapper #}
+{% block hero %}
     {% if post.image %}
     <div class="hero-scroll-wrapper">
     {% endif %}
@@ -56,34 +55,31 @@
             </div>
         </div>
 
-        {# Banner image #}
         {% if post.image %}
             <c-hero-banner :image="post.image" :ppoi="post.image_ppoi" :alt="post.title" />
     </div>
     {% endif %}
+{% endblock hero %}
 
-    {# Two-column content #}
-    <div class="container px-3 px-md-4 mt-5">
-        {% include "components/messages.html" %}
-        <c-publish-status :object="post" />
+{% block content %}
+    <c-publish-status :object="post" />
 
-        <c-layout-sidebar>
-            <c-slot name="content">
-                <div class="rendered-markdown">
-                    {{ post.text_rendered|safe }}
-                </div>
+    <c-layout-sidebar>
+        <c-slot name="content">
+            <div class="rendered-markdown">
+                {{ post.text_rendered|safe }}
+            </div>
 
-                {% if post.allow_comments and comments_enabled %}
-                    {% include "blog/comments.html" %}
-                {% endif %}
-            </c-slot>
+            {% if post.allow_comments and comments_enabled %}
+                {% include "blog/comments.html" %}
+            {% endif %}
+        </c-slot>
 
-            <c-slot name="sidebar">
-                {% if post.author %}
-                    {% include "components/identity_sidebar.html" with author=post.author %}
-                {% endif %}
-                {% include "blog/sidebar.html" %}
-            </c-slot>
-        </c-layout-sidebar>
-    </div>
-{% endblock base_content %}
+        <c-slot name="sidebar">
+            {% if post.author %}
+                {% include "components/identity_sidebar.html" with author=post.author %}
+            {% endif %}
+            {% include "blog/sidebar.html" %}
+        </c-slot>
+    </c-layout-sidebar>
+{% endblock content %}

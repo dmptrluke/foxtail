@@ -1,9 +1,9 @@
-{% extends "base.html" %}
+{% extends "base/page.html" %}
 {% load icon avatar %}
 
 {% block title %}Your Account{% endblock %}
 
-{% block base_content %}
+{% block hero %}
     <section class="hero hero-dashboard">
         <div class="container px-3 px-md-4">
             <div class="hero-identity">
@@ -18,99 +18,98 @@
             </div>
         </div>
     </section>
+{% endblock hero %}
 
-    <main id="main-content" class="container px-3 py-4 px-md-4">
-        {% include "components/messages.html" %}
-        <div class="dashboard-grid">
-            <c-dashboard-tile url="{% url 'account_profile_edit' %}" title="Profile">
-                <c-slot name="icon">{% icon "account-cog" size="1.5rem" %}</c-slot>
-                <c-slot name="detail">Avatar, username, and personal details</c-slot>
-            </c-dashboard-tile>
+{% block content %}
+    <div class="dashboard-grid">
+        <c-dashboard-tile url="{% url 'account_profile_edit' %}" title="Profile">
+            <c-slot name="icon">{% icon "account-cog" size="1.5rem" %}</c-slot>
+            <c-slot name="detail">Avatar, username, and personal details</c-slot>
+        </c-dashboard-tile>
 
-            <c-dashboard-tile url="{% url 'account_change_password' %}" title="Password">
-                <c-slot name="icon">{% icon "lock" size="1.5rem" %}</c-slot>
-                <c-slot name="detail">Change your password</c-slot>
-                <c-slot name="status">
-                    {% if has_password %}
-                        <div class="tile-status tile-status-ok">Password set</div>
-                    {% else %}
-                        <div class="tile-status tile-status-warn">No password set</div>
-                    {% endif %}
-                </c-slot>
-            </c-dashboard-tile>
+        <c-dashboard-tile url="{% url 'account_change_password' %}" title="Password">
+            <c-slot name="icon">{% icon "lock" size="1.5rem" %}</c-slot>
+            <c-slot name="detail">Change your password</c-slot>
+            <c-slot name="status">
+                {% if has_password %}
+                    <div class="tile-status tile-status-ok">Password set</div>
+                {% else %}
+                    <div class="tile-status tile-status-warn">No password set</div>
+                {% endif %}
+            </c-slot>
+        </c-dashboard-tile>
 
-            <c-dashboard-tile url="{% url 'account_email' %}" title="Email">
-                <c-slot name="icon">{% icon "email" size="1.5rem" %}</c-slot>
-                <c-slot name="detail">
-                    {% if primary_email %}
-                        {{ primary_email.email }}
-                    {% else %}
-                        Manage your email addresses
-                    {% endif %}
-                </c-slot>
-                <c-slot name="status">
-                    {% if primary_email.verified %}
-                        <div class="tile-status tile-status-ok">Verified</div>
-                    {% elif primary_email %}
-                        <div class="tile-status tile-status-warn">Not verified</div>
-                    {% else %}
-                        <div class="tile-status tile-status-warn">No email</div>
-                    {% endif %}
-                </c-slot>
-            </c-dashboard-tile>
+        <c-dashboard-tile url="{% url 'account_email' %}" title="Email">
+            <c-slot name="icon">{% icon "email" size="1.5rem" %}</c-slot>
+            <c-slot name="detail">
+                {% if primary_email %}
+                    {{ primary_email.email }}
+                {% else %}
+                    Manage your email addresses
+                {% endif %}
+            </c-slot>
+            <c-slot name="status">
+                {% if primary_email.verified %}
+                    <div class="tile-status tile-status-ok">Verified</div>
+                {% elif primary_email %}
+                    <div class="tile-status tile-status-warn">Not verified</div>
+                {% else %}
+                    <div class="tile-status tile-status-warn">No email</div>
+                {% endif %}
+            </c-slot>
+        </c-dashboard-tile>
 
-            <c-dashboard-tile url="{% url 'account_verification' %}" title="Verification">
-                <c-slot name="icon">
-                    {% if user.is_verified %}
-                        {% icon "check-decagram" size="1.5rem" %}
-                    {% else %}
-                        {% icon "shield-off" size="1.5rem" %}
-                    {% endif %}
-                </c-slot>
-                <c-slot name="detail">
-                    {% if user.is_verified %}
-                        Identity confirmed
-                    {% else %}
-                        Verify you're a real person
-                    {% endif %}
-                </c-slot>
-                <c-slot name="status">
-                    {% if user.is_verified %}
-                        <div class="tile-status tile-status-ok">Verified</div>
-                    {% else %}
-                        <div class="tile-status tile-status-neutral">Not verified</div>
-                    {% endif %}
-                </c-slot>
-            </c-dashboard-tile>
+        <c-dashboard-tile url="{% url 'account_verification' %}" title="Verification">
+            <c-slot name="icon">
+                {% if user.is_verified %}
+                    {% icon "check-decagram" size="1.5rem" %}
+                {% else %}
+                    {% icon "shield-off" size="1.5rem" %}
+                {% endif %}
+            </c-slot>
+            <c-slot name="detail">
+                {% if user.is_verified %}
+                    Identity confirmed
+                {% else %}
+                    Verify you're a real person
+                {% endif %}
+            </c-slot>
+            <c-slot name="status">
+                {% if user.is_verified %}
+                    <div class="tile-status tile-status-ok">Verified</div>
+                {% else %}
+                    <div class="tile-status tile-status-neutral">Not verified</div>
+                {% endif %}
+            </c-slot>
+        </c-dashboard-tile>
 
-            <c-dashboard-tile url="{% url 'mfa_index' %}" title="Two-Factor Authentication">
-                <c-slot name="icon">
-                    {% if mfa_enabled %}
-                        {% icon "shield-lock" size="1.5rem" %}
-                    {% else %}
-                        {% icon "shield-off" size="1.5rem" %}
-                    {% endif %}
-                </c-slot>
-                <c-slot name="detail">
-                    {% if mfa_enabled %}
-                        {% if "totp" in mfa_methods %}Authenticator App{% endif %}{% if "totp" in mfa_methods and "webauthn" in mfa_methods %}, {% endif %}{% if "webauthn" in mfa_methods %}Security Key{% endif %}
-                    {% else %}
-                        Add an extra layer of security
-                    {% endif %}
-                </c-slot>
-                <c-slot name="status">
-                    {% if mfa_enabled %}
-                        <div class="tile-status tile-status-ok">Enabled</div>
-                    {% else %}
-                        <div class="tile-status tile-status-warn">Not enabled</div>
-                    {% endif %}
-                </c-slot>
-            </c-dashboard-tile>
+        <c-dashboard-tile url="{% url 'mfa_index' %}" title="Two-Factor Authentication">
+            <c-slot name="icon">
+                {% if mfa_enabled %}
+                    {% icon "shield-lock" size="1.5rem" %}
+                {% else %}
+                    {% icon "shield-off" size="1.5rem" %}
+                {% endif %}
+            </c-slot>
+            <c-slot name="detail">
+                {% if mfa_enabled %}
+                    {% if "totp" in mfa_methods %}Authenticator App{% endif %}{% if "totp" in mfa_methods and "webauthn" in mfa_methods %}, {% endif %}{% if "webauthn" in mfa_methods %}Security Key{% endif %}
+                {% else %}
+                    Add an extra layer of security
+                {% endif %}
+            </c-slot>
+            <c-slot name="status">
+                {% if mfa_enabled %}
+                    <div class="tile-status tile-status-ok">Enabled</div>
+                {% else %}
+                    <div class="tile-status tile-status-warn">Not enabled</div>
+                {% endif %}
+            </c-slot>
+        </c-dashboard-tile>
 
-            <c-dashboard-tile url="{% url 'socialaccount_connections' %}" title="Apps & Connections">
-                <c-slot name="icon">{% icon "application-brackets" size="1.5rem" %}</c-slot>
-                <c-slot name="detail">{{ social_count }} sign-in method{{ social_count|pluralize }}, {{ app_count }} authorized app{{ app_count|pluralize }}</c-slot>
-            </c-dashboard-tile>
-        </div>
-    </main>
-{% endblock base_content %}
+        <c-dashboard-tile url="{% url 'socialaccount_connections' %}" title="Apps & Connections">
+            <c-slot name="icon">{% icon "application-brackets" size="1.5rem" %}</c-slot>
+            <c-slot name="detail">{{ social_count }} sign-in method{{ social_count|pluralize }}, {{ app_count }} authorized app{{ app_count|pluralize }}</c-slot>
+        </c-dashboard-tile>
+    </div>
+{% endblock content %}

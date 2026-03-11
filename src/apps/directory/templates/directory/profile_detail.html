@@ -1,9 +1,9 @@
-{% extends "base.html" %}
+{% extends "base/page.html" %}
 {% load icon breadcrumbs permissions avatar %}
 
 {% block title %}{{ profile.user.username }}{% endblock %}
 
-{% block base_content %}
+{% block hero %}
     <div class="hero hero-detail">
         <div class="container px-3 px-md-4">
             <div class="hero-topline">
@@ -28,15 +28,13 @@
             </div>
         </div>
     </div>
+{% endblock hero %}
 
-    <main id="main-content" class="container px-3 px-md-4 mt-5">
-        {% include "components/messages.html" %}
-
-        {% can_view 'description' as show_description %}
-        {% if show_description and profile.description %}
-            <div class="rendered-markdown">
-                {{ profile.description }}
-            </div>
-        {% endif %}
-    </main>
-{% endblock base_content %}
+{% block content %}
+    {% can_view 'description' as show_description %}
+    {% if show_description and profile.description %}
+        <div class="rendered-markdown">
+            {{ profile.description }}
+        </div>
+    {% endif %}
+{% endblock content %}

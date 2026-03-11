@@ -1,25 +1,20 @@
-{% extends "base.html" %}
-{% load breadcrumbs %}
+{% extends "base/page.html" %}
+{% load cotton breadcrumbs %}
 
 {% block title %}{{ character.name }}{% endblock %}
 
-{% block base_content %}
-    <div class="hero hero-detail">
-        <div class="container px-3 px-md-4">
+{% block hero %}
+    <c-hero title="{{ character.name }}" subtitle="{{ character.species }}">
+        <c-slot name="topline">
             {% url 'directory:index' as dir_url %}{% breadcrumbs dir_url "Directory" character.name %}
+        </c-slot>
+    </c-hero>
+{% endblock hero %}
 
-            <h1>{{ character.name }}</h1>
-            <h2>{{ character.species }}</h2>
+{% block content %}
+    {% if character.description %}
+        <div class="rendered-markdown">
+            {{ character.description }}
         </div>
-    </div>
-
-    <main id="main-content" class="container px-3 px-md-4 mt-5">
-        {% include "components/messages.html" %}
-
-        {% if character.description %}
-            <div class="rendered-markdown">
-                {{ character.description }}
-            </div>
-        {% endif %}
-    </main>
-{% endblock base_content %}
+    {% endif %}
+{% endblock content %}

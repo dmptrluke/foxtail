@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block body %}
+    <a class="visually-hidden-focusable" href="#main-content">Skip to main content</a>
+    {% include "components/header.html" %}
+
+    <main id="main-content" class="container px-3 px-md-4 py-5">
+        <h1>{% block error_heading %}{% endblock %}</h1>
+        {% block error_body %}{% endblock %}
+        {% if sentry_event_id %}
+            <p>If you need assistance, you may reference this error as
+                <strong>{{ sentry_event_id }}</strong>.</p>
+        {% endif %}
+    </main>
+
+    {% include "components/footer.html" %}
+{% endblock body %}

@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "base/page.html" %}
 {% load icon breadcrumbs image %}
 
 {% block extra_head %}
@@ -43,8 +43,7 @@
 
 {% block title %}{% if year %}Events in {{ year }}{% else %}Furry Events{% endif %}{% endblock %}
 
-{% block base_content %}
-    {# Hero #}
+{% block hero %}
     <div class="hero hero-detail">
         <div class="container px-3 px-md-4">
             {% if year %}
@@ -60,7 +59,6 @@
         </div>
     </div>
 
-    {# Featured next event #}
     {% if featured_event and not year %}
         <div class="container px-3 px-md-4">
             <div class="event-featured">
@@ -85,37 +83,34 @@
             </div>
         </div>
     {% endif %}
+{% endblock hero %}
 
-    {# Event grid #}
-    <main id="main-content" class="container px-3 px-md-4 pt-4">
-        {% include "components/messages.html" %}
+{% block content %}
+    {% if upcoming_events %}
+        <div class="event-section-label">Upcoming</div>
+        <div class="row narrow-gutters event-masonry" data-colcade="columns: .grid-col, items: .event-card">
+            <div class="grid-col col-md-6 col-lg-4"></div>
+            <div class="grid-col d-none d-md-block col-md-6 col-lg-4"></div>
+            <div class="grid-col d-none d-lg-block col-md-6 col-lg-4"></div>
+            {% for event in upcoming_events %}
+                <c-event-card :event="event" />
+            {% endfor %}
+        </div>
+    {% elif not past_events %}
+        <div class="empty-state">
+            <p>No events found{% if year %} for {{ year }}{% endif %}.</p>
+        </div>
+    {% endif %}
 
-        {% if upcoming_events %}
-            <div class="event-section-label">Upcoming</div>
-            <div class="row narrow-gutters event-masonry" data-colcade="columns: .grid-col, items: .event-card">
-                <div class="grid-col col-md-6 col-lg-4"></div>
-                <div class="grid-col d-none d-md-block col-md-6 col-lg-4"></div>
-                <div class="grid-col d-none d-lg-block col-md-6 col-lg-4"></div>
-                {% for event in upcoming_events %}
-                    <c-event-card :event="event" />
-                {% endfor %}
-            </div>
-        {% elif not past_events %}
-            <div class="empty-state">
-                <p>No events found{% if year %} for {{ year }}{% endif %}.</p>
-            </div>
-        {% endif %}
-
-        {% if past_events %}
-            <div class="event-section-label{% if upcoming_events %} mt-5{% endif %}">Past Events</div>
-            <div class="row narrow-gutters event-masonry" data-colcade="columns: .grid-col, items: .event-card">
-                <div class="grid-col col-md-6 col-lg-4"></div>
-                <div class="grid-col d-none d-md-block col-md-6 col-lg-4"></div>
-                <div class="grid-col d-none d-lg-block col-md-6 col-lg-4"></div>
-                {% for event in past_events %}
-                    <c-event-card :event="event" />
-                {% endfor %}
-            </div>
-        {% endif %}
-    </main>
-{% endblock base_content %}
+    {% if past_events %}
+        <div class="event-section-label{% if upcoming_events %} mt-5{% endif %}">Past Events</div>
+        <div class="row narrow-gutters event-masonry" data-colcade="columns: .grid-col, items: .event-card">
+            <div class="grid-col col-md-6 col-lg-4"></div>
+            <div class="grid-col d-none d-md-block col-md-6 col-lg-4"></div>
+            <div class="grid-col d-none d-lg-block col-md-6 col-lg-4"></div>
+            {% for event in past_events %}
+                <c-event-card :event="event" />
+            {% endfor %}
+        </div>
+    {% endif %}
+{% endblock content %}

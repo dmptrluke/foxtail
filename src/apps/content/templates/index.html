@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "base/page.html" %}
 {% load humanize account jsonld opengraph meta image %}
 
 {% block title_full %}{{ request.site.name }} — the resource for New Zealand furries{% endblock title_full %}
@@ -11,109 +11,104 @@
     {% meta_for view %}
 {% endblock %}
 
-{% block base_content %}
-    <main id="main-content">
-        <section class="hero hero-home{% if user.is_authenticated %} hero-compact{% endif %}">
-            <div class="container px-3 px-md-4">
-                {% if user.is_authenticated %}
-                    <h1>Welcome back, {{ user.get_short_name }}</h1>
-                    <p>See what's happening in the NZ furry community.</p>
-                    <nav aria-label="Actions">
-                        <a href="{% url 'account_profile' %}" class="btn btn-outline-light">My Account</a>
-                    </nav>
+{% block hero %}
+    <section class="hero hero-home{% if user.is_authenticated %} hero-compact{% endif %}">
+        <div class="container px-3 px-md-4">
+            {% if user.is_authenticated %}
+                <h1>Welcome back, {{ user.get_short_name }}</h1>
+                <p>See what's happening in the NZ furry community.</p>
+                <nav aria-label="Actions">
+                    <a href="{% url 'account_profile' %}" class="btn btn-outline-light">My Account</a>
+                </nav>
+            {% else %}
+                <h1>Welcome to furry.nz</h1>
+                <p>The community hub for New Zealand furries. Events, news, and more.</p>
+                <nav aria-label="Actions">
+                    <a href="{% url 'account_signup' %}" class="btn btn-primary btn-lg">Create Account</a>
+                    <a href="{% url 'account_login' %}" class="btn btn-outline-light btn-lg">Sign In</a>
+                </nav>
+            {% endif %}
+        </div>
+    </section>
+{% endblock hero %}
+
+{% block content %}
+    {# ── News ── #}
+    <section class="mb-5">
+        <header class="section-header">
+            <h2>Latest News</h2>
+            <a href="{% url 'blog:list' %}" class="section-link">View all &rarr;</a>
+        </header>
+
+        {% for post in post_list %}
+                {% if forloop.first %}
+                    <article class="news-feature">
+                        <a href="{{ post.get_absolute_url }}">
+                            {% if post.image %}
+                                <img src="{{ post.image.card }}"
+                                     srcset="{{ post.image.card }} 1x, {{ post.image.card_2x }} 2x"
+                                     alt="{{ post.title }}"
+                                     style="object-position: {{ post.image_ppoi|ppoi_position }}">
+                            {% else %}
+                                <div class="card-img-placeholder"></div>
+                            {% endif %}
+                        </a>
+                        <header>
+                            <time datetime="{{ post.created|date:'Y-m-d' }}">{{ post.created|date:"M j, Y" }}</time>
+                            <h3><a href="{{ post.get_absolute_url }}">{{ post.title }}</a></h3>
+                            <p>{{ post.text_rendered|safe|striptags|truncatechars:200 }}</p>
+                            <a href="{{ post.get_absolute_url }}" class="btn btn-primary">Read more</a>
+                        </header>
+                    </article>
                 {% else %}
-                    <h1>Welcome to furry.nz</h1>
-                    <p>The community hub for New Zealand furries. Events, news, and more.</p>
-                    <nav aria-label="Actions">
-                        <a href="{% url 'account_signup' %}" class="btn btn-primary btn-lg">Create Account</a>
-                        <a href="{% url 'account_login' %}" class="btn btn-outline-light btn-lg">Sign In</a>
-                    </nav>
+                    {% if forloop.counter == 2 %}<div class="news-grid">{% endif %}
+                        <article class="news-compact">
+                            <a href="{{ post.get_absolute_url }}">
+                                {% if post.image %}
+                                    <img src="{{ post.image.card }}"
+                                         srcset="{{ post.image.card }} 1x, {{ post.image.card_2x }} 2x"
+                                         alt="{{ post.title }}"
+                                         style="object-position: {{ post.image_ppoi|ppoi_position }}">
+                                {% else %}
+                                    <div class="card-img-placeholder"></div>
+                                {% endif %}
+                            </a>
+                            <header>
+                                <time datetime="{{ post.created|date:'Y-m-d' }}">{{ post.created|date:"M j, Y" }}</time>
+                                <h4><a href="{{ post.get_absolute_url }}">{{ post.title }}</a></h4>
+                                <p>{{ post.text_rendered|safe|striptags|truncatechars:100 }}</p>
+                            </header>
+                        </article>
+                    {% if forloop.last %}</div>{% endif %}
                 {% endif %}
+        {% endfor %}
+    </section>
+
+    {# ── Events ── #}
+    {% if event_list %}
+        <section>
+            <header class="section-header">
+                <h2>Upcoming Events</h2>
+                <a href="{% url 'events:list' %}" class="section-link">View all &rarr;</a>
+            </header>
+
+            <div class="event-list">
+                {% for event in event_list %}
+                        <a href="{{ event.get_absolute_url }}" class="event-item">
+                            <div class="event-date-badge">
+                                <span class="event-date-month">{{ event.start|date:"M" }}</span>
+                                <span class="event-date-day">{{ event.start|date:"j" }}</span>
+                            </div>
+                            <div class="event-details">
+                                <h4>{{ event.title }}</h4>
+                                <p>{{ event.description_rendered|safe|striptags|truncatechars:120 }}</p>
+                                {% if event.location %}
+                                    <span class="event-location">{{ event.location }}</span>
+                                {% endif %}
+                            </div>
+                        </a>
+                {% endfor %}
             </div>
         </section>
-
-        <div class="container px-3 py-4 px-md-4 py-md-5">
-            {% include "components/messages.html" %}
-
-            {# ── News ── #}
-            <section class="mb-5">
-                <header class="section-header">
-                    <h2>Latest News</h2>
-                    <a href="{% url 'blog:list' %}" class="section-link">View all &rarr;</a>
-                </header>
-
-                {% for post in post_list %}
-                        {% if forloop.first %}
-                            <article class="news-feature">
-                                <a href="{{ post.get_absolute_url }}">
-                                    {% if post.image %}
-                                        <img src="{{ post.image.card }}"
-                                             srcset="{{ post.image.card }} 1x, {{ post.image.card_2x }} 2x"
-                                             alt="{{ post.title }}"
-                                             style="object-position: {{ post.image_ppoi|ppoi_position }}">
-                                    {% else %}
-                                        <div class="card-img-placeholder"></div>
-                                    {% endif %}
-                                </a>
-                                <header>
-                                    <time datetime="{{ post.created|date:'Y-m-d' }}">{{ post.created|date:"M j, Y" }}</time>
-                                    <h3><a href="{{ post.get_absolute_url }}">{{ post.title }}</a></h3>
-                                    <p>{{ post.text_rendered|safe|striptags|truncatechars:200 }}</p>
-                                    <a href="{{ post.get_absolute_url }}" class="btn btn-primary">Read more</a>
-                                </header>
-                            </article>
-                        {% else %}
-                            {% if forloop.counter == 2 %}<div class="news-grid">{% endif %}
-                                <article class="news-compact">
-                                    <a href="{{ post.get_absolute_url }}">
-                                        {% if post.image %}
-                                            <img src="{{ post.image.card }}"
-                                                 srcset="{{ post.image.card }} 1x, {{ post.image.card_2x }} 2x"
-                                                 alt="{{ post.title }}"
-                                                 style="object-position: {{ post.image_ppoi|ppoi_position }}">
-                                        {% else %}
-                                            <div class="card-img-placeholder"></div>
-                                        {% endif %}
-                                    </a>
-                                    <header>
-                                        <time datetime="{{ post.created|date:'Y-m-d' }}">{{ post.created|date:"M j, Y" }}</time>
-                                        <h4><a href="{{ post.get_absolute_url }}">{{ post.title }}</a></h4>
-                                        <p>{{ post.text_rendered|safe|striptags|truncatechars:100 }}</p>
-                                    </header>
-                                </article>
-                            {% if forloop.last %}</div>{% endif %}
-                        {% endif %}
-                {% endfor %}
-            </section>
-
-            {# ── Events ── #}
-            {% if event_list %}
-                <section>
-                    <header class="section-header">
-                        <h2>Upcoming Events</h2>
-                        <a href="{% url 'events:list' %}" class="section-link">View all &rarr;</a>
-                    </header>
-
-                    <div class="event-list">
-                        {% for event in event_list %}
-                                <a href="{{ event.get_absolute_url }}" class="event-item">
-                                    <div class="event-date-badge">
-                                        <span class="event-date-month">{{ event.start|date:"M" }}</span>
-                                        <span class="event-date-day">{{ event.start|date:"j" }}</span>
-                                    </div>
-                                    <div class="event-details">
-                                        <h4>{{ event.title }}</h4>
-                                        <p>{{ event.description_rendered|safe|striptags|truncatechars:120 }}</p>
-                                        {% if event.location %}
-                                            <span class="event-location">{{ event.location }}</span>
-                                        {% endif %}
-                                    </div>
-                                </a>
-                        {% endfor %}
-                    </div>
-                </section>
-            {% endif %}
-
-        </div>
-    </main>
-{% endblock base_content %}
+    {% endif %}
+{% endblock content %}

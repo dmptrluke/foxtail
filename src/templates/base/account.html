@@ -1,0 +1,14 @@
+{% extends "base/page.html" %}
+{% load cotton %}
+
+{% block title %}Manage Account{% endblock %}
+
+{% block hero %}
+    <c-hero title="{% block hero_heading %}Manage Account{% endblock %}">
+        <c-slot name="topline">
+            {% block hero_breadcrumbs %}{% endblock %}
+        </c-slot>
+
+        {% block hero_sub %}{% endblock %}
+    </c-hero>
+{% endblock hero %}
