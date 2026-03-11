@@ -59,7 +59,7 @@ class TestEventStructuredData:
         sd = event.structured_data
         assert sd['@type'] == 'Event'
         assert sd['name'] == event.title
-        assert sd['startDate'] == event.start.strftime('%Y-%m-%d')
+        assert sd['startDate'] == event.start
         assert 'url' in sd
 
     # endDate is included only when end is set
@@ -69,7 +69,7 @@ class TestEventStructuredData:
         if 'structured_data' in event.__dict__:
             del event.__dict__['structured_data']
         sd = event.structured_data
-        assert sd['endDate'] == '2026-06-15'
+        assert sd['endDate'] == date(2026, 6, 15)
 
     # endDate is absent when end is not set
     def test_end_date_absent(self, event: Event):

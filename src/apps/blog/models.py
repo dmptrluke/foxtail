@@ -81,16 +81,19 @@ class Post(PublishedModel):
             'headline': self.title,
             'description': self.description or Truncator(strip_tags(self.text_rendered)).chars(200),
             'author': {'@type': 'Person', 'name': self.author.name} if self.author else None,
-            'datePublished': self.created.strftime('%Y-%m-%d'),
-            'dateModified': self.modified.strftime('%Y-%m-%d'),
+            'datePublished': self.created,
+            'dateModified': self.modified,
             'publisher': None,
             'url': url,
             'mainEntityOfPage': {'@type': 'WebPage', '@id': url},
         }
         if self.image:
+            image_url = self.image.card_2x
+            if not image_url.startswith('http'):
+                image_url = settings.SITE_URL + image_url
             data['image'] = {
                 '@type': 'ImageObject',
-                'url': settings.SITE_URL + self.image.card_2x,
+                'url': image_url,
                 'width': 1200,
                 'height': 630,
             }
