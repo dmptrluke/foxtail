@@ -629,15 +629,6 @@ if SENTRY_DSN:
 
     sentry_sdk.init(**_vars)
 
-# Django Structured Data
-# <https://github.com/dmptrluke/django-structured-data>
-
-DEFAULT_STRUCTURED_DATA = {
-    'publisher': {
-        '@id': 'https://furry.nz/#organization',
-    }
-}
-
 # Taggit
 # <https://django-taggit.readthedocs.io/en/latest/getting_started.html>
 

@@ -527,14 +527,14 @@ azure = [
 
 [[package]]
 name = "django-structured-data"
-version = "0.8.0"
+version = "0.9.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "django" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/d7/5c/2fbc4a1e4c21d54543a6837340e025a48aec98f9837fad760cd240c0391d/django_structured_data-0.8.0.tar.gz", hash = "sha256:b60a82df17b19d283d7df170da7cb7f82a3cfc6659811457ed01042e3181837b", size = 8216, upload-time = "2026-03-11T06:58:12.83Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/2a/b1/3151d7ac3c4e174cff4fc8d80020d8bafbe79c79c10789262d76526d9193/django_structured_data-0.9.0.tar.gz", hash = "sha256:9353cfc40f5c76ffe8b5810a5bf012c7a1e75762b02f4bc3577c4055e43ed078", size = 11901, upload-time = "2026-03-11T08:02:06.901Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/cc/48/ed8237fb496735213612f2fd7c63d7136347c55c9ea5cca5f4da80e219e6/django_structured_data-0.8.0-py3-none-any.whl", hash = "sha256:be23a1f9339e2a611666fa07dec60f196ecfebc66a6beb09441e8ef600047aa7", size = 7226, upload-time = "2026-03-11T06:58:14.507Z" },
+    { url = "https://files.pythonhosted.org/packages/46/27/26f242fa6f5bd373b104220661cf7df0c8536350f46d928809e5738058f0/django_structured_data-0.9.0-py3-none-any.whl", hash = "sha256:487245607d32f8696a18da4a75661d10ed2b2fbf89aa23375b5bedd042c69db0", size = 11280, upload-time = "2026-03-11T08:02:09.5Z" },
 ]
 
 [[package]]
@@ -700,7 +700,7 @@ requires-dist = [
     { name = "django-redis", specifier = "==6.0.0" },
     { name = "django-rq", specifier = "==3.0.1" },
     { name = "django-storages", extras = ["azure"], specifier = "==1.14.6" },
-    { name = "django-structured-data", specifier = "==0.8.0" },
+    { name = "django-structured-data", specifier = "==0.9.0" },
     { name = "django-taggit", specifier = "==6.1.0" },
     { name = "django-vite", specifier = "==3.1.0" },
     { name = "django-widget-tweaks", specifier = "==1.5.0" },

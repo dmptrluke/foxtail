@@ -83,9 +83,10 @@ class Post(PublishedModel):
             'author': {'@type': 'Person', 'name': self.author.name} if self.author else None,
             'datePublished': self.created,
             'dateModified': self.modified,
-            'publisher': None,
+            'publisher': {'@id': 'https://furry.nz/#organization'},
             'url': url,
             'mainEntityOfPage': {'@type': 'WebPage', '@id': url},
+            'keywords': [tag.name for tag in self.tags.all()],
         }
         if self.image:
             image_url = self.image.card_2x

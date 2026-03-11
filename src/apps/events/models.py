@@ -84,6 +84,7 @@ class Event(PublishedModel):
             'startDate': self.start,
             'url': url,
             'mainEntityOfPage': {'@type': 'WebPage', '@id': url},
+            'keywords': [tag.name for tag in self.tags.all()],
         }
 
         if self.end:

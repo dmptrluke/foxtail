@@ -1,14 +1,14 @@
 {% extends "base/page.html" %}
-{% load cache jsonld opengraph meta breadcrumbs rules image %}
+{% load cache jsonld opengraph meta twitter breadcrumbs rules image %}
 
 {% if post.image %}{% block body_class %}has-hero-banner{% endblock %}{% endif %}
 
 {% block extra_head %}
     <link rel="canonical" href="{{ SITE_URL }}{{ post.get_absolute_url }}"/>
-    <meta name="twitter:card" content="summary_large_image"/>
     {% json_ld_for post %}
     {% og_for post %}
     {% meta_for post %}
+    {% twitter_for post %}
 {% endblock %}
 
 {% block title %}{{ post.title }}{% endblock %}
