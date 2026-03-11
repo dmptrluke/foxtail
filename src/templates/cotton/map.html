@@ -1,0 +1,14 @@
+{% load map_tags %}
+<c-vars zoom="15" map_style="streets-v2" />
+
+{% with style_url=map_style|map_style_url %}
+    {% if latitude and longitude and style_url %}
+        <div class="event-map-container"
+             data-map
+             data-lat="{{ latitude }}"
+             data-lng="{{ longitude }}"
+             data-zoom="{{ zoom }}"
+             data-style="{{ style_url }}">
+        </div>
+    {% endif %}
+{% endwith %}

@@ -1,0 +1,14 @@
+{% load image %}
+
+<div class="hero-banner-tall">
+    <picture>
+        <source media="(max-width: 991px)"
+                srcset="{{ image.tall }} 768w, {{ image.tall_2x }} 1536w"
+                sizes="100vw">
+        <img src="{{ image.banner }}"
+             srcset="{{ image.banner }} 1440w, {{ image.banner_2x }} 2880w"
+             sizes="100vw"
+             alt="{{ alt }}"
+             style="object-position: {{ ppoi|ppoi_position }}">
+    </picture>
+</div>

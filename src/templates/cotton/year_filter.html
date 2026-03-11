@@ -1,0 +1,9 @@
+<div class="hero-bottom">
+    <nav class="hero-nav">
+        <a href="{% url list_url %}" class="hero-pill{% if not year %} active{% endif %}">All</a>
+        {% for y in years %}
+            <a href="{% url year_url year=y %}"
+               class="hero-pill{% if year == y|stringformat:'d' %} active{% endif %}">{{ y }}</a>
+        {% endfor %}
+    </nav>
+</div>

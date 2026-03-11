@@ -1,0 +1,9 @@
+<c-vars description="" />
+
+<div class="account-section">
+    {% if title %}<h5>{{ title }}</h5>{% endif %}
+    {% if description %}
+        <p class="account-section-desc">{{ description }}</p>
+    {% endif %}
+    {{ slot }}
+</div>
