@@ -13,17 +13,15 @@
         {% csrf_token %}
         {% non_field_errors form %}
 
-        <div class="account-section">
-            <h5>Avatar</h5>
+        <c-account-section title="Avatar">
             <div class="row">
                 <div class="col-md-6">
                     {% image_field form.avatar hide_label=True %}
                 </div>
             </div>
-        </div>
+        </c-account-section>
 
-        <div class="account-section">
-            <h5>Basic Details</h5>
+        <c-account-section title="Basic Details">
             <div class="row">
                 <div class="col-md-6">
                     {% text_field form.username %}
@@ -33,11 +31,10 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </c-account-section>
 
-        <div class="account-section">
-            <h5>Personal Information</h5>
-            <p class="account-section-desc">This information is optional and may be requested by third-party applications. It will not be shared without your explicit consent.</p>
+        <c-account-section title="Personal Information"
+            description="This information is optional and may be requested by third-party applications. It will not be shared without your explicit consent.">
             <div class="row">
                 <div class="col-md-6">
                     {% text_field form.full_name autocomplete="name" %}
@@ -48,7 +45,7 @@
                     {% select_field form.date_of_birth %}
                 </div>
             </div>
-        </div>
+        </c-account-section>
 
         <button type="submit" class="btn btn-primary">Save Changes</button>
     </form>

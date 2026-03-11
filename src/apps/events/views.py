@@ -77,13 +77,6 @@ class EventDetailView(PublishedDetailMixin, YearMixin, DetailView):
 
         return Event.objects.filter(start__year=date.year, slug=self.kwargs['slug']).prefetch_related('tags')
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        api_key = settings.MAPTILER_API_KEY
-        if api_key:
-            context['map_style_url'] = f'https://api.maptiler.com/maps/streets-v2/style.json?key={api_key}'
-        return context
-
 
 # --- Management views ---
 

@@ -22,7 +22,7 @@
 
     {% non_field_errors form %}
 
-    <div class="account-section">
+    <c-account-section>
         {% if form.accounts %}
             <div class="account-item-list">
                 {% for base_account in form.accounts %}
@@ -48,14 +48,13 @@
                 No external accounts are linked to your furry.nz account.
             </div>
         {% endif %}
-    </div>
+    </c-account-section>
 
-    <div class="account-section">
-        <h5>Link an Account</h5>
+    <c-account-section title="Link an Account">
         <p>
             {% include "components/provider_list.html" with process="connect" %}
         </p>
-    </div>
+    </c-account-section>
 
     {% include "socialaccount/snippets/login_extra.html" %}
 {% endblock %}

@@ -11,7 +11,7 @@
 {% block hero_heading %}Confirm Verification{% endblock %}
 
 {% block content %}
-    <div class="account-section">
+    <c-account-section>
         <div class="d-flex align-items-center gap-3 mb-3">
             <img src="{{ target_user|avatar_url:80 }}" alt="{{ target_user.username }}" class="rounded-circle" width="80" height="80">
             <div>
@@ -45,5 +45,5 @@
                 <a href="{% url 'account_verification' %}" class="btn btn-outline-secondary">Cancel</a>
             </div>
         {% endif %}
-    </div>
+    </c-account-section>
 {% endblock content %}

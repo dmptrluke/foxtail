@@ -22,9 +22,7 @@
         </div>
     {% endif %}
 
-    <div class="account-section">
-        <h5>Authentication Methods</h5>
-
+    <c-account-section title="Authentication Methods">
         <div class="account-method-card">
             <h5>Authenticator App</h5>
             {% if authenticators.totp %}
@@ -48,11 +46,10 @@
                 <a href="{% url 'mfa_add_webauthn' %}" class="btn btn-primary btn-sm">Add a Key</a>
             {% endif %}
         </div>
-    </div>
+    </c-account-section>
 
     {% if authenticators.totp or authenticators.webauthn %}
-        <div class="account-section">
-            <h5>Recovery</h5>
+        <c-account-section title="Recovery">
             <div class="account-method-card">
                 <h5>Recovery Codes</h5>
                 {% if authenticators.recovery_codes %}
@@ -62,6 +59,6 @@
                 {% endif %}
                 <a href="{% url 'mfa_view_recovery_codes' %}" class="btn btn-outline-secondary btn-sm">View Codes</a>
             </div>
-        </div>
+        </c-account-section>
     {% endif %}
 {% endblock %}

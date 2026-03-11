@@ -9,15 +9,13 @@
 {% block hero_sub %}<h2>Use any authenticator app -- such as Google Authenticator, Authy, or 1Password -- to scan the code below.</h2>{% endblock %}
 
 {% block content %}
-    <div class="account-section">
-        <h5>Step 1 — Scan the QR code</h5>
-        <p class="account-section-desc">Open your authenticator app and scan this code to add your account.</p>
+    <c-account-section title="Step 1 — Scan the QR code"
+        description="Open your authenticator app and scan this code to add your account.">
         {{ totp_svg | safe }}
-    </div>
+    </c-account-section>
 
-    <div class="account-section">
-        <h5>Step 2 — Enter a code to verify</h5>
-        <p class="account-section-desc">Enter the 6-digit code shown in your app to confirm the setup worked.</p>
+    <c-account-section title="Step 2 — Enter a code to verify"
+        description="Enter the 6-digit code shown in your app to confirm the setup worked.">
         <form method="post">
             {% csrf_token %}
             {% non_field_errors form %}
@@ -25,5 +23,5 @@
             <button type="submit" class="btn btn-primary">Verify and Enable</button>
             <a href="{% url 'mfa_index' %}" class="btn btn-outline-secondary ms-2">Cancel</a>
         </form>
-    </div>
+    </c-account-section>
 {% endblock %}

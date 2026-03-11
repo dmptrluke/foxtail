@@ -9,7 +9,7 @@
 {% block hero_sub %}<h2>Register a hardware security key (such as a YubiKey) or a passkey saved on your device.</h2>{% endblock %}
 
 {% block content %}
-    <div class="account-section">
+    <c-account-section>
         <form method="post" action="{% url 'mfa_add_webauthn' %}">
             {% csrf_token %}
             {% non_field_errors form %}
@@ -19,7 +19,7 @@
             <button type="button" id="mfa_webauthn_add" class="btn btn-primary">Register Key</button>
             <a href="{% url 'mfa_list_webauthn' %}" class="btn btn-outline-secondary ms-2">Cancel</a>
         </form>
-    </div>
+    </c-account-section>
 
     {% include "mfa/webauthn/snippets/scripts.html" %}
     {{ js_data|json_script:"js_data" }}

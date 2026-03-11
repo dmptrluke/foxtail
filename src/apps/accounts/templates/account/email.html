@@ -9,7 +9,7 @@
 {% block hero_sub %}<h2>Manage the email addresses associated with your account.</h2>{% endblock %}
 
 {% block content %}
-    <div class="account-section">
+    <c-account-section>
         {% with emails=emailaddresses|dictsortreversed:"primary" %}
         {% if emails %}
             <div class="account-item-list">
@@ -59,15 +59,14 @@
             </div>
         {% endif %}
         {% endwith %}
-    </div>
+    </c-account-section>
 
-    <div class="account-section">
-        <h5>Add Email</h5>
+    <c-account-section title="Add Email">
         <form method="post" action="{% url 'account_email' %}" class="d-flex gap-2 align-items-start">
             {% csrf_token %}
             {% non_field_errors form %}
             {% text_field form.email autocomplete="email" inline=True %}
             <button name="action_add" class="btn btn-primary flex-shrink-0" type="submit">Add</button>
         </form>
-    </div>
+    </c-account-section>
 {% endblock %}

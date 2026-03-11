@@ -49,13 +49,7 @@
                     {% endif %}
                 </div>
 
-                {% if post.tags.all %}
-                    <div class="tag-row">
-                        {% for tag in post.tags.all %}
-                            <a href="{% url 'blog:list' %}?tag={{ tag.slug }}" class="tag-pill">{{ tag.name|capfirst }}</a>
-                        {% endfor %}
-                    </div>
-                {% endif %}
+                <c-tag-row :tags="post.tags.all" url_name="blog:list" />
 
                 <h1>{{ post.title }}</h1>
                 <h2>{{ post.created|date:"F jS, Y" }}{% if post.author %} — by {{ post.author.name }}{% endif %}</h2>
@@ -64,28 +58,17 @@
 
         {# Banner image #}
         {% if post.image %}
-            <div class="hero-banner-tall">
-                <picture>
-                    <source media="(max-width: 991px)"
-                            srcset="{{ post.image.tall }} 768w, {{ post.image.tall_2x }} 1536w"
-                            sizes="100vw">
-                    <img src="{{ post.image.banner }}"
-                         srcset="{{ post.image.banner }} 1440w, {{ post.image.banner_2x }} 2880w"
-                         sizes="100vw"
-                         alt="{{ post.title }}"
-                         style="object-position: {{ post.image_ppoi|ppoi_position }}">
-                </picture>
-            </div>
+            <c-hero-banner :image="post.image" :ppoi="post.image_ppoi" :alt="post.title" />
     </div>
     {% endif %}
 
     {# Two-column content #}
     <div class="container px-3 px-md-4 mt-5">
         {% include "components/messages.html" %}
-        {% include "components/publish_status.html" with object=post %}
+        <c-publish-status :object="post" />
 
-        <div class="layout-sidebar">
-            <main id="main-content">
+        <c-layout-sidebar>
+            <c-slot name="content">
                 <div class="rendered-markdown">
                     {{ post.text_rendered|safe }}
                 </div>
@@ -93,14 +76,14 @@
                 {% if post.allow_comments and comments_enabled %}
                     {% include "blog/comments.html" %}
                 {% endif %}
-            </main>
+            </c-slot>
 
-            <aside class="sidebar">
+            <c-slot name="sidebar">
                 {% if post.author %}
                     {% include "components/identity_sidebar.html" with author=post.author %}
                 {% endif %}
                 {% include "blog/sidebar.html" %}
-            </aside>
-        </div>
+            </c-slot>
+        </c-layout-sidebar>
     </div>
 {% endblock base_content %}

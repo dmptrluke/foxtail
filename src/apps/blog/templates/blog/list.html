@@ -73,15 +73,7 @@
             </h2>
 
             {% if blog_years and not tag and not request.GET.q %}
-                <div class="hero-bottom">
-                    <nav class="hero-nav">
-                        <a href="{% url 'blog:list' %}" class="hero-pill{% if not year %} active{% endif %}">All</a>
-                        {% for y in blog_years %}
-                            <a href="{% url 'blog:list_year' year=y %}"
-                               class="hero-pill{% if year == y|stringformat:'d' %} active{% endif %}">{{ y }}</a>
-                        {% endfor %}
-                    </nav>
-                </div>
+                <c-year-filter :years="blog_years" list_url="blog:list" year_url="blog:list_year" />
             {% endif %}
         </div>
     </div>
@@ -90,11 +82,11 @@
     <div class="container px-3 px-md-4 mt-5">
         {% include "components/messages.html" %}
 
-        <div class="layout-sidebar">
-            <main id="main-content">
+        <c-layout-sidebar>
+            <c-slot name="content">
                 {% if posts %}
                     {% for post in page_obj %}
-                        {% include "blog/post_card.html" %}
+                        <c-post-card :post="post" />
                     {% endfor %}
                 {% else %}
                     <div class="empty-state">
@@ -103,13 +95,13 @@
                 {% endif %}
 
                 {% if is_paginated %}
-                    {% include 'components/pagination.html' %}
+                    <c-pagination :page_obj="page_obj" :paginator="paginator" />
                 {% endif %}
-            </main>
+            </c-slot>
 
-            <aside class="sidebar">
+            <c-slot name="sidebar">
                 {% include "blog/sidebar.html" %}
-            </aside>
-        </div>
+            </c-slot>
+        </c-layout-sidebar>
     </div>
 {% endblock base_content %}

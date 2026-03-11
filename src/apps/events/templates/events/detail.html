@@ -52,13 +52,7 @@
                     {% endif %}
                 </div>
 
-                {% if event.tags.all %}
-                    <div class="tag-row">
-                        {% for tag in event.tags.all %}
-                            <span class="tag-pill">{{ tag.name | title }}</span>
-                        {% endfor %}
-                    </div>
-                {% endif %}
+                <c-tag-row :tags="event.tags.all" />
 
                 <h1>{{ event.title }}</h1>
                 <h2>{{ event.location }}</h2>
@@ -85,46 +79,27 @@
         </div>
 
         {% if event.image %}
-            <div class="hero-banner-tall">
-                <picture>
-                    <source media="(max-width: 991px)"
-                            srcset="{{ event.image.tall }} 768w, {{ event.image.tall_2x }} 1536w"
-                            sizes="100vw">
-                    <img src="{{ event.image.banner }}"
-                         srcset="{{ event.image.banner }} 1440w, {{ event.image.banner_2x }} 2880w"
-                         sizes="100vw"
-                         alt="{{ event.title }}"
-                         style="object-position: {{ event.image_ppoi|ppoi_position }}">
-                </picture>
-            </div>
+            <c-hero-banner :image="event.image" :ppoi="event.image_ppoi" :alt="event.title" />
         {% endif %}
     </div>
 
     {# Two-column content #}
     <div class="container px-3 px-md-4 mt-5">
         {% include "components/messages.html" %}
-        {% include "components/publish_status.html" with object=event %}
+        <c-publish-status :object="event" />
 
-        <div class="layout-sidebar">
-            <main id="main-content">
+        <c-layout-sidebar>
+            <c-slot name="content">
                 <div class="rendered-markdown">
                     {{ event.description_rendered | safe }}
                 </div>
 
-                {% if event.latitude and event.longitude and map_style_url %}
-                    <div class="event-map-container"
-                         data-map
-                         data-lat="{{ event.latitude }}"
-                         data-lng="{{ event.longitude }}"
-                         data-zoom="15"
-                         data-style="{{ map_style_url }}">
-                    </div>
-                {% endif %}
+                <c-map :latitude="event.latitude" :longitude="event.longitude" />
 
                 {% event_calendar event %}
-            </main>
+            </c-slot>
 
-            <aside class="sidebar">
+            <c-slot name="sidebar">
                 {# Location card #}
                 <div class="sidebar-card">
                     <h6 class="header">Location</h6>
@@ -155,7 +130,7 @@
                         </div>
                     </div>
                 {% endif %}
-            </aside>
-        </div>
+            </c-slot>
+        </c-layout-sidebar>
     </div>
 {% endblock base_content %}

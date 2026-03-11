@@ -55,15 +55,7 @@
             <h2 class="hero-sub-narrow">Furry conventions, meets, and community gatherings across New Zealand and beyond.</h2>
 
             {% if event_years %}
-                <div class="hero-bottom">
-                    <nav class="hero-nav">
-                        <a href="{% url 'events:list' %}" class="hero-pill{% if not year %} active{% endif %}">All</a>
-                        {% for y in event_years %}
-                            <a href="{% url 'events:list_year' year=y %}"
-                               class="hero-pill{% if year == y|stringformat:'d' %} active{% endif %}">{{ y }}</a>
-                        {% endfor %}
-                    </nav>
-                </div>
+                <c-year-filter :years="event_years" list_url="events:list" year_url="events:list_year" />
             {% endif %}
         </div>
     </div>
@@ -88,13 +80,7 @@
                         <span>{{ featured_event.location }}</span>
                     </div>
                     <p>{{ featured_event.description_rendered | safe | striptags | truncatechars:200 }}</p>
-                    {% if featured_event.tags.all %}
-                        <div class="tag-row tag-row-dark">
-                            {% for tag in featured_event.tags.all %}
-                                <span class="tag-pill">{{ tag.name | title }}</span>
-                            {% endfor %}
-                        </div>
-                    {% endif %}
+                    <c-tag-row :tags="featured_event.tags.all" dark />
                 </div>
             </div>
         </div>
@@ -111,7 +97,7 @@
                 <div class="grid-col d-none d-md-block col-md-6 col-lg-4"></div>
                 <div class="grid-col d-none d-lg-block col-md-6 col-lg-4"></div>
                 {% for event in upcoming_events %}
-                    {% include "events/card.html" %}
+                    <c-event-card :event="event" />
                 {% endfor %}
             </div>
         {% elif not past_events %}
@@ -127,7 +113,7 @@
                 <div class="grid-col d-none d-md-block col-md-6 col-lg-4"></div>
                 <div class="grid-col d-none d-lg-block col-md-6 col-lg-4"></div>
                 {% for event in past_events %}
-                    {% include "events/card.html" %}
+                    <c-event-card :event="event" />
                 {% endfor %}
             </div>
         {% endif %}

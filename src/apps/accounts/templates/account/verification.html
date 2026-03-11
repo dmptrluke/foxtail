@@ -11,8 +11,7 @@
 {% block content %}
     <div class="alert alert-info"><strong>Verification will always be optional!</strong> Down the line, it may be used to unlock features like submitting events, or by third-party apps as an extra layer of trust.</div>
 
-    <div class="account-section">
-        <h5>Status</h5>
+    <c-account-section title="Status">
         {% if verification %}
             <p>
                 {% icon "check-decagram" size="1.25rem" %}
@@ -44,12 +43,11 @@
                 </button>
             </form>
         {% endif %}
-    </div>
+    </c-account-section>
 
     {% if is_verifier %}
         <hr>
-        <div class="account-section">
-            <h5>Verify Someone</h5>
+        <c-account-section title="Verify Someone">
             <p>Enter the verification code shown on another member's page. You can also scan their QR code with your phone camera.</p>
             <div class="row">
                 <div class="col-md-6">
@@ -63,6 +61,6 @@
                     </form>
                 </div>
             </div>
-        </div>
+        </c-account-section>
     {% endif %}
 {% endblock content %}

@@ -9,7 +9,7 @@
 {% block hero_sub %}<h2>Give this key a name that helps you identify it -- for example, "YubiKey 5" or "MacBook Touch ID".</h2>{% endblock %}
 
 {% block content %}
-    <div class="account-section">
+    <c-account-section>
         <form method="post">
             {% csrf_token %}
             {% non_field_errors form %}
@@ -17,5 +17,5 @@
             <button type="submit" class="btn btn-primary">Save</button>
             <a href="{% url 'mfa_list_webauthn' %}" class="btn btn-outline-secondary ms-2">Cancel</a>
         </form>
-    </div>
+    </c-account-section>
 {% endblock %}

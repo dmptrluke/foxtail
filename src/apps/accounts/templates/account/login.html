@@ -10,7 +10,7 @@
 {% block heading %}<h1>Sign in</h1>{% endblock %}
 
 {% block content %}
-    {% include "components/auth_provider_list.html" with process="login" %}
+    <c-auth-providers process="login" />
 
     {% get_providers as socialaccount_providers %}
     {% if socialaccount_providers %}

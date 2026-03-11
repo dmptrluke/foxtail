@@ -6,7 +6,7 @@
 {% block heading %}<h1>Create account</h1>{% endblock %}
 
 {% block content %}
-    {% include "components/auth_provider_list.html" with process="account_signup" %}
+    <c-auth-providers process="account_signup" />
 
     {% get_providers as socialaccount_providers %}
     {% if socialaccount_providers %}
