@@ -1,5 +1,5 @@
 {% extends "base/page.html" %}
-{% load icon cache jsonld opengraph meta breadcrumbs rules image %}
+{% load cache jsonld opengraph meta breadcrumbs rules image %}
 
 {% if post.image %}{% block body_class %}has-hero-banner{% endblock %}{% endif %}
 
@@ -41,10 +41,10 @@
         <div class="hero hero-detail{% if post.image %} hero-sticky{% endif %}">
             <div class="container px-3 px-md-4">
                 <div class="hero-topline">
-                    {% url 'blog:list' as news_url %}{% breadcrumbs news_url "News" post.title %}
+                    {% breadcrumbs "blog:list" "News" post.title %}
                     {% has_perm 'blog.manage_posts' user as can_manage %}
                     {% if can_manage %}
-                        <a href="{% url 'blog:post_edit' post.pk %}" class="hero-admin-link">{% icon "pencil" size="0.75em" %} Edit</a>
+                        <a href="{% url 'blog:post_edit' post.pk %}" class="hero-admin-link"><c-icons.pencil width="0.75em" height="0.75em" /> Edit</a>
                     {% endif %}
                 </div>
 

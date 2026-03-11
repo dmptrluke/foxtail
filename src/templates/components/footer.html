@@ -1,4 +1,4 @@
-{% load tz icon %}
+{% load tz %}
 {% get_current_timezone as TIME_ZONE %}
 <footer id="footer">
     <div class="container px-3 px-md-4">
@@ -8,17 +8,17 @@
                 <a href="{% url 'content:page' slug='privacy' %}">Privacy</a>
                 <a href="{% url 'contact:contact' %}">Contact</a>
             </nav>
-            <p class="footer-credit">Made with {% icon "paw" size="0.85em" %} by <a href="https://bsky.app/profile/kapthefox.bsky.social" target="_blank" rel="noopener noreferrer">Kap</a></p>
+            <p class="footer-credit">Made with <c-icons.paw width="0.85em" height="0.85em" /> by <a href="https://bsky.app/profile/kapthefox.bsky.social" target="_blank" rel="noopener noreferrer">Kap</a></p>
         </div>
         <div class="footer-social">
             <a href="https://t.me/furrynz" target="_blank" rel="noopener noreferrer" title="Telegram">
-                {% icon "telegram" size="1.1em" %}
+                <c-icons.telegram width="1.1em" height="1.1em" />
             </a>
             <a href="https://bsky.app/profile/furry.nz" target="_blank" rel="noopener noreferrer" title="Bluesky">
-                {% icon "bluesky" size="1.1em" %}
+                <c-icons.bluesky width="1.1em" height="1.1em" />
             </a>
             <a href="https://x.com/furrynz" target="_blank" rel="noopener noreferrer" title="X">
-                {% icon "x" size="1.1em" %}
+                <c-icons.x width="1.1em" height="1.1em" />
             </a>
             <button class="footer-theme-toggle" type="button" title="Toggle theme style" aria-label="Toggle theme style"></button>
             <a class="footer-debug" role="button" tabindex="0" data-bs-toggle="popover" data-bs-trigger="focus"

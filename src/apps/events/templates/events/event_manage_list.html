@@ -1,12 +1,12 @@
 {% extends "base/page.html" %}
-{% load cotton icon breadcrumbs %}
+{% load cotton breadcrumbs %}
 
 {% block title %}Manage Events{% endblock %}
 
 {% block hero %}
     <c-hero title="Manage Events">
         <c-slot name="topline">
-            {% url 'events:list' as events_url %}{% breadcrumbs events_url "Events" "Manage Events" %}
+            {% breadcrumbs "events:list" "Events" "Manage Events" %}
         </c-slot>
     </c-hero>
 {% endblock %}
@@ -14,7 +14,7 @@
 {% block content %}
     <div class="d-flex justify-content-between align-items-center mb-3">
         <p class="mb-0 text-secondary">{{ paginator.count }} event{{ paginator.count|pluralize }}</p>
-        <a href="{% url 'events:event_create' %}" class="btn btn-primary">{% icon "plus" size="1rem" %} New Event</a>
+        <a href="{% url 'events:event_create' %}" class="btn btn-primary"><c-icons.plus /> New Event</a>
     </div>
 
     {% if events %}

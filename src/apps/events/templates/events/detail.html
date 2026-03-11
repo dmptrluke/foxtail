@@ -1,5 +1,5 @@
 {% extends "base/page.html" %}
-{% load icon cache jsonld opengraph meta breadcrumbs event_calendar rules image %}
+{% load cache jsonld opengraph meta breadcrumbs event_calendar rules image %}
 
 {% if event.image %}{% block body_class %}has-hero-banner{% endblock %}{% endif %}
 
@@ -44,10 +44,10 @@
         <div class="hero hero-detail hero-event{% if event.image %} hero-sticky{% endif %}">
             <div class="container px-3 px-md-4">
                 <div class="hero-topline">
-                    {% url 'events:list' as events_url %}{% breadcrumbs events_url "Events" event.title %}
+                    {% breadcrumbs "events:list" "Events" event.title %}
                     {% has_perm 'events.manage_events' user as can_manage %}
                     {% if can_manage %}
-                        <a href="{% url 'events:event_edit' event.pk %}" class="hero-admin-link">{% icon "pencil" size="0.75em" %} Edit</a>
+                        <a href="{% url 'events:event_edit' event.pk %}" class="hero-admin-link"><c-icons.pencil width="0.75em" height="0.75em" /> Edit</a>
                     {% endif %}
                 </div>
 

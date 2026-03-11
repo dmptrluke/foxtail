@@ -1,12 +1,12 @@
 {% extends "base/page.html" %}
-{% load cotton icon breadcrumbs %}
+{% load cotton breadcrumbs %}
 
 {% block title %}Manage Posts{% endblock %}
 
 {% block hero %}
     <c-hero title="Manage Posts">
         <c-slot name="topline">
-            {% url 'blog:list' as news_url %}{% breadcrumbs news_url "News" "Manage Posts" %}
+            {% breadcrumbs "blog:list" "News" "Manage Posts" %}
         </c-slot>
     </c-hero>
 {% endblock hero %}
@@ -14,7 +14,7 @@
 {% block content %}
     <div class="d-flex justify-content-between align-items-center mb-3">
         <p class="mb-0 text-secondary">{{ paginator.count }} post{{ paginator.count|pluralize }}</p>
-        <a href="{% url 'blog:post_create' %}" class="btn btn-primary">{% icon "plus" size="1rem" %} New Post</a>
+        <a href="{% url 'blog:post_create' %}" class="btn btn-primary"><c-icons.plus /> New Post</a>
     </div>
 
     {% if posts %}

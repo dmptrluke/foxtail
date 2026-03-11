@@ -1,5 +1,5 @@
 {% extends "base/page.html" %}
-{% load icon avatar %}
+{% load avatar %}
 
 {% block title %}Your Account{% endblock %}
 
@@ -9,7 +9,7 @@
             <div class="hero-identity">
                 <a href="{% url 'account_profile_edit' %}" class="dashboard-avatar-link" title="Change avatar">
                     <img src="{{ user|avatar_url:160 }}" alt="{{ user.username }}" class="hero-avatar">
-                    <span class="dashboard-avatar-edit">{% icon "pencil" size="1rem" %}</span>
+                    <span class="dashboard-avatar-edit"><c-icons.pencil /></span>
                 </a>
                 <div>
                     <h1>{{ user.get_short_name }}</h1>
@@ -23,12 +23,12 @@
 {% block content %}
     <div class="dashboard-grid">
         <c-dashboard-tile url="{% url 'account_profile_edit' %}" title="Profile">
-            <c-slot name="icon">{% icon "account-cog" size="1.5rem" %}</c-slot>
+            <c-slot name="icon"><c-icons.account-cog width="1.5rem" height="1.5rem" /></c-slot>
             <c-slot name="detail">Avatar, username, and personal details</c-slot>
         </c-dashboard-tile>
 
         <c-dashboard-tile url="{% url 'account_change_password' %}" title="Password">
-            <c-slot name="icon">{% icon "lock" size="1.5rem" %}</c-slot>
+            <c-slot name="icon"><c-icons.lock width="1.5rem" height="1.5rem" /></c-slot>
             <c-slot name="detail">Change your password</c-slot>
             <c-slot name="status">
                 {% if has_password %}
@@ -40,7 +40,7 @@
         </c-dashboard-tile>
 
         <c-dashboard-tile url="{% url 'account_email' %}" title="Email">
-            <c-slot name="icon">{% icon "email" size="1.5rem" %}</c-slot>
+            <c-slot name="icon"><c-icons.email width="1.5rem" height="1.5rem" /></c-slot>
             <c-slot name="detail">
                 {% if primary_email %}
                     {{ primary_email.email }}
@@ -62,9 +62,9 @@
         <c-dashboard-tile url="{% url 'account_verification' %}" title="Verification">
             <c-slot name="icon">
                 {% if user.is_verified %}
-                    {% icon "check-decagram" size="1.5rem" %}
+                    <c-icons.check-decagram width="1.5rem" height="1.5rem" />
                 {% else %}
-                    {% icon "shield-off" size="1.5rem" %}
+                    <c-icons.shield-off width="1.5rem" height="1.5rem" />
                 {% endif %}
             </c-slot>
             <c-slot name="detail">
@@ -86,9 +86,9 @@
         <c-dashboard-tile url="{% url 'mfa_index' %}" title="Two-Factor Authentication">
             <c-slot name="icon">
                 {% if mfa_enabled %}
-                    {% icon "shield-lock" size="1.5rem" %}
+                    <c-icons.shield-lock width="1.5rem" height="1.5rem" />
                 {% else %}
-                    {% icon "shield-off" size="1.5rem" %}
+                    <c-icons.shield-off width="1.5rem" height="1.5rem" />
                 {% endif %}
             </c-slot>
             <c-slot name="detail">
@@ -108,7 +108,7 @@
         </c-dashboard-tile>
 
         <c-dashboard-tile url="{% url 'socialaccount_connections' %}" title="Apps & Connections">
-            <c-slot name="icon">{% icon "application-brackets" size="1.5rem" %}</c-slot>
+            <c-slot name="icon"><c-icons.application-brackets width="1.5rem" height="1.5rem" /></c-slot>
             <c-slot name="detail">{{ social_count }} sign-in method{{ social_count|pluralize }}, {{ app_count }} authorized app{{ app_count|pluralize }}</c-slot>
         </c-dashboard-tile>
     </div>

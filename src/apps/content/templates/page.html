@@ -1,5 +1,5 @@
 {% extends "base/page.html" %}
-{% load cotton icon %}
+{% load cotton %}
 
 {% block title %}{{ page.title }}{% endblock %}
 
@@ -11,7 +11,7 @@
     <c-hero title="{{ page.title }}" subtitle="{{ page.subtitle }}">
         {% if user.is_staff %}
             <c-slot name="topline">
-                <a href="{% url 'admin:content_page_change' page.pk %}" class="hero-admin-link">{% icon "pencil" size="0.75em" %} Edit</a>
+                <a href="{% url 'admin:content_page_change' page.pk %}" class="hero-admin-link"><c-icons.pencil width="0.75em" height="0.75em" /> Edit</a>
             </c-slot>
         {% endif %}
     </c-hero>
