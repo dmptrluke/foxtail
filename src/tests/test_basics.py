@@ -53,7 +53,7 @@ def test_unauthenticated_user_browsing(driver, live_server, post: Post, second_p
 
     # the event detail page shows the event title and details
     assert event.title in driver.title
-    hero = driver.find_element(By.CLASS_NAME, 'hero-detail')
+    hero = driver.find_element(By.CLASS_NAME, 'hero')
     assert event.title in hero.text
     assert 'Auckland, New Zealand' in hero.text
     assert event_date.strftime('%B') in hero.text
@@ -87,7 +87,7 @@ def test_unauthenticated_user_browsing(driver, live_server, post: Post, second_p
     assert 'example.com' in driver.title
 
     # the user sees the post title and date in the hero
-    hero = driver.find_element(By.CLASS_NAME, 'hero-detail')
+    hero = driver.find_element(By.CLASS_NAME, 'hero')
     assert post.title in hero.text
     assert 'December 2nd, 2019' in hero.text
 
