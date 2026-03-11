@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django_vite',
     'django.forms',
+    'django_cotton',
     'django.contrib.humanize',
     'django.contrib.postgres',
     'django.contrib.sitemaps',
@@ -125,8 +126,20 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [(SRC_DIR / 'templates').as_posix()],
-        'APP_DIRS': True,
         'OPTIONS': {
+            'loaders': [
+                (
+                    'django.template.loaders.cached.Loader',
+                    [
+                        'django_cotton.cotton_loader.Loader',
+                        'django.template.loaders.filesystem.Loader',
+                        'django.template.loaders.app_directories.Loader',
+                    ],
+                ),
+            ],
+            'builtins': [
+                'django_cotton.templatetags.cotton',
+            ],
             'context_processors': [
                 'django.template.context_processors.debug',
                 'django.template.context_processors.request',

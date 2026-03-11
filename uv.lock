@@ -360,6 +360,18 @@ wheels = [
 ]
 
 [[package]]
+name = "django-cotton"
+version = "2.6.1"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "django" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/11/c1/0df4b01255626897f5e74bdcef407ba88753ca92898c912caf2f9e73ba33/django_cotton-2.6.1.tar.gz", hash = "sha256:bedfa4561e2505fca5b88396acb9bdfaea85167eeef11813676fedab45906088", size = 31147, upload-time = "2026-01-13T12:06:00.142Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/3d/d2/dea85f1931de0b2da4746f6ad669c7da1f5c8569bee144fe6620c8d98d61/django_cotton-2.6.1-py3-none-any.whl", hash = "sha256:775dda0336c08d33a6daf10557eb261746b1b8e5f260b669cc6b37115571cb08", size = 30563, upload-time = "2026-01-13T12:05:59.162Z" },
+]
+
+[[package]]
 name = "django-csp"
 version = "4.0"
 source = { registry = "https://pypi.org/simple" }
@@ -614,6 +626,7 @@ dependencies = [
     { name = "django-anymail" },
     { name = "django-cjswidget" },
     { name = "django-cleanup" },
+    { name = "django-cotton" },
     { name = "django-csp" },
     { name = "django-csp-helpers" },
     { name = "django-environ" },
@@ -675,6 +688,7 @@ requires-dist = [
     { name = "django-anymail", extras = ["mailgun"], specifier = "==14.0" },
     { name = "django-cjswidget", specifier = "==0.5.0" },
     { name = "django-cleanup", specifier = "==8.1.0" },
+    { name = "django-cotton", specifier = ">=1.1.0" },
     { name = "django-csp", specifier = "==4.0" },
     { name = "django-csp-helpers", specifier = ">=0.8.0" },
     { name = "django-environ", specifier = "==0.13.0" },
