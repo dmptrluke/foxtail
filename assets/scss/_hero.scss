@@ -1,12 +1,13 @@
-// Shared base
 .hero {
 	background: $hero-gradient;
 	color: $white;
 	padding: 2rem 0;
 
 	h1 {
+		font-size: 2rem;
 		font-weight: 550;
-        letter-spacing: -.02em;
+		letter-spacing: -.02em;
+		margin-bottom: 0.35rem;
 	}
 
 	.hero-topline {
@@ -58,20 +59,12 @@
 			color: rgba($white, 0.3);
 		}
 	}
-}
-
-// Detail and list pages
-.hero-detail {
-	h1 {
-		font-size: 2rem;
-		margin-bottom: 0.35rem;
-	}
 
 	.tag-row {
 		margin-bottom: 1rem;
 	}
 
-	h2 {
+	.hero-subtitle {
 		font-size: 1.05rem;
 		font-weight: 300;
 		line-height: var(--bs-body-line-height);
@@ -169,13 +162,6 @@
 // Banner image (below hero on detail pages)
 
 .hero-banner img {
-	width: 100%;
-	max-height: 300px;
-	object-fit: cover;
-	display: block;
-}
-
-.hero-banner-tall img {
 	width: 100%;
 	height: 50vh;
 	object-fit: cover;

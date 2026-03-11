@@ -4,17 +4,17 @@
 {% block title %}{{ character.name }}{% endblock %}
 
 {% block hero %}
-    <c-hero title="{{ character.name }}" subtitle="{{ character.species }}">
-        <c-slot name="topline">
-            {% breadcrumbs "directory:index" "Directory" character.name %}
-        </c-slot>
+    <c-hero>
+        <c-hero.nav>
+            {% breadcrumbs "directory:index" "Directory" request.path character.name %}
+        </c-hero.nav>
+        <c-hero.title>{{ character.name }}</c-hero.title>
+        <c-hero.subtitle>{{ character.species }}</c-hero.subtitle>
     </c-hero>
 {% endblock hero %}
 
 {% block content %}
     {% if character.description %}
-        <div class="rendered-markdown">
-            {{ character.description }}
-        </div>
+        <c-rendered-markdown>{{ character.description }}</c-rendered-markdown>
     {% endif %}
 {% endblock content %}

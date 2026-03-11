@@ -4,9 +4,10 @@
 {% block title %}Email Addresses{% endblock %}
 
 {% block hero %}
-    <c-hero title="Email Addresses">
-        <c-slot name="topline">{% breadcrumbs "account_profile" "Account" "Email" %}</c-slot>
-        <h2>Manage the email addresses associated with your account.</h2>
+    <c-hero>
+        <c-hero.nav>{% breadcrumbs "account_profile" "Account" "account_email" "Email" %}</c-hero.nav>
+        <c-hero.title>Email Addresses</c-hero.title>
+        <c-hero.subtitle>Manage the email addresses associated with your account.</c-hero.subtitle>
     </c-hero>
 {% endblock hero %}
 

@@ -4,10 +4,11 @@
 {% block title %}Edit Profile{% endblock %}
 
 {% block hero %}
-    <c-hero title="Edit Profile">
-        <c-slot name="topline">
-            {% url 'directory:profile' slug=object.profile_URL as profile_url %}{% breadcrumbs "directory:index" "Directory" profile_url object.user.username "Edit" %}
-        </c-slot>
+    <c-hero>
+        <c-hero.nav>
+            {% url 'directory:profile' slug=object.profile_URL as profile_url %}{% breadcrumbs "directory:index" "Directory" profile_url object.user.username request.path "Edit" %}
+        </c-hero.nav>
+        <c-hero.title>Edit Profile</c-hero.title>
     </c-hero>
 {% endblock hero %}
 

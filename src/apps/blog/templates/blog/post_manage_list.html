@@ -4,10 +4,11 @@
 {% block title %}Manage Posts{% endblock %}
 
 {% block hero %}
-    <c-hero title="Manage Posts">
-        <c-slot name="topline">
-            {% breadcrumbs "blog:list" "News" "Manage Posts" %}
-        </c-slot>
+    <c-hero>
+        <c-hero.nav>
+            {% breadcrumbs "blog:list" "News" "blog:manage_list" "Manage Posts" %}
+        </c-hero.nav>
+        <c-hero.title>Manage Posts</c-hero.title>
     </c-hero>
 {% endblock hero %}
 

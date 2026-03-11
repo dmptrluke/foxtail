@@ -4,9 +4,10 @@
 {% block title %}Disable Authenticator App{% endblock %}
 
 {% block hero %}
-    <c-hero title="Disable Authenticator App">
-        <c-slot name="topline">{% breadcrumbs "account_profile" "Account" "mfa_index" "Two-Factor Auth" "Disable App" %}</c-slot>
-        <h2>This will remove your authenticator app as a sign-in method.</h2>
+    <c-hero>
+        <c-hero.nav>{% breadcrumbs "account_profile" "Account" "mfa_index" "Two-Factor Auth" "mfa_deactivate_totp" "Disable App" %}</c-hero.nav>
+        <c-hero.title>Disable Authenticator App</c-hero.title>
+        <c-hero.subtitle>This will remove your authenticator app as a sign-in method.</c-hero.subtitle>
     </c-hero>
 {% endblock hero %}
 

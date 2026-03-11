@@ -4,9 +4,10 @@
 {% block title %}Security Keys{% endblock %}
 
 {% block hero %}
-    <c-hero title="Security Keys">
-        <c-slot name="topline">{% breadcrumbs "account_profile" "Account" "mfa_index" "Two-Factor Auth" "Security Keys" %}</c-slot>
-        <h2>Security keys and passkeys registered to your account. You can add as many as you like.</h2>
+    <c-hero>
+        <c-hero.nav>{% breadcrumbs "account_profile" "Account" "mfa_index" "Two-Factor Auth" "mfa_list_webauthn" "Security Keys" %}</c-hero.nav>
+        <c-hero.title>Security Keys</c-hero.title>
+        <c-hero.subtitle>Security keys and passkeys registered to your account. You can add as many as you like.</c-hero.subtitle>
     </c-hero>
 {% endblock hero %}
 

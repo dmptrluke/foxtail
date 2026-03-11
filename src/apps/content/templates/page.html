@@ -8,19 +8,21 @@
 {% endblock %}
 
 {% block hero %}
-    <c-hero title="{{ page.title }}" subtitle="{{ page.subtitle }}">
+    <c-hero>
         {% if user.is_staff %}
-            <c-slot name="topline">
+            <c-hero.nav>
                 <a href="{% url 'admin:content_page_change' page.pk %}" class="hero-admin-link"><c-icons.pencil width="0.75em" height="0.75em" /> Edit</a>
-            </c-slot>
+            </c-hero.nav>
+        {% endif %}
+        <c-hero.title>{{ page.title }}</c-hero.title>
+        {% if page.subtitle %}
+            <c-hero.subtitle>{{ page.subtitle }}</c-hero.subtitle>
         {% endif %}
     </c-hero>
 {% endblock hero %}
 
 {% block content %}
     <div class="layout-content">
-        <div class="rendered-markdown">
-            {{ page.body_rendered | safe }}
-        </div>
+        <c-rendered-markdown>{{ page.body_rendered | safe }}</c-rendered-markdown>
     </div>
 {% endblock content %}

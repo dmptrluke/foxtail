@@ -6,18 +6,19 @@
 {% block extra_head %}{{ form.media }}{% endblock %}
 
 {% block hero %}
-    {% url 'events:list' as events_url %}{% url 'events:manage_list' as manage_url %}
     {% if object %}
-        <c-hero title="Edit Event">
-            <c-slot name="topline">
-                {% breadcrumbs events_url "Events" manage_url "Manage Events" "Edit Event" %}
-            </c-slot>
+        <c-hero>
+            <c-hero.nav>
+                {% breadcrumbs "events:list" "Events" "events:manage_list" "Manage Events" request.path "Edit Event" %}
+            </c-hero.nav>
+            <c-hero.title>Edit Event</c-hero.title>
         </c-hero>
     {% else %}
-        <c-hero title="New Event">
-            <c-slot name="topline">
-                {% breadcrumbs events_url "Events" manage_url "Manage Events" "New Event" %}
-            </c-slot>
+        <c-hero>
+            <c-hero.nav>
+                {% breadcrumbs "events:list" "Events" "events:manage_list" "Manage Events" "events:event_create" "New Event" %}
+            </c-hero.nav>
+            <c-hero.title>New Event</c-hero.title>
         </c-hero>
     {% endif %}
 {% endblock %}

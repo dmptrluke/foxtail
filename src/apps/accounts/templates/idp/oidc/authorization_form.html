@@ -4,7 +4,10 @@
 {% block title %}Service Authorisation{% endblock %}
 
 {% block hero %}
-    <c-hero title="Authorise Login" subtitle="Review and approve access for {{ client.name }}."/>
+    <c-hero>
+        <c-hero.title>Authorise Login</c-hero.title>
+        <c-hero.subtitle>Review and approve access for {{ client.name }}.</c-hero.subtitle>
+    </c-hero>
 {% endblock %}
 
 {% block content %}

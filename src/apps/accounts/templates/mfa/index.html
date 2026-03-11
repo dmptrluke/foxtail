@@ -4,12 +4,13 @@
 {% block title %}Two-Factor Authentication{% endblock %}
 
 {% block hero %}
-    <c-hero title="Two-Factor Authentication">
-        <c-slot name="topline">{% breadcrumbs "account_profile" "Account" "Two-Factor Auth" %}</c-slot>
+    <c-hero>
+        <c-hero.nav>{% breadcrumbs "account_profile" "Account" "mfa_index" "Two-Factor Auth" %}</c-hero.nav>
+        <c-hero.title>Two-Factor Authentication</c-hero.title>
         {% if authenticators.totp or authenticators.webauthn %}
-            <h2>Two-factor authentication is active. You'll be asked to verify when signing in.</h2>
+            <c-hero.subtitle>Two-factor authentication is active. You'll be asked to verify when signing in.</c-hero.subtitle>
         {% else %}
-            <h2>Add an extra layer of security to your account.</h2>
+            <c-hero.subtitle>Add an extra layer of security to your account.</c-hero.subtitle>
         {% endif %}
     </c-hero>
 {% endblock hero %}

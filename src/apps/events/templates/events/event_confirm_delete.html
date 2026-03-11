@@ -4,11 +4,11 @@
 {% block title %}Delete Event{% endblock %}
 
 {% block hero %}
-    <c-hero title="Delete Event">
-        <c-slot name="topline">
-            {% url 'events:manage_list' as manage_url %}
-            {% breadcrumbs manage_url "Manage Events" "Delete Event" %}
-        </c-slot>
+    <c-hero>
+        <c-hero.nav>
+            {% breadcrumbs "events:manage_list" "Manage Events" request.path "Delete Event" %}
+        </c-hero.nav>
+        <c-hero.title>Delete Event</c-hero.title>
     </c-hero>
 {% endblock %}
 

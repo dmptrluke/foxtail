@@ -6,15 +6,15 @@
 {% block extra_head %}{{ form.media }}{% endblock %}
 
 {% block hero %}
-    <c-hero title="{% if object %}Edit Post{% else %}New Post{% endif %}">
-        <c-slot name="topline">
-            {% url 'blog:list' as news_url %}{% url 'blog:manage_list' as manage_url %}
+    <c-hero>
+        <c-hero.nav>
             {% if object %}
-                {% breadcrumbs news_url "News" manage_url "Manage Posts" "Edit Post" %}
+                {% breadcrumbs "blog:list" "News" "blog:manage_list" "Manage Posts" request.path "Edit Post" %}
             {% else %}
-                {% breadcrumbs news_url "News" manage_url "Manage Posts" "New Post" %}
+                {% breadcrumbs "blog:list" "News" "blog:manage_list" "Manage Posts" "blog:post_create" "New Post" %}
             {% endif %}
-        </c-slot>
+        </c-hero.nav>
+        <c-hero.title>{% if object %}Edit Post{% else %}New Post{% endif %}</c-hero.title>
     </c-hero>
 {% endblock hero %}
 

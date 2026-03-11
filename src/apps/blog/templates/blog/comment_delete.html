@@ -4,12 +4,12 @@
 {% block title %}Delete Comment{% endblock %}
 
 {% block hero %}
-    {% url 'blog:list' as news_url %}
     {% url 'blog:detail' slug=object.post.slug as post_url %}
-    <c-hero title="Delete Comment">
-        <c-slot name="topline">
-            {% breadcrumbs news_url "News" post_url object.post.title "Delete Comment" %}
-        </c-slot>
+    <c-hero>
+        <c-hero.nav>
+            {% breadcrumbs "blog:list" "News" post_url object.post.title request.path "Delete Comment" %}
+        </c-hero.nav>
+        <c-hero.title>Delete Comment</c-hero.title>
     </c-hero>
 {% endblock %}
 

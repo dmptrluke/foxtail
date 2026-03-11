@@ -4,10 +4,11 @@
 {% block title %}Manage Events{% endblock %}
 
 {% block hero %}
-    <c-hero title="Manage Events">
-        <c-slot name="topline">
-            {% breadcrumbs "events:list" "Events" "Manage Events" %}
-        </c-slot>
+    <c-hero>
+        <c-hero.nav>
+            {% breadcrumbs "events:list" "Events" "events:manage_list" "Manage Events" %}
+        </c-hero.nav>
+        <c-hero.title>Manage Events</c-hero.title>
     </c-hero>
 {% endblock %}
 

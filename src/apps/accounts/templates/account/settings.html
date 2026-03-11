@@ -4,9 +4,10 @@
 {% block title %}Profile{% endblock %}
 
 {% block hero %}
-    <c-hero title="Profile">
-        <c-slot name="topline">{% breadcrumbs "account_profile" "Account" "Profile" %}</c-slot>
-        <h2>Manage your username, name, and personal details.</h2>
+    <c-hero>
+        <c-hero.nav>{% breadcrumbs "account_profile" "Account" "account_profile" "Profile" %}</c-hero.nav>
+        <c-hero.title>Profile</c-hero.title>
+        <c-hero.subtitle>Manage your username, name, and personal details.</c-hero.subtitle>
     </c-hero>
 {% endblock hero %}
 

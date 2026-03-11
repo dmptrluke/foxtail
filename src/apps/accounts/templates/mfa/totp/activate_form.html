@@ -4,9 +4,10 @@
 {% block title %}Set Up Authenticator App{% endblock %}
 
 {% block hero %}
-    <c-hero title="Set Up Authenticator App">
-        <c-slot name="topline">{% breadcrumbs "account_profile" "Account" "mfa_index" "Two-Factor Auth" "Set Up App" %}</c-slot>
-        <h2>Use any authenticator app -- such as Google Authenticator, Authy, or 1Password -- to scan the code below.</h2>
+    <c-hero>
+        <c-hero.nav>{% breadcrumbs "account_profile" "Account" "mfa_index" "Two-Factor Auth" "mfa_activate_totp" "Set Up App" %}</c-hero.nav>
+        <c-hero.title>Set Up Authenticator App</c-hero.title>
+        <c-hero.subtitle>Use any authenticator app -- such as Google Authenticator, Authy, or 1Password -- to scan the code below.</c-hero.subtitle>
     </c-hero>
 {% endblock hero %}
 

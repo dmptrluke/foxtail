@@ -4,9 +4,10 @@
 {% block title %}Add Security Key{% endblock %}
 
 {% block hero %}
-    <c-hero title="Add Security Key">
-        <c-slot name="topline">{% breadcrumbs "account_profile" "Account" "mfa_index" "Two-Factor Auth" "mfa_list_webauthn" "Security Keys" "Add Key" %}</c-slot>
-        <h2>Register a hardware security key (such as a YubiKey) or a passkey saved on your device.</h2>
+    <c-hero>
+        <c-hero.nav>{% breadcrumbs "account_profile" "Account" "mfa_index" "Two-Factor Auth" "mfa_list_webauthn" "Security Keys" "mfa_add_webauthn" "Add Key" %}</c-hero.nav>
+        <c-hero.title>Add Security Key</c-hero.title>
+        <c-hero.subtitle>Register a hardware security key (such as a YubiKey) or a passkey saved on your device.</c-hero.subtitle>
     </c-hero>
 {% endblock hero %}
 

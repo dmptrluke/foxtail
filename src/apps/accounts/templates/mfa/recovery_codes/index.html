@@ -4,9 +4,10 @@
 {% block title %}Recovery Codes{% endblock %}
 
 {% block hero %}
-    <c-hero title="Recovery Codes">
-        <c-slot name="topline">{% breadcrumbs "account_profile" "Account" "mfa_index" "Two-Factor Auth" "Recovery Codes" %}</c-slot>
-        <h2>Recovery codes let you access your account if you ever lose access to your authenticator app.</h2>
+    <c-hero>
+        <c-hero.nav>{% breadcrumbs "account_profile" "Account" "mfa_index" "Two-Factor Auth" "mfa_view_recovery_codes" "Recovery Codes" %}</c-hero.nav>
+        <c-hero.title>Recovery Codes</c-hero.title>
+        <c-hero.subtitle>Recovery codes let you access your account if you ever lose access to your authenticator app.</c-hero.subtitle>
     </c-hero>
 {% endblock hero %}
 

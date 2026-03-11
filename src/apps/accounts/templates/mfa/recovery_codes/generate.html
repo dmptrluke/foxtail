@@ -4,9 +4,10 @@
 {% block title %}Generate Recovery Codes{% endblock %}
 
 {% block hero %}
-    <c-hero title="Generate Recovery Codes">
-        <c-slot name="topline">{% breadcrumbs "account_profile" "Account" "mfa_index" "Two-Factor Auth" "Generate Codes" %}</c-slot>
-        <h2>A new set of one-time recovery codes will be created for your account.</h2>
+    <c-hero>
+        <c-hero.nav>{% breadcrumbs "account_profile" "Account" "mfa_index" "Two-Factor Auth" "mfa_generate_recovery_codes" "Generate Codes" %}</c-hero.nav>
+        <c-hero.title>Generate Recovery Codes</c-hero.title>
+        <c-hero.subtitle>A new set of one-time recovery codes will be created for your account.</c-hero.subtitle>
     </c-hero>
 {% endblock hero %}
 

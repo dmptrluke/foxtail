@@ -1,81 +1,42 @@
 {% extends "base/page.html" %}
 {% load breadcrumbs %}
 
-{% block extra_head %}
-    {% if year %}
-        <script type="application/ld+json">
-            {
-                "@context": "https://schema.org",
-                "@type": "BreadcrumbList",
-                "itemListElement": [
-                    {
-                        "@type": "ListItem",
-                        "position": 1,
-                        "name": "News",
-                        "item": "{{ SITE_URL }}{% url 'blog:list' %}"
-                    },
-                    {
-                        "@type": "ListItem",
-                        "position": 2,
-                        "name": "{{ year }}",
-                        "item": "{{ SITE_URL }}{% url 'blog:list_year' year=year %}"
-                    }
-                ]
-            }
-        </script>
-    {% else %}
-        <script type="application/ld+json">
-            {
-                "@context": "https://schema.org",
-                "@type": "BreadcrumbList",
-                "itemListElement": [
-                    {
-                        "@type": "ListItem",
-                        "position": 1,
-                        "name": "News",
-                        "item": "{{ SITE_URL }}{% url 'blog:list' %}"
-                    }
-                ]
-            }
-        </script>
-    {% endif %}
-{% endblock %}
 
 {% block title %}{% if year %}News from {{ year }}{% else %}News{% endif %}{% endblock %}
 
 {% block hero %}
-    <div class="hero hero-detail">
-        <div class="container px-3 px-md-4">
-            {% if year %}
-                {% breadcrumbs "blog:list" "News" year %}
-            {% endif %}
+    <c-hero>
+        {% if year %}
+            <c-hero.nav>
+                {% breadcrumbs "blog:list" "News" request.path year %}
+            </c-hero.nav>
+        {% endif %}
 
-            <h1>
-                {% if request.GET.q %}
-                    Search results for {{ request.GET.q }}
-                {% elif tag %}
-                    Posts tagged {{ tag.name }}
-                {% elif year %}
-                    News from {{ year }}
-                {% else %}
-                    News
-                {% endif %}
-            </h1>
-            <h2 class="hero-sub-narrow">
-                {% if request.GET.q %}
-                    Showing news posts matching your search query
-                {% elif tag %}
-                    Showing news posts tagged with {{ tag.name }}
-                {% else %}
-                    Community news and updates from furry.nz
-                {% endif %}
-            </h2>
-
-            {% if blog_years and not tag and not request.GET.q %}
-                <c-year-filter :years="blog_years" list_url="blog:list" year_url="blog:list_year" />
+        <c-hero.title>
+            {% if request.GET.q %}
+                Search results for {{ request.GET.q }}
+            {% elif tag %}
+                Posts tagged {{ tag.name }}
+            {% elif year %}
+                News from {{ year }}
+            {% else %}
+                News
             {% endif %}
-        </div>
-    </div>
+        </c-hero.title>
+        <c-hero.subtitle narrow>
+            {% if request.GET.q %}
+                Showing news posts matching your search query
+            {% elif tag %}
+                Showing news posts tagged with {{ tag.name }}
+            {% else %}
+                Community news and updates from furry.nz
+            {% endif %}
+        </c-hero.subtitle>
+
+        {% if blog_years and not tag and not request.GET.q %}
+            <c-hero.year-filter :years="blog_years" list_url="blog:list" year_url="blog:list_year" />
+        {% endif %}
+    </c-hero>
 {% endblock hero %}
 
 {% block content %}

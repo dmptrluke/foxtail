@@ -1,72 +1,35 @@
 {% extends "base/page.html" %}
 {% load breadcrumbs image %}
 
-{% block extra_head %}
-    {% if year %}
-        <script type="application/ld+json">
-            {
-                "@context": "https://schema.org",
-                "@type": "BreadcrumbList",
-                "itemListElement": [
-                    {
-                        "@type": "ListItem",
-                        "position": 1,
-                        "name": "Events",
-                        "item": "{{ SITE_URL }}{% url 'events:list' %}"
-                    },
-                    {
-                        "@type": "ListItem",
-                        "position": 2,
-                        "name": "{{ year }}",
-                        "item": "{{ SITE_URL }}{% url 'events:list_year' year=year %}"
-                    }
-                ]
-            }
-        </script>
-    {% else %}
-        <script type="application/ld+json">
-            {
-                "@context": "https://schema.org",
-                "@type": "BreadcrumbList",
-                "itemListElement": [
-                    {
-                        "@type": "ListItem",
-                        "position": 1,
-                        "name": "Events",
-                        "item": "{{ SITE_URL }}{% url 'events:list' %}"
-                    }
-                ]
-            }
-        </script>
-    {% endif %}
-{% endblock %}
 
 {% block title %}{% if year %}Events in {{ year }}{% else %}Furry Events{% endif %}{% endblock %}
 
 {% block hero %}
-    <div class="hero hero-detail">
-        <div class="container px-3 px-md-4">
-            {% if year %}
-                {% breadcrumbs "events:list" "Events" year %}
-            {% endif %}
+    <c-hero>
+        {% if year %}
+            <c-hero.nav>
+                {% breadcrumbs "events:list" "Events" request.path year %}
+            </c-hero.nav>
+        {% endif %}
 
-            <h1>{% if year %}Events in {{ year }}{% else %}Events{% endif %}</h1>
-            <h2 class="hero-sub-narrow">Furry conventions, meets, and community gatherings across New Zealand and beyond.</h2>
+        <c-hero.title>{% if year %}Events in {{ year }}{% else %}Events{% endif %}</c-hero.title>
+        <c-hero.subtitle narrow>Furry conventions, meets, and community gatherings across New Zealand and beyond.</c-hero.subtitle>
 
-            {% if event_years %}
-                <c-year-filter :years="event_years" list_url="events:list" year_url="events:list_year" />
-            {% endif %}
-        </div>
-    </div>
+        {% if event_years %}
+            <c-hero.year-filter :years="event_years" list_url="events:list" year_url="events:list_year" />
+        {% endif %}
+    </c-hero>
+{% endblock hero %}
 
-    {% if featured_event and not year %}
+{% block pre_content %}
+    {% if featured_event %}
         <div class="container px-3 px-md-4">
             <div class="event-featured">
                 {% if featured_event.image %}
                     <a href="{{ featured_event.get_absolute_url }}" class="event-featured-image">
                         <img src="{{ featured_event.image.card }}"
                              srcset="{{ featured_event.image.card }} 1x, {{ featured_event.image.card_2x }} 2x"
-                             alt=""
+                             alt="{{ featured_event.title }}"
                              style="object-position: {{ featured_event.image_ppoi|ppoi_position }}">
                     </a>
                 {% endif %}
@@ -83,7 +46,7 @@
             </div>
         </div>
     {% endif %}
-{% endblock hero %}
+{% endblock pre_content %}
 
 {% block content %}
     {% if upcoming_events %}

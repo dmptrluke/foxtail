@@ -4,11 +4,11 @@
 {% block title %}Delete Post{% endblock %}
 
 {% block hero %}
-    <c-hero title="Delete Post">
-        <c-slot name="topline">
-            {% url 'blog:manage_list' as manage_url %}
-            {% breadcrumbs manage_url "Manage Posts" "Delete Post" %}
-        </c-slot>
+    <c-hero>
+        <c-hero.nav>
+            {% breadcrumbs "blog:manage_list" "Manage Posts" request.path "Delete Post" %}
+        </c-hero.nav>
+        <c-hero.title>Delete Post</c-hero.title>
     </c-hero>
 {% endblock hero %}
 

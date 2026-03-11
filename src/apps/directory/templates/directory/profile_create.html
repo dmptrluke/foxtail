@@ -4,10 +4,12 @@
 {% block title %}Create Profile{% endblock %}
 
 {% block hero %}
-    <c-hero title="Create Profile" subtitle="Choose a URL for your directory profile.">
-        <c-slot name="topline">
-            {% breadcrumbs "directory:index" "Directory" "Create Profile" %}
-        </c-slot>
+    <c-hero>
+        <c-hero.nav>
+            {% breadcrumbs "directory:index" "Directory" "directory:profile_create" "Create Profile" %}
+        </c-hero.nav>
+        <c-hero.title>Create Profile</c-hero.title>
+        <c-hero.subtitle>Choose a URL for your directory profile.</c-hero.subtitle>
     </c-hero>
 {% endblock hero %}
 

@@ -5,10 +5,10 @@
 
 {% block heading %}
     <h1>Enter your code</h1>
-    <h2>
+    <p class="auth-subtitle">
         Check your email for a sign-in code.
         {% if email %}Sent to <strong>{{ email }}</strong>.{% endif %}
-    </h2>
+    </p>
 {% endblock %}
 
 {% block content %}

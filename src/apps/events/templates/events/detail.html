@@ -9,73 +9,46 @@
     {% json_ld_for event %}
     {% og_for event %}
     {% meta_for event %}
-    <script type="application/ld+json">
-        {
-            "@context": "https://schema.org",
-            "@type": "BreadcrumbList",
-            "itemListElement": [
-                {
-                    "@type": "ListItem",
-                    "position": 1,
-                    "name": "Events",
-                    "item": "{{ SITE_URL }}{% url 'events:list' %}"
-                },
-                {
-                    "@type": "ListItem",
-                    "position": 2,
-                    "name": "{{ event.start.year }}",
-                    "item": "{{ SITE_URL }}{% url 'events:list_year' year=event.start.year %}"
-                },
-                {
-                    "@type": "ListItem",
-                    "position": 3,
-                    "name": "{{ event.title }}",
-                    "item": "{{ SITE_URL }}{{ event.get_absolute_url }}"
-                }
-            ]
-        }
-    </script>
 {% endblock %}
 
 {% block title %}{{ event.title }}{% endblock %}
 
 {% block hero %}
     <div class="hero-scroll-wrapper">
-        <div class="hero hero-detail hero-event{% if event.image %} hero-sticky{% endif %}">
-            <div class="container px-3 px-md-4">
-                <div class="hero-topline">
-                    {% breadcrumbs "events:list" "Events" event.title %}
-                    {% has_perm 'events.manage_events' user as can_manage %}
-                    {% if can_manage %}
-                        <a href="{% url 'events:event_edit' event.pk %}" class="hero-admin-link"><c-icons.pencil width="0.75em" height="0.75em" /> Edit</a>
-                    {% endif %}
+        <c-hero hero_class="hero-event{% if event.image %} hero-sticky{% endif %}">
+            <c-hero.nav>
+                {% url 'events:list_year' year=event.start.year as year_url %}
+                {% breadcrumbs "events:list" "Events" year_url event.start.year event.get_absolute_url event.title %}
+                {% has_perm 'events.manage_events' user as can_manage %}
+                {% if can_manage %}
+                    <a href="{% url 'events:event_edit' event.pk %}" class="hero-admin-link"><c-icons.pencil width="0.75em" height="0.75em" /> Edit</a>
+                {% endif %}
+            </c-hero.nav>
+
+            <c-tag-row :tags="event.tags.all" />
+
+            <c-hero.title>{{ event.title }}</c-hero.title>
+            <c-hero.subtitle>{{ event.location }}</c-hero.subtitle>
+
+            <dl class="event-hero-dates">
+                <div>
+                    <dt>Starts</dt>
+                    <dd>{{ event.start | date:"l, F jS Y" }}{{ event.start_time | time:" \a\t g:i A" }}</dd>
                 </div>
-
-                <c-tag-row :tags="event.tags.all" />
-
-                <h1>{{ event.title }}</h1>
-                <h2>{{ event.location }}</h2>
-
-                <dl class="event-hero-dates">
+                {% if event.end or event.end_time %}
                     <div>
-                        <dt>Starts</dt>
-                        <dd>{{ event.start | date:"l, F jS Y" }}{{ event.start_time | time:" \a\t g:i A" }}</dd>
+                        <dt>Ends</dt>
+                        <dd>
+                            {% if event.end and event.end != event.start %}
+                                {{ event.end | date:"l, F jS Y" }}{{ event.end_time | time:" \a\t g:i A" }}
+                            {% elif event.end_time %}
+                                Same day at {{ event.end_time | time:"g:i A" }}
+                            {% endif %}
+                        </dd>
                     </div>
-                    {% if event.end or event.end_time %}
-                        <div>
-                            <dt>Ends</dt>
-                            <dd>
-                                {% if event.end and event.end != event.start %}
-                                    {{ event.end | date:"l, F jS Y" }}{{ event.end_time | time:" \a\t g:i A" }}
-                                {% elif event.end_time %}
-                                    Same day at {{ event.end_time | time:"g:i A" }}
-                                {% endif %}
-                            </dd>
-                        </div>
-                    {% endif %}
-                </dl>
-            </div>
-        </div>
+                {% endif %}
+            </dl>
+        </c-hero>
 
         {% if event.image %}
             <c-hero-banner :image="event.image" :ppoi="event.image_ppoi" :alt="event.title" />
@@ -88,9 +61,7 @@
 
     <c-layout-sidebar>
         <c-slot name="content">
-            <div class="rendered-markdown">
-                {{ event.description_rendered | safe }}
-            </div>
+            <c-rendered-markdown>{{ event.description_rendered | safe }}</c-rendered-markdown>
 
             <c-map :latitude="event.latitude" :longitude="event.longitude" />
 

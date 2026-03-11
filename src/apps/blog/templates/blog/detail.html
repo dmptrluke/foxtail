@@ -9,26 +9,6 @@
     {% json_ld_for post %}
     {% og_for post %}
     {% meta_for post %}
-    <script type="application/ld+json">
-        {
-            "@context": "https://schema.org",
-            "@type": "BreadcrumbList",
-            "itemListElement": [
-                {
-                    "@type": "ListItem",
-                    "position": 1,
-                    "name": "News",
-                    "item": "{{ SITE_URL }}{% url 'blog:list' %}"
-                },
-                {
-                    "@type": "ListItem",
-                    "position": 2,
-                    "name": "{{ post.title }}",
-                    "item": "{{ SITE_URL }}{{ post.get_absolute_url }}"
-                }
-            ]
-        }
-    </script>
 {% endblock %}
 
 {% block title %}{{ post.title }}{% endblock %}
@@ -38,22 +18,20 @@
     <div class="hero-scroll-wrapper">
     {% endif %}
 
-        <div class="hero hero-detail{% if post.image %} hero-sticky{% endif %}">
-            <div class="container px-3 px-md-4">
-                <div class="hero-topline">
-                    {% breadcrumbs "blog:list" "News" post.title %}
-                    {% has_perm 'blog.manage_posts' user as can_manage %}
-                    {% if can_manage %}
-                        <a href="{% url 'blog:post_edit' post.pk %}" class="hero-admin-link"><c-icons.pencil width="0.75em" height="0.75em" /> Edit</a>
-                    {% endif %}
-                </div>
+        <c-hero hero_class="{% if post.image %}hero-sticky{% endif %}">
+            <c-hero.nav>
+                {% breadcrumbs "blog:list" "News" post.get_absolute_url post.title %}
+                {% has_perm 'blog.manage_posts' user as can_manage %}
+                {% if can_manage %}
+                    <a href="{% url 'blog:post_edit' post.pk %}" class="hero-admin-link"><c-icons.pencil width="0.75em" height="0.75em" /> Edit</a>
+                {% endif %}
+            </c-hero.nav>
 
-                <c-tag-row :tags="post.tags.all" url_name="blog:list" />
+            <c-tag-row :tags="post.tags.all" url_name="blog:list" />
 
-                <h1>{{ post.title }}</h1>
-                <h2>{{ post.created|date:"F jS, Y" }}{% if post.author %} — by {{ post.author.name }}{% endif %}</h2>
-            </div>
-        </div>
+            <c-hero.title>{{ post.title }}</c-hero.title>
+            <c-hero.subtitle>{{ post.created|date:"F jS, Y" }}{% if post.author %} — by {{ post.author.name }}{% endif %}</c-hero.subtitle>
+        </c-hero>
 
         {% if post.image %}
             <c-hero-banner :image="post.image" :ppoi="post.image_ppoi" :alt="post.title" />
@@ -66,9 +44,7 @@
 
     <c-layout-sidebar>
         <c-slot name="content">
-            <div class="rendered-markdown">
-                {{ post.text_rendered|safe }}
-            </div>
+            <c-rendered-markdown>{{ post.text_rendered|safe }}</c-rendered-markdown>
 
             {% if post.allow_comments and comments_enabled %}
                 {% include "blog/comments.html" %}

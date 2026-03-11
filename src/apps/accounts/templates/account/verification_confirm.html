@@ -4,10 +4,11 @@
 {% block title %}Confirm Verification{% endblock %}
 
 {% block hero %}
-    <c-hero title="Confirm Verification">
-        <c-slot name="topline">
-            {% breadcrumbs "account_profile" "Account" "account_verification" "Verification" "Confirm" %}
-        </c-slot>
+    <c-hero>
+        <c-hero.nav>
+            {% breadcrumbs "account_profile" "Account" "account_verification" "Verification" request.path "Confirm" %}
+        </c-hero.nav>
+        <c-hero.title>Confirm Verification</c-hero.title>
     </c-hero>
 {% endblock hero %}
 

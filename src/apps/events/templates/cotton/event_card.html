@@ -5,7 +5,7 @@
         <div class="event-card-image">
             <img src="{{ event.image.card }}"
                  srcset="{{ event.image.card }} 1x, {{ event.image.card_2x }} 2x"
-                 alt=""
+                 alt="{{ event.title }}"
                  style="object-position: {{ event.image_ppoi|ppoi_position }}">
         </div>
     {% endif %}

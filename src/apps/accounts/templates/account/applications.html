@@ -4,9 +4,10 @@
 {% block title %}Apps & Connections{% endblock %}
 
 {% block hero %}
-    <c-hero title="Apps & Connections">
-        <c-slot name="topline">{% breadcrumbs "account_profile" "Account" "Apps & Connections" %}</c-slot>
-        <h2>Manage third-party apps and external sign-in services linked to your account.</h2>
+    <c-hero>
+        <c-hero.nav>{% breadcrumbs "account_profile" "Account" "account_application_list" "Apps & Connections" %}</c-hero.nav>
+        <c-hero.title>Apps & Connections</c-hero.title>
+        <c-hero.subtitle>Manage third-party apps and external sign-in services linked to your account.</c-hero.subtitle>
     </c-hero>
 {% endblock hero %}
 

@@ -4,20 +4,18 @@
 {% block title %}Your Account{% endblock %}
 
 {% block hero %}
-    <section class="hero hero-dashboard">
-        <div class="container px-3 px-md-4">
-            <div class="hero-identity">
-                <a href="{% url 'account_profile_edit' %}" class="dashboard-avatar-link" title="Change avatar">
-                    <img src="{{ user|avatar_url:160 }}" alt="{{ user.username }}" class="hero-avatar">
-                    <span class="dashboard-avatar-edit"><c-icons.pencil /></span>
-                </a>
-                <div>
-                    <h1>{{ user.get_short_name }}</h1>
-                    <p>{{ user.email }}</p>
-                </div>
+    <c-hero hero_class="hero-dashboard">
+        <div class="hero-identity">
+            <a href="{% url 'account_profile_edit' %}" class="dashboard-avatar-link" title="Change avatar">
+                <img src="{{ user|avatar_url:160 }}" alt="{{ user.username }}" class="hero-avatar">
+                <span class="dashboard-avatar-edit"><c-icons.pencil /></span>
+            </a>
+            <div>
+                <c-hero.title>{{ user.get_short_name }}</c-hero.title>
+                <p>{{ user.email }}</p>
             </div>
         </div>
-    </section>
+    </c-hero>
 {% endblock hero %}
 
 {% block content %}

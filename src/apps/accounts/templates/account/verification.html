@@ -4,9 +4,10 @@
 {% block title %}Verification{% endblock %}
 
 {% block hero %}
-    <c-hero title="Verification">
-        <c-slot name="topline">{% breadcrumbs "account_profile" "Account" "Verification" %}</c-slot>
-        <h2>Get verified by a trusted community member.</h2>
+    <c-hero>
+        <c-hero.nav>{% breadcrumbs "account_profile" "Account" "account_verification" "Verification" %}</c-hero.nav>
+        <c-hero.title>Verification</c-hero.title>
+        <c-hero.subtitle>Get verified by a trusted community member.</c-hero.subtitle>
     </c-hero>
 {% endblock hero %}
 
