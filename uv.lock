@@ -386,14 +386,14 @@ wheels = [
 
 [[package]]
 name = "django-csp-helpers"
-version = "0.8.0"
+version = "0.9.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "django" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/2a/a5/281e2c9ae1a370a9122c4ea0063338de35fc768676b46001cce723e62a60/django_csp_helpers-0.8.0.tar.gz", hash = "sha256:5280de3c795112b960a7444762e4021c8305ac3ca89d9756c56cf7df9124bacd", size = 6348, upload-time = "2026-03-04T11:30:07.293Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/09/8f/ea076739207528ccb73f1b3c5588d8af0785ea2d78bfb666d13a691b054c/django_csp_helpers-0.9.0.tar.gz", hash = "sha256:4b0e24e152dba4cb0117ab201e86da231bc64d6bd85f21598dab11a6192483c7", size = 8004, upload-time = "2026-03-11T23:05:03.602Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/39/47/4ee015a0e3904c5cb1d40caa09ae2f16e5d0deebf6db6e6f790a440cb08f/django_csp_helpers-0.8.0-py3-none-any.whl", hash = "sha256:da820253d603e7d4e948272870cd526bfbcb8f4453e5a7c871d8922cea73d1d1", size = 6909, upload-time = "2026-03-04T11:30:05.942Z" },
+    { url = "https://files.pythonhosted.org/packages/f0/b5/61dd113077f0182bac4964af6648f541b3ff7de5b48bf7e685378889d6fc/django_csp_helpers-0.9.0-py3-none-any.whl", hash = "sha256:1ea5fe63cfcb923bc6214a5ca7f577b8515f91c480adf711fdc8e0daa9ff3910", size = 6883, upload-time = "2026-03-11T23:05:04.592Z" },
 ]
 
 [[package]]
@@ -690,7 +690,7 @@ requires-dist = [
     { name = "django-cleanup", specifier = "==8.1.0" },
     { name = "django-cotton", specifier = ">=1.1.0" },
     { name = "django-csp", specifier = "==4.0" },
-    { name = "django-csp-helpers", specifier = ">=0.8.0" },
+    { name = "django-csp-helpers", specifier = ">=0.9.0" },
     { name = "django-environ", specifier = "==0.13.0" },
     { name = "django-imagefield", extras = ["vips"], specifier = "==0.23.0a3" },
     { name = "django-mail-templated-simple", specifier = "==3.2" },
