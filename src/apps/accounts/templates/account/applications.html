@@ -1,12 +1,14 @@
-{% extends "base/account.html" %}
-{% load breadcrumbs %}
+{% extends "base/page.html" %}
+{% load cotton breadcrumbs %}
 
 {% block title %}Apps & Connections{% endblock %}
 
-{% block hero_breadcrumbs %}{% url 'account_profile' as a %}{% breadcrumbs a "Account" "Apps & Connections" %}{% endblock %}
-
-{% block hero_heading %}Apps & Connections{% endblock %}
-{% block hero_sub %}<h2>Manage third-party apps and external sign-in services linked to your account.</h2>{% endblock %}
+{% block hero %}
+    <c-hero title="Apps & Connections">
+        <c-slot name="topline">{% breadcrumbs "account_profile" "Account" "Apps & Connections" %}</c-slot>
+        <h2>Manage third-party apps and external sign-in services linked to your account.</h2>
+    </c-hero>
+{% endblock hero %}
 
 {% block content %}
     <ul class="nav nav-tabs mb-4">

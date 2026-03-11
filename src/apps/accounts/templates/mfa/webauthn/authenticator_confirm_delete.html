@@ -1,12 +1,14 @@
-{% extends 'base/account.html' %}
-{% load breadcrumbs %}
+{% extends "base/page.html" %}
+{% load cotton breadcrumbs %}
 
 {% block title %}Remove Security Key{% endblock %}
 
-{% block hero_breadcrumbs %}{% url 'account_profile' as a %}{% url 'mfa_index' as m %}{% url 'mfa_list_webauthn' as k %}{% breadcrumbs a "Account" m "Two-Factor Auth" k "Security Keys" "Remove" %}{% endblock %}
-
-{% block hero_heading %}Remove Security Key{% endblock %}
-{% block hero_sub %}<h2>This key will be permanently removed from your account.</h2>{% endblock %}
+{% block hero %}
+    <c-hero title="Remove Security Key">
+        <c-slot name="topline">{% breadcrumbs "account_profile" "Account" "mfa_index" "Two-Factor Auth" "mfa_list_webauthn" "Security Keys" "Remove" %}</c-slot>
+        <h2>This key will be permanently removed from your account.</h2>
+    </c-hero>
+{% endblock hero %}
 
 {% block content %}
     <div class="account-confirm">

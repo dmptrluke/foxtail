@@ -1,14 +1,15 @@
-{% extends "base/account.html" %}
-{% load breadcrumbs icon avatar %}
+{% extends "base/page.html" %}
+{% load cotton breadcrumbs avatar %}
 
 {% block title %}Confirm Verification{% endblock %}
 
-{% block hero_breadcrumbs %}
-    {% url 'account_profile' as a %}{% url 'account_verification' as v %}
-    {% breadcrumbs a "Account" v "Verification" "Confirm" %}
-{% endblock %}
-
-{% block hero_heading %}Confirm Verification{% endblock %}
+{% block hero %}
+    <c-hero title="Confirm Verification">
+        <c-slot name="topline">
+            {% breadcrumbs "account_profile" "Account" "account_verification" "Verification" "Confirm" %}
+        </c-slot>
+    </c-hero>
+{% endblock hero %}
 
 {% block content %}
     <c-account-section>
@@ -17,7 +18,7 @@
             <div>
                 <h5 class="mb-0">{{ target_user.username }}</h5>
                 {% if already_verified %}
-                    <span class="text-success">{% icon "check-decagram" size="1rem" %} Already verified</span>
+                    <span class="text-success"><c-icons.check-decagram /> Already verified</span>
                 {% else %}
                     <span class="text-body-secondary">Not yet verified</span>
                 {% endif %}

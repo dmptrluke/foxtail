@@ -1,12 +1,14 @@
-{% extends 'base/account.html' %}
-{% load breadcrumbs %}
+{% extends "base/page.html" %}
+{% load cotton breadcrumbs %}
 
 {% block title %}Generate Recovery Codes{% endblock %}
 
-{% block hero_breadcrumbs %}{% url 'account_profile' as a %}{% url 'mfa_index' as m %}{% breadcrumbs a "Account" m "Two-Factor Auth" "Generate Codes" %}{% endblock %}
-
-{% block hero_heading %}Generate Recovery Codes{% endblock %}
-{% block hero_sub %}<h2>A new set of one-time recovery codes will be created for your account.</h2>{% endblock %}
+{% block hero %}
+    <c-hero title="Generate Recovery Codes">
+        <c-slot name="topline">{% breadcrumbs "account_profile" "Account" "mfa_index" "Two-Factor Auth" "Generate Codes" %}</c-slot>
+        <h2>A new set of one-time recovery codes will be created for your account.</h2>
+    </c-hero>
+{% endblock hero %}
 
 {% block content %}
     <div class="account-confirm">

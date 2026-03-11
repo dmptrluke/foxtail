@@ -1,18 +1,18 @@
-{% extends 'base/account.html' %}
-{% load breadcrumbs %}
+{% extends "base/page.html" %}
+{% load cotton breadcrumbs %}
 
 {% block title %}Two-Factor Authentication{% endblock %}
 
-{% block hero_breadcrumbs %}{% url 'account_profile' as a %}{% breadcrumbs a "Account" "Two-Factor Auth" %}{% endblock %}
-
-{% block hero_heading %}Two-Factor Authentication{% endblock %}
-{% block hero_sub %}
-    {% if authenticators.totp or authenticators.webauthn %}
-        <h2>Two-factor authentication is active. You'll be asked to verify when signing in.</h2>
-    {% else %}
-        <h2>Add an extra layer of security to your account.</h2>
-    {% endif %}
-{% endblock %}
+{% block hero %}
+    <c-hero title="Two-Factor Authentication">
+        <c-slot name="topline">{% breadcrumbs "account_profile" "Account" "Two-Factor Auth" %}</c-slot>
+        {% if authenticators.totp or authenticators.webauthn %}
+            <h2>Two-factor authentication is active. You'll be asked to verify when signing in.</h2>
+        {% else %}
+            <h2>Add an extra layer of security to your account.</h2>
+        {% endif %}
+    </c-hero>
+{% endblock hero %}
 
 {% block content %}
     {% if not authenticators.totp and not authenticators.webauthn %}

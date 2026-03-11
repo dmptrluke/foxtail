@@ -1,12 +1,14 @@
-{% extends "base/account.html" %}
-{% load breadcrumbs form_tags %}
+{% extends "base/page.html" %}
+{% load cotton breadcrumbs form_tags %}
 
 {% block title %}Email Addresses{% endblock %}
 
-{% block hero_breadcrumbs %}{% url 'account_profile' as a %}{% breadcrumbs a "Account" "Email" %}{% endblock %}
-
-{% block hero_heading %}Email Addresses{% endblock %}
-{% block hero_sub %}<h2>Manage the email addresses associated with your account.</h2>{% endblock %}
+{% block hero %}
+    <c-hero title="Email Addresses">
+        <c-slot name="topline">{% breadcrumbs "account_profile" "Account" "Email" %}</c-slot>
+        <h2>Manage the email addresses associated with your account.</h2>
+    </c-hero>
+{% endblock hero %}
 
 {% block content %}
     <c-account-section>

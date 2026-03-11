@@ -1,12 +1,14 @@
-{% extends 'base/account.html' %}
-{% load breadcrumbs humanize %}
+{% extends "base/page.html" %}
+{% load cotton breadcrumbs humanize %}
 
 {% block title %}Security Keys{% endblock %}
 
-{% block hero_breadcrumbs %}{% url 'account_profile' as a %}{% url 'mfa_index' as m %}{% breadcrumbs a "Account" m "Two-Factor Auth" "Security Keys" %}{% endblock %}
-
-{% block hero_heading %}Security Keys{% endblock %}
-{% block hero_sub %}<h2>Security keys and passkeys registered to your account. You can add as many as you like.</h2>{% endblock %}
+{% block hero %}
+    <c-hero title="Security Keys">
+        <c-slot name="topline">{% breadcrumbs "account_profile" "Account" "mfa_index" "Two-Factor Auth" "Security Keys" %}</c-slot>
+        <h2>Security keys and passkeys registered to your account. You can add as many as you like.</h2>
+    </c-hero>
+{% endblock hero %}
 
 {% block content %}
     {% if authenticators %}

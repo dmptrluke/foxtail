@@ -1,12 +1,14 @@
-{% extends "base/account.html" %}
-{% load breadcrumbs icon %}
+{% extends "base/page.html" %}
+{% load cotton breadcrumbs %}
 
 {% block title %}Verification{% endblock %}
 
-{% block hero_breadcrumbs %}{% url 'account_profile' as a %}{% breadcrumbs a "Account" "Verification" %}{% endblock %}
-
-{% block hero_heading %}Verification{% endblock %}
-{% block hero_sub %}<h2>Get verified by a trusted community member.</h2>{% endblock %}
+{% block hero %}
+    <c-hero title="Verification">
+        <c-slot name="topline">{% breadcrumbs "account_profile" "Account" "Verification" %}</c-slot>
+        <h2>Get verified by a trusted community member.</h2>
+    </c-hero>
+{% endblock hero %}
 
 {% block content %}
     <div class="alert alert-info"><strong>Verification will always be optional!</strong> Down the line, it may be used to unlock features like submitting events, or by third-party apps as an extra layer of trust.</div>
@@ -14,7 +16,7 @@
     <c-account-section title="Status">
         {% if verification %}
             <p>
-                {% icon "check-decagram" size="1.25rem" %}
+                <c-icons.check-decagram width="1.25rem" height="1.25rem" />
                 <strong>Verified</strong>
                 {% if verification.verified_by %}
                     by {{ verification.verified_by.username }}

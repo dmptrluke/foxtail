@@ -1,12 +1,14 @@
-{% extends 'base/account.html' %}
-{% load breadcrumbs form_tags %}
+{% extends "base/page.html" %}
+{% load cotton breadcrumbs form_tags %}
 
 {% block title %}Set Up Authenticator App{% endblock %}
 
-{% block hero_breadcrumbs %}{% url 'account_profile' as a %}{% url 'mfa_index' as m %}{% breadcrumbs a "Account" m "Two-Factor Auth" "Set Up App" %}{% endblock %}
-
-{% block hero_heading %}Set Up Authenticator App{% endblock %}
-{% block hero_sub %}<h2>Use any authenticator app -- such as Google Authenticator, Authy, or 1Password -- to scan the code below.</h2>{% endblock %}
+{% block hero %}
+    <c-hero title="Set Up Authenticator App">
+        <c-slot name="topline">{% breadcrumbs "account_profile" "Account" "mfa_index" "Two-Factor Auth" "Set Up App" %}</c-slot>
+        <h2>Use any authenticator app -- such as Google Authenticator, Authy, or 1Password -- to scan the code below.</h2>
+    </c-hero>
+{% endblock hero %}
 
 {% block content %}
     <c-account-section title="Step 1 — Scan the QR code"

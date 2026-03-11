@@ -1,12 +1,14 @@
-{% extends "base/account.html" %}
-{% load breadcrumbs form_tags %}
+{% extends "base/page.html" %}
+{% load cotton breadcrumbs form_tags %}
 
 {% block title %}Profile{% endblock %}
 
-{% block hero_breadcrumbs %}{% url 'account_profile' as a %}{% breadcrumbs a "Account" "Profile" %}{% endblock %}
-
-{% block hero_heading %}Profile{% endblock %}
-{% block hero_sub %}<h2>Manage your username, name, and personal details.</h2>{% endblock %}
+{% block hero %}
+    <c-hero title="Profile">
+        <c-slot name="topline">{% breadcrumbs "account_profile" "Account" "Profile" %}</c-slot>
+        <h2>Manage your username, name, and personal details.</h2>
+    </c-hero>
+{% endblock hero %}
 
 {% block content %}
     <form method="post" enctype="multipart/form-data">
