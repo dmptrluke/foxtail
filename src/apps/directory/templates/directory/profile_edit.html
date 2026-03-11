@@ -6,7 +6,7 @@
 {% block hero %}
     <c-hero title="Edit Profile">
         <c-slot name="topline">
-            {% url 'directory:index' as dir_url %}{% url 'directory:profile' slug=object.profile_URL as profile_url %}{% breadcrumbs dir_url "Directory" profile_url object.user.username "Edit" %}
+            {% url 'directory:profile' slug=object.profile_URL as profile_url %}{% breadcrumbs "directory:index" "Directory" profile_url object.user.username "Edit" %}
         </c-slot>
     </c-hero>
 {% endblock hero %}

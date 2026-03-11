@@ -6,7 +6,7 @@
 {% block hero %}
     <c-hero title="{{ character.name }}" subtitle="{{ character.species }}">
         <c-slot name="topline">
-            {% url 'directory:index' as dir_url %}{% breadcrumbs dir_url "Directory" character.name %}
+            {% breadcrumbs "directory:index" "Directory" character.name %}
         </c-slot>
     </c-hero>
 {% endblock hero %}

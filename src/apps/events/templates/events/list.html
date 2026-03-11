@@ -1,5 +1,5 @@
 {% extends "base/page.html" %}
-{% load icon breadcrumbs image %}
+{% load breadcrumbs image %}
 
 {% block extra_head %}
     {% if year %}
@@ -47,7 +47,7 @@
     <div class="hero hero-detail">
         <div class="container px-3 px-md-4">
             {% if year %}
-                {% url 'events:list' as events_url %}{% breadcrumbs events_url "Events" year %}
+                {% breadcrumbs "events:list" "Events" year %}
             {% endif %}
 
             <h1>{% if year %}Events in {{ year }}{% else %}Events{% endif %}</h1>
