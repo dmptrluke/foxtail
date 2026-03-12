@@ -9,12 +9,9 @@ from django.utils.text import Truncator
 from imagefield.fields import ImageField as ProcessedImageField
 from markdownfield.models import MarkdownField, RenderedMarkdownField
 from published.models import PublishedModel
-from rules.contrib.models import RulesModel
 from taggit.managers import TaggableManager
 
 from apps.core.validators import VALIDATOR_EXTENDED
-
-from . import rules
 
 
 class Author(models.Model):
@@ -102,16 +99,13 @@ class Post(PublishedModel):
         return data
 
 
-class Comment(RulesModel):
+class Comment(models.Model):
     post = models.ForeignKey('foxtail_blog.Post', on_delete=models.CASCADE, related_name='comments')
     author = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
 
     text = models.TextField(max_length=280, help_text='280 characters or fewer.')
     created = models.DateTimeField(auto_now_add=True)
     approved = models.BooleanField(default=False)
-
-    class Meta:
-        rules_permissions = {'change': rules.is_owner_or_editor, 'delete': rules.is_owner_or_editor}
 
     def __str__(self):
         return self.text

@@ -92,6 +92,12 @@ class TestEventManageListView:
         assert response.status_code == 200
         assert event in response.context['events']
 
+    # staff user can access management views
+    def test_staff_can_access(self, client, staff_user, event: Event):
+        client.force_login(staff_user)
+        response = client.get(self.url)
+        assert response.status_code == 200
+
 
 class TestEventCreateView:
     url = reverse('events:event_create')

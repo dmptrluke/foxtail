@@ -13,6 +13,7 @@ from apps.events.tests.factories import EventFactory, PastEventFactory
 register(UserFactory, 'user')
 register(UserFactory, 'second_user')
 register(UserFactory, 'third_user')
+register(UserFactory, 'fourth_user')
 register(UserNoPasswordFactory, 'user_without_password')
 
 # blog

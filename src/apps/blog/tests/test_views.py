@@ -125,7 +125,7 @@ class TestCommentDeleteView:
         assert response.status_code == 302
         assert not Comment.objects.filter(pk=comment.pk).exists()
 
-    # moderator can delete any comment
+    # editor can delete any comment
     def test_editor_can_delete(self, client, user, editor, post: Post):
         comment = Comment.objects.create(post=post, author=user, text='to delete')
         client.force_login(editor)
@@ -134,7 +134,16 @@ class TestCommentDeleteView:
         assert response.status_code == 302
         assert not Comment.objects.filter(pk=comment.pk).exists()
 
-    # non-owner non-editor gets 403 (third_user avoids collision with editor fixture on second_user)
+    # moderator can delete any comment
+    def test_moderator_can_delete(self, client, user, moderator, post: Post):
+        comment = Comment.objects.create(post=post, author=user, text='moderated')
+        client.force_login(moderator)
+        url = reverse('blog:comment_delete', kwargs={'pk': comment.pk})
+        response = client.post(url)
+        assert response.status_code == 302
+        assert not Comment.objects.filter(pk=comment.pk).exists()
+
+    # non-owner non-editor non-moderator gets 403
     def test_other_user_forbidden(self, client, user, third_user, post: Post):
         comment = Comment.objects.create(post=post, author=user, text='protected')
         client.force_login(third_user)
@@ -166,6 +175,12 @@ class TestPostManageListView:
         response = client.get(self.url)
         assert response.status_code == 200
         assert post in response.context['posts']
+
+    # staff user can access management views
+    def test_staff_can_access(self, client, staff_user, post: Post):
+        client.force_login(staff_user)
+        response = client.get(self.url)
+        assert response.status_code == 200
 
 
 class TestPostCreateView:
@@ -206,6 +221,22 @@ class TestPostUpdateView:
         response = client.get(url)
         assert response.status_code == 403
 
+    # post author can edit their own post
+    def test_author_can_edit_own_post(self, client, user, post: Post):
+        post.author.user = user
+        post.author.save()
+        client.force_login(user)
+        url = reverse('blog:post_edit', kwargs={'pk': post.pk})
+        response = client.get(url)
+        assert response.status_code == 200
+
+    # non-author regular user cannot edit another's post
+    def test_non_author_cannot_edit(self, client, third_user, post: Post):
+        client.force_login(third_user)
+        url = reverse('blog:post_edit', kwargs={'pk': post.pk})
+        response = client.get(url)
+        assert response.status_code == 403
+
     # editor can update a post and its tags
     def test_updates_post(self, client, editor, post: Post):
         client.force_login(editor)
@@ -231,6 +262,15 @@ class TestPostUpdateView:
 class TestPostDeleteView:
     # regular user gets 403
     def test_requires_editor_permission(self, client, user, post: Post):
+        client.force_login(user)
+        url = reverse('blog:post_delete', kwargs={'pk': post.pk})
+        response = client.post(url)
+        assert response.status_code == 403
+
+    # post author cannot delete their own post (requires editor)
+    def test_author_cannot_delete_own_post(self, client, user, post: Post):
+        post.author.user = user
+        post.author.save()
         client.force_login(user)
         url = reverse('blog:post_delete', kwargs={'pk': post.pk})
         response = client.post(url)

@@ -1,6 +1,5 @@
 from django.conf import settings
 from django.contrib import messages
-from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.postgres.search import SearchQuery, SearchRank, SearchVector
 from django.db.models import Count
 from django.http import Http404, HttpResponseForbidden, HttpResponseRedirect
@@ -12,7 +11,6 @@ from django.views.generic.dates import YearMixin
 from csp_helpers.mixins import CSPViewMixin
 from published.mixins import PublishedDetailMixin, PublishedListMixin
 from published.utils import queryset_filter
-from rules.contrib.views import AutoPermissionRequiredMixin
 from taggit.models import Tag
 
 from apps.core.mixins import PermissionMixin
@@ -149,7 +147,8 @@ class BlogDetailView(PublishedDetailMixin, DetailView):
         return self.render_to_response(context)
 
 
-class CommentDeleteView(AutoPermissionRequiredMixin, LoginRequiredMixin, DeleteView):
+class CommentDeleteView(PermissionMixin, DeleteView):
+    permission_required = 'blog.delete_comment'
     model = Comment
     template_name = 'blog/comment_delete.html'
 
@@ -198,7 +197,7 @@ class PostCreateView(CSPViewMixin, PermissionMixin, CreateView):
 
 
 class PostUpdateView(CSPViewMixin, PermissionMixin, UpdateView):
-    permission_required = 'blog.manage_posts'
+    permission_required = 'blog.change_post'
     model = Post
     template_name = 'blog/post_form.html'
 
@@ -220,7 +219,7 @@ class PostUpdateView(CSPViewMixin, PermissionMixin, UpdateView):
 
 
 class PostDeleteView(PermissionMixin, DeleteView):
-    permission_required = 'blog.manage_posts'
+    permission_required = 'blog.delete_post'
     model = Post
     template_name = 'blog/post_confirm_delete.html'
     success_url = reverse_lazy('blog:manage_list')

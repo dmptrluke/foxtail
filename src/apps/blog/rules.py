@@ -13,7 +13,13 @@ def is_author(user, obj=None):
     return getattr(author, 'user', author) == user
 
 
-is_editor = is_group_member('moderators') | rules.is_staff
-is_owner_or_editor = is_author | is_editor
+is_editor = is_group_member('Blog Editors') | rules.is_staff
+is_moderator = is_group_member('Moderators') | is_editor
+is_author_or_editor = is_author | is_editor
 
 rules.add_perm('blog.manage_posts', is_editor)
+rules.add_perm('blog.change_post', is_author_or_editor)
+rules.add_perm('blog.delete_post', is_editor)
+
+rules.add_perm('blog.change_comment', is_author)
+rules.add_perm('blog.delete_comment', is_author | is_moderator)
