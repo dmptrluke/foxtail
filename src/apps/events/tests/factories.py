@@ -19,6 +19,7 @@ class EventFactory(DjangoModelFactory):
 
     class Meta:
         model = Event
+        skip_postgeneration_save = True
 
     @factory.post_generation
     def tags(self, create, extracted, **kwargs):
