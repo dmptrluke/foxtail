@@ -2,6 +2,7 @@ from datetime import UTC, date, time, timedelta
 from decimal import Decimal
 from unittest.mock import PropertyMock, patch
 
+from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.utils.timezone import now
 
@@ -127,7 +128,7 @@ class TestEventStructuredData:
             event.__dict__.pop('structured_data', None)
             sd = event.structured_data
             assert sd['image']['@type'] == 'ImageObject'
-            assert sd['image']['url'] == 'http://localhost:8000/media/events/test.jpg'
+            assert sd['image']['url'] == f'{settings.SITE_URL}/media/events/test.jpg'
             assert sd['image']['width'] == 1200
             assert sd['image']['height'] == 630
 

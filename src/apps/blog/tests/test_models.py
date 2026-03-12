@@ -1,5 +1,7 @@
 from unittest.mock import PropertyMock, patch
 
+from django.conf import settings
+
 import pytest
 
 from ..models import Author, Comment, Post
@@ -63,7 +65,7 @@ class TestPostStructuredData:
             post.__dict__.pop('structured_data', None)
             sd = post.structured_data
             assert sd['image']['@type'] == 'ImageObject'
-            assert sd['image']['url'] == 'http://localhost:8000/media/blog/test.jpg'
+            assert sd['image']['url'] == f'{settings.SITE_URL}/media/blog/test.jpg'
             assert sd['image']['width'] == 1200
             assert sd['image']['height'] == 630
 
