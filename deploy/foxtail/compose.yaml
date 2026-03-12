@@ -73,9 +73,9 @@ services:
         condition: service_healthy
       redis:
         condition: service_healthy
-    command: django-admin rqworker default
+    command: django-admin run_huey
     healthcheck:
-      test: ["CMD-SHELL", "django-admin rqstats --json | python -c 'import sys,json; json.load(sys.stdin)'"]
+      test: ["CMD-SHELL", "pgrep -f run_huey"]
       interval: 30s
       timeout: 10s
       retries: 3

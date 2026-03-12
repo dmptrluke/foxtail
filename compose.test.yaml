@@ -12,7 +12,7 @@ services:
       TESTING: "true"
       SECRET_KEY: "test-secret-key"
       SITE_URL: "http://localhost:8000"
-      RQ_ASYNC: "false"
+      HUEY_IMMEDIATE: "true"
       DIRECTORY_ENABLED: "true"
       CONTACT_EMAILS: "test@example.com"
       RECAPTCHA_ENABLED: "false"

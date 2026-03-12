@@ -80,7 +80,7 @@ INSTALLED_APPS = [
     'allauth.idp.oidc',
     'django_recaptcha',
     'imagefield',
-    'django_rq',
+    'huey.contrib.djhuey',
     'django_cleanup.apps.CleanupConfig',
 ]
 
@@ -548,12 +548,20 @@ IMAGEFIELD_FORMATS = {
     },
 }
 
-# django-rq
-# <https://github.com/rq/django-rq>
+# huey
+# <https://huey.readthedocs.io/en/latest/django.html>
 
-RQ_ASYNC = env.bool('RQ_ASYNC', default=True)
-
-RQ_QUEUES = {'default': {'USE_REDIS_CACHE': 'default', 'ASYNC': RQ_ASYNC}}
+HUEY = {
+    'huey_class': 'huey.RedisHuey',
+    'name': 'foxtail',
+    'immediate': env.bool('HUEY_IMMEDIATE', default=False),
+    'results': False,
+    'url': env.str('CACHE_URL', default='redis://redis/1'),
+    'consumer': {
+        'workers': 1,
+        'worker_type': 'thread',
+    },
+}
 
 # Markdown
 # <https://github.com/jamesturk/django-markdownfield>

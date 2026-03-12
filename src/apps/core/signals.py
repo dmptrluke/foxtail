@@ -1,16 +1,15 @@
 """
-Async image rendition processing via django-rq.
+Async image rendition processing via huey.
 
 Replaces django-imagefield's synchronous post_save processing (IMAGEFIELD_AUTOGENERATE)
-with an RQ job that runs on the worker. Tracks image and PPOI field changes to avoid
-unnecessary job enqueues on unrelated saves.
+with a huey task that runs on the worker. Tracks image and PPOI field changes to avoid
+unnecessary task enqueues on unrelated saves.
 
 Connected in CoreConfig.ready().
 """
 
 from django.db import transaction
 
-import django_rq
 from imagefield.fields import IMAGEFIELDS
 
 from apps.core.jobs import process_imagefields
@@ -61,8 +60,7 @@ def on_post_save(sender, instance, **kwargs):
         return
 
     def _enqueue():
-        django_rq.enqueue(
-            process_imagefields,
+        process_imagefields(
             instance._meta.app_label,
             instance._meta.model_name,
             instance.pk,

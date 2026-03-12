@@ -72,7 +72,7 @@ jobs:
           TESTING: true
           SECRET_KEY: fake
           EMAIL_ASYNC: false
-          RQ_ASYNC: false
+          HUEY_IMMEDIATE: "true"
           DIRECTORY_ENABLED: true
           CONTACT_EMAILS: test@example.com
           RECAPTCHA_ENABLED: false

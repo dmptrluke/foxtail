@@ -1,10 +1,12 @@
 import logging
 
+from huey.contrib.djhuey import task
 from imagefield.fields import IMAGEFIELDS
 
 logger = logging.getLogger(__name__)
 
 
+@task()
 def process_imagefields(app_label, model_name, pk):
     from django.apps import apps
 

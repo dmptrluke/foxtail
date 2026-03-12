@@ -7,12 +7,12 @@ from django.conf import settings
 from django.core.mail import get_connection
 from django.core.mail.backends.base import BaseEmailBackend
 
-import django_rq
-from rq import Retry
+from huey.contrib.djhuey import task
 
 logger = logging.getLogger(__name__)
 
 
+@task(retries=3, retry_delay=60)
 def send_message_async(message, **kwargs):
     conn = get_connection(backend=settings.EMAIL_REAL_BACKEND, **kwargs)
     conn.open()
@@ -31,13 +31,7 @@ class AsyncEmailBackend(BaseEmailBackend):
     def send_messages(self, messages):
         for message in messages:
             try:
-                django_rq.enqueue(
-                    send_message_async,
-                    message,
-                    retry=Retry(max=3, interval=[10, 60, 300]),
-                    description=f'Email to {len(message.to)} recipient(s)',
-                    **self.init_kwargs,
-                )
+                send_message_async(message, **self.init_kwargs)
             except Exception:
                 if not self.fail_silently:
                     raise
