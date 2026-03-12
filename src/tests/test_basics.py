@@ -73,12 +73,9 @@ def test_unauthenticated_user_browsing(driver, live_server, post: Post, second_p
     assert second_post.title in compact.text
     assert second_post.text[0:15] in compact.text
 
-    # the user sees the "Read more" button on the featured post
-    read_more = feature.find_element(By.LINK_TEXT, 'Read more')
-    assert read_more
-
-    # the user clicks it
-    read_more.click()
+    # the user clicks the featured post title link
+    feature_link = feature.find_element(By.CSS_SELECTOR, 'a.stretched-link')
+    feature_link.click()
 
     # the page title is now for the blog post, being a new page
     assert post.title in driver.title

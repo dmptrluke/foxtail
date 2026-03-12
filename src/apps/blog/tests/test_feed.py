@@ -1,11 +1,10 @@
-from datetime import datetime
+from datetime import UTC, datetime
 from urllib.parse import urlparse
 
 from django.urls import reverse
 
 import atoma
 import pytest
-from pytz import utc
 
 from ..models import Post
 
@@ -14,8 +13,8 @@ pytestmark = pytest.mark.django_db
 
 def test_feed(client, post: Post, second_post: Post, hidden_post: Post):
     # set the post dates to they are listed in a predictable order
-    post.created = datetime(2019, 12, 2, tzinfo=utc)
-    second_post.created = datetime(2019, 11, 1, tzinfo=utc)
+    post.created = datetime(2019, 12, 2, tzinfo=UTC)
+    second_post.created = datetime(2019, 11, 1, tzinfo=UTC)
 
     post.save()
     second_post.save()
