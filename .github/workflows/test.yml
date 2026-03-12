@@ -13,6 +13,20 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  lint:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v6
+
+      - name: Lint
+        run: |
+          uvx ruff check src/
+          uvx ruff format --check src/
+
   test:
     runs-on: ubuntu-latest
 
@@ -25,13 +39,23 @@ jobs:
           POSTGRES_DB: postgres
         ports:
           - 5432/tcp
-        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 3s
+          --health-timeout 3s
+          --health-retries 5
+          --mount type=tmpfs,destination=/var/lib/postgresql/data
 
       redis:
         image: redis:8
         ports:
           - 6379/tcp
-        options: --entrypoint redis-server
+        options: >-
+          --entrypoint redis-server
+          --health-cmd "redis-cli ping"
+          --health-interval 3s
+          --health-timeout 3s
+          --health-retries 5
 
     steps:
       - uses: actions/checkout@v6
@@ -60,11 +84,6 @@ jobs:
 
       - name: Install Python dependencies
         run: uv sync --frozen --no-install-project --group test
-
-      - name: Lint
-        run: |
-          uvx ruff check src/
-          uvx ruff format --check src/
 
       - name: Test with pytest
         env:
