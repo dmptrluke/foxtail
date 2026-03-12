@@ -11,14 +11,14 @@ updates:
       update-types:
         - minor
         - patch
-- package-ecosystem: pip
-  directory: "/requirements"
+- package-ecosystem: uv
+  directory: "/"
   schedule:
     interval: weekly
     time: '09:00'
     timezone: Pacific/Auckland
   groups:
-    pip-minor-patch:
+    uv-minor-patch:
       update-types:
         - minor
         - patch
