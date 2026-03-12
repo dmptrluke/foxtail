@@ -50,9 +50,7 @@
 
 		.breadcrumb-item.active {
 			color: rgba($white, 0.7);
-			overflow: hidden;
-			text-overflow: ellipsis;
-			white-space: nowrap;
+			@include text-truncate();
 		}
 
 		.breadcrumb-item + .breadcrumb-item::before {

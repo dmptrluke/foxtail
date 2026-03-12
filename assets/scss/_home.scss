@@ -67,7 +67,7 @@
 	padding-bottom: 2rem;
 	border-bottom: 1px solid rgba($secondary, 0.12);
 
-	@media (min-width: 768px) {
+	@include media-breakpoint-up(md) {
 		grid-template-columns: 1.2fr 1fr;
 	}
 
@@ -132,7 +132,7 @@
 	grid-template-columns: 1fr;
 	gap: 1.25rem;
 
-	@media (min-width: 576px) {
+	@include media-breakpoint-up(sm) {
 		grid-template-columns: 1fr 1fr;
 	}
 }

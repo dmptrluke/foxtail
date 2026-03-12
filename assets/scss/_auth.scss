@@ -1,5 +1,4 @@
 // Auth shell: standalone layout for login, signup, MFA, password reset, etc.
-// Does NOT inherit from base.html — uses its own full-page gradient layout.
 
 @keyframes gradient-shift {
   0% { background-position: 0% 50%; }

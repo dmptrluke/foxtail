@@ -5,7 +5,7 @@
 	grid-template-columns: 1fr;
 	gap: 2.5rem;
 
-	@media (min-width: 768px) {
+	@include media-breakpoint-up(md) {
 		grid-template-columns: 1fr 320px;
 	}
 
