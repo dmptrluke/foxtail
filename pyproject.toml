@@ -62,7 +62,7 @@ test = [
 DJANGO_SETTINGS_MODULE = "foxtail.settings"
 pythonpath = ["src"]
 python_files = ["tests.py", "test_*.py", "*_tests.py"]
-norecursedirs = ["node_modules", ".git", ".tox", "storage"]
+norecursedirs = ["node_modules", ".git", ".tox", "storage", "_stashed"]
 
 [tool.coverage.run]
 source = ["apps"]

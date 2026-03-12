@@ -7,7 +7,6 @@ from pytest_factoryboy import register
 from apps.accounts.tests.factories import UserFactory, UserNoPasswordFactory
 from apps.blog.tests.factories import AuthorFactory, CommentFactory, PostFactory
 from apps.content.tests.factories import PageFactory
-from apps.directory.tests.factories import ProfileFactory
 from apps.events.tests.factories import EventFactory, PastEventFactory
 
 # accounts
@@ -25,9 +24,6 @@ register(CommentFactory, 'comment')
 
 # content
 register(PageFactory)
-
-# directory
-register(ProfileFactory)
 
 # events
 register(EventFactory)

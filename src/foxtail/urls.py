@@ -37,7 +37,6 @@ urlpatterns = [
     # Apps
     path('blog/', include('apps.blog.urls')),
     path('contact/', include('apps.contact.urls')),
-    path('directory/', include('apps.directory.urls')),
     path('events/', include('apps.events.urls')),
     path('', include('apps.content.urls')),
 ]

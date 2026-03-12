@@ -3,7 +3,6 @@ from django.core.management.base import BaseCommand
 from apps.accounts.tests.factories import UserFactory
 from apps.blog.tests.factories import CommentFactory, PostFactory
 from apps.content.tests.factories import PageFactory
-from apps.directory.tests.factories import ProfileFactory
 from apps.events.tests.factories import EventFactory
 
 
@@ -24,10 +23,6 @@ class Command(BaseCommand):
         self.stdout.write(f'  Creating {users_count} users...')
         users = UserFactory.create_batch(users_count)
         self.stdout.write(self.style.SUCCESS(f'  Created {len(users)} users'))
-
-        self.stdout.write(f'  Creating {len(users)} directory profiles...')
-        profiles = [ProfileFactory(user=user) for user in users]
-        self.stdout.write(self.style.SUCCESS(f'  Created {len(profiles)} profiles'))
 
         posts_count = options['posts']
         self.stdout.write(f'  Creating {posts_count} blog posts...')

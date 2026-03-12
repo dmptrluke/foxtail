@@ -3,7 +3,7 @@ from django.utils.timezone import now
 
 
 def site(request):
-    return {'DEBUG': settings.DEBUG, 'DIRECTORY_ENABLED': settings.DIRECTORY_ENABLED, 'SITE_URL': settings.SITE_URL}
+    return {'DEBUG': settings.DEBUG, 'SITE_URL': settings.SITE_URL}
 
 
 def debug(request):

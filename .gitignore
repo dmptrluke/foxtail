@@ -24,6 +24,9 @@ node_modules
 !.vscode/extensions.json
 *.code-workspace
 
+# Stashed apps
+_stashed/
+
 # Produced assets
 build/
 storage/

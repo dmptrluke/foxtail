@@ -12,10 +12,7 @@
            href="{% url 'blog:list' %}">News</a>
         <a class="nav-item nav-link{% if vn == 'events:list' or vn == 'events:list_year' or vn == 'events:detail' %} active{% endif %}"
            href="{% url 'events:list' %}">Events</a>
-        {% if DIRECTORY_ENABLED %}
-            <a class="nav-item nav-link{% if request.resolver_match.app_name == "directory" %} active{% endif %}"
-           href="{% url 'directory:index' %}">Directory</a>
-        {% endif %}
+
         {% has_perm 'blog.manage_posts' user as can_manage_posts %}
         {% has_perm 'events.manage_events' user as can_manage_events %}
         {% if can_manage_posts or can_manage_events %}

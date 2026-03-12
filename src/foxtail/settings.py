@@ -61,7 +61,6 @@ INSTALLED_APPS = [
     'apps.accounts',
     'apps.content',
     'apps.events',
-    'apps.directory',
     'apps.blog',
     'apps.contact',
     'allauth',
@@ -647,6 +646,6 @@ TAGGIT_CASE_INSENSITIVE = True
 
 BLOG_COMMENTS = True
 CONTACT_EMAILS = env.list('CONTACT_EMAILS')
-DIRECTORY_ENABLED = env.bool('DIRECTORY_ENABLED', default=False)
+
 MAPTILER_API_KEY = env('MAPTILER_API_KEY', default='')
 ROBOTS_ALLOWED = env.bool('ROBOTS_ALLOWED', default=True)
