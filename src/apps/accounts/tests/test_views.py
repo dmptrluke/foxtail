@@ -1,4 +1,8 @@
+import re
+
+from django.contrib.auth.models import Group
 from django.contrib.messages import get_messages
+from django.core.cache import cache
 from django.test import RequestFactory
 from django.urls import reverse
 
@@ -9,7 +13,15 @@ from allauth.idp.oidc.models import Token as OIDCToken
 from allauth.mfa.models import Authenticator
 from allauth.socialaccount.models import SocialAccount
 
-from apps.accounts.views import UserView
+from apps.accounts.models import Verification
+from apps.accounts.views import (
+    VERIFICATION_TOKEN_TTL,
+    UserView,
+    _cache_key_for_token,
+    _cache_key_for_user,
+    _generate_token,
+    _normalize_token,
+)
 
 pytestmark = pytest.mark.django_db
 
@@ -27,6 +39,24 @@ def oidc_token(user, oidc_client):
         client=oidc_client,
         user=user,
     )
+
+
+@pytest.fixture
+def verifier(second_user):
+    # uses second_user so `user` is free as the verification target
+    group, _ = Group.objects.get_or_create(name='verifiers')
+    second_user.groups.add(group)
+    return second_user
+
+
+@pytest.fixture
+def verification(user, verifier):
+    return Verification.objects.create(user=user, verified_by=verifier)
+
+
+def _store_token(token, user_id):
+    cache.set(_cache_key_for_token(token), user_id, VERIFICATION_TOKEN_TTL)
+    cache.set(_cache_key_for_user(user_id), token, VERIFICATION_TOKEN_TTL)
 
 
 class TestUserView:
@@ -288,3 +318,280 @@ class TestChangePassword:
 
         assert response.status_code == 302
         assert response['Location'] == reverse('account_change_password')
+
+
+class TestTokenHelpers:
+    """Test verification token generation and normalization functions."""
+
+    # generated token matches XXXX-XXXX format with uppercase alphanumeric chars
+    def test_generate_token_format(self):
+        token = _generate_token()
+        assert re.fullmatch(r'[A-Z0-9]{4}-[A-Z0-9]{4}', token)
+
+    # generated tokens are not identical (randomness sanity check)
+    def test_generate_token_uniqueness(self):
+        tokens = {_generate_token() for _ in range(10)}
+        assert len(tokens) > 1
+
+    # lowercase input without dash is normalized to XXXX-XXXX uppercase
+    def test_normalize_strips_dashes_and_uppercases(self):
+        assert _normalize_token('abcd1234') == 'ABCD-1234'
+
+    # already-formatted input is preserved
+    def test_normalize_preserves_valid_format(self):
+        assert _normalize_token('ABCD-1234') == 'ABCD-1234'
+
+    # wrong-length input is uppercased but not reformatted
+    def test_normalize_wrong_length_passthrough(self):
+        assert _normalize_token('abc') == 'ABC'
+
+    # dash in a non-standard position is stripped and reformatted correctly
+    def test_normalize_misplaced_dash(self):
+        assert _normalize_token('AB-CD1234') == 'ABCD-1234'
+
+
+class TestVerificationView:
+    """Test the verification status page and token display."""
+
+    # anonymous users are redirected to login
+    def test_requires_login(self, client):
+        url = reverse('account_verification')
+        response = client.get(url)
+        assert response.status_code == 302
+        assert '/login/' in response['Location']
+
+    # unverified user has no verification object in context
+    def test_unverified_user(self, client, user):
+        client.force_login(user)
+        response = client.get(reverse('account_verification'))
+        assert response.status_code == 200
+        assert 'verification' not in response.context
+
+    # verified user sees their verification object
+    def test_verified_user_sees_verification(self, client, user, verification):
+        client.force_login(user)
+        response = client.get(reverse('account_verification'))
+        assert response.context['verification'] == verification
+
+    # active token in cache is shown with QR code and TTL
+    def test_shows_active_token(self, client, user):
+        client.force_login(user)
+        _store_token('ABCD-1234', user.pk)
+        response = client.get(reverse('account_verification'))
+        assert response.context['token'] == 'ABCD-1234'
+        assert 'token_ttl' in response.context
+        assert response.context['qr_data_uri'].startswith('data:image/svg+xml;base64,')
+
+    # stale user→token pointer with expired token cache doesn't show token
+    def test_expired_token_not_shown(self, client, user):
+        client.force_login(user)
+        cache.set(_cache_key_for_user(user.pk), 'DEAD-BEEF', VERIFICATION_TOKEN_TTL)
+        response = client.get(reverse('account_verification'))
+        assert 'token' not in response.context
+
+    # verifier user sees is_verifier=True
+    def test_verifier_flag(self, client, verifier):
+        client.force_login(verifier)
+        response = client.get(reverse('account_verification'))
+        assert response.context['is_verifier'] is True
+
+    # regular user sees is_verifier=False
+    def test_non_verifier_flag(self, client, user):
+        client.force_login(user)
+        response = client.get(reverse('account_verification'))
+        assert response.context['is_verifier'] is False
+
+    # ?code= query param prefills lookup form for verifiers
+    def test_code_prefill_for_verifier(self, client, verifier):
+        client.force_login(verifier)
+        response = client.get(reverse('account_verification') + '?code=ABCD-1234')
+        assert response.context['prefilled_code'] == 'ABCD-1234'
+
+    # ?code= for non-verifier shows error message, no prefill
+    def test_code_prefill_denied_for_non_verifier(self, client, user):
+        client.force_login(user)
+        response = client.get(reverse('account_verification') + '?code=ABCD-1234')
+        assert 'prefilled_code' not in response.context
+        msgs = [str(m) for m in get_messages(response.wsgi_request)]
+        assert any('permission' in m for m in msgs)
+
+
+class TestGenerateTokenView:
+    """Test verification token generation endpoint."""
+
+    # anonymous users are redirected to login
+    def test_requires_login(self, client):
+        url = reverse('account_verification_generate')
+        response = client.post(url)
+        assert response.status_code == 302
+        assert '/login/' in response['Location']
+
+    # POST creates both cache keys (token→user_id and user_id→token)
+    def test_generates_token_in_cache(self, client, user):
+        client.force_login(user)
+        client.post(reverse('account_verification_generate'))
+        token = cache.get(_cache_key_for_user(user.pk))
+        assert token is not None
+        assert cache.get(_cache_key_for_token(token)) == user.pk
+
+    # POST redirects to verification page
+    def test_redirects_to_verification(self, client, user):
+        client.force_login(user)
+        response = client.post(reverse('account_verification_generate'))
+        assert response.status_code == 302
+        assert response['Location'] == reverse('account_verification')
+
+    # generating a new token invalidates the old one and creates a valid replacement
+    def test_replaces_old_token(self, client, user):
+        client.force_login(user)
+        _store_token('OLD1-OLD2', user.pk)
+        client.post(reverse('account_verification_generate'))
+        assert cache.get(_cache_key_for_token('OLD1-OLD2')) is None
+        new_token = cache.get(_cache_key_for_user(user.pk))
+        assert new_token != 'OLD1-OLD2'
+        assert re.fullmatch(r'[A-Z0-9]{4}-[A-Z0-9]{4}', new_token)
+        assert cache.get(_cache_key_for_token(new_token)) == user.pk
+
+
+class TestConfirmVerificationView:
+    """Test the verification confirmation page (verifier enters code, sees target user)."""
+
+    # non-verifier gets 403
+    def test_requires_verifier_permission(self, client, user):
+        client.force_login(user)
+        response = client.post(reverse('account_verification_confirm'), {'token': 'ABCD-1234'})
+        assert response.status_code == 403
+
+    # valid token shows confirmation page with target user
+    def test_valid_token_shows_confirmation(self, client, user, verifier):
+        client.force_login(verifier)
+        _store_token('ABCD-1234', user.pk)
+        response = client.post(reverse('account_verification_confirm'), {'token': 'ABCD-1234'})
+        assert response.status_code == 200
+        assert response.context['target_user'] == user
+        assert response.context['token'] == 'ABCD-1234'
+        assert response.context['already_verified'] is False
+
+    # already-verified user shows already_verified=True on confirmation
+    def test_already_verified_flag(self, client, user, verifier, verification):
+        client.force_login(verifier)
+        _store_token('ABCD-1234', user.pk)
+        response = client.post(reverse('account_verification_confirm'), {'token': 'ABCD-1234'})
+        assert response.status_code == 200
+        assert response.context['already_verified'] is True
+
+    # expired/invalid token redirects with error message
+    def test_invalid_token_redirects(self, client, verifier):
+        client.force_login(verifier)
+        response = client.post(reverse('account_verification_confirm'), {'token': 'BAD0-CODE'}, follow=True)
+        msgs = [str(m) for m in get_messages(response.wsgi_request)]
+        assert any('Invalid or expired' in m for m in msgs)
+
+    # empty token redirects with error message
+    def test_empty_token_redirects(self, client, verifier):
+        client.force_login(verifier)
+        response = client.post(reverse('account_verification_confirm'), {'token': ''}, follow=True)
+        msgs = [str(m) for m in get_messages(response.wsgi_request)]
+        assert any('enter a verification code' in m for m in msgs)
+
+
+class TestVerifyUserView:
+    """Test the endpoint that creates a Verification record."""
+
+    # non-verifier gets 403
+    def test_requires_verifier_permission(self, client, user):
+        client.force_login(user)
+        response = client.post(reverse('account_verification_verify'), {'token': 'ABCD-1234'})
+        assert response.status_code == 403
+
+    # valid token creates Verification record with correct verified_by
+    def test_creates_verification_record(self, client, user, verifier):
+        client.force_login(verifier)
+        _store_token('ABCD-1234', user.pk)
+        response = client.post(reverse('account_verification_verify'), {'token': 'ABCD-1234'})
+        assert response.status_code == 302
+        v = Verification.objects.get(user=user)
+        assert v.verified_by == verifier
+
+    # both cache keys are cleaned up after verification
+    def test_clears_cache(self, client, user, verifier):
+        client.force_login(verifier)
+        _store_token('ABCD-1234', user.pk)
+        response = client.post(reverse('account_verification_verify'), {'token': 'ABCD-1234'})
+        assert response.status_code == 302
+        assert cache.get(_cache_key_for_token('ABCD-1234')) is None
+        assert cache.get(_cache_key_for_user(user.pk)) is None
+
+    # verifying already-verified user shows info message, no duplicate record
+    def test_already_verified_shows_info(self, client, user, verifier, verification):
+        client.force_login(verifier)
+        _store_token('ABCD-1234', user.pk)
+        response = client.post(reverse('account_verification_verify'), {'token': 'ABCD-1234'}, follow=True)
+        assert Verification.objects.filter(user=user).count() == 1
+        msgs = [str(m) for m in get_messages(response.wsgi_request)]
+        assert any('already verified' in m for m in msgs)
+
+    # invalid token redirects with error
+    def test_invalid_token_redirects(self, client, verifier):
+        client.force_login(verifier)
+        response = client.post(reverse('account_verification_verify'), {'token': 'BAD0-CODE'}, follow=True)
+        msgs = [str(m) for m in get_messages(response.wsgi_request)]
+        assert any('Invalid or expired' in m for m in msgs)
+
+    # successful verification shows success message
+    def test_success_message(self, client, user, verifier):
+        client.force_login(verifier)
+        _store_token('ABCD-1234', user.pk)
+        response = client.post(reverse('account_verification_verify'), {'token': 'ABCD-1234'}, follow=True)
+        msgs = [str(m) for m in get_messages(response.wsgi_request)]
+        assert any('has been verified' in m for m in msgs)
+
+
+class TestUnverifyUserView:
+    """Test the endpoint that removes a Verification record."""
+
+    # non-verifier gets 403
+    def test_requires_verifier_permission(self, client, user):
+        client.force_login(user)
+        response = client.post(reverse('account_verification_unverify'), {'token': 'ABCD-1234'})
+        assert response.status_code == 403
+
+    # valid token deletes the Verification record
+    def test_deletes_verification_record(self, client, user, verifier, verification):
+        client.force_login(verifier)
+        _store_token('ABCD-1234', user.pk)
+        response = client.post(reverse('account_verification_unverify'), {'token': 'ABCD-1234'})
+        assert response.status_code == 302
+        assert not Verification.objects.filter(user=user).exists()
+
+    # both cache keys are cleaned up after unverification
+    def test_clears_cache(self, client, user, verifier, verification):
+        client.force_login(verifier)
+        _store_token('ABCD-1234', user.pk)
+        response = client.post(reverse('account_verification_unverify'), {'token': 'ABCD-1234'})
+        assert response.status_code == 302
+        assert cache.get(_cache_key_for_token('ABCD-1234')) is None
+        assert cache.get(_cache_key_for_user(user.pk)) is None
+
+    # unverifying a non-verified user shows info message
+    def test_not_verified_shows_info(self, client, user, verifier):
+        client.force_login(verifier)
+        _store_token('ABCD-1234', user.pk)
+        response = client.post(reverse('account_verification_unverify'), {'token': 'ABCD-1234'}, follow=True)
+        msgs = [str(m) for m in get_messages(response.wsgi_request)]
+        assert any('not currently verified' in m for m in msgs)
+
+    # invalid token redirects with error
+    def test_invalid_token_redirects(self, client, verifier):
+        client.force_login(verifier)
+        response = client.post(reverse('account_verification_unverify'), {'token': 'BAD0-CODE'}, follow=True)
+        msgs = [str(m) for m in get_messages(response.wsgi_request)]
+        assert any('Invalid or expired' in m for m in msgs)
+
+    # successful unverification shows success message
+    def test_success_message(self, client, user, verifier, verification):
+        client.force_login(verifier)
+        _store_token('ABCD-1234', user.pk)
+        response = client.post(reverse('account_verification_unverify'), {'token': 'ABCD-1234'}, follow=True)
+        msgs = [str(m) for m in get_messages(response.wsgi_request)]
+        assert any('has been removed' in m for m in msgs)
