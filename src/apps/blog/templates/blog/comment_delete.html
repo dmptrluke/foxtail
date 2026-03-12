@@ -25,8 +25,9 @@
         <div class="account-confirm-actions">
             <form method="post">
                 {% csrf_token %}
+                {% if next %}<input type="hidden" name="next" value="{{ next }}">{% endif %}
                 <button type="submit" class="btn btn-danger">Delete Comment</button>
-                <a href="{{ post_url }}" class="btn btn-outline-secondary ms-2">Cancel</a>
+                <a href="{% if next %}{{ next }}{% else %}{{ post_url }}{% endif %}" class="btn btn-outline-secondary ms-2">Cancel</a>
             </form>
         </div>
     </div>

@@ -1,0 +1,84 @@
+{% extends "base/page.html" %}
+{% load cotton breadcrumbs %}
+
+{% block title %}Manage Comments{% endblock %}
+
+{% block hero %}
+    <c-hero>
+        <c-hero.nav>
+            {% breadcrumbs "blog:list" "News" "blog:comment_manage_list" "Manage Comments" %}
+        </c-hero.nav>
+        <c-hero.title>Manage Comments</c-hero.title>
+    </c-hero>
+{% endblock hero %}
+
+{% block content %}
+    <ul class="nav nav-tabs mb-3">
+        <li class="nav-item">
+            <a class="nav-link{% if current_filter != 'all' %} active{% endif %}" href="{% url 'blog:comment_manage_list' %}">Pending ({{ pending_count }})</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link{% if current_filter == 'all' %} active{% endif %}" href="{% url 'blog:comment_manage_list' %}?filter=all">All ({{ all_count }})</a>
+        </li>
+    </ul>
+
+    {% if comments %}
+        <div class="table-responsive">
+            <table class="table table-hover align-middle">
+                <thead>
+                    <tr>
+                        <th>Comment</th>
+                        <th>Author</th>
+                        <th>Post</th>
+                        <th>Date</th>
+                        <th>Status</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for comment in comments %}
+                        <tr>
+                            <td>{{ comment.text|truncatechars:80 }}</td>
+                            <td class="text-secondary">{{ comment.author.get_short_name }}</td>
+                            <td><a href="{{ comment.post.get_absolute_url }}" class="text-decoration-none">{{ comment.post.title }}</a></td>
+                            <td class="text-secondary text-nowrap">{{ comment.created|date:"d M Y" }}</td>
+                            <td>
+                                {% if comment.approved %}
+                                    <span class="badge text-bg-success">Approved</span>
+                                {% else %}
+                                    <span class="badge text-bg-warning">Pending</span>
+                                {% endif %}
+                            </td>
+                            <td class="text-end text-nowrap">
+                                <form method="post" action="{% url 'blog:comment_approve' pk=comment.pk %}" class="d-inline">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="filter" value="{{ current_filter }}">
+                                    <button type="submit" class="btn btn-sm {% if comment.approved %}btn-outline-secondary{% else %}btn-outline-success{% endif %}">
+                                        {% if comment.approved %}Unapprove{% else %}Approve{% endif %}
+                                    </button>
+                                </form>
+                                <a href="{% url 'blog:comment_delete' pk=comment.pk %}?next={% url 'blog:comment_manage_list' %}{% if current_filter == 'all' %}%3Ffilter%3Dall{% endif %}" class="btn btn-sm btn-outline-danger ms-1">Delete</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        {% if is_paginated %}
+            <nav aria-label="Comment list pagination">
+                <ul class="pagination">
+                    {% if page_obj.has_previous %}
+                        <li class="page-item"><a class="page-link" href="?{% if current_filter == 'all' %}filter=all&{% endif %}page={{ page_obj.previous_page_number }}">Previous</a></li>
+                    {% endif %}
+                    <li class="page-item disabled"><span class="page-link">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span></li>
+                    {% if page_obj.has_next %}
+                        <li class="page-item"><a class="page-link" href="?{% if current_filter == 'all' %}filter=all&{% endif %}page={{ page_obj.next_page_number }}">Next</a></li>
+                    {% endif %}
+                </ul>
+            </nav>
+        {% endif %}
+    {% else %}
+        <p class="text-secondary">No comments to show.</p>
+    {% endif %}
+{% endblock content %}

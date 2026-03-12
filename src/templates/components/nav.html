@@ -14,13 +14,15 @@
            href="{% url 'events:list' %}">Events</a>
 
         {% has_perm 'blog.manage_posts' user as can_manage_posts %}
+        {% has_perm 'blog.manage_comments' user as can_manage_comments %}
         {% has_perm 'events.manage_events' user as can_manage_events %}
-        {% if can_manage_posts or can_manage_events %}
+        {% if can_manage_posts or can_manage_comments or can_manage_events %}
             <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle{% if vn == 'blog:manage_list' or vn == 'blog:post_create' or vn == 'blog:post_edit' or vn == 'blog:post_delete' or vn == 'events:manage_list' or vn == 'events:event_create' or vn == 'events:event_edit' or vn == 'events:event_delete' %} active{% endif %}"
+                <a class="nav-link dropdown-toggle{% if vn == 'blog:manage_list' or vn == 'blog:post_create' or vn == 'blog:post_edit' or vn == 'blog:post_delete' or vn == 'blog:comment_manage_list' or vn == 'blog:comment_approve' or vn == 'events:manage_list' or vn == 'events:event_create' or vn == 'events:event_edit' or vn == 'events:event_delete' %} active{% endif %}"
                    href="#" data-bs-toggle="dropdown" aria-expanded="false">Manage</a>
                 <div class="dropdown-menu">
                     {% if can_manage_posts %}<a class="dropdown-item" href="{% url 'blog:manage_list' %}">Posts</a>{% endif %}
+                    {% if can_manage_comments %}<a class="dropdown-item" href="{% url 'blog:comment_manage_list' %}">Comments</a>{% endif %}
                     {% if can_manage_events %}<a class="dropdown-item" href="{% url 'events:manage_list' %}">Events</a>{% endif %}
                 </div>
             </li>

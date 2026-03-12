@@ -3,8 +3,10 @@ from django.contrib import messages
 from django.contrib.postgres.search import SearchQuery, SearchRank, SearchVector
 from django.db.models import Count
 from django.http import Http404, HttpResponseForbidden, HttpResponseRedirect
-from django.shortcuts import redirect
+from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse, reverse_lazy
+from django.utils.http import url_has_allowed_host_and_scheme
+from django.views import View
 from django.views.generic import CreateView, DeleteView, DetailView, ListView, UpdateView
 from django.views.generic.dates import YearMixin
 
@@ -107,7 +109,7 @@ class BlogDetailView(PublishedDetailMixin, DetailView):
         context.update(_sidebar_context())
 
         if COMMENTS_ENABLED:
-            context['comment_list'] = self.object.comments.all()
+            context['comment_list'] = self.object.comments.filter(approved=True)
             context['comments_enabled'] = True
             if form:
                 context['form'] = form
@@ -138,7 +140,7 @@ class BlogDetailView(PublishedDetailMixin, DetailView):
             comment.post = self.object
             comment.author = request.user
             comment.save()
-            messages.success(self.request, 'Your comment has been posted!')
+            messages.success(self.request, 'Your comment has been submitted and is pending approval.')
             return redirect('blog:detail', slug=self.object.slug)
         else:
             messages.error(self.request, 'There was a problem posting your comment.')
@@ -152,11 +154,19 @@ class CommentDeleteView(PermissionMixin, DeleteView):
     model = Comment
     template_name = 'blog/comment_delete.html'
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['next'] = self.request.GET.get('next', '')
+        return context
+
     def form_valid(self, form):
         messages.success(self.request, 'Your comment has been deleted.')
         return super().form_valid(form)
 
     def get_success_url(self):
+        next_url = self.request.POST.get('next', '')
+        if next_url and url_has_allowed_host_and_scheme(next_url, allowed_hosts=None):
+            return next_url
         return reverse('blog:detail', kwargs={'slug': self.object.post.slug})
 
 
@@ -231,11 +241,51 @@ class PostDeleteView(PermissionMixin, DeleteView):
         return result
 
 
+class CommentManageListView(PermissionMixin, ListView):
+    permission_required = 'blog.manage_comments'
+    model = Comment
+    template_name = 'blog/comment_manage_list.html'
+    context_object_name = 'comments'
+    paginate_by = 20
+
+    def get_queryset(self):
+        qs = Comment.objects.select_related('author', 'post').order_by('-created')
+        if self.request.GET.get('filter') == 'all':
+            return qs
+        return qs.filter(approved=False)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['current_filter'] = self.request.GET.get('filter', 'pending')
+        all_comments = Comment.objects.all()
+        context['pending_count'] = all_comments.filter(approved=False).count()
+        context['all_count'] = all_comments.count()
+        return context
+
+
+class CommentApproveView(PermissionMixin, View):
+    permission_required = 'blog.manage_comments'
+
+    def post(self, request, pk):
+        comment = get_object_or_404(Comment, pk=pk)
+        comment.approved = not comment.approved
+        comment.save(update_fields=['approved'])
+        action = 'approved' if comment.approved else 'unapproved'
+        messages.success(request, f'Comment {action}.')
+        filter_param = request.POST.get('filter', 'pending')
+        url = reverse('blog:comment_manage_list')
+        if filter_param == 'all':
+            url += '?filter=all'
+        return redirect(url)
+
+
 __all__ = [
     'BlogDetailView',
     'BlogListView',
     'BlogListYearView',
+    'CommentApproveView',
     'CommentDeleteView',
+    'CommentManageListView',
     'PostCreateView',
     'PostDeleteView',
     'PostManageListView',

@@ -21,5 +21,6 @@ rules.add_perm('blog.manage_posts', is_editor)
 rules.add_perm('blog.change_post', is_author_or_editor)
 rules.add_perm('blog.delete_post', is_editor)
 
+rules.add_perm('blog.manage_comments', is_moderator)
 rules.add_perm('blog.change_comment', is_author)
 rules.add_perm('blog.delete_comment', is_author | is_moderator)

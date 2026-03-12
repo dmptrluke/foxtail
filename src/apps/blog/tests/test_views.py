@@ -73,7 +73,7 @@ class TestBlogDetailView:
         assert response.status_code == 302
         assert Comment.objects.filter(post=post, author=user, text='Great post!').exists()
         messages = list(get_messages(response.wsgi_request))
-        assert any('posted' in str(m) for m in messages)
+        assert any('pending' in str(m) for m in messages)
 
     # unauthenticated user gets 403 on comment POST
     def test_comment_submission_unauthenticated(self, client, post: Post):
@@ -158,6 +158,141 @@ class TestCommentDeleteView:
         url = reverse('blog:comment_delete', kwargs={'pk': comment.pk})
         response = client.post(url)
         assert response['Location'] == reverse('blog:detail', kwargs={'slug': post.slug})
+
+    # delete with ?next= redirects to specified URL
+    def test_redirects_with_next(self, client, user, post: Post):
+        comment = Comment.objects.create(post=post, author=user, text='bye')
+        client.force_login(user)
+        manage_url = reverse('blog:comment_manage_list')
+        url = reverse('blog:comment_delete', kwargs={'pk': comment.pk}) + f'?next={manage_url}'
+        response = client.post(url, {'next': manage_url})
+        assert response['Location'] == manage_url
+
+
+class TestCommentManageListView:
+    url = reverse('blog:comment_manage_list')
+
+    # anonymous user gets redirected
+    def test_requires_login(self, client):
+        response = client.get(self.url)
+        assert response.status_code == 403
+
+    # regular user gets 403
+    def test_regular_user_forbidden(self, client, user):
+        client.force_login(user)
+        response = client.get(self.url)
+        assert response.status_code == 403
+
+    # moderator can access
+    def test_moderator_can_access(self, client, moderator, post: Post):
+        Comment.objects.create(post=post, author=moderator, text='pending')
+        client.force_login(moderator)
+        response = client.get(self.url)
+        assert response.status_code == 200
+
+    # editor can access
+    def test_editor_can_access(self, client, editor):
+        client.force_login(editor)
+        response = client.get(self.url)
+        assert response.status_code == 200
+
+    # staff can access
+    def test_staff_can_access(self, client, staff_user):
+        client.force_login(staff_user)
+        response = client.get(self.url)
+        assert response.status_code == 200
+
+    # default tab shows only unapproved comments
+    def test_pending_filter(self, client, moderator, user, post: Post):
+        pending = Comment.objects.create(post=post, author=user, text='pending')
+        Comment.objects.create(post=post, author=user, text='approved', approved=True)
+        client.force_login(moderator)
+        response = client.get(self.url)
+        assert list(response.context['comments']) == [pending]
+
+    # all tab shows all comments
+    def test_all_filter(self, client, moderator, user, post: Post):
+        Comment.objects.create(post=post, author=user, text='pending')
+        Comment.objects.create(post=post, author=user, text='approved', approved=True)
+        client.force_login(moderator)
+        response = client.get(self.url, {'filter': 'all'})
+        assert len(response.context['comments']) == 2
+
+    # context includes correct counts
+    def test_tab_counts(self, client, moderator, user, post: Post):
+        Comment.objects.create(post=post, author=user, text='pending')
+        Comment.objects.create(post=post, author=user, text='approved', approved=True)
+        client.force_login(moderator)
+        response = client.get(self.url)
+        assert response.context['pending_count'] == 1
+        assert response.context['all_count'] == 2
+
+
+class TestCommentApproveView:
+    # moderator can approve an unapproved comment
+    def test_approve_comment(self, client, moderator, user, post: Post):
+        comment = Comment.objects.create(post=post, author=user, text='pending')
+        client.force_login(moderator)
+        url = reverse('blog:comment_approve', kwargs={'pk': comment.pk})
+        response = client.post(url)
+        assert response.status_code == 302
+        comment.refresh_from_db()
+        assert comment.approved is True
+        msgs = list(get_messages(response.wsgi_request))
+        assert any('approved' in str(m) for m in msgs)
+
+    # moderator can unapprove an approved comment
+    def test_unapprove_comment(self, client, moderator, user, post: Post):
+        comment = Comment.objects.create(post=post, author=user, text='approved', approved=True)
+        client.force_login(moderator)
+        url = reverse('blog:comment_approve', kwargs={'pk': comment.pk})
+        response = client.post(url)
+        assert response.status_code == 302
+        comment.refresh_from_db()
+        assert comment.approved is False
+
+    # regular user gets 403
+    def test_regular_user_forbidden(self, client, user, post: Post):
+        comment = Comment.objects.create(post=post, author=user, text='test')
+        client.force_login(user)
+        url = reverse('blog:comment_approve', kwargs={'pk': comment.pk})
+        response = client.post(url)
+        assert response.status_code == 403
+
+    # preserves filter=all tab on redirect
+    def test_preserves_filter(self, client, moderator, user, post: Post):
+        comment = Comment.objects.create(post=post, author=user, text='test')
+        client.force_login(moderator)
+        url = reverse('blog:comment_approve', kwargs={'pk': comment.pk})
+        response = client.post(url, {'filter': 'all'})
+        assert '?filter=all' in response['Location']
+
+    # GET is not allowed
+    def test_get_not_allowed(self, client, moderator, user, post: Post):
+        comment = Comment.objects.create(post=post, author=user, text='test')
+        client.force_login(moderator)
+        url = reverse('blog:comment_approve', kwargs={'pk': comment.pk})
+        response = client.get(url)
+        assert response.status_code == 405
+
+
+class TestPublicCommentVisibility:
+    # only approved comments appear on the post detail page
+    def test_only_approved_visible(self, client, user, post: Post):
+        Comment.objects.create(post=post, author=user, text='pending')
+        approved = Comment.objects.create(post=post, author=user, text='visible', approved=True)
+        url = reverse('blog:detail', kwargs={'slug': post.slug})
+        response = client.get(url)
+        assert list(response.context['comment_list']) == [approved]
+
+    # submitting a comment shows pending approval message
+    def test_submission_pending_message(self, client, user, post: Post):
+        client.force_login(user)
+        url = reverse('blog:detail', kwargs={'slug': post.slug})
+        response = client.post(url, {'text': 'new comment'})
+        assert response.status_code == 302
+        msgs = list(get_messages(response.wsgi_request))
+        assert any('pending' in str(m) for m in msgs)
 
 
 class TestPostManageListView:
