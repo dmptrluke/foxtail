@@ -12,7 +12,7 @@ from django.db import transaction
 
 from imagefield.fields import IMAGEFIELDS
 
-from apps.core.jobs import process_imagefields
+from apps.core.tasks import process_imagefields
 
 # Map each model to its image fields that have rendition formats defined.
 # Built once at import time - IMAGEFIELDS is fully populated after all models are loaded.

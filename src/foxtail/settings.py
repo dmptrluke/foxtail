@@ -73,7 +73,6 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.github',
     'allauth.socialaccount.providers.openid_connect',
     'anymail',
-    'mail_templated_simple',
     'taggit',
     'widget_tweaks',
     'allauth.idp',

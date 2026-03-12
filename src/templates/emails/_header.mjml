@@ -1,0 +1,14 @@
+<mj-section background-color="#2c3840">
+  <mj-column>
+    <mj-table>
+      <tr>
+        <td style="width: 40px;">
+          <img width="30px" color="white" src="https://cdn.furry.nz/static/paw.png" />
+        </td>
+        <td font-color="#626262" style="font-size:20px; color: #fff;">
+          <span>furry</span>.nz
+        </td>
+      </tr>
+    </mj-table>
+  </mj-column>
+</mj-section>

@@ -1,0 +1,36 @@
+<mjml>
+  <mj-body>
+    {% include 'emails/_header.mjml' %}
+    <mj-section>
+      <mj-column>
+        <mj-text font-size="16px">
+          Contact form submission
+        </mj-text>
+        <mj-text>
+          A user{% if authentication %} (logged in as {{ authentication }}){% endif %} has submitted a
+          query using the contact form on the website. Details are below.
+        </mj-text>
+        <mj-divider border-width="1px" border-style="dashed" border-color="lightgrey" />
+        <mj-text>
+          <strong>Name</strong>
+        </mj-text>
+        <mj-text>
+          {{ name }}
+        </mj-text>
+        <mj-text>
+          <strong>Email</strong>
+        </mj-text>
+        <mj-text>
+          {{ email }}
+        </mj-text>
+        <mj-text>
+          <strong>Message</strong>
+        </mj-text>
+        <mj-text>
+          {{ message }}
+        </mj-text>
+      </mj-column>
+    </mj-section>
+    {% include 'emails/_footer.mjml' %}
+  </mj-body>
+</mjml>

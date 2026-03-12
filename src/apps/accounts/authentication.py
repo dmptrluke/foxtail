@@ -2,10 +2,18 @@ from datetime import datetime
 
 from django.core.exceptions import ValidationError
 from django.core.validators import validate_email
+from django.template.loader import render_to_string
 
 from allauth.account.adapter import DefaultAccountAdapter
 from allauth.account.utils import user_email, user_field, user_username
 from allauth.socialaccount.adapter import DefaultSocialAccountAdapter
+
+from apps.email.engine import render_email
+
+MJML_EMAIL_MAP = {
+    'account/email/email_confirmation': 'emails/account/email_confirmation',
+    'account/email/password_reset_key': 'emails/account/password_reset_key',
+}
 
 
 def valid_email_or_none(email):
@@ -27,6 +35,25 @@ class AccountAdapter(DefaultAccountAdapter):
         email = user_email(user)
         username = user_username(user)
         user_username(user, username or self.generate_unique_username([full_name, email, username, 'user']))
+
+    def render_mail(self, template_prefix, email, context, headers=None):
+        mjml_template = MJML_EMAIL_MAP.get(template_prefix)
+        if mjml_template is None:
+            return super().render_mail(template_prefix, email, context, headers)
+
+        to = [email] if isinstance(email, str) else email
+        subject = render_to_string(f'{template_prefix}_subject.txt', context)
+        subject = ' '.join(subject.splitlines()).strip()
+        subject = self.format_email_subject(subject)
+
+        return render_email(
+            subject=subject,
+            to=to,
+            template=mjml_template,
+            context=context,
+            from_email=self.get_from_email(),
+            headers=headers,
+        )
 
 
 class SocialAccountAdapter(DefaultSocialAccountAdapter):

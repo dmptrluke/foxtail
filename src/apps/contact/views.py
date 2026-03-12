@@ -7,7 +7,8 @@ from django.urls import reverse_lazy
 from django.views.generic import FormView
 
 from csp_helpers.mixins import CSPViewMixin
-from mail_templated_simple import send_mail
+
+from apps.email.engine import send_email
 
 from .forms import ContactForm
 
@@ -36,8 +37,9 @@ class ContactView(CSPViewMixin, FormView):
             )
             return self._fake_success()
 
+        name = form.cleaned_data['name']
         context = {
-            'name': form.cleaned_data['name'],
+            'name': name,
             'authentication': False,
             'email': form.cleaned_data['email'],
             'message': form.cleaned_data['message'],
@@ -46,7 +48,12 @@ class ContactView(CSPViewMixin, FormView):
         if self.request.user.is_authenticated:
             context['authentication'] = self.request.user.username
 
-        send_mail('contact/emails/submission.tpl', context, None, settings.CONTACT_EMAILS)
+        send_email(
+            subject=f'Contact form submission - {name}',
+            to=settings.CONTACT_EMAILS,
+            template='emails/contact/submission',
+            context=context,
+        )
 
         messages.success(self.request, 'Your message has been sent.')
         return super().form_valid(form)

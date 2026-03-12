@@ -411,12 +411,6 @@ vips = [
 ]
 
 [[package]]
-name = "django-mail-templated-simple"
-version = "3.2"
-source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/a3/7e/90424eab65d6674bf978fbeb8bdd28bec4bd4783314f945a5c55b64aaaf4/django-mail-templated-simple-3.2.tar.gz", hash = "sha256:41852fb1b55e2bb276ae9a14d5e7b65888799665a2db4c8ce8890aa31ab46338", size = 6611, upload-time = "2018-03-23T15:53:51.58Z" }
-
-[[package]]
 name = "django-markdownfield"
 version = "0.13.2"
 source = { registry = "https://pypi.org/simple" }
@@ -595,7 +589,6 @@ dependencies = [
     { name = "django-csp-helpers" },
     { name = "django-environ" },
     { name = "django-imagefield", extra = ["vips"] },
-    { name = "django-mail-templated-simple" },
     { name = "django-markdownfield" },
     { name = "django-published" },
     { name = "django-recaptcha" },
@@ -609,6 +602,7 @@ dependencies = [
     { name = "gunicorn" },
     { name = "huey" },
     { name = "markdown" },
+    { name = "mjml-python" },
     { name = "psycopg", extra = ["binary"] },
     { name = "pyjwt" },
     { name = "pymdown-extensions" },
@@ -656,7 +650,6 @@ requires-dist = [
     { name = "django-csp-helpers", specifier = "==0.9.0" },
     { name = "django-environ", specifier = "==0.13.0" },
     { name = "django-imagefield", extras = ["vips"], specifier = "==0.23.0a3" },
-    { name = "django-mail-templated-simple", specifier = "==3.2" },
     { name = "django-markdownfield", specifier = "==0.13.2" },
     { name = "django-published", specifier = "==0.10.0" },
     { name = "django-recaptcha", specifier = "==4.1.0" },
@@ -670,6 +663,7 @@ requires-dist = [
     { name = "gunicorn", specifier = "==25.1.0" },
     { name = "huey" },
     { name = "markdown", specifier = "==3.10.2" },
+    { name = "mjml-python", specifier = "==1.3.5" },
     { name = "psycopg", extras = ["binary"], specifier = "==3.3.3" },
     { name = "pyjwt", specifier = "==2.11.0" },
     { name = "pymdown-extensions", specifier = "==10.21" },
@@ -777,6 +771,20 @@ source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/2b/f4/69fa6ed85ae003c2378ffa8f6d2e3234662abd02c10d216c0ba96081a238/markdown-3.10.2.tar.gz", hash = "sha256:994d51325d25ad8aa7ce4ebaec003febcce822c3f8c911e3b17c52f7f589f950", size = 368805, upload-time = "2026-02-09T14:57:26.942Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/de/1f/77fa3081e4f66ca3576c896ae5d31c3002ac6607f9747d2e3aa49227e464/markdown-3.10.2-py3-none-any.whl", hash = "sha256:e91464b71ae3ee7afd3017d9f358ef0baf158fd9a298db92f1d4761133824c36", size = 108180, upload-time = "2026-02-09T14:57:25.787Z" },
+]
+
+[[package]]
+name = "mjml-python"
+version = "1.3.5"
+source = { registry = "https://pypi.org/simple" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/c7/98/7fe276c1843f04676e79d60b7fb034d403a7a4b55d3e2cc9aaa1cf1407c7/mjml_python-1.3.5-cp37-abi3-macosx_10_12_x86_64.whl", hash = "sha256:ab7ae1196818a8961acc60bfeaf8e0dae59d1ac3ced0fade37ce7f1c8a34342a", size = 562070, upload-time = "2025-03-19T10:10:24.135Z" },
+    { url = "https://files.pythonhosted.org/packages/08/3c/c157812c259e5ce3d967a983077f6996c4c23ab41d27f91be6698a4d1afb/mjml_python-1.3.5-cp37-abi3-macosx_11_0_arm64.whl", hash = "sha256:9c5852b39d87e762c6c5e1d34f14953f16c943e10b1e632c1b482b5cb978823a", size = 541255, upload-time = "2025-03-18T12:16:43.432Z" },
+    { url = "https://files.pythonhosted.org/packages/34/bc/75bdf4c90e5a04417287ee586132bb811cbe6a9da838aa494b4ceae54305/mjml_python-1.3.5-cp37-abi3-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:995ab02019885440325919b0f70ea85cdbf5fe09d768d2ad8dccf8ddfa6f3bb2", size = 593757, upload-time = "2025-03-18T12:16:45.108Z" },
+    { url = "https://files.pythonhosted.org/packages/65/f7/89f90e016a312395e2e847e4ae538284d8068bcd5a484b421aa632f49cfd/mjml_python-1.3.5-cp37-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:4f06c4122263082cb92c5f725e2a60efe93a56d9ae85cabb7701ed022c7363c6", size = 611535, upload-time = "2025-03-18T12:16:46.519Z" },
+    { url = "https://files.pythonhosted.org/packages/1f/d0/6f7f0d4039e823278692b5d8be1e8067f1f613bde8ea293dc86e14361ff0/mjml_python-1.3.5-cp37-abi3-musllinux_1_2_aarch64.whl", hash = "sha256:193298d33211d617deebef9d2c869eaefa5866998bd777dd835cb7305aee41aa", size = 771030, upload-time = "2025-03-18T12:16:47.748Z" },
+    { url = "https://files.pythonhosted.org/packages/f1/24/bbee29182103421af2b003133e70617623c8c99d79f0a86fea1f80f65644/mjml_python-1.3.5-cp37-abi3-musllinux_1_2_x86_64.whl", hash = "sha256:60c46ca5ed5ae218805ff88f048428dc3a6568748a6abb25a028428ee3e27fc9", size = 690332, upload-time = "2025-03-18T12:16:48.919Z" },
+    { url = "https://files.pythonhosted.org/packages/e6/00/247c090dfb5b85e4cfdeaa55cc5b16f3782c7e2135f22495accb5ce1be29/mjml_python-1.3.5-cp37-abi3-win_amd64.whl", hash = "sha256:0bc1098bf5939a6b729b433e07c479ca8c4c2ad37f2dc4071a49b2e5e6b248ea", size = 430975, upload-time = "2025-03-18T12:16:50.24Z" },
 ]
 
 [[package]]

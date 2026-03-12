@@ -1,0 +1,14 @@
+<mj-section>
+  <mj-column>
+    <mj-text>
+      This is an automatically generated email, please do not reply.
+    </mj-text>
+  </mj-column>
+</mj-section>
+<mj-section background-color="#F2F2F2">
+  <mj-column>
+    <mj-text align="center">
+      Sincerely, {{ current_site.name }}!
+    </mj-text>
+  </mj-column>
+</mj-section>
