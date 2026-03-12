@@ -1,13 +1,11 @@
 from ..model_name import get_model_name
 
 
-class DummyModel:
+class _DummyModel:
     pass
 
 
-dummy_instance = DummyModel()
-
-
-def test_model_name():
-    assert get_model_name(dummy_instance) == 'DummyModel'
-    assert get_model_name(dummy_instance) != 'IncorrectName'
+class TestGetModelName:
+    # returns the class name of the given object
+    def test_returns_class_name(self):
+        assert get_model_name(_DummyModel()) == '_DummyModel'
