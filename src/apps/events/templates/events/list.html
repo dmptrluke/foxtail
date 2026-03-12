@@ -4,6 +4,8 @@
 
 {% block title %}{% if year %}Events in {{ year }}{% else %}Furry Events{% endif %}{% endblock %}
 
+{% block extra_head %}<meta name="description" content="{% if year %}Furry conventions and community events from {{ year }}{% else %}Furry conventions, meets, and community gatherings across New Zealand and beyond{% endif %}">{% endblock %}
+
 {% block hero %}
     <c-hero>
         {% if year %}

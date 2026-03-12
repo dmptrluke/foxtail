@@ -102,14 +102,14 @@ class BlogListYearView(PublishedListMixin, YearMixin, ListView):
 class BlogDetailView(PublishedDetailMixin, DetailView):
     model = Post
     template_name = 'blog/detail.html'
-    queryset = Post.objects.select_related('author').prefetch_related('comments__author', 'tags').all()
+    queryset = Post.objects.select_related('author').prefetch_related('tags').all()
 
     def get_context_data(self, form=None, **kwargs):
         context = super().get_context_data(**kwargs)
         context.update(_sidebar_context())
 
         if COMMENTS_ENABLED:
-            context['comment_list'] = self.object.comments.filter(approved=True)
+            context['comment_list'] = self.object.comments.select_related('author').filter(approved=True)
             context['comments_enabled'] = True
             if form:
                 context['form'] = form

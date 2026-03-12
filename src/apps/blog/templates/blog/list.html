@@ -4,6 +4,8 @@
 
 {% block title %}{% if year %}News from {{ year }}{% else %}News{% endif %}{% endblock %}
 
+{% block extra_head %}<meta name="description" content="{% if request.GET.q %}Search results for {{ request.GET.q }} on furry.nz{% elif tag %}News posts tagged {{ tag.name }} on furry.nz{% elif year %}Furry community news from {{ year }}{% else %}Community news and updates for New Zealand furries{% endif %}">{% endblock %}
+
 {% block hero %}
     <c-hero>
         {% if year %}

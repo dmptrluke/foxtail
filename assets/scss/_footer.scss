@@ -43,7 +43,8 @@
 
 	a {
 		color: color.adjust($body-color, $lightness: 20%);
-		text-decoration: none;
+		text-decoration: underline;
+		text-underline-offset: 0.15em;
 
 		&:hover {
 			color: $primary;

@@ -2,6 +2,11 @@
 	font-size: 0.95rem;
 	line-height: 1.6;
 
+	a {
+		text-decoration: underline;
+		text-underline-offset: 0.15em;
+	}
+
 	blockquote {
 		margin-bottom: $spacer;
 		@include font-size($blockquote-font-size);

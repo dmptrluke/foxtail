@@ -35,6 +35,10 @@
         {% block title_full %}{% block title %}{% endblock title %} | {{ request.site.name }}{% endblock title_full %}
     </title>
 
+    <link rel="preconnect" href="https://cdn.furry.nz" crossorigin>
+    <link rel="preload" href="{% vite_asset_url 'fonts/inter-latin-wght-normal.woff2' %}" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="{% vite_asset_url '../node_modules/@fontsource-variable/plus-jakarta-sans/files/plus-jakarta-sans-latin-wght-normal.woff2' %}" as="font" type="font/woff2" crossorigin>
+
     {% vite_hmr_client nonce=request.csp_nonce %}
     {% vite_asset 'js/main.js' nonce=request.csp_nonce %}
 
