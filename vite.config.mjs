@@ -1,5 +1,6 @@
 import { defineConfig } from 'vite';
 import { resolve } from 'path';
+import { NodePackageImporter } from 'sass';
 
 export default defineConfig(({ mode }) => ({
     base: '/static/',
@@ -34,6 +35,7 @@ export default defineConfig(({ mode }) => ({
             scss: {
                 quietDeps: true,
                 silenceDeprecations: ['import', 'global-builtin'],
+                importers: [new NodePackageImporter()],
                 loadPaths: [resolve(__dirname, 'node_modules')],
             },
         },

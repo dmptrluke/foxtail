@@ -7,7 +7,6 @@ export function initMaps() {
         const lng = parseFloat(el.dataset.lng);
         const zoom = parseFloat(el.dataset.zoom) || 15;
         const style = el.dataset.style;
-
         if (!style || isNaN(lat) || isNaN(lng)) return;
 
         try {
@@ -16,7 +15,8 @@ export function initMaps() {
                 style: style,
                 center: [lng, lat],
                 zoom: zoom,
-                attributionControl: true,
+                attributionControl: { compact: true },
+                scrollZoom: false,
             });
 
             new maplibregl.Marker({ color: '#e74c3c' })

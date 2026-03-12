@@ -11,8 +11,8 @@
         "build-production": "vite build"
     },
     "dependencies": {
+        "@fontsource-utils/scss": "^0.2.2",
         "@fontsource-variable/plus-jakarta-sans": "^5.2.8",
-        "@fontsource-variable/roboto": "^5.2.10",
         "@popperjs/core": "^2.11.8",
         "bootstrap": "^5.3.8",
         "colcade": "^0.2.0",

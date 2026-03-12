@@ -1,5 +1,5 @@
-@use '@fontsource-variable/roboto/scss/mixins' as roboto;
-@use '@fontsource-variable/plus-jakarta-sans/scss/mixins' as jakarta;
+@use 'pkg:@fontsource-utils/scss' as fontsource;
+@use 'pkg:@fontsource-variable/plus-jakarta-sans/scss' as jakarta;
 
 // Inter Variable - self-hosted with full OpenType features (cv05, sups, subs, etc.)
 // Subsetted from Inter v4.1 via pyftsubset with --layout-features=*
@@ -40,10 +40,6 @@
 	unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
 }
 
-// Roboto & Jakarta Sans - fontsource (no OpenType features needed)
+// Jakarta Sans - fontsource (no OpenType features needed)
 
-$roboto-dir: '@fontsource-variable/roboto/files';
-$jakarta-dir: '@fontsource-variable/plus-jakarta-sans/files';
-
-@include roboto.faces($subsets: (latin, latin-ext), $directory: $roboto-dir);
-@include jakarta.faces($subsets: (latin, latin-ext), $directory: $jakarta-dir);
+@include fontsource.faces($metadata: jakarta.$metadata, $subsets: (latin, latin-ext));
