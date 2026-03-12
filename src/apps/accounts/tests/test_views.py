@@ -54,6 +54,11 @@ def verification(user, verifier):
     return Verification.objects.create(user=user, verified_by=verifier)
 
 
+@pytest.fixture
+def token():
+    return _generate_token()
+
+
 def _store_token(token, user_id):
     cache.set(_cache_key_for_token(token), user_id, VERIFICATION_TOKEN_TTL)
     cache.set(_cache_key_for_user(user_id), token, VERIFICATION_TOKEN_TTL)
@@ -374,11 +379,11 @@ class TestVerificationView:
         assert response.context['verification'] == verification
 
     # active token in cache is shown with QR code and TTL
-    def test_shows_active_token(self, client, user):
+    def test_shows_active_token(self, client, user, token):
         client.force_login(user)
-        _store_token('ABCD-1234', user.pk)
+        _store_token(token, user.pk)
         response = client.get(reverse('account_verification'))
-        assert response.context['token'] == 'ABCD-1234'
+        assert response.context['token'] == token
         assert 'token_ttl' in response.context
         assert response.context['qr_data_uri'].startswith('data:image/svg+xml;base64,')
 
@@ -463,20 +468,20 @@ class TestConfirmVerificationView:
         assert response.status_code == 403
 
     # valid token shows confirmation page with target user
-    def test_valid_token_shows_confirmation(self, client, user, verifier):
+    def test_valid_token_shows_confirmation(self, client, user, verifier, token):
         client.force_login(verifier)
-        _store_token('ABCD-1234', user.pk)
-        response = client.post(reverse('account_verification_confirm'), {'token': 'ABCD-1234'})
+        _store_token(token, user.pk)
+        response = client.post(reverse('account_verification_confirm'), {'token': token})
         assert response.status_code == 200
         assert response.context['target_user'] == user
-        assert response.context['token'] == 'ABCD-1234'
+        assert response.context['token'] == token
         assert response.context['already_verified'] is False
 
     # already-verified user shows already_verified=True on confirmation
-    def test_already_verified_flag(self, client, user, verifier, verification):
+    def test_already_verified_flag(self, client, user, verifier, verification, token):
         client.force_login(verifier)
-        _store_token('ABCD-1234', user.pk)
-        response = client.post(reverse('account_verification_confirm'), {'token': 'ABCD-1234'})
+        _store_token(token, user.pk)
+        response = client.post(reverse('account_verification_confirm'), {'token': token})
         assert response.status_code == 200
         assert response.context['already_verified'] is True
 
@@ -505,28 +510,28 @@ class TestVerifyUserView:
         assert response.status_code == 403
 
     # valid token creates Verification record with correct verified_by
-    def test_creates_verification_record(self, client, user, verifier):
+    def test_creates_verification_record(self, client, user, verifier, token):
         client.force_login(verifier)
-        _store_token('ABCD-1234', user.pk)
-        response = client.post(reverse('account_verification_verify'), {'token': 'ABCD-1234'})
+        _store_token(token, user.pk)
+        response = client.post(reverse('account_verification_verify'), {'token': token})
         assert response.status_code == 302
         v = Verification.objects.get(user=user)
         assert v.verified_by == verifier
 
     # both cache keys are cleaned up after verification
-    def test_clears_cache(self, client, user, verifier):
+    def test_clears_cache(self, client, user, verifier, token):
         client.force_login(verifier)
-        _store_token('ABCD-1234', user.pk)
-        response = client.post(reverse('account_verification_verify'), {'token': 'ABCD-1234'})
+        _store_token(token, user.pk)
+        response = client.post(reverse('account_verification_verify'), {'token': token})
         assert response.status_code == 302
-        assert cache.get(_cache_key_for_token('ABCD-1234')) is None
+        assert cache.get(_cache_key_for_token(token)) is None
         assert cache.get(_cache_key_for_user(user.pk)) is None
 
     # verifying already-verified user shows info message, no duplicate record
-    def test_already_verified_shows_info(self, client, user, verifier, verification):
+    def test_already_verified_shows_info(self, client, user, verifier, verification, token):
         client.force_login(verifier)
-        _store_token('ABCD-1234', user.pk)
-        response = client.post(reverse('account_verification_verify'), {'token': 'ABCD-1234'}, follow=True)
+        _store_token(token, user.pk)
+        response = client.post(reverse('account_verification_verify'), {'token': token}, follow=True)
         assert Verification.objects.filter(user=user).count() == 1
         msgs = [str(m) for m in get_messages(response.wsgi_request)]
         assert any('already verified' in m for m in msgs)
@@ -539,10 +544,10 @@ class TestVerifyUserView:
         assert any('Invalid or expired' in m for m in msgs)
 
     # successful verification shows success message
-    def test_success_message(self, client, user, verifier):
+    def test_success_message(self, client, user, verifier, token):
         client.force_login(verifier)
-        _store_token('ABCD-1234', user.pk)
-        response = client.post(reverse('account_verification_verify'), {'token': 'ABCD-1234'}, follow=True)
+        _store_token(token, user.pk)
+        response = client.post(reverse('account_verification_verify'), {'token': token}, follow=True)
         msgs = [str(m) for m in get_messages(response.wsgi_request)]
         assert any('has been verified' in m for m in msgs)
 
@@ -557,27 +562,27 @@ class TestUnverifyUserView:
         assert response.status_code == 403
 
     # valid token deletes the Verification record
-    def test_deletes_verification_record(self, client, user, verifier, verification):
+    def test_deletes_verification_record(self, client, user, verifier, verification, token):
         client.force_login(verifier)
-        _store_token('ABCD-1234', user.pk)
-        response = client.post(reverse('account_verification_unverify'), {'token': 'ABCD-1234'})
+        _store_token(token, user.pk)
+        response = client.post(reverse('account_verification_unverify'), {'token': token})
         assert response.status_code == 302
         assert not Verification.objects.filter(user=user).exists()
 
     # both cache keys are cleaned up after unverification
-    def test_clears_cache(self, client, user, verifier, verification):
+    def test_clears_cache(self, client, user, verifier, verification, token):
         client.force_login(verifier)
-        _store_token('ABCD-1234', user.pk)
-        response = client.post(reverse('account_verification_unverify'), {'token': 'ABCD-1234'})
+        _store_token(token, user.pk)
+        response = client.post(reverse('account_verification_unverify'), {'token': token})
         assert response.status_code == 302
-        assert cache.get(_cache_key_for_token('ABCD-1234')) is None
+        assert cache.get(_cache_key_for_token(token)) is None
         assert cache.get(_cache_key_for_user(user.pk)) is None
 
     # unverifying a non-verified user shows info message
-    def test_not_verified_shows_info(self, client, user, verifier):
+    def test_not_verified_shows_info(self, client, user, verifier, token):
         client.force_login(verifier)
-        _store_token('ABCD-1234', user.pk)
-        response = client.post(reverse('account_verification_unverify'), {'token': 'ABCD-1234'}, follow=True)
+        _store_token(token, user.pk)
+        response = client.post(reverse('account_verification_unverify'), {'token': token}, follow=True)
         msgs = [str(m) for m in get_messages(response.wsgi_request)]
         assert any('not currently verified' in m for m in msgs)
 
@@ -589,9 +594,9 @@ class TestUnverifyUserView:
         assert any('Invalid or expired' in m for m in msgs)
 
     # successful unverification shows success message
-    def test_success_message(self, client, user, verifier, verification):
+    def test_success_message(self, client, user, verifier, verification, token):
         client.force_login(verifier)
-        _store_token('ABCD-1234', user.pk)
-        response = client.post(reverse('account_verification_unverify'), {'token': 'ABCD-1234'}, follow=True)
+        _store_token(token, user.pk)
+        response = client.post(reverse('account_verification_unverify'), {'token': token}, follow=True)
         msgs = [str(m) for m in get_messages(response.wsgi_request)]
         assert any('has been removed' in m for m in msgs)
