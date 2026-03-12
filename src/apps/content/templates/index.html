@@ -40,7 +40,7 @@
         {% for post in post_list %}
                 {% if forloop.first %}
                     <article class="news-feature">
-                        <a href="{{ post.get_absolute_url }}">
+                        <div class="news-feature-img">
                             {% if post.image %}
                                 <img src="{{ post.image.card }}"
                                      srcset="{{ post.image.card }} 1x, {{ post.image.card_2x }} 2x"
@@ -49,18 +49,17 @@
                             {% else %}
                                 <div class="card-img-placeholder"></div>
                             {% endif %}
-                        </a>
+                        </div>
                         <header>
                             <time datetime="{{ post.created|date:'Y-m-d' }}">{{ post.created|date:"M j, Y" }}</time>
-                            <h3><a href="{{ post.get_absolute_url }}">{{ post.title }}</a></h3>
-                            <p>{{ post.text_rendered|safe|striptags|truncatechars:200 }}</p>
-                            <a href="{{ post.get_absolute_url }}" class="btn btn-primary">Read more</a>
+                            <h3><a href="{{ post.get_absolute_url }}" class="stretched-link">{{ post.title }}</a></h3>
+                            <p>{{ post.text_rendered|safe|striptags|truncatechars:400 }}</p>
                         </header>
                     </article>
                 {% else %}
                     {% if forloop.counter == 2 %}<div class="news-grid">{% endif %}
                         <article class="news-compact">
-                            <a href="{{ post.get_absolute_url }}">
+                            <div class="news-compact-img">
                                 {% if post.image %}
                                     <img src="{{ post.image.card }}"
                                          srcset="{{ post.image.card }} 1x, {{ post.image.card_2x }} 2x"
@@ -69,10 +68,10 @@
                                 {% else %}
                                     <div class="card-img-placeholder"></div>
                                 {% endif %}
-                            </a>
+                            </div>
                             <header>
                                 <time datetime="{{ post.created|date:'Y-m-d' }}">{{ post.created|date:"M j, Y" }}</time>
-                                <h3><a href="{{ post.get_absolute_url }}">{{ post.title }}</a></h3>
+                                <h3><a href="{{ post.get_absolute_url }}" class="stretched-link">{{ post.title }}</a></h3>
                                 <p>{{ post.text_rendered|safe|striptags|truncatechars:100 }}</p>
                             </header>
                         </article>

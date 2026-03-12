@@ -60,6 +60,7 @@
 
 // News: featured post
 .news-feature {
+	position: relative;
 	display: grid;
 	grid-template-columns: 1fr;
 	gap: 1.5rem;
@@ -71,8 +72,7 @@
 		grid-template-columns: 1.2fr 1fr;
 	}
 
-	> a {
-		display: block;
+	.news-feature-img {
 		overflow: hidden;
 		border-radius: $card-border-radius;
 
@@ -80,9 +80,13 @@
 			width: 100%;
 			aspect-ratio: 2 / 1;
 			object-fit: cover;
-			@include img-zoom;
+			transition: transform 0.3s ease;
 			border-radius: $card-border-radius;
 		}
+	}
+
+	&:hover .news-feature-img img {
+		transform: scale(1.03);
 	}
 
 	> header {
@@ -110,19 +114,19 @@
 			a {
 				color: $body-color;
 				text-decoration: none;
-
-				&:hover {
-					color: $primary;
-				}
 			}
 		}
 
 		p {
 			color: color.adjust($body-color, $lightness: 15%);
 			line-height: 1.6;
-			margin-bottom: 1.25rem;
-			@include line-clamp(4);
+			margin-bottom: 0;
+			@include line-clamp(6);
 		}
+	}
+
+	&:hover h3 a {
+		color: $primary;
 	}
 }
 
@@ -138,6 +142,7 @@
 }
 
 .news-compact {
+	position: relative;
 	display: flex;
 	flex-direction: column;
 	background: $white;
@@ -151,16 +156,19 @@
 		transform: translateY(-2px);
 	}
 
-	> a {
-		display: block;
+	.news-compact-img {
 		overflow: hidden;
 
 		img, .card-img-placeholder {
 			width: 100%;
 			aspect-ratio: 1.91 / 1;
 			object-fit: cover;
-			@include img-zoom;
+			transition: transform 0.3s ease;
 		}
+	}
+
+	&:hover .news-compact-img img {
+		transform: scale(1.03);
 	}
 
 	> header {
@@ -186,10 +194,6 @@
 			a {
 				color: $body-color;
 				text-decoration: none;
-
-				&:hover {
-					color: $primary;
-				}
 			}
 		}
 
@@ -199,6 +203,10 @@
 			@include line-clamp(2);
 			margin-bottom: 0;
 		}
+	}
+
+	&:hover h3 a {
+		color: $primary;
 	}
 }
 
