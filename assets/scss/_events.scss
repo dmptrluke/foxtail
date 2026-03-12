@@ -176,10 +176,14 @@
 // Event detail map
 
 .event-map-container {
-	aspect-ratio: 16 / 9;
+	aspect-ratio: 4 / 3;
 	border-radius: $card-border-radius;
 	overflow: hidden;
 	margin-top: 1.5rem;
+
+	@include media-breakpoint-up(md) {
+		aspect-ratio: 16 / 9;
+	}
 }
 
 // Event detail page
