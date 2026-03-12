@@ -36,9 +36,9 @@ docker compose run --rm foxtail django-admin migrate
 
 ### Running the tests
 
-This project uses `pytest`, `pytest-django`, and `selenium` for automated code testing.
+This project uses `pytest` and `pytest-django` for automated code testing.
 
-To run the full test suite (including Selenium browser tests) in Docker:
+To run the test suite in Docker:
 
 ```
 docker compose run --rm test

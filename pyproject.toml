@@ -56,7 +56,6 @@ test = [
     "pytest-django==4.12.0",
     "pytest-factoryboy==2.8.1",
     "pytest-xdist==3.8.0",
-    "selenium==4.41.0",
 ]
 
 [tool.pytest.ini_options]

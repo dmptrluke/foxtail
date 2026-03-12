@@ -45,16 +45,6 @@ RUN --mount=type=cache,target=/root/.cache/uv \
 
 FROM dev-deps AS test-deps
 
-RUN --mount=type=cache,target=/var/lib/apt/lists \
-    --mount=type=cache,target=/var/cache/apt \
-    apt-get update \
-    && apt-get install -y --no-install-recommends \
-        wget gnupg2 \
-    && wget -qO- https://dl.google.com/linux/linux_signing_key.pub | gpg --dearmor -o /usr/share/keyrings/google-chrome.gpg \
-    && echo "deb [arch=amd64 signed-by=/usr/share/keyrings/google-chrome.gpg] http://dl.google.com/linux/chrome/deb/ stable main" > /etc/apt/sources.list.d/google-chrome.list \
-    && apt-get update \
-    && apt-get install -y --no-install-recommends google-chrome-stable
-
 RUN --mount=type=cache,target=/root/.cache/uv \
     uv sync --frozen --no-install-project --group test
 
