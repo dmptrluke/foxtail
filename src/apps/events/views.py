@@ -1,9 +1,9 @@
-from datetime import date, datetime
+from datetime import date
 
 from django.conf import settings
 from django.contrib import messages
 from django.db.models import Q
-from django.http import Http404, HttpResponseRedirect
+from django.http import HttpResponseRedirect
 from django.urls import reverse, reverse_lazy
 from django.views.generic import CreateView, DeleteView, DetailView, ListView, UpdateView
 from django.views.generic.dates import YearMixin
@@ -50,10 +50,7 @@ class EventListYearView(YearMixin, ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        try:
-            year = datetime.strptime(str(self.get_year()), self.get_year_format()).year
-        except ValueError:
-            raise Http404() from None
+        year = int(self.get_year())
 
         context['year'] = str(year)
         today = date.today()
@@ -70,12 +67,8 @@ class EventDetailView(PublishedDetailMixin, YearMixin, DetailView):
     template_name = 'events/detail.html'
 
     def get_queryset(self):
-        try:
-            date = datetime.strptime(str(self.get_year()), self.get_year_format())
-        except ValueError:
-            raise Http404() from None
-
-        return Event.objects.filter(start__year=date.year, slug=self.kwargs['slug']).prefetch_related('tags')
+        year = int(self.get_year())
+        return Event.objects.filter(start__year=year, slug=self.kwargs['slug']).prefetch_related('tags')
 
 
 # --- Management views ---

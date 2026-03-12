@@ -1,11 +1,16 @@
-from django.contrib.auth import get_user_model
+from datetime import UTC
 
 import factory
-from factory import Faker, Iterator
+from factory import Faker
 from factory.django import DjangoModelFactory
+from faker import Faker as FakerLib
 from published.constants import AVAILABLE
 
+from apps.accounts.tests.factories import UserFactory
+
 from ..models import Author, Comment, Post
+
+fake = FakerLib()
 
 
 class AuthorFactory(DjangoModelFactory):
@@ -19,26 +24,32 @@ class PostFactory(DjangoModelFactory):
     title = Faker('name')
     slug = Faker('slug')
 
-    tags = f'{Faker("words")}, {Faker("words")}'
-
     allow_comments = True
     publish_status = AVAILABLE
 
     author = factory.SubFactory(AuthorFactory)
-    created = Faker('date_time_this_year')
+    created = Faker('date_time_this_year', tzinfo=UTC)
 
     text = Faker('paragraph')
 
     class Meta:
         model = Post
 
+    @factory.post_generation
+    def tags(self, create, extracted, **kwargs):
+        if not create:
+            return
+        if extracted:
+            self.tags.add(*extracted)
+        else:
+            self.tags.add(fake.word(), fake.word())
+
 
 class CommentFactory(DjangoModelFactory):
-    post = Iterator(Post.objects.all())
-    author = Iterator(get_user_model().objects.all())
+    post = factory.SubFactory(PostFactory)
+    author = factory.SubFactory(UserFactory)
 
     text = Faker('paragraph')
-    created = Faker('date_time_this_year')
 
     class Meta:
         model = Comment

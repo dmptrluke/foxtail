@@ -11,37 +11,34 @@ from ..models import Post
 pytestmark = pytest.mark.django_db
 
 
-def test_feed(client, post: Post, second_post: Post, hidden_post: Post):
-    # set the post dates to they are listed in a predictable order
-    post.created = datetime(2019, 12, 2, tzinfo=UTC)
-    second_post.created = datetime(2019, 11, 1, tzinfo=UTC)
-
-    post.save()
-    second_post.save()
-
-    # get the feed
+class TestLatestEntriesFeed:
     url = reverse('blog:feed')
-    response = client.get(url)
-    feed = atoma.parse_rss_bytes(response.content)
 
-    # check the title and description match those in the config
-    assert feed.title == 'Latest News'
-    assert feed.description == 'The latest furry news.'
+    # feed metadata matches configured title, description, and link
+    def test_feed_metadata(self, client, post: Post):
+        response = client.get(self.url)
+        feed = atoma.parse_rss_bytes(response.content)
+        assert feed.title == 'Latest News'
+        assert feed.description == 'The latest furry news.'
+        assert urlparse(feed.link).path == reverse('blog:list')
 
-    # check the link is correct
-    assert urlparse(feed.link).path == reverse('blog:list')
+    # only published posts appear in feed, ordered by date descending
+    def test_published_posts_only(self, client, post: Post, second_post: Post, hidden_post: Post):
+        post.created = datetime(2019, 12, 2, tzinfo=UTC)
+        second_post.created = datetime(2019, 11, 1, tzinfo=UTC)
+        post.save()
+        second_post.save()
 
-    # check we only have two visible items
-    assert len(feed.items) == 2
+        response = client.get(self.url)
+        feed = atoma.parse_rss_bytes(response.content)
+        assert len(feed.items) == 2
+        assert feed.items[0].title == post.title
+        assert feed.items[1].title == second_post.title
 
-    # first post
-    item_one = feed.items[0]
-    assert urlparse(item_one.link).path == post.get_absolute_url()
-    assert item_one.title == post.title
-    assert item_one.pub_date == post.created
-
-    # second post
-    item_two = feed.items[1]
-    assert urlparse(item_two.link).path == second_post.get_absolute_url()
-    assert item_two.title == second_post.title
-    assert item_two.pub_date == second_post.created
+    # feed items have correct link and publication date
+    def test_item_details(self, client, post: Post):
+        response = client.get(self.url)
+        feed = atoma.parse_rss_bytes(response.content)
+        item = feed.items[0]
+        assert urlparse(item.link).path == post.get_absolute_url()
+        assert item.pub_date == post.created.replace(microsecond=0)

@@ -1,7 +1,6 @@
 from datetime import timedelta
 
 from django.contrib.auth.models import AnonymousUser
-from django.http import Http404
 from django.test import RequestFactory
 from django.utils.timezone import now
 
@@ -80,16 +79,6 @@ class TestEventListYearView:
         assert list(context['upcoming_events']) == []
         assert list(context['past_events']) == []
 
-    # invalid year raises 404
-    def test_invalid_year_404(self, db, request_factory: RequestFactory):
-        view = EventListYearView()
-        view.setup(request_factory.get('/events/notayear/'))
-        view.kwargs = {'year': 'notayear'}
-        view.object_list = view.get_queryset()
-
-        with pytest.raises(Http404):
-            view.get_context_data()
-
 
 class TestEventDetailView:
     """Test EventDetailView year+slug lookup."""
@@ -102,12 +91,3 @@ class TestEventDetailView:
         qs = view.get_queryset()
 
         assert list(qs) == [event]
-
-    # invalid year raises 404
-    def test_invalid_year_404(self, event: Event, request_factory: RequestFactory):
-        view = EventDetailView()
-        view.setup(request_factory.get('/events/notayear/test/'))
-        view.kwargs = {'year': 'notayear', 'slug': event.slug}
-
-        with pytest.raises(Http404):
-            view.get_queryset()

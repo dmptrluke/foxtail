@@ -1,5 +1,3 @@
-from datetime import datetime
-
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -90,10 +88,7 @@ class BlogListYearView(PublishedListMixin, YearMixin, ListView):
 
     def get_queryset(self):
         queryset = super().get_queryset()
-        try:
-            year = datetime.strptime(str(self.get_year()), self.get_year_format()).year
-        except ValueError:
-            raise Http404() from None
+        year = int(self.get_year())
         return queryset.filter(created__year=year).prefetch_related('tags')
 
     def get_context_data(self, **kwargs):

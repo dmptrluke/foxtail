@@ -6,7 +6,7 @@ from pytest_factoryboy import register
 from selenium import webdriver
 
 from apps.accounts.tests.factories import UserFactory, UserNoPasswordFactory
-from apps.blog.tests.factories import AuthorFactory, PostFactory
+from apps.blog.tests.factories import AuthorFactory, CommentFactory, PostFactory
 from apps.content.tests.factories import PageFactory
 from apps.directory.tests.factories import ProfileFactory
 from apps.events.tests.factories import EventFactory, PastEventFactory
@@ -22,6 +22,7 @@ register(AuthorFactory)
 register(PostFactory, 'post')
 register(PostFactory, 'second_post')
 register(PostFactory, 'hidden_post', publish_status=NEVER_AVAILABLE)
+register(CommentFactory, 'comment')
 
 # content
 register(PageFactory)
