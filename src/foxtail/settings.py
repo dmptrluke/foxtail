@@ -210,7 +210,6 @@ LANGUAGE_CODE = 'en-au'
 TIME_ZONE = 'Pacific/Auckland'
 USE_I18N = True
 USE_TZ = True
-FORMS_URLFIELD_ASSUME_HTTPS = True
 
 # Messages
 # <https://docs.djangoproject.com/en/stable/ref/contrib/messages/>

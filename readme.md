@@ -1,4 +1,4 @@
-# foxtail 
+# foxtail
 ![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/dmptrluke/foxtail/build.yml?branch=master&style=flat&label=build&link=https%3A%2F%2Fgithub.com%2Fdmptrluke%2Ffoxtail%2Factions%2Fworkflows%2Fbuild.yml)
 ![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/dmptrluke/foxtail/build.yml?branch=master&style=flat&label=test&link=https%3A%2F%2Fgithub.com%2Fdmptrluke%2Ffoxtail%2Factions%2Fworkflows%2Ftest.yml)
 ![Codecov](https://img.shields.io/codecov/c/github/dmptrluke/foxtail)

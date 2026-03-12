@@ -63,6 +63,7 @@ DJANGO_SETTINGS_MODULE = "foxtail.settings"
 pythonpath = ["src"]
 python_files = ["tests.py", "test_*.py", "*_tests.py"]
 norecursedirs = ["node_modules", ".git", ".tox", "storage", "_stashed"]
+markers = ["keep_rate_limits: opt out of the autouse rate-limit disabling fixture"]
 
 [tool.coverage.run]
 source = ["apps"]

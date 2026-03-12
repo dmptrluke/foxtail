@@ -157,10 +157,7 @@ class VerificationView(LoginRequiredMixin, TemplateView):
             token_cache_key = _cache_key_for_token(existing_token_key)
             if cache.get(token_cache_key):
                 ctx['token'] = existing_token_key
-                try:
-                    ctx['token_ttl'] = cache.ttl(token_cache_key)
-                except AttributeError:
-                    ctx['token_ttl'] = VERIFICATION_TOKEN_TTL
+                ctx['token_ttl'] = cache.ttl(token_cache_key)  # type: ignore[attr-defined]
                 from django.conf import settings
 
                 base = settings.SITE_URL.rstrip('/')

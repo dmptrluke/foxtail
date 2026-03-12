@@ -457,6 +457,15 @@ class TestGenerateTokenView:
         assert re.fullmatch(r'[A-Z0-9]{4}-[A-Z0-9]{4}', new_token)
         assert cache.get(_cache_key_for_token(new_token)) == user.pk
 
+    # returns 429 after exceeding verify_generate rate limit
+    @pytest.mark.keep_rate_limits
+    def test_rate_limited(self, client, user, settings):
+        settings.ACCOUNT_RATE_LIMITS = {'verify_generate': '5/m/user'}
+        client.force_login(user)
+        for _ in range(6):
+            response = client.post(reverse('account_verification_generate'))
+        assert response.status_code == 429
+
 
 class TestConfirmVerificationView:
     """Test the verification confirmation page (verifier enters code, sees target user)."""
@@ -551,6 +560,15 @@ class TestVerifyUserView:
         msgs = [str(m) for m in get_messages(response.wsgi_request)]
         assert any('has been verified' in m for m in msgs)
 
+    # returns 429 after exceeding verify_submit rate limit
+    @pytest.mark.keep_rate_limits
+    def test_rate_limited(self, client, verifier, settings):
+        settings.ACCOUNT_RATE_LIMITS = {'verify_submit': '10/m/ip'}
+        client.force_login(verifier)
+        for _ in range(11):
+            response = client.post(reverse('account_verification_verify'), {'token': 'FAKE-CODE'})
+        assert response.status_code == 429
+
 
 class TestUnverifyUserView:
     """Test the endpoint that removes a Verification record."""
@@ -600,3 +618,12 @@ class TestUnverifyUserView:
         response = client.post(reverse('account_verification_unverify'), {'token': token}, follow=True)
         msgs = [str(m) for m in get_messages(response.wsgi_request)]
         assert any('has been removed' in m for m in msgs)
+
+    # returns 429 after exceeding verify_unverify rate limit
+    @pytest.mark.keep_rate_limits
+    def test_rate_limited(self, client, verifier, settings):
+        settings.ACCOUNT_RATE_LIMITS = {'verify_unverify': '5/m/user'}
+        client.force_login(verifier)
+        for _ in range(6):
+            response = client.post(reverse('account_verification_unverify'), {'token': 'FAKE-CODE'})
+        assert response.status_code == 429
