@@ -3,24 +3,11 @@
 
 import logging
 
-from django.conf import settings
-from django.core.mail import get_connection
 from django.core.mail.backends.base import BaseEmailBackend
 
-from huey.contrib.djhuey import task
+from apps.email.tasks import send_email_message
 
 logger = logging.getLogger(__name__)
-
-
-@task(retries=3, retry_delay=60)
-def send_message_async(message, **kwargs):
-    conn = get_connection(backend=settings.EMAIL_REAL_BACKEND, **kwargs)
-    conn.open()
-    try:
-        conn.send_messages([message])
-        logger.info('Sent email to %d recipient(s)', len(message.to))
-    finally:
-        conn.close()
 
 
 class AsyncEmailBackend(BaseEmailBackend):
@@ -28,12 +15,14 @@ class AsyncEmailBackend(BaseEmailBackend):
         super().__init__(fail_silently)
         self.init_kwargs = kwargs
 
-    def send_messages(self, messages):
-        for message in messages:
+    def send_messages(self, email_messages):
+        sent = 0
+        for msg in email_messages:
             try:
-                send_message_async(message, **self.init_kwargs)
+                send_email_message(msg, **self.init_kwargs)
+                sent += 1
             except Exception:
                 if not self.fail_silently:
                     raise
-                logger.exception('Failed to enqueue email to %d recipient(s)', len(message.to))
-        return len(messages)
+                logger.exception('Failed to enqueue email to %d recipient(s)', len(msg.to))
+        return sent
