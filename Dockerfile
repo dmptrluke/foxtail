@@ -91,7 +91,8 @@ FROM test-deps AS test
 
 COPY --from=assets /app/build ./build
 COPY --chown=abc:abc . .
+RUN chown abc:abc /app
 
 USER abc
 
-CMD ["python", "-m", "pytest"]
+CMD ["python", "-m", "pytest", "--cov=apps", "--cov-report=xml", "--cov-report=term-missing"]
