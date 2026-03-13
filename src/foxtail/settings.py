@@ -489,7 +489,7 @@ CONTENT_SECURITY_POLICY = {
         'base-uri': [NONE],
         'frame-ancestors': [NONE],
         'form-action': [SELF],
-        'upgrade-insecure-requests': True,
+        'upgrade-insecure-requests': not DEBUG,
         'report-uri': env('CSP_REPORT_URI', default=None),
     },
 }

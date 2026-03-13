@@ -15,7 +15,10 @@
 		align-items: flex-start;
 		justify-content: space-between;
 		min-width: 0;
-		overflow: hidden;
+
+		> nav {
+			min-width: 0;
+		}
 	}
 
 	.hero-admin-link {
@@ -38,7 +41,6 @@
 	.breadcrumb {
 		flex-wrap: nowrap;
 		min-width: 0;
-		overflow: hidden;
 
 		a {
 			color: rgba($white, 0.5);
@@ -48,13 +50,24 @@
 			}
 		}
 
+		.breadcrumb-item {
+			min-width: 0;
+			@include text-truncate();
+			flex-shrink: 0;
+
+			a {
+				display: inline;
+			}
+		}
+
 		.breadcrumb-item.active {
 			color: rgba($white, 0.7);
-			@include text-truncate();
+			flex-shrink: 1;
 		}
 
 		.breadcrumb-item + .breadcrumb-item::before {
 			color: rgba($white, 0.3);
+			flex-shrink: 0;
 		}
 	}
 

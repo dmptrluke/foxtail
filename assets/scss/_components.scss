@@ -42,6 +42,14 @@ p a {
 .tag-row {
 	display: flex;
 	gap: 0.5rem;
+	flex-wrap: nowrap;
+	overflow-x: auto;
+	-webkit-overflow-scrolling: touch;
+	scrollbar-width: none;
+
+	&::-webkit-scrollbar {
+		display: none;
+	}
 }
 
 .tag-row-dark .tag-pill {

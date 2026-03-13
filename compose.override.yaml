@@ -1,14 +1,6 @@
 # Dev overrides — auto-loaded by "docker compose up".
-# Adds debugpy, Django dev server, and sensible defaults for local development.
-
-x-dev-env: &dev-env
-  DEBUG: "true"
-  SECRET_KEY: "dev-insecure-key-do-not-use-in-production"
-  CONTACT_EMAILS: "admin@example.com"
-  SITE_URL: "http://localhost:8000"
-  ALLOWED_HOSTS: "localhost,127.0.0.1"
-  DIRECTORY_ENABLED: "true"
-  VITE_DEV_MODE: "true"
+# Adds debugpy, Django dev server, and local env vars.
+# All environment config lives in .env (not tracked in git).
 
 services:
   foxtail:
@@ -21,11 +13,8 @@ services:
       - "5678:5678"
     volumes:
       - ./src:/app/src
-    environment:
-      <<: *dev-env
     env_file:
-      - path: .env
-        required: false
+      - .env
     depends_on:
       vite:
         condition: service_started
@@ -33,11 +22,8 @@ services:
   worker:
     volumes:
       - ./src:/app/src
-    environment:
-      <<: *dev-env
     env_file:
-      - path: .env
-        required: false
+      - .env
 
   vite:
     build:
