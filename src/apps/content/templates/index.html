@@ -4,10 +4,10 @@
 {% block title_full %}{{ request.site.name }} — the resource for New Zealand furries{% endblock title_full %}
 
 {% block extra_head %}
-    {% json_ld_for view %}
-    {% og_for view %}
-    {% meta_for view %}
-    {% twitter_for view %}
+    {% json_ld_for structured_data %}
+    {% og_for structured_data %}
+    {% meta_for structured_data %}
+    {% twitter_for structured_data %}
 {% endblock %}
 
 {% block hero %}

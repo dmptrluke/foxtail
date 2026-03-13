@@ -1,4 +1,4 @@
-{% load static django_vite %}
+{% load static django_vite jsonld opengraph %}
 <!doctype html>
 <html lang="en" class="no-js" prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# article: http://ogp.me/ns/article#">
 <head>
@@ -7,25 +7,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 
     <meta name="application-name" content="{{ request.site.name }}">
-    <meta property="og:site_name" content="{{ request.site.name }}">
-    <meta property="og:locale" content="en_NZ">
-    <meta property="og:logo" content="https://cdn.furry.nz/static/images/paw-dark@3x.png">
+    {% og_sitewide %}
     <meta property="fb:app_id" content="538473223430196">
-    <script type="application/ld+json">
-        {
-            "@context": "https://schema.org",
-            "@type": "Organization",
-            "@id": "https://furry.nz/#organization",
-            "name": "furry.nz",
-            "url": "https://furry.nz",
-            "logo": {
-                "@type": "ImageObject",
-                "url": "https://cdn.furry.nz/static/images/paw-dark@3x.png",
-                "width": 90,
-                "height": 90
-            }
-        }
-    </script>
+    {% json_ld_sitewide %}
 
     <meta name="theme-color" content="#281e33">
     <link rel="icon" type="image/png" sizes="32x32" href="{% static "favicon-32x32.png" %}">

@@ -639,6 +639,30 @@ if SENTRY_DSN:
 
 TAGGIT_CASE_INSENSITIVE = True
 
+# django-structured-data
+# <https://github.com/dmptrluke/django-structured-data>
+
+STRUCTURED_DATA_SITEWIDE = [
+    {
+        '@type': 'Organization',
+        '@id': f'{SITE_URL}/#organization',
+        'name': 'furry.nz',
+        'url': SITE_URL,
+        'logo': {
+            '@type': 'ImageObject',
+            'url': 'https://cdn.furry.nz/static/images/paw-dark@3x.png',
+            'width': 90,
+            'height': 90,
+        },
+    },
+]
+
+STRUCTURED_DATA_SITEWIDE_OG = {
+    'og:site_name': 'furry.nz',
+    'og:locale': 'en_NZ',
+    'og:logo': 'https://cdn.furry.nz/static/images/paw-dark@3x.png',
+}
+
 # =============================================================================
 # Foxtail
 # =============================================================================

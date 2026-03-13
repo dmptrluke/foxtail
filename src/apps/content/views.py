@@ -1,8 +1,10 @@
+from django.conf import settings
 from django.db.models import Q
 from django.utils.timezone import now
 from django.views.generic import DetailView, TemplateView
 
 from published.utils import queryset_filter
+from structured_data.views import StructuredDataMixin
 
 from apps.blog.models import Post
 from apps.events.models import Event
@@ -10,7 +12,7 @@ from apps.events.models import Event
 from .models import Page
 
 
-class IndexView(TemplateView):
+class IndexView(StructuredDataMixin, TemplateView):
     template_name = 'index.html'
 
     def get_context_data(self, **kwargs):
@@ -20,17 +22,16 @@ class IndexView(TemplateView):
         context['event_list'] = Event.objects.filter(Q(start__gte=today) | Q(end__gte=today))[:3]
         return context
 
-    @property
-    def structured_data(self):
+    def get_structured_data(self):
         return {
             '@type': 'WebSite',
-            '@id': 'https://furry.nz/#website',
+            '@id': f'{settings.SITE_URL}/#website',
             'name': 'furry.nz',
             'description': 'The resource for New Zealand furries.',
-            'url': 'https://furry.nz/',
+            'url': f'{settings.SITE_URL}/',
             'author': {
                 '@type': 'Organization',
-                '@id': 'https://furry.nz/#organization',
+                '@id': f'{settings.SITE_URL}/#organization',
             },
         }
 
