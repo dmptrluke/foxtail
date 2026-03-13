@@ -1,5 +1,7 @@
 from django.conf import settings
+from django.forms import Select, SelectMultiple
 from django.forms.widgets import ClearableFileInput
+from django.urls import reverse
 
 
 class ImageWidget(ClearableFileInput):
@@ -37,3 +39,25 @@ class CroppedImageWidget(ImageWidget):
         context = super().get_context(name, value, attrs)
         context['widget']['aspect_ratio'] = self.aspect_ratio
         return context
+
+
+class _AutocompleteMixin:
+    def __init__(self, url_name, *args, **kwargs):
+        self.url_name = url_name
+        super().__init__(*args, **kwargs)
+
+    def get_url(self):
+        return reverse(self.url_name)
+
+    def build_attrs(self, base_attrs, extra_attrs=None):
+        attrs = super().build_attrs(base_attrs, extra_attrs)
+        attrs['data-autocomplete-url'] = self.get_url()
+        return attrs
+
+
+class AutocompleteSelect(_AutocompleteMixin, Select):
+    pass
+
+
+class AutocompleteSelectMultiple(_AutocompleteMixin, SelectMultiple):
+    pass

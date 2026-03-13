@@ -65,6 +65,10 @@ function onLoad() {
     if (document.querySelector('[data-map]')) {
         import('./map.js').then(m => m.initMaps());
     }
+
+    if (document.querySelector('[data-autocomplete-url]')) {
+        import('./autocomplete.js').then(m => m.initAutocomplete());
+    }
 }
 
 onLoad();

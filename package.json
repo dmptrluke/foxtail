@@ -19,6 +19,7 @@
         "cropperjs": "^1.6.2",
         "maplibre-gl": "^5.20.0",
         "sass": "^1.98.0",
+        "tom-select": "^2.5.2",
         "vite": "^7.3.1"
     }
 }

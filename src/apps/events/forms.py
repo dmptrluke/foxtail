@@ -13,7 +13,7 @@ from csp_helpers.mixins import CSPFormMixin
 from markdownfield.widgets import MDEWidget
 from taggit.forms import TagField
 
-from apps.core.widgets import ImageWidget
+from apps.core.widgets import AutocompleteSelect, ImageWidget
 
 from .models import Event
 
@@ -51,6 +51,8 @@ class EventForm(CSPFormMixin, ModelForm):
         ]
         widgets = {
             'description': MDEWidget(),
+            'organisation': AutocompleteSelect('autocomplete:organisation'),
+            'series': AutocompleteSelect('autocomplete:event_series'),
             'address': Textarea(attrs={'rows': 5}),
             'start': DateInput(attrs={'type': 'date'}, format='%Y-%m-%d'),
             'end': DateInput(attrs={'type': 'date'}, format='%Y-%m-%d'),

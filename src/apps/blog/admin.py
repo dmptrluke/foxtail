@@ -39,6 +39,7 @@ class PostAdmin(PublishedAdmin):
         ),
     )
 
+    autocomplete_fields = ['organisations', 'event_series', 'events']
     prepopulated_fields = {'slug': ('title',)}
     search_fields = ['title']
     raw_id_fields = ('author',)

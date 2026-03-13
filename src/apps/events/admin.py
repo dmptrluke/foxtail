@@ -42,6 +42,8 @@ class EventAdmin(ModelAdmin):
         ),
     )
 
+    autocomplete_fields = ['organisation', 'series']
+    search_fields = ['title']
     list_display = ('title', 'start', 'tag_list')
 
     def get_queryset(self, request):
