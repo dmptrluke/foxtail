@@ -67,12 +67,12 @@ class TestIndexView:
         assert len(context['event_list']) <= 3
 
     # structured data contains required schema.org fields
-    def test_structured_data(self):
+    def test_structured_data(self, settings):
         view = IndexView()
-        sd = view.structured_data
+        sd = view.get_structured_data()
 
         assert sd['@type'] == 'WebSite'
-        assert sd['url'] == 'https://furry.nz/'
+        assert sd['url'] == f'{settings.SITE_URL}/'
         assert 'name' in sd
 
 
