@@ -105,7 +105,7 @@ class Event(PublishedModel):
             'description': self.description or Truncator(strip_tags(self.description_rendered)).chars(200),
             'startDate': self.start,
             'url': url,
-            'mainEntityOfPage': {'@type': 'WebPage', '@id': url},
+            'mainEntityOfPage': url,
             'keywords': [tag.name for tag in self.tags.all()],
         }
 

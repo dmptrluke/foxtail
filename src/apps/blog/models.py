@@ -86,7 +86,7 @@ class Post(PublishedModel):
             'dateModified': self.modified,
             'publisher': {'@id': 'https://furry.nz/#organization'},
             'url': url,
-            'mainEntityOfPage': {'@type': 'WebPage', '@id': url},
+            'mainEntityOfPage': url,
             'keywords': [tag.name for tag in self.tags.all()],
         }
         if self.image:

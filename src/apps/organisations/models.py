@@ -43,7 +43,7 @@ class Organisation(models.Model):
             '@id': url,
             'name': self.name,
             'url': url,
-            'mainEntityOfPage': {'@type': 'WebPage', '@id': url},
+            'mainEntityOfPage': url,
         }
         if self.description_rendered:
             data['description'] = Truncator(strip_tags(self.description_rendered)).chars(200)
