@@ -75,6 +75,51 @@ class TestEventDetailView:
         assert response.status_code == 200
         assert response.context['event'] == event
 
+    # show_series is True when event has a series
+    def test_show_series_with_series(self, client):
+        from apps.organisations.tests.factories import EventSeriesFactory
+
+        series = EventSeriesFactory(name='Cool Series')
+        event = EventFactory(series=series, organisation=None)
+        response = client.get(event.get_absolute_url())
+        assert response.context['show_series'] is True
+
+    # show_series is False when event has no series
+    def test_show_series_without_series(self, client, event: Event):
+        response = client.get(event.get_absolute_url())
+        assert response.context['show_series'] is False
+
+    # series pill hidden when series name matches org name and org has only that series
+    def test_show_series_hidden_when_redundant(self, client):
+        from apps.organisations.tests.factories import EventSeriesFactory, OrganisationFactory
+
+        org = OrganisationFactory(name='Wellington Furries')
+        series = EventSeriesFactory(name='Wellington Furries', organisation=org)
+        event = EventFactory(series=series, organisation=None)
+        response = client.get(event.get_absolute_url())
+        assert response.context['show_series'] is False
+
+    # series pill shown when series name differs from org name
+    def test_show_series_visible_when_name_differs(self, client):
+        from apps.organisations.tests.factories import EventSeriesFactory, OrganisationFactory
+
+        org = OrganisationFactory(name='Wellington Furries')
+        series = EventSeriesFactory(name='Monthly Meets', organisation=org)
+        event = EventFactory(series=series, organisation=None)
+        response = client.get(event.get_absolute_url())
+        assert response.context['show_series'] is True
+
+    # series pill shown when org has multiple series (even if one name matches)
+    def test_show_series_visible_when_org_has_multiple_series(self, client):
+        from apps.organisations.tests.factories import EventSeriesFactory, OrganisationFactory
+
+        org = OrganisationFactory(name='Wellington Furries')
+        series = EventSeriesFactory(name='Wellington Furries', organisation=org)
+        EventSeriesFactory(name='Annual Con', organisation=org)
+        event = EventFactory(series=series, organisation=None)
+        response = client.get(event.get_absolute_url())
+        assert response.context['show_series'] is True
+
 
 class TestEventManageListView:
     url = reverse('events:manage_list')

@@ -111,6 +111,20 @@ class EventDetailView(PublishedDetailMixin, YearMixin, DetailView):
         from apps.blog.models import Post
 
         context['related_posts'] = queryset_filter(Post.objects).filter(events=self.object)
+
+        event = self.object
+        org = event.resolved_organisation
+        series = event.series
+        show_series = bool(series)
+        if (
+            show_series
+            and org
+            and series.organisation_id == org.pk
+            and org.series.count() == 1
+            and series.name == org.name
+        ):
+            show_series = False
+        context['show_series'] = show_series
         return context
 
 
