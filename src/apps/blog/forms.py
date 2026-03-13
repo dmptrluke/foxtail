@@ -47,6 +47,9 @@ class PostForm(CSPFormMixin, ModelForm):
             'live_as_of',
             'image',
             'image_ppoi',
+            'organisations',
+            'event_series',
+            'events',
         ]
         widgets = {
             'description': Textarea(attrs={'rows': 3}),

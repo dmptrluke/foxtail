@@ -36,6 +36,8 @@ class EventForm(CSPFormMixin, ModelForm):
             'slug',
             'description',
             'url',
+            'organisation',
+            'series',
             'location',
             'address',
             'start',

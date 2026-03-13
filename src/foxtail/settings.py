@@ -61,6 +61,7 @@ INSTALLED_APPS = [
     'apps.accounts',
     'apps.content',
     'apps.events',
+    'apps.organisations',
     'apps.blog',
     'apps.contact',
     'allauth',
@@ -541,6 +542,14 @@ IMAGEFIELD_FORMATS = {
         'banner_2x': ['default', ('crop', (2880, 886))],
         'tall': ['default', ('crop', (960, 768))],
         'tall_2x': ['default', ('crop', (1920, 1536))],
+        'admin': ['default', ('thumbnail', (300, 300))],
+    },
+    'organisations.organisation.logo': {
+        'square': ['default', ('crop', (400, 400))],
+        'admin': ['default', ('thumbnail', (300, 300))],
+    },
+    'organisations.eventseries.logo': {
+        'square': ['default', ('crop', (400, 400))],
         'admin': ['default', ('thumbnail', (300, 300))],
     },
 }

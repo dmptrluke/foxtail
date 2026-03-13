@@ -61,6 +61,10 @@ class Post(PublishedModel):
     text = MarkdownField(rendered_field='text_rendered', validator=VALIDATOR_EXTENDED)
     text_rendered = RenderedMarkdownField()
 
+    organisations = models.ManyToManyField('organisations.Organisation', blank=True)
+    event_series = models.ManyToManyField('organisations.EventSeries', blank=True)
+    events = models.ManyToManyField('events.Event', blank=True)
+
     class Meta:
         ordering = ['-created']
 

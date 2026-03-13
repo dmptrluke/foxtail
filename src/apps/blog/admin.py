@@ -22,6 +22,7 @@ class PostAdmin(PublishedAdmin):
     fieldsets = (
         ('Metadata', {'fields': ('title', 'author', 'tags', 'description')}),
         ('Content', {'fields': ('text',)}),
+        ('Related Content', {'fields': ('organisations', 'event_series', 'events')}),
         add_to_fieldsets(section=True, collapse=False),
         (
             'Image',

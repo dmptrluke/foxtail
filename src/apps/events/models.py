@@ -19,7 +19,14 @@ from apps.core.fields import AutoSlugField
 from apps.core.validators import file_size_validator
 
 
+class EventQuerySet(models.QuerySet):
+    def for_organisation(self, org):
+        return self.filter(models.Q(organisation=org) | models.Q(series__organisation=org))
+
+
 class Event(PublishedModel):
+    objects = EventQuerySet.as_manager()
+
     title = models.CharField(max_length=100, help_text='100 characters or fewer.')
     slug = AutoSlugField(populate_from='title', unique_for_year='start')
     tags = TaggableManager(blank=True)
@@ -27,6 +34,9 @@ class Event(PublishedModel):
     description = MarkdownField(rendered_field='description_rendered', validator=VALIDATOR_CLASSY)
     description_rendered = RenderedMarkdownField()
     url = models.URLField(blank=True)
+
+    organisation = models.ForeignKey('organisations.Organisation', on_delete=models.SET_NULL, null=True, blank=True)
+    series = models.ForeignKey('organisations.EventSeries', on_delete=models.SET_NULL, null=True, blank=True)
 
     location = models.CharField(max_length=200)
     address = models.TextField(blank=True)
@@ -48,8 +58,19 @@ class Event(PublishedModel):
         ordering = ['start']
 
     def clean(self):
+        super().clean()
         if self.end and self.end < self.start:
             raise ValidationError({'end': 'End date cannot be before start date.'})
+        if self.series and self.series.organisation and self.organisation:
+            raise ValidationError(
+                {'organisation': 'Events in a series with an organisation cannot also have a direct organisation.'}
+            )
+
+    @cached_property
+    def resolved_organisation(self):
+        if self.series and self.series.organisation:
+            return self.series.organisation
+        return self.organisation
 
     def __str__(self):
         return self.title
