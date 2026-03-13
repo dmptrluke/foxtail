@@ -84,6 +84,31 @@ class TestPostStructuredData:
         sd = post.structured_data
         assert 'image' not in sd
 
+    # about references linked organisations by @id
+    def test_about_organisations(self, post: Post):
+        from apps.organisations.tests.factories import OrganisationFactory
+
+        org = OrganisationFactory()
+        post.organisations.add(org)
+        post.__dict__.pop('structured_data', None)
+        sd = post.structured_data
+        assert {'@type': 'Organization', '@id': org.structured_data['@id']} in sd['about']
+
+    # about references linked events by @id
+    def test_about_events(self, post: Post):
+        from apps.events.tests.factories import EventFactory
+
+        event = EventFactory()
+        post.events.add(event)
+        post.__dict__.pop('structured_data', None)
+        sd = post.structured_data
+        assert {'@type': 'Event', '@id': event.structured_data['@id']} in sd['about']
+
+    # about absent when no organisations or events linked
+    def test_about_absent_when_empty(self, post: Post):
+        sd = post.structured_data
+        assert 'about' not in sd
+
 
 class TestAuthor:
     # __str__ returns the name

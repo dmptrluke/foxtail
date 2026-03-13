@@ -100,6 +100,7 @@ class Event(PublishedModel):
         url = settings.SITE_URL + self.get_absolute_url()
         data = {
             '@type': 'Event',
+            '@id': url + '#event',
             'name': self.title,
             'description': self.description or Truncator(strip_tags(self.description_rendered)).chars(200),
             'startDate': self.start,
@@ -138,10 +139,6 @@ class Event(PublishedModel):
 
         org = self.resolved_organisation
         if org:
-            data['organizer'] = {
-                '@type': 'Organization',
-                'name': org.name,
-                'url': settings.SITE_URL + org.get_absolute_url(),
-            }
+            data['organizer'] = {'@type': 'Organization', '@id': org.structured_data['@id']}
 
         return data

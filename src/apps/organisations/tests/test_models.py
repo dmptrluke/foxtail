@@ -1,9 +1,26 @@
+from django.conf import settings
+
 import pytest
 
 from ..models import SocialLink
 from .factories import OrganisationFactory, SocialLinkFactory
 
 pytestmark = pytest.mark.django_db
+
+
+class TestOrganisationStructuredData:
+    # structured data includes @id as a fragment URI
+    def test_id_present(self):
+        org = OrganisationFactory()
+        sd = org.structured_data
+        expected_id = settings.SITE_URL + org.get_absolute_url() + '#org'
+        assert sd['@id'] == expected_id
+
+    # @id is stable and can be used as a cross-reference
+    def test_id_matches_url_fragment(self):
+        org = OrganisationFactory(slug='test-org')
+        sd = org.structured_data
+        assert sd['@id'].endswith('/organisations/test-org/#org')
 
 
 class TestSocialLink:

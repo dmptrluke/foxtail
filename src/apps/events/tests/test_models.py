@@ -58,6 +58,7 @@ class TestEventStructuredData:
     def test_required_fields(self, event: Event):
         sd = event.structured_data
         assert sd['@type'] == 'Event'
+        assert sd['@id'].endswith('#event')
         assert sd['name'] == event.title
         assert sd['startDate'] == event.start
         assert 'url' in sd
@@ -145,6 +146,25 @@ class TestEventStructuredData:
     def test_without_image(self, event: Event):
         sd = event.structured_data
         assert 'image' not in sd
+
+    # organizer references org's @id when event has a resolved organisation
+    def test_organizer_references_org_id(self):
+        from apps.organisations.tests.factories import OrganisationFactory
+
+        from ..tests.factories import EventFactory
+
+        org = OrganisationFactory()
+        event = EventFactory(organisation=org)
+        sd = event.structured_data
+        assert sd['organizer'] == {'@type': 'Organization', '@id': org.structured_data['@id']}
+
+    # organizer absent when event has no organisation
+    def test_organizer_absent_without_org(self, event: Event):
+        event.organisation = None
+        event.series = None
+        event.__dict__.pop('structured_data', None)
+        sd = event.structured_data
+        assert 'organizer' not in sd
 
 
 class TestEvent:

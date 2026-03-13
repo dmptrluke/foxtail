@@ -40,6 +40,7 @@ class Organisation(models.Model):
         url = settings.SITE_URL + self.get_absolute_url()
         data = {
             '@type': 'Organization',
+            '@id': url + '#org',
             'name': self.name,
             'url': url,
             'mainEntityOfPage': {'@type': 'WebPage', '@id': url},
