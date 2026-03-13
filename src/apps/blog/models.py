@@ -102,9 +102,11 @@ class Post(PublishedModel):
 
         about = []
         for org in self.organisations.all():
-            about.append({'@type': 'Organization', '@id': org.structured_data['@id']})
+            org_url = org.structured_data['@id']
+            about.append({'@type': 'Organization', '@id': org_url, 'name': org.name, 'url': org_url})
         for event in self.events.all():
-            about.append({'@type': 'Event', '@id': event.structured_data['@id']})
+            event_url = event.structured_data['@id']
+            about.append({'@type': 'Event', '@id': event_url, 'name': event.title, 'url': event_url})
         if about:
             data['about'] = about
 

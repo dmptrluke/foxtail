@@ -58,7 +58,7 @@ class TestEventStructuredData:
     def test_required_fields(self, event: Event):
         sd = event.structured_data
         assert sd['@type'] == 'Event'
-        assert sd['@id'].endswith('#event')
+        assert sd['@id'] == sd['url']
         assert sd['name'] == event.title
         assert sd['startDate'] == event.start
         assert 'url' in sd
@@ -156,7 +156,8 @@ class TestEventStructuredData:
         org = OrganisationFactory()
         event = EventFactory(organisation=org)
         sd = event.structured_data
-        assert sd['organizer'] == {'@type': 'Organization', '@id': org.structured_data['@id']}
+        org_url = org.structured_data['@id']
+        assert sd['organizer'] == {'@type': 'Organization', '@id': org_url, 'name': org.name, 'url': org_url}
 
     # organizer absent when event has no organisation
     def test_organizer_absent_without_org(self, event: Event):

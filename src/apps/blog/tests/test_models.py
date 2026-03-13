@@ -92,7 +92,8 @@ class TestPostStructuredData:
         post.organisations.add(org)
         post.__dict__.pop('structured_data', None)
         sd = post.structured_data
-        assert {'@type': 'Organization', '@id': org.structured_data['@id']} in sd['about']
+        org_url = org.structured_data['@id']
+        assert {'@type': 'Organization', '@id': org_url, 'name': org.name, 'url': org_url} in sd['about']
 
     # about references linked events by @id
     def test_about_events(self, post: Post):
@@ -102,7 +103,8 @@ class TestPostStructuredData:
         post.events.add(event)
         post.__dict__.pop('structured_data', None)
         sd = post.structured_data
-        assert {'@type': 'Event', '@id': event.structured_data['@id']} in sd['about']
+        event_url = event.structured_data['@id']
+        assert {'@type': 'Event', '@id': event_url, 'name': event.title, 'url': event_url} in sd['about']
 
     # about absent when no organisations or events linked
     def test_about_absent_when_empty(self, post: Post):
