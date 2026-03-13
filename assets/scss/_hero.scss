@@ -12,11 +12,12 @@
 
 	.hero-topline {
 		display: flex;
-		align-items: flex-start;
-		justify-content: space-between;
-		min-width: 0;
+		align-items: center;
+		gap: 0.75rem;
+		margin-bottom: 0.25rem;
 
 		> nav {
+			flex: 1 1 0;
 			min-width: 0;
 		}
 	}
@@ -29,18 +30,25 @@
 		font-weight: 500;
 		color: rgba($white, 0.5);
 		text-decoration: none;
-		margin-top: 0.35rem;
-		margin-left: auto;
+		white-space: nowrap;
 		flex-shrink: 0;
 
 		&:hover {
 			color: rgba($white, 0.85);
 		}
+
+		span {
+			display: none;
+
+			@include media-breakpoint-up(sm) {
+				display: inline;
+			}
+		}
 	}
 
 	.breadcrumb {
 		flex-wrap: nowrap;
-		min-width: 0;
+		margin-bottom: 0;
 
 		a {
 			color: rgba($white, 0.5);
@@ -72,6 +80,7 @@
 	}
 
 	.tag-row {
+		margin-top: 1rem;
 		margin-bottom: 1rem;
 	}
 

@@ -11,7 +11,7 @@
     <c-hero>
         {% if user.is_staff %}
             <c-hero.nav>
-                <a href="{% url 'admin:content_page_change' page.pk %}" class="hero-admin-link"><c-icons.pencil width="0.75em" height="0.75em" /> Edit</a>
+                <a href="{% url 'admin:content_page_change' page.pk %}" class="hero-admin-link"><c-icons.pencil width="0.75em" height="0.75em" /> <span>Edit</span></a>
             </c-hero.nav>
         {% endif %}
         <c-hero.title>{{ page.title }}</c-hero.title>

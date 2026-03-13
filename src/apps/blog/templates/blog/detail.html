@@ -23,7 +23,7 @@
                 {% breadcrumbs "blog:list" "News" post.get_absolute_url post.title %}
                 {% has_perm 'blog.manage_posts' user as can_manage %}
                 {% if can_manage %}
-                    <a href="{% url 'blog:post_edit' post.pk %}" class="hero-admin-link"><c-icons.pencil width="0.75em" height="0.75em" /> Edit</a>
+                    <a href="{% url 'blog:post_edit' post.pk %}" class="hero-admin-link"><c-icons.pencil width="0.75em" height="0.75em" /> <span>Edit</span></a>
                 {% endif %}
             </c-hero.nav>
 
