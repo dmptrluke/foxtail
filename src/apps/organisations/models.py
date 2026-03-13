@@ -2,6 +2,8 @@ from django.conf import settings
 from django.db import models
 from django.urls import reverse
 from django.utils.functional import cached_property
+from django.utils.html import strip_tags
+from django.utils.text import Truncator
 
 from imagefield.fields import ImageField as ProcessedImageField
 from markdownfield.models import MarkdownField, RenderedMarkdownField
@@ -41,8 +43,8 @@ class Organisation(models.Model):
             'url': url,
             'mainEntityOfPage': {'@type': 'WebPage', '@id': url},
         }
-        if self.description:
-            data['description'] = self.description
+        if self.description_rendered:
+            data['description'] = Truncator(strip_tags(self.description_rendered)).chars(200)
         if self.url:
             data['sameAs'] = self.url
         if self.logo:

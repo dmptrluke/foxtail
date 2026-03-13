@@ -1,0 +1,30 @@
+{% if related_organisations or related_series or related_events %}
+<div class="related-content mt-5">
+    <h2>Related</h2>
+    <div class="list-group">
+        {% for org in related_organisations %}
+            <a href="{{ org.get_absolute_url }}" class="list-group-item list-group-item-action">
+                <small class="text-body-secondary">Organisation</small>
+                <h5 class="mb-0">{{ org.name }}</h5>
+            </a>
+        {% endfor %}
+        {% for s in related_series %}
+            <a href="{{ s.get_absolute_url }}" class="list-group-item list-group-item-action">
+                <small class="text-body-secondary">Event Series</small>
+                <h5 class="mb-0">{{ s.name }}</h5>
+            </a>
+        {% endfor %}
+        {% for event in related_events %}
+            <a href="{{ event.get_absolute_url }}" class="list-group-item list-group-item-action">
+                <div class="d-flex w-100 justify-content-between">
+                    <div>
+                        <small class="text-body-secondary">Event</small>
+                        <h5 class="mb-0">{{ event.title }}</h5>
+                    </div>
+                    <small class="text-body-secondary">{{ event.start|date:"M j, Y" }}</small>
+                </div>
+            </a>
+        {% endfor %}
+    </div>
+</div>
+{% endif %}

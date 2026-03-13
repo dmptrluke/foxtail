@@ -1,0 +1,96 @@
+{% extends "base/page.html" %}
+{% load jsonld %}
+
+{% block extra_head %}
+    <link rel="canonical" href="{{ SITE_URL }}{{ organisation.get_absolute_url }}"/>
+    {% json_ld_for organisation %}
+{% endblock %}
+
+{% block title %}{{ organisation.name }}{% endblock %}
+
+{% block hero %}
+    <c-hero>
+        <c-hero.nav>
+            {% load breadcrumbs %}
+            {% breadcrumbs organisation.get_absolute_url organisation.name %}
+        </c-hero.nav>
+        <c-hero.title>{{ organisation.name }}</c-hero.title>
+        {% if organisation.url %}
+            <c-hero.subtitle><a href="{{ organisation.url }}" rel="noopener noreferrer" target="_blank">{{ organisation.url }}</a></c-hero.subtitle>
+        {% endif %}
+    </c-hero>
+{% endblock hero %}
+
+{% block content %}
+    <c-layout-sidebar>
+        <c-slot name="content">
+            {% if organisation.description_rendered %}
+                <c-rendered-markdown>{{ organisation.description_rendered|safe }}</c-rendered-markdown>
+            {% endif %}
+
+            {% if events %}
+                <h2>Events</h2>
+                <div class="list-group mb-4">
+                    {% for event in events %}
+                        <a href="{{ event.get_absolute_url }}" class="list-group-item list-group-item-action">
+                            <div class="d-flex w-100 justify-content-between">
+                                <h5 class="mb-1">{{ event.title }}</h5>
+                                <small class="text-body-secondary">{{ event.start|date:"M j, Y" }}</small>
+                            </div>
+                            {% if event.series %}
+                                <small class="text-body-secondary">{{ event.series.name }}</small>
+                            {% endif %}
+                        </a>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            {% if posts %}
+                <h2>Related Posts</h2>
+                <div class="list-group mb-4">
+                    {% for post in posts %}
+                        <a href="{{ post.get_absolute_url }}" class="list-group-item list-group-item-action">
+                            <div class="d-flex w-100 justify-content-between">
+                                <h5 class="mb-1">{{ post.title }}</h5>
+                                <small class="text-body-secondary">{{ post.created|date:"M j, Y" }}</small>
+                            </div>
+                        </a>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </c-slot>
+
+        <c-slot name="sidebar">
+            {% if organisation.logo %}
+                <div class="sidebar-card">
+                    <div class="content text-center">
+                        <img src="{{ organisation.logo.square }}" alt="{{ organisation.name }}" class="img-fluid rounded" width="400" height="400">
+                    </div>
+                </div>
+            {% endif %}
+
+            {% if series %}
+                <div class="sidebar-card">
+                    <h3 class="header">Event Series</h3>
+                    <div class="content">
+                        <ul class="list-unstyled mb-0">
+                            {% for s in series %}
+                                <li><a href="{{ s.get_absolute_url }}">{{ s.name }}</a></li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            {% endif %}
+
+            {% if organisation.url %}
+                <div class="sidebar-card">
+                    <div class="footer">
+                        <a class="btn btn-primary" href="{{ organisation.url }}" rel="noopener noreferrer" target="_blank">
+                            Visit Website
+                        </a>
+                    </div>
+                </div>
+            {% endif %}
+        </c-slot>
+    </c-layout-sidebar>
+{% endblock content %}

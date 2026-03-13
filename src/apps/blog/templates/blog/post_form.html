@@ -54,6 +54,14 @@
             </div>
         </div>
 
+        {# Related content #}
+        <fieldset class="mb-4">
+            <legend>Related Content</legend>
+            {% select_field form.organisations %}
+            {% select_field form.event_series %}
+            {% select_field form.events %}
+        </fieldset>
+
         {# Content -- full width #}
         <fieldset class="mb-4">
             <legend>Content</legend>

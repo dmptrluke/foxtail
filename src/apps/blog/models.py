@@ -100,6 +100,26 @@ class Post(PublishedModel):
                 'height': 630,
             }
 
+        about = []
+        for org in self.organisations.all():
+            about.append(
+                {
+                    '@type': 'Organization',
+                    'name': org.name,
+                    'url': settings.SITE_URL + org.get_absolute_url(),
+                }
+            )
+        for event in self.events.all():
+            about.append(
+                {
+                    '@type': 'Event',
+                    'name': event.title,
+                    'url': settings.SITE_URL + event.get_absolute_url(),
+                }
+            )
+        if about:
+            data['about'] = about
+
         return data
 
 

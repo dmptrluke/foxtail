@@ -46,6 +46,8 @@
         <c-slot name="content">
             <c-rendered-markdown>{{ post.text_rendered|safe }}</c-rendered-markdown>
 
+            {% include "components/related_content.html" %}
+
             {% if post.allow_comments and comments_enabled %}
                 {% include "blog/comments.html" %}
             {% endif %}

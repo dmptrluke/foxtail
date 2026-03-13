@@ -39,6 +39,12 @@
                     {% text_field form.url %}
                 </fieldset>
 
+                <fieldset class="mb-4">
+                    <legend>Organisation</legend>
+                    {% select_field form.organisation %}
+                    {% select_field form.series %}
+                </fieldset>
+
                 <fieldset>
                     <legend>Location</legend>
                     {% text_field form.location %}

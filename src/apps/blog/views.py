@@ -128,11 +128,18 @@ class BlogListYearView(StructuredDataMixin, PublishedListMixin, YearMixin, ListV
 class BlogDetailView(PublishedDetailMixin, DetailView):
     model = Post
     template_name = 'blog/detail.html'
-    queryset = Post.objects.select_related('author').prefetch_related('tags').all()
+    queryset = (
+        Post.objects.select_related('author').prefetch_related('tags', 'organisations', 'event_series', 'events').all()
+    )
 
     def get_context_data(self, form=None, **kwargs):
         context = super().get_context_data(**kwargs)
         context.update(_sidebar_context())
+
+        post = self.object
+        context['related_organisations'] = post.organisations.all()
+        context['related_series'] = post.event_series.all()
+        context['related_events'] = post.events.all()
 
         if COMMENTS_ENABLED:
             context['comment_list'] = self.object.comments.select_related('author').filter(approved=True)

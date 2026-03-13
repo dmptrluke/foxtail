@@ -1,0 +1,75 @@
+{% extends "base/page.html" %}
+
+{% block title %}{{ eventseries.name }}{% endblock %}
+
+{% block hero %}
+    <c-hero>
+        <c-hero.nav>
+            {% load breadcrumbs %}
+            {% if eventseries.organisation %}
+                {% url 'organisations:organisation_detail' slug=eventseries.organisation.slug as org_url %}
+                {% breadcrumbs org_url eventseries.organisation.name eventseries.get_absolute_url eventseries.name %}
+            {% else %}
+                {% breadcrumbs eventseries.get_absolute_url eventseries.name %}
+            {% endif %}
+        </c-hero.nav>
+        <c-hero.title>{{ eventseries.name }}</c-hero.title>
+        {% if eventseries.organisation %}
+            <c-hero.subtitle>by <a href="{{ org_url }}">{{ eventseries.organisation.name }}</a></c-hero.subtitle>
+        {% endif %}
+    </c-hero>
+{% endblock hero %}
+
+{% block content %}
+    <c-layout-sidebar>
+        <c-slot name="content">
+            {% if eventseries.description_rendered %}
+                <c-rendered-markdown>{{ eventseries.description_rendered|safe }}</c-rendered-markdown>
+            {% endif %}
+
+            {% if events %}
+                <h2>Events</h2>
+                <div class="list-group mb-4">
+                    {% for event in events %}
+                        <a href="{{ event.get_absolute_url }}" class="list-group-item list-group-item-action">
+                            <div class="d-flex w-100 justify-content-between">
+                                <h5 class="mb-1">{{ event.title }}</h5>
+                                <small class="text-body-secondary">{{ event.start|date:"M j, Y" }}</small>
+                            </div>
+                        </a>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            {% if posts %}
+                <h2>Related Posts</h2>
+                <div class="list-group mb-4">
+                    {% for post in posts %}
+                        <a href="{{ post.get_absolute_url }}" class="list-group-item list-group-item-action">
+                            <div class="d-flex w-100 justify-content-between">
+                                <h5 class="mb-1">{{ post.title }}</h5>
+                                <small class="text-body-secondary">{{ post.created|date:"M j, Y" }}</small>
+                            </div>
+                        </a>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </c-slot>
+
+        <c-slot name="sidebar">
+            {% if eventseries.logo %}
+                <div class="sidebar-card">
+                    <div class="content text-center">
+                        <img src="{{ eventseries.logo.square }}" alt="{{ eventseries.name }}" class="img-fluid rounded" width="400" height="400">
+                    </div>
+                </div>
+            {% elif eventseries.organisation.logo %}
+                <div class="sidebar-card">
+                    <div class="content text-center">
+                        <img src="{{ eventseries.organisation.logo.square }}" alt="{{ eventseries.organisation.name }}" class="img-fluid rounded" width="400" height="400">
+                    </div>
+                </div>
+            {% endif %}
+        </c-slot>
+    </c-layout-sidebar>
+{% endblock content %}

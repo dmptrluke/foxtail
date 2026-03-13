@@ -21,7 +21,7 @@ from apps.core.validators import file_size_validator
 
 class EventQuerySet(models.QuerySet):
     def for_organisation(self, org):
-        return self.filter(models.Q(organisation=org) | models.Q(series__organisation=org))
+        return self.filter(models.Q(organisation=org) | models.Q(series__organisation=org)).distinct()
 
 
 class Event(PublishedModel):
@@ -134,6 +134,14 @@ class Event(PublishedModel):
                 'url': image_url,
                 'width': 1200,
                 'height': 630,
+            }
+
+        org = self.resolved_organisation
+        if org:
+            data['organizer'] = {
+                '@type': 'Organization',
+                'name': org.name,
+                'url': settings.SITE_URL + org.get_absolute_url(),
             }
 
         return data

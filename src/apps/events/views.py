@@ -14,6 +14,7 @@ from published.utils import queryset_filter
 from structured_data.views import StructuredDataMixin
 
 from apps.core.mixins import PermissionMixin
+from apps.organisations.models import Organisation
 
 from .models import Event
 
@@ -29,16 +30,29 @@ class EventListView(StructuredDataMixin, ListView):
     def get_queryset(self):
         return Event.objects.none()
 
+    def _get_base_queryset(self):
+        qs = queryset_filter(Event.objects, self.request.user).select_related('organisation', 'series')
+        org_slug = self.request.GET.get('org')
+        if org_slug:
+            try:
+                org = Organisation.objects.get(slug=org_slug)
+                qs = qs.for_organisation(org)
+                self._filter_org = org
+            except Organisation.DoesNotExist:
+                pass
+        return qs
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         today = date.today()
         upcoming_filter = Q(start__gte=today) | Q(end__gte=today)
-        published = queryset_filter(Event.objects, self.request.user)
+        published = self._get_base_queryset()
         upcoming = published.filter(upcoming_filter).prefetch_related('tags').order_by('start')
         context['upcoming_events'] = upcoming
         context['past_events'] = published.exclude(upcoming_filter).prefetch_related('tags').order_by('-start')
         context['featured_event'] = upcoming.first()
         context['event_years'] = _event_years()
+        context['filter_org'] = getattr(self, '_filter_org', None)
         return context
 
     def get_structured_data(self):
@@ -86,7 +100,18 @@ class EventDetailView(PublishedDetailMixin, YearMixin, DetailView):
 
     def get_queryset(self):
         year = int(self.get_year())
-        return Event.objects.filter(start__year=year, slug=self.kwargs['slug']).prefetch_related('tags')
+        return (
+            Event.objects.filter(start__year=year, slug=self.kwargs['slug'])
+            .select_related('organisation', 'series', 'series__organisation')
+            .prefetch_related('tags')
+        )
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        from apps.blog.models import Post
+
+        context['related_posts'] = queryset_filter(Post.objects).filter(events=self.object)
+        return context
 
 
 # --- Management views ---
