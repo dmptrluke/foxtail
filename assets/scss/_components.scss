@@ -64,6 +64,16 @@ p a {
 	}
 }
 
+.tag-pill-meta {
+	background: rgba($secondary, 0.35);
+	color: $white;
+}
+
+.tag-row-dark .tag-pill-meta {
+	background: rgba($secondary, 0.15);
+	color: $primary;
+}
+
 
 // Empty states
 .empty-state {

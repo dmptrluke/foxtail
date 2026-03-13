@@ -25,17 +25,23 @@
                 {% endif %}
             </c-hero.nav>
 
-            <c-tag-row :tags="event.tags.all" />
+            {% if event.resolved_organisation or event.series or event.tags.all %}
+                <div class="tag-row">
+                    {% if event.resolved_organisation %}
+                        <a href="{{ event.resolved_organisation.get_absolute_url }}" class="tag-pill tag-pill-meta">{{ event.resolved_organisation.name }}</a>
+                    {% endif %}
+                    {% if event.series %}
+                        <a href="{{ event.series.get_absolute_url }}" class="tag-pill tag-pill-meta">{{ event.series.name }}</a>
+                    {% endif %}
+                    {% for tag in event.tags.all %}
+                        <span class="tag-pill">{{ tag.name|title }}</span>
+                    {% endfor %}
+                </div>
+            {% endif %}
 
             <c-hero.title>{{ event.title }}</c-hero.title>
             <c-hero.subtitle>
                 {{ event.location }}
-                {% if event.resolved_organisation %}
-                    &middot; Organised by <a href="{{ event.resolved_organisation.get_absolute_url }}">{{ event.resolved_organisation.name }}</a>
-                {% endif %}
-                {% if event.series %}
-                    &middot; Part of <a href="{{ event.series.get_absolute_url }}">{{ event.series.name }}</a>
-                {% endif %}
             </c-hero.subtitle>
 
             <dl class="event-hero-dates">
