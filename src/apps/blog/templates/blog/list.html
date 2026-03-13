@@ -1,10 +1,15 @@
 {% extends "base/page.html" %}
-{% load breadcrumbs %}
+{% load breadcrumbs jsonld opengraph meta twitter %}
 
 
 {% block title %}{% if year %}News from {{ year }}{% else %}News{% endif %}{% endblock %}
 
-{% block extra_head %}<meta name="description" content="{% if request.GET.q %}Search results for {{ request.GET.q }} on furry.nz{% elif tag %}News posts tagged {{ tag.name }} on furry.nz{% elif year %}Furry community news from {{ year }}{% else %}Community news and updates for New Zealand furries{% endif %}">{% endblock %}
+{% block extra_head %}
+    {% json_ld_for structured_data %}
+    {% og_for structured_data %}
+    {% meta_for structured_data %}
+    {% twitter_for structured_data %}
+{% endblock %}
 
 {% block hero %}
     <c-hero>

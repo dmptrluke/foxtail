@@ -13,6 +13,7 @@ from django.views.generic.dates import YearMixin
 from csp_helpers.mixins import CSPViewMixin
 from published.mixins import PublishedDetailMixin, PublishedListMixin
 from published.utils import queryset_filter
+from structured_data.views import StructuredDataMixin
 from taggit.models import Tag
 
 from apps.core.mixins import PermissionMixin
@@ -36,7 +37,7 @@ def _sidebar_context():
     }
 
 
-class BlogListView(PublishedListMixin, ListView):
+class BlogListView(StructuredDataMixin, PublishedListMixin, ListView):
     model = Post
     paginate_by = 10
     context_object_name = 'posts'
@@ -55,6 +56,22 @@ class BlogListView(PublishedListMixin, ListView):
                 raise Http404() from None
 
         return context
+
+    def get_structured_data(self):
+        q = self.request.GET.get('q')
+        tag = self.request.GET.get('tag')
+        if q:
+            description = f'Search results for {q} on furry.nz'
+        elif tag:
+            description = f'News posts tagged {tag} on furry.nz'
+        else:
+            description = 'Community news and updates for New Zealand furries'
+        return {
+            '@type': 'CollectionPage',
+            'name': 'News',
+            'description': description,
+            'url': self.request.build_absolute_uri(),
+        }
 
     def get_queryset(self):
         queryset = super().get_queryset()
@@ -80,7 +97,7 @@ class BlogListView(PublishedListMixin, ListView):
         return queryset
 
 
-class BlogListYearView(PublishedListMixin, YearMixin, ListView):
+class BlogListYearView(StructuredDataMixin, PublishedListMixin, YearMixin, ListView):
     model = Post
     paginate_by = 10
     context_object_name = 'posts'
@@ -97,6 +114,15 @@ class BlogListYearView(PublishedListMixin, YearMixin, ListView):
         context['blog_years'] = _blog_years()
         context['year'] = str(self.get_year())
         return context
+
+    def get_structured_data(self):
+        year = self.get_year()
+        return {
+            '@type': 'CollectionPage',
+            'name': f'News from {year}',
+            'description': f'Furry community news from {year}',
+            'url': self.request.build_absolute_uri(),
+        }
 
 
 class BlogDetailView(PublishedDetailMixin, DetailView):

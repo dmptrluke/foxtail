@@ -1,10 +1,15 @@
 {% extends "base/page.html" %}
-{% load breadcrumbs image %}
+{% load breadcrumbs image jsonld opengraph meta twitter %}
 
 
 {% block title %}{% if year %}Events in {{ year }}{% else %}Furry Events{% endif %}{% endblock %}
 
-{% block extra_head %}<meta name="description" content="{% if year %}Furry conventions and community events from {{ year }}{% else %}Furry conventions, meets, and community gatherings across New Zealand and beyond{% endif %}">{% endblock %}
+{% block extra_head %}
+    {% json_ld_for structured_data %}
+    {% og_for structured_data %}
+    {% meta_for structured_data %}
+    {% twitter_for structured_data %}
+{% endblock %}
 
 {% block hero %}
     <c-hero>

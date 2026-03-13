@@ -11,6 +11,7 @@ from django.views.generic.dates import YearMixin
 from csp_helpers.mixins import CSPViewMixin
 from published.mixins import PublishedDetailMixin
 from published.utils import queryset_filter
+from structured_data.views import StructuredDataMixin
 
 from apps.core.mixins import PermissionMixin
 
@@ -21,7 +22,7 @@ def _event_years():
     return queryset_filter(Event.objects).dates('start', 'year', order='DESC').values_list('start__year', flat=True)
 
 
-class EventListView(ListView):
+class EventListView(StructuredDataMixin, ListView):
     template_name = 'events/list.html'
     context_object_name = 'event_list'
 
@@ -40,8 +41,16 @@ class EventListView(ListView):
         context['event_years'] = _event_years()
         return context
 
+    def get_structured_data(self):
+        return {
+            '@type': 'CollectionPage',
+            'name': 'Furry Events',
+            'description': 'Furry conventions, meets, and community gatherings across New Zealand and beyond',
+            'url': self.request.build_absolute_uri(),
+        }
 
-class EventListYearView(YearMixin, ListView):
+
+class EventListYearView(StructuredDataMixin, YearMixin, ListView):
     template_name = 'events/list.html'
     context_object_name = 'event_list'
 
@@ -60,6 +69,15 @@ class EventListYearView(YearMixin, ListView):
         context['past_events'] = year_qs.exclude(upcoming_filter).order_by('-start')
         context['event_years'] = _event_years()
         return context
+
+    def get_structured_data(self):
+        year = self.get_year()
+        return {
+            '@type': 'CollectionPage',
+            'name': f'Events in {year}',
+            'description': f'Furry conventions and community events from {year}',
+            'url': self.request.build_absolute_uri(),
+        }
 
 
 class EventDetailView(PublishedDetailMixin, YearMixin, DetailView):
