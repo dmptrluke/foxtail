@@ -57,7 +57,7 @@
 
 {% block content %}
     {% if upcoming_events %}
-        <h2 class="event-section-label">Upcoming</h2>
+        <c-section-label large>Upcoming</c-section-label>
         <div class="row narrow-gutters event-masonry" data-colcade="columns: .grid-col, items: .event-card">
             <div class="grid-col col-md-6 col-lg-4"></div>
             <div class="grid-col d-none d-md-block col-md-6 col-lg-4"></div>
@@ -73,7 +73,7 @@
     {% endif %}
 
     {% if past_events %}
-        <h2 class="event-section-label{% if upcoming_events %} mt-5{% endif %}">Past Events</h2>
+        <c-section-label large class="{% if upcoming_events %}mt-5{% endif %}">Past Events</c-section-label>
         <div class="row narrow-gutters event-masonry" data-colcade="columns: .grid-col, items: .event-card">
             <div class="grid-col col-md-6 col-lg-4"></div>
             <div class="grid-col d-none d-md-block col-md-6 col-lg-4"></div>

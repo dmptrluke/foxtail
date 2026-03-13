@@ -9,9 +9,9 @@
 </form>
 
 {% cache 1800 sidebarposts %}
-    <div class="sidebar-card">
-        <h3 class="header">Recent Posts <small><a title="RSS Feed" href="{% url 'blog:feed' %}"><c-icons.rss-square /></a></small></h3>
-        <div class="content">
+    <c-sidebar>
+        <c-sidebar.header>Recent Posts <small><a title="RSS Feed" href="{% url 'blog:feed' %}"><c-icons.rss-square /></a></small></c-sidebar.header>
+        <c-sidebar.content>
             {% for post in sidebar_post_list %}
                 <a href="{{ post.get_absolute_url }}" class="preview">
                     <strong>{{ post.title }}</strong>
@@ -19,13 +19,13 @@
                     <p>{{ post.text_rendered|safe|striptags|truncatechars:80 }}</p>
                 </a>
             {% endfor %}
-        </div>
-    </div>
+        </c-sidebar.content>
+    </c-sidebar>
 {% endcache %}
 
-<div class="sidebar-card">
-    <h3 class="header">Categories</h3>
-    <div class="content">
+<c-sidebar>
+    <c-sidebar.header>Categories</c-sidebar.header>
+    <c-sidebar.content>
         {% for tag in sidebar_tag_list %}
             <a href="{% url 'blog:list' %}?tag={{ tag.slug }}"
                class="filter{% if request.GET.tag == tag.slug %} active{% endif %}">
@@ -33,5 +33,5 @@
                 <span class="count">{{ tag.num_times }}</span>
             </a>
         {% endfor %}
-    </div>
-</div>
+    </c-sidebar.content>
+</c-sidebar>

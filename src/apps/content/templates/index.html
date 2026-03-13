@@ -32,10 +32,7 @@
 {% block content %}
     {# ── News ── #}
     <section class="mb-5">
-        <header class="section-header">
-            <h2>Latest News</h2>
-            <a href="{% url 'blog:list' %}" class="section-link">View all &rarr;</a>
-        </header>
+        <c-section-header link_url="{% url 'blog:list' %}">Latest News</c-section-header>
 
         {% for post in post_list %}
                 {% if forloop.first %}
@@ -83,18 +80,12 @@
     {# ── Events ── #}
     {% if event_list %}
         <section>
-            <header class="section-header">
-                <h2>Upcoming Events</h2>
-                <a href="{% url 'events:list' %}" class="section-link">View all &rarr;</a>
-            </header>
+            <c-section-header link_url="{% url 'events:list' %}">Upcoming Events</c-section-header>
 
             <div class="event-list">
                 {% for event in event_list %}
                         <a href="{{ event.get_absolute_url }}" class="event-item">
-                            <div class="event-date-badge">
-                                <span class="event-date-month">{{ event.start|date:"M" }}</span>
-                                <span class="event-date-day">{{ event.start|date:"j" }}</span>
-                            </div>
+                            <c-cal_badge :date="event.start" large />
                             <div class="event-details">
                                 <h3>{{ event.title }}</h3>
                                 <p>{{ event.description_rendered|safe|striptags|truncatechars:120 }}</p>

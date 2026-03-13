@@ -30,7 +30,7 @@
                     {% if event.resolved_organisation %}
                         <a href="{{ event.resolved_organisation.get_absolute_url }}" class="tag-pill tag-pill-meta">{{ event.resolved_organisation.name }}</a>
                     {% endif %}
-                    {% if event.series %}
+                    {% if show_series %}
                         <a href="{{ event.series.get_absolute_url }}" class="tag-pill tag-pill-meta">{{ event.series.name }}</a>
                     {% endif %}
                     {% for tag in event.tags.all %}
@@ -98,34 +98,34 @@
 
         <c-slot name="sidebar">
             {# Location card #}
-            <div class="sidebar-card">
-                <h3 class="header">Location</h3>
-                <div class="content">
+            <c-sidebar>
+                <c-sidebar.header>Location</c-sidebar.header>
+                <c-sidebar.content>
                     <p><strong>{{ event.location }}</strong></p>
                     {% if event.address %}
                         <p class="meta">{{ event.address }}</p>
                     {% endif %}
-                </div>
-            </div>
+                </c-sidebar.content>
+            </c-sidebar>
 
             {# Cost card (dummy data - field doesn't exist yet) #}
-            <div class="sidebar-card">
-                <h3 class="header">Cost</h3>
-                <div class="content">
+            <c-sidebar>
+                <c-sidebar.header>Cost</c-sidebar.header>
+                <c-sidebar.content>
                     <p><strong>Check event website</strong></p>
                     <p>Pricing varies by registration type and date.</p>
-                </div>
-            </div>
+                </c-sidebar.content>
+            </c-sidebar>
 
             {# CTA #}
             {% if event.url %}
-                <div class="sidebar-card">
-                    <div class="footer">
+                <c-sidebar>
+                    <c-sidebar.footer>
                         <a class="btn btn-primary" href="{{ event.url }}" rel="noopener noreferrer" target="_blank">
                             Visit Event Website
                         </a>
-                    </div>
-                </div>
+                    </c-sidebar.footer>
+                </c-sidebar>
             {% endif %}
         </c-slot>
     </c-layout-sidebar>

@@ -73,14 +73,6 @@
 
 // Section labels & empty state
 
-.event-section-label {
-	@include label-style-lg;
-	color: color.adjust($body-color, $lightness: 25%);
-	padding-bottom: 0.75rem;
-	margin-bottom: 1rem;
-	border-bottom: 2px solid rgba($secondary, 0.15);
-}
-
 // Event cards (list page)
 
 .event-card {

@@ -58,17 +58,21 @@
 
         <c-slot name="sidebar">
             {% if eventseries.logo %}
-                <div class="sidebar-card">
-                    <div class="content text-center">
-                        <img src="{{ eventseries.logo.square }}" alt="{{ eventseries.name }}" class="img-fluid rounded" width="400" height="400">
-                    </div>
-                </div>
+                <c-sidebar>
+                    <c-sidebar.content>
+                        <div class="text-center">
+                            <img src="{{ eventseries.logo.square }}" alt="{{ eventseries.name }}" class="img-fluid rounded" width="400" height="400">
+                        </div>
+                    </c-sidebar.content>
+                </c-sidebar>
             {% elif eventseries.organisation.logo %}
-                <div class="sidebar-card">
-                    <div class="content text-center">
-                        <img src="{{ eventseries.organisation.logo.square }}" alt="{{ eventseries.organisation.name }}" class="img-fluid rounded" width="400" height="400">
-                    </div>
-                </div>
+                <c-sidebar>
+                    <c-sidebar.content>
+                        <div class="text-center">
+                            <img src="{{ eventseries.organisation.logo.square }}" alt="{{ eventseries.organisation.name }}" class="img-fluid rounded" width="400" height="400">
+                        </div>
+                    </c-sidebar.content>
+                </c-sidebar>
             {% endif %}
         </c-slot>
     </c-layout-sidebar>

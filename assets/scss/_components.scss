@@ -83,6 +83,92 @@ p a {
 }
 
 
+// Date badge (shared between homepage event list and org page)
+
+.cal-badge {
+	font-family: $label-font-family;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	min-width: 2.75rem;
+	height: 2.75rem;
+	background: rgba($primary, 0.08);
+	border-radius: $card-border-radius;
+	flex-shrink: 0;
+	transition: background 0.15s;
+
+	.event-date-month {
+		font-size: 0.6rem;
+		font-weight: 700;
+		text-transform: uppercase;
+		letter-spacing: 0.06em;
+		color: $primary;
+		line-height: 1;
+		transition: color 0.15s;
+	}
+
+	.event-date-day {
+		font-size: 1.1rem;
+		font-weight: 700;
+		color: $primary;
+		line-height: 1.1;
+		transition: color 0.15s;
+	}
+}
+
+.cal-badge--lg {
+	min-width: 3.75rem;
+	height: 3.75rem;
+
+	.event-date-month {
+		font-size: 0.7rem;
+	}
+
+	.event-date-day {
+		font-size: 1.35rem;
+	}
+}
+
+// Section header (large, with optional link)
+
+.section-header {
+	display: flex;
+	align-items: baseline;
+	justify-content: space-between;
+	margin-bottom: 1.25rem;
+	border-bottom: 2px solid rgba($secondary, 0.2);
+	padding-bottom: 0.5rem;
+
+	h2 {
+		font-size: 1.5rem;
+		font-weight: 500;
+		margin: 0;
+	}
+}
+
+.section-link {
+	font-size: 0.875rem;
+	font-weight: 500;
+	white-space: nowrap;
+}
+
+// Section label (small uppercase marker)
+
+.section-label {
+	@include label-style;
+	color: $secondary;
+	margin-bottom: 0.75rem;
+}
+
+.section-label--lg {
+	@include label-style-lg;
+	color: color.adjust($body-color, $lightness: 25%);
+	padding-bottom: 0.75rem;
+	margin-bottom: 1rem;
+	border-bottom: 2px solid rgba($secondary, 0.15);
+}
+
 // Empty states
 .empty-state {
 	padding: 2rem 1.25rem;
