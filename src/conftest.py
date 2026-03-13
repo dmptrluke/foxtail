@@ -8,7 +8,7 @@ from apps.accounts.tests.factories import UserFactory, UserNoPasswordFactory
 from apps.blog.tests.factories import AuthorFactory, CommentFactory, PostFactory
 from apps.content.tests.factories import PageFactory
 from apps.events.tests.factories import EventFactory, PastEventFactory
-from apps.organisations.tests.factories import EventSeriesFactory, OrganisationFactory
+from apps.organisations.tests.factories import EventSeriesFactory, OrganisationFactory, SocialLinkFactory
 
 # accounts
 register(UserFactory, 'user')
@@ -33,6 +33,7 @@ register(PastEventFactory, 'past_event')
 
 # organisations
 register(OrganisationFactory)
+register(SocialLinkFactory)
 register(EventSeriesFactory)
 
 

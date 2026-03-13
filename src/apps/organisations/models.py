@@ -21,6 +21,7 @@ class Organisation(models.Model):
 
     logo = ProcessedImageField(upload_to='organisations', blank=True, auto_add_fields=True)
     url = models.URLField(blank=True)
+    country = models.CharField(max_length=100, blank=True)
 
     created = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
@@ -58,6 +59,49 @@ class Organisation(models.Model):
                 'height': 400,
             }
         return data
+
+
+class SocialLink(models.Model):
+    PLATFORM_CHOICES = [
+        ('telegram', 'Telegram'),
+        ('discord', 'Discord'),
+        ('twitter', 'Twitter / X'),
+        ('bluesky', 'Bluesky'),
+        ('instagram', 'Instagram'),
+        ('facebook', 'Facebook'),
+        ('mastodon', 'Mastodon'),
+        ('website', 'Website'),
+    ]
+
+    PLATFORM_ICONS = {
+        'telegram': 'telegram',
+        'discord': 'discord',
+        'twitter': 'x',
+        'bluesky': 'bluesky',
+        'instagram': 'instagram',
+        'facebook': 'facebook',
+        'mastodon': 'mastodon',
+        'website': 'link_variant',
+    }
+
+    organisation = models.ForeignKey(
+        'organisations.Organisation',
+        on_delete=models.CASCADE,
+        related_name='social_links',
+    )
+    platform = models.CharField(max_length=20, choices=PLATFORM_CHOICES)
+    url = models.URLField()
+    is_primary = models.BooleanField(default=False)
+
+    class Meta:
+        ordering = ['-is_primary', 'platform']
+
+    def __str__(self):
+        return f'{self.get_platform_display()} - {self.organisation}'
+
+    @property
+    def icon_name(self):
+        return self.PLATFORM_ICONS.get(self.platform, 'link_variant')
 
 
 class EventSeries(models.Model):

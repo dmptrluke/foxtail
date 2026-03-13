@@ -1,5 +1,5 @@
 {% extends "base/page.html" %}
-{% load jsonld %}
+{% load breadcrumbs icon jsonld %}
 
 {% block extra_head %}
     <link rel="canonical" href="{{ SITE_URL }}{{ organisation.get_absolute_url }}"/>
@@ -11,12 +11,51 @@
 {% block hero %}
     <c-hero>
         <c-hero.nav>
-            {% load breadcrumbs %}
-            {% breadcrumbs organisation.get_absolute_url organisation.name %}
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item">Organisations</li>
+                    <li class="breadcrumb-item active" aria-current="page">{{ organisation.name }}</li>
+                </ol>
+            </nav>
+            {% if user.is_staff %}
+                <a href="{% url 'admin:organisations_organisation_change' organisation.pk %}" class="hero-admin-link"><c-icons.pencil width="0.75em" height="0.75em" /> <span>Edit</span></a>
+            {% endif %}
         </c-hero.nav>
-        <c-hero.title>{{ organisation.name }}</c-hero.title>
-        {% if organisation.url %}
-            <c-hero.subtitle><a href="{{ organisation.url }}" rel="noopener noreferrer" target="_blank">{{ organisation.url }}</a></c-hero.subtitle>
+
+        <div class="org-hero-identity">
+            {% if organisation.logo %}
+                <img src="{{ organisation.logo.square }}" alt="{{ organisation.name }}" class="org-hero-logo">
+            {% else %}
+                <div class="org-hero-logo org-hero-logo-placeholder">{{ organisation.name|slice:":2"|upper }}</div>
+            {% endif %}
+            <div>
+                <h1 class="org-hero-name">{{ organisation.name }}</h1>
+                {% if organisation.country %}
+                    <div class="org-hero-type">{{ organisation.country }}</div>
+                {% endif %}
+            </div>
+        </div>
+
+        {% if social_links %}
+            <div class="hero-bottom org-hero-links">
+                {% for link in social_links %}
+                    {% if link.is_primary %}
+                        <a href="{{ link.url }}" class="org-join-btn" rel="noopener noreferrer" target="_blank">
+                            {% icon link.icon_name %} Join on {{ link.get_platform_display }}
+                        </a>
+                    {% endif %}
+                {% endfor %}
+
+                <div class="org-social-icons">
+                    {% for link in social_links %}
+                        {% if not link.is_primary %}
+                            <a href="{{ link.url }}" title="{{ link.get_platform_display }}" rel="noopener noreferrer" target="_blank">
+                                {% icon link.icon_name %}
+                            </a>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
         {% endif %}
     </c-hero>
 {% endblock hero %}
@@ -29,67 +68,69 @@
             {% endif %}
 
             {% if events %}
-                <h2>Events</h2>
-                <div class="list-group mb-4">
-                    {% for event in events %}
-                        <a href="{{ event.get_absolute_url }}" class="list-group-item list-group-item-action">
-                            <div class="d-flex w-100 justify-content-between">
-                                <h5 class="mb-1">{{ event.title }}</h5>
-                                <small class="text-body-secondary">{{ event.start|date:"M j, Y" }}</small>
-                            </div>
-                            {% if event.series %}
-                                <small class="text-body-secondary">{{ event.series.name }}</small>
-                            {% endif %}
+                <c-section-label large class="mt-3">Events</c-section-label>
+
+                {% regroup events by series as event_groups %}
+                {% for group in event_groups %}
+                    {% if group.grouper %}
+                        <div class="series-heading{% if forloop.first %} mt-1{% else %} mt-3{% endif %}">
+                            <a href="{{ group.grouper.get_absolute_url }}">{{ group.grouper.name }}</a>
+                        </div>
+                    {% elif not forloop.first %}
+                        <div class="series-heading">
+                            <span>Other Events</span>
+                        </div>
+                    {% endif %}
+
+                    {% for event in group.list %}
+                        <a href="{{ event.get_absolute_url }}" class="event-row-stamp">
+                            <c-cal_badge :date="event.start" />
+                            <div class="event-row-stamp-title">{{ event.title }}</div>
+                            <div class="event-row-stamp-year">{{ event.start|date:"Y" }}</div>
                         </a>
                     {% endfor %}
-                </div>
+                {% endfor %}
             {% endif %}
 
             {% if posts %}
-                <h2>Related Posts</h2>
-                <div class="list-group mb-4">
-                    {% for post in posts %}
-                        <a href="{{ post.get_absolute_url }}" class="list-group-item list-group-item-action">
-                            <div class="d-flex w-100 justify-content-between">
-                                <h5 class="mb-1">{{ post.title }}</h5>
-                                <small class="text-body-secondary">{{ post.created|date:"M j, Y" }}</small>
-                            </div>
-                        </a>
-                    {% endfor %}
-                </div>
+                <c-section-label large class="mt-4">Related Posts</c-section-label>
+                {% for post in posts %}
+                    <a href="{{ post.get_absolute_url }}" class="event-row-stamp">
+                        <div class="event-row-stamp-title">{{ post.title }}</div>
+                        <div class="event-row-stamp-year">{{ post.created|date:"M j, Y" }}</div>
+                    </a>
+                {% endfor %}
             {% endif %}
         </c-slot>
 
         <c-slot name="sidebar">
-            {% if organisation.logo %}
-                <div class="sidebar-card">
-                    <div class="content text-center">
-                        <img src="{{ organisation.logo.square }}" alt="{{ organisation.name }}" class="img-fluid rounded" width="400" height="400">
+            {% if next_event %}
+                <a href="{{ next_event.get_absolute_url }}" class="upcoming-event-card">
+                    <span class="upcoming-event-label">Upcoming</span>
+                    <div class="upcoming-event-info">
+                        <span class="upcoming-event-title">{{ next_event.title }}</span>
+                        <span class="upcoming-event-dates">
+                            {{ next_event.start|date:"M j" }}{% if next_event.end %} – {{ next_event.end|date:"M j, Y" }}{% else %}, {{ next_event.start|date:"Y" }}{% endif %}
+                        </span>
+                        {% if next_event.location %}
+                            <span class="upcoming-event-location">{{ next_event.location }}</span>
+                        {% endif %}
                     </div>
-                </div>
+                    <c-cal_badge large :date="next_event.start" />
+                </a>
             {% endif %}
 
             {% if series %}
-                <div class="sidebar-card">
-                    <h3 class="header">Event Series</h3>
-                    <div class="content">
+                <c-sidebar>
+                    <c-sidebar.header>Event Series</c-sidebar.header>
+                    <c-sidebar.content>
                         <ul class="list-unstyled mb-0">
                             {% for s in series %}
                                 <li><a href="{{ s.get_absolute_url }}">{{ s.name }}</a></li>
                             {% endfor %}
                         </ul>
-                    </div>
-                </div>
-            {% endif %}
-
-            {% if organisation.url %}
-                <div class="sidebar-card">
-                    <div class="footer">
-                        <a class="btn btn-primary" href="{{ organisation.url }}" rel="noopener noreferrer" target="_blank">
-                            Visit Website
-                        </a>
-                    </div>
-                </div>
+                    </c-sidebar.content>
+                </c-sidebar>
             {% endif %}
         </c-slot>
     </c-layout-sidebar>

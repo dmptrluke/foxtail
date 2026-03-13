@@ -1,0 +1,243 @@
+@use "sass:color";
+
+// Org page hero
+
+.org-hero-identity {
+	display: flex;
+	align-items: center;
+	gap: 1.25rem;
+	margin-bottom: 0.25rem;
+}
+
+.org-hero-logo {
+	width: 4.5rem;
+	height: 4.5rem;
+	border-radius: 12px;
+	flex-shrink: 0;
+	object-fit: cover;
+}
+
+.org-hero-logo-placeholder {
+	background: rgba($white, 0.15);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 1.5rem;
+	font-weight: 700;
+	color: rgba($white, 0.7);
+	letter-spacing: -0.02em;
+}
+
+.org-hero-name {
+	font-size: 2rem;
+	font-weight: 550;
+	letter-spacing: -0.02em;
+	margin: 0 0 0.25rem;
+	line-height: 1.1;
+	color: $white;
+}
+
+.org-hero-type {
+	font-size: 0.85rem;
+	opacity: 0.65;
+	font-weight: 300;
+}
+
+// Social links in hero
+
+.org-hero-links {
+	display: flex;
+	align-items: center;
+	gap: 0.75rem;
+	flex-wrap: wrap;
+}
+
+.org-join-btn {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.4rem;
+	background: rgba($white, 0.15);
+	border: 1px solid rgba($white, 0.3);
+	color: $white;
+	font-size: 0.85rem;
+	font-weight: 600;
+	padding: 0.4rem 1rem;
+	border-radius: 999px;
+	text-decoration: none;
+	transition: background 0.15s;
+
+	.icon {
+		width: 1.1em;
+		height: 1.1em;
+	}
+
+	&:hover {
+		background: rgba($white, 0.25);
+		color: $white;
+	}
+}
+
+.org-social-icons {
+	display: flex;
+	gap: 0.65rem;
+	align-items: center;
+
+	a {
+		color: rgba($white, 0.65);
+		text-decoration: none;
+		transition: color 0.15s;
+
+		.icon {
+			width: 1.15em;
+			height: 1.15em;
+		}
+
+		&:hover {
+			color: $white;
+		}
+	}
+}
+
+// Upcoming event sidebar card
+
+.upcoming-event-card {
+	display: flex;
+	align-items: center;
+	gap: 1rem;
+	background: $dark;
+	padding: 1.25rem;
+	padding-top: 1.75rem;
+	border-radius: $card-border-radius;
+	text-decoration: none;
+	color: $white;
+	position: relative;
+	overflow: hidden;
+	transition: box-shadow 0.2s ease, transform 0.2s ease;
+
+	&:hover {
+		box-shadow: $shadow-lg;
+		transform: translateY(-2px);
+		color: $white;
+		text-decoration: none;
+	}
+
+	.cal-badge {
+		background: rgba($white, 0.12);
+		flex-shrink: 0;
+		margin-left: auto;
+
+		.event-date-month {
+			color: rgba($white, 0.6);
+		}
+
+		.event-date-day {
+			color: $white;
+		}
+	}
+}
+
+.upcoming-event-label {
+	@include label-style;
+	position: absolute;
+	top: 0;
+	left: 0;
+	background: $warning;
+	color: $dark;
+	padding: 0.2rem 0.75rem;
+	border-radius: 0 0 $border-radius-sm 0;
+	font-size: 0.6rem;
+}
+
+.upcoming-event-info {
+	display: flex;
+	flex-direction: column;
+	gap: 0.15rem;
+	min-width: 0;
+}
+
+.upcoming-event-title {
+	font-size: 1rem;
+	font-weight: 600;
+	line-height: 1.2;
+}
+
+.upcoming-event-dates {
+	font-size: 0.8rem;
+	color: rgba($white, 0.6);
+}
+
+.upcoming-event-location {
+	font-size: 0.75rem;
+	color: rgba($white, 0.45);
+	@include line-clamp(1);
+}
+
+// Event rows with date stamp
+
+.event-row-stamp {
+	display: flex;
+	align-items: center;
+	gap: 1rem;
+	padding: 0.6rem 0;
+	border-bottom: 1px solid rgba($secondary, 0.1);
+	text-decoration: none;
+	color: $body-color;
+
+	&:last-child {
+		border-bottom: none;
+	}
+
+	&:hover {
+		.cal-badge {
+			background: $primary;
+
+			.event-date-month,
+			.event-date-day {
+				color: $white;
+			}
+		}
+
+		.event-row-stamp-title {
+			color: $primary;
+		}
+	}
+}
+
+.event-row-stamp-title {
+	flex: 1;
+	font-size: 0.95rem;
+	font-weight: 500;
+	transition: color 0.15s;
+}
+
+.event-row-stamp-year {
+	font-size: 0.8rem;
+	color: $secondary;
+	flex-shrink: 0;
+}
+
+// Series grouping heading
+
+.series-heading {
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+	margin-bottom: 0.5rem;
+
+	a, span {
+		@include label-style;
+		color: $secondary;
+		text-decoration: none;
+	}
+
+	a:hover {
+		color: $primary;
+	}
+
+	&::after {
+		content: '';
+		flex: 1;
+		height: 1px;
+		background: rgba($secondary, 0.2);
+	}
+}

@@ -1,7 +1,7 @@
 from factory import Faker, SubFactory
 from factory.django import DjangoModelFactory
 
-from ..models import EventSeries, Organisation
+from ..models import EventSeries, Organisation, SocialLink
 
 
 class OrganisationFactory(DjangoModelFactory):
@@ -11,6 +11,15 @@ class OrganisationFactory(DjangoModelFactory):
 
     class Meta:
         model = Organisation
+
+
+class SocialLinkFactory(DjangoModelFactory):
+    organisation = SubFactory(OrganisationFactory)
+    platform = 'discord'
+    url = Faker('url')
+
+    class Meta:
+        model = SocialLink
 
 
 class EventSeriesFactory(DjangoModelFactory):

@@ -1,14 +1,21 @@
 from django.contrib import admin
 from django.contrib.admin import ModelAdmin
 
-from .models import EventSeries, Organisation
+from .models import EventSeries, Organisation, SocialLink
+
+
+class SocialLinkInline(admin.TabularInline):
+    model = SocialLink
+    extra = 1
+    fields = ['platform', 'url', 'is_primary']
 
 
 class OrganisationAdmin(ModelAdmin):
     fieldsets = (
-        (None, {'fields': ('name', 'slug', 'description', 'url')}),
+        (None, {'fields': ('name', 'slug', 'description', 'url', 'country')}),
         ('Logo', {'fields': ('logo', 'logo_ppoi')}),
     )
+    inlines = [SocialLinkInline]
     list_display = ['name', 'slug', 'url']
     search_fields = ['name']
     prepopulated_fields = {'slug': ('name',)}
