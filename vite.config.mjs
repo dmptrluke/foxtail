@@ -21,7 +21,7 @@ export default defineConfig(({ mode }) => ({
         outDir: resolve(__dirname, 'build/static'),
         emptyOutDir: true,
         manifest: true,
-        rollupOptions: {
+        rolldownOptions: {
             input: {
                 main: resolve(__dirname, 'assets/js/main.js'),
             },
@@ -34,7 +34,7 @@ export default defineConfig(({ mode }) => ({
         preprocessorOptions: {
             scss: {
                 quietDeps: true,
-                silenceDeprecations: ['import', 'global-builtin'],
+                silenceDeprecations: ['import', 'global-builtin', 'color-functions'],
                 importers: [new NodePackageImporter()],
                 loadPaths: [resolve(__dirname, 'node_modules')],
             },

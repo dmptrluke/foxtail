@@ -31,7 +31,7 @@
 	border-radius: 8px;
 	box-shadow: var(--ft-shadow-md);
 	padding: 0.5rem 0.65rem;
-	z-index: 10;
+	z-index: $zindex-fixed;
 
 	@include media-breakpoint-up(md) {
 		position: absolute;

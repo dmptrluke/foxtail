@@ -1,6 +1,6 @@
 // Theme: Glass
-// Frosted glassmorphism in dark zones (heroes, navbar, event cards).
-// Light content areas stay opaque.
+// Frosted glassmorphism.
+
 
 .theme-glass {
 	--ft-glass-bg: rgba(255, 255, 255, 0.08);
@@ -8,7 +8,7 @@
 	--ft-glass-backdrop: blur(16px) saturate(180%);
 	--ft-glass-glow: 0 0 0 1px rgba(255, 255, 255, 0.05);
 
-	// Ambient gradient blobs give glass elements something to refract
+	// Ambient gradient blobs
 	body {
 		background-image:
 			linear-gradient(var(--bs-dark) calc(4rem + env(safe-area-inset-top, 0px)), transparent calc(4rem + env(safe-area-inset-top, 0px))),
