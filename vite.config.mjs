@@ -6,16 +6,9 @@ export default defineConfig(({ mode }) => ({
     base: '/static/',
     root: 'assets',
     server: {
-        host: '0.0.0.0',
         port: 5173,
         origin: 'http://localhost:5173',
         strictPort: true,
-        hmr: {
-            host: 'localhost',
-        },
-        watch: {
-            usePolling: true,
-        },
     },
     build: {
         outDir: resolve(__dirname, 'build/static'),

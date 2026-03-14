@@ -6,7 +6,7 @@
     "private": true,
     "author": "",
     "scripts": {
-        "watch": "vite build --watch",
+        "dev": "vite",
         "build-development": "vite build --mode development",
         "build-production": "vite build"
     },

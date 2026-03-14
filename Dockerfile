@@ -39,18 +39,7 @@ RUN --mount=type=cache,target=/root/.cache/uv \
 
 ENV PATH="/app/.venv/bin:$PATH"
 
-FROM deps AS dev-deps
-RUN --mount=type=cache,target=/root/.cache/uv \
-    uv sync --frozen --no-install-project
-
-FROM dev-deps AS test-deps
-
-RUN --mount=type=cache,target=/root/.cache/uv \
-    uv sync --frozen --no-install-project --group test
-
-RUN mkdir -p /home/abc/.cache && chown -R abc:abc /home/abc
-
-# Applications
+# Application
 
 FROM deps AS app
 
@@ -69,20 +58,3 @@ RUN SECRET_KEY=build-placeholder SITE_URL=http://localhost CONTACT_EMAILS=noop@l
 
 EXPOSE 8000
 CMD ["gunicorn", "--bind", "0.0.0.0:8000", "--worker-tmp-dir", "/dev/shm", "--forwarded-allow-ips", "*", "foxtail.wsgi:application"]
-
-FROM dev-deps AS dev
-
-COPY --from=assets /app/build ./build
-COPY --chown=abc:abc . .
-
-USER abc
-
-FROM test-deps AS test
-
-COPY --from=assets /app/build ./build
-COPY --chown=abc:abc . .
-RUN chown abc:abc /app
-
-USER abc
-
-CMD ["python", "-m", "pytest", "--cov=apps", "--cov-report=xml", "--cov-report=term-missing"]

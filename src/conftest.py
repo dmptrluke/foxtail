@@ -38,7 +38,17 @@ register(EventSeriesFactory)
 
 
 @pytest.fixture(autouse=True)
-def _disable_rate_limits(request, settings):
+def _testing_overrides(request, settings):
+    # simplified staticfiles (no manifest needed)
+    settings.STORAGES = {
+        **settings.STORAGES,
+        'staticfiles': {
+            'BACKEND': 'whitenoise.storage.CompressedStaticFilesStorage',
+        },
+    }
+    settings.WHITENOISE_AUTOREFRESH = True
+    # disable debug toolbar in tests (middleware bombs when URL conf isn't fully wired)
+    settings.DEBUG_TOOLBAR_CONFIG = {'SHOW_TOOLBAR_CALLBACK': lambda _: False}
     if 'keep_rate_limits' not in request.keywords:
         settings.ACCOUNT_RATE_LIMITS = {}
 

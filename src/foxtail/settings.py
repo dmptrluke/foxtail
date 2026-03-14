@@ -346,15 +346,31 @@ LOGGING = {
             'class': 'logging.StreamHandler',
             'formatter': 'access',
         },
+        'access_file': {
+            'level': 'INFO',
+            'class': 'logging.FileHandler',
+            'filename': str(BASE_DIR / 'logs' / 'django.log'),
+            'formatter': 'access',
+        },
+        'file': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': str(BASE_DIR / 'logs' / 'django.log'),
+            'formatter': 'verbose',
+        },
     },
-    'root': {'level': 'INFO', 'handlers': ['console']},
+    'root': {'level': 'INFO', 'handlers': ['console'] + (['file'] if DEBUG else [])},
     'loggers': {
         'sentry_sdk': {'level': 'ERROR', 'handlers': ['console']},
         'botocore': {'level': 'WARNING'},
         's3transfer': {'level': 'WARNING'},
         'pyvips': {'level': 'WARNING'},
         'django.request': {'level': 'ERROR', 'handlers': ['console'], 'propagate': False},
-        'apps.core.access': {'level': 'INFO', 'handlers': ['access'], 'propagate': False},
+        'apps.core.access': {
+            'level': 'INFO',
+            'handlers': ['access'] + (['access_file'] if DEBUG else []),
+            'propagate': False,
+        },
     },
 }
 

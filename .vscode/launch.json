@@ -4,30 +4,14 @@
         {
             "name": "Run: Dev Server",
             "type": "debugpy",
-            "request": "attach",
-            "connect": {
-                "host": "localhost",
-                "port": 5678
+            "request": "launch",
+            "program": "src/manage.py",
+            "args": ["runserver", "--noreload"],
+            "django": true,
+            "env": {
+                "PYTHONPATH": "${workspaceFolder}/src"
             },
-            "pathMappings": [
-                {
-                    "localRoot": "${workspaceFolder}",
-                    "remoteRoot": "/app"
-                }
-            ],
-            "preLaunchTask": "Docker: Start Dev Server"
-        },
-        {
-            "name": "Test: Apps Only",
-            "type": "node-terminal",
-            "request": "launch",
-            "command": "docker compose -f compose.yaml -f compose.test.yaml run --rm test pytest src/apps/ -v"
-        },
-        {
-            "name": "Test: All",
-            "type": "node-terminal",
-            "request": "launch",
-            "command": "docker compose -f compose.yaml -f compose.test.yaml run --rm test pytest src/apps/ src/tests/ -v"
+            "preLaunchTask": "Vite: Dev Server"
         }
     ]
 }

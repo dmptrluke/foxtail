@@ -2,17 +2,17 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "Docker: Build Dev",
+            "label": "Infra: Start",
             "type": "shell",
-            "command": "docker compose build",
+            "command": "docker compose up -d",
             "presentation": {
-                "reveal": "always",
+                "reveal": "silent",
                 "panel": "shared"
             },
             "problemMatcher": []
         },
         {
-            "label": "Docker: Stop All",
+            "label": "Infra: Stop",
             "type": "shell",
             "command": "docker compose down",
             "presentation": {
@@ -22,9 +22,67 @@
             "problemMatcher": []
         },
         {
+            "label": "Django: Dev Server",
+            "type": "shell",
+            "command": "uv run python src/manage.py runserver",
+            "isBackground": true,
+            "dependsOn": "Infra: Start",
+            "runOptions": {
+                "instanceLimit": 1
+            },
+            "presentation": {
+                "reveal": "always",
+                "panel": "dedicated"
+            },
+            "problemMatcher": {
+                "owner": "django",
+                "pattern": {
+                    "regexp": "^$"
+                },
+                "background": {
+                    "activeOnStart": true,
+                    "beginsPattern": "Watching for file changes",
+                    "endsPattern": "Quit the server with"
+                }
+            }
+        },
+        {
+            "label": "Vite: Dev Server",
+            "type": "shell",
+            "command": "npm run dev",
+            "isBackground": true,
+            "runOptions": {
+                "instanceLimit": 1
+            },
+            "presentation": {
+                "reveal": "always",
+                "panel": "dedicated"
+            },
+            "problemMatcher": {
+                "owner": "vite",
+                "pattern": {
+                    "regexp": "^$"
+                },
+                "background": {
+                    "activeOnStart": true,
+                    "beginsPattern": "VITE",
+                    "endsPattern": "ready in"
+                }
+            }
+        },
+        {
+            "label": "Dev: Start All",
+            "dependsOn": ["Django: Dev Server", "Vite: Dev Server"],
+            "dependsOrder": "parallel",
+            "runOptions": {
+                "instanceLimit": 1
+            },
+            "problemMatcher": []
+        },
+        {
             "label": "Django: Run Migrations",
             "type": "shell",
-            "command": "docker compose run --rm foxtail django-admin migrate",
+            "command": "uv run python src/manage.py migrate",
             "presentation": {
                 "reveal": "always",
                 "panel": "shared"
@@ -34,7 +92,7 @@
         {
             "label": "Django: Open Shell",
             "type": "shell",
-            "command": "docker compose run --rm foxtail bash",
+            "command": "uv run python src/manage.py shell",
             "presentation": {
                 "reveal": "always",
                 "panel": "dedicated"
@@ -42,51 +100,9 @@
             "problemMatcher": []
         },
         {
-            "label": "Docker: Start Dev Server",
+            "label": "Django: Create Superuser",
             "type": "shell",
-            "command": "docker compose down && docker compose up --build foxtail",
-            "isBackground": true,
-            "presentation": {
-                "reveal": "always",
-                "panel": "dedicated"
-            },
-            "problemMatcher": {
-                "owner": "docker-debugpy",
-                "pattern": {
-                    "regexp": "^$"
-                },
-                "background": {
-                    "activeOnStart": true,
-                    "beginsPattern": "Attaching to",
-                    "endsPattern": "Listening for debugger connections"
-                }
-            }
-        },
-        {
-            "label": "Docker: Start Prod Server",
-            "type": "shell",
-            "command": "docker compose -f compose.yaml -f compose.prod-local.yaml down && docker compose -f compose.yaml -f compose.prod-local.yaml up --build foxtail",
-            "isBackground": true,
-            "presentation": {
-                "reveal": "always",
-                "panel": "dedicated"
-            },
-            "problemMatcher": {
-                "owner": "docker-gunicorn",
-                "pattern": {
-                    "regexp": "^$"
-                },
-                "background": {
-                    "activeOnStart": true,
-                    "beginsPattern": "Attaching to",
-                    "endsPattern": "\\[INFO\\] Listening at"
-                }
-            }
-        },
-        {
-            "label": "Docker: Build Tests",
-            "type": "shell",
-            "command": "docker compose -f compose.yaml -f compose.test.yaml build test",
+            "command": "uv run python src/manage.py createsuperuser --username ${input:superuserUsername} --email ${input:superuserEmail}",
             "presentation": {
                 "reveal": "always",
                 "panel": "shared"
@@ -94,9 +110,19 @@
             "problemMatcher": []
         },
         {
-            "label": "Django: Create Superuser",
+            "label": "Django: Warm Images",
             "type": "shell",
-            "command": "docker compose run --rm -e DJANGO_SUPERUSER_PASSWORD=${input:superuserPassword} foxtail django-admin createsuperuser --username ${input:superuserUsername} --email ${input:superuserEmail} --no-input",
+            "command": "uv run python src/manage.py warm_images",
+            "presentation": {
+                "reveal": "always",
+                "panel": "shared"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Django: Generate Sample Data",
+            "type": "shell",
+            "command": "uv run python src/manage.py generate_sample_data --users ${input:sampleUsers} --posts ${input:samplePosts} --comments ${input:sampleComments} --events ${input:sampleEvents} --pages ${input:samplePages}",
             "presentation": {
                 "reveal": "always",
                 "panel": "shared"
@@ -124,9 +150,9 @@
             "problemMatcher": []
         },
         {
-            "label": "Django: Warm Images",
+            "label": "Test: Run",
             "type": "shell",
-            "command": "docker compose run --rm foxtail django-admin warm_images",
+            "command": "uv run pytest src/apps/ -v",
             "presentation": {
                 "reveal": "always",
                 "panel": "shared"
@@ -134,14 +160,28 @@
             "problemMatcher": []
         },
         {
-            "label": "Django: Generate Sample Data",
+            "label": "Docker: Start Prod Server",
             "type": "shell",
-            "command": "docker compose run --rm foxtail django-admin generate_sample_data --users ${input:sampleUsers} --posts ${input:samplePosts} --comments ${input:sampleComments} --events ${input:sampleEvents} --pages ${input:samplePages}",
+            "command": "docker compose -f compose.yaml -f compose.prod.yaml down && docker compose -f compose.yaml -f compose.prod.yaml up --build foxtail",
+            "isBackground": true,
+            "runOptions": {
+                "instanceLimit": 1
+            },
             "presentation": {
                 "reveal": "always",
-                "panel": "shared"
+                "panel": "dedicated"
             },
-            "problemMatcher": []
+            "problemMatcher": {
+                "owner": "docker-gunicorn",
+                "pattern": {
+                    "regexp": "^$"
+                },
+                "background": {
+                    "activeOnStart": true,
+                    "beginsPattern": "Attaching to",
+                    "endsPattern": "\\[INFO\\] Listening at"
+                }
+            }
         }
     ],
     "inputs": [
@@ -155,12 +195,6 @@
             "type": "promptString",
             "description": "Superuser email address",
             "default": ""
-        },
-        {
-            "id": "superuserPassword",
-            "type": "promptString",
-            "description": "Superuser password",
-            "password": true
         },
         {
             "id": "dumpFile",
