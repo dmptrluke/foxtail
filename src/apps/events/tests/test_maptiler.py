@@ -34,8 +34,11 @@ class TestGeocode:
         )
         assert geocode('nonexistent place', 'test-key') is None
 
-    # geocode returns None on network failure
+    # geocode raises on network failure (Huey task handles retries)
     @patch('apps.events.maptiler.requests.get')
-    def test_returns_none_on_network_error(self, mock_get):
+    def test_raises_on_network_error(self, mock_get):
+        import pytest
+
         mock_get.side_effect = requests.RequestException('timeout')
-        assert geocode('TSB Arena', 'test-key') is None
+        with pytest.raises(requests.RequestException):
+            geocode('TSB Arena', 'test-key')

@@ -23,38 +23,25 @@ class TestEventAdmin:
         qs = admin.get_queryset(request)
         assert 'tags' in qs._prefetch_related_lookups
 
-    # save_model geocodes when API key set and address changed
-    @patch('apps.events.maptiler.geocode', return_value=(Decimal('-41.286460'), Decimal('174.776236')))
-    def test_save_model_geocodes(self, mock_geocode, event: Event, settings):
-        settings.MAPTILER_API_KEY = 'test-key'
+    # save_model enqueues geocoding task when address changed
+    @patch('apps.events.admin.transaction.on_commit', lambda fn: fn())
+    @patch('apps.events.admin.geocode_event')
+    def test_save_model_enqueues_geocoding(self, mock_task, event: Event):
+        event.latitude = Decimal('-41.0')
+        event.longitude = Decimal('174.0')
         admin = EventAdmin(Event, None)
         request = MagicMock()
         form = MagicMock()
         form.changed_data = ['address']
         event.address = '123 Main St, Wellington'
         admin.save_model(request, event, form, change=True)
-        mock_geocode.assert_called_once_with('123 Main St, Wellington', 'test-key')
-        assert event.latitude == Decimal('-41.286460')
-        assert event.longitude == Decimal('174.776236')
-
-    # save_model warns when geocoding fails
-    @patch('apps.events.admin.messages')
-    @patch('apps.events.maptiler.geocode', return_value=None)
-    def test_save_model_geocode_failure_warns(self, mock_geocode, mock_messages, event: Event, settings):
-        settings.MAPTILER_API_KEY = 'test-key'
-        admin = EventAdmin(Event, None)
-        request = MagicMock()
-        form = MagicMock()
-        form.changed_data = ['address']
-        event.address = 'Nowhere'
-        admin.save_model(request, event, form, change=True)
-        mock_geocode.assert_called_once()
-        mock_messages.warning.assert_called_once()
+        mock_task.assert_called_once_with(event.pk, '123 Main St, Wellington')
+        assert event.latitude is None
+        assert event.longitude is None
 
     # save_model clears coords when address is cleared
-    @patch('apps.events.maptiler.geocode')
-    def test_save_model_clears_coords(self, mock_geocode, event: Event, settings):
-        settings.MAPTILER_API_KEY = 'test-key'
+    @patch('apps.events.admin.geocode_event')
+    def test_save_model_clears_coords(self, mock_task, event: Event):
         event.latitude = Decimal('-41.0')
         event.longitude = Decimal('174.0')
         admin = EventAdmin(Event, None)
@@ -65,27 +52,14 @@ class TestEventAdmin:
         admin.save_model(request, event, form, change=True)
         assert event.latitude is None
         assert event.longitude is None
-        mock_geocode.assert_not_called()
-
-    # save_model skips geocoding when no API key
-    @patch('apps.events.maptiler.geocode')
-    def test_save_model_no_api_key(self, mock_geocode, event: Event, settings):
-        settings.MAPTILER_API_KEY = ''
-        admin = EventAdmin(Event, None)
-        request = MagicMock()
-        form = MagicMock()
-        form.changed_data = ['address']
-        event.address = '123 Main St'
-        admin.save_model(request, event, form, change=True)
-        mock_geocode.assert_not_called()
+        mock_task.assert_not_called()
 
     # save_model skips geocoding when address not in changed_data
-    @patch('apps.events.maptiler.geocode')
-    def test_save_model_address_unchanged(self, mock_geocode, event: Event, settings):
-        settings.MAPTILER_API_KEY = 'test-key'
+    @patch('apps.events.admin.geocode_event')
+    def test_save_model_address_unchanged(self, mock_task, event: Event):
         admin = EventAdmin(Event, None)
         request = MagicMock()
         form = MagicMock()
         form.changed_data = ['title']
         admin.save_model(request, event, form, change=True)
-        mock_geocode.assert_not_called()
+        mock_task.assert_not_called()

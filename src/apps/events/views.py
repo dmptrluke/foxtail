@@ -1,7 +1,7 @@
 from datetime import date
 
-from django.conf import settings
 from django.contrib import messages
+from django.db import transaction
 from django.db.models import Q
 from django.http import HttpResponseRedirect
 from django.urls import reverse, reverse_lazy
@@ -17,6 +17,7 @@ from apps.core.mixins import PermissionMixin
 from apps.organisations.models import Organisation
 
 from .models import Event
+from .tasks import geocode_event
 
 
 def _event_years():
@@ -154,10 +155,14 @@ class EventCreateView(CSPViewMixin, PermissionMixin, CreateView):
 
     def form_valid(self, form):
         self.object = form.save(commit=False)
-        _apply_geocoding(self.object, form.changed_data, self.request)
+        if 'address' in form.changed_data:
+            self.object.latitude = None
+            self.object.longitude = None
         self.object.save()
         form.save_m2m()
         self.object.tags.set(form.cleaned_data.get('tags', []))
+        if self.object.address and 'address' in form.changed_data:
+            transaction.on_commit(lambda: geocode_event(self.object.pk, self.object.address))
         messages.success(self.request, f'Event "{self.object.title}" created.')
         return HttpResponseRedirect(reverse('events:event_edit', kwargs={'pk': self.object.pk}))
 
@@ -174,10 +179,14 @@ class EventUpdateView(CSPViewMixin, PermissionMixin, UpdateView):
 
     def form_valid(self, form):
         self.object = form.save(commit=False)
-        _apply_geocoding(self.object, form.changed_data, self.request)
+        if 'address' in form.changed_data:
+            self.object.latitude = None
+            self.object.longitude = None
         self.object.save()
         form.save_m2m()
         self.object.tags.set(form.cleaned_data.get('tags', []))
+        if self.object.address and 'address' in form.changed_data:
+            transaction.on_commit(lambda: geocode_event(self.object.pk, self.object.address))
         messages.success(self.request, f'Event "{self.object.title}" saved.')
         return HttpResponseRedirect(reverse('events:event_edit', kwargs={'pk': self.object.pk}))
 
@@ -193,23 +202,6 @@ class EventDeleteView(PermissionMixin, DeleteView):
         result = super().form_valid(form)
         messages.success(self.request, f'Event "{title}" deleted.')
         return result
-
-
-def _apply_geocoding(obj, changed_data, request):
-    api_key = getattr(settings, 'MAPTILER_API_KEY', None)
-    if not api_key or 'address' not in changed_data:
-        return
-    if not obj.address:
-        obj.latitude = None
-        obj.longitude = None
-        return
-    from .maptiler import geocode
-
-    coords = geocode(obj.address, api_key)
-    if coords:
-        obj.latitude, obj.longitude = coords
-    else:
-        messages.warning(request, 'Address could not be geocoded.')
 
 
 __all__ = [

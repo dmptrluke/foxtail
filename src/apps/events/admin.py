@@ -1,8 +1,9 @@
-from django.conf import settings
-from django.contrib import admin, messages
+from django.contrib import admin
 from django.contrib.admin import ModelAdmin
+from django.db import transaction
 
 from .models import Event
+from .tasks import geocode_event
 
 
 class EventAdmin(ModelAdmin):
@@ -54,23 +55,14 @@ class EventAdmin(ModelAdmin):
         return ', '.join(sorted(t.name for t in obj.tags.all()))
 
     def save_model(self, request, obj, form, change):
-        api_key = settings.MAPTILER_API_KEY
-        address_changed = 'address' in form.changed_data
-
-        if api_key and address_changed:
-            if obj.address:
-                from .maptiler import geocode
-
-                coords = geocode(obj.address, api_key)
-                if coords:
-                    obj.latitude, obj.longitude = coords
-                else:
-                    messages.warning(request, 'Address could not be geocoded. Enter coordinates manually if needed.')
-            else:
-                obj.latitude = None
-                obj.longitude = None
+        if 'address' in form.changed_data:
+            obj.latitude = None
+            obj.longitude = None
 
         super().save_model(request, obj, form, change)
+
+        if obj.address and 'address' in form.changed_data:
+            transaction.on_commit(lambda: geocode_event(obj.pk, obj.address))
 
 
 admin.site.register(Event, EventAdmin)

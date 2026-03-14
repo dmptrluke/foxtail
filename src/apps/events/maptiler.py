@@ -1,5 +1,6 @@
 import logging
 from decimal import Decimal
+from urllib.parse import quote
 
 import requests
 
@@ -11,7 +12,7 @@ GEOCODE_URL = 'https://api.maptiler.com/geocoding/{query}.json'
 def geocode(address, api_key):
     try:
         response = requests.get(
-            GEOCODE_URL.format(query=address),
+            GEOCODE_URL.format(query=quote(address, safe='')),
             params={'key': api_key, 'country': 'nz,au', 'limit': 1},
             timeout=10,
         )
@@ -23,4 +24,4 @@ def geocode(address, api_key):
         return Decimal(str(coords[1])), Decimal(str(coords[0]))
     except requests.RequestException:
         logger.warning('MapTiler geocoding failed for address: %s', address, exc_info=True)
-        return None
+        raise

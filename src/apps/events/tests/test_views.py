@@ -1,5 +1,4 @@
 from datetime import timedelta
-from decimal import Decimal
 from unittest.mock import patch
 
 from django.contrib.messages import get_messages
@@ -174,10 +173,10 @@ class TestEventCreateView:
         messages = list(get_messages(response.wsgi_request))
         assert any('created' in str(m) for m in messages)
 
-    # geocoding runs when address is provided and API key is set
-    @patch('apps.events.maptiler.geocode', return_value=None)
-    def test_geocoding_on_create(self, mock_geocode, client, editor, settings):
-        settings.MAPTILER_API_KEY = 'test-key'
+    # geocoding task is enqueued when address is provided
+    @patch('apps.events.views.transaction.on_commit', lambda fn: fn())
+    @patch('apps.events.views.geocode_event')
+    def test_geocoding_on_create(self, mock_task, client, editor):
         client.force_login(editor)
         data = {
             'title': 'Geocode Test',
@@ -191,7 +190,8 @@ class TestEventCreateView:
             'image_ppoi': '0.5x0.5',
         }
         client.post(self.url, data)
-        mock_geocode.assert_called_once_with('123 Main St, Wellington', 'test-key')
+        event = Event.objects.get(slug='geocode-test')
+        mock_task.assert_called_once_with(event.pk, '123 Main St, Wellington')
 
 
 class TestEventUpdateView:
@@ -224,33 +224,10 @@ class TestEventUpdateView:
         messages = list(get_messages(response.wsgi_request))
         assert any('saved' in str(m) for m in messages)
 
-    # successful geocoding sets lat/lng on the event
-    @patch('apps.events.maptiler.geocode')
-    def test_geocoding_success_sets_coords(self, mock_geocode, client, editor, event: Event, settings):
-        mock_geocode.return_value = (Decimal('-41.286460'), Decimal('174.776236'))
-        settings.MAPTILER_API_KEY = 'test-key'
-        client.force_login(editor)
-        url = reverse('events:event_edit', kwargs={'pk': event.pk})
-        data = {
-            'title': event.title,
-            'slug': event.slug,
-            'description': event.description,
-            'location': event.location,
-            'address': 'TSB Arena, Wellington',
-            'start': event.start.isoformat(),
-            'publish_status': event.publish_status,
-            'tags': ', '.join(event.tags.names()),
-            'image_ppoi': '0.5x0.5',
-        }
-        client.post(url, data)
-        event.refresh_from_db()
-        assert event.latitude == Decimal('-41.286460')
-        assert event.longitude == Decimal('174.776236')
-
-    # geocoding runs when address is changed
-    @patch('apps.events.maptiler.geocode', return_value=None)
-    def test_geocoding_on_address_change(self, mock_geocode, client, editor, event: Event, settings):
-        settings.MAPTILER_API_KEY = 'test-key'
+    # geocoding task is enqueued when address changes
+    @patch('apps.events.views.transaction.on_commit', lambda fn: fn())
+    @patch('apps.events.views.geocode_event')
+    def test_geocoding_on_address_change(self, mock_task, client, editor, event: Event):
         client.force_login(editor)
         url = reverse('events:event_edit', kwargs={'pk': event.pk})
         data = {
@@ -265,12 +242,11 @@ class TestEventUpdateView:
             'image_ppoi': '0.5x0.5',
         }
         client.post(url, data)
-        mock_geocode.assert_called_once_with('New Address, Wellington', 'test-key')
+        mock_task.assert_called_once_with(event.pk, 'New Address, Wellington')
 
-    # clearing address clears lat/lng without calling geocode
-    @patch('apps.events.maptiler.geocode')
-    def test_clearing_address_clears_coords(self, mock_geocode, client, editor, event: Event, settings):
-        settings.MAPTILER_API_KEY = 'test-key'
+    # clearing address clears lat/lng without enqueuing geocoding
+    @patch('apps.events.views.geocode_event')
+    def test_clearing_address_clears_coords(self, mock_task, client, editor, event: Event):
         event.address = 'Old Address'
         event.latitude = -41.0
         event.longitude = 174.0
@@ -292,28 +268,28 @@ class TestEventUpdateView:
         event.refresh_from_db()
         assert event.latitude is None
         assert event.longitude is None
-        mock_geocode.assert_not_called()
+        mock_task.assert_not_called()
 
-    # failed geocoding shows warning message
-    @patch('apps.events.maptiler.geocode', return_value=None)
-    def test_geocoding_failure_shows_warning(self, mock_geocode, client, editor, event: Event, settings):
-        settings.MAPTILER_API_KEY = 'test-key'
+    # updating event without changing address does not enqueue geocoding
+    @patch('apps.events.views.geocode_event')
+    def test_address_unchanged_skips_geocoding(self, mock_task, client, editor, event: Event):
+        event.address = '123 Main St'
+        event.save()
         client.force_login(editor)
         url = reverse('events:event_edit', kwargs={'pk': event.pk})
         data = {
-            'title': event.title,
+            'title': 'Updated Title',
             'slug': event.slug,
             'description': event.description,
             'location': event.location,
-            'address': 'Nowhere Special',
+            'address': '123 Main St',
             'start': event.start.isoformat(),
             'publish_status': event.publish_status,
             'tags': ', '.join(event.tags.names()),
             'image_ppoi': '0.5x0.5',
         }
-        response = client.post(url, data)
-        messages = list(get_messages(response.wsgi_request))
-        assert any('geocoded' in str(m) for m in messages)
+        client.post(url, data)
+        mock_task.assert_not_called()
 
 
 class TestEventDeleteView:
