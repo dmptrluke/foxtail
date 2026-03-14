@@ -31,7 +31,6 @@
 	border-radius: 8px;
 	box-shadow: var(--ft-shadow-md);
 	padding: 0.5rem 0.65rem;
-	white-space: nowrap;
 	z-index: 10;
 
 	@include media-breakpoint-up(md) {
@@ -40,13 +39,15 @@
 		left: auto;
 		right: 0;
 		transform: none;
+		white-space: nowrap;
 	}
 }
 
 @mixin popup-base-row {
 	display: flex;
 	align-items: center;
-	gap: 0.4rem;
+	flex-wrap: wrap;
+	gap: 0.25rem 0.4rem;
 
 	& + & {
 		margin-top: 0.35rem;
@@ -155,6 +156,8 @@
 
 .popup-theme {
 	@include popup-base;
+	width: calc(100vw - 2rem);
+	max-width: 26rem;
 
 	&-row {
 		@include popup-base-row;
@@ -203,6 +206,7 @@
 
 .popup-debug {
 	@include popup-base;
+	min-width: 16rem;
 
 	&-row {
 		@include popup-base-row;
