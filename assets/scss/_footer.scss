@@ -101,9 +101,10 @@
 }
 
 .theme-picker {
-	position: absolute;
-	bottom: calc(100% + 0.5rem);
-	right: 0;
+	position: fixed;
+	bottom: 4rem;
+	left: 50%;
+	transform: translateX(-50%);
 	background: var(--ft-surface);
 	border: 1px solid rgba(var(--bs-secondary-rgb), 0.15);
 	border-radius: 8px;
@@ -111,6 +112,14 @@
 	padding: 0.5rem 0.65rem;
 	white-space: nowrap;
 	z-index: 10;
+
+	@include media-breakpoint-up(md) {
+		position: absolute;
+		bottom: calc(100% + 0.5rem);
+		left: auto;
+		right: 0;
+		transform: none;
+	}
 
 	&-row {
 		display: flex;
