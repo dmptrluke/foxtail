@@ -13,7 +13,7 @@ services:
       - "8000:8000"
     command: >
       sh -c "django-admin migrate --noinput &&
-      gunicorn --bind 0.0.0.0:8000 foxtail.wsgi:application"
+      gunicorn --bind 0.0.0.0:8000 -k gthread --threads 4 foxtail.wsgi:application"
     environment:
       DATABASE_URL: "postgres://foxtail:foxtail@db/foxtail"
       CACHE_URL: "redis://redis/1"
