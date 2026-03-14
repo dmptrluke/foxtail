@@ -1,18 +1,16 @@
-@use "sass:color";
-
 // Account subpage components
 .account-section {
 	margin-bottom: 2rem;
 
 	h5 {
 		@include label-style-lg;
-		color: $secondary;
+		color: var(--bs-secondary);
 		margin-bottom: 0.75rem;
 	}
 
 	p.account-section-desc {
 		font-size: 0.9rem;
-		color: color.adjust($body-color, $lightness: 15%);
+		color: var(--ft-text-muted);
 		margin-bottom: 1rem;
 	}
 }
@@ -27,18 +25,18 @@
 	align-items: center;
 	gap: 1rem;
 	padding: 1rem 1.25rem;
-	background: $white;
-	border: 1px solid rgba($secondary, 0.12);
+	background: var(--ft-surface);
+	border: 1px solid rgba(var(--bs-secondary-rgb), 0.12);
 	border-radius: $card-border-radius;
 	margin-bottom: 0.5rem;
 	transition: box-shadow 0.15s ease;
 
 	&:hover {
-		box-shadow: $shadow-sm;
+		box-shadow: var(--ft-shadow-sm);
 	}
 
 	&.account-item-warn {
-		border-color: rgba($warning, 0.35);
+		border-color: rgba(var(--bs-warning-rgb), 0.35);
 	}
 
 	.account-item-body {
@@ -52,7 +50,7 @@
 
 		.account-item-meta {
 			font-size: 0.825rem;
-			color: color.adjust($body-color, $lightness: 20%);
+			color: var(--ft-text-soft);
 			margin: 0;
 		}
 	}
@@ -65,15 +63,15 @@
 }
 
 .account-method-card {
-	background: $white;
-	border: 1px solid rgba($secondary, 0.12);
+	background: var(--ft-surface);
+	border: 1px solid rgba(var(--bs-secondary-rgb), 0.12);
 	border-radius: $card-border-radius;
 	padding: 1.25rem 1.5rem;
 	margin-bottom: 0.75rem;
 	transition: box-shadow 0.15s ease;
 
 	&:hover {
-		box-shadow: $shadow-sm;
+		box-shadow: var(--ft-shadow-sm);
 	}
 
 	h5 {
@@ -81,31 +79,31 @@
 		font-weight: 600;
 		text-transform: none;
 		letter-spacing: normal;
-		color: $body-color;
+		color: var(--bs-body-color);
 		margin-bottom: 0.35rem;
 	}
 
 	p {
 		font-size: 0.875rem;
-		color: color.adjust($body-color, $lightness: 15%);
+		color: var(--ft-text-muted);
 		margin-bottom: 0.75rem;
 	}
 }
 
 .account-confirm {
-	background: $white;
-	border: 1px solid rgba($warning, 0.3);
+	background: var(--ft-surface);
+	border: 1px solid rgba(var(--bs-warning-rgb), 0.3);
 	border-radius: $card-border-radius;
 	padding: 1.25rem 1.5rem;
 	margin-bottom: 1.5rem;
 
 	p {
 		font-size: 0.925rem;
-		color: color.adjust($body-color, $lightness: 10%);
+		color: var(--ft-text-light);
 		margin-bottom: 0;
 
 		strong {
-			color: $body-color;
+			color: var(--bs-body-color);
 		}
 	}
 
@@ -174,19 +172,19 @@
 .dashboard-tile {
 	display: flex;
 	flex-direction: column;
-	background: $white;
+	background: var(--ft-surface);
 	border-radius: $card-border-radius;
-	border: 1px solid rgba($secondary, 0.12);
+	border: 1px solid rgba(var(--bs-secondary-rgb), 0.12);
 	padding: 1.25rem 1.5rem;
 	text-decoration: none;
-	color: $body-color;
+	color: var(--bs-body-color);
 	transition: box-shadow 0.2s ease, transform 0.2s ease;
 
 	&:hover {
-		box-shadow: $shadow-md;
+		box-shadow: var(--ft-shadow-md);
 		transform: translateY(-2px);
 		text-decoration: none;
-		color: $body-color;
+		color: var(--bs-body-color);
 	}
 
 	.tile-icon {
@@ -196,8 +194,8 @@
 		width: 2.75rem;
 		height: 2.75rem;
 		border-radius: 10px;
-		background: rgba($primary, 0.08);
-		color: $primary;
+		background: rgba(var(--bs-primary-rgb), 0.08);
+		color: var(--bs-primary);
 		margin-bottom: 1rem;
 		flex-shrink: 0;
 	}
@@ -210,7 +208,7 @@
 
 	.tile-detail {
 		font-size: 0.85rem;
-		color: color.adjust($body-color, $lightness: 15%);
+		color: var(--ft-text-muted);
 		margin-bottom: 0;
 		flex: 1;
 	}
@@ -219,18 +217,18 @@
 		@include label-style;
 		margin-top: 0.75rem;
 		padding-top: 0.75rem;
-		border-top: 1px solid rgba($secondary, 0.1);
+		border-top: 1px solid rgba(var(--bs-secondary-rgb), 0.1);
 	}
 
 	.tile-status-ok {
-		color: $success;
+		color: var(--bs-success);
 	}
 
 	.tile-status-warn {
-		color: $warning;
+		color: var(--bs-warning);
 	}
 
 	.tile-status-neutral {
-		color: $secondary;
+		color: var(--bs-secondary);
 	}
 }

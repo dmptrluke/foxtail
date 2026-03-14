@@ -1,31 +1,29 @@
-@use "sass:color";
-
-// Sidebar container — flex column of cards
+// Sidebar: flex column of cards
 .sidebar {
 	display: flex;
 	flex-direction: column;
 	gap: 1.5rem;
 }
 
-// Sidebar card — white box with border, holds all card elements
+// Sidebar card: surface box with border, holds all card elements
 .sidebar-card {
-	background: $white;
-	border: 1px solid rgba($secondary, 0.12);
+	background: var(--ft-surface);
+	border: 1px solid rgba(var(--bs-secondary-rgb), 0.12);
 	border-radius: $card-border-radius;
 	overflow: hidden;
 
 	// Label heading at top of card
 	.header {
 		@include label-style;
-		color: $secondary;
+		color: var(--bs-secondary);
 		padding: 1rem 1.25rem 0;
 		margin-bottom: 0.75rem;
 
 		small a {
-			color: color.adjust($body-color, $lightness: 20%);
+			color: var(--ft-text-soft);
 
 			&:hover {
-				color: $warning;
+				color: var(--bs-warning);
 			}
 		}
 	}
@@ -37,11 +35,11 @@
 
 		p {
 			margin-bottom: 0.35rem;
-			color: color.adjust($body-color, $lightness: 10%);
+			color: var(--ft-text-light);
 		}
 
 		strong {
-			color: $body-color;
+			color: var(--bs-body-color);
 		}
 	}
 
@@ -50,13 +48,13 @@
 		width: 100%;
 		object-fit: cover;
 		display: block;
-		background: rgba($secondary, 0.08);
+		background: rgba(var(--bs-secondary-rgb), 0.08);
 	}
 
 	// Bottom bar with border-top (links, CTA buttons)
 	.footer {
 		padding: 0.75rem 1.25rem;
-		border-top: 1px solid rgba($secondary, 0.08);
+		border-top: 1px solid rgba(var(--bs-secondary-rgb), 0.08);
 		font-size: 0.8rem;
 
 		a {
@@ -70,7 +68,7 @@
 		}
 	}
 
-	// Search — fills entire card, no header
+	// Search: fills entire card, no header
 	&.search {
 		padding: 1rem 1.25rem;
 
@@ -83,9 +81,9 @@
 	.preview {
 		display: block;
 		padding: 0.65rem 0;
-		border-bottom: 1px solid rgba($secondary, 0.08);
+		border-bottom: 1px solid rgba(var(--bs-secondary-rgb), 0.08);
 		text-decoration: none;
-		color: $body-color;
+		color: var(--bs-body-color);
 		transition: background 0.15s ease;
 
 		&:first-child {
@@ -98,7 +96,7 @@
 		}
 
 		&:hover {
-			color: $primary;
+			color: var(--bs-primary);
 			text-decoration: none;
 		}
 
@@ -112,7 +110,7 @@
 
 		p {
 			font-size: 0.8rem;
-			color: color.adjust($body-color, $lightness: 15%);
+			color: var(--ft-text-muted);
 			margin: 0.25rem 0 0;
 			@include line-clamp(2);
 		}
@@ -124,10 +122,10 @@
 		justify-content: space-between;
 		align-items: center;
 		padding: 0.45rem 0;
-		border-bottom: 1px solid rgba($secondary, 0.06);
+		border-bottom: 1px solid rgba(var(--bs-secondary-rgb), 0.06);
 		font-size: 0.875rem;
 		font-weight: 500;
-		color: $body-color;
+		color: var(--bs-body-color);
 		text-decoration: none;
 		transition: color 0.15s ease;
 
@@ -141,12 +139,12 @@
 		}
 
 		&:hover {
-			color: $primary;
+			color: var(--bs-primary);
 			text-decoration: none;
 		}
 
 		&.active {
-			color: $primary;
+			color: var(--bs-primary);
 			font-weight: 600;
 		}
 	}
@@ -154,20 +152,20 @@
 	// Small muted text (timestamps, addresses)
 	.meta {
 		font-size: 0.75rem;
-		color: color.adjust($body-color, $lightness: 25%);
+		color: var(--ft-text-faint);
 	}
 
 	// Count pill (tag/category counts)
 	.count {
 		font-size: 0.75rem;
 		font-weight: 600;
-		color: color.adjust($body-color, $lightness: 25%);
-		background: rgba($secondary, 0.08);
+		color: var(--ft-text-faint);
+		background: rgba(var(--bs-secondary-rgb), 0.08);
 		padding: 0.1rem 0.5rem;
 		border-radius: 2px;
 	}
 
-	// Identity — avatar + name/description layout (modifier on .content)
+	// Identity: avatar + name/description layout (modifier on .content)
 	.identity {
 		display: flex;
 		gap: 1rem;
@@ -178,7 +176,7 @@
 			height: 80px;
 			object-fit: cover;
 			flex-shrink: 0;
-			background: rgba($secondary, 0.08);
+			background: rgba(var(--bs-secondary-rgb), 0.08);
 		}
 
 		.info {
@@ -189,7 +187,7 @@
 
 			p {
 				font-size: 0.85rem;
-				color: color.adjust($body-color, $lightness: 10%);
+				color: var(--ft-text-light);
 				margin: 0;
 			}
 		}

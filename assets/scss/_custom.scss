@@ -48,10 +48,7 @@ $danger: #c75b5b;
 $body-bg: #f8f6fa;
 $body-color: #2d2639;
 
-// layered warm shadows
-$shadow-sm: 0 1px 3px rgba($dark, 0.04), 0 2px 8px rgba($dark, 0.06);
-$shadow-md: 0 2px 4px rgba($dark, 0.04), 0 8px 24px rgba($dark, 0.08);
-$shadow-lg: 0 4px 8px rgba($dark, 0.06), 0 12px 32px rgba($dark, 0.16);
+// shadows and hero gradient are CSS custom properties in _palettes.scss
 
 // soft rounded edges
 $border-radius: 8px;

@@ -1,5 +1,3 @@
-@use "sass:color";
-
 // Org page hero
 
 .org-hero-identity {
@@ -104,7 +102,7 @@
 	display: flex;
 	align-items: center;
 	gap: 1rem;
-	background: $dark;
+	background: var(--bs-dark);
 	padding: 1.25rem;
 	padding-top: 1.75rem;
 	border-radius: $card-border-radius;
@@ -115,7 +113,7 @@
 	transition: box-shadow 0.2s ease, transform 0.2s ease;
 
 	&:hover {
-		box-shadow: $shadow-lg;
+		box-shadow: var(--ft-shadow-lg);
 		transform: translateY(-2px);
 		color: $white;
 		text-decoration: none;
@@ -141,8 +139,8 @@
 	position: absolute;
 	top: 0;
 	left: 0;
-	background: $warning;
-	color: $dark;
+	background: var(--bs-warning);
+	color: var(--bs-dark);
 	padding: 0.2rem 0.75rem;
 	border-radius: 0 0 $border-radius-sm 0;
 	font-size: 0.6rem;
@@ -179,9 +177,9 @@
 	align-items: center;
 	gap: 1rem;
 	padding: 0.6rem 0;
-	border-bottom: 1px solid rgba($secondary, 0.1);
+	border-bottom: 1px solid rgba(var(--bs-secondary-rgb), 0.1);
 	text-decoration: none;
-	color: $body-color;
+	color: var(--bs-body-color);
 
 	&:last-child {
 		border-bottom: none;
@@ -189,7 +187,7 @@
 
 	&:hover {
 		.cal-badge {
-			background: $primary;
+			background: var(--bs-primary);
 
 			.event-date-month,
 			.event-date-day {
@@ -198,7 +196,7 @@
 		}
 
 		.event-row-stamp-title {
-			color: $primary;
+			color: var(--bs-primary);
 		}
 	}
 }
@@ -212,7 +210,7 @@
 
 .event-row-stamp-year {
 	font-size: 0.8rem;
-	color: $secondary;
+	color: var(--bs-secondary);
 	flex-shrink: 0;
 }
 
@@ -226,18 +224,18 @@
 
 	a, span {
 		@include label-style;
-		color: $secondary;
+		color: var(--bs-secondary);
 		text-decoration: none;
 	}
 
 	a:hover {
-		color: $primary;
+		color: var(--bs-primary);
 	}
 
 	&::after {
 		content: '';
 		flex: 1;
 		height: 1px;
-		background: rgba($secondary, 0.2);
+		background: rgba(var(--bs-secondary-rgb), 0.2);
 	}
 }

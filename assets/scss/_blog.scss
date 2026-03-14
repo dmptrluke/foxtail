@@ -1,11 +1,9 @@
-@use "sass:color";
-
 // Blog post cards (list page)
 
 .blog-card {
 	padding-bottom: 2rem;
 	margin-bottom: 2rem;
-	border-bottom: 1px solid rgba($secondary, 0.12);
+	border-bottom: 1px solid rgba(var(--bs-secondary-rgb), 0.12);
 
 	&:last-of-type {
 		border-bottom: none;
@@ -29,7 +27,7 @@
 .blog-card-body {
 	.blog-card-date {
 		@include label-style;
-		color: $secondary;
+		color: var(--bs-secondary);
 		margin-bottom: 0.35rem;
 	}
 
@@ -40,18 +38,18 @@
 		margin-bottom: 0.5rem;
 
 		a {
-			color: $body-color;
+			color: var(--bs-body-color);
 			text-decoration: none;
 
 			&:hover {
-				color: $primary;
+				color: var(--bs-primary);
 			}
 		}
 	}
 
 	.blog-card-excerpt {
 		font-size: 0.925rem;
-		color: color.adjust($body-color, $lightness: 15%);
+		color: var(--ft-text-muted);
 		line-height: 1.6;
 		margin-bottom: 0.75rem;
 		@include line-clamp(3);
@@ -65,12 +63,12 @@
 .comments-section {
 	margin-top: 3rem;
 	padding-top: 2rem;
-	border-top: 2px solid rgba($secondary, 0.15);
+	border-top: 2px solid rgba(var(--bs-secondary-rgb), 0.15);
 }
 
 .comments-heading {
 	@include label-style-lg;
-	color: color.adjust($body-color, $lightness: 25%);
+	color: var(--ft-text-faint);
 	margin-bottom: 1rem;
 }
 
@@ -78,7 +76,7 @@
 	display: flex;
 	gap: 1rem;
 	padding: 1rem 0;
-	border-bottom: 1px solid rgba($secondary, 0.08);
+	border-bottom: 1px solid rgba(var(--bs-secondary-rgb), 0.08);
 
 	&:last-child {
 		border-bottom: none;
@@ -104,17 +102,17 @@
 
 	p {
 		font-size: 0.9rem;
-		color: color.adjust($body-color, $lightness: 10%);
+		color: var(--ft-text-light);
 		margin-bottom: 0.25rem;
 		word-break: break-word;
 	}
 
 	small a {
 		font-size: 0.75rem;
-		color: color.adjust($body-color, $lightness: 30%);
+		color: var(--ft-text-fainter);
 
 		&:hover {
-			color: $danger;
+			color: var(--bs-danger);
 		}
 	}
 }
@@ -124,7 +122,7 @@
 
 	.comment-form-heading {
 		@include label-style;
-		color: color.adjust($body-color, $lightness: 25%);
+		color: var(--ft-text-faint);
 		margin-bottom: 1rem;
 	}
 }

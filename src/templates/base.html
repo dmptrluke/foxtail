@@ -27,10 +27,17 @@
     {% vite_asset 'js/main.js' nonce=request.csp_nonce %}
 
     <script nonce="{{ request.csp_nonce }}">
-        (function (a) {
-            a.remove("no-js");
-            a.add("js")
-        })(document.documentElement.classList);
+        (function() {
+            var h = document.documentElement, c = h.classList;
+            c.remove('no-js'); c.add('js');
+            var s = localStorage.getItem('color-scheme') || 'plum';
+            if (s !== 'plum') c.add('theme-' + s);
+            var t = localStorage.getItem('style-theme') || 'default';
+            if (t !== 'default') c.add('theme-' + t);
+            var m = localStorage.getItem('dark-mode') || 'auto';
+            if (m === 'dark' || (m === 'auto' && matchMedia('(prefers-color-scheme: dark)').matches))
+                h.setAttribute('data-bs-theme', 'dark');
+        })();
     </script>
 
     {% block extra_head %}{% endblock extra_head %}

@@ -1,6 +1,6 @@
 {% if related_organisations or related_series or related_events %}
 <div class="related-content mt-5">
-    <h2>Related</h2>
+    <c-section-label large>Related</c-section-label>
     <div class="list-group">
         {% for org in related_organisations %}
             <a href="{{ org.get_absolute_url }}" class="list-group-item list-group-item-action">

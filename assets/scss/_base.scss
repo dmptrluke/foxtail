@@ -13,7 +13,7 @@ body {
 	display: flex;
 	flex-direction: column;
 	height: 100% !important;
-	background-image: linear-gradient($dark calc(4rem + env(safe-area-inset-top, 0px)), transparent calc(4rem + env(safe-area-inset-top, 0px)));
+	background-image: linear-gradient(var(--bs-dark) calc(4rem + env(safe-area-inset-top, 0px)), transparent calc(4rem + env(safe-area-inset-top, 0px)));
 	background-attachment: fixed;
 	font-feature-settings: 'cv05' 1;
 }

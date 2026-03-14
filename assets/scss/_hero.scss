@@ -1,5 +1,5 @@
 .hero {
-	background: $hero-gradient;
+	background: var(--ft-hero-gradient);
 	color: $white;
 	padding: 2rem 0;
 
@@ -166,7 +166,7 @@
 // Scroll wrapper: hero stays sticky while banner scrolls behind it
 .hero-scroll-wrapper {
 	position: relative;
-	background: $dark;
+	background: var(--bs-dark);
 }
 
 .hero-sticky {
@@ -175,8 +175,12 @@
 	backdrop-filter: blur(16px) saturate(180%);
 	z-index: 2;
 	background:
-		linear-gradient(135deg, #281e33eb, #352c3deb, #5b4b6ceb),
-		linear-gradient(to bottom, $dark, transparent);
+		var(--ft-hero-sticky),
+		linear-gradient(to bottom, var(--bs-dark), transparent);
+
+	[data-bs-theme="dark"] & {
+		backdrop-filter: blur(24px) saturate(140%);
+	}
 }
 
 // Banner image (below hero on detail pages)

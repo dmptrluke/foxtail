@@ -1,0 +1,168 @@
+// Theme: Retro
+// Pure style theme (like sharp): reverts to stock Bootstrap look, no color overrides.
+
+.theme-retro {
+	// Stock Bootstrap font stack
+	--bs-body-font-family: -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+
+	// No custom shadows
+	--ft-shadow-sm: none;
+	--ft-shadow-md: none;
+	--ft-shadow-lg: none;
+
+	// Flat hero: solid color, no gradient
+	--ft-hero-gradient: var(--bs-dark);
+	--ft-hero-sticky: var(--bs-dark);
+
+	// Stock Bootstrap radii
+	--bs-border-radius: .375rem;
+	--bs-border-radius-sm: .25rem;
+	--bs-border-radius-lg: .5rem;
+	--bs-border-radius-xl: 1rem;
+	--bs-border-radius-xxl: 2rem;
+
+	// System font stack everywhere
+	h1, h2, h3, h4, h5, h6,
+	.h1, .h2, .h3, .h4, .h5, .h6 {
+		font-family: inherit;
+	}
+
+	.btn,
+	label,
+	.nav-link,
+	.navbar-brand {
+		font-family: inherit;
+	}
+
+	h3, .h3 {
+		letter-spacing: normal;
+	}
+
+	// Cards: bordered, no shadow
+	.card,
+	.sidebar-card,
+	.news-compact,
+	.dashboard-tile,
+	.account-item,
+	.account-method-card,
+	.account-confirm {
+		box-shadow: none;
+		border: 1px solid rgba(var(--bs-secondary-rgb), 0.15);
+	}
+
+	.event-card {
+		background: var(--bs-dark);
+		box-shadow: none;
+	}
+
+	// Navbar: opaque, no blur
+	#navigation {
+		backdrop-filter: none;
+		background: var(--bs-dark) !important;
+	}
+
+	// Static hero: no sticky, banner scrolls normally
+	.hero-sticky {
+		position: relative;
+		top: auto;
+		backdrop-filter: none;
+		background: var(--bs-dark);
+	}
+
+	// Banner pages: flatten hero into a plain page heading
+	.has-hero-banner .hero {
+		background: var(--bs-body-bg);
+		color: var(--bs-body-color);
+		padding: 1.5rem 0 1rem;
+
+		h1 {
+			font-size: 1.75rem;
+			font-weight: 700;
+		}
+
+		.hero-subtitle {
+			opacity: 1;
+			color: var(--bs-secondary);
+		}
+
+		.breadcrumb {
+			color: var(--bs-secondary);
+
+			a {
+				color: var(--bs-link-color);
+
+				&:hover {
+					color: var(--bs-link-hover-color);
+				}
+			}
+
+			.breadcrumb-item.active {
+				color: var(--bs-secondary);
+			}
+
+			.breadcrumb-item + .breadcrumb-item::before {
+				color: var(--ft-text-fainter);
+			}
+		}
+
+		.hero-admin-link {
+			color: var(--ft-text-fainter);
+
+			&:hover {
+				color: var(--bs-secondary);
+			}
+		}
+
+		.tag-row .tag-pill {
+			color: var(--ft-text-light);
+			background: rgba(var(--bs-secondary-rgb), 0.15);
+
+			&:hover {
+				color: var(--bs-body-color);
+				background: rgba(var(--bs-secondary-rgb), 0.22);
+			}
+
+			&.active {
+				color: #fff;
+				background: var(--bs-primary);
+			}
+		}
+	}
+
+	.has-hero-banner .hero-sticky {
+		background: var(--bs-body-bg);
+	}
+
+	.has-hero-banner .hero-scroll-wrapper {
+		background: var(--bs-body-bg);
+	}
+
+	.hero-banner img {
+		height: 60vh;
+	}
+
+	body {
+		background-image: linear-gradient(var(--bs-dark) calc(4rem + env(safe-area-inset-top, 0px)), transparent calc(4rem + env(safe-area-inset-top, 0px)));
+	}
+
+	.hero-avatar {
+		border: 2px solid rgba(255, 255, 255, 0.3);
+	}
+
+	// Stock Bootstrap badge radii
+	.hero .hero-pill {
+		border-radius: .375rem;
+	}
+
+	// Alerts: stock Bootstrap (not left-border accent)
+	.alert {
+		border-radius: .375rem;
+		border: 1px solid;
+		border-left-width: 1px;
+	}
+
+	#footer {
+		background: rgba(var(--bs-secondary-rgb), 0.04);
+		border-top: 1px solid rgba(var(--bs-secondary-rgb), 0.15);
+	}
+}

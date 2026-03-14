@@ -1,0 +1,217 @@
+// Theme system: color-scheme mixin + per-theme palettes (light and dark).
+//
+// --bs-* overrides Bootstrap's compiled defaults at runtime.
+// --ft-* covers derived values Bootstrap doesn't generate (text hierarchy, heroes, shadows).
+// Shadows use var(--bs-dark-rgb) so they auto-adapt per scheme; dark mode bumps opacity.
+
+@mixin color-scheme(
+	$primary, $secondary, $dark, $darker,
+	$success, $info, $warning, $danger,
+	$body-bg, $body-color,
+	$link-color, $link-hover-color,
+	$dark-mode: false
+) {
+	// Bootstrap color overrides
+	--bs-primary: #{$primary};
+	--bs-primary-rgb: #{red($primary), green($primary), blue($primary)};
+	--bs-secondary: #{$secondary};
+	--bs-secondary-rgb: #{red($secondary), green($secondary), blue($secondary)};
+	--bs-dark: #{$dark};
+	--bs-dark-rgb: #{red($dark), green($dark), blue($dark)};
+	--bs-success: #{$success};
+	--bs-success-rgb: #{red($success), green($success), blue($success)};
+	--bs-info: #{$info};
+	--bs-info-rgb: #{red($info), green($info), blue($info)};
+	--bs-warning: #{$warning};
+	--bs-warning-rgb: #{red($warning), green($warning), blue($warning)};
+	--bs-danger: #{$danger};
+	--bs-danger-rgb: #{red($danger), green($danger), blue($danger)};
+	--bs-body-bg: #{$body-bg};
+	--bs-body-bg-rgb: #{red($body-bg), green($body-bg), blue($body-bg)};
+	--bs-body-color: #{$body-color};
+	--bs-body-color-rgb: #{red($body-color), green($body-color), blue($body-color)};
+	--bs-link-color: #{$link-color};
+	--bs-link-color-rgb: #{red($link-color), green($link-color), blue($link-color)};
+	--bs-link-hover-color: #{$link-hover-color};
+	--bs-link-hover-color-rgb: #{red($link-hover-color), green($link-hover-color), blue($link-hover-color)};
+
+	// Text hierarchy: progressively fade body-color toward the background.
+	// Light uses color.adjust (absolute shift), dark uses color.scale (proportional)
+	// to avoid clipping near the edges of the lightness range.
+	@if $dark-mode {
+		--ft-text-light: #{color.scale($body-color, $lightness: -12%)};
+		--ft-text-muted: #{color.scale($body-color, $lightness: -20%)};
+		--ft-text-soft: #{color.scale($body-color, $lightness: -28%)};
+		--ft-text-faint: #{color.scale($body-color, $lightness: -36%)};
+		--ft-text-fainter: #{color.scale($body-color, $lightness: -44%)};
+		--ft-text-faintest: #{color.scale($body-color, $lightness: -52%)};
+		--ft-surface: #{color.adjust($body-bg, $lightness: 5%)};
+	} @else {
+		--ft-text-light: #{color.adjust($body-color, $lightness: 10%)};
+		--ft-text-muted: #{color.adjust($body-color, $lightness: 15%)};
+		--ft-text-soft: #{color.adjust($body-color, $lightness: 20%)};
+		--ft-text-faint: #{color.adjust($body-color, $lightness: 25%)};
+		--ft-text-fainter: #{color.adjust($body-color, $lightness: 30%)};
+		--ft-text-faintest: #{color.adjust($body-color, $lightness: 35%)};
+		--ft-surface: #fff;
+	}
+
+	// Hero gradients: 3-stop diagonal from $dark through $primary/$secondary variants.
+	// Dark mode mixes toward $darker for near-black tones; sticky is slightly lighter
+	// and translucent (sits over .hero-scroll-wrapper's solid --bs-dark background).
+	@if $dark-mode {
+		$hero-start: $dark;
+		$hero-mid: color.adjust(color.mix($darker, $primary, 92%), $lightness: +2%);
+		$hero-end: color.adjust(color.mix($darker, $secondary, 82%), $lightness: +5%);
+		--ft-hero-gradient: linear-gradient(135deg, #{$hero-start} 0%, #{$hero-mid} 50%, #{$hero-end} 100%);
+		$sticky-start: $dark;
+		$sticky-mid: color.adjust($hero-mid, $lightness: +2%);
+		$sticky-end: color.adjust($hero-end, $lightness: +4%);
+		--ft-hero-sticky: linear-gradient(135deg, #{rgba($sticky-start, 0.78)}, #{rgba($sticky-mid, 0.78)}, #{rgba($sticky-end, 0.78)});
+	} @else {
+		$hero-start: $dark;
+		$hero-mid: color.adjust($primary, $lightness: -8%);
+		$hero-end: color.adjust($secondary, $lightness: -12%);
+		--ft-hero-gradient: linear-gradient(135deg, #{$hero-start} 0%, #{$hero-mid} 50%, #{$hero-end} 100%);
+		--ft-hero-sticky: linear-gradient(135deg, #{rgba($hero-start, 0.92)}, #{rgba($hero-mid, 0.92)}, #{rgba($hero-end, 0.92)});
+	}
+
+	// Darker: custom theme color not in Bootstrap's palette
+	--ft-darker: #{$darker};
+	--ft-darker-rgb: #{red($darker), green($darker), blue($darker)};
+
+	// Button overrides (Bootstrap pre-compiles hover/active from Sass vars at build time,
+	// so runtime theme switches need explicit CSS custom property overrides)
+	.btn-primary {
+		--bs-btn-bg: #{$primary};
+		--bs-btn-border-color: #{$primary};
+		--bs-btn-hover-bg: #{color.adjust($primary, $lightness: -8%)};
+		--bs-btn-hover-border-color: #{color.adjust($primary, $lightness: -10%)};
+		--bs-btn-active-bg: #{color.adjust($primary, $lightness: -10%)};
+		--bs-btn-active-border-color: #{color.adjust($primary, $lightness: -12.5%)};
+		--bs-btn-disabled-bg: #{$primary};
+		--bs-btn-disabled-border-color: #{$primary};
+	}
+
+	.btn-outline-primary {
+		--bs-btn-color: #{$primary};
+		--bs-btn-border-color: #{$primary};
+		--bs-btn-hover-bg: #{$primary};
+		--bs-btn-hover-border-color: #{$primary};
+		--bs-btn-active-bg: #{$primary};
+		--bs-btn-active-border-color: #{$primary};
+	}
+}
+
+// Shadows: light mode derives from --bs-dark-rgb, dark mode uses solid black at higher opacity
+:root {
+	--ft-shadow-sm: 0 1px 3px rgba(var(--bs-dark-rgb), 0.04), 0 2px 8px rgba(var(--bs-dark-rgb), 0.06);
+	--ft-shadow-md: 0 2px 4px rgba(var(--bs-dark-rgb), 0.04), 0 8px 24px rgba(var(--bs-dark-rgb), 0.08);
+	--ft-shadow-lg: 0 4px 8px rgba(var(--bs-dark-rgb), 0.06), 0 12px 32px rgba(var(--bs-dark-rgb), 0.16);
+}
+
+[data-bs-theme="dark"] {
+	--ft-shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.15), 0 2px 8px rgba(0, 0, 0, 0.2);
+	--ft-shadow-md: 0 2px 4px rgba(0, 0, 0, 0.15), 0 8px 24px rgba(0, 0, 0, 0.25);
+	--ft-shadow-lg: 0 4px 8px rgba(0, 0, 0, 0.2), 0 12px 32px rgba(0, 0, 0, 0.35);
+}
+
+// --- Light palettes ---
+
+// Plum: default, applied to :root (no theme class needed)
+:root {
+	@include color-scheme(
+		$primary: #4a3d55, $secondary: #7a6490, $dark: #281e33, $darker: #2d2a33,
+		$success: #5a9e6f, $info: #5b5e9a, $warning: #d4a054, $danger: #c75b5b,
+		$body-bg: #f8f6fa, $body-color: #2d2639,
+		$link-color: #5b5e9a, $link-hover-color: #454881
+	);
+}
+
+.theme-coffee {
+	@include color-scheme(
+		$primary: #5c4a3a, $secondary: #8c7161, $dark: #2e2118, $darker: #3a2e25,
+		$success: #6a9e5a, $info: #7a8a5e, $warning: #c89a4a, $danger: #b85c4a,
+		$body-bg: #faf8f5, $body-color: #332b24,
+		$link-color: #7a6550, $link-hover-color: #5c4a3a
+	);
+}
+
+.theme-autumn {
+	@include color-scheme(
+		$primary: #c85a20, $secondary: #a07830, $dark: #2a1a10, $darker: #321e12,
+		$success: #5a8e3a, $info: #8a4a5a, $warning: #d4922a, $danger: #c04030,
+		$body-bg: #fdf6ee, $body-color: #302018,
+		$link-color: #9a5028, $link-hover-color: #7a3a18
+	);
+}
+
+.theme-forest {
+	@include color-scheme(
+		$primary: #3a5a3a, $secondary: #5a7a5a, $dark: #1a2a1a, $darker: #1e2e1e,
+		$success: #5a9e5a, $info: #5a7a8a, $warning: #c8a040, $danger: #b85a4a,
+		$body-bg: #f6faf6, $body-color: #2a332a,
+		$link-color: #3a6a4a, $link-hover-color: #2a5038
+	);
+}
+
+.theme-slate {
+	@include color-scheme(
+		$primary: #4a5568, $secondary: #718096, $dark: #1a202c, $darker: #171923,
+		$success: #48bb78, $info: #4299e1, $warning: #d69e2e, $danger: #e53e3e,
+		$body-bg: #f7fafc, $body-color: #2d3748,
+		$link-color: #4a6fa5, $link-hover-color: #2c5282
+	);
+}
+
+// --- Dark palettes ---
+
+[data-bs-theme="dark"] {
+	@include color-scheme(
+		$primary: #9b8aad, $secondary: #a090b8, $dark: #120d1a, $darker: #0e0a14,
+		$success: #6ab880, $info: #8b8ed4, $warning: #e0b46a, $danger: #d87070,
+		$body-bg: #1a1520, $body-color: #d8d0e0,
+		$link-color: #9a9dd4, $link-hover-color: #b5b8e8,
+		$dark-mode: true
+	);
+}
+
+[data-bs-theme="dark"].theme-coffee {
+	@include color-scheme(
+		$primary: #b09880, $secondary: #c0a890, $dark: #1a1410, $darker: #120e0a,
+		$success: #7ab06a, $info: #a0aa78, $warning: #d8b060, $danger: #c87060,
+		$body-bg: #1e1810, $body-color: #d8d0c8,
+		$link-color: #b09878, $link-hover-color: #c8b090,
+		$dark-mode: true
+	);
+}
+
+[data-bs-theme="dark"].theme-autumn {
+	@include color-scheme(
+		$primary: #e08840, $secondary: #c8a050, $dark: #181008, $darker: #100a04,
+		$success: #80a848, $info: #c07080, $warning: #d8a030, $danger: #d85040,
+		$body-bg: #1c1408, $body-color: #d8d0c0,
+		$link-color: #d87830, $link-hover-color: #f09048,
+		$dark-mode: true
+	);
+}
+
+[data-bs-theme="dark"].theme-forest {
+	@include color-scheme(
+		$primary: #70b070, $secondary: #88b888, $dark: #0e1a0e, $darker: #0a140a,
+		$success: #70b870, $info: #78a0b0, $warning: #d8b850, $danger: #c87060,
+		$body-bg: #141e14, $body-color: #c8d8c8,
+		$link-color: #70a880, $link-hover-color: #90c8a0,
+		$dark-mode: true
+	);
+}
+
+[data-bs-theme="dark"].theme-slate {
+	@include color-scheme(
+		$primary: #90a0b8, $secondary: #a0b0c8, $dark: #0e1218, $darker: #0a0e14,
+		$success: #68d898, $info: #68b8f0, $warning: #e8c050, $danger: #f06060,
+		$body-bg: #161a22, $body-color: #d0d8e0,
+		$link-color: #78a0d0, $link-hover-color: #98c0e8,
+		$dark-mode: true
+	);
+}

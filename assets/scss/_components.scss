@@ -1,9 +1,7 @@
-@use "sass:color";
-
 // Alerts - left-border accent
 
 .alert {
-	border: 1px solid rgba($secondary, 0.12);
+	border: 1px solid rgba(var(--bs-secondary-rgb), 0.12);
 	border-left: 3px solid;
 	font-size: 0.9rem;
 
@@ -25,15 +23,15 @@ p a {
 	margin-bottom: 1.25rem;
 
 	a {
-		color: $secondary;
+		color: var(--bs-secondary);
 
 		&:hover {
-			color: $primary;
+			color: var(--bs-primary);
 		}
 	}
 
 	.breadcrumb-item.active {
-		color: color.adjust($body-color, $lightness: 10%);
+		color: var(--ft-text-light);
 	}
 }
 
@@ -53,8 +51,8 @@ p a {
 }
 
 .tag-row-dark .tag-pill {
-	background: rgba($dark, 0.08);
-	color: $dark;
+	background: rgba(var(--bs-dark-rgb), 0.08);
+	color: var(--bs-dark);
 }
 
 .tag-pill {
@@ -73,13 +71,13 @@ p a {
 }
 
 .tag-pill-meta {
-	background: rgba($secondary, 0.35);
+	background: rgba(var(--bs-secondary-rgb), 0.35);
 	color: $white;
 }
 
 .tag-row-dark .tag-pill-meta {
-	background: rgba($secondary, 0.15);
-	color: $primary;
+	background: rgba(var(--bs-secondary-rgb), 0.15);
+	color: var(--bs-primary);
 }
 
 
@@ -93,7 +91,7 @@ p a {
 	justify-content: center;
 	min-width: 2.75rem;
 	height: 2.75rem;
-	background: rgba($primary, 0.08);
+	background: rgba(var(--bs-primary-rgb), 0.08);
 	border-radius: $card-border-radius;
 	flex-shrink: 0;
 	transition: background 0.15s;
@@ -103,7 +101,7 @@ p a {
 		font-weight: 700;
 		text-transform: uppercase;
 		letter-spacing: 0.06em;
-		color: $primary;
+		color: var(--bs-primary);
 		line-height: 1;
 		transition: color 0.15s;
 	}
@@ -111,7 +109,7 @@ p a {
 	.event-date-day {
 		font-size: 1.1rem;
 		font-weight: 700;
-		color: $primary;
+		color: var(--bs-primary);
 		line-height: 1.1;
 		transition: color 0.15s;
 	}
@@ -137,7 +135,7 @@ p a {
 	align-items: baseline;
 	justify-content: space-between;
 	margin-bottom: 1.25rem;
-	border-bottom: 2px solid rgba($secondary, 0.2);
+	border-bottom: 2px solid rgba(var(--bs-secondary-rgb), 0.2);
 	padding-bottom: 0.5rem;
 
 	h2 {
@@ -157,25 +155,25 @@ p a {
 
 .section-label {
 	@include label-style;
-	color: $secondary;
+	color: var(--bs-secondary);
 	margin-bottom: 0.75rem;
 }
 
 .section-label--lg {
 	@include label-style-lg;
-	color: color.adjust($body-color, $lightness: 25%);
+	color: var(--ft-text-faint);
 	padding-bottom: 0.75rem;
 	margin-bottom: 1rem;
-	border-bottom: 2px solid rgba($secondary, 0.15);
+	border-bottom: 2px solid rgba(var(--bs-secondary-rgb), 0.15);
 }
 
 // Empty states
 .empty-state {
 	padding: 2rem 1.25rem;
 	text-align: center;
-	color: color.adjust($body-color, $lightness: 25%);
-	background: rgba($secondary, 0.03);
-	border: 1px dashed rgba($secondary, 0.2);
+	color: var(--ft-text-faint);
+	background: rgba(var(--bs-secondary-rgb), 0.03);
+	border: 1px dashed rgba(var(--bs-secondary-rgb), 0.2);
 	border-radius: $card-border-radius;
 	font-size: 0.925rem;
 }

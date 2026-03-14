@@ -2,10 +2,10 @@
 	font-family: $navbar-font-family;
 	z-index: $zindex-dropdown + 1;
 	backdrop-filter: blur(16px) saturate(180%);
-	background: rgba($dark, 1) !important;
+	background: var(--bs-dark) !important;
 
 	.has-hero-banner & {
-		background: rgba($dark, 0.99) !important;
+		background: rgba(var(--bs-dark-rgb), 0.99) !important;
 	}
 	padding-top: calc(var(--bs-navbar-padding-y) + env(safe-area-inset-top, 0px));
 	padding-left: env(safe-area-inset-left, 0px);
@@ -38,10 +38,10 @@
 	.dropdown-menu {
 		border-radius: 10px;
 		border: 1px solid rgba($white, 0.08);
-		background: rgba(34, 28, 42, 0.95);
+		background: rgba(var(--bs-dark-rgb), 0.95);
 		backdrop-filter: blur(20px);
 		padding: 0.35rem;
-		box-shadow: 0 8px 32px rgba($dark, 0.4), 0 2px 8px rgba($dark, 0.2);
+		box-shadow: 0 8px 32px rgba(var(--bs-dark-rgb), 0.4), 0 2px 8px rgba(var(--bs-dark-rgb), 0.2);
 
 		&[data-bs-popper] {
 			margin-top: .5rem;

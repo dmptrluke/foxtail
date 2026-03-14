@@ -20,7 +20,31 @@
             <a href="https://x.com/furrynz" target="_blank" rel="noopener noreferrer" title="X">
                 <c-icons.x width="1.1em" height="1.1em" />
             </a>
-            <button class="footer-theme-toggle" type="button" title="Toggle theme style" aria-label="Toggle theme style"></button>
+            <div class="footer-theme-wrapper">
+                <button class="footer-theme-toggle" type="button" title="Theme" aria-label="Theme settings"></button>
+                <div class="theme-picker" hidden>
+                    <div class="theme-picker-row">
+                        <span class="theme-picker-label">Color</span>
+                        <button class="theme-picker-option" data-scheme="plum"><span class="theme-picker-dot" style="--dot:#4a3d55"></span>Plum</button>
+                        <button class="theme-picker-option" data-scheme="coffee"><span class="theme-picker-dot" style="--dot:#5c4a3a"></span>Coffee</button>
+                        <button class="theme-picker-option" data-scheme="autumn"><span class="theme-picker-dot" style="--dot:#c85a20"></span>Autumn</button>
+                        <button class="theme-picker-option" data-scheme="forest"><span class="theme-picker-dot" style="--dot:#3a5a3a"></span>Forest</button>
+                        <button class="theme-picker-option" data-scheme="slate"><span class="theme-picker-dot" style="--dot:#4a5568"></span>Slate</button>
+                    </div>
+                    <div class="theme-picker-row">
+                        <span class="theme-picker-label">Style</span>
+                        <button class="theme-picker-option" data-style="default">Rounded</button>
+                        <button class="theme-picker-option" data-style="sharp">Sharp</button>
+                        <button class="theme-picker-option" data-style="retro">Retro</button>
+                    </div>
+                    <div class="theme-picker-row">
+                        <span class="theme-picker-label">Mode</span>
+                        <button class="theme-picker-option" data-mode="auto">Auto</button>
+                        <button class="theme-picker-option" data-mode="light">Light</button>
+                        <button class="theme-picker-option" data-mode="dark">Dark</button>
+                    </div>
+                </div>
+            </div>
             <a class="footer-debug" role="button" tabindex="0" data-bs-toggle="popover" data-bs-trigger="focus"
                data-bs-placement="top" data-bs-content="{{ DEBUG_DATA | escape }}" title="Debug info">?</a>
         </div>
