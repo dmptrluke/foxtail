@@ -45,7 +45,9 @@
 		--ft-text-faint: #{color.scale($body-color, $lightness: -36%)};
 		--ft-text-fainter: #{color.scale($body-color, $lightness: -44%)};
 		--ft-text-faintest: #{color.scale($body-color, $lightness: -52%)};
-		--ft-surface: #{color.adjust($body-bg, $lightness: 5%)};
+		$surface: color.adjust($body-bg, $lightness: 5%);
+		--ft-surface: #{$surface};
+		--ft-surface-rgb: #{red($surface), green($surface), blue($surface)};
 	} @else {
 		--ft-text-light: #{color.adjust($body-color, $lightness: 10%)};
 		--ft-text-muted: #{color.adjust($body-color, $lightness: 15%)};
@@ -54,6 +56,7 @@
 		--ft-text-fainter: #{color.adjust($body-color, $lightness: 30%)};
 		--ft-text-faintest: #{color.adjust($body-color, $lightness: 35%)};
 		--ft-surface: #fff;
+		--ft-surface-rgb: 255, 255, 255;
 	}
 
 	// Hero gradients: 3-stop diagonal from $dark through $primary/$secondary variants.

@@ -53,6 +53,11 @@ p a {
 .tag-row-dark .tag-pill {
 	background: rgba(var(--bs-dark-rgb), 0.08);
 	color: var(--bs-dark);
+
+	[data-bs-theme="dark"] & {
+		background: rgba(255, 255, 255, 0.1);
+		color: rgba(255, 255, 255, 0.8);
+	}
 }
 
 .tag-pill {
@@ -78,6 +83,11 @@ p a {
 .tag-row-dark .tag-pill-meta {
 	background: rgba(var(--bs-secondary-rgb), 0.15);
 	color: var(--bs-primary);
+
+	[data-bs-theme="dark"] & {
+		background: rgba(var(--bs-secondary-rgb), 0.25);
+		color: rgba(255, 255, 255, 0.85);
+	}
 }
 
 

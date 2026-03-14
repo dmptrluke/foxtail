@@ -1,0 +1,104 @@
+// Theme: Glass
+// Frosted glassmorphism in dark zones (heroes, navbar, event cards).
+// Light content areas stay opaque.
+
+.theme-glass {
+	--ft-glass-bg: rgba(255, 255, 255, 0.08);
+	--ft-glass-border: rgba(255, 255, 255, 0.15);
+	--ft-glass-backdrop: blur(16px) saturate(180%);
+	--ft-glass-glow: 0 0 0 1px rgba(255, 255, 255, 0.05);
+
+	// Ambient gradient blobs give glass elements something to refract
+	body {
+		background-image:
+			linear-gradient(var(--bs-dark) calc(4rem + env(safe-area-inset-top, 0px)), transparent calc(4rem + env(safe-area-inset-top, 0px))),
+			radial-gradient(ellipse 50% 40% at 15% 20%, rgba(var(--bs-primary-rgb), 0.1) 0%, transparent 70%),
+			radial-gradient(ellipse 40% 50% at 85% 60%, rgba(var(--bs-secondary-rgb), 0.08) 0%, transparent 70%),
+			radial-gradient(ellipse 60% 30% at 50% 90%, rgba(var(--bs-primary-rgb), 0.06) 0%, transparent 70%);
+		background-attachment: fixed, fixed, fixed, fixed;
+	}
+
+	// Navbar: translucent with content showing through
+	#navigation {
+		background: rgba(var(--bs-dark-rgb), 0.7) !important;
+		backdrop-filter: var(--ft-glass-backdrop);
+		border-bottom: 1px solid var(--ft-glass-border);
+	}
+
+	#navigation .dropdown-menu {
+		background: rgba(var(--bs-dark-rgb), 0.8);
+		border-color: var(--ft-glass-border);
+		box-shadow:
+			var(--ft-glass-glow),
+			0 8px 32px rgba(var(--bs-dark-rgb), 0.4);
+	}
+
+	// Hero pills: glass borders and subtle blur
+	.hero .hero-pill {
+		background: var(--ft-glass-bg);
+		border: 1px solid var(--ft-glass-border);
+		backdrop-filter: blur(8px);
+
+		&.active {
+			background: rgba(255, 255, 255, 0.18);
+			border-color: rgba(255, 255, 255, 0.25);
+		}
+	}
+
+	// Sticky hero: glass border accent
+	.hero-sticky {
+		border-bottom: 1px solid var(--ft-glass-border);
+		box-shadow: var(--ft-glass-glow);
+	}
+
+	// Event cards: frosted glass panels
+	.event-card {
+		background: rgba(var(--bs-dark-rgb), 0.75);
+		backdrop-filter: var(--ft-glass-backdrop);
+		border: 1px solid var(--ft-glass-border);
+		box-shadow: var(--ft-glass-glow);
+	}
+
+	.event-card-footer {
+		border-top-color: var(--ft-glass-border);
+	}
+
+	// Sidebar cards: light glass treatment
+	.sidebar-card {
+		background: rgba(var(--ft-surface-rgb), 0.7);
+		backdrop-filter: blur(12px);
+		border-color: rgba(var(--bs-secondary-rgb), 0.08);
+		box-shadow: var(--ft-glass-glow);
+	}
+
+	// Dashboard tiles: light glass treatment
+	.dashboard-tile {
+		background: rgba(var(--ft-surface-rgb), 0.7);
+		backdrop-filter: blur(12px);
+		border-color: rgba(var(--bs-secondary-rgb), 0.08);
+		box-shadow: var(--ft-glass-glow);
+
+		.tile-icon {
+			background: rgba(var(--bs-primary-rgb), 0.06);
+			backdrop-filter: blur(8px);
+			border: 1px solid rgba(var(--bs-primary-rgb), 0.08);
+		}
+	}
+}
+
+// Dark mode: lower opacity, higher blur, subtle glow
+.theme-glass[data-bs-theme="dark"] {
+	--ft-glass-bg: rgba(255, 255, 255, 0.06);
+	--ft-glass-border: rgba(255, 255, 255, 0.12);
+	--ft-glass-backdrop: blur(24px) saturate(140%);
+	--ft-glass-glow: 0 0 12px rgba(255, 255, 255, 0.03);
+
+	.event-card {
+		background: rgba(var(--bs-dark-rgb), 0.65);
+	}
+
+	.sidebar-card,
+	.dashboard-tile {
+		border-color: rgba(var(--bs-secondary-rgb), 0.06);
+	}
+}
