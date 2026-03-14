@@ -1,7 +1,7 @@
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.postgres.search import SearchQuery, SearchRank, SearchVector
-from django.db.models import Count
+from django.db.models import Count, Q
 from django.http import Http404, HttpResponseForbidden, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse, reverse_lazy
@@ -290,9 +290,12 @@ class CommentManageListView(PermissionMixin, ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['current_filter'] = self.request.GET.get('filter', 'pending')
-        all_comments = Comment.objects.all()
-        context['pending_count'] = all_comments.filter(approved=False).count()
-        context['all_count'] = all_comments.count()
+        counts = Comment.objects.aggregate(
+            pending_count=Count('pk', filter=Q(approved=False)),
+            all_count=Count('pk'),
+        )
+        context['pending_count'] = counts['pending_count']
+        context['all_count'] = counts['all_count']
         return context
 
 

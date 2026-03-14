@@ -139,7 +139,7 @@ class Event(PublishedModel):
 
         org = self.resolved_organisation
         if org:
-            org_url = org.structured_data['@id']
+            org_url = settings.SITE_URL + org.get_absolute_url()
             data['organizer'] = {'@type': 'Organization', '@id': org_url, 'name': org.name, 'url': org_url}
 
         return data
