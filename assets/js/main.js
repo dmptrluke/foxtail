@@ -32,7 +32,7 @@ function initCharCounter() {
 // --- Theme switcher ---
 
 const COLOR_SCHEMES = ['plum', 'coffee', 'autumn', 'forest', 'slate'];
-const STYLE_THEMES = ['default', 'sharp', 'retro'];
+const STYLE_THEMES = ['default', 'sharp', 'retro', 'glass'];
 
 function applyTheme() {
     const root = document.documentElement;
@@ -75,35 +75,45 @@ function initThemeToggle() {
     matchMedia('(prefers-color-scheme: dark)').addEventListener('change', applyTheme);
     window.addEventListener('storage', applyTheme);
 
-    const toggle = document.querySelector('.footer-theme-toggle');
-    const picker = document.querySelector('.theme-picker');
-    if (!toggle || !picker) return;
+    const picker = document.querySelector('.popup-theme');
+    const debugPopup = document.querySelector('.popup-debug');
+    const popups = [picker, debugPopup].filter(Boolean);
 
-    toggle.addEventListener('click', (e) => {
-        e.stopPropagation();
-        const wasOpen = !picker.hidden;
-        picker.hidden = wasOpen;
-        if (!wasOpen) updatePickerState(picker);
+    // Toggle buttons: each .footer-popup-toggle opens its sibling popup
+    document.querySelectorAll('.footer-popup-toggle').forEach(toggle => {
+        const popup = toggle.parentElement.querySelector('.popup-theme, .popup-debug');
+        if (!popup) return;
+
+        toggle.addEventListener('click', (e) => {
+            e.stopPropagation();
+            popups.forEach(p => { if (p !== popup) p.hidden = true; });
+            popup.hidden = !popup.hidden;
+            if (!popup.hidden && popup === picker) updatePickerState(picker);
+        });
     });
 
-    picker.addEventListener('click', (e) => {
-        const btn = e.target.closest('.theme-picker-option');
-        if (!btn) return;
+    // Theme picker option clicks
+    if (picker) {
+        picker.addEventListener('click', (e) => {
+            const btn = e.target.closest('.popup-theme-option');
+            if (!btn) return;
 
-        if (btn.dataset.scheme) {
-            localStorage.setItem('color-scheme', btn.dataset.scheme);
-        } else if (btn.dataset.style) {
-            localStorage.setItem('style-theme', btn.dataset.style);
-        } else if (btn.dataset.mode) {
-            localStorage.setItem('dark-mode', btn.dataset.mode);
-        }
-        applyTheme();
-        updatePickerState(picker);
-    });
+            if (btn.dataset.scheme) {
+                localStorage.setItem('color-scheme', btn.dataset.scheme);
+            } else if (btn.dataset.style) {
+                localStorage.setItem('style-theme', btn.dataset.style);
+            } else if (btn.dataset.mode) {
+                localStorage.setItem('dark-mode', btn.dataset.mode);
+            }
+            applyTheme();
+            updatePickerState(picker);
+        });
+    }
 
+    // Close popups on outside click
     document.addEventListener('click', (e) => {
-        if (!picker.hidden && !e.target.closest('.footer-theme-wrapper')) {
-            picker.hidden = true;
+        if (!e.target.closest('.popup-wrapper')) {
+            popups.forEach(p => { p.hidden = true; });
         }
     });
 }

@@ -20,33 +20,55 @@
             <a href="https://x.com/furrynz" target="_blank" rel="noopener noreferrer" title="X">
                 <c-icons.x width="1.1em" height="1.1em" />
             </a>
-            <div class="footer-theme-wrapper">
-                <button class="footer-theme-toggle" type="button" title="Theme" aria-label="Theme settings"></button>
-                <div class="theme-picker" hidden>
-                    <div class="theme-picker-row">
-                        <span class="theme-picker-label">Color</span>
-                        <button class="theme-picker-option" data-scheme="plum"><span class="theme-picker-dot" style="--dot:#4a3d55"></span>Plum</button>
-                        <button class="theme-picker-option" data-scheme="coffee"><span class="theme-picker-dot" style="--dot:#5c4a3a"></span>Coffee</button>
-                        <button class="theme-picker-option" data-scheme="autumn"><span class="theme-picker-dot" style="--dot:#c85a20"></span>Autumn</button>
-                        <button class="theme-picker-option" data-scheme="forest"><span class="theme-picker-dot" style="--dot:#3a5a3a"></span>Forest</button>
-                        <button class="theme-picker-option" data-scheme="slate"><span class="theme-picker-dot" style="--dot:#4a5568"></span>Slate</button>
+            <div class="popup-wrapper">
+                <button class="footer-popup-toggle" type="button" title="Theme" aria-label="Theme settings">&#x25CF;</button>
+                <div class="popup-theme" hidden>
+                    <div class="popup-theme-row">
+                        <span class="popup-theme-label">Color</span>
+                        <button class="popup-theme-option" data-scheme="plum"><span class="popup-theme-dot" style="--dot:#4a3d55"></span>Plum</button>
+                        <button class="popup-theme-option" data-scheme="coffee"><span class="popup-theme-dot" style="--dot:#5c4a3a"></span>Coffee</button>
+                        <button class="popup-theme-option" data-scheme="autumn"><span class="popup-theme-dot" style="--dot:#c85a20"></span>Autumn</button>
+                        <button class="popup-theme-option" data-scheme="forest"><span class="popup-theme-dot" style="--dot:#3a5a3a"></span>Forest</button>
+                        <button class="popup-theme-option" data-scheme="slate"><span class="popup-theme-dot" style="--dot:#4a5568"></span>Slate</button>
                     </div>
-                    <div class="theme-picker-row">
-                        <span class="theme-picker-label">Style</span>
-                        <button class="theme-picker-option" data-style="default">Rounded</button>
-                        <button class="theme-picker-option" data-style="sharp">Sharp</button>
-                        <button class="theme-picker-option" data-style="retro">Retro</button>
+                    <div class="popup-theme-row">
+                        <span class="popup-theme-label">Style</span>
+                        <button class="popup-theme-option" data-style="default">Rounded</button>
+                        <button class="popup-theme-option" data-style="sharp">Sharp</button>
+                        <button class="popup-theme-option" data-style="retro">Retro</button>
+                        <button class="popup-theme-option" data-style="glass">Glass</button>
                     </div>
-                    <div class="theme-picker-row">
-                        <span class="theme-picker-label">Mode</span>
-                        <button class="theme-picker-option" data-mode="auto">Auto</button>
-                        <button class="theme-picker-option" data-mode="light">Light</button>
-                        <button class="theme-picker-option" data-mode="dark">Dark</button>
+                    <div class="popup-theme-row">
+                        <span class="popup-theme-label">Mode</span>
+                        <button class="popup-theme-option" data-mode="auto">Auto</button>
+                        <button class="popup-theme-option" data-mode="light">Light</button>
+                        <button class="popup-theme-option" data-mode="dark">Dark</button>
                     </div>
                 </div>
             </div>
-            <a class="footer-debug" role="button" tabindex="0" data-bs-toggle="popover" data-bs-trigger="focus"
-               data-bs-placement="top" data-bs-content="{{ DEBUG_DATA | escape }}" title="Debug info">?</a>
+            <div class="popup-wrapper">
+                <button class="footer-popup-toggle" type="button" title="Debug info" aria-label="Debug info">?</button>
+                <div class="popup-debug" hidden>
+                    <div class="popup-debug-row">
+                        <span class="popup-debug-label">IP</span>
+                        <span class="popup-debug-value">{{ DEBUG_DATA_IP }}</span>
+                    </div>
+                    {% if request.user.is_authenticated %}
+                    <div class="popup-debug-row">
+                        <span class="popup-debug-label">User</span>
+                        <span class="popup-debug-value">{{ request.user.username }}</span>
+                    </div>
+                    {% endif %}
+                    <div class="popup-debug-row">
+                        <span class="popup-debug-label">Time</span>
+                        <span class="popup-debug-value">{% now "c" %}</span>
+                    </div>
+                    <div class="popup-debug-row">
+                        <span class="popup-debug-label">TZ</span>
+                        <span class="popup-debug-value">{{ TIME_ZONE }}</span>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </footer>
