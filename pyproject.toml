@@ -21,7 +21,7 @@ dependencies = [
     "django-recaptcha==4.1.0",
     "django-redis==6.0.0",
     "huey",
-    "django-storages[azure]==1.14.6",
+    "django-storages[s3]==1.14.6",
     "django-structured-data==0.11.0",
     "django-taggit==6.1.0",
     "django-widget-tweaks==1.5.1",

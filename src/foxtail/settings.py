@@ -237,19 +237,20 @@ MEDIA_URL = '/media/'
 STATICFILES_DIRS = [str(BASE_DIR / 'build/static'), str(BASE_DIR / 'assets/static')]
 
 
-AZURE_MEDIA = env.bool('AZURE_MEDIA', default=False)
+S3_MEDIA = env.bool('S3_MEDIA', default=False)
 
-if AZURE_MEDIA:
-    AZURE_ACCOUNT_NAME = env('AZURE_ACCOUNT')
-    AZURE_ACCOUNT_KEY = env('AZURE_KEY')
-    AZURE_CUSTOM_DOMAIN = env('AZURE_DOMAIN', default=None)
-    AZURE_SSL = True
+if S3_MEDIA:
+    AWS_ACCESS_KEY_ID = env('S3_ACCESS_KEY')
+    AWS_SECRET_ACCESS_KEY = env('S3_SECRET_KEY')
+    AWS_STORAGE_BUCKET_NAME = env('S3_BUCKET')
+    AWS_S3_ENDPOINT_URL = env('S3_ENDPOINT')
+    AWS_S3_CUSTOM_DOMAIN = env('S3_DOMAIN', default=None)
+    AWS_DEFAULT_ACL = None
+    AWS_QUERYSTRING_AUTH = False
 
 STORAGES = {
     'default': {
-        'BACKEND': 'apps.core.storages.MediaAzureStorage'
-        if AZURE_MEDIA
-        else 'django.core.files.storage.FileSystemStorage',
+        'BACKEND': 'apps.core.storages.MediaS3Storage' if S3_MEDIA else 'django.core.files.storage.FileSystemStorage',
     },
     'staticfiles': {
         'BACKEND': 'whitenoise.storage.CompressedManifestStaticFilesStorage',
@@ -257,7 +258,7 @@ STORAGES = {
 }
 STATIC_ROOT = str(BASE_DIR / 'static')
 
-if not AZURE_MEDIA:
+if not S3_MEDIA:
     MEDIA_ROOT = str(BASE_DIR / 'storage/media')
 
 if TESTING:
@@ -348,7 +349,8 @@ LOGGING = {
     'root': {'level': 'INFO', 'handlers': ['console']},
     'loggers': {
         'sentry_sdk': {'level': 'ERROR', 'handlers': ['console']},
-        'azure': {'level': 'WARNING'},
+        'botocore': {'level': 'WARNING'},
+        's3transfer': {'level': 'WARNING'},
         'pyvips': {'level': 'WARNING'},
         'django.request': {'level': 'ERROR', 'handlers': ['console'], 'propagate': False},
         'apps.core.access': {'level': 'INFO', 'handlers': ['access'], 'propagate': False},
