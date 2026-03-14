@@ -24,6 +24,7 @@ env = environ.Env()
 environ.Env.read_env(BASE_DIR / '.env')
 
 SECRET_KEY = env('SECRET_KEY')
+SECRET_KEY_FALLBACKS = env.list('SECRET_KEY_FALLBACKS', default=[])
 
 DEBUG = env.bool('DEBUG', default=False)  # debug toolbar, relaxed CSP, verbose messages, no conn pooling
 TESTING = env.bool('TESTING', default=False)  # simplified staticfiles, silenced reCAPTCHA check
