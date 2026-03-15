@@ -8,4 +8,8 @@ def site(request):
 def debug(request):
     forwarded = request.META.get('HTTP_X_FORWARDED_FOR')
     ip = forwarded.split(',')[0] if forwarded else request.META.get('REMOTE_ADDR')
-    return {'DEBUG_DATA_IP': ip}
+    release = settings.GIT_SHA
+    return {
+        'DEBUG_DATA_IP': ip,
+        'DEBUG_DATA_VERSION': release[:8] if release else '',
+    }

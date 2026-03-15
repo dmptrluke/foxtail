@@ -21,7 +21,7 @@
                 <c-icons.x width="1.1em" height="1.1em" />
             </a>
             <div class="popup-wrapper">
-                <button class="footer-popup-toggle" type="button" title="Theme" aria-label="Theme settings">&#x25CF;</button>
+                <button class="footer-popup-toggle" type="button" title="Theme" aria-label="Theme settings"><c-icons.palette /></button>
                 <div class="popup-theme" hidden>
                     <div class="popup-theme-row">
                         <span class="popup-theme-label">Color</span>
@@ -47,7 +47,7 @@
                 </div>
             </div>
             <div class="popup-wrapper">
-                <button class="footer-popup-toggle" type="button" title="Debug info" aria-label="Debug info">?</button>
+                <button class="footer-popup-toggle" type="button" title="Debug info" aria-label="Debug info"><c-icons.information /></button>
                 <div class="popup-debug" hidden>
                     <div class="popup-debug-row">
                         <span class="popup-debug-label">IP</span>
@@ -59,13 +59,35 @@
                         <span class="popup-debug-value">{{ request.user.username }}</span>
                     </div>
                     {% endif %}
+                    {% if DEBUG_DATA_VERSION %}
+                    <div class="popup-debug-row">
+                        <span class="popup-debug-label">Build</span>
+                        <span class="popup-debug-value">{{ DEBUG_DATA_VERSION }}</span>
+                    </div>
+                    {% endif %}
                     <div class="popup-debug-row">
                         <span class="popup-debug-label">Time</span>
-                        <span class="popup-debug-value">{% now "c" %}</span>
+                        <span class="popup-debug-value">{% now "Y-m-d H:i:s" %}</span>
                     </div>
                     <div class="popup-debug-row">
                         <span class="popup-debug-label">TZ</span>
                         <span class="popup-debug-value">{{ TIME_ZONE }}</span>
+                    </div>
+                    <div class="popup-debug-row">
+                        <span class="popup-debug-label">Screen</span>
+                        <span class="popup-debug-value" data-debug="screen"></span>
+                    </div>
+                    <div class="popup-debug-row">
+                        <span class="popup-debug-label">Browser</span>
+                        <span class="popup-debug-value" data-debug="browser"></span>
+                    </div>
+                    <div class="popup-debug-row">
+                        <span class="popup-debug-label">Device</span>
+                        <span class="popup-debug-value" data-debug="device"></span>
+                    </div>
+                    <div class="popup-debug-row">
+                        <span class="popup-debug-label">Theme</span>
+                        <span class="popup-debug-value" data-debug="theme"></span>
                     </div>
                 </div>
             </div>

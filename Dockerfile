@@ -44,7 +44,7 @@ ENV PATH="/app/.venv/bin:$PATH"
 FROM deps AS app
 
 ARG GIT_SHA
-ENV SENTRY_RELEASE=$GIT_SHA
+ENV GIT_SHA=$GIT_SHA
 
 RUN rm /usr/local/bin/uv
 

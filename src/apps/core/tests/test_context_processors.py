@@ -20,3 +20,21 @@ class TestDebugContextProcessor:
         result = debug(request)
 
         assert result['DEBUG_DATA_IP'] == '127.0.0.1'
+
+    # includes truncated git SHA from settings
+    def test_includes_version_from_git_sha(self, request_factory: RequestFactory, settings):
+        settings.GIT_SHA = 'abc123def456'
+        request = request_factory.get('/')
+        request.user = AnonymousUser()
+        result = debug(request)
+
+        assert result['DEBUG_DATA_VERSION'] == 'abc123de'
+
+    # returns empty version when GIT_SHA is blank
+    def test_version_empty_without_git_sha(self, request_factory: RequestFactory, settings):
+        settings.GIT_SHA = ''
+        request = request_factory.get('/')
+        request.user = AnonymousUser()
+        result = debug(request)
+
+        assert result['DEBUG_DATA_VERSION'] == ''

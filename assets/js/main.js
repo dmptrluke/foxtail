@@ -7,6 +7,7 @@ import Popover from 'bootstrap/js/dist/popover';
 import Tooltip from 'bootstrap/js/dist/tooltip';
 
 import 'colcade';
+import { UAParser } from 'ua-parser-js';
 
 // --- Bootstrap component initialization ---
 
@@ -79,6 +80,23 @@ function initThemeToggle() {
     const debugPopup = document.querySelector('.popup-debug');
     const popups = [picker, debugPopup].filter(Boolean);
 
+    // Populate client-side debug fields
+    function updateDebugInfo() {
+        if (!debugPopup) return;
+        const set = (key, val) => {
+            const el = debugPopup.querySelector(`[data-debug="${key}"]`);
+            if (el) el.textContent = val;
+        };
+        const { browser, os, device } = UAParser(navigator.userAgent);
+        set('screen', `${window.innerWidth}x${window.innerHeight}`);
+        const browserPart = [browser.name, browser.version].filter(Boolean).join(' ');
+        const osPart = [os.name, os.version].filter(Boolean).join(' ');
+        set('browser', [browserPart, osPart].filter(Boolean).join(' / '));
+        set('device', device.vendor ? [device.vendor, device.model].filter(Boolean).join(' ') : 'Desktop');
+        const ls = (key, fallback) => localStorage.getItem(key) || fallback;
+        set('theme', `${ls('color-scheme', 'plum')} / ${ls('style-theme', 'default')} / ${ls('dark-mode', 'auto')}`);
+    }
+
     // Toggle buttons: each .footer-popup-toggle opens its sibling popup
     document.querySelectorAll('.footer-popup-toggle').forEach(toggle => {
         const popup = toggle.parentElement.querySelector('.popup-theme, .popup-debug');
@@ -89,6 +107,7 @@ function initThemeToggle() {
             popups.forEach(p => { if (p !== popup) p.hidden = true; });
             popup.hidden = !popup.hidden;
             if (!popup.hidden && popup === picker) updatePickerState(picker);
+            if (!popup.hidden && popup === debugPopup) updateDebugInfo();
         });
     });
 

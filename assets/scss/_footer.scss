@@ -11,11 +11,9 @@
 	background: rgba(var(--bs-secondary-rgb), 0.06);
 	border-radius: 50%;
 	cursor: pointer;
-	transition: color 0.15s ease, background 0.15s ease, opacity 0.15s ease;
-	opacity: 0;
+	transition: color 0.15s ease, background 0.15s ease;
 
 	&:hover {
-		opacity: 1;
 		color: var(--bs-secondary);
 		background: rgba(var(--bs-secondary-rgb), 0.12);
 	}
@@ -134,9 +132,6 @@
 		}
 	}
 
-	&:hover .footer-popup-toggle {
-		opacity: 1;
-	}
 }
 
 // --- Popup wrappers & toggle buttons ---
@@ -206,7 +201,7 @@
 
 .popup-debug {
 	@include popup-base;
-	min-width: 16rem;
+	min-width: 20rem;
 
 	&-row {
 		@include popup-base-row;
@@ -214,6 +209,7 @@
 
 	&-label {
 		@include popup-base-label;
+		width: 3.5rem;
 	}
 
 	&-value {
