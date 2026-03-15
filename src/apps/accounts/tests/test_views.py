@@ -508,6 +508,14 @@ class TestConfirmVerificationView:
         msgs = [str(m) for m in get_messages(response.wsgi_request)]
         assert any('enter a verification code' in m for m in msgs)
 
+    # verifier cannot confirm their own token
+    def test_self_verification_rejected(self, client, verifier, token):
+        client.force_login(verifier)
+        _store_token(token, verifier.pk)
+        response = client.post(reverse('account_verification_confirm'), {'token': token}, follow=True)
+        msgs = [str(m) for m in get_messages(response.wsgi_request)]
+        assert any('cannot verify yourself' in m for m in msgs)
+
 
 class TestVerifyUserView:
     """Test the endpoint that creates a Verification record."""
@@ -559,6 +567,15 @@ class TestVerifyUserView:
         response = client.post(reverse('account_verification_verify'), {'token': token}, follow=True)
         msgs = [str(m) for m in get_messages(response.wsgi_request)]
         assert any('has been verified' in m for m in msgs)
+
+    # verifier cannot verify themselves
+    def test_self_verification_rejected(self, client, verifier, token):
+        client.force_login(verifier)
+        _store_token(token, verifier.pk)
+        response = client.post(reverse('account_verification_verify'), {'token': token}, follow=True)
+        msgs = [str(m) for m in get_messages(response.wsgi_request)]
+        assert any('cannot verify yourself' in m for m in msgs)
+        assert not Verification.objects.filter(user=verifier).exists()
 
     # returns 429 after exceeding verify_submit rate limit
     @pytest.mark.keep_rate_limits
@@ -618,6 +635,14 @@ class TestUnverifyUserView:
         response = client.post(reverse('account_verification_unverify'), {'token': token}, follow=True)
         msgs = [str(m) for m in get_messages(response.wsgi_request)]
         assert any('has been removed' in m for m in msgs)
+
+    # verifier cannot unverify themselves
+    def test_self_unverification_rejected(self, client, verifier, token):
+        client.force_login(verifier)
+        _store_token(token, verifier.pk)
+        response = client.post(reverse('account_verification_unverify'), {'token': token}, follow=True)
+        msgs = [str(m) for m in get_messages(response.wsgi_request)]
+        assert any('cannot verify yourself' in m for m in msgs)
 
     # returns 429 after exceeding verify_unverify rate limit
     @pytest.mark.keep_rate_limits

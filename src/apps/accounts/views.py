@@ -210,10 +210,9 @@ def _resolve_token(request, token_raw):
     if not target_user_id:
         messages.error(request, 'Invalid or expired verification code.')
         return None, None
-    # TODO: re-enable self-verification check
-    # if target_user_id == request.user.pk:
-    #     messages.error(request, 'You cannot verify yourself.')
-    #     return None, None
+    if target_user_id == request.user.pk:
+        messages.error(request, 'You cannot verify yourself.')
+        return None, None
     return get_object_or_404(User, pk=target_user_id), formatted
 
 
