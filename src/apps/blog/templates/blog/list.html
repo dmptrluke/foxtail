@@ -51,7 +51,7 @@
         <c-slot name="content">
             {% if posts %}
                 {% for post in page_obj %}
-                    <c-post-card :post="post" />
+                    <c-blog_post :post="post" />
                 {% endfor %}
             {% else %}
                 <div class="empty-state">

@@ -1,0 +1,13 @@
+{% load text %}
+<a href="{{ post.get_absolute_url }}" class="post-card" {{ attrs }}>
+    <div class="post-card-img"{% if post.image %} style="background-image: url('{{ post.image.card }}')"{% endif %}></div>
+    <div class="post-card-body">
+        <h3>{{ post.title }}</h3>
+        <p class="post-card-excerpt">{{ post.text_rendered|striptags|truncatechars:120 }}</p>
+        <div class="post-card-meta">
+            <span>{{ post.comment_count }} comment{{ post.comment_count|pluralize }}</span>
+            <span class="meta-sep">&middot;</span>
+            <span>{{ post.text_rendered|reading_time }}</span>
+        </div>
+    </div>
+</a>

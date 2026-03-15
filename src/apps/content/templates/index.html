@@ -1,5 +1,5 @@
-{% extends "base/page.html" %}
-{% load humanize account jsonld opengraph meta twitter image %}
+{% extends "base/minimal.html" %}
+{% load cache avatar text jsonld opengraph meta twitter %}
 
 {% block title_full %}{{ request.site.name }} — the resource for New Zealand furries{% endblock title_full %}
 
@@ -10,92 +10,204 @@
     {% twitter_for structured_data %}
 {% endblock %}
 
-{% block hero %}
-    <c-hero hero_class="hero-home{% if user.is_authenticated %} hero-compact{% endif %}">
-        {% if user.is_authenticated %}
-            <c-hero.title>Welcome back, {{ user.get_short_name }}</c-hero.title>
-            <p>See what's happening in the NZ furry community.</p>
-            <nav aria-label="Actions">
-                <a href="{% url 'account_profile' %}" class="btn btn-outline-light">My Account</a>
-            </nav>
-        {% else %}
-            <c-hero.title>Welcome to furry.nz</c-hero.title>
-            <p>The community hub for New Zealand furries. Events, news, and more.</p>
-            <nav aria-label="Actions">
-                <a href="{% url 'account_signup' %}" class="btn btn-primary btn-lg">Create Account</a>
-                <a href="{% url 'account_login' %}" class="btn btn-outline-light btn-lg">Sign In</a>
-            </nav>
-        {% endif %}
-    </c-hero>
-{% endblock hero %}
-
-{% block content %}
-    {# ── News ── #}
-    <section class="mb-5">
-        <c-section-header link_url="{% url 'blog:list' %}">Latest News</c-section-header>
-
-        {% for post in post_list %}
-                {% if forloop.first %}
-                    <article class="news-feature">
-                        <div class="news-feature-img">
-                            {% if post.image %}
-                                <img src="{{ post.image.card }}"
-                                     srcset="{{ post.image.card }} 1x, {{ post.image.card_2x }} 2x"
-                                     alt="{{ post.title }}"
-                                     style="object-position: {{ post.image_ppoi|ppoi_position }}">
-                            {% else %}
-                                <div class="card-img-placeholder"></div>
-                            {% endif %}
-                        </div>
-                        <header>
-                            <time datetime="{{ post.created|date:'Y-m-d' }}">{{ post.created|date:"M j, Y" }}</time>
-                            <h3><a href="{{ post.get_absolute_url }}" class="stretched-link">{{ post.title }}</a></h3>
-                            <p>{{ post.text_rendered|safe|striptags|truncatechars:400 }}</p>
-                        </header>
-                    </article>
-                {% else %}
-                    {% if forloop.counter == 2 %}<div class="news-grid">{% endif %}
-                        <article class="news-compact">
-                            <div class="news-compact-img">
-                                {% if post.image %}
-                                    <img src="{{ post.image.card }}"
-                                         srcset="{{ post.image.card }} 1x, {{ post.image.card_2x }} 2x"
-                                         alt="{{ post.title }}"
-                                         style="object-position: {{ post.image_ppoi|ppoi_position }}">
-                                {% else %}
-                                    <div class="card-img-placeholder"></div>
-                                {% endif %}
-                            </div>
-                            <header>
-                                <time datetime="{{ post.created|date:'Y-m-d' }}">{{ post.created|date:"M j, Y" }}</time>
-                                <h3><a href="{{ post.get_absolute_url }}" class="stretched-link">{{ post.title }}</a></h3>
-                                <p>{{ post.text_rendered|safe|striptags|truncatechars:100 }}</p>
-                            </header>
-                        </article>
-                    {% if forloop.last %}</div>{% endif %}
-                {% endif %}
-        {% endfor %}
-    </section>
-
-    {# ── Events ── #}
-    {% if event_list %}
-        <section>
-            <c-section-header link_url="{% url 'events:list' %}">Upcoming Events</c-section-header>
-
-            <div class="event-list">
-                {% for event in event_list %}
-                        <a href="{{ event.get_absolute_url }}" class="event-item">
-                            <c-cal_badge :date="event.start" large />
-                            <div class="event-details">
-                                <h3>{{ event.title }}</h3>
-                                <p>{{ event.description_rendered|safe|striptags|truncatechars:120 }}</p>
-                                {% if event.location %}
-                                    <span class="event-location">{{ event.location }}</span>
-                                {% endif %}
+{% block page %}
+    {# ── Hero ── #}
+    {% if not user.is_authenticated %}
+        <c-hero hero_class="hero-home-split">
+            <div class="hero-split">
+                <div class="hero-split-left">
+                    <h1>New Zealand's Furry Community</h1>
+                    <p class="tagline">Connecting furries across Aotearoa</p>
+                    <div class="stats-row">
+                        {% cache 600 "homepage_stats" %}
+                            <c-stat :value="stats.member_count" label="Members" />
+                            <c-stat :value="stats.events_this_year" label="Events this year" />
+                            <c-stat :value="stats.org_count" label="Organisations" />
+                        {% endcache %}
+                    </div>
+                    <div class="hero-actions">
+                        <a href="{% url 'account_signup' %}" class="btn btn-primary btn-lg">Join the community</a>
+                        <a href="{% url 'account_login' %}" class="btn btn-outline-light btn-lg">Log in</a>
+                    </div>
+                </div>
+                <div class="hero-split-right">
+                    {% if featured_post %}
+                        <a href="{{ featured_post.get_absolute_url }}" class="hero-glass-card">
+                            <div class="hero-glass-card-img"{% if featured_post.image %} style="background-image: url('{{ featured_post.image.card }}')"{% endif %}></div>
+                            <span class="hero-glass-card-badge">Latest Post</span>
+                            <time datetime="{{ featured_post.created|date:'Y-m-d' }}">{{ featured_post.created|date:"M j, Y" }}</time>
+                            <h3>{{ featured_post.title }}</h3>
+                            <p>{{ featured_post.text_rendered|striptags|truncatechars:150 }}</p>
+                            <div class="hero-glass-card-meta">
+                                <span>{{ featured_post.author.name }}</span>
+                                <span class="meta-sep">&middot;</span>
+                                <span>{{ featured_post.comment_count }} comment{{ featured_post.comment_count|pluralize }}</span>
+                                <span class="meta-sep">&middot;</span>
+                                <span>{{ featured_post.text_rendered|reading_time }}</span>
                             </div>
                         </a>
-                {% endfor %}
+                    {% endif %}
+                </div>
+            </div>
+        </c-hero>
+    {% else %}
+        <c-hero hero_class="hero-home-banner">
+            <div class="banner-top">
+                <div class="banner-top-left">
+                    <h1>Welcome back, {{ user.full_name|default:user.username }}</h1>
+                    <p class="tagline">See what's happening in the NZ furry community.</p>
+                </div>
+                <div class="banner-top-right">
+                    <a href="{% url 'account_profile' %}" class="btn btn-outline-light">My account</a>
+                </div>
+            </div>
+            <div class="banner-stats">
+                {% cache 600 "homepage_stats" %}
+                    <c-stat :value="stats.member_count" label="Members" />
+                    <c-stat :value="stats.events_this_year" label="Events this year" />
+                    <c-stat :value="stats.org_count" label="Organisations" />
+                {% endcache %}
+            </div>
+        </c-hero>
+    {% endif %}
+
+    {# ── Onboarding (logged-out only) ── #}
+    {% if not user.is_authenticated %}
+        <section class="onboarding">
+            <div class="container px-3 px-md-4">
+                <div class="onboarding-inner">
+                    <a href="#" class="onboarding-card">
+                        <c-icons.paw />
+                        <h3>What is furry?</h3>
+                        <p>Learn about the furry fandom and the community in New Zealand.</p>
+                    </a>
+                    <a href="#" class="onboarding-card">
+                        <c-icons.search />
+                        <h3>Find your local group</h3>
+                        <p>Connect with furries in your city or region.</p>
+                    </a>
+                    <a href="#" class="onboarding-card">
+                        <c-icons.plus />
+                        <h3>Get involved</h3>
+                        <p>Join events, meet people, and become part of the community.</p>
+                    </a>
+                </div>
             </div>
         </section>
     {% endif %}
-{% endblock content %}
+
+    {# ── Main content ── #}
+    <main id="main-content" class="container px-3 px-md-4">
+        {% include "components/messages.html" %}
+
+        {% if user.is_authenticated and featured_post %}
+            <section class="featured-post-section">
+                <a href="{{ featured_post.get_absolute_url }}" class="featured-post-card">
+                    <div class="featured-post-card-img"{% if featured_post.image %} style="background-image: url('{{ featured_post.image.card }}')"{% endif %}></div>
+                    <div class="featured-post-card-body">
+                        <time datetime="{{ featured_post.created|date:'Y-m-d' }}">{{ featured_post.created|date:"M j, Y" }}</time>
+                        <h3>{{ featured_post.title }}</h3>
+                        <p>{{ featured_post.text_rendered|striptags|truncatechars:150 }}</p>
+                        <div class="featured-post-card-meta">
+                            {% if featured_post.author.user %}
+                                <img class="featured-post-card-avatar" src="{{ featured_post.author.user|avatar_url:32 }}" alt="{{ featured_post.author.name }}" width="32" height="32">
+                            {% endif %}
+                            <span>{{ featured_post.author.name }}</span>
+                            <span class="meta-sep">&middot;</span>
+                            <span>{{ featured_post.comment_count }} comment{{ featured_post.comment_count|pluralize }}</span>
+                            <span class="meta-sep">&middot;</span>
+                            <span>{{ featured_post.text_rendered|reading_time }}</span>
+                        </div>
+                    </div>
+                </a>
+            </section>
+        {% endif %}
+
+        <div class="content-split">
+            {% if post_list|length > 1 %}
+                <section class="content-split-left">
+                    <c-section-header link_url="{% url 'blog:list' %}">More News</c-section-header>
+                    {% for post in post_list %}
+                        {% if not forloop.first %}
+                            <c-post_card :post="post" />
+                        {% endif %}
+                    {% endfor %}
+                </section>
+            {% endif %}
+
+            {% if event_list %}
+                <section class="content-split-right">
+                    <c-section-header link_url="{% url 'events:list' %}">Upcoming Events</c-section-header>
+                    {% for event in event_list %}
+                        <div class="event-item">
+                            <a href="{{ event.get_absolute_url }}" class="event-item-main">
+                                <c-cal_badge :date="event.start" large />
+                                <div class="event-details">
+                                    <h3>{{ event.title }}</h3>
+                                    {% if event.location %}
+                                        <span class="event-location">{{ event.location }}</span>
+                                    {% endif %}
+                                </div>
+                            </a>
+                            {% with interests=event.interests.all %}
+                                {% with total=interests|length %}
+                                    {% if total > 3 %}
+                                        {% with overflow=total|add:"-3" %}
+                                            <c-avatar_stack :interests="interests" :overflow="overflow" :total="total" />
+                                        {% endwith %}
+                                    {% elif total > 0 %}
+                                        <c-avatar_stack :interests="interests" overflow="0" :total="total" />
+                                    {% endif %}
+                                {% endwith %}
+                            {% endwith %}
+                        </div>
+                    {% endfor %}
+                </section>
+            {% endif %}
+        </div>
+    </main>
+
+    {# ── Connect + Organisations (full-width band) ── #}
+    <div class="bottom-strip">
+        <div class="container px-3 px-md-4">
+            <div class="bottom-split">
+                <section class="bottom-split-left">
+                    <c-section-header>Connect</c-section-header>
+                    <div class="connect-grid">
+                        <c-connect_card title="Telegram" url="https://t.me/nzfur" description="Chat with the community" external>
+                            <c-icons.telegram />
+                        </c-connect_card>
+                        <c-connect_card title="Discord" url="https://discord.gg/nzfurry" description="Voice and text channels" external>
+                            <c-icons.discord />
+                        </c-connect_card>
+                        <c-connect_card title="Bluesky" url="https://bsky.app/profile/furry.nz" description="Follow us for updates" external>
+                            <c-icons.bluesky />
+                        </c-connect_card>
+                        <c-connect_card title="Contact" url="{% url 'contact:contact' %}" description="Get in touch with us">
+                            <c-icons.email />
+                        </c-connect_card>
+                    </div>
+                </section>
+
+                {% if featured_organisations %}
+                    <section class="bottom-split-right">
+                        <c-section-header link_url="{% url 'organisations:organisation_list' %}">Organisations</c-section-header>
+                        <div class="org-list">
+                            {% for org in featured_organisations %}
+                                <a href="{{ org.get_absolute_url }}" class="org-item">
+                                    {% if org.logo %}
+                                        <img class="org-item-logo" src="{{ org.logo.square }}" alt="{{ org.name }}" width="48" height="48">
+                                    {% endif %}
+                                    <div class="org-item-info">
+                                        <h4>{{ org.name }}</h4>
+                                        <span>{{ org.event_count }} event{{ org.event_count|pluralize }}</span>
+                                    </div>
+                                </a>
+                            {% endfor %}
+                        </div>
+                    </section>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock page %}

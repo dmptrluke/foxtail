@@ -191,3 +191,169 @@
 	object-fit: cover;
 	display: block;
 }
+
+// Homepage: logged-out split hero
+.hero-home-split {
+	padding: 3rem 0;
+
+	.hero-split {
+		display: grid;
+		grid-template-columns: 1fr;
+		gap: 2rem;
+		align-items: center;
+
+		@include media-breakpoint-up(md) {
+			grid-template-columns: 1fr 1.1fr;
+			gap: 3rem;
+		}
+	}
+
+	.hero-split-left {
+		h1 {
+			font-size: 2rem;
+			font-weight: 800;
+			margin-bottom: 0.4rem;
+		}
+
+		.tagline {
+			font-size: 1rem;
+			opacity: 0.7;
+			font-weight: 300;
+			margin-bottom: 1.25rem;
+		}
+	}
+
+	.stats-row {
+		display: flex;
+		gap: 1.5rem;
+		margin-bottom: 1.5rem;
+		flex-wrap: wrap;
+	}
+
+	.hero-actions {
+		display: flex;
+		gap: 0.75rem;
+	}
+}
+
+// Homepage: glass card for featured post in hero
+.hero-glass-card {
+	background: rgba(255, 255, 255, 0.07);
+	backdrop-filter: blur(12px);
+	border: 1px solid rgba(255, 255, 255, 0.1);
+	border-radius: $card-border-radius;
+	overflow: hidden;
+	text-decoration: none;
+	color: $white;
+	display: block;
+	position: relative;
+	transition: background 0.2s ease, transform 0.2s ease;
+
+	&:hover {
+		background: rgba(255, 255, 255, 0.12);
+		transform: translateY(-2px);
+		color: $white;
+		text-decoration: none;
+	}
+
+	.hero-glass-card-img {
+		aspect-ratio: 1.91 / 1;
+		background-size: cover;
+		background-position: center;
+		border-radius: $card-border-radius $card-border-radius 0 0;
+		background: linear-gradient(135deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.15));
+
+		&[style*="background-image"] {
+			background-color: transparent;
+		}
+	}
+
+	.hero-glass-card-badge {
+		position: absolute;
+		top: 0.75rem;
+		left: 0.75rem;
+		background: rgba(0, 0, 0, 0.4);
+		backdrop-filter: blur(4px);
+		padding: 0.2rem 0.6rem;
+		border-radius: 4px;
+		font-size: 0.6rem;
+		font-weight: 600;
+		text-transform: uppercase;
+		letter-spacing: 0.06em;
+	}
+
+	time {
+		display: block;
+		padding: 1rem 1.25rem 0;
+		font-size: 0.65rem;
+		opacity: 0.5;
+	}
+
+	h3 {
+		padding: 0 1.25rem;
+		font-size: 1.05rem;
+		font-weight: 700;
+		margin-bottom: 0.25rem;
+	}
+
+	p {
+		padding: 0 1.25rem;
+		font-size: 0.78rem;
+		opacity: 0.65;
+		@include line-clamp(2);
+		margin-bottom: 0.5rem;
+	}
+
+	.hero-glass-card-meta {
+		display: flex;
+		gap: 0.35rem;
+		font-size: 0.65rem;
+		opacity: 0.45;
+		padding: 0 1.25rem 1rem;
+	}
+}
+
+// Homepage: logged-in banner
+.hero-home-banner {
+	padding: 3.5rem 0;
+
+	.banner-top {
+		display: flex;
+		justify-content: space-between;
+		align-items: flex-start;
+		flex-wrap: wrap;
+		gap: 1rem;
+		margin-bottom: 1.25rem;
+	}
+
+	.banner-top-left {
+		flex: 1;
+		min-width: 0;
+
+		h1 {
+			font-size: 1.5rem;
+			font-weight: 800;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			white-space: nowrap;
+		}
+
+		.tagline {
+			font-size: 0.9rem;
+			opacity: 0.65;
+			font-weight: 300;
+		}
+	}
+
+	.banner-top-right {
+		display: flex;
+		gap: 0.5rem;
+		flex-shrink: 0;
+	}
+
+	.banner-stats {
+		display: flex;
+		gap: 2rem;
+		flex-wrap: wrap;
+	}
+}
