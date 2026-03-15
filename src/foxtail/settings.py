@@ -346,20 +346,8 @@ LOGGING = {
             'class': 'logging.StreamHandler',
             'formatter': 'access',
         },
-        'access_file': {
-            'level': 'INFO',
-            'class': 'logging.FileHandler',
-            'filename': str(BASE_DIR / 'logs' / 'django.log'),
-            'formatter': 'access',
-        },
-        'file': {
-            'level': 'DEBUG',
-            'class': 'logging.FileHandler',
-            'filename': str(BASE_DIR / 'logs' / 'django.log'),
-            'formatter': 'verbose',
-        },
     },
-    'root': {'level': 'INFO', 'handlers': ['console'] + (['file'] if DEBUG else [])},
+    'root': {'level': 'INFO', 'handlers': ['console']},
     'loggers': {
         'sentry_sdk': {'level': 'ERROR', 'handlers': ['console']},
         'botocore': {'level': 'WARNING'},
@@ -368,11 +356,28 @@ LOGGING = {
         'django.request': {'level': 'ERROR', 'handlers': ['console'], 'propagate': False},
         'apps.core.access': {
             'level': 'INFO',
-            'handlers': ['access'] + (['access_file'] if DEBUG else []),
+            'handlers': ['access'],
             'propagate': False,
         },
     },
 }
+
+if DEBUG:
+    _log_file = str(BASE_DIR / 'logs' / 'django.log')
+    LOGGING['handlers']['file'] = {
+        'level': 'DEBUG',
+        'class': 'logging.FileHandler',
+        'filename': _log_file,
+        'formatter': 'verbose',
+    }
+    LOGGING['handlers']['access_file'] = {
+        'level': 'INFO',
+        'class': 'logging.FileHandler',
+        'filename': _log_file,
+        'formatter': 'access',
+    }
+    LOGGING['root']['handlers'].append('file')
+    LOGGING['loggers']['apps.core.access']['handlers'].append('access_file')
 
 # =============================================================================
 # Third-party
