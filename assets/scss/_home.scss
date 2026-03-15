@@ -253,6 +253,20 @@
 		flex: 1;
 		min-width: 0;
 	}
+
+	.event-details {
+		h3 {
+			font-size: 0.9rem;
+			font-weight: 600;
+			margin: 0 0 0.1rem;
+		}
+
+		.event-location {
+			font-size: 0.7rem;
+			color: $secondary;
+			font-weight: 500;
+		}
+	}
 }
 
 // Avatar stack
