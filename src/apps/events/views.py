@@ -3,8 +3,10 @@ from datetime import date
 from django.contrib import messages
 from django.db import transaction
 from django.db.models import Q
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, JsonResponse
+from django.shortcuts import get_object_or_404
 from django.urls import reverse, reverse_lazy
+from django.views import View
 from django.views.generic import CreateView, DeleteView, DetailView, ListView, UpdateView
 from django.views.generic.dates import YearMixin
 
@@ -16,7 +18,7 @@ from structured_data.views import StructuredDataMixin
 from apps.core.mixins import PermissionMixin
 from apps.organisations.models import Organisation
 
-from .models import Event
+from .models import Event, EventInterest
 from .tasks import geocode_event
 
 
@@ -204,10 +206,34 @@ class EventDeleteView(PermissionMixin, DeleteView):
         return result
 
 
+class EventInterestToggleView(View):
+    def post(self, request, pk):
+        if not request.user.is_authenticated:
+            return JsonResponse({'error': 'Authentication required'}, status=403)
+
+        event = get_object_or_404(queryset_filter(Event.objects), pk=pk)
+        interest, created = EventInterest.objects.get_or_create(
+            event=event, user=request.user, defaults={'status': EventInterest.INTERESTED}
+        )
+
+        if not created:
+            interest.delete()
+            interested = False
+        else:
+            interested = True
+
+        count = event.interests.filter(status=EventInterest.INTERESTED).count()
+        return JsonResponse({'interested': interested, 'count': count})
+
+    def http_method_not_allowed(self, request, *args, **kwargs):
+        return JsonResponse({'error': 'Method not allowed'}, status=405)
+
+
 __all__ = [
     'EventCreateView',
     'EventDeleteView',
     'EventDetailView',
+    'EventInterestToggleView',
     'EventListView',
     'EventListYearView',
     'EventManageListView',

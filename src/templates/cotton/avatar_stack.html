@@ -1,0 +1,14 @@
+{% load avatar %}
+{% if interests %}
+<div class="avatar-stack-wrap" {{ attrs }}>
+    <div class="avatar-stack">
+        {% for interest in interests|slice:":3" %}
+            <img class="avatar-stack-item" src="{{ interest.user|avatar_url:26 }}" alt="{{ interest.user.username }}" width="26" height="26">
+        {% endfor %}
+        {% if overflow > 0 %}
+            <span class="avatar-stack-count">+{{ overflow }}</span>
+        {% endif %}
+    </div>
+    <span class="avatar-stack-label">{{ total }} interested</span>
+</div>
+{% endif %}

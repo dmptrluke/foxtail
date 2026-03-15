@@ -143,3 +143,23 @@ class Event(PublishedModel):
             data['organizer'] = {'@type': 'Organization', '@id': org_url, 'name': org.name, 'url': org_url}
 
         return data
+
+
+class EventInterest(models.Model):
+    INTERESTED = 'interested'
+    GOING = 'going'
+    STATUS_CHOICES = [
+        (INTERESTED, 'Interested'),
+        (GOING, 'Going'),
+    ]
+
+    event = models.ForeignKey('events.Event', on_delete=models.CASCADE, related_name='interests')
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='event_interests')
+    status = models.CharField(max_length=12, choices=STATUS_CHOICES, default=INTERESTED)
+    created = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('event', 'user')
+
+    def __str__(self):
+        return f'{self.user} - {self.event} ({self.status})'

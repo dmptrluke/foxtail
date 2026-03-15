@@ -189,3 +189,41 @@ class TestEvent:
         event.start = date(2026, 6, 15)
         event.end = date(2026, 6, 20)
         event.clean()
+
+
+class TestEventInterest:
+    """EventInterest tracks user interest in events with a status field."""
+
+    # creating an interest with explicit status stores that status
+    def test_create_interested(self, user, event):
+        from ..models import EventInterest
+
+        interest = EventInterest.objects.create(event=event, user=user, status='interested')
+        assert interest.status == 'interested'
+        assert interest.event == event
+        assert interest.user == user
+
+    # duplicate user+event pair violates unique constraint
+    def test_unique_per_user_event(self, user, event):
+        from django.db import IntegrityError
+
+        from ..models import EventInterest
+
+        EventInterest.objects.create(event=event, user=user, status='interested')
+        with pytest.raises(IntegrityError):
+            EventInterest.objects.create(event=event, user=user, status='interested')
+
+    # default status is 'interested' when omitted
+    def test_default_status_is_interested(self, user, event):
+        from ..models import EventInterest
+
+        interest = EventInterest.objects.create(event=event, user=user)
+        assert interest.status == 'interested'
+
+    # interests reverse relation counts correctly across users
+    def test_interested_count(self, user, second_user, event):
+        from ..models import EventInterest
+
+        EventInterest.objects.create(event=event, user=user)
+        EventInterest.objects.create(event=event, user=second_user)
+        assert event.interests.filter(status='interested').count() == 2

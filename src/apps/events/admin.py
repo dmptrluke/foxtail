@@ -2,8 +2,14 @@ from django.contrib import admin
 from django.contrib.admin import ModelAdmin
 from django.db import transaction
 
-from .models import Event
+from .models import Event, EventInterest
 from .tasks import geocode_event
+
+
+class EventInterestInline(admin.TabularInline):
+    model = EventInterest
+    extra = 0
+    readonly_fields = ('user', 'status', 'created')
 
 
 class EventAdmin(ModelAdmin):
@@ -43,6 +49,7 @@ class EventAdmin(ModelAdmin):
         ),
     )
 
+    inlines = [EventInterestInline]
     autocomplete_fields = ['organisation', 'series']
     search_fields = ['title']
     list_display = ('title', 'start', 'tag_list')

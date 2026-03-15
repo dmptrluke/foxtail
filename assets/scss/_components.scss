@@ -177,6 +177,50 @@ p a {
 	border-bottom: 2px solid rgba(var(--bs-secondary-rgb), 0.15);
 }
 
+// Avatar stack
+
+.avatar-stack-wrap {
+	display: flex;
+	align-items: center;
+	gap: 0.4rem;
+}
+
+.avatar-stack {
+	display: flex;
+}
+
+.avatar-stack-item {
+	width: 26px;
+	height: 26px;
+	border-radius: 50%;
+	border: 2px solid var(--ft-surface);
+	margin-left: -7px;
+
+	&:first-child {
+		margin-left: 0;
+	}
+}
+
+.avatar-stack-count {
+	width: 26px;
+	height: 26px;
+	border-radius: 50%;
+	background: $secondary;
+	color: $white;
+	font-size: 0.5rem;
+	font-weight: 700;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	margin-left: -7px;
+	border: 2px solid var(--ft-surface);
+}
+
+.avatar-stack-label {
+	font-size: 0.65rem;
+	color: var(--ft-text-soft);
+}
+
 // Empty states
 .empty-state {
 	padding: 2rem 1.25rem;

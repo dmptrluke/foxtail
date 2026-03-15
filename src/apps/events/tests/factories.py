@@ -33,3 +33,12 @@ class EventFactory(DjangoModelFactory):
 
 class PastEventFactory(EventFactory):
     start = Faker('past_date')
+
+
+class EventInterestFactory(DjangoModelFactory):
+    class Meta:
+        model = 'events.EventInterest'
+
+    event = factory.SubFactory(EventFactory)
+    user = factory.SubFactory('apps.accounts.tests.factories.UserFactory')
+    status = 'interested'
