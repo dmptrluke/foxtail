@@ -35,5 +35,32 @@ services:
       - path: .env
         required: false
 
+  worker:
+    build:
+      context: .
+      target: app
+      args:
+        BUILD_MODE: production
+    command: django-admin run_huey
+    environment:
+      DATABASE_URL: "postgres://foxtail:foxtail@db/foxtail"
+      CACHE_URL: "redis://redis/1"
+      DEBUG: "false"
+      SECRET_KEY: "dev-insecure-key-do-not-use-in-production"
+      CONTACT_EMAILS: "admin@example.com"
+      SITE_URL: "http://localhost:8000"
+      TESTING: "true"
+      SERVICE_NAME: "worker"
+    volumes:
+      - storage:/app/storage
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    env_file:
+      - path: .env
+        required: false
+
 volumes:
   storage:

@@ -66,7 +66,7 @@ To run multiple instances (e.g. live + test):
 Each app stack includes:
 
 - **app** — Gunicorn web server (internal port 8000)
-- **worker** — RQ background worker (processes async email)
+- **worker** — Huey background worker
 - **db** — PostgreSQL 17
 - **redis** — Redis 8 (cache + job queue)
 

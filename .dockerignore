@@ -16,12 +16,9 @@ htmlcov
 __pycache__
 *.pyc
 compose.yaml
-compose.override.yaml
-compose.test.yaml
-compose.prod-local.yaml
+compose.prod.yaml
 deploy
 build
 storage
 static
 assets/*.json
-docs
