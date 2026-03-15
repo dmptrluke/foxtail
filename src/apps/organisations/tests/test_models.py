@@ -2,7 +2,7 @@ from django.conf import settings
 
 import pytest
 
-from ..models import SocialLink
+from ..models import Organisation, SocialLink
 from .factories import OrganisationFactory, SocialLinkFactory
 
 pytestmark = pytest.mark.django_db
@@ -46,3 +46,18 @@ class TestSocialLink:
     def test_all_platforms_have_icons(self):
         for platform_code, _ in SocialLink.PLATFORM_CHOICES:
             assert platform_code in SocialLink.PLATFORM_ICONS
+
+
+@pytest.mark.django_db
+class TestOrganisationFeatured:
+    """Featured boolean controls homepage visibility."""
+
+    # featured defaults to False on new organisations
+    def test_default_not_featured(self, organisation):
+        assert organisation.featured is False
+
+    # filtering by featured=True returns only featured organisations
+    def test_filter_featured(self, organisation):
+        organisation.featured = True
+        organisation.save()
+        assert Organisation.objects.filter(featured=True).count() == 1

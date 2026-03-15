@@ -22,6 +22,7 @@ class Organisation(models.Model):
     logo = ProcessedImageField(upload_to='organisations', blank=True, auto_add_fields=True)
     url = models.URLField(blank=True)
     country = models.CharField(max_length=100, blank=True)
+    featured = models.BooleanField(default=False)
 
     created = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)

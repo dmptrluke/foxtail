@@ -1,4 +1,4 @@
-
+{% load avatar %}
 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
@@ -36,7 +36,7 @@
                 <a class="nav-link dropdown-toggle{% if "account_" in request.resolver_match.url_name %} active{% endif %}"
                    href="#" id="account-dropdown" role="button" data-bs-toggle="dropdown"
                    aria-haspopup="true" aria-expanded="false">
-                    {{ user.username }}
+                    <img src="{{ user|avatar_url:30 }}" alt="{{ user.username }}" width="30" height="30" class="navbar-avatar rounded-circle">
                 </a>
                 <div class="dropdown-menu" aria-labelledby="account-dropdown">
                     <a class="dropdown-item" href="{% url 'account_profile' %}">Manage Account</a>
