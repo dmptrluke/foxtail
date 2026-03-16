@@ -1,4 +1,4 @@
-name: Docker Build
+name: Build & Deploy
 
 on:
   push:
@@ -63,3 +63,46 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
+
+  deploy-staging:
+    needs: build
+    if: github.ref == 'refs/heads/master' && github.event_name == 'push'
+    runs-on: [self-hosted, deploy]
+    timeout-minutes: 10
+    environment: staging
+    steps:
+      - name: Deploy to staging
+        run: sudo /opt/foxtail/deploy-staging.sh
+
+  deploy-production:
+    needs: deploy-staging
+    if: github.ref == 'refs/heads/master' && github.event_name == 'push'
+    runs-on: [self-hosted, deploy]
+    timeout-minutes: 10
+    environment: production
+    steps:
+      - name: Deploy to production
+        run: sudo /opt/foxtail/deploy-prod.sh
+
+  sentry-release:
+    needs: deploy-production
+    if: github.ref == 'refs/heads/master' && github.event_name == 'push'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Create Sentry release
+        uses: getsentry/action-release@v3
+        env:
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+          SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
+          SENTRY_PROJECT: ${{ secrets.SENTRY_PROJECT }}
+        with:
+          environment: production
+          set_commits: auto
+          ignore_missing: true
