@@ -1,14 +1,13 @@
 import factory
 from factory import Faker
 from factory.django import DjangoModelFactory
-from faker import Faker as FakerLib
+
+from apps.core.tests.factories import TaggedModelFactory
 
 from ..models import Event
 
-fake = FakerLib()
 
-
-class EventFactory(DjangoModelFactory):
+class EventFactory(TaggedModelFactory):
     title = Faker('name')
 
     description = Faker('paragraph')
@@ -20,15 +19,6 @@ class EventFactory(DjangoModelFactory):
     class Meta:
         model = Event
         skip_postgeneration_save = True
-
-    @factory.post_generation
-    def tags(self, create, extracted, **kwargs):
-        if not create:
-            return
-        if extracted:
-            self.tags.add(*extracted)
-        else:
-            self.tags.add(fake.word(), fake.word())
 
 
 class PastEventFactory(EventFactory):

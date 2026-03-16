@@ -3,14 +3,12 @@ from datetime import UTC
 import factory
 from factory import Faker
 from factory.django import DjangoModelFactory
-from faker import Faker as FakerLib
 from published.constants import AVAILABLE
 
 from apps.accounts.tests.factories import UserFactory
+from apps.core.tests.factories import TaggedModelFactory
 
 from ..models import Author, Comment, Post
-
-fake = FakerLib()
 
 
 class AuthorFactory(DjangoModelFactory):
@@ -20,7 +18,7 @@ class AuthorFactory(DjangoModelFactory):
         model = Author
 
 
-class PostFactory(DjangoModelFactory):
+class PostFactory(TaggedModelFactory):
     title = Faker('name')
     slug = Faker('slug')
 
@@ -35,15 +33,6 @@ class PostFactory(DjangoModelFactory):
     class Meta:
         model = Post
         skip_postgeneration_save = True
-
-    @factory.post_generation
-    def tags(self, create, extracted, **kwargs):
-        if not create:
-            return
-        if extracted:
-            self.tags.add(*extracted)
-        else:
-            self.tags.add(fake.word(), fake.word())
 
 
 class CommentFactory(DjangoModelFactory):

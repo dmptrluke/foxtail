@@ -9,10 +9,3 @@ def editor(second_user):
     second_user.groups.add(group)
     second_user.save()
     return second_user
-
-
-@pytest.fixture
-def staff_user(second_user):
-    second_user.is_staff = True
-    second_user.save()
-    return second_user

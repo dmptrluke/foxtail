@@ -53,6 +53,19 @@ def _testing_overrides(request, settings):
     if 'keep_rate_limits' not in request.keywords:
         settings.ACCOUNT_RATE_LIMITS = {}
 
+    from django.core.cache import cache
+
+    cache.clear()
+    yield
+    cache.clear()
+
+
+@pytest.fixture
+def staff_user(second_user):
+    second_user.is_staff = True
+    second_user.save()
+    return second_user
+
 
 @pytest.fixture
 def request_factory() -> RequestFactory:

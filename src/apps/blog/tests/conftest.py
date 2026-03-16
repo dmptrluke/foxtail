@@ -17,10 +17,3 @@ def moderator(fourth_user):
     fourth_user.groups.add(group)
     fourth_user.save()
     return fourth_user
-
-
-@pytest.fixture
-def staff_user(second_user):
-    second_user.is_staff = True
-    second_user.save()
-    return second_user
