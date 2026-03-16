@@ -5,6 +5,8 @@ from markdownfield.validators import MARKDOWN_ATTRS, MARKDOWN_TAGS, Validator
 
 
 class FileSizeValidator:
+    """Validate uploaded file size against a configurable limit (defaults to MAX_IMAGE_FILE_SIZE)"""
+
     def __init__(self, max_bytes=None):
         self.max_bytes = max_bytes
 
@@ -30,6 +32,7 @@ def file_size_validator(max_bytes=None):
     return FileSizeValidator(max_bytes=max_bytes)
 
 
+# Markdown validator that allows tables, figures, and embedded iframes beyond the default set
 VALIDATOR_EXTENDED = Validator(
     allowed_tags={
         *MARKDOWN_TAGS,

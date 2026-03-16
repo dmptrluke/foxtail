@@ -5,6 +5,8 @@ from django.urls import reverse
 
 
 class ImageWidget(ClearableFileInput):
+    """File input with size validation and optional PPOI (point of interest) field"""
+
     template_name = 'components/forms/widgets/image_widget.html'
 
     def __init__(self, max_file_size=None, ppoi_field=None, attrs=None, **kwargs):
@@ -29,6 +31,8 @@ class ImageWidget(ClearableFileInput):
 
 
 class CroppedImageWidget(ImageWidget):
+    """ImageWidget with client-side cropping at a fixed aspect ratio"""
+
     template_name = 'components/forms/widgets/image_crop.html'
 
     def __init__(self, aspect_ratio=None, **kwargs):
@@ -42,6 +46,8 @@ class CroppedImageWidget(ImageWidget):
 
 
 class _AutocompleteMixin:
+    """Add data-autocomplete-url attribute for JS-driven autocomplete widgets"""
+
     def __init__(self, url_name, *args, **kwargs):
         self.url_name = url_name
         super().__init__(*args, **kwargs)

@@ -10,6 +10,7 @@ GEOCODE_URL = 'https://api.maptiler.com/geocoding/{query}.json'
 
 
 def geocode(address, api_key):
+    """Geocode an address via MapTiler, restricted to NZ/AU. Returns (lat, lon) Decimals or None"""
     try:
         response = requests.get(
             GEOCODE_URL.format(query=quote(address, safe='')),
@@ -21,7 +22,7 @@ def geocode(address, api_key):
         if not features:
             return None
         coords = features[0]['geometry']['coordinates']
-        return Decimal(str(coords[1])), Decimal(str(coords[0]))
+        return Decimal(str(coords[1])), Decimal(str(coords[0]))  # GeoJSON is [lon, lat], Django fields are (lat, lon)
     except requests.RequestException:
         logger.warning('MapTiler geocoding failed for address: %s', address, exc_info=True)
         raise

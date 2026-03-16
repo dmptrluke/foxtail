@@ -5,6 +5,8 @@ from rules.contrib.views import PermissionRequiredMixin
 
 
 class PermissionMixin(PermissionRequiredMixin, LoginRequiredMixin):
+    """Require login + object-level permission, return 403 on failure (not redirect)"""
+
     raise_exception = True
 
 

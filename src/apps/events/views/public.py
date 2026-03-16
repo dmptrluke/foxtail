@@ -112,6 +112,7 @@ class EventDetailView(PublishedDetailMixin, YearMixin, DetailView):
         org = event.resolved_organisation
         series = event.series
         show_series = bool(series)
+        # Hide series when org has one series with the same name (redundant display)
         if (
             show_series
             and org

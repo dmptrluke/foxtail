@@ -8,6 +8,7 @@ logger = logging.getLogger(__name__)
 
 @task()
 def process_imagefields(app_label, model_name, pk):
+    """Generate all renditions for an instance's image fields (runs async via Huey)"""
     from django.apps import apps
 
     model = apps.get_model(app_label, model_name)

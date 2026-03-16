@@ -27,6 +27,7 @@ class _EventFormMixin:
     def _save_event(self, form, success_msg):
         self.object = form.save(commit=False)
         if 'address' in form.changed_data:
+            # Clear stale coordinates until async geocode completes
             self.object.latitude = None
             self.object.longitude = None
         self.object.save()

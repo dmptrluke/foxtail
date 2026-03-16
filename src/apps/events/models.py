@@ -21,6 +21,7 @@ from apps.core.validators import file_size_validator
 
 class EventQuerySet(models.QuerySet):
     def for_organisation(self, org):
+        """Filter to events belonging to an org directly or through a series"""
         return self.filter(models.Q(organisation=org) | models.Q(series__organisation=org)).distinct()
 
 
@@ -68,6 +69,7 @@ class Event(PublishedModel):
 
     @cached_property
     def resolved_organisation(self):
+        """Return the organisation, preferring the series' org over a direct assignment"""
         if self.series and self.series.organisation:
             return self.series.organisation
         return self.organisation
@@ -80,6 +82,7 @@ class Event(PublishedModel):
 
     @property
     def is_ended(self):
+        """Check if the event has ended; events without an end date are assumed over at midnight after start"""
         if self.end:
             end = (
                 datetime.combine(self.end, self.end_time)

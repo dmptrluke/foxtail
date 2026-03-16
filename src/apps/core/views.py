@@ -59,6 +59,7 @@ class ApiView(View):
         except PermissionDenied:
             return self.error('Forbidden', 403)
         except Exception:
+            # API boundary: always return JSON, never leak tracebacks to clients
             logger.exception('Unhandled error in %s', self.__class__.__name__)
             return self.error('Internal server error', 500)
 

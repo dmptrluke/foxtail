@@ -112,7 +112,7 @@ class CommentApproveView(HtmxMixin, PermissionMixin, View):
 
     def post(self, request, pk):
         comment = get_object_or_404(Comment.objects.select_related('author', 'post'), pk=pk)
-        comment.approved = not comment.approved
+        comment.approved = not comment.approved  # toggles: approve and unapprove
         comment.save(update_fields=['approved'])
 
         if request.POST.get('context') == 'detail':

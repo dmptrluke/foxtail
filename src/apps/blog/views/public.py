@@ -125,6 +125,7 @@ class BlogDetailView(HtmxMixin, PublishedDetailMixin, DetailView):
     )
 
     def _comment_queryset(self):
+        # Authors see their own pending comments so they know submission worked
         qs = self.object.comments.select_related('author').order_by('created')
         user = self.request.user
         if user.has_perm('blog.manage_comments'):
@@ -148,6 +149,7 @@ class BlogDetailView(HtmxMixin, PublishedDetailMixin, DetailView):
         return context
 
     def _should_auto_approve(self, user):
+        # is_verified = identity confirmed in person, not just email verification
         return user.has_perm('blog.manage_comments') or user.is_verified
 
     def post(self, request, *args, **kwargs):

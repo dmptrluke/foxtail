@@ -5,6 +5,8 @@ from django.views import View
 
 
 class AutocompleteView(LoginRequiredMixin, View):
+    """Generic JSON autocomplete endpoint for Select2-style widgets"""
+
     model = None
     search_fields = []
 

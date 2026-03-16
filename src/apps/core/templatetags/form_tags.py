@@ -17,10 +17,12 @@ def _field_context(field, **extra):
 
 
 def _set_widget_attrs(field, **attrs):
-    # Sets HTML attributes on the field's widget.
-    # _UNSET = leave the form's value untouched.
-    # None   = remove the attribute entirely.
-    # value  = set to that value.
+    """Set HTML attributes on a field's widget.
+
+    _UNSET = leave the form's value untouched.
+    None   = remove the attribute entirely.
+    value  = set to that value.
+    """
     for key, value in attrs.items():
         if value is _UNSET:
             pass

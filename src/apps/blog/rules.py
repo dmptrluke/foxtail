@@ -4,6 +4,7 @@ from rules import is_group_member, predicate
 
 @predicate
 def is_author(user, obj=None):
+    """Check authorship for both Post (Author.user) and Comment (direct User FK)"""
     if obj is None:
         return False
     author = getattr(obj, 'author', None)

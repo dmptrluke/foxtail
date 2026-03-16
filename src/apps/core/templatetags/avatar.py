@@ -16,6 +16,11 @@ _RENDITION_MAP = [
 
 @register.filter
 def avatar_url(user, size=40):
+    """Return avatar URL at the nearest rendition size, or an SVG fallback with the user's initial.
+
+    Usage: {{ user|avatar_url:64 }}
+    Renditions: small (80px), medium (160px), large (400px).
+    """
     size = int(size)
     if user.avatar:
         try:

@@ -514,6 +514,7 @@ CONTENT_SECURITY_POLICY = {
         'frame-ancestors': [NONE],
         'form-action': [
             SELF,
+            # OAuth login redirects are form submissions blocked by CSP form-action
             'https://github.com',
             'https://accounts.google.com',
             'https://discord.com',

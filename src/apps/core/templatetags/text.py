@@ -8,6 +8,7 @@ register = template.Library()
 
 @register.filter
 def reading_time(html):
+    """Estimate reading time from HTML content at 200 words per minute"""
     if not html:
         return '1 min read'
     text = strip_tags(str(html))
