@@ -8,6 +8,8 @@ class OrganisationFactory(DjangoModelFactory):
     name = Faker('company')
     description = Faker('paragraph')
     url = Faker('url')
+    group_type = 'organisation'
+    region = ''
 
     class Meta:
         model = Organisation

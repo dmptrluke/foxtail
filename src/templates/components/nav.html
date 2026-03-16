@@ -8,10 +8,12 @@
     {% load rules %}
     {% with vn=request.resolver_match.view_name %}
     <div class="navbar-nav me-auto mb-2 mb-lg-0">
-        <a class="nav-item nav-link{% if vn == 'blog:list' or vn == 'blog:list_year' or vn == 'blog:detail' %} active{% endif %}"
-           href="{% url 'blog:list' %}">News</a>
+        <a class="nav-item nav-link{% if vn == 'groups:organisation_list' or vn == 'groups:organisation_detail' %} active{% endif %}"
+           href="{% url 'groups:organisation_list' %}">Groups</a>
         <a class="nav-item nav-link{% if vn == 'events:list' or vn == 'events:list_year' or vn == 'events:detail' %} active{% endif %}"
            href="{% url 'events:list' %}">Events</a>
+        <a class="nav-item nav-link{% if vn == 'blog:list' or vn == 'blog:list_year' or vn == 'blog:detail' %} active{% endif %}"
+           href="{% url 'blog:list' %}">News</a>
 
         {% has_perm 'blog.manage_posts' user as can_manage_posts %}
         {% has_perm 'blog.manage_comments' user as can_manage_comments %}

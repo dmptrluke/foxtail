@@ -1,3 +1,129 @@
+// Directory card grid
+
+.org-grid {
+	row-gap: 1.25rem;
+}
+
+.org-card {
+	display: flex;
+	flex-direction: column;
+	gap: 0.75rem;
+	padding: 1.25rem;
+	border-radius: $card-border-radius;
+	background: var(--bs-body-bg);
+	border: 1px solid rgba(var(--bs-secondary-rgb), 0.15);
+	height: 100%;
+	position: relative;
+	transition: box-shadow 0.2s ease, transform 0.2s ease;
+
+	&:hover {
+		box-shadow: var(--ft-shadow-lg);
+		transform: translateY(-2px);
+	}
+}
+
+.org-card-identity {
+	display: flex;
+	align-items: center;
+	gap: 0.85rem;
+}
+
+.org-card-logo {
+	width: 3rem;
+	height: 3rem;
+	border-radius: 8px;
+	flex-shrink: 0;
+	object-fit: cover;
+}
+
+.org-card-logo-placeholder {
+	background: rgba(var(--bs-secondary-rgb), 0.1);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 1.1rem;
+	font-weight: 700;
+	color: var(--bs-secondary);
+
+	.icon {
+		width: 1.3em;
+		height: 1.3em;
+	}
+}
+
+.org-card-info {
+	min-width: 0;
+}
+
+.org-card-name {
+	font-size: 1rem;
+	font-weight: 600;
+	margin: 0;
+	line-height: 1.2;
+
+	a {
+		color: var(--bs-body-color);
+		text-decoration: none;
+	}
+}
+
+.org-card-meta {
+	display: flex;
+	align-items: center;
+	gap: 0.4rem;
+	margin-top: 0.15rem;
+}
+
+.org-card-region {
+	font-size: 0.8rem;
+	color: var(--bs-secondary);
+}
+
+.org-card-join {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.35rem;
+	font-size: 0.8rem;
+	font-weight: 600;
+	color: var(--bs-primary);
+	text-decoration: none;
+	position: relative;
+	z-index: 1;
+
+	.icon {
+		width: 1em;
+		height: 1em;
+	}
+
+	&:hover {
+		text-decoration: underline;
+	}
+}
+
+// Empty state for groups with no content
+
+.org-empty-state {
+	text-align: center;
+	padding: 2rem 0 3rem;
+	color: var(--bs-secondary);
+
+	p {
+		font-size: 1rem;
+		margin-bottom: 1.25rem;
+	}
+
+	.btn {
+		gap: 0.4rem;
+		display: inline-flex;
+		align-items: center;
+
+		.icon {
+			width: 1.1em;
+			height: 1.1em;
+		}
+	}
+}
+
 // Org page hero
 
 .org-hero-identity {
@@ -33,6 +159,12 @@
 	margin: 0 0 0.25rem;
 	line-height: 1.1;
 	color: $white;
+}
+
+.org-hero-meta {
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
 }
 
 .org-hero-type {

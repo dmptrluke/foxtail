@@ -191,6 +191,63 @@ class TestEvent:
         event.clean()
 
 
+class TestEventAgeRequirement:
+    # event's own age_requirement is used when set
+    def test_own_age_requirement(self, event: Event):
+        event.age_requirement = '18'
+        assert event.resolved_age_requirement == '18'
+
+    # falls back to resolved organisation's age_requirement
+    def test_fallback_to_org(self):
+        from apps.organisations.tests.factories import OrganisationFactory
+
+        from .factories import EventFactory
+
+        org = OrganisationFactory(age_requirement='16')
+        event = EventFactory(organisation=org, age_requirement='')
+        assert event.resolved_age_requirement == '16'
+
+    # event's own value takes priority over org's
+    def test_event_overrides_org(self):
+        from apps.organisations.tests.factories import OrganisationFactory
+
+        from .factories import EventFactory
+
+        org = OrganisationFactory(age_requirement='16')
+        event = EventFactory(organisation=org, age_requirement='18')
+        assert event.resolved_age_requirement == '18'
+
+    # returns empty string when neither event nor org has a value
+    def test_no_age_requirement(self, event: Event):
+        event.age_requirement = ''
+        event.organisation = None
+        event.series = None
+        assert event.resolved_age_requirement == ''
+
+    # display property returns human-readable label
+    def test_display_label(self, event: Event):
+        event.age_requirement = '13'
+        assert event.resolved_age_requirement_display == '13+'
+
+    # display property returns empty string when no age requirement
+    def test_display_empty(self, event: Event):
+        event.age_requirement = ''
+        event.organisation = None
+        event.series = None
+        assert event.resolved_age_requirement_display == ''
+
+    # falls back through series to org
+    def test_fallback_through_series(self):
+        from apps.organisations.tests.factories import EventSeriesFactory, OrganisationFactory
+
+        from .factories import EventFactory
+
+        org = OrganisationFactory(age_requirement='18')
+        series = EventSeriesFactory(organisation=org)
+        event = EventFactory(series=series, organisation=None, age_requirement='')
+        assert event.resolved_age_requirement == '18'
+
+
 class TestEventInterest:
     """EventInterest tracks user interest in events with a status field."""
 

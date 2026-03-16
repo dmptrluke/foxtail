@@ -13,6 +13,36 @@ from apps.core.fields import AutoSlugField
 
 
 class Organisation(models.Model):
+    TYPE_CHOICES = [
+        ('organisation', 'Organisation'),
+        ('community', 'Community Group'),
+        ('interest', 'Interest Group'),
+    ]
+    AGE_CHOICES = [
+        ('all', 'All Ages'),
+        ('13', '13+'),
+        ('16', '16+'),
+        ('18', '18+'),
+    ]
+    REGION_CHOICES = [
+        ('northland', 'Northland'),
+        ('auckland', 'Auckland'),
+        ('waikato', 'Waikato'),
+        ('bay-of-plenty', 'Bay of Plenty'),
+        ('central-ni', 'Central North Island'),
+        ('wellington', 'Wellington'),
+        ('top-of-the-south', 'Nelson/Marlborough'),
+        ('canterbury', 'Canterbury'),
+        ('otago', 'Otago'),
+        ('southland', 'Southland'),
+        ('nationwide', 'Nationwide'),
+        ('online', 'Online'),
+    ]
+    COUNTRY_CHOICES = [
+        ('NZ', 'New Zealand'),
+        ('AU', 'Australia'),
+    ]
+
     name = models.CharField(max_length=200)
     slug = AutoSlugField(populate_from='name', unique=True)
 
@@ -21,20 +51,30 @@ class Organisation(models.Model):
 
     logo = ProcessedImageField(upload_to='organisations', blank=True, auto_add_fields=True)
     url = models.URLField(blank=True)
-    country = models.CharField(max_length=100, blank=True)
+    country = models.CharField(max_length=2, choices=COUNTRY_CHOICES, blank=True)
     featured = models.BooleanField(default=False)
+    group_type = models.CharField(max_length=20, choices=TYPE_CHOICES, default='organisation')
+    region = models.CharField(max_length=20, choices=REGION_CHOICES, blank=True)
+    age_requirement = models.CharField(max_length=3, choices=AGE_CHOICES, blank=True)
 
     created = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
 
     class Meta:
         ordering = ['name']
+        verbose_name = 'group'
+        verbose_name_plural = 'groups'
 
     def __str__(self):
         return self.name
 
     def get_absolute_url(self):
-        return reverse('organisations:organisation_detail', kwargs={'slug': self.slug})
+        return reverse('groups:organisation_detail', kwargs={'slug': self.slug})
+
+    @property
+    def has_detail_content(self):
+        """Groups with no description or URL are link-only entries in the directory"""
+        return bool(self.description_rendered or self.url)
 
     @cached_property
     def structured_data(self):
@@ -104,6 +144,13 @@ class SocialLink(models.Model):
     @property
     def icon_name(self):
         return self.PLATFORM_ICONS.get(self.platform, 'link_variant')
+
+    @property
+    def join_label(self):
+        """Return the CTA label: 'Visit Website' for websites, 'Join on X' for chat platforms"""
+        if self.platform == 'website':
+            return 'Visit Website'
+        return f'Join on {self.get_platform_display()}'
 
 
 class EventSeries(models.Model):

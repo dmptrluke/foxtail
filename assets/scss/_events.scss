@@ -123,6 +123,11 @@
 		font-size: 0.85rem;
 		opacity: 0.7;
 		margin-bottom: 0.65rem;
+
+		.age-badge {
+			margin-left: 0.35rem;
+			opacity: 1;
+		}
 	}
 
 	.event-card-excerpt {
@@ -196,6 +201,35 @@
 	dd {
 		margin: 0;
 		font-weight: 500;
+	}
+}
+
+// Interest toggle buttons
+
+.event-interest-row {
+	display: flex;
+	align-items: center;
+	gap: 1rem;
+	margin-top: 1rem;
+	flex-wrap: wrap;
+}
+
+.event-interest-group {
+	.btn-group .btn {
+		font-weight: 600;
+		font-size: 0.8rem;
+
+		&.active {
+			background: $white;
+			color: var(--bs-dark);
+			border-color: $white;
+		}
+
+		span:not(:empty) {
+			margin-left: 0.3em;
+			font-weight: 400;
+			opacity: 0.7;
+		}
 	}
 }
 

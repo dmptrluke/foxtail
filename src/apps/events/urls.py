@@ -10,6 +10,7 @@ urlpatterns = [
     path('manage/<int:pk>/edit/', views.EventUpdateView.as_view(), name='event_edit'),
     path('manage/<int:pk>/delete/', views.EventDeleteView.as_view(), name='event_delete'),
     path('<int:pk>/interest/', views.EventInterestToggleView.as_view(), name='interest'),
+    path('<int:pk>/calendar/', views.EventICSView.as_view(), name='event_ics'),
     path('<int:year>/', views.EventListYearView.as_view(), name='list_year'),
     path('<int:year>/<slug:slug>/', views.EventDetailView.as_view(), name='detail'),
 ]

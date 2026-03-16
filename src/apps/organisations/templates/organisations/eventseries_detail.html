@@ -7,7 +7,7 @@
         <c-hero.nav>
             {% load breadcrumbs %}
             {% if eventseries.organisation %}
-                {% url 'organisations:organisation_detail' slug=eventseries.organisation.slug as org_url %}
+                {% url 'groups:organisation_detail' slug=eventseries.organisation.slug as org_url %}
                 {% breadcrumbs org_url eventseries.organisation.name eventseries.get_absolute_url eventseries.name %}
             {% else %}
                 {% breadcrumbs eventseries.get_absolute_url eventseries.name %}

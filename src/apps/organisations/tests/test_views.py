@@ -1,5 +1,6 @@
 from datetime import timedelta
 
+from django.urls import reverse
 from django.utils.timezone import now
 
 import pytest
@@ -9,6 +10,65 @@ from apps.events.tests.factories import EventFactory
 from .factories import EventSeriesFactory, OrganisationFactory, SocialLinkFactory
 
 pytestmark = pytest.mark.django_db
+
+
+class TestOrganisationListView:
+    # directory page renders with mixed group types
+    def test_renders_directory(self, client):
+        OrganisationFactory(group_type='organisation')
+        OrganisationFactory(group_type='community')
+        OrganisationFactory(group_type='interest')
+        response = client.get(reverse('groups:organisation_list'))
+        assert response.status_code == 200
+        assert len(response.context['organisations']) == 1
+        assert len(response.context['communities']) == 1
+        assert len(response.context['interest_groups']) == 1
+
+    # region filter returns matching + nationwide/online orgs, excludes others
+    def test_region_filter(self, client):
+        OrganisationFactory(region='auckland')
+        OrganisationFactory(region='wellington')
+        OrganisationFactory(region='nationwide')
+        OrganisationFactory(region='online')
+        OrganisationFactory(region='')
+        response = client.get(reverse('groups:organisation_list'), {'region': 'auckland'})
+        regions = [o.region for o in response.context['organisation_list']]
+        assert 'auckland' in regions
+        assert 'nationwide' in regions
+        assert 'online' in regions
+        assert '' not in regions
+        assert 'wellington' not in regions
+
+    # invalid region param shows all orgs
+    def test_invalid_region_shows_all(self, client):
+        OrganisationFactory(region='auckland')
+        OrganisationFactory(region='wellington')
+        response = client.get(reverse('groups:organisation_list'), {'region': 'invalid'})
+        assert len(response.context['organisation_list']) == 2
+
+    # empty directory shows empty state
+    def test_empty_directory(self, client):
+        response = client.get(reverse('groups:organisation_list'))
+        assert response.status_code == 200
+        assert len(response.context['organisation_list']) == 0
+
+    # featured orgs appear in featured section, not in type sections
+    def test_featured_in_separate_section(self, client):
+        featured = OrganisationFactory(featured=True, group_type='organisation')
+        regular = OrganisationFactory(featured=False, group_type='organisation')
+        response = client.get(reverse('groups:organisation_list'))
+        assert featured in response.context['featured']
+        assert featured not in response.context['organisations']
+        assert regular in response.context['organisations']
+
+    # sections only appear when they have content
+    def test_sections_conditional(self, client):
+        OrganisationFactory(group_type='community')
+        response = client.get(reverse('groups:organisation_list'))
+        assert len(response.context['communities']) == 1
+        assert len(response.context['organisations']) == 0
+        assert len(response.context['interest_groups']) == 0
+        assert len(response.context['featured']) == 0
 
 
 class TestOrganisationDetailView:

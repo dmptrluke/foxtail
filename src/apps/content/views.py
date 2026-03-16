@@ -8,6 +8,7 @@ from structured_data.views import StructuredDataMixin
 
 from apps.blog.models import Post
 from apps.events.models import Event
+from apps.organisations.models import Organisation
 
 from .models import Page
 
@@ -19,7 +20,18 @@ class IndexView(StructuredDataMixin, TemplateView):
         context = super().get_context_data(**kwargs)
         today = now().date()
         context['post_list'] = queryset_filter(Post.objects).select_related('author').all()[:3]
-        context['event_list'] = Event.objects.filter(Q(start__gte=today) | Q(end__gte=today))[:3]
+        context['event_list'] = Event.objects.filter(Q(start__gte=today) | Q(end__gte=today)).prefetch_related(
+            'interests__user'
+        )[:3]
+
+        context['featured_organisations'] = Organisation.objects.filter(featured=True).prefetch_related('social_links')[
+            :6
+        ]
+
+        next_event = context['event_list'].first() if context['event_list'] else None
+        if next_event:
+            context['days_until'] = (next_event.start - today).days
+
         return context
 
     def get_structured_data(self):

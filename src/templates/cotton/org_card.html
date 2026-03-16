@@ -1,0 +1,48 @@
+{% load icon %}
+
+<div class="org-card" {{ attrs }}>
+    <div class="org-card-identity">
+        {% if org.logo %}
+            <img src="{{ org.logo.square }}" alt="{{ org.name }}" class="org-card-logo">
+        {% else %}
+            <div class="org-card-logo org-card-logo-placeholder">
+                {% with primary=org.social_links.all|first %}
+                    {% if primary %}
+                        {% icon primary.icon_name %}
+                    {% else %}
+                        {{ org.name|slice:":2"|upper }}
+                    {% endif %}
+                {% endwith %}
+            </div>
+        {% endif %}
+        <div class="org-card-info">
+            {% with primary_link=org.social_links.all|first %}
+                <h3 class="org-card-name">
+                    {% if org.has_detail_content %}
+                        <a href="{{ org.get_absolute_url }}" class="stretched-link">{{ org.name }}</a>
+                    {% elif primary_link.is_primary %}
+                        <a href="{{ primary_link.url }}" class="stretched-link" rel="noopener noreferrer" target="_blank">{{ org.name }}</a>
+                    {% else %}
+                        {{ org.name }}
+                    {% endif %}
+                </h3>
+                <div class="org-card-meta">
+                    {% if org.region %}
+                        <span class="org-card-region">{{ org.get_region_display }}</span>
+                    {% elif org.country %}
+                        <span class="org-card-region">{{ org.get_country_display }}</span>
+                    {% endif %}
+                    {% if org.age_requirement %}
+                        <span class="age-badge{% if org.age_requirement == '18' %} age-badge-18{% endif %}">{{ org.get_age_requirement_display }}</span>
+                    {% endif %}
+                </div>
+        </div>
+    </div>
+
+    {% if primary_link.is_primary %}
+        <a href="{{ primary_link.url }}" class="org-card-join" rel="noopener noreferrer" target="_blank">
+            {% icon primary_link.icon_name %} {{ primary_link.join_label }}
+        </a>
+    {% endif %}
+    {% endwith %}
+</div>

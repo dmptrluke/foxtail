@@ -6,6 +6,7 @@ from .manage import (
 )
 from .public import (
     EventDetailView,
+    EventICSView,
     EventInterestToggleView,
     EventListView,
     EventListYearView,
@@ -15,6 +16,7 @@ __all__ = [
     'EventCreateView',
     'EventDeleteView',
     'EventDetailView',
+    'EventICSView',
     'EventInterestToggleView',
     'EventListView',
     'EventListYearView',

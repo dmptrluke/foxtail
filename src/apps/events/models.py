@@ -18,6 +18,13 @@ from taggit.managers import TaggableManager
 from apps.core.fields import AutoSlugField
 from apps.core.validators import file_size_validator
 
+AGE_CHOICES = [
+    ('all', 'All Ages'),
+    ('13', '13+'),
+    ('16', '16+'),
+    ('18', '18+'),
+]
+
 
 class EventQuerySet(models.QuerySet):
     def for_organisation(self, org):
@@ -48,6 +55,8 @@ class Event(PublishedModel):
     end = models.DateField(null=True, blank=True, help_text='End date and time are optional.')
     end_time = models.TimeField(null=True, blank=True, help_text='End date and time are optional.')
 
+    age_requirement = models.CharField(max_length=3, choices=AGE_CHOICES, blank=True)
+
     image = ProcessedImageField(
         upload_to='events', blank=True, auto_add_fields=True, validators=[file_size_validator()]
     )
@@ -73,6 +82,24 @@ class Event(PublishedModel):
         if self.series and self.series.organisation:
             return self.series.organisation
         return self.organisation
+
+    @property
+    def resolved_age_requirement(self):
+        """Return age requirement, falling back to the resolved organisation's setting"""
+        if self.age_requirement:
+            return self.age_requirement
+        org = self.resolved_organisation
+        if org:
+            return org.age_requirement
+        return ''
+
+    @property
+    def resolved_age_requirement_display(self):
+        """Return the human-readable age requirement label, with org fallback"""
+        value = self.resolved_age_requirement
+        if not value:
+            return ''
+        return dict(AGE_CHOICES).get(value, value)
 
     def __str__(self):
         return self.title

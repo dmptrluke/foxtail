@@ -9,6 +9,7 @@ from apps.blog.models import Post
 from apps.blog.tests.factories import PostFactory
 from apps.events.models import Event
 from apps.events.tests.factories import EventFactory
+from apps.organisations.tests.factories import OrganisationFactory
 
 from ..models import Page
 from ..views import IndexView, PageView
@@ -74,6 +75,32 @@ class TestIndexView:
         assert sd['@type'] == 'WebSite'
         assert sd['url'] == f'{settings.SITE_URL}/'
         assert 'name' in sd
+
+    # featured_organisations in context, capped at 6
+    def test_featured_organisations_capped(self, db, request_factory: RequestFactory):
+        OrganisationFactory.create_batch(8, featured=True)
+        view = IndexView()
+        view.setup(request_factory.get('/'))
+        context = view.get_context_data()
+
+        assert len(context['featured_organisations']) <= 6
+
+    # days_until computed for next event
+    def test_days_until_present(self, event: Event, request_factory: RequestFactory):
+        view = IndexView()
+        view.setup(request_factory.get('/'))
+        context = view.get_context_data()
+
+        assert 'days_until' in context
+        assert context['days_until'] >= 0
+
+    # no events: days_until absent
+    def test_days_until_absent_no_events(self, db, request_factory: RequestFactory):
+        view = IndexView()
+        view.setup(request_factory.get('/'))
+        context = view.get_context_data()
+
+        assert 'days_until' not in context
 
 
 class TestPageView:

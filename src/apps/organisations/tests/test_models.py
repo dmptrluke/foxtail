@@ -33,6 +33,16 @@ class TestSocialLink:
         link = SocialLinkFactory.build(platform='unknown')
         assert link.icon_name == 'link_variant'
 
+    # join_label says "Visit Website" for website platform
+    def test_join_label_website(self):
+        link = SocialLinkFactory.build(platform='website')
+        assert link.join_label == 'Visit Website'
+
+    # join_label says "Join on X" for chat platforms
+    def test_join_label_chat(self):
+        link = SocialLinkFactory.build(platform='discord')
+        assert link.join_label == 'Join on Discord'
+
     # primary links sort before non-primary, then alphabetically by platform
     def test_ordering(self):
         org = OrganisationFactory()
@@ -61,3 +71,49 @@ class TestOrganisationFeatured:
         organisation.featured = True
         organisation.save()
         assert Organisation.objects.filter(featured=True).count() == 1
+
+
+class TestOrganisationGroupType:
+    # group_type defaults to 'organisation'
+    def test_default_group_type(self, organisation):
+        assert organisation.group_type == 'organisation'
+
+    # filter by group_type returns matching organisations
+    def test_filter_by_group_type(self):
+        OrganisationFactory(group_type='community')
+        OrganisationFactory(group_type='interest')
+        OrganisationFactory(group_type='organisation')
+        assert Organisation.objects.filter(group_type='community').count() == 1
+        assert Organisation.objects.filter(group_type='interest').count() == 1
+
+
+class TestOrganisationAgeRequirement:
+    # age_requirement defaults to blank
+    def test_default_blank(self, organisation):
+        assert organisation.age_requirement == ''
+
+    # display method returns human-readable label
+    def test_display_label(self):
+        org = OrganisationFactory(age_requirement='18')
+        assert org.get_age_requirement_display() == '18+'
+
+    # filter by age_requirement returns matching organisations
+    def test_filter_by_age(self):
+        OrganisationFactory(age_requirement='18')
+        OrganisationFactory(age_requirement='all')
+        OrganisationFactory(age_requirement='')
+        assert Organisation.objects.filter(age_requirement='18').count() == 1
+
+
+class TestOrganisationRegion:
+    # region can be blank
+    def test_region_blank_by_default(self, organisation):
+        assert organisation.region == ''
+
+    # filter by region returns matching organisations
+    def test_filter_by_region(self):
+        OrganisationFactory(region='auckland')
+        OrganisationFactory(region='wellington')
+        OrganisationFactory(region='')
+        assert Organisation.objects.filter(region='auckland').count() == 1
+        assert Organisation.objects.filter(region='wellington').count() == 1

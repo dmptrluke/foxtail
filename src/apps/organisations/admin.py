@@ -12,12 +12,27 @@ class SocialLinkInline(admin.TabularInline):
 
 class OrganisationAdmin(ModelAdmin):
     fieldsets = (
-        (None, {'fields': ('name', 'slug', 'description', 'url', 'country', 'featured')}),
+        (
+            None,
+            {
+                'fields': (
+                    'name',
+                    'slug',
+                    'description',
+                    'url',
+                    'featured',
+                    'group_type',
+                    'country',
+                    'region',
+                    'age_requirement',
+                )
+            },
+        ),
         ('Logo', {'fields': ('logo', 'logo_ppoi')}),
     )
     inlines = [SocialLinkInline]
-    list_display = ['name', 'slug', 'url', 'featured']
-    list_filter = ['featured']
+    list_display = ['name', 'slug', 'group_type', 'region', 'age_requirement', 'featured']
+    list_filter = ['featured', 'group_type', 'region', 'age_requirement']
     search_fields = ['name']
     prepopulated_fields = {'slug': ('name',)}
 

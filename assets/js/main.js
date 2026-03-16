@@ -7,12 +7,13 @@ import 'bootstrap/js/dist/alert';
 import 'colcade';
 import htmx from 'htmx.org';
 import { UAParser } from 'ua-parser-js';
+import { getCsrfToken } from './csrf.js';
 
 window.htmx = htmx;
 
 document.addEventListener('htmx:configRequest', (e) => {
-    const cookieName = document.cookie.match(/(__Host-csrftoken|csrftoken)=([^;]+)/);
-    if (cookieName) e.detail.headers['X-CSRFToken'] = cookieName[2];
+    const token = getCsrfToken();
+    if (token) e.detail.headers['X-CSRFToken'] = token;
 });
 
 // --- Comment character counter ---
@@ -161,6 +162,10 @@ function onLoad() {
 
     if (document.querySelector('[data-autocomplete-url]')) {
         import('./autocomplete.js').then(m => m.initAutocomplete());
+    }
+
+    if (document.querySelector('[data-interest-url]')) {
+        import('./eventInterest.js').then(m => m.initEventInterest());
     }
 }
 

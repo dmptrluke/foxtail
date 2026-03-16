@@ -14,7 +14,12 @@
             <div class="event-card-hero-date">{{ event.start|date:"M j, Y" }}</div>
         {% endif %}
         <h3><a href="{{ event.get_absolute_url }}" class="stretched-link">{{ event.title }}</a></h3>
-        <div class="event-card-location">{{ event.location }}</div>
+        <div class="event-card-location">
+            {{ event.location }}
+            {% if event.resolved_age_requirement %}
+                <span class="age-badge{% if event.resolved_age_requirement == '18' %} age-badge-18{% endif %}">{{ event.resolved_age_requirement_display }}</span>
+            {% endif %}
+        </div>
         <p class="event-card-excerpt">{{ event.description_rendered|safe|striptags|truncatechars:120 }}</p>
         {% if event.image %}
             <div class="event-card-date">{{ event.start|date:"F jS, Y" }}</div>

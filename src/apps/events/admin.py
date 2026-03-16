@@ -24,6 +24,7 @@ class EventAdmin(ModelAdmin):
                     'url',
                     'organisation',
                     'series',
+                    'age_requirement',
                     'publish_status',
                     'live_as_of',
                 ),

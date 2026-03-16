@@ -1,0 +1,85 @@
+{% extends "base/page.html" %}
+{% load jsonld opengraph meta twitter %}
+
+{% block title %}Groups{% endblock %}
+
+{% block extra_head %}
+    {% json_ld_for structured_data %}
+    {% og_for structured_data %}
+    {% meta_for structured_data %}
+    {% twitter_for structured_data %}
+{% endblock %}
+
+{% block hero %}
+    <c-hero>
+        <c-hero.title>Groups</c-hero.title>
+        <c-hero.subtitle narrow>Find your community in New Zealand</c-hero.subtitle>
+
+        {% if regions %}
+            <div class="hero-bottom">
+                <nav class="hero-nav">
+                    <a href="{% url 'groups:organisation_list' %}"
+                       class="hero-pill{% if not current_region %} active{% endif %}">All Regions</a>
+                    {% for value, label in regions %}
+                        {% if value != 'nationwide' and value != 'online' %}
+                            <a href="?region={{ value }}"
+                               class="hero-pill{% if current_region == value %} active{% endif %}">{{ label }}</a>
+                        {% endif %}
+                    {% endfor %}
+                </nav>
+            </div>
+        {% endif %}
+    </c-hero>
+{% endblock hero %}
+
+{% block content %}
+    {% if featured %}
+        <c-section-label large>Featured</c-section-label>
+        <div class="row narrow-gutters org-grid">
+            {% for org in featured %}
+                <div class="col-md-6 col-lg-4">
+                    <c-org_card :org="org" />
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    {% if communities %}
+        <c-section-label large class="{% if featured %}mt-5{% endif %}">Community Groups</c-section-label>
+        <div class="row narrow-gutters org-grid">
+            {% for org in communities %}
+                <div class="col-md-6 col-lg-4">
+                    <c-org_card :org="org" />
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    {% if interest_groups %}
+        <c-section-label large class="{% if featured or communities %}mt-5{% endif %}">Interest Groups</c-section-label>
+        <div class="row narrow-gutters org-grid">
+            {% for org in interest_groups %}
+                <div class="col-md-6 col-lg-4">
+                    <c-org_card :org="org" />
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    {% if organisations %}
+        <c-section-label large class="{% if featured or communities or interest_groups %}mt-5{% endif %}">Organisations</c-section-label>
+        <div class="row narrow-gutters org-grid">
+            {% for org in organisations %}
+                <div class="col-md-6 col-lg-4">
+                    <c-org_card :org="org" />
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    {% if not featured and not communities and not interest_groups and not organisations %}
+        <div class="empty-state">
+            <p>No groups found{% if current_region %} for this region{% endif %}.</p>
+        </div>
+    {% endif %}
+{% endblock content %}

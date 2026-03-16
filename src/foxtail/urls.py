@@ -39,7 +39,7 @@ urlpatterns = [
     path('blog/', include('apps.blog.urls')),
     path('contact/', include('apps.contact.urls')),
     path('events/', include('apps.events.urls')),
-    path('organisations/', include('apps.organisations.urls')),
+    path('groups/', include('apps.organisations.urls')),
     path('series/', include('apps.organisations.series_urls')),
     path('', include('apps.content.urls')),
 ]

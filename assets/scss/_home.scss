@@ -26,6 +26,92 @@
 	}
 }
 
+// Community stats
+.community-stats {
+	display: flex;
+	justify-content: center;
+	gap: 2.5rem;
+	padding: 1.75rem 0;
+	margin-bottom: 1rem;
+}
+
+.community-stat {
+	text-align: center;
+
+	.community-stat-num {
+		font-family: $headings-font-family;
+		font-size: 1.5rem;
+		font-weight: 800;
+		line-height: 1;
+		display: block;
+	}
+
+	.community-stat-label {
+		font-size: 0.65rem;
+		text-transform: uppercase;
+		letter-spacing: 0.06em;
+		opacity: 0.5;
+		margin-top: 0.2rem;
+		display: block;
+	}
+}
+
+// Onboarding cards (logged-out)
+.onboarding {
+	background: var(--ft-surface);
+	border-bottom: 1px solid rgba($secondary, 0.12);
+	padding: 2rem 0;
+
+	.onboarding-inner {
+		display: grid;
+		grid-template-columns: 1fr;
+		gap: 1rem;
+
+		@include media-breakpoint-up(sm) {
+			grid-template-columns: repeat(3, 1fr);
+		}
+	}
+
+	.onboarding-card {
+		padding: 1.5rem;
+		border-radius: $card-border-radius + 4px;
+		background: var(--bs-body-bg);
+		text-decoration: none;
+		color: inherit;
+		transition: box-shadow 0.25s ease, transform 0.25s ease;
+		display: block;
+
+		&:hover {
+			box-shadow: var(--ft-shadow-md);
+			transform: translateY(-2px);
+		}
+
+		.icon {
+			font-size: 1.5rem;
+			margin-bottom: 0.75rem;
+		}
+
+		h3 {
+			font-family: $headings-font-family;
+			font-size: 1rem;
+			font-weight: 700;
+			margin-bottom: 0.3rem;
+		}
+
+		p {
+			font-size: 0.825rem;
+			color: var(--ft-text-muted);
+			line-height: 1.5;
+			margin-bottom: 0;
+		}
+	}
+}
+
+// Featured groups section
+.featured-groups {
+	margin-bottom: 2rem;
+}
+
 // News: shared
 .card-img-placeholder {
 	aspect-ratio: 1.91 / 1;

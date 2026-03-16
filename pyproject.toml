@@ -27,6 +27,7 @@ dependencies = [
     "django-widget-tweaks==1.5.1",
     "fido2==2.1.1",
     "gunicorn==25.1.0",
+    "icalendar==7.0.3",
     "markdown==3.10.2",
     "psycopg[binary]==3.3.3",
     "pyjwt==2.12.0",

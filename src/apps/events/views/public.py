@@ -1,7 +1,9 @@
 from datetime import date
 
 from django.db.models import Count, Q
+from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
+from django.views import View
 from django.views.generic import DetailView, ListView
 from django.views.generic.dates import YearMixin
 
@@ -12,6 +14,7 @@ from structured_data.views import StructuredDataMixin
 from apps.core.views import ApiView
 from apps.organisations.models import Organisation
 
+from ..ics import generate_ics
 from ..models import Event, EventInterest
 
 
@@ -122,6 +125,19 @@ class EventDetailView(PublishedDetailMixin, YearMixin, DetailView):
         ):
             show_series = False
         context['show_series'] = show_series
+
+        if self.request.user.is_authenticated:
+            interest = EventInterest.objects.filter(event=self.object, user=self.request.user).first()
+            context['user_interest_status'] = interest.status if interest else ''
+
+        interests = self.object.interests.select_related('user')[:10]
+        context['interests'] = interests
+        context['interest_count'] = self.object.interests.count()
+
+        counts = self.object.interests.values('status').annotate(n=Count('pk'))
+        count_map = {r['status']: r['n'] for r in counts}
+        context['interested_count'] = count_map.get(EventInterest.INTERESTED, 0)
+        context['going_count'] = count_map.get(EventInterest.GOING, 0)
         return context
 
 
@@ -149,3 +165,12 @@ class EventInterestToggleView(ApiView):
                 'going_count': count_map.get(EventInterest.GOING, 0),
             }
         )
+
+
+class EventICSView(View):
+    def get(self, request, pk):
+        event = get_object_or_404(queryset_filter(Event.objects), pk=pk)
+        cal = generate_ics(event)
+        response = HttpResponse(cal, content_type='text/calendar')
+        response['Content-Disposition'] = f'attachment; filename="{event.slug}.ics"'
+        return response

@@ -9,7 +9,7 @@ import pytest
 from published.constants import AVAILABLE
 
 from ..models import Event
-from .factories import EventFactory
+from .factories import EventFactory, EventInterestFactory
 
 pytestmark = pytest.mark.django_db
 
@@ -118,6 +118,27 @@ class TestEventDetailView:
         event = EventFactory(series=series, organisation=None)
         response = client.get(event.get_absolute_url())
         assert response.context['show_series'] is True
+
+    # authenticated user sees their interest status
+    def test_interest_status_authenticated(self, client, user):
+        event = EventFactory()
+        EventInterestFactory(event=event, user=user, status='going')
+        client.force_login(user)
+        response = client.get(event.get_absolute_url())
+        assert response.context['user_interest_status'] == 'going'
+
+    # authenticated user with no interest gets empty string
+    def test_interest_status_empty(self, client, user):
+        event = EventFactory()
+        client.force_login(user)
+        response = client.get(event.get_absolute_url())
+        assert response.context['user_interest_status'] == ''
+
+    # anonymous user has no interest status in context
+    def test_interest_status_anonymous(self, client):
+        event = EventFactory()
+        response = client.get(event.get_absolute_url())
+        assert 'user_interest_status' not in response.context
 
 
 class TestEventManageListView:

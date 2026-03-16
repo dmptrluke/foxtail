@@ -25,13 +25,16 @@
                 {% endif %}
             </c-hero.nav>
 
-            {% if event.resolved_organisation or event.series or event.tags.all %}
+            {% if event.resolved_organisation or event.series or event.tags.all or event.resolved_age_requirement %}
                 <div class="tag-row">
                     {% if event.resolved_organisation %}
                         <a href="{{ event.resolved_organisation.get_absolute_url }}" class="tag-pill tag-pill-meta">{{ event.resolved_organisation.name }}</a>
                     {% endif %}
                     {% if show_series %}
                         <a href="{{ event.series.get_absolute_url }}" class="tag-pill tag-pill-meta">{{ event.series.name }}</a>
+                    {% endif %}
+                    {% if event.resolved_age_requirement %}
+                        <span class="age-badge age-badge-hero{% if event.resolved_age_requirement == '18' %} age-badge-18{% endif %}">{{ event.resolved_age_requirement_display }}</span>
                     {% endif %}
                     {% for tag in event.tags.all %}
                         <span class="tag-pill">{{ tag.name|title }}</span>
@@ -62,6 +65,26 @@
                     </div>
                 {% endif %}
             </dl>
+            <div class="event-interest-row">
+                {% if user.is_authenticated %}
+                    <div class="event-interest-group" data-interest-url="{% url 'events:interest' event.pk %}" data-status="{{ user_interest_status }}">
+                        <div class="btn-group" role="group" aria-label="Event interest">
+                            <button type="button" data-interest-btn="interested" class="btn btn-outline-light btn-sm">
+                                Interested <span data-interest-count="interested">{% if interested_count %}{{ interested_count }}{% endif %}</span>
+                            </button>
+                            <button type="button" data-interest-btn="going" class="btn btn-outline-light btn-sm">
+                                Going <span data-interest-count="going">{% if going_count %}{{ going_count }}{% endif %}</span>
+                            </button>
+                        </div>
+                    </div>
+                {% endif %}
+
+                {% if interest_count > 0 %}
+                    <c-avatar_stack :interests="interests"
+                                    overflow="{{ interest_count|add:'-3' }}"
+                                    :total="interest_count" />
+                {% endif %}
+            </div>
         </c-hero>
 
         {% if event.image %}
@@ -118,15 +141,18 @@
             </c-sidebar>
 
             {# CTA #}
-            {% if event.url %}
-                <c-sidebar>
-                    <c-sidebar.footer>
-                        <a class="btn btn-primary" href="{{ event.url }}" rel="noopener noreferrer" target="_blank">
+            <c-sidebar>
+                <c-sidebar.footer>
+                    {% if event.url %}
+                        <a class="btn btn-primary w-100 mb-2" href="{{ event.url }}" rel="noopener noreferrer" target="_blank">
                             Visit Event Website
                         </a>
-                    </c-sidebar.footer>
-                </c-sidebar>
-            {% endif %}
+                    {% endif %}
+                    <a href="{% url 'events:event_ics' event.pk %}" class="btn btn-outline-secondary w-100">
+                        Add to calendar
+                    </a>
+                </c-sidebar.footer>
+            </c-sidebar>
         </c-slot>
     </c-layout-sidebar>
 {% endblock content %}

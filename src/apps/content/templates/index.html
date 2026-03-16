@@ -1,7 +1,7 @@
 {% extends "base/page.html" %}
-{% load humanize account jsonld opengraph meta twitter image %}
+{% load humanize account cache jsonld opengraph meta twitter icon image %}
 
-{% block title_full %}{{ request.site.name }} — the resource for New Zealand furries{% endblock title_full %}
+{% block title_full %}{{ request.site.name }} — the community hub for New Zealand furries{% endblock title_full %}
 
 {% block extra_head %}
     {% json_ld_for structured_data %}
@@ -29,7 +29,49 @@
     </c-hero>
 {% endblock hero %}
 
+{% block pre_content %}
+    {# ── Onboarding (logged-out) ── #}
+    {% if not user.is_authenticated %}
+        <div class="onboarding">
+            <div class="container px-3 px-md-4">
+                <div class="onboarding-inner">
+                    <div class="onboarding-card">
+                        <c-icons.paw width="1.5em" height="1.5em" />
+                        <h3>What is furry?</h3>
+                        <p>A creative community of people who enjoy anthropomorphic animal characters through art, costumes, and social events.</p>
+                    </div>
+                    <a href="{% url 'groups:organisation_list' %}" class="onboarding-card">
+                        <c-icons.search width="1.5em" height="1.5em" />
+                        <h3>Find your local group</h3>
+                        <p>Discover community groups and interest chats across New Zealand and connect with furries near you.</p>
+                    </a>
+                    <a href="{% url 'events:list' %}" class="onboarding-card">
+                        <c-icons.palette width="1.5em" height="1.5em" />
+                        <h3>Get involved</h3>
+                        <p>Check out upcoming events, from conventions and camps to casual meetups and online hangouts.</p>
+                    </a>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+
+{% endblock pre_content %}
+
 {% block content %}
+    {# ── Featured Groups ── #}
+    {% if featured_organisations %}
+        <section class="featured-groups mb-5">
+            <c-section-header link_url="{% url 'groups:organisation_list' %}">Featured Groups</c-section-header>
+            <div class="row narrow-gutters org-grid">
+                {% for org in featured_organisations %}
+                    <div class="col-md-6 col-lg-4">
+                        <c-org_card :org="org" />
+                    </div>
+                {% endfor %}
+            </div>
+        </section>
+    {% endif %}
+
     {# ── News ── #}
     <section class="mb-5">
         <c-section-header link_url="{% url 'blog:list' %}">Latest News</c-section-header>
@@ -87,12 +129,22 @@
                         <a href="{{ event.get_absolute_url }}" class="event-item">
                             <c-cal_badge :date="event.start" large />
                             <div class="event-details">
-                                <h3>{{ event.title }}</h3>
+                                <h3>
+                                    {{ event.title }}
+                                    {% if forloop.first and days_until is not None %}
+                                        <span class="badge bg-primary-subtle text-primary-emphasis ms-1">in {{ days_until }} day{{ days_until|pluralize }}</span>
+                                    {% endif %}
+                                </h3>
                                 <p>{{ event.description_rendered|safe|striptags|truncatechars:120 }}</p>
                                 {% if event.location %}
                                     <span class="event-location">{{ event.location }}</span>
                                 {% endif %}
                             </div>
+                            {% with total=event.interests.count %}
+                                {% if total > 0 %}
+                                    <c-avatar_stack :interests="event.interests.all" overflow="{{ total|add:'-3' }}" :total="total" />
+                                {% endif %}
+                            {% endwith %}
                         </a>
                 {% endfor %}
             </div>

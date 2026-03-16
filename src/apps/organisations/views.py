@@ -1,14 +1,48 @@
 from datetime import date
 
 from django.db.models import F, Q
-from django.views.generic import DetailView
+from django.views.generic import DetailView, ListView
 
 from published.utils import queryset_filter
+from structured_data.views import StructuredDataMixin
 
 from apps.blog.models import Post
 from apps.events.models import Event
 
 from .models import EventSeries, Organisation
+
+
+class OrganisationListView(StructuredDataMixin, ListView):
+    model = Organisation
+    template_name = 'organisations/organisation_list.html'
+    context_object_name = 'organisation_list'
+
+    def get_queryset(self):
+        qs = Organisation.objects.prefetch_related('social_links')
+        region = self.request.GET.get('region')
+        if region and region in dict(Organisation.REGION_CHOICES):
+            qs = qs.filter(Q(region=region) | Q(region='nationwide') | Q(region='online'))
+        return qs
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        all_orgs = context['organisation_list']
+        context['featured'] = [o for o in all_orgs if o.featured]
+        context['organisations'] = [o for o in all_orgs if o.group_type == 'organisation' and not o.featured]
+        context['communities'] = [o for o in all_orgs if o.group_type == 'community' and not o.featured]
+        context['interest_groups'] = [o for o in all_orgs if o.group_type == 'interest' and not o.featured]
+        active_regions = set(Organisation.objects.exclude(region='').values_list('region', flat=True).distinct())
+        context['regions'] = [(k, v) for k, v in Organisation.REGION_CHOICES if k in active_regions]
+        context['current_region'] = self.request.GET.get('region', '')
+        return context
+
+    def get_structured_data(self):
+        return {
+            '@type': 'CollectionPage',
+            'name': 'Groups',
+            'description': 'Find your community in New Zealand',
+            'url': self.request.build_absolute_uri(),
+        }
 
 
 class OrganisationDetailView(DetailView):
@@ -45,6 +79,7 @@ class OrganisationDetailView(DetailView):
         context['events'] = events
         context['posts'] = posts
         context['next_event'] = next_event
+        context['has_content'] = bool(org.description_rendered or events or posts or series or next_event)
         return context
 
 
