@@ -37,7 +37,7 @@ class AutoSlugField(models.SlugField):
                     self.unique_for_date,
                     self.unique_for_month,
                     self.unique_for_year,
-                    self.model._meta.unique_together,
+                    self._get_unique_constraints(),
                 )
             ):
                 value = self._get_unique_slug(value, model_instance)
@@ -45,6 +45,14 @@ class AutoSlugField(models.SlugField):
             setattr(model_instance, self.attname, value)
 
         return value
+
+    def _get_unique_constraints(self):
+        """Return UniqueConstraint field tuples that include this field."""
+        return [
+            c.fields
+            for c in self.model._meta.constraints
+            if isinstance(c, models.UniqueConstraint) and self.attname in c.fields
+        ]
 
     def _get_unique_lookups(self, instance):
         if self.unique:
@@ -78,15 +86,10 @@ class AutoSlugField(models.SlugField):
                 }
             )
 
-        for field_group in self.model._meta.unique_together:
-            if self.attname in field_group:
-                lookups.append(
-                    {
-                        field_name: getattr(instance, field_name)
-                        for field_name in field_group
-                        if field_name != self.attname
-                    }
-                )
+        for field_group in self._get_unique_constraints():
+            lookups.append(
+                {field_name: getattr(instance, field_name) for field_name in field_group if field_name != self.attname}
+            )
 
         return reduce(or_, (Q(**lookup) for lookup in lookups), Q())
 

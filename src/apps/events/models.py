@@ -162,7 +162,9 @@ class EventInterest(models.Model):
     created = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        unique_together = ('event', 'user')
+        constraints = [
+            models.UniqueConstraint(fields=['event', 'user'], name='events_eventinterest_event_user_uniq'),
+        ]
 
     def __str__(self):
         return f'{self.user} - {self.event} ({self.status})'

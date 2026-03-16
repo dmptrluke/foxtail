@@ -154,6 +154,7 @@ TEMPLATES = [
 ]
 
 FORM_RENDERER = 'django.forms.renderers.TemplatesSetting'
+FORMS_URLFIELD_ASSUME_HTTPS = True
 
 # Database
 # <https://docs.djangoproject.com/en/stable/ref/settings/#databases>

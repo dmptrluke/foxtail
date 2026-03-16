@@ -51,7 +51,9 @@ class UniqueTogetherSlugModel(models.Model):
 
     class Meta:
         app_label = 'core'
-        unique_together = [('slug', 'category')]
+        constraints = [
+            models.UniqueConstraint(fields=['slug', 'category'], name='core_uniquetogetherslug_slug_cat_uniq'),
+        ]
 
 
 @pytest.fixture
