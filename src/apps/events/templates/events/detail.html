@@ -66,7 +66,7 @@
                 {% endif %}
             </dl>
             <div class="event-interest-row">
-                {% if user.is_authenticated %}
+                {% if user.is_authenticated and not event.is_ended %}
                     <div class="event-interest-group" data-interest-url="{% url 'events:interest' event.pk %}" data-status="{{ user_interest_status }}">
                         <div class="btn-group" role="group" aria-label="Event interest">
                             <button type="button" data-interest-btn="interested" class="btn btn-outline-light btn-sm">
