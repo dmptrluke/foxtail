@@ -1,0 +1,20 @@
+{% load form_tags %}
+
+<div id="comment-form-wrapper"{% if is_partial %} hx-swap-oob="outerHTML:#comment-form-wrapper"{% endif %}>
+    <div class="comment-form">
+        <div class="comment-form-heading">Leave a Comment</div>
+        {% if user.is_authenticated %}
+            <form hx-post="{% url 'blog:detail' slug=post.slug %}"
+                  hx-target="#comment-list"
+                  hx-swap="beforeend"
+                  method="post">
+                {% csrf_token %}
+                {% non_field_errors form %}
+                {% textarea_field form.text hide_label=True %}
+                <button type="submit" name="post-comment" class="btn btn-primary mt-2" hx-disabled-elt="this">Post Comment</button>
+            </form>
+        {% else %}
+            <p>Please <a href="{% url 'account_login' %}">sign in</a> to leave a comment.</p>
+        {% endif %}
+    </div>
+</div>

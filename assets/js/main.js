@@ -136,6 +136,8 @@ function initThemeToggle() {
     });
 }
 
+document.addEventListener('htmx:afterSwap', () => initCharCounter());
+
 // --- Init ---
 
 function onLoad() {

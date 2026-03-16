@@ -1,4 +1,3 @@
-from django.conf import settings
 from django.urls import path
 
 from .feeds import LatestEntriesFeed
@@ -15,8 +14,6 @@ from .views import (
     PostUpdateView,
 )
 
-COMMENTS_ENABLED = getattr(settings, 'BLOG_COMMENTS', False)
-
 app_name = 'blog'
 urlpatterns = [
     path('', BlogListView.as_view(), name='list'),
@@ -27,9 +24,7 @@ urlpatterns = [
     path('manage/<int:pk>/delete/', PostDeleteView.as_view(), name='post_delete'),
     path('manage/comments/', CommentManageListView.as_view(), name='comment_manage_list'),
     path('manage/comments/<int:pk>/approve/', CommentApproveView.as_view(), name='comment_approve'),
+    path('comment/delete/<int:pk>/', CommentDeleteView.as_view(), name='comment_delete'),
     path('<int:year>/', BlogListYearView.as_view(), name='list_year'),
     path('<slug:slug>/', BlogDetailView.as_view(), name='detail'),
 ]
-
-if COMMENTS_ENABLED:
-    urlpatterns += [path('comment/delete/<int:pk>/', CommentDeleteView.as_view(), name='comment_delete')]

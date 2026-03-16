@@ -1,5 +1,3 @@
-from unittest.mock import patch
-
 from django.contrib.messages import get_messages
 from django.urls import reverse
 
@@ -63,7 +61,6 @@ class TestBlogDetailView:
         assert response.status_code == 200
         assert response.context['post'] == post
         assert 'form' in response.context
-        assert response.context['comments_enabled'] is True
 
     # authenticated user can post a comment
     def test_comment_submission(self, client, user, post: Post):
@@ -98,21 +95,6 @@ class TestBlogDetailView:
         assert response.status_code == 200
         messages = list(get_messages(response.wsgi_request))
         assert any('problem' in str(m) for m in messages)
-
-    # comments_enabled is False when BLOG_COMMENTS setting is disabled
-    def test_comments_disabled_globally(self, client, post: Post):
-        with patch('apps.blog.views.COMMENTS_ENABLED', False):
-            url = reverse('blog:detail', kwargs={'slug': post.slug})
-            response = client.get(url)
-            assert response.context['comments_enabled'] is False
-
-    # POST returns 403 when BLOG_COMMENTS setting is disabled
-    def test_comment_post_disabled_globally(self, client, user, post: Post):
-        client.force_login(user)
-        with patch('apps.blog.views.COMMENTS_ENABLED', False):
-            url = reverse('blog:detail', kwargs={'slug': post.slug})
-            response = client.post(url, {'text': 'test'})
-            assert response.status_code == 403
 
 
 class TestCommentDeleteView:
@@ -276,16 +258,35 @@ class TestCommentApproveView:
         assert '(2)' in content
 
 
-class TestPublicCommentVisibility:
-    # only approved comments appear on the post detail page
-    def test_only_approved_visible(self, client, user, post: Post):
+class TestCommentVisibility:
+    # anonymous users see approved comments only
+    def test_anonymous_sees_approved_only(self, client, user, post: Post):
         Comment.objects.create(post=post, author=user, text='pending')
         approved = Comment.objects.create(post=post, author=user, text='visible', approved=True)
         url = reverse('blog:detail', kwargs={'slug': post.slug})
         response = client.get(url)
         assert list(response.context['comment_list']) == [approved]
 
-    # submitting a comment shows pending approval message
+    # author sees approved comments plus their own pending ones
+    def test_author_sees_own_pending(self, client, user, third_user, post: Post):
+        own_pending = Comment.objects.create(post=post, author=user, text='my pending')
+        approved = Comment.objects.create(post=post, author=third_user, text='visible', approved=True)
+        Comment.objects.create(post=post, author=third_user, text='other pending')
+        client.force_login(user)
+        url = reverse('blog:detail', kwargs={'slug': post.slug})
+        response = client.get(url)
+        assert list(response.context['comment_list']) == [own_pending, approved]
+
+    # moderator sees all comments including other users' pending
+    def test_moderator_sees_all(self, client, user, moderator, post: Post):
+        pending = Comment.objects.create(post=post, author=user, text='pending')
+        approved = Comment.objects.create(post=post, author=user, text='approved', approved=True)
+        client.force_login(moderator)
+        url = reverse('blog:detail', kwargs={'slug': post.slug})
+        response = client.get(url)
+        assert list(response.context['comment_list']) == [pending, approved]
+
+    # submitting a comment shows pending approval message (non-HTMX)
     def test_submission_pending_message(self, client, user, post: Post):
         client.force_login(user)
         url = reverse('blog:detail', kwargs={'slug': post.slug})
@@ -293,6 +294,108 @@ class TestPublicCommentVisibility:
         assert response.status_code == 302
         msgs = list(get_messages(response.wsgi_request))
         assert any('pending' in str(m) for m in msgs)
+
+
+class TestCommentAutoApprove:
+    # moderator's comment is auto-approved
+    def test_moderator_auto_approved(self, client, moderator, post: Post):
+        client.force_login(moderator)
+        url = reverse('blog:detail', kwargs={'slug': post.slug})
+        client.post(url, {'text': 'mod comment'})
+        comment = Comment.objects.get(text='mod comment')
+        assert comment.approved is True
+
+    # verified user's comment is auto-approved
+    def test_verified_user_auto_approved(self, client, user, second_user, post: Post):
+        from apps.accounts.models import Verification
+
+        Verification.objects.create(user=user, verified_by=second_user)
+        client.force_login(user)
+        url = reverse('blog:detail', kwargs={'slug': post.slug})
+        client.post(url, {'text': 'verified comment'})
+        comment = Comment.objects.get(text='verified comment')
+        assert comment.approved is True
+
+    # auto-approved non-HTMX comment shows "posted" not "pending"
+    def test_auto_approved_message(self, client, moderator, post: Post):
+        client.force_login(moderator)
+        url = reverse('blog:detail', kwargs={'slug': post.slug})
+        response = client.post(url, {'text': 'mod comment msg'})
+        assert response.status_code == 302
+        msgs = list(get_messages(response.wsgi_request))
+        assert any('posted' in str(m) for m in msgs)
+        assert not any('pending' in str(m) for m in msgs)
+
+    # regular unverified user's comment is not auto-approved
+    def test_regular_user_not_auto_approved(self, client, user, post: Post):
+        client.force_login(user)
+        url = reverse('blog:detail', kwargs={'slug': post.slug})
+        client.post(url, {'text': 'regular comment'})
+        comment = Comment.objects.get(text='regular comment')
+        assert comment.approved is False
+
+
+class TestCommentHtmxPosting:
+    htmx_headers = {'HTTP_HX_REQUEST': 'true'}
+
+    # HTMX post returns comment partial, not redirect
+    def test_htmx_returns_partial(self, client, user, post: Post):
+        client.force_login(user)
+        url = reverse('blog:detail', kwargs={'slug': post.slug})
+        response = client.post(url, {'text': 'htmx comment'}, **self.htmx_headers)
+        assert response.status_code == 200
+        content = response.content.decode()
+        assert 'htmx comment' in content
+        assert 'comment-item' in content
+
+    # HTMX response includes OOB form reset
+    def test_htmx_includes_oob_form_reset(self, client, user, post: Post):
+        client.force_login(user)
+        url = reverse('blog:detail', kwargs={'slug': post.slug})
+        response = client.post(url, {'text': 'oob test'}, **self.htmx_headers)
+        content = response.content.decode()
+        assert 'hx-swap-oob' in content
+        assert 'comment-form-wrapper' in content
+
+    # HTMX invalid form returns errors with HX-Retarget
+    def test_htmx_invalid_retargets(self, client, user, post: Post):
+        client.force_login(user)
+        url = reverse('blog:detail', kwargs={'slug': post.slug})
+        response = client.post(url, {'text': ''}, **self.htmx_headers)
+        assert response.status_code == 200
+        assert response['HX-Retarget'] == '#comment-form-wrapper'
+        assert response['HX-Reswap'] == 'outerHTML'
+
+    # moderator comment via HTMX has no pending styling
+    def test_htmx_moderator_no_pending_class(self, client, moderator, post: Post):
+        client.force_login(moderator)
+        url = reverse('blog:detail', kwargs={'slug': post.slug})
+        response = client.post(url, {'text': 'mod htmx'}, **self.htmx_headers)
+        content = response.content.decode()
+        assert 'comment-pending' not in content
+        assert 'Pending' not in content
+
+    # non-HTMX post still redirects
+    def test_non_htmx_still_redirects(self, client, user, post: Post):
+        client.force_login(user)
+        url = reverse('blog:detail', kwargs={'slug': post.slug})
+        response = client.post(url, {'text': 'plain post'})
+        assert response.status_code == 302
+
+
+class TestCommentInlineApprove:
+    # approve from detail context returns _comment_item.html
+    def test_approve_from_detail_returns_item(self, client, moderator, user, post: Post):
+        comment = Comment.objects.create(post=post, author=user, text='to approve')
+        client.force_login(moderator)
+        url = reverse('blog:comment_approve', kwargs={'pk': comment.pk})
+        response = client.post(url, {'context': 'detail'})
+        assert response.status_code == 200
+        comment.refresh_from_db()
+        assert comment.approved is True
+        content = response.content.decode()
+        assert 'comment-item' in content
+        assert 'pending-count' not in content
 
 
 class TestPostManageListView:

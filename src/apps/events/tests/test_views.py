@@ -174,8 +174,8 @@ class TestEventCreateView:
         assert any('created' in str(m) for m in messages)
 
     # geocoding task is enqueued when address is provided
-    @patch('apps.events.views.transaction.on_commit', lambda fn: fn())
-    @patch('apps.events.views.geocode_event')
+    @patch('apps.events.views.manage.transaction.on_commit', lambda fn: fn())
+    @patch('apps.events.views.manage.geocode_event')
     def test_geocoding_on_create(self, mock_task, client, editor):
         client.force_login(editor)
         data = {
@@ -225,8 +225,8 @@ class TestEventUpdateView:
         assert any('saved' in str(m) for m in messages)
 
     # geocoding task is enqueued when address changes
-    @patch('apps.events.views.transaction.on_commit', lambda fn: fn())
-    @patch('apps.events.views.geocode_event')
+    @patch('apps.events.views.manage.transaction.on_commit', lambda fn: fn())
+    @patch('apps.events.views.manage.geocode_event')
     def test_geocoding_on_address_change(self, mock_task, client, editor, event: Event):
         client.force_login(editor)
         url = reverse('events:event_edit', kwargs={'pk': event.pk})
@@ -245,7 +245,7 @@ class TestEventUpdateView:
         mock_task.assert_called_once_with(event.pk, 'New Address, Wellington')
 
     # clearing address clears lat/lng without enqueuing geocoding
-    @patch('apps.events.views.geocode_event')
+    @patch('apps.events.views.manage.geocode_event')
     def test_clearing_address_clears_coords(self, mock_task, client, editor, event: Event):
         event.address = 'Old Address'
         event.latitude = -41.0
@@ -271,7 +271,7 @@ class TestEventUpdateView:
         mock_task.assert_not_called()
 
     # updating event without changing address does not enqueue geocoding
-    @patch('apps.events.views.geocode_event')
+    @patch('apps.events.views.manage.geocode_event')
     def test_address_unchanged_skips_geocoding(self, mock_task, client, editor, event: Event):
         event.address = '123 Main St'
         event.save()

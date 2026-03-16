@@ -1,39 +1,10 @@
-{% load avatar rules form_tags %}
-
 <div class="comments-section">
-    {% if comment_list %}
-        <div class="comments-heading">Comments</div>
+    <div class="comments-heading">Comments</div>
+    <div id="comment-list">
         {% for comment in comment_list %}
-            <div class="comment-item" id="comment-{{ comment.pk }}">
-                <img src="{{ comment.author|avatar_url:64 }}" alt="{{ comment.author.get_short_name }}">
-                <div class="comment-body">
-                    <strong>{{ comment.author.get_short_name }}</strong>
-                    <p>{{ comment.text }}</p>
-                    {% has_perm 'foxtail_blog.delete_comment' user comment as can_delete %}
-                    {% if can_delete %}
-                        <small><button type="button" class="btn btn-link btn-sm p-0 text-decoration-none"
-                                hx-post="{% url 'blog:comment_delete' pk=comment.pk %}"
-                                hx-target="#comment-{{ comment.pk }}"
-                                hx-swap="delete"
-                                hx-confirm="Delete this comment?"
-                                >delete</button></small>
-                    {% endif %}
-                </div>
-            </div>
+            {% include "blog/_comment_item.html" %}
         {% endfor %}
-    {% endif %}
-
-    <div class="comment-form">
-        <div class="comment-form-heading">Leave a Comment</div>
-        {% if user.is_authenticated %}
-            <form method="post">
-                {% csrf_token %}
-                {% non_field_errors form %}
-                {% textarea_field form.text hide_label=True %}
-                <button type="submit" name="post-comment" class="btn btn-primary mt-2">Post Comment</button>
-            </form>
-        {% else %}
-            <p>Please <a href="{% url 'account_login' %}">sign in</a> to leave a comment.</p>
-        {% endif %}
     </div>
+
+    {% include "blog/_comment_form.html" %}
 </div>

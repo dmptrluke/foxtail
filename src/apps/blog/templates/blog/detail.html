@@ -48,7 +48,7 @@
 
             {% include "blog/_related_content.html" %}
 
-            {% if post.allow_comments and comments_enabled %}
+            {% if post.allow_comments %}
                 {% include "blog/_comments.html" %}
             {% endif %}
         </c-slot>

@@ -1,0 +1,28 @@
+{% load avatar rules %}
+
+<div class="comment-item{% if not comment.approved %} comment-pending{% endif %}" id="comment-{{ comment.pk }}">
+    <img src="{{ comment.author|avatar_url:64 }}" alt="{{ comment.author.get_short_name }}">
+    <div class="comment-body">
+        <strong>{{ comment.author.get_short_name }}</strong>
+        {% if not comment.approved %}<span class="badge text-bg-warning">Pending</span>{% endif %}
+        <p>{{ comment.text }}</p>
+        {% has_perm 'blog.manage_comments' user comment as can_moderate %}
+        {% if can_moderate and not comment.approved %}
+            <small><button type="button" class="btn btn-link btn-sm p-0 text-decoration-none text-success"
+                    hx-post="{% url 'blog:comment_approve' pk=comment.pk %}"
+                    hx-vals='{"context": "detail"}'
+                    hx-target="#comment-{{ comment.pk }}"
+                    hx-swap="outerHTML"
+                    >approve</button></small>
+        {% endif %}
+        {% has_perm 'blog.delete_comment' user comment as can_delete %}
+        {% if can_delete %}
+            <small><button type="button" class="btn btn-link btn-sm p-0 text-decoration-none"
+                    hx-post="{% url 'blog:comment_delete' pk=comment.pk %}"
+                    hx-target="#comment-{{ comment.pk }}"
+                    hx-swap="delete"
+                    hx-confirm="Delete this comment?"
+                    >delete</button></small>
+        {% endif %}
+    </div>
+</div>

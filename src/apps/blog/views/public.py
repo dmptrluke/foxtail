@@ -1,15 +1,12 @@
-from django.conf import settings
 from django.contrib import messages
 from django.contrib.postgres.search import SearchQuery, SearchRank, SearchVector
 from django.db.models import Count, Q
-from django.http import Http404, HttpResponseForbidden, HttpResponseRedirect
+from django.http import Http404, HttpResponseForbidden
 from django.shortcuts import get_object_or_404, redirect
-from django.urls import reverse, reverse_lazy
 from django.views import View
-from django.views.generic import CreateView, DeleteView, DetailView, ListView, UpdateView
+from django.views.generic import DetailView, ListView
 from django.views.generic.dates import YearMixin
 
-from csp_helpers.mixins import CSPViewMixin
 from published.mixins import PublishedDetailMixin, PublishedListMixin
 from published.utils import queryset_filter
 from structured_data.views import StructuredDataMixin
@@ -17,12 +14,8 @@ from taggit.models import Tag
 
 from apps.core.mixins import HtmxMixin, PermissionMixin
 
-from .models import Comment, Post
-
-COMMENTS_ENABLED = getattr(settings, 'BLOG_COMMENTS', False)
-
-if COMMENTS_ENABLED:
-    from .forms import CommentForm
+from ..forms import CommentForm
+from ..models import Comment, Post
 
 
 def _blog_years():
@@ -124,12 +117,21 @@ class BlogListYearView(StructuredDataMixin, PublishedListMixin, YearMixin, ListV
         }
 
 
-class BlogDetailView(PublishedDetailMixin, DetailView):
+class BlogDetailView(HtmxMixin, PublishedDetailMixin, DetailView):
     model = Post
     template_name = 'blog/detail.html'
     queryset = (
         Post.objects.select_related('author').prefetch_related('tags', 'organisations', 'event_series', 'events').all()
     )
+
+    def _comment_queryset(self):
+        qs = self.object.comments.select_related('author').order_by('created')
+        user = self.request.user
+        if user.has_perm('blog.manage_comments'):
+            return qs
+        if user.is_authenticated:
+            return qs.filter(Q(approved=True) | Q(author=user))
+        return qs.filter(approved=True)
 
     def get_context_data(self, form=None, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -140,22 +142,15 @@ class BlogDetailView(PublishedDetailMixin, DetailView):
         context['related_series'] = post.event_series.all()
         context['related_events'] = post.events.all()
 
-        if COMMENTS_ENABLED:
-            context['comment_list'] = self.object.comments.select_related('author').filter(approved=True)
-            context['comments_enabled'] = True
-            if form:
-                context['form'] = form
-            else:
-                context['form'] = CommentForm()
-        else:
-            context['comments_enabled'] = False
+        context['comment_list'] = self._comment_queryset()
+        context['form'] = form or CommentForm()
 
         return context
 
-    def post(self, request, *args, **kwargs):
-        if not COMMENTS_ENABLED:
-            return HttpResponseForbidden()
+    def _should_auto_approve(self, user):
+        return user.has_perm('blog.manage_comments') or user.is_verified
 
+    def post(self, request, *args, **kwargs):
         if not request.user.is_authenticated:
             return HttpResponseForbidden()
 
@@ -171,13 +166,33 @@ class BlogDetailView(PublishedDetailMixin, DetailView):
             comment = form.save(commit=False)
             comment.post = self.object
             comment.author = request.user
+            if self._should_auto_approve(request.user):
+                comment.approved = True
             comment.save()
-            messages.success(self.request, 'Your comment has been submitted and is pending approval.')
-            return redirect('blog:detail', slug=self.object.slug)
-        else:
-            messages.error(self.request, 'There was a problem posting your comment.')
-            context = self.get_context_data(form=form, object=self.object)
 
+            if self.is_htmx():
+                return self.htmx_response(
+                    {'comment': comment, 'post': self.object, 'form': CommentForm()},
+                    template='blog/_comment_post_response.html',
+                )
+
+            if comment.approved:
+                messages.success(request, 'Your comment has been posted.')
+            else:
+                messages.success(request, 'Your comment has been submitted and is pending approval.')
+            return redirect('blog:detail', slug=self.object.slug)
+
+        if self.is_htmx():
+            response = self.htmx_response(
+                {'form': form, 'post': self.object},
+                template='blog/_comment_form.html',
+            )
+            response['HX-Retarget'] = '#comment-form-wrapper'
+            response['HX-Reswap'] = 'outerHTML'
+            return response
+
+        messages.error(request, 'There was a problem posting your comment.')
+        context = self.get_context_data(form=form, object=self.object)
         return self.render_to_response(context)
 
 
@@ -198,134 +213,3 @@ class CommentDeleteView(HtmxMixin, PermissionMixin, View):
             all_count=Count('pk'),
         )
         return self.htmx_response(counts)
-
-
-# --- Management views ---
-
-
-class PostManageListView(PermissionMixin, ListView):
-    permission_required = 'blog.manage_posts'
-    model = Post
-    template_name = 'blog/manage/post_list.html'
-    context_object_name = 'posts'
-    paginate_by = 20
-
-    def get_queryset(self):
-        return Post.objects.select_related('author').prefetch_related('tags').order_by('-created')
-
-
-class PostCreateView(CSPViewMixin, PermissionMixin, CreateView):
-    permission_required = 'blog.manage_posts'
-    model = Post
-    template_name = 'blog/manage/post_edit.html'
-
-    def get_form_class(self):
-        from .forms import PostForm
-
-        return PostForm
-
-    def get_form_kwargs(self):
-        kwargs = super().get_form_kwargs()
-        kwargs['user'] = self.request.user
-        return kwargs
-
-    def form_valid(self, form):
-        self.object = form.save()
-        self.object.tags.set(form.cleaned_data.get('tags', []))
-        messages.success(self.request, f'Post "{self.object.title}" created.')
-        return HttpResponseRedirect(reverse('blog:post_edit', kwargs={'pk': self.object.pk}))
-
-
-class PostUpdateView(CSPViewMixin, PermissionMixin, UpdateView):
-    permission_required = 'blog.change_post'
-    model = Post
-    template_name = 'blog/manage/post_edit.html'
-
-    def get_form_class(self):
-        from .forms import PostForm
-
-        return PostForm
-
-    def get_form_kwargs(self):
-        kwargs = super().get_form_kwargs()
-        kwargs['user'] = self.request.user
-        return kwargs
-
-    def form_valid(self, form):
-        self.object = form.save()
-        self.object.tags.set(form.cleaned_data.get('tags', []))
-        messages.success(self.request, f'Post "{self.object.title}" saved.')
-        return HttpResponseRedirect(reverse('blog:post_edit', kwargs={'pk': self.object.pk}))
-
-
-class PostDeleteView(PermissionMixin, DeleteView):
-    permission_required = 'blog.delete_post'
-    model = Post
-    template_name = 'blog/manage/post_delete.html'
-    success_url = reverse_lazy('blog:manage_list')
-
-    def form_valid(self, form):
-        title = self.object.title
-        result = super().form_valid(form)
-        messages.success(self.request, f'Post "{title}" deleted.')
-        return result
-
-
-class CommentManageListView(PermissionMixin, ListView):
-    permission_required = 'blog.manage_comments'
-    model = Comment
-    template_name = 'blog/manage/comment_list.html'
-    context_object_name = 'comments'
-    paginate_by = 20
-
-    def get_queryset(self):
-        qs = Comment.objects.select_related('author', 'post').order_by('-created')
-        if self.request.GET.get('filter') == 'all':
-            return qs
-        return qs.filter(approved=False)
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['current_filter'] = self.request.GET.get('filter', 'pending')
-        counts = Comment.objects.aggregate(
-            pending_count=Count('pk', filter=Q(approved=False)),
-            all_count=Count('pk'),
-        )
-        context['pending_count'] = counts['pending_count']
-        context['all_count'] = counts['all_count']
-        return context
-
-
-class CommentApproveView(HtmxMixin, PermissionMixin, View):
-    permission_required = 'blog.manage_comments'
-    htmx_template = 'blog/manage/_comment_row.html'
-
-    def post(self, request, pk):
-        comment = get_object_or_404(Comment.objects.select_related('author', 'post'), pk=pk)
-        comment.approved = not comment.approved
-        comment.save(update_fields=['approved'])
-        counts = Comment.objects.aggregate(
-            pending_count=Count('pk', filter=Q(approved=False)),
-            all_count=Count('pk'),
-        )
-        return self.htmx_response(
-            {
-                'comment': comment,
-                'current_filter': request.POST.get('filter', 'pending'),
-                **counts,
-            }
-        )
-
-
-__all__ = [
-    'BlogDetailView',
-    'BlogListView',
-    'BlogListYearView',
-    'CommentApproveView',
-    'CommentDeleteView',
-    'CommentManageListView',
-    'PostCreateView',
-    'PostDeleteView',
-    'PostManageListView',
-    'PostUpdateView',
-]

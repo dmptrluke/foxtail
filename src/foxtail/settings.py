@@ -709,7 +709,6 @@ STRUCTURED_DATA_SITEWIDE_OG = {
 # Foxtail
 # =============================================================================
 
-BLOG_COMMENTS = True
 CONTACT_EMAILS = env.list('CONTACT_EMAILS')
 
 MAPTILER_API_KEY = env('MAPTILER_API_KEY', default='')
