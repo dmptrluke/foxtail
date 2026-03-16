@@ -5,6 +5,7 @@ import pytest
 
 from apps.accounts.models import User
 from apps.accounts.tests.factories import UserFactory
+from conftest import CAPTCHA_FIELD
 
 pytestmark = pytest.mark.django_db
 
@@ -22,6 +23,7 @@ class TestAccountCreation:
                 'email': proto_user.email,
                 'password1': proto_user._password,
                 'password2': proto_user._password,
+                **CAPTCHA_FIELD,
             },
         )
         assert response.status_code == 302
@@ -38,6 +40,7 @@ class TestAccountCreation:
                 'email': proto_user.email,
                 'password1': proto_user._password,
                 'password2': proto_user._password,
+                **CAPTCHA_FIELD,
             },
             follow=True,
         )

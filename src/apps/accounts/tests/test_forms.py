@@ -8,6 +8,7 @@ from PIL import Image
 
 from apps.accounts.forms import SignupForm, UserForm
 from apps.accounts.forms.custom import MAX_AVATAR_SIZE
+from conftest import CAPTCHA_FIELD
 
 from .factories import UserFactory
 
@@ -38,6 +39,7 @@ class TestSignupForm:
                 'email': proto_user.email,
                 'password1': proto_user._password,
                 'password2': proto_user._password,
+                **CAPTCHA_FIELD,
             }
         )
 
@@ -53,6 +55,7 @@ class TestSignupForm:
                 'email': proto_user.email,
                 'password1': proto_user._password,
                 'password2': proto_user._password,
+                **CAPTCHA_FIELD,
             }
         )
 
@@ -70,6 +73,7 @@ class TestSignupForm:
                 'email': proto_user.email,
                 'password1': proto_user._password,
                 'password2': proto_user._password,
+                **CAPTCHA_FIELD,
             }
         )
 
@@ -87,6 +91,7 @@ class TestSignupForm:
                 'email': user.email,
                 'password1': proto_user._password,
                 'password2': proto_user._password,
+                **CAPTCHA_FIELD,
             }
         )
 
@@ -104,6 +109,7 @@ class TestSignupForm:
                 'email': 'chocolate',
                 'password1': proto_user._password,
                 'password2': proto_user._password,
+                **CAPTCHA_FIELD,
             }
         )
 
@@ -121,6 +127,7 @@ class TestSignupForm:
                 'email': '',
                 'password1': proto_user._password,
                 'password2': proto_user._password,
+                **CAPTCHA_FIELD,
             }
         )
 
@@ -138,6 +145,7 @@ class TestSignupForm:
                 'email': proto_user.email,
                 'password1': 'password',
                 'password2': 'password',
+                **CAPTCHA_FIELD,
             }
         )
 
@@ -155,6 +163,7 @@ class TestSignupForm:
                 'email': proto_user.email,
                 'password1': proto_user._password,
                 'password2': fake.password(),
+                **CAPTCHA_FIELD,
             }
         )
 

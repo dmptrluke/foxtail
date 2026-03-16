@@ -6,6 +6,7 @@ import pytest
 from allauth.account.models import EmailAddress
 
 from apps.accounts.tests.factories import UserFactory
+from conftest import CAPTCHA_FIELD
 
 pytestmark = pytest.mark.django_db
 
@@ -21,7 +22,7 @@ class TestPasswordReset:
 
     # requesting a reset sends an MJML email with reset link and username
     def test_reset_sends_email(self, client, user_with_email, mailoutbox):
-        client.post(self.url, {'email': user_with_email.email})
+        client.post(self.url, {'email': user_with_email.email, **CAPTCHA_FIELD})
         assert len(mailoutbox) == 1
         msg = mailoutbox[0]
         assert user_with_email.email in msg.to
@@ -35,7 +36,7 @@ class TestPasswordReset:
 
     # full flow: request reset, follow email link, set new password, login works
     def test_full_reset_flow(self, client, user_with_email, mailoutbox):
-        client.post(self.url, {'email': user_with_email.email})
+        client.post(self.url, {'email': user_with_email.email, **CAPTCHA_FIELD})
 
         reset_url = re.search(r'(https?://\S+/password/reset/key/\S+/)', mailoutbox[0].body).group(1)
         reset_path = re.sub(r'https?://[^/]+', '', reset_url)
@@ -60,7 +61,7 @@ class TestPasswordReset:
 
     # nonexistent email gets same 302 and an email (no enumeration leak)
     def test_nonexistent_email_no_enumeration(self, client, mailoutbox):
-        response = client.post(self.url, {'email': 'nobody@example.com'})
+        response = client.post(self.url, {'email': 'nobody@example.com', **CAPTCHA_FIELD})
         assert response.status_code == 302
         assert len(mailoutbox) == 1
         assert 'password/reset/key/' not in mailoutbox[0].body

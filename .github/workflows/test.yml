@@ -95,7 +95,6 @@ jobs:
           HUEY_IMMEDIATE: "true"
           DIRECTORY_ENABLED: true
           CONTACT_EMAILS: test@example.com
-          RECAPTCHA_ENABLED: false
           DATABASE_URL: postgres://postgres:hunter2@localhost:${{ job.services.postgres.ports['5432'] }}/postgres
           CACHE_URL: redis://localhost:${{ job.services.redis.ports[6379] }}/1
           SITE_URL: http://localhost:8000

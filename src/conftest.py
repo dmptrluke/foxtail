@@ -57,3 +57,6 @@ def _testing_overrides(request, settings):
 @pytest.fixture
 def request_factory() -> RequestFactory:
     return RequestFactory()
+
+
+CAPTCHA_FIELD = {'g-recaptcha-response': 'PASSED'}

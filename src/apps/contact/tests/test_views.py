@@ -3,6 +3,8 @@ from django.urls import reverse
 
 import pytest
 
+from conftest import CAPTCHA_FIELD
+
 pytestmark = pytest.mark.django_db
 
 
@@ -11,7 +13,7 @@ class TestContactView:
 
     # successful submission sends email with correct subject, recipients, and body
     def test_submission_sends_email(self, client, mailoutbox, settings):
-        data = {'name': 'Fox McCloud', 'email': 'fox@example.com', 'message': 'Hello there'}
+        data = {'name': 'Fox McCloud', 'email': 'fox@example.com', 'message': 'Hello there', **CAPTCHA_FIELD}
         response = client.post(self.url, data)
 
         assert response.status_code == 302
@@ -28,15 +30,21 @@ class TestContactView:
     # authenticated user's username is included in email context
     def test_authenticated_user_included_in_email(self, client, user, mailoutbox):
         client.force_login(user)
-        data = {'name': 'Fox', 'email': 'fox@example.com', 'message': 'Hello'}
+        data = {'name': 'Fox', 'email': 'fox@example.com', 'message': 'Hello', **CAPTCHA_FIELD}
         client.post(self.url, data)
 
         assert len(mailoutbox) == 1
         assert user.username in mailoutbox[0].body
 
-    # honeypot silently blocks submission — no email sent, fake success shown, warning logged
+    # honeypot silently blocks submission - no email sent, fake success shown, warning logged
     def test_honeypot_blocks_submission(self, client, mailoutbox, caplog):
-        data = {'name': 'Bot', 'email': 'bot@spam.com', 'message': 'Buy now', 'website': 'http://spam.com'}
+        data = {
+            'name': 'Bot',
+            'email': 'bot@spam.com',
+            'message': 'Buy now',
+            'website': 'http://spam.com',
+            **CAPTCHA_FIELD,
+        }
         response = client.post(self.url, data)
 
         assert response.status_code == 302
