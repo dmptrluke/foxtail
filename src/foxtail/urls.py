@@ -3,7 +3,8 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.contrib.sitemaps.views import sitemap
 from django.urls import include, path
-from django.views.generic import RedirectView
+
+from allauth.idp.oidc import views as oidc_views
 
 import apps.blog.sitemaps as blog_sitemaps
 import apps.content.sitemaps as content_sitemaps
@@ -28,12 +29,12 @@ urlpatterns = [
     path('accounts/', include('apps.accounts.urls')),
     path('accounts/', include('allauth.urls')),
     path('', include('allauth.idp.urls')),
-    # Backward-compatible redirects for old oidc_provider paths
-    path('openid/authorize', RedirectView.as_view(pattern_name='idp:oidc:authorization', query_string=True)),
-    path('openid/token', RedirectView.as_view(pattern_name='idp:oidc:token')),
-    path('openid/userinfo', RedirectView.as_view(pattern_name='idp:oidc:userinfo')),
-    path('openid/jwks', RedirectView.as_view(pattern_name='idp:oidc:jwks')),
-    path('openid/end-session', RedirectView.as_view(pattern_name='idp:oidc:logout', query_string=True)),
+    # Backward-compatible aliases for old oidc_provider paths
+    path('openid/authorize', oidc_views.authorization),
+    path('openid/token', oidc_views.token),
+    path('openid/userinfo', oidc_views.user_info),
+    path('openid/jwks', oidc_views.jwks),
+    path('openid/end-session', oidc_views.logout),
     # Apps
     path('autocomplete/', include('apps.core.autocomplete_urls')),
     path('blog/', include('apps.blog.urls')),
