@@ -81,6 +81,16 @@ p a {
 	color: $white;
 }
 
+.tag-pill-age {
+	background: rgba($white, 0.15);
+	color: rgba($white, 0.85);
+}
+
+.tag-pill-age-18 {
+	background: rgba($warning, 0.25);
+	color: $warning;
+}
+
 .tag-row-dark .tag-pill-meta {
 	background: rgba(var(--bs-secondary-rgb), 0.15);
 	color: var(--bs-primary);

@@ -25,9 +25,16 @@
             <div class="event-card-date">{{ event.start|date:"F jS, Y" }}</div>
         {% endif %}
     </div>
-    {% if event.tags.all %}
+    {% if event.tags.all or event.resolved_organisation.country %}
         <div class="event-card-footer">
-            <c-tag-row :tags="event.tags.all" />
+            <div class="tag-row">
+                {% if event.resolved_organisation.country %}
+                    <span class="tag-pill">{{ event.resolved_organisation.get_country_display }}</span>
+                {% endif %}
+                {% for tag in event.tags.all %}
+                    <span class="tag-pill">{{ tag.name|title }}</span>
+                {% endfor %}
+            </div>
         </div>
     {% endif %}
 </div>

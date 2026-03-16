@@ -48,7 +48,16 @@
                         <span>{{ featured_event.location }}</span>
                     </div>
                     <p>{{ featured_event.description_rendered | safe | striptags | truncatechars:200 }}</p>
-                    <c-tag-row :tags="featured_event.tags.all" dark />
+                    {% if featured_event.tags.all or featured_event.resolved_organisation.country %}
+                        <div class="tag-row tag-row-dark">
+                            {% if featured_event.resolved_organisation.country %}
+                                <span class="tag-pill">{{ featured_event.resolved_organisation.get_country_display }}</span>
+                            {% endif %}
+                            {% for tag in featured_event.tags.all %}
+                                <span class="tag-pill">{{ tag.name|title }}</span>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
                 </div>
             </div>
         </div>

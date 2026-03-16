@@ -33,8 +33,11 @@
                     {% if show_series %}
                         <a href="{{ event.series.get_absolute_url }}" class="tag-pill tag-pill-meta">{{ event.series.name }}</a>
                     {% endif %}
+                    {% if event.resolved_organisation.country %}
+                        <span class="tag-pill tag-pill-meta">{{ event.resolved_organisation.get_country_display }}</span>
+                    {% endif %}
                     {% if event.resolved_age_requirement %}
-                        <span class="age-badge age-badge-hero{% if event.resolved_age_requirement == '18' %} age-badge-18{% endif %}">{{ event.resolved_age_requirement_display }}</span>
+                        <span class="tag-pill tag-pill-age{% if event.resolved_age_requirement == '18' %} tag-pill-age-18{% endif %}">{{ event.resolved_age_requirement_display }}</span>
                     {% endif %}
                     {% for tag in event.tags.all %}
                         <span class="tag-pill">{{ tag.name|title }}</span>
@@ -142,16 +145,16 @@
 
             {# CTA #}
             <c-sidebar>
-                <c-sidebar.footer>
+                <c-sidebar.cta>
                     {% if event.url %}
-                        <a class="btn btn-primary w-100 mb-2" href="{{ event.url }}" rel="noopener noreferrer" target="_blank">
+                        <a class="btn btn-primary" href="{{ event.url }}" rel="noopener noreferrer" target="_blank">
                             Visit Event Website
                         </a>
                     {% endif %}
-                    <a href="{% url 'events:event_ics' event.pk %}" class="btn btn-outline-secondary w-100">
+                    <a href="{% url 'events:event_ics' event.pk %}" class="btn btn-outline-secondary">
                         Add to calendar
                     </a>
-                </c-sidebar.footer>
+                </c-sidebar.cta>
             </c-sidebar>
         </c-slot>
     </c-layout-sidebar>

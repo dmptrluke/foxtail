@@ -68,6 +68,13 @@
 		}
 	}
 
+	// CTA: full-width stacked buttons, no header needed
+	.cta {
+		display: grid;
+		gap: 0.5rem;
+		padding: 1.25rem;
+	}
+
 	// Search: fills entire card, no header
 	&.search {
 		padding: 1rem 1.25rem;
