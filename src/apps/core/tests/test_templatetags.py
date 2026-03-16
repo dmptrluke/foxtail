@@ -13,6 +13,11 @@ class TestReadingTimeFilter:
         html = '<p>' + ' '.join(['word'] * 600) + '</p>'
         assert reading_time(html) == '3 min read'
 
+    def test_boundary_rounds_up(self):
+        # 500 words at 200 wpm = 2.5 minutes, ceil to 3
+        html = '<p>' + ' '.join(['word'] * 500) + '</p>'
+        assert reading_time(html) == '3 min read'
+
     def test_strips_html_tags(self):
         # Only text content counts, not tag names or attributes
         html = '<h1>Title</h1><p><strong>Bold</strong> text with <a href="#">links</a></p>'

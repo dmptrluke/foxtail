@@ -3,6 +3,8 @@
 {% block body %}
     <a class="visually-hidden-focusable" href="#main-content">Skip to main content</a>
     {% include "components/header.html" %}
-    {% block page %}{% endblock page %}
+    <main id="main-content">
+        {% block page %}{% endblock page %}
+    </main>
     {% include "components/footer.html" %}
 {% endblock body %}

@@ -2,62 +2,55 @@
 # Uses the production Docker stage (collectstatic at build, gunicorn to serve).
 # Usage: docker compose -f compose.yaml -f compose.prod.yaml up --build
 
+x-shared-env: &shared-env
+  DATABASE_URL: "postgres://foxtail:foxtail@db/foxtail"
+  CACHE_URL: "redis://redis/1"
+  DEBUG: "false"
+  SECRET_KEY: "dev-insecure-key-do-not-use-in-production"
+  CONTACT_EMAILS: "admin@example.com"
+  SITE_URL: "http://localhost:8000"
+  TESTING: "true"
+
+x-shared-build: &shared-build
+  context: .
+  target: app
+  args:
+    BUILD_MODE: production
+
+x-shared-depends: &shared-depends
+  db:
+    condition: service_healthy
+  redis:
+    condition: service_started
+
 services:
   foxtail:
-    build:
-      context: .
-      target: app
-      args:
-        BUILD_MODE: production
+    build: *shared-build
     ports:
       - "8000:8000"
     command: >
       sh -c "django-admin migrate --noinput &&
       gunicorn --bind 0.0.0.0:8000 -k gthread --threads 4 foxtail.wsgi:application"
     environment:
-      DATABASE_URL: "postgres://foxtail:foxtail@db/foxtail"
-      CACHE_URL: "redis://redis/1"
-      DEBUG: "false"
-      SECRET_KEY: "dev-insecure-key-do-not-use-in-production"
-      CONTACT_EMAILS: "admin@example.com"
-      SITE_URL: "http://localhost:8000"
-      TESTING: "true"
+      <<: *shared-env
       ALLOWED_HOSTS: "localhost,127.0.0.1"
       SERVICE_NAME: "app"
     volumes:
       - storage:/app/storage
-    depends_on:
-      db:
-        condition: service_healthy
-      redis:
-        condition: service_started
+    depends_on: *shared-depends
     env_file:
       - path: .env
         required: false
 
   worker:
-    build:
-      context: .
-      target: app
-      args:
-        BUILD_MODE: production
+    build: *shared-build
     command: django-admin run_huey
     environment:
-      DATABASE_URL: "postgres://foxtail:foxtail@db/foxtail"
-      CACHE_URL: "redis://redis/1"
-      DEBUG: "false"
-      SECRET_KEY: "dev-insecure-key-do-not-use-in-production"
-      CONTACT_EMAILS: "admin@example.com"
-      SITE_URL: "http://localhost:8000"
-      TESTING: "true"
+      <<: *shared-env
       SERVICE_NAME: "worker"
     volumes:
       - storage:/app/storage
-    depends_on:
-      db:
-        condition: service_healthy
-      redis:
-        condition: service_started
+    depends_on: *shared-depends
     env_file:
       - path: .env
         required: false

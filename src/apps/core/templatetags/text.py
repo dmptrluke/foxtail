@@ -1,3 +1,5 @@
+import math
+
 from django import template
 from django.utils.html import strip_tags
 
@@ -10,5 +12,5 @@ def reading_time(html):
         return '1 min read'
     text = strip_tags(str(html))
     words = len(text.split())
-    minutes = max(1, round(words / 200))
+    minutes = max(1, math.ceil(words / 200))
     return f'{minutes} min read'

@@ -1,6 +1,7 @@
 from decimal import Decimal
 from unittest.mock import Mock, patch
 
+import pytest
 import requests
 
 from ..maptiler import geocode
@@ -37,8 +38,6 @@ class TestGeocode:
     # geocode raises on network failure (Huey task handles retries)
     @patch('apps.events.maptiler.requests.get')
     def test_raises_on_network_error(self, mock_get):
-        import pytest
-
         mock_get.side_effect = requests.RequestException('timeout')
         with pytest.raises(requests.RequestException):
             geocode('TSB Arena', 'test-key')
