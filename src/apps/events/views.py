@@ -2,11 +2,10 @@ from datetime import date
 
 from django.contrib import messages
 from django.db import transaction
-from django.db.models import Q
-from django.http import HttpResponseRedirect, JsonResponse
+from django.db.models import Count, Q
+from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.urls import reverse, reverse_lazy
-from django.views import View
 from django.views.generic import CreateView, DeleteView, DetailView, ListView, UpdateView
 from django.views.generic.dates import YearMixin
 
@@ -16,6 +15,7 @@ from published.utils import queryset_filter
 from structured_data.views import StructuredDataMixin
 
 from apps.core.mixins import PermissionMixin
+from apps.core.views import ApiView
 from apps.organisations.models import Organisation
 
 from .models import Event, EventInterest
@@ -145,7 +145,22 @@ class EventManageListView(PermissionMixin, ListView):
         return Event.objects.prefetch_related('tags').order_by('-start')
 
 
-class EventCreateView(CSPViewMixin, PermissionMixin, CreateView):
+class _EventFormMixin:
+    def _save_event(self, form, success_msg):
+        self.object = form.save(commit=False)
+        if 'address' in form.changed_data:
+            self.object.latitude = None
+            self.object.longitude = None
+        self.object.save()
+        form.save_m2m()
+        self.object.tags.set(form.cleaned_data.get('tags', []))
+        if self.object.address and 'address' in form.changed_data:
+            transaction.on_commit(lambda: geocode_event(self.object.pk, self.object.address))
+        messages.success(self.request, success_msg.format(title=self.object.title))
+        return HttpResponseRedirect(reverse('events:event_edit', kwargs={'pk': self.object.pk}))
+
+
+class EventCreateView(_EventFormMixin, CSPViewMixin, PermissionMixin, CreateView):
     permission_required = 'events.manage_events'
     model = Event
     template_name = 'events/event_form.html'
@@ -156,20 +171,10 @@ class EventCreateView(CSPViewMixin, PermissionMixin, CreateView):
         return EventForm
 
     def form_valid(self, form):
-        self.object = form.save(commit=False)
-        if 'address' in form.changed_data:
-            self.object.latitude = None
-            self.object.longitude = None
-        self.object.save()
-        form.save_m2m()
-        self.object.tags.set(form.cleaned_data.get('tags', []))
-        if self.object.address and 'address' in form.changed_data:
-            transaction.on_commit(lambda: geocode_event(self.object.pk, self.object.address))
-        messages.success(self.request, f'Event "{self.object.title}" created.')
-        return HttpResponseRedirect(reverse('events:event_edit', kwargs={'pk': self.object.pk}))
+        return self._save_event(form, 'Event "{title}" created.')
 
 
-class EventUpdateView(CSPViewMixin, PermissionMixin, UpdateView):
+class EventUpdateView(_EventFormMixin, CSPViewMixin, PermissionMixin, UpdateView):
     permission_required = 'events.manage_events'
     model = Event
     template_name = 'events/event_form.html'
@@ -180,17 +185,7 @@ class EventUpdateView(CSPViewMixin, PermissionMixin, UpdateView):
         return EventForm
 
     def form_valid(self, form):
-        self.object = form.save(commit=False)
-        if 'address' in form.changed_data:
-            self.object.latitude = None
-            self.object.longitude = None
-        self.object.save()
-        form.save_m2m()
-        self.object.tags.set(form.cleaned_data.get('tags', []))
-        if self.object.address and 'address' in form.changed_data:
-            transaction.on_commit(lambda: geocode_event(self.object.pk, self.object.address))
-        messages.success(self.request, f'Event "{self.object.title}" saved.')
-        return HttpResponseRedirect(reverse('events:event_edit', kwargs={'pk': self.object.pk}))
+        return self._save_event(form, 'Event "{title}" saved.')
 
 
 class EventDeleteView(PermissionMixin, DeleteView):
@@ -206,27 +201,30 @@ class EventDeleteView(PermissionMixin, DeleteView):
         return result
 
 
-class EventInterestToggleView(View):
+class EventInterestToggleView(ApiView):
+    VALID_STATUSES = {EventInterest.INTERESTED, EventInterest.GOING}
+
     def post(self, request, pk):
-        if not request.user.is_authenticated:
-            return JsonResponse({'error': 'Authentication required'}, status=403)
-
         event = get_object_or_404(queryset_filter(Event.objects), pk=pk)
-        interest, created = EventInterest.objects.get_or_create(
-            event=event, user=request.user, defaults={'status': EventInterest.INTERESTED}
-        )
+        status = self.data.get('status')
 
-        if not created:
-            interest.delete()
-            interested = False
+        if status and status not in self.VALID_STATUSES:
+            return self.error('Invalid status')
+
+        if status:
+            EventInterest.objects.update_or_create(event=event, user=request.user, defaults={'status': status})
         else:
-            interested = True
+            EventInterest.objects.filter(event=event, user=request.user).delete()
 
-        count = event.interests.filter(status=EventInterest.INTERESTED).count()
-        return JsonResponse({'interested': interested, 'count': count})
-
-    def http_method_not_allowed(self, request, *args, **kwargs):
-        return JsonResponse({'error': 'Method not allowed'}, status=405)
+        counts = event.interests.values('status').annotate(n=Count('pk'))
+        count_map = {r['status']: r['n'] for r in counts}
+        return self.success(
+            {
+                'status': status or None,
+                'interested_count': count_map.get(EventInterest.INTERESTED, 0),
+                'going_count': count_map.get(EventInterest.GOING, 0),
+            }
+        )
 
 
 __all__ = [

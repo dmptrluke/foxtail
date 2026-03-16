@@ -1,8 +1,15 @@
+import json
+import logging
+from functools import cached_property
 from textwrap import dedent
 
 from django.conf import settings
-from django.http import HttpResponse
+from django.core.exceptions import PermissionDenied
+from django.http import Http404, HttpResponse, JsonResponse
 from django.shortcuts import render
+from django.views import View
+
+logger = logging.getLogger(__name__)
 
 
 def health(request):
@@ -35,3 +42,40 @@ def handler_500(request, *args, **kwargs):
         context = {}
 
     return render(request, '500.html', context=context, status=500)
+
+
+class ApiView(View):
+    """Base for JSON endpoints. Handles auth, error formatting, and body parsing."""
+
+    require_auth = True
+
+    def dispatch(self, request, *args, **kwargs):
+        if self.require_auth and not request.user.is_authenticated:
+            return self.error('Authentication required', 403)
+        try:
+            return super().dispatch(request, *args, **kwargs)
+        except Http404:
+            return self.error('Not found', 404)
+        except PermissionDenied:
+            return self.error('Forbidden', 403)
+        except Exception:
+            logger.exception('Unhandled error in %s', self.__class__.__name__)
+            return self.error('Internal server error', 500)
+
+    def http_method_not_allowed(self, request, *args, **kwargs):
+        return self.error('Method not allowed', 405)
+
+    @cached_property
+    def data(self):
+        if self.request.content_type == 'application/json':
+            try:
+                return json.loads(self.request.body)
+            except (json.JSONDecodeError, ValueError):
+                return {}
+        return self.request.POST
+
+    def success(self, data=None, status=200):
+        return JsonResponse(data or {}, status=status)
+
+    def error(self, message, status=400):
+        return JsonResponse({'error': message}, status=status)
