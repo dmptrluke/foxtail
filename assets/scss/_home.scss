@@ -280,6 +280,7 @@
 
 .event-item {
 	display: flex;
+	flex-wrap: wrap;
 	gap: 1.25rem;
 	padding: 1.15rem 0.5rem;
 	border-bottom: 1px solid rgba(var(--bs-secondary-rgb), 0.1);
@@ -287,6 +288,10 @@
 	color: var(--bs-body-color);
 	transition: background 0.15s ease;
 	border-radius: $card-border-radius;
+
+	@include media-breakpoint-up(md) {
+		flex-wrap: nowrap;
+	}
 
 	&:hover {
 		background: rgba(var(--bs-primary-rgb), 0.04);
@@ -296,6 +301,16 @@
 
 	&:first-child {
 		border-top: 1px solid rgba(var(--bs-secondary-rgb), 0.1);
+	}
+}
+
+.event-item .avatar-stack-wrap {
+	flex-basis: 100%;
+	margin-left: calc(3.75rem + 1.25rem);
+
+	@include media-breakpoint-up(md) {
+		flex-basis: auto;
+		margin-left: 0;
 	}
 }
 

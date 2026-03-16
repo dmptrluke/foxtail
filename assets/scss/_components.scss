@@ -65,6 +65,7 @@ p a {
 	display: inline-block;
 	font-size: 0.75rem;
 	font-weight: 500;
+	line-height: 1.5;
 	padding: 0.2rem 0.6rem;
 	background: rgba($white, 0.15);
 	border-radius: 6px;
@@ -81,14 +82,9 @@ p a {
 	color: $white;
 }
 
-.tag-pill-age {
-	background: rgba($white, 0.15);
-	color: rgba($white, 0.85);
-}
-
 .tag-pill-age-18 {
-	background: rgba($warning, 0.25);
-	color: $warning;
+	background: rgba($warning, 0.2);
+	color: desaturate($warning, 25%);
 }
 
 .tag-row-dark .tag-pill-meta {

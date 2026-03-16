@@ -36,12 +36,12 @@
                     {% if event.resolved_organisation.country %}
                         <span class="tag-pill tag-pill-meta">{{ event.resolved_organisation.get_country_display }}</span>
                     {% endif %}
-                    {% if event.resolved_age_requirement %}
-                        <span class="tag-pill tag-pill-age{% if event.resolved_age_requirement == '18' %} tag-pill-age-18{% endif %}">{{ event.resolved_age_requirement_display }}</span>
-                    {% endif %}
                     {% for tag in event.tags.all %}
                         <span class="tag-pill">{{ tag.name|title }}</span>
                     {% endfor %}
+                    {% if event.resolved_age_requirement %}
+                        <span class="tag-pill tag-pill-meta{% if event.resolved_age_requirement == '18' %} tag-pill-age-18{% endif %}">{{ event.resolved_age_requirement_display }}</span>
+                    {% endif %}
                 </div>
             {% endif %}
 
@@ -52,12 +52,12 @@
 
             <dl class="event-hero-dates">
                 <div>
-                    <dt>Starts</dt>
+                    <dt>Start{{ event.is_ended|yesno:"ed,s" }}</dt>
                     <dd>{{ event.start | date:"l, F jS Y" }}{{ event.start_time | time:" \a\t g:i A" }}</dd>
                 </div>
                 {% if event.end or event.end_time %}
                     <div>
-                        <dt>Ends</dt>
+                        <dt>End{{ event.is_ended|yesno:"ed,s" }}</dt>
                         <dd>
                             {% if event.end and event.end != event.start %}
                                 {{ event.end | date:"l, F jS Y" }}{{ event.end_time | time:" \a\t g:i A" }}
