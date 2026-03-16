@@ -15,6 +15,8 @@ def icon_tag(context, icon_id, size=None, colored=False):
     Icons live in templates/cotton/icons/ (colored variants in icons/colored/).
     """
     icon_id = slugify(icon_id)
+    if not icon_id:
+        return ''
     prefix = 'colored.' if colored else ''
     component_name = f'icons.{prefix}{icon_id}'
 
