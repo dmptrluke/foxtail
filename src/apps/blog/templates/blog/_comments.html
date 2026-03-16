@@ -30,9 +30,6 @@
                 {% csrf_token %}
                 {% non_field_errors form %}
                 {% textarea_field form.text hide_label=True %}
-                {% if form.captcha %}
-                    {% captcha_field form.captcha %}
-                {% endif %}
                 <button type="submit" name="post-comment" class="btn btn-primary mt-2">Post Comment</button>
             </form>
         {% else %}

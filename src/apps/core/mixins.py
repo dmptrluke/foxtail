@@ -19,7 +19,7 @@ class HtmxMixin:
     def is_htmx(self):
         return self.request.headers.get('HX-Request') == 'true'
 
-    def htmx_response(self, context=None):
+    def htmx_response(self, context=None, template=None):
         ctx = context or {}
         ctx['is_partial'] = True
-        return TemplateResponse(self.request, self.htmx_template, ctx)
+        return TemplateResponse(self.request, template or self.htmx_template, ctx)

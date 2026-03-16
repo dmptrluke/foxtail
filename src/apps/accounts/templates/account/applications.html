@@ -26,7 +26,7 @@
     {% if client_list %}
         <div class="account-item-list">
             {% for client in client_list %}
-                <div class="account-item">
+                <div class="account-item" id="app-{{ client.pk }}">
                     {% if client.metadata.logo %}
                         <img class="rounded flex-shrink-0" src="{{ client.metadata.logo.url }}"
                              alt="{{ client.name }}" width="48" height="48"
@@ -50,10 +50,13 @@
                         </p>
                     </div>
                     <div class="account-item-actions">
-                        <form method="post" action="{% url 'account_application_revoke' client.pk %}">
-                            {% csrf_token %}
-                            <button type="submit" class="btn btn-outline-danger btn-sm">Revoke</button>
-                        </form>
+                        <button type="button" class="btn btn-outline-danger btn-sm"
+                                hx-post="{% url 'account_application_revoke' client.pk %}"
+                                hx-target="#app-{{ client.pk }}"
+                                hx-swap="delete"
+                                hx-confirm="Revoke access for {{ client.name }}?">
+                            Revoke
+                        </button>
                     </div>
                 </div>
             {% endfor %}

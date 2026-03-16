@@ -6,7 +6,7 @@ import string
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.cache import cache
-from django.http import Http404
+from django.http import Http404, HttpResponse
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse
 from django.views import View
@@ -26,6 +26,7 @@ from rules.contrib.views import PermissionRequiredMixin
 
 from apps.accounts.forms import UserForm
 from apps.accounts.models import User, Verification
+from apps.core.mixins import HtmxMixin
 
 
 class MFAAuthenticateView(AuthenticateView):
@@ -103,12 +104,14 @@ class ConsentList(LoginRequiredMixin, ListView):
         )
 
 
-class ConsentRevoke(LoginRequiredMixin, View):
+class ConsentRevoke(HtmxMixin, LoginRequiredMixin, View):
     def post(self, request, pk):
         client = get_object_or_404(OIDCClient, pk=pk)
         deleted, _ = OIDCToken.objects.filter(user=request.user, client=client).delete()
         if not deleted:
             raise Http404
+        if self.is_htmx():
+            return HttpResponse(status=200)
         messages.success(request, 'Application access has been revoked.')
         return redirect('account_application_list')
 
