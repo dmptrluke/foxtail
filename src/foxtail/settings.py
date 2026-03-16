@@ -520,7 +520,8 @@ CONTENT_SECURITY_POLICY = {
             'https://accounts.google.com',
             'https://discord.com',
             'https://oauth.telegram.org',
-        ],
+        ]
+        + env.list('CSP_FORM_ACTION', default=[]),
         'upgrade-insecure-requests': not DEBUG,
         'report-uri': env('CSP_REPORT_URI', default=None),
     },
