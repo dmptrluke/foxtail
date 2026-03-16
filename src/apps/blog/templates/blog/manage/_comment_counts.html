@@ -1,0 +1,4 @@
+{% if is_partial %}
+<span id="pending-count" hx-swap-oob="innerHTML">({{ pending_count }})</span>
+<span id="all-count" hx-swap-oob="innerHTML">({{ all_count }})</span>
+{% endif %}

@@ -122,16 +122,7 @@ class TestCommentDeleteView:
         client.force_login(user)
         url = reverse('blog:comment_delete', kwargs={'pk': comment.pk})
         response = client.post(url)
-        assert response.status_code == 302
-        assert not Comment.objects.filter(pk=comment.pk).exists()
-
-    # editor can delete any comment
-    def test_editor_can_delete(self, client, user, editor, post: Post):
-        comment = Comment.objects.create(post=post, author=user, text='to delete')
-        client.force_login(editor)
-        url = reverse('blog:comment_delete', kwargs={'pk': comment.pk})
-        response = client.post(url)
-        assert response.status_code == 302
+        assert response.status_code == 200
         assert not Comment.objects.filter(pk=comment.pk).exists()
 
     # moderator can delete any comment
@@ -140,10 +131,10 @@ class TestCommentDeleteView:
         client.force_login(moderator)
         url = reverse('blog:comment_delete', kwargs={'pk': comment.pk})
         response = client.post(url)
-        assert response.status_code == 302
+        assert response.status_code == 200
         assert not Comment.objects.filter(pk=comment.pk).exists()
 
-    # non-owner non-editor non-moderator gets 403
+    # non-owner non-moderator gets 403
     def test_other_user_forbidden(self, client, user, third_user, post: Post):
         comment = Comment.objects.create(post=post, author=user, text='protected')
         client.force_login(third_user)
@@ -151,22 +142,24 @@ class TestCommentDeleteView:
         response = client.post(url)
         assert response.status_code == 403
 
-    # successful delete redirects back to the post
-    def test_redirects_to_post(self, client, user, post: Post):
-        comment = Comment.objects.create(post=post, author=user, text='bye')
+    # GET returns 405
+    def test_get_not_allowed(self, client, user, post: Post):
+        comment = Comment.objects.create(post=post, author=user, text='test')
         client.force_login(user)
         url = reverse('blog:comment_delete', kwargs={'pk': comment.pk})
-        response = client.post(url)
-        assert response['Location'] == reverse('blog:detail', kwargs={'slug': post.slug})
+        response = client.get(url)
+        assert response.status_code == 405
 
-    # delete with ?next= redirects to specified URL
-    def test_redirects_with_next(self, client, user, post: Post):
-        comment = Comment.objects.create(post=post, author=user, text='bye')
-        client.force_login(user)
-        manage_url = reverse('blog:comment_manage_list')
-        url = reverse('blog:comment_delete', kwargs={'pk': comment.pk}) + f'?next={manage_url}'
-        response = client.post(url, {'next': manage_url})
-        assert response['Location'] == manage_url
+    # response includes updated counts for OOB swap
+    def test_response_includes_counts(self, client, user, moderator, post: Post):
+        Comment.objects.create(post=post, author=user, text='keep', approved=False)
+        comment = Comment.objects.create(post=post, author=user, text='delete')
+        client.force_login(moderator)
+        url = reverse('blog:comment_delete', kwargs={'pk': comment.pk})
+        response = client.post(url)
+        content = response.content.decode()
+        assert 'pending-count' in content
+        assert '(1)' in content
 
 
 class TestCommentManageListView:
@@ -235,11 +228,11 @@ class TestCommentApproveView:
         client.force_login(moderator)
         url = reverse('blog:comment_approve', kwargs={'pk': comment.pk})
         response = client.post(url)
-        assert response.status_code == 302
+        assert response.status_code == 200
         comment.refresh_from_db()
         assert comment.approved is True
-        msgs = list(get_messages(response.wsgi_request))
-        assert any('approved' in str(m) for m in msgs)
+        content = response.content.decode()
+        assert 'Approved' in content
 
     # moderator can unapprove an approved comment
     def test_unapprove_comment(self, client, moderator, user, post: Post):
@@ -247,9 +240,11 @@ class TestCommentApproveView:
         client.force_login(moderator)
         url = reverse('blog:comment_approve', kwargs={'pk': comment.pk})
         response = client.post(url)
-        assert response.status_code == 302
+        assert response.status_code == 200
         comment.refresh_from_db()
         assert comment.approved is False
+        content = response.content.decode()
+        assert 'Pending' in content
 
     # regular user gets 403
     def test_regular_user_forbidden(self, client, user, post: Post):
@@ -259,14 +254,6 @@ class TestCommentApproveView:
         response = client.post(url)
         assert response.status_code == 403
 
-    # preserves filter=all tab on redirect
-    def test_preserves_filter(self, client, moderator, user, post: Post):
-        comment = Comment.objects.create(post=post, author=user, text='test')
-        client.force_login(moderator)
-        url = reverse('blog:comment_approve', kwargs={'pk': comment.pk})
-        response = client.post(url, {'filter': 'all'})
-        assert '?filter=all' in response['Location']
-
     # GET is not allowed
     def test_get_not_allowed(self, client, moderator, user, post: Post):
         comment = Comment.objects.create(post=post, author=user, text='test')
@@ -274,6 +261,19 @@ class TestCommentApproveView:
         url = reverse('blog:comment_approve', kwargs={'pk': comment.pk})
         response = client.get(url)
         assert response.status_code == 405
+
+    # response includes updated tab counts via OOB swap targets
+    def test_response_includes_counts(self, client, moderator, user, post: Post):
+        Comment.objects.create(post=post, author=user, text='other pending')
+        comment = Comment.objects.create(post=post, author=user, text='to approve')
+        client.force_login(moderator)
+        url = reverse('blog:comment_approve', kwargs={'pk': comment.pk})
+        response = client.post(url)
+        content = response.content.decode()
+        assert 'pending-count' in content
+        assert 'all-count' in content
+        assert '(1)' in content
+        assert '(2)' in content
 
 
 class TestPublicCommentVisibility:

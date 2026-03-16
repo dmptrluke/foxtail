@@ -137,7 +137,7 @@ class EventDetailView(PublishedDetailMixin, YearMixin, DetailView):
 class EventManageListView(PermissionMixin, ListView):
     permission_required = 'events.manage_events'
     model = Event
-    template_name = 'events/event_manage_list.html'
+    template_name = 'events/manage/event_list.html'
     context_object_name = 'events'
     paginate_by = 20
 
@@ -163,7 +163,7 @@ class _EventFormMixin:
 class EventCreateView(_EventFormMixin, CSPViewMixin, PermissionMixin, CreateView):
     permission_required = 'events.manage_events'
     model = Event
-    template_name = 'events/event_form.html'
+    template_name = 'events/manage/event_edit.html'
 
     def get_form_class(self):
         from .forms import EventForm
@@ -177,7 +177,7 @@ class EventCreateView(_EventFormMixin, CSPViewMixin, PermissionMixin, CreateView
 class EventUpdateView(_EventFormMixin, CSPViewMixin, PermissionMixin, UpdateView):
     permission_required = 'events.manage_events'
     model = Event
-    template_name = 'events/event_form.html'
+    template_name = 'events/manage/event_edit.html'
 
     def get_form_class(self):
         from .forms import EventForm
@@ -191,7 +191,7 @@ class EventUpdateView(_EventFormMixin, CSPViewMixin, PermissionMixin, UpdateView
 class EventDeleteView(PermissionMixin, DeleteView):
     permission_required = 'events.manage_events'
     model = Event
-    template_name = 'events/event_confirm_delete.html'
+    template_name = 'events/manage/event_delete.html'
     success_url = reverse_lazy('events:manage_list')
 
     def form_valid(self, form):

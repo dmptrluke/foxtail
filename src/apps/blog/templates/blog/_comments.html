@@ -11,7 +11,12 @@
                     <p>{{ comment.text }}</p>
                     {% has_perm 'foxtail_blog.delete_comment' user comment as can_delete %}
                     {% if can_delete %}
-                        <small><a href="{% url 'blog:comment_delete' pk=comment.pk %}">delete</a></small>
+                        <small><button type="button" class="btn btn-link btn-sm p-0 text-decoration-none"
+                                hx-post="{% url 'blog:comment_delete' pk=comment.pk %}"
+                                hx-target="#comment-{{ comment.pk }}"
+                                hx-swap="delete"
+                                hx-confirm="Delete this comment?"
+                                >delete</button></small>
                     {% endif %}
                 </div>
             </div>

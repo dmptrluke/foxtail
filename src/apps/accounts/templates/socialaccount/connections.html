@@ -1,5 +1,5 @@
 {% extends "base/page.html" %}
-{% load cotton breadcrumbs icon form_tags %}
+{% load cotton breadcrumbs icon form_tags socialaccount %}
 
 {% block title %}Apps & Connections{% endblock %}
 
@@ -55,7 +55,15 @@
 
     <c-account-section title="Link an Account">
         <p>
-            {% include "components/provider_list.html" with process="connect" %}
+            {% get_providers as socialaccount_providers %}
+            {% for provider in socialaccount_providers %}
+                <form method="post" action="{% provider_login_url provider process="connect" %}" class="d-inline">
+                    {% csrf_token %}
+                    <button type="submit" title="{{ provider.name }}" class="socialaccount_provider {{ provider.sub_id }} btn btn-outline-primary mb-1">
+                        {% icon provider.sub_id colored=True %} {{ provider.name }}
+                    </button>
+                </form>
+            {% endfor %}
         </p>
     </c-account-section>
 

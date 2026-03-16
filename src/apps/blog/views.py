@@ -5,7 +5,6 @@ from django.db.models import Count, Q
 from django.http import Http404, HttpResponseForbidden, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse, reverse_lazy
-from django.utils.http import url_has_allowed_host_and_scheme
 from django.views import View
 from django.views.generic import CreateView, DeleteView, DetailView, ListView, UpdateView
 from django.views.generic.dates import YearMixin
@@ -16,7 +15,7 @@ from published.utils import queryset_filter
 from structured_data.views import StructuredDataMixin
 from taggit.models import Tag
 
-from apps.core.mixins import PermissionMixin
+from apps.core.mixins import HtmxMixin, PermissionMixin
 
 from .models import Comment, Post
 
@@ -182,25 +181,23 @@ class BlogDetailView(PublishedDetailMixin, DetailView):
         return self.render_to_response(context)
 
 
-class CommentDeleteView(PermissionMixin, DeleteView):
+class CommentDeleteView(HtmxMixin, PermissionMixin, View):
     permission_required = 'blog.delete_comment'
-    model = Comment
-    template_name = 'blog/comment_delete.html'
+    htmx_template = 'blog/manage/_comment_counts.html'
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['next'] = self.request.GET.get('next', '')
-        return context
+    def get_permission_object(self):
+        if not hasattr(self, '_comment'):
+            self._comment = get_object_or_404(Comment, pk=self.kwargs['pk'])
+        return self._comment
 
-    def form_valid(self, form):
-        messages.success(self.request, 'Your comment has been deleted.')
-        return super().form_valid(form)
-
-    def get_success_url(self):
-        next_url = self.request.POST.get('next', '')
-        if next_url and url_has_allowed_host_and_scheme(next_url, allowed_hosts=None):
-            return next_url
-        return reverse('blog:detail', kwargs={'slug': self.object.post.slug})
+    def post(self, request, pk):
+        comment = self._comment
+        comment.delete()
+        counts = Comment.objects.aggregate(
+            pending_count=Count('pk', filter=Q(approved=False)),
+            all_count=Count('pk'),
+        )
+        return self.htmx_response(counts)
 
 
 # --- Management views ---
@@ -209,7 +206,7 @@ class CommentDeleteView(PermissionMixin, DeleteView):
 class PostManageListView(PermissionMixin, ListView):
     permission_required = 'blog.manage_posts'
     model = Post
-    template_name = 'blog/post_manage_list.html'
+    template_name = 'blog/manage/post_list.html'
     context_object_name = 'posts'
     paginate_by = 20
 
@@ -220,7 +217,7 @@ class PostManageListView(PermissionMixin, ListView):
 class PostCreateView(CSPViewMixin, PermissionMixin, CreateView):
     permission_required = 'blog.manage_posts'
     model = Post
-    template_name = 'blog/post_form.html'
+    template_name = 'blog/manage/post_edit.html'
 
     def get_form_class(self):
         from .forms import PostForm
@@ -242,7 +239,7 @@ class PostCreateView(CSPViewMixin, PermissionMixin, CreateView):
 class PostUpdateView(CSPViewMixin, PermissionMixin, UpdateView):
     permission_required = 'blog.change_post'
     model = Post
-    template_name = 'blog/post_form.html'
+    template_name = 'blog/manage/post_edit.html'
 
     def get_form_class(self):
         from .forms import PostForm
@@ -264,7 +261,7 @@ class PostUpdateView(CSPViewMixin, PermissionMixin, UpdateView):
 class PostDeleteView(PermissionMixin, DeleteView):
     permission_required = 'blog.delete_post'
     model = Post
-    template_name = 'blog/post_confirm_delete.html'
+    template_name = 'blog/manage/post_delete.html'
     success_url = reverse_lazy('blog:manage_list')
 
     def form_valid(self, form):
@@ -277,7 +274,7 @@ class PostDeleteView(PermissionMixin, DeleteView):
 class CommentManageListView(PermissionMixin, ListView):
     permission_required = 'blog.manage_comments'
     model = Comment
-    template_name = 'blog/comment_manage_list.html'
+    template_name = 'blog/manage/comment_list.html'
     context_object_name = 'comments'
     paginate_by = 20
 
@@ -299,20 +296,25 @@ class CommentManageListView(PermissionMixin, ListView):
         return context
 
 
-class CommentApproveView(PermissionMixin, View):
+class CommentApproveView(HtmxMixin, PermissionMixin, View):
     permission_required = 'blog.manage_comments'
+    htmx_template = 'blog/manage/_comment_row.html'
 
     def post(self, request, pk):
-        comment = get_object_or_404(Comment, pk=pk)
+        comment = get_object_or_404(Comment.objects.select_related('author', 'post'), pk=pk)
         comment.approved = not comment.approved
         comment.save(update_fields=['approved'])
-        action = 'approved' if comment.approved else 'unapproved'
-        messages.success(request, f'Comment {action}.')
-        filter_param = request.POST.get('filter', 'pending')
-        url = reverse('blog:comment_manage_list')
-        if filter_param == 'all':
-            url += '?filter=all'
-        return redirect(url)
+        counts = Comment.objects.aggregate(
+            pending_count=Count('pk', filter=Q(approved=False)),
+            all_count=Count('pk'),
+        )
+        return self.htmx_response(
+            {
+                'comment': comment,
+                'current_filter': request.POST.get('filter', 'pending'),
+                **counts,
+            }
+        )
 
 
 __all__ = [

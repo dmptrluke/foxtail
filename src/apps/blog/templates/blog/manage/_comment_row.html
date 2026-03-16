@@ -1,0 +1,37 @@
+<tr id="comment-{{ comment.pk }}">
+    <td>{{ comment.text|truncatechars:80 }}</td>
+    <td class="text-secondary">{{ comment.author.get_short_name }}</td>
+    <td><a href="{{ comment.post.get_absolute_url }}" class="text-decoration-none">{{ comment.post.title }}</a></td>
+    <td class="text-secondary text-nowrap">{{ comment.created|date:"d M Y" }}</td>
+    <td>
+        {% if comment.approved %}
+            <span class="badge text-bg-success">Approved</span>
+        {% else %}
+            <span class="badge text-bg-warning">Pending</span>
+        {% endif %}
+    </td>
+    <td class="text-end text-nowrap">
+        <button type="button"
+                class="btn btn-sm {% if comment.approved %}btn-outline-secondary{% else %}btn-outline-success{% endif %}"
+                hx-post="{% url 'blog:comment_approve' pk=comment.pk %}"
+                hx-target="#comment-{{ comment.pk }}"
+                hx-swap="outerHTML"
+                hx-vals='{"filter": "{{ current_filter }}"}'
+                >
+            {% if comment.approved %}Unapprove{% else %}Approve{% endif %}
+        </button>
+        <button type="button"
+                class="btn btn-sm btn-outline-danger ms-1"
+                hx-post="{% url 'blog:comment_delete' pk=comment.pk %}"
+                hx-target="#comment-{{ comment.pk }}"
+                hx-swap="delete"
+                hx-confirm="Delete this comment?"
+                >
+            Delete
+        </button>
+    </td>
+</tr>
+{% if is_partial %}
+<span id="pending-count" hx-swap-oob="innerHTML">({{ pending_count }})</span>
+<span id="all-count" hx-swap-oob="innerHTML">({{ all_count }})</span>
+{% endif %}

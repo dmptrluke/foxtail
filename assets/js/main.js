@@ -3,18 +3,17 @@ import '../scss/index.scss';
 import 'bootstrap/js/dist/dropdown';
 import 'bootstrap/js/dist/collapse';
 import 'bootstrap/js/dist/alert';
-import Popover from 'bootstrap/js/dist/popover';
-import Tooltip from 'bootstrap/js/dist/tooltip';
 
 import 'colcade';
+import htmx from 'htmx.org';
 import { UAParser } from 'ua-parser-js';
 
-// --- Bootstrap component initialization ---
+window.htmx = htmx;
 
-function initBootstrap() {
-    document.querySelectorAll('[data-bs-toggle="tooltip"]').forEach(el => new Tooltip(el));
-    document.querySelectorAll('[data-bs-toggle="popover"]').forEach(el => new Popover(el));
-}
+document.addEventListener('htmx:configRequest', (e) => {
+    const cookieName = document.cookie.match(/(__Host-csrftoken|csrftoken)=([^;]+)/);
+    if (cookieName) e.detail.headers['X-CSRFToken'] = cookieName[2];
+});
 
 // --- Comment character counter ---
 
@@ -141,7 +140,6 @@ function initThemeToggle() {
 
 function onLoad() {
     initThemeToggle();
-    initBootstrap();
     initCharCounter();
     if (document.getElementById('id_age_privacy')) {
         import('./profileEdit.js').then(m => m.initProfileEdit());

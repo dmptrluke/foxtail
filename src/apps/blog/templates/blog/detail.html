@@ -46,18 +46,18 @@
         <c-slot name="content">
             <c-rendered-markdown>{{ post.text_rendered|safe }}</c-rendered-markdown>
 
-            {% include "components/related_content.html" %}
+            {% include "blog/_related_content.html" %}
 
             {% if post.allow_comments and comments_enabled %}
-                {% include "blog/comments.html" %}
+                {% include "blog/_comments.html" %}
             {% endif %}
         </c-slot>
 
         <c-slot name="sidebar">
             {% if post.author %}
-                {% include "components/identity_sidebar.html" with author=post.author %}
+                {% include "blog/_author_sidebar.html" with author=post.author %}
             {% endif %}
-            {% include "blog/sidebar.html" %}
+            {% include "blog/_sidebar.html" %}
         </c-slot>
     </c-layout-sidebar>
 {% endblock content %}

@@ -23,14 +23,8 @@
         {% non_field_errors form %}
 
         {% text_field form.login %}
-
-        <div class="form-group">
-            <label for="{{ form.password.id_for_label }}">
-                {{ form.password.label }}
-                <a href="{% url 'account_reset_password' %}" class="inline-link">Forgot password?</a>
-            </label>
-            {% render_field form.password class="form-control" %}
-        </div>
+        {% text_field form.password %}
+        <a href="{% url 'account_reset_password' %}" class="form-text text-decoration-none">Forgot password?</a>
 
         {% if form.remember %}{% check_field form.remember %}{% endif %}
 
