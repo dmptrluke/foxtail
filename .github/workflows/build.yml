@@ -33,6 +33,7 @@ jobs:
             ghcr.io/dmptrluke/foxtail
           tags: |
             type=raw,value=latest,enable={{is_default_branch}}
+            type=sha,format=short,enable={{is_default_branch}}
             type=ref,event=branch
             type=ref,event=pr
             type=semver,pattern={{version}}
@@ -72,7 +73,7 @@ jobs:
     environment: staging
     steps:
       - name: Deploy to staging
-        run: sudo /opt/foxtail/deploy-staging.sh
+        run: sudo /opt/foxtail/deploy-staging.sh "sha-${GITHUB_SHA::7}"
 
   deploy-production:
     needs: deploy-staging
@@ -82,7 +83,7 @@ jobs:
     environment: production
     steps:
       - name: Deploy to production
-        run: sudo /opt/foxtail/deploy-prod.sh
+        run: sudo /opt/foxtail/deploy-prod.sh "sha-${GITHUB_SHA::7}"
 
   sentry-release:
     needs: deploy-production
