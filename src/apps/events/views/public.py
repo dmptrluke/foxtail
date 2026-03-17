@@ -1,8 +1,7 @@
-from datetime import date
-
 from django.db.models import Count, Q
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
+from django.utils.timezone import localdate
 from django.views import View
 from django.views.generic import DetailView, ListView
 from django.views.generic.dates import YearMixin
@@ -43,7 +42,7 @@ class EventListView(StructuredDataMixin, ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        today = date.today()
+        today = localdate()
         upcoming_filter = Q(start__gte=today) | Q(end__gte=today)
         published = self._get_base_queryset()
         upcoming = published.filter(upcoming_filter).prefetch_related('tags').order_by('start')
@@ -75,7 +74,7 @@ class EventListYearView(StructuredDataMixin, YearMixin, ListView):
         year = int(self.get_year())
 
         context['year'] = str(year)
-        today = date.today()
+        today = localdate()
         upcoming_filter = Q(start__gte=today) | Q(end__gte=today)
         year_qs = queryset_filter(Event.objects, self.request.user).filter(start__year=year).prefetch_related('tags')
         context['upcoming_events'] = year_qs.filter(upcoming_filter).order_by('start')

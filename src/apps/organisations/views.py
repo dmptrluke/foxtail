@@ -1,9 +1,8 @@
-from datetime import date
-
 from django.db.models import F, Q
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
 from django.utils.decorators import method_decorator
+from django.utils.timezone import localdate
 from django.views import View
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import DetailView, ListView
@@ -75,7 +74,7 @@ class OrganisationDetailView(DetailView):
         )
         next_event = (
             queryset_filter(Event.objects.for_organisation(org))
-            .filter(Q(end__gte=date.today()) | Q(end__isnull=True, start__gte=date.today()))
+            .filter(Q(end__gte=localdate()) | Q(end__isnull=True, start__gte=localdate()))
             .select_related('series')
             .order_by('start')
             .first()

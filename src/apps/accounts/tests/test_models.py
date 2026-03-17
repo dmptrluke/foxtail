@@ -1,6 +1,7 @@
 from datetime import date, timedelta
 
 from django.core.exceptions import ValidationError
+from django.utils.timezone import localdate
 
 import pytest
 from allauth.account.models import EmailAddress
@@ -31,14 +32,14 @@ class TestUserClean:
 
     # future DOB raises ValidationError
     def test_rejects_future_dob(self, user):
-        user.date_of_birth = date.today() + timedelta(days=1)
+        user.date_of_birth = localdate() + timedelta(days=1)
         with pytest.raises(ValidationError) as exc_info:
             user.clean()
         assert 'date_of_birth' in exc_info.value.message_dict
 
     # today's date is also rejected (strict past-only boundary)
     def test_rejects_today_dob(self, user):
-        user.date_of_birth = date.today()
+        user.date_of_birth = localdate()
         with pytest.raises(ValidationError) as exc_info:
             user.clean()
         assert 'date_of_birth' in exc_info.value.message_dict
