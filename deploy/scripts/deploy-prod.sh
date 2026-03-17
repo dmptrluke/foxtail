@@ -1,8 +1,6 @@
 #!/bin/bash
 set -euo pipefail
 
-export IMAGE_TAG="${1:?Usage: deploy-prod.sh <image-tag>}"
-
 cd /opt/foxtail/prod
 docker compose pull app worker
 docker compose run --rm app django-admin migrate --noinput

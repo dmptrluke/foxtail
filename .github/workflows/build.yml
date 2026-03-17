@@ -16,8 +16,6 @@ jobs:
   build:
     runs-on: ubuntu-latest
     timeout-minutes: 20
-    outputs:
-      image_tag: ${{ steps.meta.outputs.version }}
 
     permissions:
       packages: write
@@ -35,8 +33,6 @@ jobs:
             ghcr.io/dmptrluke/foxtail
           tags: |
             type=raw,value=latest,enable={{is_default_branch}}
-            type=sha,format=short,enable={{is_default_branch}}
-            type=ref,event=branch
             type=ref,event=pr
             type=semver,pattern={{version}}
             type=semver,pattern={{major}}.{{minor}}
@@ -77,9 +73,7 @@ jobs:
       group: deploy-staging
     steps:
       - name: Deploy to staging
-        env:
-          IMAGE_TAG: ${{ needs.build.outputs.image_tag }}
-        run: sudo /opt/foxtail/scripts/deploy-staging.sh "$IMAGE_TAG"
+        run: sudo /opt/foxtail/scripts/deploy-staging.sh
 
   sentry-staging:
     needs: deploy-staging
@@ -114,9 +108,7 @@ jobs:
       group: deploy-production
     steps:
       - name: Deploy to production
-        env:
-          IMAGE_TAG: ${{ needs.build.outputs.image_tag }}
-        run: sudo /opt/foxtail/scripts/deploy-prod.sh "$IMAGE_TAG"
+        run: sudo /opt/foxtail/scripts/deploy-prod.sh
 
   sentry-production:
     needs: deploy-production
