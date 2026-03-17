@@ -1,4 +1,5 @@
-from datetime import UTC, datetime, timedelta
+from datetime import datetime, timedelta
+from zoneinfo import ZoneInfo
 
 from django.conf import settings
 from django.core.exceptions import ValidationError
@@ -112,15 +113,17 @@ class Event(PublishedModel):
         """Check if the event has ended; events without an end date are assumed over at midnight after start"""
         if self.end:
             end = (
-                datetime.combine(self.end, self.end_time)
+                datetime.combine(self.end, self.end_time, tzinfo=ZoneInfo('Pacific/Auckland'))
                 if self.end_time
-                else datetime.combine(self.end, datetime.min.time(), tzinfo=UTC)
+                else datetime.combine(self.end, datetime.min.time(), tzinfo=ZoneInfo('Pacific/Auckland'))
             )
         else:
             end = (
-                datetime.combine(self.start, self.end_time)
+                datetime.combine(self.start, self.end_time, tzinfo=ZoneInfo('Pacific/Auckland'))
                 if self.end_time
-                else datetime.combine(self.start + timedelta(days=1), datetime.min.time(), tzinfo=UTC)
+                else datetime.combine(
+                    self.start + timedelta(days=1), datetime.min.time(), tzinfo=ZoneInfo('Pacific/Auckland')
+                )
             )
 
         return end < now()
