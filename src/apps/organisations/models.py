@@ -1,3 +1,5 @@
+import logging
+
 from django.conf import settings
 from django.db import models
 from django.urls import reverse
@@ -10,6 +12,8 @@ from markdownfield.models import MarkdownField, RenderedMarkdownField
 from markdownfield.validators import VALIDATOR_CLASSY
 
 from apps.core.fields import AutoSlugField
+
+logger = logging.getLogger(__name__)
 
 
 class Organisation(models.Model):
@@ -91,15 +95,18 @@ class Organisation(models.Model):
         if self.url:
             data['sameAs'] = self.url
         if self.logo:
-            logo_url = self.logo.square
-            if not logo_url.startswith('http'):
-                logo_url = settings.SITE_URL + logo_url
-            data['logo'] = {
-                '@type': 'ImageObject',
-                'url': logo_url,
-                'width': 400,
-                'height': 400,
-            }
+            try:
+                logo_url = self.logo.square
+                if not logo_url.startswith('http'):
+                    logo_url = settings.SITE_URL + logo_url
+                data['logo'] = {
+                    '@type': 'ImageObject',
+                    'url': logo_url,
+                    'width': 400,
+                    'height': 400,
+                }
+            except Exception:
+                logger.exception('Missing logo for organisation %s', self.pk)
         return data
 
 

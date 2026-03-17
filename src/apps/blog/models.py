@@ -1,3 +1,5 @@
+import logging
+
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.db import models
@@ -12,6 +14,8 @@ from published.models import PublishedModel
 from taggit.managers import TaggableManager
 
 from apps.core.validators import VALIDATOR_EXTENDED
+
+logger = logging.getLogger(__name__)
 
 
 class Author(models.Model):
@@ -90,15 +94,18 @@ class Post(PublishedModel):
             'keywords': [tag.name for tag in self.tags.all()],
         }
         if self.image:
-            image_url = self.image.card_2x
-            if not image_url.startswith('http'):
-                image_url = settings.SITE_URL + image_url
-            data['image'] = {
-                '@type': 'ImageObject',
-                'url': image_url,
-                'width': 1200,
-                'height': 630,
-            }
+            try:
+                image_url = self.image.card_2x
+                if not image_url.startswith('http'):
+                    image_url = settings.SITE_URL + image_url
+                data['image'] = {
+                    '@type': 'ImageObject',
+                    'url': image_url,
+                    'width': 1200,
+                    'height': 630,
+                }
+            except Exception:
+                logger.exception('Missing image for post %s', self.pk)
 
         about = []
         for org in self.organisations.all():

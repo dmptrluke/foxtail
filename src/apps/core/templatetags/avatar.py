@@ -28,8 +28,8 @@ def avatar_url(user, size=40):
                 if size <= threshold:
                     return getattr(user.avatar, format_name)
             return user.avatar.large
-        except Exception:  # noqa: BLE001
-            logger.warning('Failed to load avatar for user %s', user.pk)
+        except Exception:
+            logger.exception('Failed to load avatar for user %s', user.pk)
     return _default_avatar(user, size)
 
 
