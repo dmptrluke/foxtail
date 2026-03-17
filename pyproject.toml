@@ -22,7 +22,7 @@ dependencies = [
     "django-redis==6.0.0",
     "huey",
     "django-storages[s3]==1.14.6",
-    "django-structured-data==0.11.0",
+    "django-structured-data==0.12.0",
     "django-taggit==6.1.0",
     "django-widget-tweaks==1.5.1",
     "fido2==2.1.1",
@@ -39,6 +39,7 @@ dependencies = [
     "sentry-sdk==2.54.0",
     "unidecode==1.4.0",
     "whitenoise==6.12.0",
+    "django-solo>=2.4.0",
 ]
 
 [dependency-groups]

@@ -88,7 +88,7 @@ class Post(PublishedModel):
             'author': {'@type': 'Person', 'name': self.author.name} if self.author else None,
             'datePublished': self.created,
             'dateModified': self.modified,
-            'publisher': {'@id': 'https://furry.nz/#organization'},
+            'publisher': {'@id': f'{settings.SITE_URL}/#organization'},
             'url': url,
             'mainEntityOfPage': url,
             'keywords': [tag.name for tag in self.tags.all()],

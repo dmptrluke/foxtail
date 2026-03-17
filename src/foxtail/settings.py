@@ -10,6 +10,7 @@ Environment reference: deploy/foxtail/.env.example
 """
 
 from pathlib import Path
+from urllib.parse import urlparse
 
 from django.contrib.messages import constants as messages
 
@@ -30,6 +31,7 @@ DEBUG = env.bool('DEBUG', default=False)  # debug toolbar, relaxed CSP, verbose 
 TESTING = env.bool('TESTING', default=False)  # simplified staticfiles, silenced reCAPTCHA check
 
 SITE_URL = env('SITE_URL').rstrip('/')
+SITE_DOMAIN = urlparse(SITE_URL).hostname
 SITE_ID = 1
 DEFAULT_COLOR_SCHEME = env('DEFAULT_COLOR_SCHEME', default='plum')
 if DEFAULT_COLOR_SCHEME not in {'plum', 'coffee', 'autumn', 'forest', 'slate'}:
@@ -58,6 +60,7 @@ INSTALLED_APPS = [
     'cjswidget',
     'published',
     'structured_data',
+    'solo',
     'csp',
     'csp_helpers',
     'apps.core',
@@ -152,6 +155,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'apps.core.context_processors.site',
+                'apps.core.context_processors.conf',
                 'apps.core.context_processors.debug',
                 'csp.context_processors.nonce',
             ],
@@ -684,29 +688,49 @@ if SENTRY_DSN:
 
 TAGGIT_CASE_INSENSITIVE = True
 
+# django-solo
+# <https://github.com/lazybird/django-solo>
+
+SOLO_CACHE = 'default'
+SOLO_CACHE_TIMEOUT = 60 * 10
+
 # django-structured-data
 # <https://github.com/dmptrluke/django-structured-data>
 
-STRUCTURED_DATA_SITEWIDE = [
-    {
-        '@type': 'Organization',
-        '@id': f'{SITE_URL}/#organization',
-        'name': 'furry.nz',
-        'url': SITE_URL,
-        'logo': {
-            '@type': 'ImageObject',
-            'url': 'https://cdn.furry.nz/static/images/paw-dark@3x.png',
-            'width': 90,
-            'height': 90,
-        },
-    },
-]
 
-STRUCTURED_DATA_SITEWIDE_OG = {
-    'og:site_name': 'furry.nz',
-    'og:locale': 'en_NZ',
-    'og:logo': 'https://cdn.furry.nz/static/images/paw-dark@3x.png',
-}
+def _sitewide_structured_data():
+    from apps.core.models import SiteSettings
+
+    s = SiteSettings.get_solo()
+    return [
+        {
+            '@type': 'Organization',
+            '@id': f'{SITE_URL}/#organization',
+            'name': s.org_name,
+            'url': SITE_URL,
+            'logo': {
+                '@type': 'ImageObject',
+                'url': 'https://cdn.furry.nz/static/images/paw-dark@3x.png',
+                'width': 90,
+                'height': 90,
+            },
+        },
+    ]
+
+
+def _sitewide_og_data():
+    from apps.core.models import SiteSettings
+
+    s = SiteSettings.get_solo()
+    return {
+        'og:site_name': s.org_name,
+        'og:locale': 'en_NZ',
+        'og:logo': 'https://cdn.furry.nz/static/images/paw-dark@3x.png',
+    }
+
+
+STRUCTURED_DATA_SITEWIDE = _sitewide_structured_data
+STRUCTURED_DATA_SITEWIDE_OG = _sitewide_og_data
 
 # =============================================================================
 # Foxtail

@@ -11,15 +11,21 @@
             <p class="footer-credit">Made with <c-icons.paw width="0.85em" height="0.85em" /> by <a href="https://bsky.app/profile/kapthefox.bsky.social" target="_blank" rel="noopener noreferrer">Kap</a></p>
         </div>
         <div class="footer-social">
-            <a href="https://t.me/nzfurries" target="_blank" rel="noopener noreferrer" title="Telegram">
+            {% if conf.telegram_url %}
+            <a href="{{ conf.telegram_url }}" target="_blank" rel="noopener noreferrer" title="Telegram">
                 <c-icons.telegram width="1.1em" height="1.1em" />
             </a>
-            <a href="https://bsky.app/profile/furry.nz" target="_blank" rel="noopener noreferrer" title="Bluesky">
+            {% endif %}
+            {% if conf.bluesky_url %}
+            <a href="{{ conf.bluesky_url }}" target="_blank" rel="noopener noreferrer" title="Bluesky">
                 <c-icons.bluesky width="1.1em" height="1.1em" />
             </a>
-            <a href="https://x.com/furrynz" target="_blank" rel="noopener noreferrer" title="X">
+            {% endif %}
+            {% if conf.x_url %}
+            <a href="{{ conf.x_url }}" target="_blank" rel="noopener noreferrer" title="X">
                 <c-icons.x width="1.1em" height="1.1em" />
             </a>
+            {% endif %}
             <span class="footer-divider"></span>
             <div class="popup-wrapper">
                 <a class="footer-popup-toggle" href="#" role="button" title="Theme" aria-label="Theme settings"><c-icons.palette width="1.1em" height="1.1em" /></a>

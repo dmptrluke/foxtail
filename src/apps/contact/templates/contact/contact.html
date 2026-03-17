@@ -7,7 +7,7 @@
     <h1>Contact us</h1>
     <p class="auth-subtitle">
         Send us a message and we'll get back to you as soon as possible.
-        You can also email us at <a href="mailto:website@furry.nz">website@furry.nz</a>.
+        {% if conf.contact_email %}You can also email us at <a href="mailto:{{ conf.contact_email }}">{{ conf.contact_email }}</a>.{% endif %}
     </p>
 {% endblock %}
 
@@ -32,6 +32,6 @@
     </form>
 
     <div class="auth-footer">
-        <a href="/">&larr; Back to {{ request.site.name }}</a>
+        <a href="/">&larr; Back to {{ conf.org_name }}</a>
     </div>
 {% endblock content %}

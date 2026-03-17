@@ -13,11 +13,11 @@ NZ_TZ = ZoneInfo('Pacific/Auckland')
 def generate_ics(event):
     """Generate RFC 5545 compliant ICS calendar data for an event"""
     cal = Calendar()
-    cal.add('prodid', '-//furry.nz//events//EN')
+    cal.add('prodid', f'-//{settings.SITE_DOMAIN}//events//EN')
     cal.add('version', '2.0')
 
     ics_event = IcsEvent()
-    ics_event.add('uid', f'event-{event.pk}@furry.nz')
+    ics_event.add('uid', f'event-{event.pk}@{settings.SITE_DOMAIN}')
     ics_event.add('summary', event.title)
 
     if event.start_time:

@@ -431,6 +431,18 @@ wheels = [
 ]
 
 [[package]]
+name = "django-solo"
+version = "2.5.1"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "django" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/aa/b3/1128d46ca1956dca02b7425bd5bc753c3a31ed21be6c3bb19b8d4c5316c9/django_solo-2.5.1.tar.gz", hash = "sha256:ca3b2e44dbb4726446941ca8d765c247123f709f051d07e62eacf97330ffde01", size = 13662, upload-time = "2026-01-01T15:46:52.221Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/59/aa/45058bdec53ce3df577be9bd40c630067788923284becc6cca6fc592d4db/django_solo-2.5.1-py3-none-any.whl", hash = "sha256:23bfe48950587b409ec4b4ef95e5e62c1c6c590dd958d8d8b99d37d5ccb53ca8", size = 16882, upload-time = "2026-01-01T15:46:51.087Z" },
+]
+
+[[package]]
 name = "django-storages"
 version = "1.14.6"
 source = { registry = "https://pypi.org/simple" }
@@ -449,14 +461,14 @@ s3 = [
 
 [[package]]
 name = "django-structured-data"
-version = "0.11.0"
+version = "0.12.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "django" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/ef/5b/e014ed2990fd161084183ac52c6e825c53e021c4a87e580cb1e6e7303ddd/django_structured_data-0.11.0.tar.gz", hash = "sha256:ca660e2a06089dcbd3326d476e9039adeae9e5f2a9f83199fd9de335f5933adb", size = 15344, upload-time = "2026-03-13T00:23:01.125Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/20/45/496485c738b3b5be5e20bd3e3ce72df8abaf1cdbd4fc02076b280a52e0af/django_structured_data-0.12.0.tar.gz", hash = "sha256:def2da15f7ab43fd2f87fb859f0c52d334ced6c621e1378e1b3d5988a4cc3a19", size = 15266, upload-time = "2026-03-17T22:17:54.772Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/dd/f8/be5fdb55355d2e94eb8eb3bff6f97fcf7f7836fdb54fb7d16c71a8f646f2/django_structured_data-0.11.0-py3-none-any.whl", hash = "sha256:f16468fe3e34767891af46e9a5b2d84d7e7e3e42574a7e863b3a71821f15c7bb", size = 12195, upload-time = "2026-03-13T00:23:00.173Z" },
+    { url = "https://files.pythonhosted.org/packages/e6/46/3f119a9f5d5e60a5d30016a8c85f1e28f9c8f337798c6c5bb70455616a18/django_structured_data-0.12.0-py3-none-any.whl", hash = "sha256:a971b909ebc00906a7ff81fa56fec411987d47a5dd575f9ad988830331636898", size = 12215, upload-time = "2026-03-17T22:17:55.925Z" },
 ]
 
 [[package]]
@@ -572,6 +584,7 @@ dependencies = [
     { name = "django-published" },
     { name = "django-recaptcha" },
     { name = "django-redis" },
+    { name = "django-solo" },
     { name = "django-storages", extra = ["s3"] },
     { name = "django-structured-data" },
     { name = "django-taggit" },
@@ -633,8 +646,9 @@ requires-dist = [
     { name = "django-published", specifier = "==0.10.0" },
     { name = "django-recaptcha", specifier = "==4.1.0" },
     { name = "django-redis", specifier = "==6.0.0" },
+    { name = "django-solo", specifier = ">=2.4.0" },
     { name = "django-storages", extras = ["s3"], specifier = "==1.14.6" },
-    { name = "django-structured-data", specifier = "==0.11.0" },
+    { name = "django-structured-data", specifier = "==0.12.0" },
     { name = "django-taggit", specifier = "==6.1.0" },
     { name = "django-vite", specifier = "==3.1.0" },
     { name = "django-widget-tweaks", specifier = "==1.5.1" },

@@ -21,7 +21,7 @@
         </li>
     </ul>
 
-    <p class="text-body-secondary mb-3">External accounts you use to sign in to furry.nz.</p>
+    <p class="text-body-secondary mb-3">External accounts you use to sign in to {{ conf.org_name }}.</p>
 
     {% non_field_errors form %}
 
@@ -48,7 +48,7 @@
             </div>
         {% else %}
             <div class="empty-state">
-                No external accounts are linked to your furry.nz account.
+                No external accounts are linked to your {{ conf.org_name }} account.
             </div>
         {% endif %}
     </c-account-section>

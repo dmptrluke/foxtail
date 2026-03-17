@@ -13,6 +13,7 @@ from structured_data.views import StructuredDataMixin
 from taggit.models import Tag
 
 from apps.core.mixins import HtmxMixin, PermissionMixin
+from apps.core.models import SiteSettings
 
 from ..forms import CommentForm
 from ..models import Comment, Post
@@ -50,12 +51,14 @@ class BlogListView(StructuredDataMixin, PublishedListMixin, ListView):
         return context
 
     def get_structured_data(self):
+
         q = self.request.GET.get('q')
         tag = self.request.GET.get('tag')
+        org_name = SiteSettings.get_solo().org_name
         if q:
-            description = f'Search results for {q} on furry.nz'
+            description = f'Search results for {q} on {org_name}'
         elif tag:
-            description = f'News posts tagged {tag} on furry.nz'
+            description = f'News posts tagged {tag} on {org_name}'
         else:
             description = 'Community news and updates for New Zealand furries'
         return {

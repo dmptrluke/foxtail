@@ -26,7 +26,7 @@ class TestPostStructuredData:
         assert sd['@type'] == 'BlogPosting'
         assert sd['headline'] == post.title
         assert sd['url'].endswith(f'/blog/{post.slug}/')
-        assert sd['publisher'] == {'@id': 'https://furry.nz/#organization'}
+        assert sd['publisher'] == {'@id': f'{settings.SITE_URL}/#organization'}
         assert sd['datePublished'] == post.created
         assert sd['dateModified'] == post.modified
 

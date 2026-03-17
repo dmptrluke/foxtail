@@ -6,7 +6,7 @@
           <img width="30px" color="white" src="https://cdn.furry.nz/static/paw.png" />
         </td>
         <td font-color="#626262" style="font-size:20px; color: #fff;">
-          <span>furry</span>.nz
+          {{ conf.org_name }}
         </td>
       </tr>
     </mj-table>

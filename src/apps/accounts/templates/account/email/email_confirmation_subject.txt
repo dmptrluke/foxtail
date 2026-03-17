@@ -1,3 +1,3 @@
 {% autoescape off %}
-Confirm your {{ current_site.name }} email address.
+Confirm your {{ conf.org_name }} email address.
 {% endautoescape %}

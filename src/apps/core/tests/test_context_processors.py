@@ -1,7 +1,33 @@
+from unittest.mock import patch
+
 from django.contrib.auth.models import AnonymousUser
+from django.db import OperationalError
 from django.test import RequestFactory
 
-from ..context_processors import debug, site
+import pytest
+
+from ..context_processors import conf, debug, site
+from ..models import SiteSettings
+
+
+@pytest.mark.django_db
+class TestConfContextProcessor:
+    # returns SiteSettings singleton as conf
+    def test_returns_site_settings(self, request_factory: RequestFactory):
+        request = request_factory.get('/')
+        result = conf(request)
+
+        assert 'conf' in result
+        assert isinstance(result['conf'], SiteSettings)
+        assert result['conf'].org_name == 'furry.nz'
+
+    # returns empty dict when table does not exist
+    def test_returns_empty_on_missing_table(self, request_factory: RequestFactory):
+        request = request_factory.get('/')
+        with patch.object(SiteSettings, 'get_solo', side_effect=OperationalError):
+            result = conf(request)
+
+        assert result == {}
 
 
 class TestSiteContextProcessor:

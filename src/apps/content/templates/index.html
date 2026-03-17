@@ -1,7 +1,7 @@
 {% extends "base/page.html" %}
 {% load humanize account cache jsonld opengraph meta twitter icon image %}
 
-{% block title_full %}{{ request.site.name }} — the community hub for New Zealand furries{% endblock title_full %}
+{% block title_full %}{{ conf.org_name }} — the community hub for New Zealand furries{% endblock title_full %}
 
 {% block extra_head %}
     {% json_ld_for structured_data %}
@@ -19,7 +19,7 @@
                 <a href="{% url 'account_profile' %}" class="btn btn-outline-light">My Account</a>
             </nav>
         {% else %}
-            <c-hero.title>Welcome to furry.nz</c-hero.title>
+            <c-hero.title>Welcome to {{ conf.org_name }}</c-hero.title>
             <p>The community hub for New Zealand furries. Events, news, and more.</p>
             <nav aria-label="Actions">
                 <a href="{% url 'account_signup' %}" class="btn btn-primary btn-lg">Create Account</a>

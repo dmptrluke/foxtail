@@ -7,6 +7,7 @@ from published.utils import queryset_filter
 from structured_data.views import StructuredDataMixin
 
 from apps.blog.models import Post
+from apps.core.models import SiteSettings
 from apps.events.models import Event, EventInterest
 from apps.organisations.models import Organisation
 
@@ -61,11 +62,13 @@ class IndexView(StructuredDataMixin, TemplateView):
         context['show_mfa_nudge'] = not has_mfa and account_age < 30
 
     def get_structured_data(self):
+
+        s = SiteSettings.get_solo()
         return {
             '@type': 'WebSite',
             '@id': f'{settings.SITE_URL}/#website',
-            'name': 'furry.nz',
-            'description': 'The resource for New Zealand furries.',
+            'name': s.org_name,
+            'description': s.org_description,
             'url': f'{settings.SITE_URL}/',
             'author': {
                 '@type': 'Organization',

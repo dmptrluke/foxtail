@@ -156,11 +156,11 @@ class TestTemplateRendering:
 
     # email confirmation template renders with allauth context
     def test_email_confirmation_template(self, user):
-        site = MagicMock()
-        site.name = 'furry.nz'
+        from apps.core.models import SiteSettings
+
         context = {
             'user': user,
-            'current_site': site,
+            'conf': SiteSettings.get_solo(),
             'activate_url': 'https://example.com/confirm/abc123',
         }
         msg = render_email('Confirm', ['to@b.com'], 'emails/account/email_confirmation', context)

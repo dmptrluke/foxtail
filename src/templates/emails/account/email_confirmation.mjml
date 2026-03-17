@@ -8,7 +8,7 @@
           Email Verification
         </mj-text>
         <mj-text>
-          You're receiving this email because the user <strong>{{ user_display }}</strong> has added this email to their {{ current_site.name }} account. To confirm this is correct, click the button below.
+          You're receiving this email because the user <strong>{{ user_display }}</strong> has added this email to their {{ conf.org_name }} account. To confirm this is correct, click the button below.
         </mj-text>
         <mj-button href="{{ activate_url }}">Verify Email</mj-button>
         <mj-text>

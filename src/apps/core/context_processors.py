@@ -1,4 +1,11 @@
+import logging
+
 from django.conf import settings
+from django.db import OperationalError, ProgrammingError
+
+from apps.core.models import SiteSettings
+
+logger = logging.getLogger(__name__)
 
 
 def site(request):
@@ -7,6 +14,14 @@ def site(request):
         'SITE_URL': settings.SITE_URL,
         'DEFAULT_COLOR_SCHEME': settings.DEFAULT_COLOR_SCHEME,
     }
+
+
+def conf(request):
+    try:
+        return {'conf': SiteSettings.get_solo()}
+    except (OperationalError, ProgrammingError):
+        logger.warning('SiteSettings table not available (pending migration?)')
+        return {}
 
 
 def debug(request):

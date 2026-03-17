@@ -6,17 +6,17 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 
-    <meta name="application-name" content="{{ request.site.name }}">
+    <meta name="application-name" content="{{ conf.org_name }}">
     {% og_sitewide %}
-    <meta property="fb:app_id" content="538473223430196">
+    {% if conf.facebook_app_id %}<meta property="fb:app_id" content="{{ conf.facebook_app_id }}">{% endif %}
     {% json_ld_sitewide %}
 
-    <meta name="theme-color" content="#281e33">
+    <meta name="theme-color" content="{{ conf.theme_color }}">
     <link rel="icon" type="image/png" sizes="32x32" href="{% static "favicon-32x32.png" %}">
     <link rel="icon" type="image/png" sizes="16x16" href="{% static "favicon-16x16.png" %}">
 
     <title>
-        {% block title_full %}{% block title %}{% endblock title %} | {{ request.site.name }}{% endblock title_full %}
+        {% block title_full %}{% block title %}{% endblock title %} | {{ conf.org_name }}{% endblock title_full %}
     </title>
 
     <link rel="preconnect" href="https://cdn.furry.nz" crossorigin>

@@ -5,7 +5,7 @@
 {% block heading %}
     <h1>{% if process == "connect" %}Connect {{ provider.name }}{% else %}Continue with {{ provider.name }}{% endif %}</h1>
     {% if process == "connect" %}
-        <p class="auth-subtitle">Link your {{ provider.name }} account to your furry.nz account for easier sign-in.</p>
+        <p class="auth-subtitle">Link your {{ provider.name }} account to your {{ conf.org_name }} account for easier sign-in.</p>
     {% else %}
         <p class="auth-subtitle">You are about to sign in using your {{ provider.name }} account.</p>
     {% endif %}

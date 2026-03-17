@@ -1,6 +1,6 @@
 <nav id="navigation" class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark">
   <div class="container">
-    <a class="navbar-brand" href="{% url 'content:index' %}"><c-icons.paw />{{ request.site.name }}</a>
+    <a class="navbar-brand" href="{% url 'content:index' %}"><c-icons.paw />{{ conf.org_name }}</a>
       {% include "components/nav.html" %}
   </div>
 </nav>

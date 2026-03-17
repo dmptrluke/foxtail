@@ -38,6 +38,9 @@ class AccountAdapter(DefaultAccountAdapter):
         user_username(user, username or self.generate_unique_username([full_name, email, username, 'user']))
 
     def render_mail(self, template_prefix, email, context, headers=None):
+        from apps.core.models import SiteSettings
+
+        context['conf'] = SiteSettings.get_solo()
         mjml_template = MJML_EMAIL_MAP.get(template_prefix)
         if mjml_template is None:
             return super().render_mail(template_prefix, email, context, headers)
