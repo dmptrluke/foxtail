@@ -119,6 +119,9 @@ ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=[]) + ['localhost']
 USE_X_FORWARDED_HOST = env.bool('USE_X_FORWARDED_HOST', default=False)
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
+# Caddy handles HSTS and HTTP->HTTPS redirect at the reverse proxy layer
+SILENCED_SYSTEM_CHECKS = ['security.W004', 'security.W008']
+
 # Template Engine
 # <https://docs.djangoproject.com/en/stable/topics/templates/>
 
@@ -625,7 +628,7 @@ TEST_PUBLIC_KEY = '6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI'
 TEST_PRIVATE_KEY = '6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe'
 
 if DEBUG or TESTING:
-    SILENCED_SYSTEM_CHECKS = ['django_recaptcha.recaptcha_test_key_error']
+    SILENCED_SYSTEM_CHECKS += ['django_recaptcha.recaptcha_test_key_error']
 
 RECAPTCHA_INVISIBLE = env.bool('RECAPTCHA_INVISIBLE', default=True)
 RECAPTCHA_PUBLIC_KEY = env('RECAPTCHA_PUBLIC_KEY', default=TEST_PUBLIC_KEY)
