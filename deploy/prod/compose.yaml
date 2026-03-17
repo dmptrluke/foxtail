@@ -1,0 +1,86 @@
+# Foxtail production stack.
+# Requires a .env file -- see .env.example for all available settings.
+
+services:
+  db:
+    image: postgres:17
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: foxtail
+      POSTGRES_PASSWORD: foxtail
+    volumes:
+      - db:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U foxtail"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:8
+    restart: unless-stopped
+    volumes:
+      - redis:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  app:
+    image: ghcr.io/dmptrluke/foxtail:${IMAGE_TAG:-latest}
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      DATABASE_URL: "postgres://foxtail:foxtail@db/foxtail"
+      CACHE_URL: "redis://redis/1"
+      SERVICE_NAME: "app"
+    volumes:
+      - storage:/app/storage
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "python -c 'import urllib.request; urllib.request.urlopen(\"http://localhost:8000/health/\")'"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 15s
+    networks:
+      default:
+      caddy:
+        aliases:
+          - prod-app
+
+  worker:
+    image: ghcr.io/dmptrluke/foxtail:${IMAGE_TAG:-latest}
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      DATABASE_URL: "postgres://foxtail:foxtail@db/foxtail"
+      CACHE_URL: "redis://redis/1"
+      SERVICE_NAME: "worker"
+    volumes:
+      - storage:/app/storage
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    command: django-admin run_huey
+    healthcheck:
+      test: ["CMD-SHELL", "pgrep -f run_huey"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+networks:
+  caddy:
+    external: true
+
+volumes:
+  storage:   # User-uploaded media (avatars, blog images, event images)
+  db:        # PostgreSQL data
+  redis:     # Redis persistence (sessions, cache, task queue)

@@ -1,11 +1,5 @@
-# Foxtail production compose file.
-# Copy this folder and customize for your deployment.
-#
-# Usage:
-#   docker compose up -d
-#
-# Requires a .env file — see .env.example for all available settings.
-# Set COMPOSE_PROJECT_NAME in .env to namespace containers and volumes.
+# Foxtail staging stack.
+# Requires a .env file -- see .env.example for all available settings.
 
 services:
   db:
@@ -55,8 +49,10 @@ services:
       retries: 5
       start_period: 15s
     networks:
-      - default
-      - caddy
+      default:
+      caddy:
+        aliases:
+          - staging-app
 
   worker:
     image: ghcr.io/dmptrluke/foxtail:${IMAGE_TAG:-latest}

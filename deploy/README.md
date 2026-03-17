@@ -9,32 +9,41 @@ deploy/
 ├── caddy/                # Shared reverse proxy (one per server)
 │   ├── compose.yaml
 │   └── Caddyfile         # Edit to add site blocks for each stack
-├── foxtail/              # App stack template (copy per instance)
+├── prod/                 # Production stack
 │   ├── compose.yaml
 │   └── .env.example
+├── staging/              # Staging stack
+│   ├── compose.yaml
+│   └── .env.example
+├── scripts/              # Deploy scripts (called by CI)
+│   ├── deploy-staging.sh
+│   └── deploy-prod.sh
 └── README.md
 ```
 
 ## Setup
 
-1. Copy `deploy/` to your server
+1. Copy `deploy/` to `/opt/foxtail/` on your server. All paths below assume this location.
+
 2. Set up the Caddy proxy:
 
 ```bash
-cd caddy
+cd /opt/foxtail/caddy
 # Edit Caddyfile to add your domain(s)
 docker compose up -d
 ```
 
-3. Set up the app stack:
+For each stack (`prod/` and `staging/`), run steps 3-6:
+
+3. Configure the environment:
 
 ```bash
-cd foxtail
+cd /opt/foxtail/prod  # or /opt/foxtail/staging
 cp .env.example .env
-# Edit .env — fill in required values
+# Edit .env -- fill in required values
 ```
 
-4. Generate a secret key and add it to `.env`:
+4. Generate a secret key and add it to `.env` (use a different key per stack):
 
 ```bash
 python -c "from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())"
@@ -52,14 +61,6 @@ docker compose up -d
 docker compose exec app django-admin migrate
 docker compose exec app django-admin createsuperuser
 ```
-
-## Running Multiple Stacks
-
-To run multiple instances (e.g. live + test):
-
-1. Copy the `foxtail/` folder for each instance
-2. Set a unique `COMPOSE_PROJECT_NAME` in each `.env` (e.g. `foxtail-live`, `foxtail-test`)
-3. Add a site block in `caddy/Caddyfile` for each instance, pointing to `<project-name>-app-1:8000`
 
 ## Services
 
@@ -92,12 +93,21 @@ Caddy automatically obtains TLS certificates via Let's Encrypt. Make sure ports 
 
 If you need to use the Cloudflare DNS challenge (e.g. the server isn't publicly reachable on port 80), you'll need to build a custom Caddy image with the `caddy-dns/cloudflare` plugin — see the [caddy-dns/cloudflare](https://github.com/caddy-dns/cloudflare) docs.
 
-## Updating
+## Continuous Deployment
 
-Pull the latest image and restart:
+Foxtail has a automated release process.
 
-```bash
-docker compose pull
-docker compose up -d
-docker compose exec app django-admin migrate
+Pushes to `master` automatically build a Docker image, deploy to staging, then wait
+for manual approval before deploying to production. Sentry releases are created after
+each deploy.
+
 ```
+push to master
+  -> build image (cloud runner, pushes to ghcr.io with SHA tag)
+  -> deploy to staging (self-hosted runner)
+  -> create Sentry release (staging)
+  -> deploy to production (requires approval in GitHub UI)
+  -> create Sentry release (production)
+```
+
+The pipeline uses a sandboxed GitHub Actions self-hosted runner. Demo scripts are included, but full deployment details are not included in this repository.
