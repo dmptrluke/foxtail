@@ -1,3 +1,4 @@
+from django.test import Client
 from django.urls import reverse
 
 import pytest
@@ -56,6 +57,13 @@ class TestSocialLinkRedirectAnonymous:
         response = client.post(reverse('social_link_redirect', args=[link.pk]), {})
         assert response.status_code == 200
         assert response.context['form'].errors
+
+    # POST without CSRF token succeeds (view is csrf_exempt for in-app browser compatibility)
+    def test_post_without_csrf_token(self):
+        csrf_client = Client(enforce_csrf_checks=True)
+        link = SocialLinkFactory(url='https://discord.gg/test')
+        response = csrf_client.post(reverse('social_link_redirect', args=[link.pk]), CAPTCHA_FIELD)
+        assert response.status_code == 302
 
 
 class TestSocialLinkRedirect404:

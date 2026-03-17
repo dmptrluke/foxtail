@@ -33,6 +33,35 @@ def robots(request):
     return HttpResponse(text, content_type='text/plain')
 
 
+IN_APP_BROWSERS = [
+    ('TelegramAndroid', 'Telegram'),
+    ('TelegramiOS', 'Telegram'),
+    ('FBAN', 'Facebook'),
+    ('FBAV', 'Facebook'),
+    ('Instagram', 'Instagram'),
+    ('Line/', 'LINE'),
+    ('MicroMessenger', 'WeChat'),
+    ('Twitter', 'X (Twitter)'),
+    ('Snapchat', 'Snapchat'),
+    ('Discord', 'Discord'),
+]
+
+
+def csrf_failure(request, reason=''):
+    ua = request.META.get('HTTP_USER_AGENT', '')
+    app_name = ''
+    for signature, name in IN_APP_BROWSERS:
+        if signature in ua:
+            app_name = name
+            break
+    return render(
+        request,
+        '403_csrf.html',
+        {'in_app_browser': app_name},
+        status=403,
+    )
+
+
 def handler_500(request, *args, **kwargs):
     if settings.SENTRY_DSN:
         from sentry_sdk import last_event_id

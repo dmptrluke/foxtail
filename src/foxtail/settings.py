@@ -289,6 +289,7 @@ DJANGO_VITE = {
 CSRF_TRUSTED_ORIGINS = [SITE_URL]
 CSRF_COOKIE_NAME = '__Host-csrftoken'
 CSRF_COOKIE_SECURE = True
+CSRF_FAILURE_VIEW = 'apps.core.views.csrf_failure'
 
 SESSION_COOKIE_NAME = '__Host-sessionid'
 SESSION_COOKIE_SECURE = True

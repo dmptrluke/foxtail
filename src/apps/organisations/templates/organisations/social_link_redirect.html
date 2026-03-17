@@ -9,7 +9,6 @@
 
 {% block content %}
     <form method="post" action="." id="redirect-form" class="auth-form">
-        {% csrf_token %}
         {% captcha_field form.captcha %}
         <button type="submit" class="btn btn-primary w-100">Continue to {{ link.get_platform_display }}</button>
     </form>

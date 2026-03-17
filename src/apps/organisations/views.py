@@ -3,7 +3,9 @@ from datetime import date
 from django.db.models import F, Q
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
+from django.utils.decorators import method_decorator
 from django.views import View
+from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import DetailView, ListView
 
 from published.utils import queryset_filter
@@ -104,6 +106,7 @@ class EventSeriesDetailView(DetailView):
         return context
 
 
+@method_decorator(csrf_exempt, name='dispatch')
 class SocialLinkRedirectView(View):
     def get(self, request, pk):
         link = get_object_or_404(SocialLink, pk=pk)
