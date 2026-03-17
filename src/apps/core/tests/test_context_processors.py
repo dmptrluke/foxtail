@@ -1,7 +1,25 @@
 from django.contrib.auth.models import AnonymousUser
 from django.test import RequestFactory
 
-from ..context_processors import debug
+from ..context_processors import debug, site
+
+
+class TestSiteContextProcessor:
+    # includes DEFAULT_COLOR_SCHEME from settings
+    def test_includes_default_color_scheme(self, request_factory: RequestFactory, settings):
+        settings.DEFAULT_COLOR_SCHEME = 'plum'
+        request = request_factory.get('/')
+        result = site(request)
+
+        assert result['DEFAULT_COLOR_SCHEME'] == 'plum'
+
+    # reflects overridden DEFAULT_COLOR_SCHEME setting
+    def test_default_color_scheme_reflects_setting(self, request_factory: RequestFactory, settings):
+        settings.DEFAULT_COLOR_SCHEME = 'coffee'
+        request = request_factory.get('/')
+        result = site(request)
+
+        assert result['DEFAULT_COLOR_SCHEME'] == 'coffee'
 
 
 class TestDebugContextProcessor:

@@ -2,7 +2,11 @@ from django.conf import settings
 
 
 def site(request):
-    return {'DEBUG': settings.DEBUG, 'SITE_URL': settings.SITE_URL}
+    return {
+        'DEBUG': settings.DEBUG,
+        'SITE_URL': settings.SITE_URL,
+        'DEFAULT_COLOR_SCHEME': settings.DEFAULT_COLOR_SCHEME,
+    }
 
 
 def debug(request):

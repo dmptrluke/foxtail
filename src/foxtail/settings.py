@@ -31,6 +31,9 @@ TESTING = env.bool('TESTING', default=False)  # simplified staticfiles, silenced
 
 SITE_URL = env('SITE_URL').rstrip('/')
 SITE_ID = 1
+DEFAULT_COLOR_SCHEME = env('DEFAULT_COLOR_SCHEME', default='plum')
+if DEFAULT_COLOR_SCHEME not in {'plum', 'coffee', 'autumn', 'forest', 'slate'}:
+    raise ValueError(f'DEFAULT_COLOR_SCHEME must be one of the valid color schemes, got {DEFAULT_COLOR_SCHEME!r}')
 
 ROOT_URLCONF = 'foxtail.urls'
 

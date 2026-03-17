@@ -34,10 +34,11 @@ function initCharCounter() {
 
 const COLOR_SCHEMES = ['plum', 'coffee', 'autumn', 'forest', 'slate'];
 const STYLE_THEMES = ['default', 'sharp', 'retro', 'glass'];
+const DEFAULT_COLOR_SCHEME = document.documentElement.dataset.defaultScheme;
 
 function applyTheme() {
     const root = document.documentElement;
-    const scheme = localStorage.getItem('color-scheme') || 'plum';
+    const scheme = localStorage.getItem('color-scheme') || DEFAULT_COLOR_SCHEME;
     const style = localStorage.getItem('style-theme') || 'default';
     const mode = localStorage.getItem('dark-mode') || 'auto';
 
@@ -56,7 +57,7 @@ function applyTheme() {
 }
 
 function updatePickerState(picker) {
-    const scheme = localStorage.getItem('color-scheme') || 'plum';
+    const scheme = localStorage.getItem('color-scheme') || DEFAULT_COLOR_SCHEME;
     const style = localStorage.getItem('style-theme') || 'default';
     const mode = localStorage.getItem('dark-mode') || 'auto';
 
@@ -94,7 +95,7 @@ function initThemeToggle() {
         set('browser', [browserPart, osPart].filter(Boolean).join(' / '));
         set('device', device.vendor ? [device.vendor, device.model].filter(Boolean).join(' ') : 'Desktop');
         const ls = (key, fallback) => localStorage.getItem(key) || fallback;
-        set('theme', `${ls('color-scheme', 'plum')} / ${ls('style-theme', 'default')} / ${ls('dark-mode', 'auto')}`);
+        set('theme', `${ls('color-scheme', DEFAULT_COLOR_SCHEME)} / ${ls('style-theme', 'default')} / ${ls('dark-mode', 'auto')}`);
     }
 
     // Toggle buttons: each .footer-popup-toggle opens its sibling popup
