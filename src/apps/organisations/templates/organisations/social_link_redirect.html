@@ -1,25 +1,25 @@
-{% extends "base/page.html" %}
+{% extends "base/shell.html" %}
 {% load form_tags %}
 
 {% block title %}Redirecting to {{ link.get_platform_display }}{% endblock %}
 
+{% block heading %}
+    <p>Redirecting to {{ link.get_platform_display }} for {{ link.organisation }}...</p>
+{% endblock %}
+
 {% block content %}
-    <div class="text-center py-5">
-        <p class="mb-4">Redirecting to {{ link.get_platform_display }} for {{ link.organisation }}...</p>
+    <form method="post" action="." id="redirect-form" class="auth-form">
+        {% csrf_token %}
+        {% captcha_field form.captcha %}
+        <button type="submit" class="btn btn-primary w-100">Continue to {{ link.get_platform_display }}</button>
+    </form>
 
-        <form method="post" id="redirect-form">
-            {% csrf_token %}
-            {% captcha_field form.captcha %}
-            <button type="submit" class="btn btn-primary">Continue to {{ link.get_platform_display }}</button>
-        </form>
-
-        <noscript>
-            <p class="text-muted mt-3">JavaScript is required for automatic verification. Click the button above to continue.</p>
-        </noscript>
-    </div>
+    <noscript>
+        <p class="text-muted mt-3">JavaScript is required for automatic verification. Click the button above to continue.</p>
+    </noscript>
 
     <script nonce="{{ request.csp_nonce }}">
-        document.addEventListener('DOMContentLoaded', function() {
+        window.addEventListener('load', function() {
             document.getElementById('redirect-form').requestSubmit();
         });
     </script>

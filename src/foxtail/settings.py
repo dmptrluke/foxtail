@@ -510,18 +510,12 @@ CONTENT_SECURITY_POLICY = {
         'img-src': [SELF, 'data:', 'https://api.maptiler.com'] + ASSET_HOSTS,
         'object-src': [NONE],
         'worker-src': [SELF, 'blob:'],
-        'connect-src': [SELF, 'https://sentry.io', 'https://api.maptiler.com'],
+        'connect-src': [SELF, 'https://sentry.io', 'https://api.maptiler.com', 'https://www.google.com/recaptcha/'],
         'base-uri': [NONE],
         'frame-ancestors': [NONE],
-        'form-action': [
-            SELF,
-            # OAuth login redirects are form submissions blocked by CSP form-action
-            'https://github.com',
-            'https://accounts.google.com',
-            'https://discord.com',
-            'https://oauth.telegram.org',
-        ]
-        + env.list('CSP_FORM_ACTION', default=[]),
+        # form-action removed: Chrome blocks reCAPTCHA invisible widget form.submit()
+        # calls as cross-origin (iframe callback context). script-src nonce policy
+        # prevents form injection attacks. CSP_FORM_ACTION env var also retired.
         'upgrade-insecure-requests': not DEBUG,
         'report-uri': env('CSP_REPORT_URI', default=None),
     },
