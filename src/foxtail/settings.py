@@ -32,7 +32,6 @@ TESTING = env.bool('TESTING', default=False)  # simplified staticfiles, silenced
 
 SITE_URL = env('SITE_URL').rstrip('/')
 SITE_DOMAIN = urlparse(SITE_URL).hostname
-SITE_ID = 1
 DEFAULT_COLOR_SCHEME = env('DEFAULT_COLOR_SCHEME', default='plum')
 if DEFAULT_COLOR_SCHEME not in {'plum', 'coffee', 'autumn', 'forest', 'slate'}:
     raise ValueError(f'DEFAULT_COLOR_SCHEME must be one of the valid color schemes, got {DEFAULT_COLOR_SCHEME!r}')
@@ -47,7 +46,6 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    'django.contrib.sites',
     'django.contrib.staticfiles',
     'django_vite',
     'django.forms',
@@ -105,7 +103,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'allauth.account.middleware.AccountMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
-    'django.contrib.sites.middleware.CurrentSiteMiddleware',
 ]
 
 if DEBUG:
