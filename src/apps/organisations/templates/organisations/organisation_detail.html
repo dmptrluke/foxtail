@@ -24,7 +24,7 @@
 
         <div class="org-hero-identity">
             {% if organisation.logo %}
-                <img src="{{ organisation.logo.square }}" alt="{{ organisation.name }}" class="org-hero-logo">
+                <img src="{{ organisation.logo.square }}" alt="{{ organisation.name }}" class="org-hero-logo" width="72" height="72">
             {% else %}
                 <div class="org-hero-logo org-hero-logo-placeholder">{{ organisation.name|slice:":2"|upper }}</div>
             {% endif %}

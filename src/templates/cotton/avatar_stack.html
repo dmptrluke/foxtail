@@ -3,9 +3,9 @@
 <div class="avatar-stack-wrap" {{ attrs }}>
     <div class="avatar-stack">
         {% for interest in interests|slice:":3" %}
-            <img class="avatar-stack-item" src="{{ interest.user|avatar_url:26 }}" alt="{{ interest.user.username }}" width="26" height="26">
+            <img class="avatar-stack-item" src="{{ interest.user|avatar_url:26 }}" alt="{{ interest.user.username }}" width="26" height="26" loading="lazy">
         {% endfor %}
-        {% if overflow > 0 %}
+        {% if overflow|add:0 > 0 %}
             <span class="avatar-stack-count">+{{ overflow }}</span>
         {% endif %}
     </div>

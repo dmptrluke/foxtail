@@ -24,7 +24,6 @@
 
         {% text_field form.login %}
         {% text_field form.password %}
-        <a href="{% url 'account_reset_password' %}" class="form-text text-decoration-none">Forgot password?</a>
 
         {% if form.remember %}{% check_field form.remember %}{% endif %}
 

@@ -56,7 +56,7 @@
 	}
 }
 
-// Onboarding cards (logged-out)
+// Onboarding / dashboard cards
 .onboarding {
 	background: var(--ft-surface);
 	border-bottom: 1px solid rgba($secondary, 0.12);
@@ -104,6 +104,30 @@
 			line-height: 1.5;
 			margin-bottom: 0;
 		}
+	}
+
+	.onboarding-badge {
+		display: inline-block;
+		font-size: 0.7rem;
+		font-weight: 600;
+		padding: 0.15rem 0.5rem;
+		border-radius: 4px;
+		margin-top: 0.5rem;
+		background: rgba($warning, 0.12);
+		color: color.adjust($warning, $lightness: -15%);
+
+		[data-bs-theme="dark"] & {
+			background: rgba($warning, 0.15);
+			color: $warning;
+		}
+	}
+
+	.onboarding-meta {
+		display: block;
+		font-size: 0.75rem;
+		font-weight: 500;
+		color: var(--bs-link-color);
+		margin-top: 0.5rem;
 	}
 }
 

@@ -3,7 +3,7 @@
 <div class="org-card" {{ attrs }}>
     <div class="org-card-identity">
         {% if org.logo %}
-            <img src="{{ org.logo.square }}" alt="{{ org.name }}" class="org-card-logo">
+            <img src="{{ org.logo.square }}" alt="{{ org.name }}" class="org-card-logo" width="48" height="48" loading="lazy">
         {% else %}
             <div class="org-card-logo org-card-logo-placeholder">
                 {% with primary=org.social_links.all|first %}

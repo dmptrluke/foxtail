@@ -30,31 +30,83 @@
 {% endblock hero %}
 
 {% block pre_content %}
-    {# ── Onboarding (logged-out) ── #}
-    {% if not user.is_authenticated %}
-        <div class="onboarding">
-            <div class="container px-3 px-md-4">
-                <div class="onboarding-inner">
+    <div class="onboarding">
+        <div class="container px-3 px-md-4">
+            <div class="onboarding-inner">
+                {% if user.is_authenticated %}
+                    {# ── Slot 1: Events (adaptive) ── #}
+                    {% if user_event_count %}
+                        <a href="{% url 'events:list' %}" class="onboarding-card">
+                            <c-icons.paw width="1.5em" height="1.5em" />
+                            <h2>Your events</h2>
+                            <p>You're interested in {{ user_event_count }} upcoming event{{ user_event_count|pluralize }}. Next: {{ user_next_event.title }}.</p>
+                            {% if user_next_event_days is not None %}
+                                <span class="onboarding-badge">In {{ user_next_event_days }} day{{ user_next_event_days|pluralize }}</span>
+                            {% endif %}
+                        </a>
+                    {% elif event_list %}
+                        <a href="{{ event_list.0.get_absolute_url }}" class="onboarding-card">
+                            <c-icons.paw width="1.5em" height="1.5em" />
+                            <h2>Next up</h2>
+                            <p>{{ event_list.0.title }}{% if event_list.0.location %} - {{ event_list.0.location }}{% endif %}</p>
+                            {% if days_until is not None %}
+                                <span class="onboarding-badge">In {{ days_until }} day{{ days_until|pluralize }}</span>
+                            {% endif %}
+                        </a>
+                    {% else %}
+                        <a href="{% url 'events:list' %}" class="onboarding-card">
+                            <c-icons.paw width="1.5em" height="1.5em" />
+                            <h2>Upcoming events</h2>
+                            <p>No events coming up right now. Check back soon!</p>
+                        </a>
+                    {% endif %}
+
+                    {# ── Slot 2: Groups (static) ── #}
+                    <a href="{% url 'groups:organisation_list' %}" class="onboarding-card">
+                        <c-icons.search width="1.5em" height="1.5em" />
+                        <h2>Find your local group</h2>
+                        <p>Discover community groups and interest chats across New Zealand.</p>
+                        <span class="onboarding-meta">Browse {{ org_count }} group{{ org_count|pluralize }} &rarr;</span>
+                    </a>
+
+                    {# ── Slot 3: MFA nudge (new accounts) or latest news ── #}
+                    {% if show_mfa_nudge %}
+                        <a href="{% url 'mfa_index' %}" class="onboarding-card">
+                            <c-icons.shield_lock width="1.5em" height="1.5em" />
+                            <h2>Secure your account</h2>
+                            <p>Add two-factor authentication to protect your account.</p>
+                        </a>
+                    {% elif post_list %}
+                        <a href="{{ post_list.0.get_absolute_url }}" class="onboarding-card">
+                            <c-icons.pencil width="1.5em" height="1.5em" />
+                            <h2>What's new</h2>
+                            <p>{{ post_list.0.title }}</p>
+                            <span class="onboarding-meta">{{ post_list.0.created|timesince }} ago</span>
+                        </a>
+                    {% endif %}
+                {% else %}
+                    {# ── Slot 1: What is furry? (static) ── #}
                     <div class="onboarding-card">
                         <c-icons.paw width="1.5em" height="1.5em" />
                         <h2>What is furry?</h2>
                         <p>A creative community of people who enjoy anthropomorphic animal characters through art, costumes, and social events.</p>
                     </div>
+                    {# ── Slot 2: Groups (static) ── #}
                     <a href="{% url 'groups:organisation_list' %}" class="onboarding-card">
                         <c-icons.search width="1.5em" height="1.5em" />
                         <h2>Find your local group</h2>
                         <p>Discover community groups and interest chats across New Zealand and connect with furries near you.</p>
                     </a>
+                    {# ── Slot 3: Events (static) ── #}
                     <a href="{% url 'events:list' %}" class="onboarding-card">
                         <c-icons.palette width="1.5em" height="1.5em" />
                         <h2>Get involved</h2>
                         <p>Check out upcoming events, from conventions and camps to casual meetups and online hangouts.</p>
                     </a>
-                </div>
+                {% endif %}
             </div>
         </div>
-    {% endif %}
-
+    </div>
 {% endblock pre_content %}
 
 {% block content %}
@@ -92,7 +144,7 @@
                         <header>
                             <time datetime="{{ post.created|date:'Y-m-d' }}">{{ post.created|date:"M j, Y" }}</time>
                             <h3><a href="{{ post.get_absolute_url }}" class="stretched-link">{{ post.title }}</a></h3>
-                            <p>{{ post.text_rendered|safe|striptags|truncatechars:400 }}</p>
+                            <p>{{ post.text_rendered|striptags|truncatechars:400 }}</p>
                         </header>
                     </article>
                 {% else %}
@@ -103,6 +155,7 @@
                                     <img src="{{ post.image.card }}"
                                          srcset="{{ post.image.card }} 1x, {{ post.image.card_2x }} 2x"
                                          alt="{{ post.title }}"
+                                         loading="lazy"
                                          style="object-position: {{ post.image_ppoi|ppoi_position }}">
                                 {% else %}
                                     <div class="card-img-placeholder"></div>
@@ -111,7 +164,7 @@
                             <header>
                                 <time datetime="{{ post.created|date:'Y-m-d' }}">{{ post.created|date:"M j, Y" }}</time>
                                 <h3><a href="{{ post.get_absolute_url }}" class="stretched-link">{{ post.title }}</a></h3>
-                                <p>{{ post.text_rendered|safe|striptags|truncatechars:100 }}</p>
+                                <p>{{ post.text_rendered|striptags|truncatechars:100 }}</p>
                             </header>
                         </article>
                     {% if forloop.last %}</div>{% endif %}
@@ -135,7 +188,7 @@
                                         <span class="badge bg-primary-subtle text-primary-emphasis ms-1">in {{ days_until }} day{{ days_until|pluralize }}</span>
                                     {% endif %}
                                 </h3>
-                                <p>{{ event.description_rendered|safe|striptags|truncatechars:120 }}</p>
+                                <p>{{ event.description_rendered|striptags|truncatechars:120 }}</p>
                                 {% if event.location %}
                                     <span class="event-location">{{ event.location }}</span>
                                 {% endif %}

@@ -7,7 +7,7 @@
     <c-hero hero_class="hero-dashboard">
         <div class="hero-identity">
             <a href="{% url 'account_profile_edit' %}" class="dashboard-avatar-link" title="Change avatar">
-                <img src="{{ user|avatar_url:160 }}" alt="{{ user.username }}" class="hero-avatar">
+                <img src="{{ user|avatar_url:160 }}" alt="{{ user.username }}" class="hero-avatar" width="88" height="88">
                 <span class="dashboard-avatar-edit"><c-icons.pencil /></span>
             </a>
             <div>
