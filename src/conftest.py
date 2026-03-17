@@ -50,6 +50,12 @@ def _testing_overrides(request, settings):
     settings.WHITENOISE_AUTOREFRESH = True
     # disable debug toolbar in tests (middleware bombs when URL conf isn't fully wired)
     settings.DEBUG_TOOLBAR_CONFIG = {'SHOW_TOOLBAR_CALLBACK': lambda _: False}
+    settings.CACHES = {
+        'default': {
+            'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+            'LOCATION': 'test-cache',
+        }
+    }
     if 'keep_rate_limits' not in request.keywords:
         settings.ACCOUNT_RATE_LIMITS = {}
 
