@@ -47,7 +47,7 @@
             <div class="hero-bottom org-hero-links">
                 {% for link in social_links %}
                     {% if link.is_primary %}
-                        <a href="{{ link.url }}" class="org-join-btn" rel="noopener noreferrer" target="_blank">
+                        <a href="{{ link.redirect_url }}" class="org-join-btn" rel="noopener noreferrer" target="_blank">
                             {% icon link.icon_name %} {{ link.join_label }}
                         </a>
                     {% endif %}
@@ -56,7 +56,7 @@
                 <div class="org-social-icons">
                     {% for link in social_links %}
                         {% if not link.is_primary %}
-                            <a href="{{ link.url }}" title="{{ link.get_platform_display }}" rel="noopener noreferrer" target="_blank">
+                            <a href="{{ link.redirect_url }}" title="{{ link.get_platform_display }}" rel="noopener noreferrer" target="_blank">
                                 {% icon link.icon_name %}
                             </a>
                         {% endif %}
@@ -73,7 +73,7 @@
             <p>{{ organisation.get_group_type_display }} based in {{ organisation.get_region_display|default:organisation.get_country_display|default:"New Zealand" }}.</p>
             {% for link in social_links %}
                 {% if link.is_primary %}
-                    <a href="{{ link.url }}" class="btn btn-primary" rel="noopener noreferrer" target="_blank">
+                    <a href="{{ link.redirect_url }}" class="btn btn-primary" rel="noopener noreferrer" target="_blank">
                         {% icon link.icon_name %} {{ link.join_label }}
                     </a>
                 {% endif %}

@@ -57,6 +57,11 @@ class TestSocialLink:
         for platform_code, _ in SocialLink.PLATFORM_CHOICES:
             assert platform_code in SocialLink.PLATFORM_ICONS
 
+    # redirect_url returns the /go/<pk>/ path
+    def test_redirect_url(self):
+        link = SocialLinkFactory(platform='telegram')
+        assert link.redirect_url == f'/go/{link.pk}/'
+
 
 @pytest.mark.django_db
 class TestOrganisationFeatured:

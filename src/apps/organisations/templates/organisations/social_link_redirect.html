@@ -1,0 +1,26 @@
+{% extends "base/page.html" %}
+{% load form_tags %}
+
+{% block title %}Redirecting to {{ link.get_platform_display }}{% endblock %}
+
+{% block content %}
+    <div class="text-center py-5">
+        <p class="mb-4">Redirecting to {{ link.get_platform_display }} for {{ link.organisation }}...</p>
+
+        <form method="post" id="redirect-form">
+            {% csrf_token %}
+            {% captcha_field form.captcha %}
+            <button type="submit" class="btn btn-primary">Continue to {{ link.get_platform_display }}</button>
+        </form>
+
+        <noscript>
+            <p class="text-muted mt-3">JavaScript is required for automatic verification. Click the button above to continue.</p>
+        </noscript>
+    </div>
+
+    <script nonce="{{ request.csp_nonce }}">
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('redirect-form').requestSubmit();
+        });
+    </script>
+{% endblock content %}

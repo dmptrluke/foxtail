@@ -10,6 +10,7 @@ import apps.blog.sitemaps as blog_sitemaps
 import apps.content.sitemaps as content_sitemaps
 import apps.core.views as core_views
 import apps.events.sitemaps as event_sitemaps
+import apps.organisations.views as organisations_views
 
 sitemaps = {
     'static': content_sitemaps.StaticSitemap,
@@ -23,6 +24,8 @@ urlpatterns = [
     path('health/', core_views.health, name='health'),
     path('robots.txt', core_views.robots, name='robots'),
     path('sitemap.xml', sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
+    # Redirects
+    path('go/<int:pk>/', organisations_views.SocialLinkRedirectView.as_view(), name='social_link_redirect'),
     # Admin
     path('admin/', admin.site.urls),
     # Auth & OIDC

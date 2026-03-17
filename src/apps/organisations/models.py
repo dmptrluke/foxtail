@@ -134,6 +134,7 @@ class SocialLink(models.Model):
     platform = models.CharField(max_length=20, choices=PLATFORM_CHOICES)
     url = models.URLField()
     is_primary = models.BooleanField(default=False)
+    click_count = models.PositiveIntegerField(default=0)
 
     class Meta:
         ordering = ['-is_primary', 'platform']
@@ -151,6 +152,10 @@ class SocialLink(models.Model):
         if self.platform == 'website':
             return 'Visit Website'
         return f'Join on {self.get_platform_display()}'
+
+    @property
+    def redirect_url(self):
+        return reverse('social_link_redirect', args=[self.pk])
 
 
 class EventSeries(models.Model):

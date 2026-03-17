@@ -1,15 +1,20 @@
 from datetime import date
 
 from django.db.models import F, Q
+from django.http import HttpResponseRedirect
+from django.shortcuts import get_object_or_404, render
+from django.views import View
 from django.views.generic import DetailView, ListView
 
+from csp_helpers.mixins import CSPViewMixin
 from published.utils import queryset_filter
 from structured_data.views import StructuredDataMixin
 
 from apps.blog.models import Post
 from apps.events.models import Event
 
-from .models import EventSeries, Organisation
+from .forms import SocialLinkRedirectForm
+from .models import EventSeries, Organisation, SocialLink
 
 
 class OrganisationListView(StructuredDataMixin, ListView):
@@ -98,3 +103,35 @@ class EventSeriesDetailView(DetailView):
         context['events'] = events
         context['posts'] = posts
         return context
+
+
+class SocialLinkRedirectView(CSPViewMixin, View):
+    def get(self, request, pk):
+        link = get_object_or_404(SocialLink, pk=pk)
+        if request.user.is_authenticated:
+            SocialLink.objects.filter(pk=pk).update(click_count=F('click_count') + 1)
+            return HttpResponseRedirect(link.url)
+        form = SocialLinkRedirectForm()
+        return render(
+            request,
+            'organisations/social_link_redirect.html',
+            {
+                'form': form,
+                'link': link,
+            },
+        )
+
+    def post(self, request, pk):
+        link = get_object_or_404(SocialLink, pk=pk)
+        form = SocialLinkRedirectForm(request.POST)
+        if form.is_valid():
+            SocialLink.objects.filter(pk=pk).update(click_count=F('click_count') + 1)
+            return HttpResponseRedirect(link.url)
+        return render(
+            request,
+            'organisations/social_link_redirect.html',
+            {
+                'form': form,
+                'link': link,
+            },
+        )

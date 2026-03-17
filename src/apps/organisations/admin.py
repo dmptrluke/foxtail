@@ -7,7 +7,8 @@ from .models import EventSeries, Organisation, SocialLink
 class SocialLinkInline(admin.TabularInline):
     model = SocialLink
     extra = 1
-    fields = ['platform', 'url', 'is_primary']
+    fields = ['platform', 'url', 'is_primary', 'click_count']
+    readonly_fields = ['click_count']
 
 
 class OrganisationAdmin(ModelAdmin):

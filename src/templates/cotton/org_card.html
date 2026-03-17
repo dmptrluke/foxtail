@@ -21,7 +21,7 @@
                     {% if org.has_detail_content %}
                         <a href="{{ org.get_absolute_url }}" class="stretched-link">{{ org.name }}</a>
                     {% elif primary_link.is_primary %}
-                        <a href="{{ primary_link.url }}" class="stretched-link" rel="noopener noreferrer" target="_blank">{{ org.name }}</a>
+                        <a href="{{ primary_link.redirect_url }}" class="stretched-link" rel="noopener noreferrer" target="_blank">{{ org.name }}</a>
                     {% else %}
                         {{ org.name }}
                     {% endif %}
@@ -40,7 +40,7 @@
     </div>
 
     {% if primary_link.is_primary %}
-        <a href="{{ primary_link.url }}" class="org-card-join" rel="noopener noreferrer" target="_blank">
+        <a href="{{ primary_link.redirect_url }}" class="org-card-join" rel="noopener noreferrer" target="_blank">
             {% icon primary_link.icon_name %} {{ primary_link.join_label }}
         </a>
     {% endif %}
