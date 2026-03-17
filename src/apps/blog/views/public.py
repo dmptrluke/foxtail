@@ -45,7 +45,7 @@ class BlogListView(StructuredDataMixin, PublishedListMixin, ListView):
             try:
                 context['tag'] = Tag.objects.get(slug=tag_slug)
             except Tag.DoesNotExist:
-                raise Http404() from None
+                raise Http404 from None
 
         return context
 

@@ -101,6 +101,20 @@ select = [
     "PT",        # flake8-pytest-style
     "T20",       # flake8-print (no stray prints)
     "PIE",       # flake8-pie (misc. lints)
+    "DTZ",       # flake8-datetimez (timezone-aware dates)
+    "PTH",       # flake8-use-pathlib
+    "BLE",       # flake8-blind-except
+    "T10",       # flake8-debugger (no breakpoints)
+    "LOG",       # flake8-logging
+    "ISC",       # flake8-implicit-str-concat
+    "FLY",       # flynt (f-string migration)
+    "FURB",      # refurb (modernization)
+    "RET",       # flake8-return (clean control flow)
+    "N",         # pep8-naming
+    "C90",       # mccabe (cyclomatic complexity)
+    "ERA",       # eradicate (commented-out code)
+    "PGH",       # pygrep-hooks (precise suppressions)
+    "RSE",       # flake8-raise (clean raise statements)
 ]
 ignore = [
     "DJ008",   # model __str__ not required on every model

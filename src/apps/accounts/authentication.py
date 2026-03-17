@@ -1,3 +1,4 @@
+from contextlib import suppress
 from datetime import datetime
 
 from django.core.exceptions import ValidationError
@@ -68,11 +69,8 @@ class SocialAccountAdapter(DefaultSocialAccountAdapter):
 
         date_of_birth = data.get('birthdate')
         if date_of_birth:
-            try:
-                parsed = datetime.strptime(date_of_birth, '%Y-%m-%d')
-                user.date_of_birth = parsed
-            except ValueError:
-                pass
+            with suppress(ValueError):
+                user.date_of_birth = datetime.strptime(date_of_birth, '%Y-%m-%d').date()  # noqa: DTZ007
 
         name = data.get('name')
         first_name = data.get('first_name')
