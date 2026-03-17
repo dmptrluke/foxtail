@@ -103,6 +103,7 @@ function initThemeToggle() {
         if (!popup) return;
 
         toggle.addEventListener('click', (e) => {
+            e.preventDefault();
             e.stopPropagation();
             popups.forEach(p => { if (p !== popup) p.hidden = true; });
             popup.hidden = !popup.hidden;

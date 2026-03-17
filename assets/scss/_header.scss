@@ -1,8 +1,15 @@
 #navigation {
 	font-family: $navbar-font-family;
 	z-index: $zindex-dropdown + 1;
+
 	backdrop-filter: blur(16px) saturate(180%);
-	background: var(--bs-dark) !important;
+
+	.nav-link {
+		min-height: 44px;
+		display: flex;
+		align-items: center;
+	}
+	background: rgba(var(--bs-dark-rgb), 0.92) !important;
 
 	.has-hero-banner & {
 		background: rgba(var(--bs-dark-rgb), 0.99) !important;

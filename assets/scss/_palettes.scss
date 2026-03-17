@@ -11,6 +11,12 @@
 	$link-color, $link-hover-color,
 	$dark-mode: false
 ) {
+	@if $dark-mode {
+		color-scheme: dark;
+	} @else {
+		color-scheme: light;
+	}
+
 	// Bootstrap color overrides
 	--bs-primary: #{$primary};
 	--bs-primary-rgb: #{red($primary), green($primary), blue($primary)};
@@ -50,7 +56,7 @@
 		--ft-surface-rgb: #{red($surface), green($surface), blue($surface)};
 	} @else {
 		--ft-text-light: #{color.adjust($body-color, $lightness: 10%)};
-		--ft-text-muted: #{color.adjust($body-color, $lightness: 15%)};
+		--ft-text-muted: #{color.adjust($body-color, $lightness: 12%)};
 		--ft-text-soft: #{color.adjust($body-color, $lightness: 20%)};
 		--ft-text-faint: #{color.adjust($body-color, $lightness: 25%)};
 		--ft-text-fainter: #{color.adjust($body-color, $lightness: 30%)};
