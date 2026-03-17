@@ -37,7 +37,7 @@ dependencies = [
     "rules==3.5",
     "segno==1.6.6",
     "sentry-sdk==2.54.0",
-    "the-big-username-blacklist==1.5.4",
+    "unidecode==1.4.0",
     "whitenoise==6.12.0",
 ]
 
@@ -50,7 +50,7 @@ dev = [
 ]
 test = [
     { include-group = "dev" },
-    "atoma==0.0.17",
+    "feedparser==6.0.11",
     "coverage==7.13.4",
     "pytest==9.0.2",
     "pytest-cov==7.0.0",

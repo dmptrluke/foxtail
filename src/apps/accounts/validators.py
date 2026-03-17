@@ -1,11 +1,122 @@
+import json
+import re
+from pathlib import Path
+
 from django.core.exceptions import ValidationError
 from django.core.validators import RegexValidator
 
-from the_big_username_blacklist import validate
+from unidecode import unidecode
+
+_LEET_MAP = str.maketrans('013457@$!', 'oieastasi')
+
+# invisible/zero-width characters to strip before any processing
+_INVISIBLE_RE = re.compile(
+    '[\u00ad\u200b\u200c\u200d\u200e\u200f\u2060\u2061\u2062\u2063\u2064'
+    '\ufeff\ufe0e\ufe0f\u034f\u115f\u1160\u17b4\u17b5\u180e]'
+)
+_SEPARATOR_RE = re.compile(r'[\s._-]')
+_DEDUP_RE = re.compile(r'(.)\1+')
+_NON_ALNUM_RE = re.compile(r'[^a-z0-9]')
+
+_DATA_FILE = Path(__file__).parent / 'data' / 'reserved_usernames.json'
+_RESERVED_RAW = frozenset(json.loads(_DATA_FILE.read_text()))
+# pre-normalize the reserved list: strip separators, deleet, collapse repeated chars
+_RESERVED_NORMALIZED = frozenset(
+    _DEDUP_RE.sub(r'\1', _SEPARATOR_RE.sub('', w).translate(_LEET_MAP)) for w in _RESERVED_RAW
+)
+
+# impersonation terms use natural spelling (no dedup)
+_AUTHORITY_TERMS = [
+    'admin',
+    'bot',
+    'mod',
+    'moderator',
+    'official',
+    'staff',
+    'support',
+    'system',
+    'thereal',
+    'verified',
+]
+
+_PROTECTED_NAMES = [
+    # site identity
+    'foxtail',
+    'furrynz',
+    # NZ conventions
+    'furconz',
+    'southernpaws',
+    'nzpah',
+    # AU conventions
+    'furdu',
+    'furrydownunder',
+    'aurawra',
+    'melbournefurcon',
+    'mfc',
+    'furjam',
+    'confurgence',
+    # major worldwide conventions
+    'anthrocon',
+    'midwestfurfest',
+    'furryweekendatlanta',
+    'fwa',
+    'blfc',
+    'furtherconfusion',
+    'megaplex',
+    'furnalequinox',
+    'denfur',
+    'vancoufur',
+    'eurofurence',
+    'nordicfuzzcon',
+    'confuzzled',
+    # furry platforms
+    'furaffinity',
+    'e621',
+    'barq',
+    'inkbunny',
+]
+
+
+def _normalize_full(value):
+    """Fold a username with all layers including dedup (for reserved list check)."""
+    cleaned = _INVISIBLE_RE.sub('', value)
+    ascii_folded = unidecode(cleaned).lower()
+    stripped = _SEPARATOR_RE.sub('', ascii_folded)
+    deleeted = stripped.translate(_LEET_MAP)
+    return _DEDUP_RE.sub(r'\1', deleeted)
+
+
+def _normalize_light(value):
+    """Fold without dedup (for impersonation combo check)."""
+    cleaned = _INVISIBLE_RE.sub('', value)
+    ascii_folded = unidecode(cleaned).lower()
+    stripped = _NON_ALNUM_RE.sub('', ascii_folded)
+    return stripped.translate(_LEET_MAP)
+
+
+def _has_impersonation_combo(normalized):
+    """Check if the normalized username contains both an authority term and a protected name."""
+    found_authority = None
+    for term in _AUTHORITY_TERMS:
+        if term in normalized:
+            found_authority = term
+            break
+    if not found_authority:
+        return False
+    remainder = normalized.replace(found_authority, '', 1)
+    return any(term != found_authority and term in remainder for term in _PROTECTED_NAMES + _AUTHORITY_TERMS)
 
 
 def validate_blacklist(value):
-    if validate(value) is False:
+    normalized = _normalize_full(value)
+
+    if normalized in _RESERVED_NORMALIZED:
+        raise ValidationError(
+            'This username is not allowed.',
+            params={'value': value},
+        )
+
+    if _has_impersonation_combo(_normalize_light(value)):
         raise ValidationError(
             'This username is not allowed.',
             params={'value': value},
