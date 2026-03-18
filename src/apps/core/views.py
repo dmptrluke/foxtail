@@ -7,6 +7,7 @@ from django.conf import settings
 from django.core.exceptions import PermissionDenied
 from django.http import Http404, HttpResponse, JsonResponse
 from django.shortcuts import render
+from django.template import loader
 from django.views import View
 
 logger = logging.getLogger(__name__)
@@ -63,7 +64,12 @@ def csrf_failure(request, reason=''):
 
 
 def handler_500(request, *args, **kwargs):
-    return render(request, '500.html', status=500)
+    try:
+        return render(request, '500.html', status=500)
+    except Exception:
+        logger.exception('Dynamic 500 template failed, using static fallback')
+        html = loader.get_template('500_static.html').render()
+        return HttpResponse(html, status=500, content_type='text/html')
 
 
 def test_error(request, code):
