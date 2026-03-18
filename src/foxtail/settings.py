@@ -651,8 +651,6 @@ BUILD_VERSION = RELEASE_VERSION or (GIT_SHA[:8] if GIT_SHA else '')
 SENTRY_DSN = env('SENTRY_DSN', default='')
 
 if SENTRY_DSN:
-    from urllib.parse import urlparse
-
     import sentry_sdk
     from sentry_sdk.integrations.django import DjangoIntegration
     from sentry_sdk.integrations.redis import RedisIntegration
@@ -661,6 +659,7 @@ if SENTRY_DSN:
         'dsn': SENTRY_DSN,
         'send_default_pii': env.bool('SENTRY_PII', default=False),
         'integrations': [DjangoIntegration(), RedisIntegration()],
+        'traces_sample_rate': env.float('SENTRY_TRACES_SAMPLE_RATE', default=0.2),
     }
 
     SENTRY_ENVIRONMENT = env('SENTRY_ENVIRONMENT', default='')
@@ -670,15 +669,14 @@ if SENTRY_DSN:
     if RELEASE_VERSION or GIT_SHA:
         _vars['release'] = RELEASE_VERSION or GIT_SHA
 
-    # set CSP report URI
     if env.bool('SENTRY_CSP', default=False):
+        from urllib.parse import urlparse
+
         _csp_report_uri = 'https://sentry.io/api/{}/security/?sentry_key={}'.format(
             urlparse(SENTRY_DSN).path.strip('/'), urlparse(SENTRY_DSN).username
         )
-
         if _vars.get('release'):
             _csp_report_uri += f'&sentry_release={_vars["release"]}'
-
         CONTENT_SECURITY_POLICY['DIRECTIVES']['report-uri'] = _csp_report_uri
 
     sentry_sdk.init(**_vars)
