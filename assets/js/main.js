@@ -9,6 +9,10 @@ import htmx from 'htmx.org';
 import { UAParser } from 'ua-parser-js';
 import { getCsrfToken } from './csrf.js';
 
+htmx.config.includeIndicatorStyles = false;
+htmx.config.selfRequestsOnly = true;
+htmx.config.allowScriptTags = false;
+htmx.config.allowEval = false;
 window.htmx = htmx;
 
 document.addEventListener('htmx:configRequest', (e) => {

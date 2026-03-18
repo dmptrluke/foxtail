@@ -6,6 +6,7 @@ furry.nz {
 	header {
 		Strict-Transport-Security "max-age=31536000"
 		X-XSS-Protection "0"
+		Permissions-Policy "camera=(), microphone=(), geolocation=(), payment=(), usb=(), bluetooth=(), midi=(), accelerometer=(), gyroscope=(), magnetometer=(), autoplay=(), fullscreen=(self), interest-cohort=()"
 	}
 	encode zstd gzip
 	reverse_proxy prod-app:8000
@@ -16,6 +17,7 @@ test.furry.nz {
 	header {
 		Strict-Transport-Security "max-age=31536000"
 		X-XSS-Protection "0"
+		Permissions-Policy "camera=(), microphone=(), geolocation=(), payment=(), usb=(), bluetooth=(), midi=(), accelerometer=(), gyroscope=(), magnetometer=(), autoplay=(), fullscreen=(self), interest-cohort=()"
 	}
 	encode zstd gzip
 	reverse_proxy staging-app:8000
