@@ -1,5 +1,5 @@
 {% extends "base/page.html" %}
-{% load humanize account cache jsonld opengraph meta twitter icon image %}
+{% load humanize account cache jsonld opengraph meta twitter icon image text %}
 
 {% block title_full %}{{ conf.org_name }} — the community hub for New Zealand furries{% endblock title_full %}
 
@@ -144,7 +144,7 @@
                         <header>
                             <time datetime="{{ post.created|date:'Y-m-d' }}">{{ post.created|date:"M j, Y" }}</time>
                             <h3><a href="{{ post.get_absolute_url }}" class="stretched-link">{{ post.title }}</a></h3>
-                            <p>{{ post.text_rendered|striptags|truncatechars:400 }}</p>
+                            <p>{{ post.text_rendered|plain_text|truncatechars:400 }}</p>
                         </header>
                     </article>
                 {% else %}
@@ -164,7 +164,7 @@
                             <header>
                                 <time datetime="{{ post.created|date:'Y-m-d' }}">{{ post.created|date:"M j, Y" }}</time>
                                 <h3><a href="{{ post.get_absolute_url }}" class="stretched-link">{{ post.title }}</a></h3>
-                                <p>{{ post.text_rendered|striptags|truncatechars:100 }}</p>
+                                <p>{{ post.text_rendered|plain_text|truncatechars:100 }}</p>
                             </header>
                         </article>
                     {% if forloop.last %}</div>{% endif %}
@@ -188,7 +188,7 @@
                                         <span class="badge bg-primary-subtle text-primary-emphasis ms-1">in {{ days_until }} day{{ days_until|pluralize }}</span>
                                     {% endif %}
                                 </h3>
-                                <p>{{ event.description_rendered|striptags|truncatechars:120 }}</p>
+                                <p>{{ event.description_rendered|plain_text|truncatechars:120 }}</p>
                                 {% if event.location %}
                                     <span class="event-location">{{ event.location }}</span>
                                 {% endif %}

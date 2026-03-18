@@ -1,3 +1,4 @@
+import html
 import logging
 from datetime import datetime, timedelta
 from zoneinfo import ZoneInfo
@@ -138,7 +139,8 @@ class Event(PublishedModel):
             '@type': 'Event',
             '@id': url,
             'name': self.title,
-            'description': self.description or Truncator(strip_tags(self.description_rendered)).chars(200),
+            'description': self.description
+            or Truncator(html.unescape(strip_tags(self.description_rendered))).chars(200),
             'startDate': self.start,
             'url': url,
             'mainEntityOfPage': url,

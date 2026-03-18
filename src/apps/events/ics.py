@@ -1,3 +1,4 @@
+import html
 from datetime import datetime, timedelta
 from zoneinfo import ZoneInfo
 
@@ -36,7 +37,7 @@ def generate_ics(event):
     if event.location:
         ics_event.add('location', event.location)
     if event.description_rendered:
-        ics_event.add('description', strip_tags(event.description_rendered))
+        ics_event.add('description', html.unescape(strip_tags(event.description_rendered)))
     ics_event.add('url', f'{settings.SITE_URL}{event.get_absolute_url()}')
 
     cal.add_component(ics_event)

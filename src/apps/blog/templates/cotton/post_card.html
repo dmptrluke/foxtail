@@ -12,7 +12,7 @@
     <div class="blog-card-body">
         <div class="blog-card-date">{{ post.created|date:"F jS, Y" }} &middot; {{ post.text_rendered|reading_time }}</div>
         <h2><a href="{{ post.get_absolute_url }}">{{ post.title }}</a></h2>
-        <p class="blog-card-excerpt">{{ post.description|default:post.text_rendered|safe|striptags|truncatechars:200 }}</p>
+        <p class="blog-card-excerpt">{{ post.description|default:post.text_rendered|plain_text|truncatechars:200 }}</p>
         <c-tag-row :tags="post.tags.all" url_name="blog:list" dark />
     </div>
 </article>

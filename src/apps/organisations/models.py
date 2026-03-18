@@ -1,3 +1,4 @@
+import html
 import logging
 
 from django.conf import settings
@@ -91,7 +92,7 @@ class Organisation(models.Model):
             'mainEntityOfPage': url,
         }
         if self.description_rendered:
-            data['description'] = Truncator(strip_tags(self.description_rendered)).chars(200)
+            data['description'] = Truncator(html.unescape(strip_tags(self.description_rendered))).chars(200)
         if self.url:
             data['sameAs'] = self.url
         if self.logo:

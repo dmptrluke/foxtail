@@ -1,5 +1,5 @@
 {% extends "base/page.html" %}
-{% load breadcrumbs image jsonld opengraph meta twitter %}
+{% load breadcrumbs image jsonld opengraph meta twitter text %}
 
 
 {% block title %}{% if year %}Events in {{ year }}{% else %}Furry Events{% endif %}{% endblock %}
@@ -47,7 +47,7 @@
                         <span>{{ featured_event.start | date:"F jS, Y" }}</span>
                         <span>{{ featured_event.location }}</span>
                     </div>
-                    <p>{{ featured_event.description_rendered | safe | striptags | truncatechars:200 }}</p>
+                    <p>{{ featured_event.description_rendered|plain_text|truncatechars:200 }}</p>
                     {% if featured_event.tags.all or featured_event.resolved_organisation.country %}
                         <div class="tag-row tag-row-dark">
                             {% if featured_event.resolved_organisation.country %}

@@ -1,3 +1,4 @@
+import html
 import logging
 
 from django.conf import settings
@@ -84,7 +85,7 @@ class Post(PublishedModel):
         data = {
             '@type': 'BlogPosting',
             'headline': self.title,
-            'description': self.description or Truncator(strip_tags(self.text_rendered)).chars(200),
+            'description': self.description or Truncator(html.unescape(strip_tags(self.text_rendered))).chars(200),
             'author': {'@type': 'Person', 'name': self.author.name} if self.author else None,
             'datePublished': self.created,
             'dateModified': self.modified,

@@ -1,4 +1,4 @@
-{% load cache humanize %}
+{% load cache humanize text %}
 
 <form action="{% url 'blog:list' %}" class="sidebar-card search">
     <label class="visually-hidden" for="search-field">Search</label>
@@ -16,7 +16,7 @@
                 <a href="{{ post.get_absolute_url }}" class="preview">
                     <strong>{{ post.title }}</strong>
                     <span class="meta">{{ post.created|naturaltime }}</span>
-                    <p>{{ post.text_rendered|safe|striptags|truncatechars:80 }}</p>
+                    <p>{{ post.text_rendered|plain_text|truncatechars:80 }}</p>
                 </a>
             {% endfor %}
         </c-sidebar.content>

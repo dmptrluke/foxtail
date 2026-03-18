@@ -1,4 +1,4 @@
-{% load image %}
+{% load image text %}
 
 <div class="event-card{% if not event.image %} event-card-noimage{% endif %}">
     {% if event.image %}
@@ -20,7 +20,7 @@
                 <span class="age-badge{% if event.resolved_age_requirement == '18' %} age-badge-18{% endif %}">{{ event.resolved_age_requirement_display }}</span>
             {% endif %}
         </div>
-        <p class="event-card-excerpt">{{ event.description_rendered|safe|striptags|truncatechars:120 }}</p>
+        <p class="event-card-excerpt">{{ event.description_rendered|plain_text|truncatechars:120 }}</p>
         {% if event.image %}
             <div class="event-card-date">{{ event.start|date:"F jS, Y" }}</div>
         {% endif %}
