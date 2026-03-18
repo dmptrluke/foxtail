@@ -39,3 +39,9 @@ sub {
 	vertical-align: baseline;
 	bottom: auto;
 }
+
+.text-ft-light   { color: var(--ft-text-light) !important; }
+.text-ft-muted   { color: var(--ft-text-muted) !important; }
+.text-ft-soft    { color: var(--ft-text-soft) !important; }
+.text-ft-faint   { color: var(--ft-text-faint) !important; }
+.text-ft-fainter { color: var(--ft-text-fainter) !important; }

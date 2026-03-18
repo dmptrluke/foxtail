@@ -1,8 +1,8 @@
 <tr id="comment-{{ comment.pk }}">
     <td>{{ comment.text|truncatechars:80 }}</td>
-    <td class="text-secondary">{{ comment.author.get_short_name }}</td>
+    <td class="text-ft-light">{{ comment.author.get_short_name }}</td>
     <td><a href="{{ comment.post.get_absolute_url }}" class="text-decoration-none">{{ comment.post.title }}</a></td>
-    <td class="text-secondary text-nowrap">{{ comment.created|date:"d M Y" }}</td>
+    <td class="text-ft-light text-nowrap">{{ comment.created|date:"d M Y" }}</td>
     <td>
         {% if comment.approved %}
             <span class="badge text-bg-success">Approved</span>

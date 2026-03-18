@@ -17,7 +17,7 @@
         <div class="event-card-location">
             {{ event.location }}
             {% if event.resolved_age_requirement %}
-                <span class="age-badge{% if event.resolved_age_requirement == '18' %} age-badge-18{% endif %}">{{ event.resolved_age_requirement_display }}</span>
+                <span class="age-badge{% if event.resolved_age_requirement == '18' %} age-badge-warning{% endif %}">{{ event.resolved_age_requirement_display }}</span>
             {% endif %}
         </div>
         <p class="event-card-excerpt">{{ event.description_rendered|plain_text|truncatechars:120 }}</p>

@@ -37,7 +37,7 @@
                         <span class="org-hero-type">{{ organisation.get_country_display }}</span>
                     {% endif %}
                     {% if organisation.age_requirement %}
-                        <span class="age-badge age-badge-hero{% if organisation.age_requirement == '18' %} age-badge-18{% endif %}">{{ organisation.get_age_requirement_display }}</span>
+                        <span class="age-badge age-badge-hero{% if organisation.age_requirement == '18' %} tag-pill-warning{% endif %}">{{ organisation.get_age_requirement_display }}</span>
                     {% endif %}
                 </div>
             </div>
@@ -142,13 +142,11 @@
                 {% if series %}
                     <c-sidebar>
                         <c-sidebar.header>Event Series</c-sidebar.header>
-                        <c-sidebar.content>
-                            <ul class="list-unstyled mb-0">
-                                {% for s in series %}
-                                    <li><a href="{{ s.get_absolute_url }}">{{ s.name }}</a></li>
-                                {% endfor %}
-                            </ul>
-                        </c-sidebar.content>
+                        <c-sidebar.cta>
+                            {% for s in series %}
+                                <a href="{{ s.get_absolute_url }}" class="btn btn-outline-secondary">{{ s.name }}</a>
+                            {% endfor %}
+                        </c-sidebar.cta>
                     </c-sidebar>
                 {% endif %}
             </c-slot>

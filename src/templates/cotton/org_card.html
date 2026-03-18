@@ -33,7 +33,7 @@
                         <span class="org-card-region">{{ org.get_country_display }}</span>
                     {% endif %}
                     {% if org.age_requirement %}
-                        <span class="age-badge{% if org.age_requirement == '18' %} age-badge-18{% endif %}">{{ org.get_age_requirement_display }}</span>
+                        <span class="age-badge{% if org.age_requirement == '18' %} age-badge-warning{% endif %}">{{ org.get_age_requirement_display }}</span>
                     {% endif %}
                 </div>
         </div>

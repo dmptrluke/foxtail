@@ -40,7 +40,7 @@
                         <span class="tag-pill">{{ tag.name|title }}</span>
                     {% endfor %}
                     {% if event.resolved_age_requirement %}
-                        <span class="tag-pill tag-pill-meta{% if event.resolved_age_requirement == '18' %} tag-pill-age-18{% endif %}">{{ event.resolved_age_requirement_display }}</span>
+                        <span class="tag-pill tag-pill-meta{% if event.resolved_age_requirement == '18' %} tag-pill-warning{% endif %}">{{ event.resolved_age_requirement_display }}</span>
                     {% endif %}
                 </div>
             {% endif %}

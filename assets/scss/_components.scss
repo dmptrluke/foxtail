@@ -82,9 +82,9 @@ p a {
 	color: $white;
 }
 
-.tag-pill-age-18 {
+.tag-pill-warning {
 	background: rgba($warning, 0.2);
-	color: desaturate($warning, 25%);
+	color: rgba($white, 0.9);
 }
 
 .tag-row-dark .tag-pill-meta {
@@ -243,7 +243,7 @@ p a {
 	vertical-align: middle;
 }
 
-.age-badge-18 {
+.age-badge-warning {
 	background: rgba(var(--bs-warning-rgb), 0.15);
 	color: $warning;
 }
@@ -252,10 +252,6 @@ p a {
 	background: rgba($white, 0.15);
 	color: rgba($white, 0.85);
 
-	&.age-badge-18 {
-		background: rgba($warning, 0.25);
-		color: $warning;
-	}
 }
 
 // Empty states
