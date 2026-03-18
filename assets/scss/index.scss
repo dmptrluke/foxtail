@@ -66,6 +66,7 @@ $theme-colors: map.merge($theme-colors, (
 @import "header";
 @import "footer";
 @import "auth";
+@import "error";
 @import "palettes";
 @import "theme-sharp";
 @import "theme-retro";

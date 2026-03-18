@@ -33,6 +33,9 @@ class AsyncEmailBackend(BaseEmailBackend):
 
 
 def render_email(subject, to, template, context, from_email=None, headers=None):
+    from apps.core.models import SiteSettings
+
+    context.setdefault('conf', SiteSettings.get_solo())
     text_body = render_to_string(f'{template}.txt', context)
     mjml_source = render_to_string(f'{template}.mjml', context)
     html_body = mjml2html(mjml_source)

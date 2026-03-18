@@ -1,14 +1,7 @@
-<mj-section>
+<mj-section background-color="#f8f6fa" padding="24px">
   <mj-column>
-    <mj-text>
-      This is an automatically generated email, please do not reply.
-    </mj-text>
-  </mj-column>
-</mj-section>
-<mj-section background-color="#F2F2F2">
-  <mj-column>
-    <mj-text align="center">
-      Sincerely, {{ conf.org_name }}!
+    <mj-text align="center" color="#7a6490" font-size="13px" padding="0">
+      This is an automated message from {{ conf.org_name }}. Please do not reply to this email.
     </mj-text>
   </mj-column>
 </mj-section>

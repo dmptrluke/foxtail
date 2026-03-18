@@ -63,14 +63,19 @@ def csrf_failure(request, reason=''):
 
 
 def handler_500(request, *args, **kwargs):
-    if settings.SENTRY_DSN:
-        from sentry_sdk import last_event_id
+    return render(request, '500.html', status=500)
 
-        context = {'sentry_event_id': last_event_id()}
-    else:
-        context = {}
 
-    return render(request, '500.html', context=context, status=500)
+def test_error(request, code):
+    """Debug-only view for previewing error pages."""
+    templates = {
+        400: ('400.html', {}),
+        403: ('403.html', {}),
+        404: ('404.html', {}),
+        500: ('500.html', {}),
+    }
+    template, context = templates.get(code, ('404.html', {}))
+    return render(request, template, context=context, status=code)
 
 
 class ApiView(View):

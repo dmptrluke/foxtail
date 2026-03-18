@@ -2,15 +2,16 @@
 
 {% block title %}Request blocked{% endblock %}
 
-{% block error_heading %}Error 403{% endblock %}
+{% block error_code %}403{% endblock %}
+
+{% block error_heading %}Your request couldn't be verified{% endblock %}
 
 {% block error_body %}
-    <p class="lead">Your request couldn't be verified</p>
     {% if in_app_browser %}
         <p>It looks like you're using {{ in_app_browser }}'s built-in browser, which doesn't
             always handle security cookies correctly.</p>
         <p>To fix this, open the page in your regular browser:</p>
-        <ul>
+        <ul style="text-align: left; display: inline-block;">
             <li>Look for a <strong>menu</strong> or <strong>"..."</strong> button and choose
                 <strong>"Open in browser"</strong> or <strong>"Open in Safari/Chrome"</strong></li>
             <li>Or copy the link and paste it into your browser's address bar</li>

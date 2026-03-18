@@ -1,17 +1,17 @@
 {% extends "base.html" %}
 
+{% block body_class %}error-shell{% endblock %}
+
 {% block body %}
-    <a class="visually-hidden-focusable" href="#main-content">Skip to main content</a>
-    {% include "components/header.html" %}
-
-    <main id="main-content" class="container px-3 px-md-4 py-5">
-        <h1>{% block error_heading %}{% endblock %}</h1>
-        {% block error_body %}{% endblock %}
+    <main class="error-content">
+        <span class="error-label">Error {% block error_code %}{% endblock %}</span>
+        <h1 class="error-heading">{% block error_heading %}{% endblock %}</h1>
+        <div class="error-body">
+            {% block error_body %}{% endblock %}
+        </div>
         {% if sentry_event_id %}
-            <p>If you need assistance, you may reference this error as
-                <strong>{{ sentry_event_id }}</strong>.</p>
+            <p class="error-reference">Reference: {{ sentry_event_id }}</p>
         {% endif %}
+        <a href="/" class="error-home-link">Back to home</a>
     </main>
-
-    {% include "components/footer.html" %}
 {% endblock body %}

@@ -1,18 +1,19 @@
 {% load account %}{% user_display user as user_display %}
 <mjml>
+  {% include 'emails/_head.mjml' %}
   <mj-body>
     {% include 'emails/_header.mjml' %}
-    <mj-section>
+    <mj-section padding-top="32px">
       <mj-column>
-        <mj-text font-size="16px">
-          Email Verification
+        <mj-text css-class="heading" padding-bottom="8px">
+          Verify your email
         </mj-text>
         <mj-text>
-          You're receiving this email because the user <strong>{{ user_display }}</strong> has added this email to their {{ conf.org_name }} account. To confirm this is correct, click the button below.
+          Hi {{ user_display }}, please confirm this email address belongs to your {{ conf.org_name }} account.
         </mj-text>
-        <mj-button href="{{ activate_url }}">Verify Email</mj-button>
-        <mj-text>
-          If you are having trouble using the button, please visit the following URL in your web browser: {{ activate_url }}
+        <mj-button href="{{ activate_url }}">Verify email address</mj-button>
+        <mj-text css-class="fallback-url">
+          Or visit this link: {{ activate_url }}
         </mj-text>
       </mj-column>
     </mj-section>

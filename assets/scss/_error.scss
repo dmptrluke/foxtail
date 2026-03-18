@@ -1,0 +1,85 @@
+// Error pages: standalone centered layout on plain background.
+
+.error-shell {
+	min-height: 100vh;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	background: var(--bs-body-bg);
+	background-image: none;
+	color: var(--bs-body-color);
+	padding: 2rem 1rem;
+	padding-top: 2rem;
+}
+
+.error-content {
+	flex: 0 0 auto;
+	text-align: center;
+	max-width: 480px;
+}
+
+.error-label {
+	display: block;
+	font-family: $font-family-accent;
+	font-size: 0.7rem;
+	font-weight: 600;
+	text-transform: uppercase;
+	letter-spacing: 0.06em;
+	color: var(--bs-secondary);
+	margin-bottom: 0.5rem;
+}
+
+.error-heading {
+	font-size: 1.5rem;
+	font-weight: 600;
+	margin-bottom: 0.75rem;
+}
+
+.error-body {
+	font-size: 0.95rem;
+	color: var(--ft-text-muted);
+	line-height: 1.6;
+	margin-bottom: 1.5rem;
+
+	p:last-child {
+		margin-bottom: 0;
+	}
+
+	ul {
+		text-align: left;
+		display: inline-block;
+		padding-left: 1.25rem;
+	}
+}
+
+.error-reference {
+	font-size: 0.775rem;
+	color: var(--ft-text-faint);
+	margin-bottom: 1rem;
+}
+
+.error-home-link {
+	display: inline-block;
+	padding: 0.55rem 1.5rem;
+	border: 1px solid rgba(var(--bs-secondary-rgb), 0.25);
+	border-radius: 8px;
+	color: var(--bs-body-color);
+	font-size: 0.875rem;
+	font-weight: 500;
+	text-decoration: none;
+	transition: border-color 0.15s, box-shadow 0.15s;
+
+	&:hover {
+		border-color: var(--bs-secondary);
+		box-shadow: var(--ft-shadow-sm);
+		text-decoration: none;
+		color: var(--bs-body-color);
+	}
+}
+
+@media (max-width: 480px) {
+	.error-shell {
+		padding: 2rem 1.5rem;
+	}
+}

@@ -1,0 +1,14 @@
+<mj-head>
+  <mj-attributes>
+    <mj-all font-family="Helvetica Neue, Arial, sans-serif" />
+    <mj-body background-color="#f8f6fa" />
+    <mj-section background-color="#ffffff" />
+    <mj-text font-size="15px" color="#2d2639" line-height="1.6" padding="0 24px 16px" />
+    <mj-button background-color="#4a3d55" color="#ffffff" border-radius="8px" font-size="15px" font-weight="600" inner-padding="12px 28px" padding="8px 24px 24px" />
+    <mj-divider border-color="#e8e2f0" border-width="1px" padding="8px 24px" />
+  </mj-attributes>
+  <mj-style>
+    .fallback-url { color: #7a6490 !important; font-size: 13px !important; }
+    .heading { font-weight: 600 !important; font-size: 20px !important; }
+  </mj-style>
+</mj-head>

@@ -1,7 +1,7 @@
 {% load account %}{% user_display user as user_display %}{% autoescape off %}
-You're receiving this email because the user {{ user_display }} has added this email to their {{ conf.org_name }} account.
+Hi {{ user_display }}, please confirm this email address belongs to your {{ conf.org_name }} account.
 
-To confirm this is correct, go to {{ activate_url }}
+Verify your email: {{ activate_url }}
 
-This is an automatically generated email, please do not reply.
+This is an automated message from {{ conf.org_name }}. Please do not reply.
 {% endautoescape %}
