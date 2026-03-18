@@ -1,4 +1,4 @@
-{% load icon %}
+{% load icon text %}
 
 <div class="org-card" {{ attrs }}>
     <div class="org-card-identity">
@@ -10,7 +10,7 @@
                     {% if primary %}
                         {% icon primary.icon_name %}
                     {% else %}
-                        {{ org.name|slice:":2"|upper }}
+                        {{ org.name|initials }}
                     {% endif %}
                 {% endwith %}
             </div>

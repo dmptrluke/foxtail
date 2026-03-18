@@ -1,5 +1,5 @@
 {% extends "base/page.html" %}
-{% load breadcrumbs icon jsonld %}
+{% load breadcrumbs icon jsonld text %}
 
 {% block extra_head %}
     <link rel="canonical" href="{{ SITE_URL }}{{ organisation.get_absolute_url }}"/>
@@ -26,7 +26,7 @@
             {% if organisation.logo %}
                 <img src="{{ organisation.logo.square }}" alt="{{ organisation.name }}" class="org-hero-logo" width="72" height="72">
             {% else %}
-                <div class="org-hero-logo org-hero-logo-placeholder">{{ organisation.name|slice:":2"|upper }}</div>
+                <div class="org-hero-logo org-hero-logo-placeholder">{{ organisation.name|initials }}</div>
             {% endif %}
             <div>
                 <h1 class="org-hero-name">{{ organisation.name }}</h1>
