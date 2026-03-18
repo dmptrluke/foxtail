@@ -24,6 +24,7 @@
         {% text_field form.name %}
         {% text_field form.email %}
         {% honeypot_field form.website %}
+        {{ form.hp_loaded }}
         {% textarea_field form.message rows=5 %}
         {% if form.captcha %}
             {% captcha_field form.captcha %}
