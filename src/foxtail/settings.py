@@ -641,6 +641,8 @@ RECAPTCHA_PRIVATE_KEY = env('RECAPTCHA_PRIVATE_KEY', default=TEST_PRIVATE_KEY)
 # Build metadata
 
 GIT_SHA = env('GIT_SHA', default='')
+RELEASE_VERSION = env('RELEASE_VERSION', default='')
+BUILD_VERSION = RELEASE_VERSION or (GIT_SHA[:8] if GIT_SHA else '')
 
 # Sentry.io
 # <https://docs.sentry.io/platforms/python/django/>
@@ -664,8 +666,8 @@ if SENTRY_DSN:
     if SENTRY_ENVIRONMENT:
         _vars['environment'] = SENTRY_ENVIRONMENT
 
-    if GIT_SHA:
-        _vars['release'] = GIT_SHA
+    if RELEASE_VERSION or GIT_SHA:
+        _vars['release'] = RELEASE_VERSION or GIT_SHA
 
     # set CSP report URI
     if env.bool('SENTRY_CSP', default=False):

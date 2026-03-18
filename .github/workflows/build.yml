@@ -33,6 +33,7 @@ jobs:
             ghcr.io/dmptrluke/foxtail
           tags: |
             type=raw,value=latest,enable={{is_default_branch}}
+            type=raw,value=latest,enable=${{ startsWith(github.ref, 'refs/tags/v') }}
             type=ref,event=pr
             type=semver,pattern={{version}}
             type=semver,pattern={{major}}.{{minor}}
@@ -58,6 +59,7 @@ jobs:
           build-args: |
             BUILD_MODE=production
             GIT_SHA=${{ github.sha }}
+            RELEASE_VERSION=${{ startsWith(github.ref, 'refs/tags/v') && github.ref_name || '' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
@@ -99,8 +101,8 @@ jobs:
           ignore_missing: true
 
   deploy-production:
-    needs: [build, deploy-staging, sentry-staging]
-    if: github.ref == 'refs/heads/master' && github.event_name == 'push'
+    needs: build
+    if: startsWith(github.ref, 'refs/tags/v')
     runs-on: [self-hosted, deploy]
     timeout-minutes: 10
     environment: production
@@ -112,7 +114,7 @@ jobs:
 
   sentry-production:
     needs: deploy-production
-    if: github.ref == 'refs/heads/master' && github.event_name == 'push'
+    if: startsWith(github.ref, 'refs/tags/v')
     runs-on: ubuntu-latest
     timeout-minutes: 5
     permissions:
@@ -130,5 +132,6 @@ jobs:
           SENTRY_PROJECT: ${{ secrets.SENTRY_PROJECT }}
         with:
           environment: production
+          release: ${{ github.ref_name }}
           set_commits: auto
           ignore_missing: true

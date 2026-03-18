@@ -1,0 +1,20 @@
+name: Cleanup Container Images
+
+on:
+  schedule:
+    - cron: '0 3 * * 0' # weekly, Sunday 3am UTC
+
+jobs:
+  prune:
+    runs-on: ubuntu-latest
+    permissions:
+      packages: write
+    steps:
+      - uses: snok/container-retention-policy@v3
+        with:
+          account: user
+          token: ${{ secrets.GITHUB_TOKEN }}
+          image-names: foxtail
+          cut-off: 30 days ago
+          keep-n-most-recent: 30
+          image-tags: "!latest"
