@@ -100,8 +100,40 @@ jobs:
           set_commits: auto
           ignore_missing: true
 
-  deploy-production:
+  verify-tag:
     needs: build
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+    steps:
+      - name: Verify tag is GPG-signed by repo owner
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          TAG_SHA=$(gh api repos/${{ github.repository }}/git/ref/tags/${{ github.ref_name }} --jq '.object.sha')
+          TAG_INFO=$(gh api repos/${{ github.repository }}/git/tags/$TAG_SHA)
+
+          VERIFIED=$(echo "$TAG_INFO" | jq -r '.verification.verified')
+          TAGGER=$(echo "$TAG_INFO" | jq -r '.tagger.email')
+
+          echo "Tag: ${{ github.ref_name }}"
+          echo "Tagger: $TAGGER"
+          echo "Verified: $VERIFIED"
+
+          if [ "$VERIFIED" != "true" ]; then
+            echo "::error::Tag ${{ github.ref_name }} is not GPG-signed or signature is invalid"
+            exit 1
+          fi
+
+          if [ "$TAGGER" != "luke@dmptr.com" ]; then
+            echo "::error::Tag ${{ github.ref_name }} was not signed by repo owner (signed by: $TAGGER)"
+            exit 1
+          fi
+
+  deploy-production:
+    needs: [build, verify-tag]
     if: startsWith(github.ref, 'refs/tags/v')
     runs-on: [self-hosted, deploy]
     timeout-minutes: 10
