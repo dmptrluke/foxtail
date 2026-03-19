@@ -668,6 +668,7 @@ if SENTRY_DSN:
         'send_default_pii': env.bool('SENTRY_PII', default=False),
         'integrations': [DjangoIntegration(), RedisIntegration()],
         'traces_sample_rate': env.float('SENTRY_TRACES_SAMPLE_RATE', default=0.2),
+        'profiles_sample_rate': env.float('SENTRY_PROFILES_SAMPLE_RATE', default=0.2),
     }
 
     SENTRY_ENVIRONMENT = env('SENTRY_ENVIRONMENT', default='')
