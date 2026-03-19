@@ -61,6 +61,7 @@ INSTALLED_APPS = [
     'solo',
     'csp',
     'csp_helpers',
+    'formguard',
     'apps.core',
     'apps.email',
     'apps.accounts',
@@ -639,6 +640,8 @@ TEST_PRIVATE_KEY = '6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe'
 
 if DEBUG or TESTING:
     SILENCED_SYSTEM_CHECKS += ['django_recaptcha.recaptcha_test_key_error']
+
+FORMGUARD_SUCCESS_MESSAGE = 'Your message has been sent.'
 
 RECAPTCHA_INVISIBLE = env.bool('RECAPTCHA_INVISIBLE', default=True)
 RECAPTCHA_PUBLIC_KEY = env('RECAPTCHA_PUBLIC_KEY', default=TEST_PUBLIC_KEY)

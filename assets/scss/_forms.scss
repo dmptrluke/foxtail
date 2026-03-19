@@ -67,14 +67,3 @@ form {
 .image-crop-container img {
 	max-width: 100%;
 }
-
-.form-assist {
-	opacity: 0;
-	position: absolute;
-	top: 0;
-	left: 0;
-	height: 0;
-	width: 0;
-	z-index: -1;
-	overflow: hidden;
-}

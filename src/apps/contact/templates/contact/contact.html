@@ -3,6 +3,8 @@
 
 {% block title %}Contact Us{% endblock %}
 
+{% block extra_head %}{{ form.media }}{% endblock %}
+
 {% block heading %}
     <h1>Contact us</h1>
     <p class="auth-subtitle">
@@ -23,8 +25,9 @@
         {% non_field_errors form %}
         {% text_field form.name %}
         {% text_field form.email %}
-        {% honeypot_field form.website %}
-        {{ form.hp_loaded }}
+        {{ form.website }}
+        {{ form.fg_token }}
+        {{ form.fg_js }}
         {% textarea_field form.message rows=5 %}
         {% if form.captcha %}
             {% captcha_field form.captcha %}

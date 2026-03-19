@@ -4,14 +4,14 @@ from django.urls import reverse_lazy
 from django.views.generic import FormView
 
 from csp_helpers.mixins import CSPViewMixin
+from formguard.views import GuardedFormViewMixin
 
-from apps.core.mixins import HoneypotViewMixin
 from apps.email.engine import send_email
 
 from .forms import ContactForm
 
 
-class ContactView(HoneypotViewMixin, CSPViewMixin, FormView):
+class ContactView(GuardedFormViewMixin, CSPViewMixin, FormView):
     template_name = 'contact/contact.html'
     form_class = ContactForm
     success_url = reverse_lazy('contact:contact')
@@ -22,8 +22,8 @@ class ContactView(HoneypotViewMixin, CSPViewMixin, FormView):
         return initial
 
     def form_valid(self, form):
-        if self.is_honeypot(form):
-            return self.honeypot_success()
+        if self.is_bot(form):
+            return self.bot_response()
 
         name = form.cleaned_data['name']
         context = {

@@ -5,15 +5,14 @@ from django.core import signing
 from django.urls import reverse
 
 import pytest
+from formguard.test import GuardedFormTestMixin, make_guard_token
 
 from conftest import CAPTCHA_FIELD
 
 pytestmark = pytest.mark.django_db
 
-VALID_TIMESTAMP = signing.dumps(0)
 
-
-class TestContactView:
+class TestContactView(GuardedFormTestMixin):
     url = reverse('contact:contact')
 
     # successful submission sends email with correct subject, recipients, and body
@@ -22,7 +21,7 @@ class TestContactView:
             'name': 'Fox McCloud',
             'email': 'fox@example.com',
             'message': 'Hello there',
-            'hp_loaded': VALID_TIMESTAMP,
+            **self.guard_data(),
             **CAPTCHA_FIELD,
         }
         response = client.post(self.url, data)
@@ -45,7 +44,7 @@ class TestContactView:
             'name': 'Fox',
             'email': 'fox@example.com',
             'message': 'Hello',
-            'hp_loaded': VALID_TIMESTAMP,
+            **self.guard_data(),
             **CAPTCHA_FIELD,
         }
         client.post(self.url, data)
@@ -60,34 +59,34 @@ class TestContactView:
             'email': 'bot@spam.com',
             'message': 'Buy now',
             'website': 'http://spam.com',
-            'hp_loaded': VALID_TIMESTAMP,
+            'fg_token': make_guard_token(),
             **CAPTCHA_FIELD,
         }
         response = client.post(self.url, data)
 
         assert response.status_code == 302
         assert len(mailoutbox) == 0
-        assert 'Honeypot triggered' in caplog.text
+        assert 'formguard triggered' in caplog.text
         messages = list(get_messages(response.wsgi_request))
         assert any('Your message has been sent' in str(m) for m in messages)
 
     # submission faster than minimum time blocks silently
     def test_honeypot_timer_blocks_fast_submission(self, client, mailoutbox, caplog):
         now = 1000.0
-        recent_timestamp = signing.dumps(now)
+        recent_timestamp = signing.dumps(now, salt='formguard')
         data = {
             'name': 'Bot',
             'email': 'bot@spam.com',
             'message': 'Buy now',
-            'hp_loaded': recent_timestamp,
+            'fg_token': recent_timestamp,
             **CAPTCHA_FIELD,
         }
-        with patch('apps.core.mixins.time.time', return_value=now + 1):
+        with patch('formguard.checks.time.time', return_value=now + 1):
             response = client.post(self.url, data)
 
         assert response.status_code == 302
         assert len(mailoutbox) == 0
-        assert 'Honeypot timer triggered' in caplog.text
+        assert 'formguard triggered' in caplog.text
 
     # tampered or missing timestamp blocks silently
     def test_honeypot_bad_signature_blocks_submission(self, client, mailoutbox, caplog):
@@ -95,14 +94,14 @@ class TestContactView:
             'name': 'Bot',
             'email': 'bot@spam.com',
             'message': 'Buy now',
-            'hp_loaded': 'tampered-garbage',
+            'fg_token': 'tampered-garbage',
             **CAPTCHA_FIELD,
         }
         response = client.post(self.url, data)
 
         assert response.status_code == 302
         assert len(mailoutbox) == 0
-        assert 'Honeypot bad signature' in caplog.text
+        assert 'formguard triggered' in caplog.text
 
     # GET with ?email= query param pre-fills the email field
     def test_email_prefill_from_query_param(self, client):

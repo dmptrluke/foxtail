@@ -362,6 +362,18 @@ wheels = [
 ]
 
 [[package]]
+name = "django-formguard"
+version = "0.1.1"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "django" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/38/e7/bbfef5ce4c3aca367a8cab39d5c6b75a25ecf5646258cae1c9706a8fe132/django_formguard-0.1.1.tar.gz", hash = "sha256:bc85b0aa991fa6667339c2ef4e4923ac8d7ef4e95516da21564ca0597b52ad6d", size = 25576, upload-time = "2026-03-19T03:20:05.715Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/13/ef/f88133d25275d4f049b7bc7cab508cbcbe8001ebf259a9290bcbd9e816c3/django_formguard-0.1.1-py3-none-any.whl", hash = "sha256:86c9075a753c0f2e600524cc5c0de437dd02562cd720ba8fb04ac0ec75df4fef", size = 20861, upload-time = "2026-03-19T03:20:06.869Z" },
+]
+
+[[package]]
 name = "django-imagefield"
 version = "0.23.0a3"
 source = { registry = "https://pypi.org/simple" }
@@ -579,6 +591,7 @@ dependencies = [
     { name = "django-csp" },
     { name = "django-csp-helpers" },
     { name = "django-environ" },
+    { name = "django-formguard" },
     { name = "django-imagefield", extra = ["vips"] },
     { name = "django-markdownfield" },
     { name = "django-published" },
@@ -641,6 +654,7 @@ requires-dist = [
     { name = "django-csp", specifier = "==4.0" },
     { name = "django-csp-helpers", specifier = "==0.9.0" },
     { name = "django-environ", specifier = "==0.13.0" },
+    { name = "django-formguard", specifier = ">=0.1.1" },
     { name = "django-imagefield", extras = ["vips"], specifier = "==0.23.0a3" },
     { name = "django-markdownfield", specifier = "==0.13.2" },
     { name = "django-published", specifier = "==0.10.0" },
