@@ -60,16 +60,21 @@ class OrganisationDetailView(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         org = self.object
-        series = org.series.all()
         social_links = org.social_links.all()
-        events = (
+
+        # Evaluate events and series eagerly so the posts query can filter on their pks
+        # instead of nesting them as subqueries
+        series = list(org.series.all())
+        events = list(
             queryset_filter(Event.objects.for_organisation(org))
             .with_relations()
             .order_by(F('series__name').asc(nulls_last=True), '-start')
         )
+        event_pks = [e.pk for e in events]
+        series_pks = [s.pk for s in series]
         posts = (
             queryset_filter(Post.objects)
-            .filter(Q(organisations=org) | Q(events__in=events) | Q(event_series__in=series))
+            .filter(Q(organisations=org) | Q(events__pk__in=event_pks) | Q(event_series__pk__in=series_pks))
             .distinct()
         )
         next_event = (
