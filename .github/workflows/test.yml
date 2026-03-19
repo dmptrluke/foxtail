@@ -118,7 +118,6 @@ jobs:
 
   percy:
     runs-on: ubuntu-latest
-    needs: test
     timeout-minutes: 10
 
     services:
