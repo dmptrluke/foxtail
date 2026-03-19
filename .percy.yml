@@ -1,0 +1,12 @@
+version: 2
+snapshot:
+  widths:
+    - 375
+    - 1280
+  minHeight: 1024
+  percyCSS: |
+    /* Stabilise animations and transitions for consistent snapshots */
+    *, *::before, *::after {
+      animation-duration: 0s !important;
+      transition-duration: 0s !important;
+    }

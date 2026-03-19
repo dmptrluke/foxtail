@@ -23,5 +23,8 @@
         "tom-select": "^2.5.2",
         "ua-parser-js": "^2.0.9",
         "vite": "^8.0.0"
+    },
+    "devDependencies": {
+        "@percy/cli": "^1.31.10"
     }
 }

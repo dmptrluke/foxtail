@@ -1,0 +1,16 @@
+- name: Homepage
+  url: http://localhost:8000/
+- name: Login
+  url: http://localhost:8000/accounts/login/
+- name: Signup
+  url: http://localhost:8000/accounts/signup/
+- name: Password Reset
+  url: http://localhost:8000/accounts/password/reset/
+- name: Blog
+  url: http://localhost:8000/blog/
+- name: Events
+  url: http://localhost:8000/events/
+- name: Groups
+  url: http://localhost:8000/groups/
+- name: Contact
+  url: http://localhost:8000/contact/
