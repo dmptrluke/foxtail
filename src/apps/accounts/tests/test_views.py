@@ -149,13 +149,12 @@ class TestDashboardView:
         assert response.status_code == 302
         assert '/login/' in response['Location']
 
-    # context includes primary email and email count
+    # context includes primary email
     def test_context_email_info(self, client, user):
         client.force_login(user)
         email = EmailAddress.objects.create(user=user, email=user.email, verified=True, primary=True)
         response = client.get(reverse('account_profile'))
         assert response.context['primary_email'] == email
-        assert response.context['email_count'] == 1
 
     # TOTP authenticator shows MFA as enabled and appears in mfa_methods
     def test_context_mfa_enabled(self, client, user):
@@ -172,13 +171,12 @@ class TestDashboardView:
         response = client.get(reverse('account_profile'))
         assert response.context['mfa_enabled'] is False
 
-    # context includes social account count and provider names
+    # context includes social account count
     def test_context_social_info(self, client, user):
         client.force_login(user)
         SocialAccount.objects.create(user=user, provider='discord', uid='123', extra_data={})
         response = client.get(reverse('account_profile'))
         assert response.context['social_count'] == 1
-        assert 'discord' in response.context['social_providers']
 
     # authorized OIDC apps are counted by distinct client
     def test_context_app_count(self, client, user, oidc_token):
@@ -196,7 +194,7 @@ class TestDashboardView:
     def test_context_defaults_empty(self, client, user):
         client.force_login(user)
         response = client.get(reverse('account_profile'))
-        assert response.context['email_count'] == 0
+        assert response.context['primary_email'] is None
         assert response.context['mfa_enabled'] is False
         assert response.context['app_count'] == 0
         assert response.context['social_count'] == 0

@@ -45,24 +45,24 @@ class TestHealthView:
 
 
 class TestHandler500:
-    # 500 handler renders with empty context when Sentry is not configured
+    # 500 handler renders the template with no context
     @patch('apps.core.views.render')
-    def test_without_sentry(self, mock_render, request_factory: RequestFactory, settings):
-        settings.SENTRY_DSN = ''
+    def test_renders_500_template(self, mock_render, request_factory: RequestFactory):
         request = request_factory.get('/')
         handler_500(request)
 
-        mock_render.assert_called_once_with(request, '500.html', context={}, status=500)
+        mock_render.assert_called_once_with(request, '500.html', status=500)
 
-    # 500 handler includes Sentry event ID in context when configured
-    @patch('sentry_sdk.last_event_id', return_value='abc123')
-    @patch('apps.core.views.render')
-    def test_with_sentry(self, mock_render, mock_event_id, request_factory: RequestFactory, settings):
-        settings.SENTRY_DSN = 'https://test@sentry.io/123'
+    # 500 handler falls back to static template when rendering fails
+    @patch('apps.core.views.loader')
+    @patch('apps.core.views.render', side_effect=Exception('template error'))
+    def test_static_fallback(self, mock_render, mock_loader, request_factory: RequestFactory):
+        mock_loader.get_template.return_value.render.return_value = '<h1>500</h1>'
         request = request_factory.get('/')
-        handler_500(request)
+        response = handler_500(request)
 
-        mock_render.assert_called_once_with(request, '500.html', context={'sentry_event_id': 'abc123'}, status=500)
+        mock_loader.get_template.assert_called_once_with('500_static.html')
+        assert response.status_code == 500
 
 
 class TestCsrfFailure:

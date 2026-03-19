@@ -54,8 +54,9 @@ def _testing_overrides(request, settings):
         'default': {
             'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
             'LOCATION': 'test-cache',
-        }
+        },
     }
+    settings.SOLO_CACHE = 'default'
     if 'keep_rate_limits' not in request.keywords:
         settings.ACCOUNT_RATE_LIMITS = {}
 
