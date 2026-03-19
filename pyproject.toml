@@ -12,7 +12,7 @@ dependencies = [
     "django-cotton==2.6.2",
     "django-csp==4.0",
     "django-vite==3.1.0",
-    "django-csp-helpers==0.9.0",
+    "django-csp-helpers==1.0.1",
     "django-environ==0.13.0",
     "django-imagefield[vips]==0.23.0a3",
     "mjml-python==1.3.7",
