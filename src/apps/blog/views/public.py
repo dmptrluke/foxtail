@@ -20,7 +20,9 @@ from ..models import Comment, Post
 
 
 def _blog_years():
-    return queryset_filter(Post.objects).dates('created', 'year', order='DESC').values_list('created__year', flat=True)
+    return list(
+        queryset_filter(Post.objects).dates('created', 'year', order='DESC').values_list('created__year', flat=True)
+    )
 
 
 def _sidebar_context():

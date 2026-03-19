@@ -21,17 +21,17 @@ class IndexView(StructuredDataMixin, TemplateView):
         context = super().get_context_data(**kwargs)
         today = now().date()
         context['post_list'] = queryset_filter(Post.objects).select_related('author').all()[:3]
-        context['event_list'] = Event.objects.filter(Q(start__gte=today) | Q(end__gte=today)).prefetch_related(
-            'interests__user'
-        )[:3]
+        event_list = list(
+            queryset_filter(Event.objects)
+            .filter(Q(start__gte=today) | Q(end__gte=today))
+            .prefetch_related('interests__user')[:3]
+        )
+        context['event_list'] = event_list
 
-        context['featured_organisations'] = Organisation.objects.filter(featured=True).prefetch_related('social_links')[
-            :6
-        ]
+        context['featured_organisations'] = Organisation.objects.filter(featured=True).with_social_links()[:6]
 
-        next_event = context['event_list'].first() if context['event_list'] else None
-        if next_event:
-            context['days_until'] = (next_event.start - today).days
+        if event_list:
+            context['days_until'] = (event_list[0].start - today).days
 
         if getattr(self.request, 'user', None) and self.request.user.is_authenticated:
             self._add_dashboard_context(context, today)
@@ -43,14 +43,14 @@ class IndexView(StructuredDataMixin, TemplateView):
 
         user = self.request.user
 
-        user_events = (
+        user_events = list(
             EventInterest.objects.filter(user=user)
             .filter(Q(event__start__gte=today) | Q(event__end__gte=today))
             .select_related('event')
             .order_by('event__start')
         )
-        context['user_event_count'] = user_events.count()
-        first_interest = user_events.first()
+        context['user_event_count'] = len(user_events)
+        first_interest = user_events[0] if user_events else None
         if first_interest:
             context['user_next_event'] = first_interest.event
             context['user_next_event_days'] = (first_interest.event.start - today).days

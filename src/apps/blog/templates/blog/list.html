@@ -1,5 +1,5 @@
 {% extends "base/page.html" %}
-{% load breadcrumbs jsonld opengraph meta twitter %}
+{% load breadcrumbs cache jsonld opengraph meta twitter %}
 
 
 {% block title %}{% if year %}News from {{ year }}{% else %}News{% endif %}{% endblock %}
@@ -51,7 +51,9 @@
         <c-slot name="content">
             {% if posts %}
                 {% for post in page_obj %}
-                    <c-post-card :post="post" />
+                    {% cache 3600 post_card post.pk post.modified %}
+                        <c-post-card :post="post" />
+                    {% endcache %}
                 {% endfor %}
             {% else %}
                 <div class="empty-state">

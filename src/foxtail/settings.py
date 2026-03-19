@@ -176,7 +176,12 @@ DATABASES['default']['CONN_HEALTH_CHECKS'] = True
 # Cache
 # <https://docs.djangoproject.com/en/stable/topics/cache/#setting-up-the-cache>
 
-CACHES = {'default': env.cache(default='dummycache://')}
+CACHES = {
+    'default': env.cache(default='dummycache://'),
+    'locmem': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+    },
+}
 
 # Sessions
 # <https://docs.djangoproject.com/en/stable/topics/http/sessions/#using-cached-sessions>
@@ -689,8 +694,8 @@ TAGGIT_CASE_INSENSITIVE = True
 # django-solo
 # <https://github.com/lazybird/django-solo>
 
-SOLO_CACHE = 'default'
-SOLO_CACHE_TIMEOUT = 60 * 10
+SOLO_CACHE = 'locmem'
+SOLO_CACHE_TIMEOUT = 60 * 5
 
 # django-structured-data
 # <https://github.com/dmptrluke/django-structured-data>

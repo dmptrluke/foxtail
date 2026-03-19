@@ -23,7 +23,7 @@ class OrganisationListView(StructuredDataMixin, ListView):
     context_object_name = 'organisation_list'
 
     def get_queryset(self):
-        qs = Organisation.objects.prefetch_related('social_links')
+        qs = Organisation.objects.with_social_links()
         region = self.request.GET.get('region')
         if region and region in dict(Organisation.REGION_CHOICES):
             qs = qs.filter(Q(region=region) | Q(region='nationwide') | Q(region='online'))
@@ -36,7 +36,7 @@ class OrganisationListView(StructuredDataMixin, ListView):
         context['organisations'] = [o for o in all_orgs if o.group_type == 'organisation' and not o.featured]
         context['communities'] = [o for o in all_orgs if o.group_type == 'community' and not o.featured]
         context['interest_groups'] = [o for o in all_orgs if o.group_type == 'interest' and not o.featured]
-        active_regions = set(Organisation.objects.exclude(region='').values_list('region', flat=True).distinct())
+        active_regions = {o.region for o in all_orgs if o.region}
         context['regions'] = [(k, v) for k, v in Organisation.REGION_CHOICES if k in active_regions]
         context['current_region'] = self.request.GET.get('region', '')
         return context
@@ -55,7 +55,7 @@ class OrganisationDetailView(DetailView):
     template_name = 'organisations/organisation_detail.html'
 
     def get_queryset(self):
-        return Organisation.objects.prefetch_related('series', 'social_links')
+        return Organisation.objects.with_relations()
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -64,7 +64,7 @@ class OrganisationDetailView(DetailView):
         social_links = org.social_links.all()
         events = (
             queryset_filter(Event.objects.for_organisation(org))
-            .select_related('organisation', 'series')
+            .with_relations()
             .order_by(F('series__name').asc(nulls_last=True), '-start')
         )
         posts = (
@@ -74,8 +74,8 @@ class OrganisationDetailView(DetailView):
         )
         next_event = (
             queryset_filter(Event.objects.for_organisation(org))
+            .with_relations()
             .filter(Q(end__gte=localdate()) | Q(end__isnull=True, start__gte=localdate()))
-            .select_related('series')
             .order_by('start')
             .first()
         )
@@ -98,7 +98,7 @@ class EventSeriesDetailView(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         series = self.object
-        events = queryset_filter(Event.objects).filter(series=series).order_by('-start')
+        events = queryset_filter(Event.objects).with_relations().filter(series=series).order_by('-start')
         posts = queryset_filter(Post.objects).filter(Q(event_series=series) | Q(events__in=events)).distinct()
         context['events'] = events
         context['posts'] = posts

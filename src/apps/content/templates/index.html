@@ -193,10 +193,12 @@
                                     <span class="event-location">{{ event.location }}</span>
                                 {% endif %}
                             </div>
-                            {% with total=event.interests.count %}
-                                {% if total > 0 %}
-                                    <c-avatar_stack :interests="event.interests.all" overflow="{{ total|add:'-3' }}" :total="total" />
-                                {% endif %}
+                            {% with interests=event.interests.all %}
+                                {% with total=interests|length %}
+                                    {% if total > 0 %}
+                                        <c-avatar_stack :interests="interests" overflow="{{ total|add:'-3' }}" :total="total" />
+                                    {% endif %}
+                                {% endwith %}
                             {% endwith %}
                         </a>
                 {% endfor %}

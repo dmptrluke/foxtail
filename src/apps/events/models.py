@@ -6,6 +6,7 @@ from zoneinfo import ZoneInfo
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.db import models
+from django.db.models import Count
 from django.urls import reverse
 from django.utils.functional import cached_property
 from django.utils.html import strip_tags
@@ -32,14 +33,16 @@ AGE_CHOICES = [
 
 
 class EventQuerySet(models.QuerySet):
+    def with_relations(self):
+        """Select related organisation, series, and series.organisation"""
+        return self.select_related('organisation', 'series', 'series__organisation')
+
     def for_organisation(self, org):
         """Filter to events belonging to an org directly or through a series"""
         return self.filter(models.Q(organisation=org) | models.Q(series__organisation=org)).distinct()
 
 
 class Event(PublishedModel):
-    objects = EventQuerySet.as_manager()
-
     title = models.CharField(max_length=100, help_text='100 characters or fewer.')
     slug = AutoSlugField(populate_from='title', unique_for_year='start')
     tags = TaggableManager(blank=True)
@@ -68,6 +71,8 @@ class Event(PublishedModel):
 
     created = models.DateTimeField(auto_now_add=True, verbose_name='date created')
     modified = models.DateTimeField(auto_now=True, verbose_name='date modified')
+
+    objects = EventQuerySet.as_manager()
 
     class Meta:
         ordering = ['start']
@@ -186,6 +191,12 @@ class Event(PublishedModel):
         return data
 
 
+class EventInterestQuerySet(models.QuerySet):
+    def status_counts(self):
+        """Return {status: count} for all interest statuses"""
+        return {r['status']: r['n'] for r in self.values('status').annotate(n=Count('pk'))}
+
+
 class EventInterest(models.Model):
     INTERESTED = 'interested'
     GOING = 'going'
@@ -198,6 +209,8 @@ class EventInterest(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='event_interests')
     status = models.CharField(max_length=12, choices=STATUS_CHOICES, default=INTERESTED)
     created = models.DateTimeField(auto_now_add=True)
+
+    objects = EventInterestQuerySet.as_manager()
 
     class Meta:
         constraints = [

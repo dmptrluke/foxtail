@@ -17,6 +17,16 @@ from apps.core.fields import AutoSlugField
 logger = logging.getLogger(__name__)
 
 
+class OrganisationQuerySet(models.QuerySet):
+    def with_social_links(self):
+        """Prefetch related social links"""
+        return self.prefetch_related('social_links')
+
+    def with_relations(self):
+        """Prefetch related series and social links"""
+        return self.prefetch_related('series', 'social_links')
+
+
 class Organisation(models.Model):
     TYPE_CHOICES = [
         ('organisation', 'Organisation'),
@@ -64,6 +74,8 @@ class Organisation(models.Model):
 
     created = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
+
+    objects = OrganisationQuerySet.as_manager()
 
     class Meta:
         ordering = ['name']

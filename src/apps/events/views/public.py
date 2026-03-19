@@ -1,4 +1,4 @@
-from django.db.models import Count, Q
+from django.db.models import Q
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 from django.utils.timezone import localdate
@@ -18,7 +18,9 @@ from ..models import Event, EventInterest
 
 
 def _event_years():
-    return queryset_filter(Event.objects).dates('start', 'year', order='DESC').values_list('start__year', flat=True)
+    return list(
+        queryset_filter(Event.objects).dates('start', 'year', order='DESC').values_list('start__year', flat=True)
+    )
 
 
 class EventListView(StructuredDataMixin, ListView):
@@ -29,7 +31,7 @@ class EventListView(StructuredDataMixin, ListView):
         return Event.objects.none()
 
     def _get_base_queryset(self):
-        qs = queryset_filter(Event.objects, self.request.user).select_related('organisation', 'series')
+        qs = queryset_filter(Event.objects, self.request.user).with_relations()
         org_slug = self.request.GET.get('org')
         if org_slug:
             try:
@@ -45,10 +47,10 @@ class EventListView(StructuredDataMixin, ListView):
         today = localdate()
         upcoming_filter = Q(start__gte=today) | Q(end__gte=today)
         published = self._get_base_queryset()
-        upcoming = published.filter(upcoming_filter).prefetch_related('tags').order_by('start')
+        upcoming = list(published.filter(upcoming_filter).prefetch_related('tags').order_by('start'))
         context['upcoming_events'] = upcoming
         context['past_events'] = published.exclude(upcoming_filter).prefetch_related('tags').order_by('-start')
-        context['featured_event'] = upcoming.first()
+        context['featured_event'] = upcoming[0] if upcoming else None
         context['event_years'] = _event_years()
         context['filter_org'] = getattr(self, '_filter_org', None)
         return context
@@ -76,7 +78,12 @@ class EventListYearView(StructuredDataMixin, YearMixin, ListView):
         context['year'] = str(year)
         today = localdate()
         upcoming_filter = Q(start__gte=today) | Q(end__gte=today)
-        year_qs = queryset_filter(Event.objects, self.request.user).filter(start__year=year).prefetch_related('tags')
+        year_qs = (
+            queryset_filter(Event.objects, self.request.user)
+            .with_relations()
+            .filter(start__year=year)
+            .prefetch_related('tags')
+        )
         context['upcoming_events'] = year_qs.filter(upcoming_filter).order_by('start')
         context['past_events'] = year_qs.exclude(upcoming_filter).order_by('-start')
         context['event_years'] = _event_years()
@@ -99,28 +106,27 @@ class EventDetailView(PublishedDetailMixin, YearMixin, DetailView):
     def get_queryset(self):
         year = int(self.get_year())
         return (
-            Event.objects.filter(start__year=year, slug=self.kwargs['slug'])
-            .select_related('organisation', 'series', 'series__organisation')
-            .prefetch_related('tags')
+            Event.objects.filter(start__year=year, slug=self.kwargs['slug']).with_relations().prefetch_related('tags')
         )
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         from apps.blog.models import Post
 
-        context['related_posts'] = queryset_filter(Post.objects).filter(events=self.object)
+        context['related_posts'] = list(queryset_filter(Post.objects).filter(events=self.object).order_by('-created'))
 
         event = self.object
         org = event.resolved_organisation
         series = event.series
         show_series = bool(series)
-        # Hide series when org has one series with the same name (redundant display)
+        # Hide series when org has one series with the same name (redundant display).
+        # Check name equality before count() to avoid the DB query when names differ.
         if (
             show_series
             and org
             and series.organisation_id == org.pk
-            and org.series.count() == 1
             and series.name == org.name
+            and org.series.count() == 1
         ):
             show_series = False
         context['show_series'] = show_series
@@ -129,12 +135,10 @@ class EventDetailView(PublishedDetailMixin, YearMixin, DetailView):
             interest = EventInterest.objects.filter(event=self.object, user=self.request.user).first()
             context['user_interest_status'] = interest.status if interest else ''
 
-        interests = self.object.interests.select_related('user')[:10]
-        context['interests'] = interests
-        context['interest_count'] = self.object.interests.count()
+        context['interests'] = list(self.object.interests.select_related('user')[:10])
 
-        counts = self.object.interests.values('status').annotate(n=Count('pk'))
-        count_map = {r['status']: r['n'] for r in counts}
+        count_map = self.object.interests.status_counts()
+        context['interest_count'] = sum(count_map.values())
         context['interested_count'] = count_map.get(EventInterest.INTERESTED, 0)
         context['going_count'] = count_map.get(EventInterest.GOING, 0)
         return context
@@ -155,8 +159,7 @@ class EventInterestToggleView(ApiView):
         else:
             EventInterest.objects.filter(event=event, user=request.user).delete()
 
-        counts = event.interests.values('status').annotate(n=Count('pk'))
-        count_map = {r['status']: r['n'] for r in counts}
+        count_map = event.interests.status_counts()
         return self.success(
             {
                 'status': status or None,

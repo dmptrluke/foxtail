@@ -52,9 +52,7 @@ class DashboardView(LoginRequiredMixin, TemplateView):
         ctx = super().get_context_data(**kwargs)
         user = self.request.user
 
-        emails = EmailAddress.objects.filter(user=user)
-        ctx['primary_email'] = emails.filter(primary=True).first()
-        ctx['email_count'] = emails.count()
+        ctx['primary_email'] = EmailAddress.objects.filter(user=user, primary=True).first()
 
         authenticator_types = set(
             Authenticator.objects.filter(user=user)
@@ -66,9 +64,7 @@ class DashboardView(LoginRequiredMixin, TemplateView):
 
         ctx['app_count'] = OIDCToken.objects.filter(user=user).values('client').distinct().count()
 
-        social_accounts = SocialAccount.objects.filter(user=user)
-        ctx['social_count'] = social_accounts.count()
-        ctx['social_providers'] = list(social_accounts.values_list('provider', flat=True))
+        ctx['social_count'] = SocialAccount.objects.filter(user=user).count()
 
         ctx['has_password'] = user.has_usable_password()
 
