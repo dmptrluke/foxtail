@@ -329,14 +329,14 @@ wheels = [
 
 [[package]]
 name = "django-csp-helpers"
-version = "0.9.0"
+version = "1.0.1"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "django" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/09/8f/ea076739207528ccb73f1b3c5588d8af0785ea2d78bfb666d13a691b054c/django_csp_helpers-0.9.0.tar.gz", hash = "sha256:4b0e24e152dba4cb0117ab201e86da231bc64d6bd85f21598dab11a6192483c7", size = 8004, upload-time = "2026-03-11T23:05:03.602Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/61/ee/d56d33c2104cd08fd51d5260c87220785ac4b972416bcb2c55f0e97da49f/django_csp_helpers-1.0.1.tar.gz", hash = "sha256:4da212a7ca50e74fc21b1bd82dee2af8311fe7c2276b976e981db41397177962", size = 8976, upload-time = "2026-03-19T04:54:47.277Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/f0/b5/61dd113077f0182bac4964af6648f541b3ff7de5b48bf7e685378889d6fc/django_csp_helpers-0.9.0-py3-none-any.whl", hash = "sha256:1ea5fe63cfcb923bc6214a5ca7f577b8515f91c480adf711fdc8e0daa9ff3910", size = 6883, upload-time = "2026-03-11T23:05:04.592Z" },
+    { url = "https://files.pythonhosted.org/packages/a7/d3/33b11042502c826f858e592890ae0f140daaf0125b199bfcad98ff7dbfbe/django_csp_helpers-1.0.1-py3-none-any.whl", hash = "sha256:091fca951ed321b12b7ef17483f201db6be73322be84ff3f938921147ede492d", size = 7482, upload-time = "2026-03-19T04:54:46.004Z" },
 ]
 
 [[package]]
@@ -652,7 +652,7 @@ requires-dist = [
     { name = "django-cleanup", specifier = "==9.0.0" },
     { name = "django-cotton", specifier = "==2.6.2" },
     { name = "django-csp", specifier = "==4.0" },
-    { name = "django-csp-helpers", specifier = "==0.9.0" },
+    { name = "django-csp-helpers", specifier = "==1.0.1" },
     { name = "django-environ", specifier = "==0.13.0" },
     { name = "django-formguard", specifier = ">=0.1.1" },
     { name = "django-imagefield", extras = ["vips"], specifier = "==0.23.0a3" },
