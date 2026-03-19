@@ -523,7 +523,7 @@ CONTENT_SECURITY_POLICY = {
         'font-src': [SELF] + ASSET_HOSTS,
         'img-src': [SELF, 'data:', 'https://api.maptiler.com'] + ASSET_HOSTS,
         'object-src': [NONE],
-        'worker-src': [SELF, 'blob:'],
+        'worker-src': [NONE],
         'connect-src': [SELF, 'https://sentry.io', 'https://api.maptiler.com', 'https://www.google.com/recaptcha/'],
         'base-uri': [NONE],
         'frame-ancestors': [NONE],
