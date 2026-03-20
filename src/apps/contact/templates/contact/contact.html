@@ -25,10 +25,7 @@
         {% non_field_errors form %}
         {% text_field form.name %}
         {% text_field form.email %}
-        {{ form.website }}
-        {{ form.fg_token }}
-        {{ form.fg_nonce }}
-        {{ form.fg_js }}
+        {{ form.guard_fields }}
         {% textarea_field form.message rows=5 %}
         {% if form.captcha %}
             {% captcha_field form.captcha %}
