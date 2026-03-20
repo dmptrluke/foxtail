@@ -49,6 +49,10 @@
 {
     "prerender": [
         {
+            "where": {"selector_matches": ".navbar-nav > .nav-link, .navbar-brand"},
+            "eagerness": "moderate"
+        },
+        {
             "where": {"selector_matches": ".event-card a, .blog-card a, .org-card a"},
             "eagerness": "moderate"
         }

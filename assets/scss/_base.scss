@@ -1,7 +1,6 @@
-@view-transition { navigation: auto; }
-
 html {
 	height: 100% !important;
+	background: var(--bs-body-bg);
 
 	@media (min-width: 1921px) {
 		font-size: 17px;
