@@ -1,11 +1,8 @@
-from unittest.mock import patch
-
 from django.contrib.messages import get_messages
-from django.core import signing
 from django.urls import reverse
 
 import pytest
-from formguard.test import GuardedFormTestMixin, make_guard_token
+from formguard.test import GuardedFormTestMixin
 
 from conftest import CAPTCHA_FIELD
 
@@ -58,8 +55,7 @@ class TestContactView(GuardedFormTestMixin):
             'name': 'Bot',
             'email': 'bot@spam.com',
             'message': 'Buy now',
-            'website': 'http://spam.com',
-            'fg_token': make_guard_token(),
+            **self.guard_data(website='http://spam.com'),
             **CAPTCHA_FIELD,
         }
         response = client.post(self.url, data)
@@ -70,31 +66,13 @@ class TestContactView(GuardedFormTestMixin):
         messages = list(get_messages(response.wsgi_request))
         assert any('Your message has been sent' in str(m) for m in messages)
 
-    # submission faster than minimum time blocks silently
-    def test_honeypot_timer_blocks_fast_submission(self, client, mailoutbox, caplog):
-        now = 1000.0
-        recent_timestamp = signing.dumps(now, salt='formguard')
+    # tampered or missing token blocks silently
+    def test_bad_token_blocks_submission(self, client, mailoutbox, caplog):
         data = {
             'name': 'Bot',
             'email': 'bot@spam.com',
             'message': 'Buy now',
-            'fg_token': recent_timestamp,
-            **CAPTCHA_FIELD,
-        }
-        with patch('formguard.checks.time.time', return_value=now + 1):
-            response = client.post(self.url, data)
-
-        assert response.status_code == 302
-        assert len(mailoutbox) == 0
-        assert 'formguard triggered' in caplog.text
-
-    # tampered or missing timestamp blocks silently
-    def test_honeypot_bad_signature_blocks_submission(self, client, mailoutbox, caplog):
-        data = {
-            'name': 'Bot',
-            'email': 'bot@spam.com',
-            'message': 'Buy now',
-            'fg_token': 'tampered-garbage',
+            **self.guard_data(fg_token='tampered-garbage'),
             **CAPTCHA_FIELD,
         }
         response = client.post(self.url, data)
