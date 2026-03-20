@@ -1,6 +1,7 @@
 html {
 	height: 100% !important;
 	background: var(--bs-body-bg);
+	scrollbar-gutter: stable;
 
 	@media (min-width: 1921px) {
 		font-size: 17px;

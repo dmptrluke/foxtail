@@ -20,7 +20,7 @@
                 <span class="age-badge{% if event.resolved_age_requirement == '18' %} age-badge-warning{% endif %}">{{ event.resolved_age_requirement_display }}</span>
             {% endif %}
         </div>
-        <p class="event-card-excerpt">{{ event.description_rendered|plain_text|truncatechars:120 }}</p>
+        <p class="event-card-excerpt">{{ event.description_rendered|plain_text|truncatechars:150 }}</p>
         {% if event.image %}
             <div class="event-card-date">{{ event.start|date:"F jS, Y" }}</div>
         {% endif %}

@@ -117,7 +117,9 @@
             <div class="row narrow-gutters org-grid">
                 {% for org in featured_organisations %}
                     <div class="col-md-6 col-lg-4">
-                        <c-org_card :org="org" />
+                        {% cache 3600 org_card org.pk %}
+                            <c-org_card :org="org" />
+                        {% endcache %}
                     </div>
                 {% endfor %}
             </div>
@@ -164,7 +166,7 @@
                             <header>
                                 <time datetime="{{ post.created|date:'Y-m-d' }}">{{ post.created|date:"M j, Y" }}</time>
                                 <h3><a href="{{ post.get_absolute_url }}" class="stretched-link">{{ post.title }}</a></h3>
-                                <p>{{ post.text_rendered|plain_text|truncatechars:100 }}</p>
+                                <p>{{ post.text_rendered|plain_text|truncatechars:150 }}</p>
                             </header>
                         </article>
                     {% if forloop.last %}</div>{% endif %}
@@ -188,7 +190,7 @@
                                         <span class="badge bg-primary-subtle text-primary-emphasis ms-1">in {{ days_until }} day{{ days_until|pluralize }}</span>
                                     {% endif %}
                                 </h3>
-                                <p>{{ event.description_rendered|plain_text|truncatechars:120 }}</p>
+                                <p>{{ event.description_rendered|plain_text|truncatechars:170 }}</p>
                                 {% if event.location %}
                                     <span class="event-location">{{ event.location }}</span>
                                 {% endif %}

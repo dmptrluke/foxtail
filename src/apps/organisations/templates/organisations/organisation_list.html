@@ -1,5 +1,5 @@
 {% extends "base/page.html" %}
-{% load jsonld opengraph meta twitter %}
+{% load jsonld opengraph meta twitter cache %}
 
 {% block title %}Groups{% endblock %}
 
@@ -38,7 +38,9 @@
         <div class="row narrow-gutters org-grid">
             {% for org in featured %}
                 <div class="col-md-6 col-lg-4">
-                    <c-org_card :org="org" />
+                    {% cache 3600 org_card org.pk %}
+                        <c-org_card :org="org" />
+                    {% endcache %}
                 </div>
             {% endfor %}
         </div>
@@ -49,7 +51,9 @@
         <div class="row narrow-gutters org-grid">
             {% for org in communities %}
                 <div class="col-md-6 col-lg-4">
-                    <c-org_card :org="org" />
+                    {% cache 3600 org_card org.pk %}
+                        <c-org_card :org="org" />
+                    {% endcache %}
                 </div>
             {% endfor %}
         </div>
@@ -60,7 +64,9 @@
         <div class="row narrow-gutters org-grid">
             {% for org in interest_groups %}
                 <div class="col-md-6 col-lg-4">
-                    <c-org_card :org="org" />
+                    {% cache 3600 org_card org.pk %}
+                        <c-org_card :org="org" />
+                    {% endcache %}
                 </div>
             {% endfor %}
         </div>
@@ -71,7 +77,9 @@
         <div class="row narrow-gutters org-grid">
             {% for org in organisations %}
                 <div class="col-md-6 col-lg-4">
-                    <c-org_card :org="org" />
+                    {% cache 3600 org_card org.pk %}
+                        <c-org_card :org="org" />
+                    {% endcache %}
                 </div>
             {% endfor %}
         </div>
