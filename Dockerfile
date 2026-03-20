@@ -34,8 +34,7 @@ RUN mkdir -p /app/static /app/storage/media \
     && chown -R abc:abc /app/static /app/storage
 
 COPY pyproject.toml uv.lock ./
-RUN --mount=type=cache,target=/root/.cache/uv \
-    uv sync --frozen --no-install-project --no-dev
+RUN uv sync --frozen --no-install-project --no-dev
 
 ENV PATH="/app/.venv/bin:$PATH"
 
