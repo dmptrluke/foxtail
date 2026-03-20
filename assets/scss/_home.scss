@@ -2,10 +2,6 @@
 .hero-home {
 	padding: 3.5rem 0 4rem;
 
-	&.hero-compact {
-		padding: 2rem 0 2.5rem;
-	}
-
 	h1 {
 		font-size: 2.25rem;
 		margin-bottom: 0.5rem;
@@ -352,7 +348,7 @@
 		font-size: 0.875rem;
 		color: var(--ft-text-muted);
 		margin: 0;
-		@include line-clamp(2);
+		@include line-clamp(1);
 	}
 
 	.event-location {

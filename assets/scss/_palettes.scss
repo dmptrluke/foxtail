@@ -110,6 +110,21 @@
 		--bs-btn-active-bg: #{$primary};
 		--bs-btn-active-border-color: #{$primary};
 	}
+
+	.btn-outline-secondary {
+		--bs-btn-color: #{$secondary};
+		--bs-btn-border-color: #{$secondary};
+		--bs-btn-hover-bg: #{$secondary};
+		--bs-btn-hover-border-color: #{$secondary};
+		--bs-btn-active-bg: #{color.adjust($secondary, $lightness: -10%)};
+		--bs-btn-active-border-color: #{color.adjust($secondary, $lightness: -12.5%)};
+	}
+
+	.page-link.active,
+	.active > .page-link {
+		--bs-pagination-active-bg: #{$primary};
+		--bs-pagination-active-border-color: #{$primary};
+	}
 }
 
 // Shadows: light mode derives from --bs-dark-rgb, dark mode uses solid black at higher opacity

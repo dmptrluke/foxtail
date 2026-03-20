@@ -11,7 +11,7 @@
 {% endblock %}
 
 {% block hero %}
-    <c-hero hero_class="hero-home{% if user.is_authenticated %} hero-compact{% endif %}">
+    <c-hero hero_class="hero-home">
         {% if user.is_authenticated %}
             <c-hero.title>Welcome back, {{ user.get_short_name }}</c-hero.title>
             <p>See what's happening in the NZ furry community.</p>
