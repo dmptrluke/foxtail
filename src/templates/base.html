@@ -3,7 +3,6 @@
 <html lang="en" class="no-js" data-default-scheme="{{ DEFAULT_COLOR_SCHEME }}" prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# article: http://ogp.me/ns/article#">
 <head>
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 
     <meta name="application-name" content="{{ conf.org_name }}">
@@ -46,5 +45,15 @@
 <body class="{% block body_class %}{% endblock %}">
 {% block body %}{% endblock body %}
 {% block extra_footer %}{% endblock extra_footer %}
+<script type="speculationrules" nonce="{{ request.csp_nonce }}">
+{
+    "prerender": [
+        {
+            "where": {"selector_matches": ".event-card a, .blog-card a, .org-card a"},
+            "eagerness": "moderate"
+        }
+    ]
+}
+</script>
 </body>
 </html>

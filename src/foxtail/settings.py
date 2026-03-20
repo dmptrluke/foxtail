@@ -273,6 +273,7 @@ STORAGES = {
     },
 }
 STATIC_ROOT = str(BASE_DIR / 'static')
+WHITENOISE_MAX_AGE = 31536000
 
 if not S3_MEDIA:
     MEDIA_ROOT = str(BASE_DIR / 'storage/media')
