@@ -15,6 +15,8 @@ class ContactView(GuardedFormViewMixin, CSPViewMixin, FormView):
     template_name = 'contact/contact.html'
     form_class = ContactForm
     success_url = reverse_lazy('contact:contact')
+    stealth_reject = True
+    stealth_message = 'Your message has been sent.'
 
     def get_initial(self):
         initial = super().get_initial()
@@ -22,9 +24,6 @@ class ContactView(GuardedFormViewMixin, CSPViewMixin, FormView):
         return initial
 
     def form_valid(self, form):
-        if self.is_bot(form):
-            return self.bot_response()
-
         name = form.cleaned_data['name']
         context = {
             'name': name,

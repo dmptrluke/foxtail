@@ -363,14 +363,14 @@ wheels = [
 
 [[package]]
 name = "django-formguard"
-version = "0.3.0"
+version = "0.4.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "django" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/37/c1/1b836bafa84bff998755a064efea5aa4b8e436c25addc81b03a7fbf928b1/django_formguard-0.3.0.tar.gz", hash = "sha256:5a814e33fe368cfdb01dd16c3e145b82b6b07ad080a9a6741a8ac73a70a41187", size = 38673, upload-time = "2026-03-20T03:16:36.728Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/fe/82/9f04e9c3513551997f66c4d3a87bb58bdf31ec496ff3f18a57cd1f4fa14e/django_formguard-0.4.0.tar.gz", hash = "sha256:b620106de5b0e8ce402b61808ebb8f4d3a36b50834c72bf9ff78ea96a3b55f0c", size = 39791, upload-time = "2026-03-22T07:04:20.479Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/7a/2e/56531e43b1055894e2c6ec36794ff5a111e8977c314e0e43b17d53c7435e/django_formguard-0.3.0-py3-none-any.whl", hash = "sha256:77b76f6fca68da8ad1bf8fd4d16dfdf500e5a0c76e3db4354c58ec79065e65d5", size = 23556, upload-time = "2026-03-20T03:16:34.046Z" },
+    { url = "https://files.pythonhosted.org/packages/b9/84/c42b9d2b141d5a2bfc0ae71773f7c6794c376793dab447777aefc6d5b68e/django_formguard-0.4.0-py3-none-any.whl", hash = "sha256:69cd8733226c667caec1f1ed58b807f49ea142521af37c39ff703a51ff772175", size = 12350, upload-time = "2026-03-22T07:04:19.063Z" },
 ]
 
 [[package]]
@@ -654,7 +654,7 @@ requires-dist = [
     { name = "django-csp", specifier = "==4.0" },
     { name = "django-csp-helpers", specifier = "==1.0.1" },
     { name = "django-environ", specifier = "==0.13.0" },
-    { name = "django-formguard", specifier = ">=0.3.0" },
+    { name = "django-formguard", specifier = ">=0.4.0" },
     { name = "django-imagefield", extras = ["vips"], specifier = "==0.23.0a3" },
     { name = "django-markdownfield", specifier = "==0.13.2" },
     { name = "django-published", specifier = "==0.10.0" },
