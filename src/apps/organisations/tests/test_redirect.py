@@ -2,8 +2,7 @@ from django.test import Client
 from django.urls import reverse
 
 import pytest
-
-from conftest import CAPTCHA_FIELD
+from formguard.test import GuardedFormTestMixin
 
 from .factories import SocialLinkFactory
 
@@ -28,7 +27,7 @@ class TestSocialLinkRedirectAuthenticated:
         assert link.click_count == 1
 
 
-class TestSocialLinkRedirectAnonymous:
+class TestSocialLinkRedirectAnonymous(GuardedFormTestMixin):
     # anonymous user sees the interstitial page
     def test_anonymous_gets_interstitial(self, client):
         link = SocialLinkFactory()
@@ -37,21 +36,21 @@ class TestSocialLinkRedirectAnonymous:
         assert 'form' in response.context
         assert 'link' in response.context
 
-    # valid POST with reCAPTCHA token redirects to real URL
+    # valid POST with guard data redirects to real URL
     def test_valid_post_redirects(self, client):
         link = SocialLinkFactory(url='https://discord.gg/test')
-        response = client.post(reverse('social_link_redirect', args=[link.pk]), CAPTCHA_FIELD)
+        response = client.post(reverse('social_link_redirect', args=[link.pk]), self.guard_data())
         assert response.status_code == 302
         assert response['Location'] == 'https://discord.gg/test'
 
     # valid POST increments click_count
     def test_valid_post_increments_click_count(self, client):
         link = SocialLinkFactory()
-        client.post(reverse('social_link_redirect', args=[link.pk]), CAPTCHA_FIELD)
+        client.post(reverse('social_link_redirect', args=[link.pk]), self.guard_data())
         link.refresh_from_db()
         assert link.click_count == 1
 
-    # POST without reCAPTCHA token re-renders form with errors
+    # POST without guard data re-renders form with errors
     def test_invalid_post_rerenders(self, client):
         link = SocialLinkFactory()
         response = client.post(reverse('social_link_redirect', args=[link.pk]), {})
@@ -62,7 +61,7 @@ class TestSocialLinkRedirectAnonymous:
     def test_post_without_csrf_token(self):
         csrf_client = Client(enforce_csrf_checks=True)
         link = SocialLinkFactory(url='https://discord.gg/test')
-        response = csrf_client.post(reverse('social_link_redirect', args=[link.pk]), CAPTCHA_FIELD)
+        response = csrf_client.post(reverse('social_link_redirect', args=[link.pk]), self.guard_data())
         assert response.status_code == 302
 
 
@@ -74,5 +73,5 @@ class TestSocialLinkRedirect404:
 
     # POST to nonexistent PK returns 404
     def test_post_nonexistent(self, client):
-        response = client.post(reverse('social_link_redirect', args=[99999]), CAPTCHA_FIELD)
+        response = client.post(reverse('social_link_redirect', args=[99999]), {})
         assert response.status_code == 404

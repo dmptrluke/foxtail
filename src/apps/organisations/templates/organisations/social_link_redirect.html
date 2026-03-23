@@ -1,7 +1,8 @@
 {% extends "base/shell.html" %}
-{% load form_tags %}
 
 {% block title %}Redirecting to {{ link.get_platform_display }}{% endblock %}
+
+{% block extra_head %}{{ form.media }}{% endblock %}
 
 {% block heading %}
     <p>Redirecting to {{ link.get_platform_display }} for {{ link.organisation }}...</p>
@@ -9,17 +10,7 @@
 
 {% block content %}
     <form method="post" action="." id="redirect-form" class="auth-form">
-        {% captcha_field form.captcha %}
+        {{ form.guard_fields }}
         <button type="submit" class="btn btn-primary w-100">Continue to {{ link.get_platform_display }}</button>
     </form>
-
-    <noscript>
-        <p class="text-muted mt-3">JavaScript is required for automatic verification. Click the button above to continue.</p>
-    </noscript>
-
-    <script nonce="{{ request.csp_nonce }}">
-        window.addEventListener('load', function() {
-            document.getElementById('redirect-form').requestSubmit();
-        });
-    </script>
 {% endblock content %}

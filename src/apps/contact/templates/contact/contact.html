@@ -25,11 +25,8 @@
         {% non_field_errors form %}
         {% text_field form.name %}
         {% text_field form.email %}
-        {{ form.guard_fields }}
         {% textarea_field form.message rows=5 %}
-        {% if form.captcha %}
-            {% captcha_field form.captcha %}
-        {% endif %}
+        {{ form.guard_fields }}
         <button type="submit" id="contact_submit" class="auth-btn-primary">Send message</button>
     </form>
 

@@ -17,6 +17,7 @@ from django.contrib.messages import constants as messages
 import environ
 import pymdownx.emoji
 from csp.constants import NONCE, NONE, SELF
+from formguard.conf import BUILTINS
 
 SRC_DIR = Path(__file__).resolve(strict=True).parents[1]
 BASE_DIR = SRC_DIR.parent
@@ -83,7 +84,6 @@ INSTALLED_APPS = [
     'widget_tweaks',
     'allauth.idp',
     'allauth.idp.oidc',
-    'django_recaptcha',
     'imagefield',
     'huey.contrib.djhuey',
     'django_cleanup.apps.CleanupConfig',
@@ -501,8 +501,7 @@ ASSET_HOSTS = env.list('ASSET_HOSTS', default=[])
 _csp_script_src = [
     SELF,
     NONCE,
-    'https://www.google.com/recaptcha/',
-    'https://www.gstatic.com/recaptcha/',
+    'https://challenges.cloudflare.com',
 ] + ASSET_HOSTS
 
 # we don't use strict-dynamic in debug because it breaks django-debug-toolbar
@@ -518,7 +517,7 @@ CONTENT_SECURITY_POLICY = {
         'style-src': [SELF, NONCE] + ASSET_HOSTS,
         'style-src-attr': ["'unsafe-inline'"],
         'frame-src': [
-            'https://www.google.com/recaptcha/',
+            'https://challenges.cloudflare.com',
             'https://www.youtube.com',
             'https://www.youtube-nocookie.com',
         ],
@@ -526,12 +525,10 @@ CONTENT_SECURITY_POLICY = {
         'img-src': [SELF, 'data:', 'https://api.maptiler.com'] + ASSET_HOSTS,
         'object-src': [NONE],
         'worker-src': ['blob:'],
-        'connect-src': [SELF, 'https://sentry.io', 'https://api.maptiler.com', 'https://www.google.com/recaptcha/'],
+        'connect-src': [SELF, 'https://sentry.io', 'https://api.maptiler.com'],
         'base-uri': [NONE],
         'frame-ancestors': [NONE],
-        # form-action removed: Chrome blocks reCAPTCHA invisible widget form.submit()
-        # calls as cross-origin (iframe callback context). script-src nonce policy
-        # prevents form injection attacks. CSP_FORM_ACTION env var also retired.
+        # form-action omitted: script-src nonce policy prevents form injection attacks
         'upgrade-insecure-requests': not DEBUG,
         'report-uri': env('CSP_REPORT_URI', default=None),
     },
@@ -633,18 +630,15 @@ MARKDOWN_EXTENSION_CONFIGS = {'pymdownx.emoji': {'emoji_generator': pymdownx.emo
 
 MARKDOWN_LINK_BLACKLIST = ['furry.nz', 'furry.org.nz']
 
-# ReCAPTCHA
-# <https://pypi.org/project/django-recaptcha/>
+# Formguard
+# <https://github.com/dmptrluke/django-formguard>
 
-TEST_PUBLIC_KEY = '6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI'
-TEST_PRIVATE_KEY = '6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe'
-
-if DEBUG or TESTING:
-    SILENCED_SYSTEM_CHECKS += ['django_recaptcha.recaptcha_test_key_error']
-
-RECAPTCHA_INVISIBLE = env.bool('RECAPTCHA_INVISIBLE', default=True)
-RECAPTCHA_PUBLIC_KEY = env('RECAPTCHA_PUBLIC_KEY', default=TEST_PUBLIC_KEY)
-RECAPTCHA_PRIVATE_KEY = env('RECAPTCHA_PRIVATE_KEY', default=TEST_PRIVATE_KEY)
+FORMGUARD_CHECKS = BUILTINS + [
+    'formguard.contrib.turnstile.TurnstileCheck',
+]
+FORMGUARD_TURNSTILE_SITE_KEY = env('TURNSTILE_SITE_KEY', default='1x00000000000000000000AA')
+FORMGUARD_TURNSTILE_SECRET_KEY = env('TURNSTILE_SECRET_KEY', default='1x0000000000000000000000000000000AA')
+FORMGUARD_TURNSTILE_IP_HEADER = 'HTTP_X_FORWARDED_FOR'
 
 # Build metadata
 

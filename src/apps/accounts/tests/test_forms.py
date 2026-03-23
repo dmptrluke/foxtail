@@ -9,7 +9,6 @@ from PIL import Image
 
 from apps.accounts.forms import SignupForm, UserForm
 from apps.accounts.forms.custom import MAX_AVATAR_SIZE
-from conftest import CAPTCHA_FIELD
 
 from .factories import UserFactory
 
@@ -40,7 +39,6 @@ class TestSignupForm(GuardedFormTestMixin):
                 'email': proto_user.email,
                 'password1': proto_user._password,
                 'password2': proto_user._password,
-                **CAPTCHA_FIELD,
                 **self.guard_data(),
             },
             request=request_factory.get('/'),
@@ -58,7 +56,6 @@ class TestSignupForm(GuardedFormTestMixin):
                 'email': proto_user.email,
                 'password1': proto_user._password,
                 'password2': proto_user._password,
-                **CAPTCHA_FIELD,
             }
         )
 
@@ -76,7 +73,6 @@ class TestSignupForm(GuardedFormTestMixin):
                 'email': proto_user.email,
                 'password1': proto_user._password,
                 'password2': proto_user._password,
-                **CAPTCHA_FIELD,
             }
         )
 
@@ -94,7 +90,6 @@ class TestSignupForm(GuardedFormTestMixin):
                 'email': user.email,
                 'password1': proto_user._password,
                 'password2': proto_user._password,
-                **CAPTCHA_FIELD,
             }
         )
 
@@ -112,7 +107,6 @@ class TestSignupForm(GuardedFormTestMixin):
                 'email': 'chocolate',
                 'password1': proto_user._password,
                 'password2': proto_user._password,
-                **CAPTCHA_FIELD,
             }
         )
 
@@ -130,7 +124,6 @@ class TestSignupForm(GuardedFormTestMixin):
                 'email': '',
                 'password1': proto_user._password,
                 'password2': proto_user._password,
-                **CAPTCHA_FIELD,
             }
         )
 
@@ -148,7 +141,6 @@ class TestSignupForm(GuardedFormTestMixin):
                 'email': proto_user.email,
                 'password1': 'password',
                 'password2': 'password',
-                **CAPTCHA_FIELD,
             }
         )
 
@@ -166,7 +158,6 @@ class TestSignupForm(GuardedFormTestMixin):
                 'email': proto_user.email,
                 'password1': proto_user._password,
                 'password2': fake.password(),
-                **CAPTCHA_FIELD,
             }
         )
 

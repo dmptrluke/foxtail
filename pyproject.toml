@@ -18,7 +18,6 @@ dependencies = [
     "mjml-python==1.3.7",
     "django-markdownfield==0.13.2",
     "django-published==0.10.0",
-    "django-recaptcha==4.1.0",
     "django-redis==6.0.0",
     "huey",
     "django-storages[s3]==1.14.6",
@@ -40,7 +39,7 @@ dependencies = [
     "unidecode==1.4.0",
     "whitenoise==6.12.0",
     "django-solo>=2.4.0",
-    "django-formguard>=0.6.0",
+    "django-formguard>=0.7.1",
 ]
 
 [dependency-groups]

@@ -54,11 +54,6 @@ def textarea_field(field, hide_label=False, inline=False, autocomplete=_UNSET, p
     return _field_context(field, hide_label=hide_label, inline=inline)
 
 
-@register.inclusion_tag('components/forms/captcha_field.html')
-def captcha_field(field):
-    return _field_context(field)
-
-
 @register.inclusion_tag('components/forms/image_field.html')
 def image_field(field, hide_label=False):
     return _field_context(field, hide_label=hide_label)

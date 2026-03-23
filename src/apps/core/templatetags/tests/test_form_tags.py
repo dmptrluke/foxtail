@@ -1,6 +1,6 @@
 from unittest.mock import MagicMock
 
-from ..form_tags import _UNSET, _set_widget_attrs, captcha_field, check_field, plain_errors, prefix_field
+from ..form_tags import _UNSET, _set_widget_attrs, check_field, plain_errors, prefix_field
 
 
 def _make_field(**initial_attrs):
@@ -48,15 +48,6 @@ class TestCheckField:
         assert result['field'] is field
         assert result['hide_label'] is True
         assert result['inline'] is True
-        assert 'is_multiwidget' in result
-
-
-class TestCaptchaField:
-    # returns context with field key
-    def test_returns_field_context(self):
-        field = _make_field()
-        result = captcha_field(field)
-        assert result['field'] is field
         assert 'is_multiwidget' in result
 
 

@@ -3,6 +3,8 @@
 
 {% block title %}Create Account{% endblock %}
 
+{% block extra_head %}{{ form.media }}{% endblock %}
+
 {% block heading %}<h1>Create account</h1>{% endblock %}
 
 {% block content %}
@@ -23,7 +25,6 @@
         {% text_field form.password1 autocomplete="new-password" placeholder=None %}
         {% text_field form.password2 autocomplete="new-password" placeholder=None %}
 
-        {% if form.captcha %}{% captcha_field form.captcha %}{% endif %}
         {{ form.guard_fields }}
 
         <button type="submit" id="create_account_submit" class="auth-btn-primary">Create account</button>

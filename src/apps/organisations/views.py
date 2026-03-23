@@ -117,7 +117,7 @@ class SocialLinkRedirectView(View):
         if request.user.is_authenticated:
             SocialLink.objects.filter(pk=pk).update(click_count=F('click_count') + 1)
             return HttpResponseRedirect(link.url)
-        form = SocialLinkRedirectForm(csp_nonce=request.csp_nonce)
+        form = SocialLinkRedirectForm(request=request, csp_nonce=request.csp_nonce)
         return render(
             request,
             'organisations/social_link_redirect.html',
@@ -129,7 +129,7 @@ class SocialLinkRedirectView(View):
 
     def post(self, request, pk):
         link = get_object_or_404(SocialLink, pk=pk)
-        form = SocialLinkRedirectForm(request.POST, csp_nonce=request.csp_nonce)
+        form = SocialLinkRedirectForm(request.POST, request=request, csp_nonce=request.csp_nonce)
         if form.is_valid():
             SocialLink.objects.filter(pk=pk).update(click_count=F('click_count') + 1)
             return HttpResponseRedirect(link.url)

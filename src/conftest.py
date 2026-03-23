@@ -77,6 +77,3 @@ def staff_user(second_user):
 @pytest.fixture
 def request_factory() -> RequestFactory:
     return RequestFactory()
-
-
-CAPTCHA_FIELD = {'g-recaptcha-response': 'PASSED'}

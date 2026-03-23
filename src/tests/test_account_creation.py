@@ -2,15 +2,15 @@ from django.contrib.messages import get_messages
 from django.urls import reverse
 
 import pytest
+from formguard.test import GuardedFormTestMixin
 
 from apps.accounts.models import User
 from apps.accounts.tests.factories import UserFactory
-from conftest import CAPTCHA_FIELD
 
 pytestmark = pytest.mark.django_db
 
 
-class TestAccountCreation:
+class TestAccountCreation(GuardedFormTestMixin):
     url = reverse('account_signup')
 
     # valid signup creates user and redirects to homepage
@@ -23,7 +23,7 @@ class TestAccountCreation:
                 'email': proto_user.email,
                 'password1': proto_user._password,
                 'password2': proto_user._password,
-                **CAPTCHA_FIELD,
+                **self.guard_data(),
             },
         )
         assert response.status_code == 302
@@ -40,7 +40,7 @@ class TestAccountCreation:
                 'email': proto_user.email,
                 'password1': proto_user._password,
                 'password2': proto_user._password,
-                **CAPTCHA_FIELD,
+                **self.guard_data(),
             },
             follow=True,
         )

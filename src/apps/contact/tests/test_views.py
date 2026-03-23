@@ -4,8 +4,6 @@ from django.urls import reverse
 import pytest
 from formguard.test import GuardedFormTestMixin
 
-from conftest import CAPTCHA_FIELD
-
 pytestmark = pytest.mark.django_db
 
 
@@ -19,7 +17,6 @@ class TestContactView(GuardedFormTestMixin):
             'email': 'fox@example.com',
             'message': 'Hello there',
             **self.guard_data(),
-            **CAPTCHA_FIELD,
         }
         response = client.post(self.url, data)
 
@@ -42,7 +39,6 @@ class TestContactView(GuardedFormTestMixin):
             'email': 'fox@example.com',
             'message': 'Hello',
             **self.guard_data(),
-            **CAPTCHA_FIELD,
         }
         client.post(self.url, data)
 
@@ -56,7 +52,6 @@ class TestContactView(GuardedFormTestMixin):
             'email': 'bot@spam.com',
             'message': 'Buy now',
             **self.guard_data(website='http://spam.com'),
-            **CAPTCHA_FIELD,
         }
         response = client.post(self.url, data)
 
@@ -73,7 +68,6 @@ class TestContactView(GuardedFormTestMixin):
             'email': 'bot@spam.com',
             'message': 'Buy now',
             **self.guard_data(fg_token='tampered-garbage'),
-            **CAPTCHA_FIELD,
         }
         response = client.post(self.url, data)
 
