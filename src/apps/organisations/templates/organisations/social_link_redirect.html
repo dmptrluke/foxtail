@@ -2,7 +2,14 @@
 
 {% block title %}Redirecting to {{ link.get_platform_display }}{% endblock %}
 
-{% block extra_head %}{{ form.media }}{% endblock %}
+{% block extra_head %}
+    <script nonce="{{ request.csp_nonce }}">
+        function onTurnstileSuccess() {
+            document.getElementById('redirect-form').requestSubmit();
+        }
+    </script>
+    {{ form.media }}
+{% endblock %}
 
 {% block heading %}
     <p>Redirecting to {{ link.get_platform_display }} for {{ link.organisation }}...</p>
@@ -15,10 +22,4 @@
             <button type="submit" class="btn btn-primary w-100">Continue to {{ link.get_platform_display }}</button>
         </noscript>
     </form>
-
-    <script nonce="{{ request.csp_nonce }}">
-        function onTurnstileSuccess() {
-            document.getElementById('redirect-form').requestSubmit();
-        }
-    </script>
 {% endblock content %}
