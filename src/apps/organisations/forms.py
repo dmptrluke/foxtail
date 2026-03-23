@@ -5,4 +5,8 @@ from formguard.forms import GuardedFormMixin
 
 
 class SocialLinkRedirectForm(GuardedFormMixin, CSPFormMixin, Form):
-    pass
+    guard_check_options = {
+        'formguard.contrib.turnstile.TurnstileCheck': {
+            'CALLBACK': 'onTurnstileSuccess',
+        },
+    }

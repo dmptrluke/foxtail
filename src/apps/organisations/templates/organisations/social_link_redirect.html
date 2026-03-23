@@ -11,6 +11,14 @@
 {% block content %}
     <form method="post" action="." id="redirect-form" class="auth-form">
         {{ form.guard_fields }}
-        <button type="submit" class="btn btn-primary w-100">Continue to {{ link.get_platform_display }}</button>
+        <noscript>
+            <button type="submit" class="btn btn-primary w-100">Continue to {{ link.get_platform_display }}</button>
+        </noscript>
     </form>
+
+    <script nonce="{{ request.csp_nonce }}">
+        function onTurnstileSuccess() {
+            document.getElementById('redirect-form').requestSubmit();
+        }
+    </script>
 {% endblock content %}
