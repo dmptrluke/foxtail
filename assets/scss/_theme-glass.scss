@@ -8,14 +8,22 @@
 	--ft-glass-backdrop: blur(16px) saturate(180%);
 	--ft-glass-glow: 0 0 0 1px rgba(255, 255, 255, 0.05);
 
-	// Ambient gradient blobs
+	// Transparent body so blobs (behind body via z-index:-1) show through
 	body {
-		background-image:
-			linear-gradient(var(--bs-dark) calc(4rem + env(safe-area-inset-top, 0px)), transparent calc(4rem + env(safe-area-inset-top, 0px))),
+		background-color: transparent;
+	}
+
+	// Ambient gradient blobs behind body, above html's canvas background
+	body::before {
+		content: '';
+		position: fixed;
+		inset: 0;
+		z-index: -1;
+		background:
 			radial-gradient(ellipse 50% 40% at 15% 20%, rgba(var(--bs-primary-rgb), 0.1) 0%, transparent 70%),
 			radial-gradient(ellipse 40% 50% at 85% 60%, rgba(var(--bs-secondary-rgb), 0.08) 0%, transparent 70%),
 			radial-gradient(ellipse 60% 30% at 50% 90%, rgba(var(--bs-primary-rgb), 0.06) 0%, transparent 70%);
-		background-attachment: fixed, fixed, fixed, fixed;
+		pointer-events: none;
 	}
 
 	// Navbar: translucent with content showing through
@@ -26,7 +34,7 @@
 	}
 
 	#navigation .dropdown-menu {
-		background: rgba(var(--bs-dark-rgb), 0.8);
+		background: rgba(var(--bs-dark-rgb), 0.95);
 		border-color: var(--ft-glass-border);
 		box-shadow:
 			var(--ft-glass-glow),
