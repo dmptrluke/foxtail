@@ -3,11 +3,13 @@
 {% block title %}Redirecting to {{ link.get_platform_display }}{% endblock %}
 
 {% block extra_head %}
+    {% if not form.errors %}
     <script nonce="{{ request.csp_nonce }}">
         function onTurnstileSuccess() {
             document.getElementById('redirect-form').requestSubmit();
         }
     </script>
+    {% endif %}
     {{ form.media }}
 {% endblock %}
 
@@ -18,6 +20,9 @@
 {% block content %}
     <form method="post" action="." id="redirect-form" class="auth-form">
         {{ form.guard_fields }}
+        {% if form.errors %}
+            <button type="submit" class="btn btn-primary w-100">Continue to {{ link.get_platform_display }}</button>
+        {% endif %}
         <noscript>
             <button type="submit" class="btn btn-primary w-100">Continue to {{ link.get_platform_display }}</button>
         </noscript>
