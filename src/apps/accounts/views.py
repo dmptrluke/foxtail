@@ -22,6 +22,7 @@ from allauth.mfa.base.views import AuthenticateView
 from allauth.mfa.models import Authenticator
 from allauth.socialaccount.models import SocialAccount
 from csp_helpers.mixins import CSPViewMixin
+from formguard.views import GuardedFormViewMixin
 from rules.contrib.views import PermissionRequiredMixin
 
 from apps.accounts.forms import UserForm
@@ -37,11 +38,11 @@ class MFAAuthenticateView(AuthenticateView):
         return ret
 
 
-class CSPSignupView(CSPViewMixin, SignupView):
+class CSPSignupView(GuardedFormViewMixin, CSPViewMixin, SignupView):
     pass
 
 
-class CSPPasswordResetView(CSPViewMixin, PasswordResetView):
+class CSPPasswordResetView(GuardedFormViewMixin, CSPViewMixin, PasswordResetView):
     pass
 
 

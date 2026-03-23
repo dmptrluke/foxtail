@@ -4,6 +4,7 @@ from django.core.files.uploadedfile import SimpleUploadedFile
 
 import pytest
 from faker import Faker
+from formguard.test import GuardedFormTestMixin
 from PIL import Image
 
 from apps.accounts.forms import SignupForm, UserForm
@@ -26,11 +27,11 @@ fake = Faker()
 pytestmark = pytest.mark.django_db
 
 
-class TestSignupForm:
+class TestSignupForm(GuardedFormTestMixin):
     """Test SignupForm username, email, and password rules."""
 
     # form accepts valid data with all fields populated
-    def test_valid_form(self):
+    def test_valid_form(self, request_factory):
         proto_user = UserFactory.build()
 
         form = SignupForm(
@@ -40,7 +41,9 @@ class TestSignupForm:
                 'password1': proto_user._password,
                 'password2': proto_user._password,
                 **CAPTCHA_FIELD,
-            }
+                **self.guard_data(),
+            },
+            request=request_factory.get('/'),
         )
 
         assert form.is_valid()

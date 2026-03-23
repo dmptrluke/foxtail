@@ -4,6 +4,7 @@ from django.urls import reverse_lazy
 from django.views.generic import FormView
 
 from csp_helpers.mixins import CSPViewMixin
+from formguard.handlers import reject_silently
 from formguard.views import GuardedFormViewMixin
 
 from apps.email.engine import send_email
@@ -15,8 +16,7 @@ class ContactView(GuardedFormViewMixin, CSPViewMixin, FormView):
     template_name = 'contact/contact.html'
     form_class = ContactForm
     success_url = reverse_lazy('contact:contact')
-    stealth_reject = True
-    stealth_message = 'Your message has been sent.'
+    guard_on_failure = reject_silently(message='Your message has been sent.')
 
     def get_initial(self):
         initial = super().get_initial()

@@ -4,9 +4,10 @@ from allauth.account import forms as auth_forms
 from csp_helpers.mixins import CSPFormMixin
 from django_recaptcha.fields import ReCaptchaField
 from django_recaptcha.widgets import ReCaptchaV2Invisible
+from formguard.forms import GuardedFormMixin
 
 
-class SignupForm(CSPFormMixin, auth_forms.SignupForm):
+class SignupForm(GuardedFormMixin, CSPFormMixin, auth_forms.SignupForm):
     if settings.RECAPTCHA_INVISIBLE:
         captcha = ReCaptchaField(widget=ReCaptchaV2Invisible)
     else:
@@ -20,7 +21,7 @@ class SignupForm(CSPFormMixin, auth_forms.SignupForm):
         self.fields['captcha'].label = False
 
 
-class ResetPasswordForm(CSPFormMixin, auth_forms.ResetPasswordForm):
+class ResetPasswordForm(GuardedFormMixin, CSPFormMixin, auth_forms.ResetPasswordForm):
     if settings.RECAPTCHA_INVISIBLE:
         captcha = ReCaptchaField(widget=ReCaptchaV2Invisible)
     else:
