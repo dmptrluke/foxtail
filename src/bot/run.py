@@ -36,6 +36,19 @@ def main(poll=False):
         for sig in (signal.SIGTERM, signal.SIGINT):
             loop.add_signal_handler(sig, _handle_signal)
 
+        from aiogram.types import BotCommand
+
+        await bot.set_my_commands(
+            [
+                BotCommand(command='link', description='Link your Telegram account to furry.nz'),
+                BotCommand(command='status', description='Check your link status'),
+                BotCommand(command='unlink', description='Remove your account link'),
+                BotCommand(command='ping', description='Check if the bot is running'),
+                BotCommand(command='help', description='Show available commands'),
+            ]
+        )
+        logger.info('Registered bot commands')
+
         listener = ActionListener(bot, ACTION_HANDLERS, settings.REDIS_URL)
 
         tasks = [
