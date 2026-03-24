@@ -19,7 +19,7 @@ class TestLinkTelegramView:
     # valid token shows confirmation page
     def test_valid_token(self, client, user, link_token_factory):
         client.force_login(user)
-        token = link_token_factory(telegram_username='testbot')
+        token = link_token_factory(username='testbot')
         url = reverse('telegram_link', kwargs={'token': token.token})
         resp = client.get(url)
         assert resp.status_code == 200
