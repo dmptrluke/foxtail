@@ -21,7 +21,7 @@ def on_social_account_changed(sender, request, sociallogin, **kwargs):
     try:
         fields = _extract_telegram_fields(sociallogin.account.extra_data)
         linking.link(
-            user=request.user,
+            user=sociallogin.user,
             telegram_id=int(sociallogin.account.uid),
             **fields,
         )

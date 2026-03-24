@@ -7,13 +7,14 @@ from apps.telegram.models import TelegramLink
 from apps.telegram.signals import on_social_account_changed, on_social_account_removed
 
 
-def _make_sociallogin(provider, uid, extra_data=None):
+def _make_sociallogin(provider, uid, extra_data=None, user=None):
     account = Mock()
     account.provider = provider
     account.uid = uid
     account.extra_data = extra_data or {}
     sociallogin = Mock()
     sociallogin.account = account
+    sociallogin.user = user
     return sociallogin
 
 
@@ -30,7 +31,7 @@ class TestSocialAccountChanged:
     def test_creates_link(self, user):
         request = Mock(user=user)
         extra = {'id_token': {'id': '12345', 'preferred_username': 'tguser', 'name': 'Test'}}
-        sociallogin = _make_sociallogin('telegram', '12345', extra)
+        sociallogin = _make_sociallogin('telegram', '12345', extra, user=user)
         on_social_account_changed(sender=None, request=request, sociallogin=sociallogin)
         link = TelegramLink.objects.get(telegram_id=12345)
         assert link.user == user
@@ -41,7 +42,7 @@ class TestSocialAccountChanged:
     # non-telegram provider is ignored
     def test_ignores_non_telegram(self, user):
         request = Mock(user=user)
-        sociallogin = _make_sociallogin('github', '99999')
+        sociallogin = _make_sociallogin('github', '99999', user=user)
         on_social_account_changed(sender=None, request=request, sociallogin=sociallogin)
         assert not TelegramLink.objects.filter(user=user).exists()
 
@@ -50,7 +51,7 @@ class TestSocialAccountChanged:
         telegram_link_factory(user=user, telegram_id=12345, username='old')
         request = Mock(user=user)
         extra = {'id_token': {'id': '12345', 'preferred_username': 'new', 'name': 'Updated'}}
-        sociallogin = _make_sociallogin('telegram', '12345', extra)
+        sociallogin = _make_sociallogin('telegram', '12345', extra, user=user)
         on_social_account_changed(sender=None, request=request, sociallogin=sociallogin)
         link = TelegramLink.objects.get(telegram_id=12345)
         assert link.username == 'new'
