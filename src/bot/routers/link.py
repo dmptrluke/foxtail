@@ -25,8 +25,8 @@ async def cmd_link(message: Message):
         return
 
     telegram_id = message.from_user.id
-    telegram_username = message.from_user.username or ''
-    first_name = message.from_user.first_name or ''
+    username = message.from_user.username or ''
+    name = f'{message.from_user.first_name or ""} {message.from_user.last_name or ""}'.strip()
 
     try:
         if await TelegramLink.objects.filter(telegram_id=telegram_id).aexists():
@@ -40,8 +40,8 @@ async def cmd_link(message: Message):
         token = secrets.token_urlsafe(48)
         await LinkToken.objects.acreate(
             telegram_id=telegram_id,
-            telegram_username=telegram_username,
-            first_name=first_name,
+            username=username,
+            name=name,
             token=token,
             expires_at=now() + timedelta(minutes=15),
         )

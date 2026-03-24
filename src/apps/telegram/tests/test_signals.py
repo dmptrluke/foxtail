@@ -4,7 +4,7 @@ import pytest
 from allauth.socialaccount.models import SocialAccount
 
 from apps.telegram.models import TelegramLink
-from apps.telegram.signals import on_social_account_added, on_social_account_removed
+from apps.telegram.signals import on_social_account_changed, on_social_account_removed
 
 
 def _make_sociallogin(provider, uid, extra_data=None):
@@ -25,36 +25,36 @@ def _make_socialaccount(provider, uid):
 
 
 @pytest.mark.django_db
-class TestSocialAccountAdded:
+class TestSocialAccountChanged:
     # creates TelegramLink and SocialAccount from uid (real Telegram ID)
     def test_creates_link(self, user):
         request = Mock(user=user)
         extra = {'id_token': {'id': '12345', 'preferred_username': 'tguser', 'name': 'Test'}}
         sociallogin = _make_sociallogin('telegram', '12345', extra)
-        on_social_account_added(sender=None, request=request, sociallogin=sociallogin)
+        on_social_account_changed(sender=None, request=request, sociallogin=sociallogin)
         link = TelegramLink.objects.get(telegram_id=12345)
         assert link.user == user
-        assert link.telegram_username == 'tguser'
-        assert link.first_name == 'Test'
+        assert link.username == 'tguser'
+        assert link.name == 'Test'
         assert SocialAccount.objects.filter(provider='telegram', uid='12345', user=user).exists()
 
     # non-telegram provider is ignored
     def test_ignores_non_telegram(self, user):
         request = Mock(user=user)
         sociallogin = _make_sociallogin('github', '99999')
-        on_social_account_added(sender=None, request=request, sociallogin=sociallogin)
+        on_social_account_changed(sender=None, request=request, sociallogin=sociallogin)
         assert not TelegramLink.objects.filter(user=user).exists()
 
     # updates existing link (idempotent)
     def test_updates_existing(self, user, telegram_link_factory):
-        telegram_link_factory(user=user, telegram_id=12345, telegram_username='old')
+        telegram_link_factory(user=user, telegram_id=12345, username='old')
         request = Mock(user=user)
         extra = {'id_token': {'id': '12345', 'preferred_username': 'new', 'name': 'Updated'}}
         sociallogin = _make_sociallogin('telegram', '12345', extra)
-        on_social_account_added(sender=None, request=request, sociallogin=sociallogin)
+        on_social_account_changed(sender=None, request=request, sociallogin=sociallogin)
         link = TelegramLink.objects.get(telegram_id=12345)
-        assert link.telegram_username == 'new'
-        assert link.first_name == 'Updated'
+        assert link.username == 'new'
+        assert link.name == 'Updated'
 
 
 @pytest.mark.django_db

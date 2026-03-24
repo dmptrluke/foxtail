@@ -41,8 +41,9 @@ class SyncUserDataMiddleware(BaseMiddleware):
     ) -> Any:
         if isinstance(event, Message) and event.from_user:
             user = event.from_user
+            name = f'{user.first_name or ""} {user.last_name or ""}'.strip()
             await TelegramLink.objects.filter(telegram_id=user.id).aupdate(
-                telegram_username=user.username or '',
-                first_name=user.first_name or '',
+                username=user.username or '',
+                name=name,
             )
         return await handler(event, data)

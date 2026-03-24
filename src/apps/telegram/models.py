@@ -12,8 +12,8 @@ class TelegramLink(models.Model):
         related_name='telegram_link',
     )
     telegram_id = models.BigIntegerField(unique=True, db_index=True)
-    telegram_username = models.CharField(max_length=32, blank=True)
-    first_name = models.CharField(max_length=64, blank=True)
+    username = models.CharField(max_length=32, blank=True)
+    name = models.CharField(max_length=64, blank=True)
     linked_at = models.DateTimeField(auto_now_add=True)
     is_blocked = models.BooleanField(
         default=False,
@@ -31,8 +31,8 @@ class LinkToken(models.Model):
     """Pending bot-first link: stores Telegram identity until a logged-in user confirms."""
 
     telegram_id = models.BigIntegerField()
-    telegram_username = models.CharField(max_length=32, blank=True)
-    first_name = models.CharField(max_length=64, blank=True)
+    username = models.CharField(max_length=32, blank=True)
+    name = models.CharField(max_length=64, blank=True)
     token = models.CharField(max_length=86, unique=True)
     created_at = models.DateTimeField(auto_now_add=True)
     expires_at = models.DateTimeField()

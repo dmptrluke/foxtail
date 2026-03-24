@@ -50,8 +50,8 @@ class LinkTelegramConfirmView(LoginRequiredMixin, View):
             linking.link(
                 user=request.user,
                 telegram_id=link_token.telegram_id,
-                telegram_username=link_token.telegram_username,
-                first_name=link_token.first_name,
+                username=link_token.username,
+                name=link_token.name,
             )
         except IntegrityError:
             messages.error(request, 'This account is already linked.')

@@ -13,8 +13,8 @@ from apps.telegram.models import LinkToken, TelegramLink
 class TelegramLinkFactory(DjangoModelFactory):
     user = factory.SubFactory(UserFactory)
     telegram_id = factory.LazyFunction(lambda: secrets.randbelow(10**10) + 10**8)
-    telegram_username = factory.Faker('user_name')
-    first_name = factory.Faker('first_name')
+    username = factory.Faker('user_name')
+    name = factory.Faker('name')
 
     class Meta:
         model = TelegramLink
@@ -22,7 +22,7 @@ class TelegramLinkFactory(DjangoModelFactory):
 
 class LinkTokenFactory(DjangoModelFactory):
     telegram_id = factory.LazyFunction(lambda: secrets.randbelow(10**10) + 10**8)
-    telegram_username = factory.Faker('user_name')
+    username = factory.Faker('user_name')
     token = factory.LazyFunction(lambda: secrets.token_urlsafe(48))
     expires_at = factory.LazyFunction(lambda: now() + timedelta(minutes=15))
 

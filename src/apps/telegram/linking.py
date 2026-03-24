@@ -9,23 +9,23 @@ from .models import TelegramLink
 logger = logging.getLogger(__name__)
 
 
-def link(user, telegram_id, telegram_username='', first_name=''):
+def link(user, telegram_id, username='', name=''):
     """Create or update TelegramLink and SocialAccount for a user."""
     tg_link, created = TelegramLink.objects.update_or_create(
         telegram_id=telegram_id,
         defaults={
             'user': user,
-            'telegram_username': telegram_username,
-            'first_name': first_name,
+            'username': username,
+            'name': name,
             'is_blocked': False,
         },
     )
 
     extra_data = {'id': telegram_id}
-    if telegram_username:
-        extra_data['username'] = telegram_username
-    if first_name:
-        extra_data['first_name'] = first_name
+    if username:
+        extra_data['username'] = username
+    if name:
+        extra_data['name'] = name
 
     SocialAccount.objects.update_or_create(
         provider='telegram',

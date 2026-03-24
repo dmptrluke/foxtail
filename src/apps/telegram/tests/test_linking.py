@@ -9,19 +9,19 @@ from apps.telegram.models import TelegramLink
 class TestLink:
     # creates both TelegramLink and SocialAccount
     def test_creates_both(self, user):
-        linking.link(user, 12345, telegram_username='tguser', first_name='Test')
+        linking.link(user, 12345, username='tguser', name='Test')
         assert TelegramLink.objects.filter(telegram_id=12345, user=user).exists()
         assert SocialAccount.objects.filter(provider='telegram', uid='12345', user=user).exists()
 
     # updates TelegramLink, SocialAccount unchanged
     def test_update_existing(self, user, telegram_link_factory):
-        telegram_link_factory(user=user, telegram_id=12345, telegram_username='old')
+        telegram_link_factory(user=user, telegram_id=12345, username='old')
         SocialAccount.objects.create(provider='telegram', uid='12345', user=user, extra_data={})
 
-        linking.link(user, 12345, telegram_username='new', first_name='Updated')
+        linking.link(user, 12345, username='new', name='Updated')
         link = TelegramLink.objects.get(telegram_id=12345)
-        assert link.telegram_username == 'new'
-        assert link.first_name == 'Updated'
+        assert link.username == 'new'
+        assert link.name == 'Updated'
         assert SocialAccount.objects.filter(provider='telegram', uid='12345').count() == 1
 
 
