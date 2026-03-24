@@ -1,4 +1,8 @@
+from unittest.mock import Mock, patch
+
 from django.contrib.auth import get_user_model
+
+import pytest
 
 from apps.accounts.authentication import SocialAccountAdapter, valid_email_or_none
 
@@ -117,3 +121,58 @@ class TestValidEmailOrNone:
     # None input returns None
     def test_none(self):
         assert valid_email_or_none(None) is None
+
+
+def _make_sociallogin(provider, uid, is_existing=False):
+    account = Mock()
+    account.provider = provider
+    account.uid = uid
+    account.extra_data = {}
+    sociallogin = Mock()
+    sociallogin.account = account
+    sociallogin.is_existing = is_existing
+    return sociallogin
+
+
+@pytest.mark.django_db
+class TestPreSocialLogin:
+    # bot-linked user doing OAuth gets auto-connected
+    def test_auto_connects_telegram_link(self, user, telegram_link_factory):
+        telegram_link_factory(user=user, telegram_id=12345)
+        sociallogin = _make_sociallogin('telegram', '12345')
+        request = Mock(user=user)
+        test_adapter.pre_social_login(request, sociallogin)
+        sociallogin.connect.assert_called_once_with(request, user)
+
+    # no TelegramLink passes through silently
+    def test_no_link_passes(self):
+        sociallogin = _make_sociallogin('telegram', '99999')
+        request = Mock()
+        test_adapter.pre_social_login(request, sociallogin)
+        sociallogin.connect.assert_not_called()
+
+    # non-telegram provider is ignored
+    def test_non_telegram_ignored(self):
+        sociallogin = _make_sociallogin('github', '12345')
+        request = Mock()
+        test_adapter.pre_social_login(request, sociallogin)
+        sociallogin.connect.assert_not_called()
+
+    # already-existing social account is ignored
+    def test_existing_ignored(self, user, telegram_link_factory):
+        telegram_link_factory(user=user, telegram_id=12345)
+        sociallogin = _make_sociallogin('telegram', '12345', is_existing=True)
+        request = Mock()
+        test_adapter.pre_social_login(request, sociallogin)
+        sociallogin.connect.assert_not_called()
+
+    # exception is caught and logged, OAuth continues
+    def test_exception_caught(self):
+        sociallogin = _make_sociallogin('telegram', '12345')
+        request = Mock()
+        with patch(
+            'apps.telegram.models.TelegramLink.objects.select_related',
+            side_effect=RuntimeError('db down'),
+        ):
+            test_adapter.pre_social_login(request, sociallogin)
+        # should not raise

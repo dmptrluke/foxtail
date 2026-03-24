@@ -1,0 +1,33 @@
+{% extends "base/page.html" %}
+{% load cotton breadcrumbs %}
+
+{% block title %}Link Telegram{% endblock %}
+
+{% block hero %}
+    <c-hero>
+        <c-hero.nav>
+            {% breadcrumbs "account_profile" "Account" request.path "Link Telegram" %}
+        </c-hero.nav>
+        <c-hero.title>Link Telegram</c-hero.title>
+    </c-hero>
+{% endblock hero %}
+
+{% block content %}
+    <c-account-section>
+        <p>
+            Link your Telegram account
+            {% if link_token.telegram_username %}
+                <strong>@{{ link_token.telegram_username }}</strong>
+            {% endif %}
+            to your furry.nz account?
+        </p>
+        <div class="d-flex gap-2">
+            <form method="post" action="{% url 'telegram_link_confirm' %}">
+                {% csrf_token %}
+                <input type="hidden" name="token" value="{{ link_token.token }}">
+                <button type="submit" class="btn btn-success">Link Account</button>
+            </form>
+            <a href="{% url 'account_profile' %}" class="btn btn-outline-secondary">Cancel</a>
+        </div>
+    </c-account-section>
+{% endblock content %}

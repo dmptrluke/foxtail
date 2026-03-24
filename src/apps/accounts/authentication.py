@@ -1,3 +1,4 @@
+import logging
 from contextlib import suppress
 from datetime import datetime
 
@@ -10,6 +11,8 @@ from allauth.account.utils import user_email, user_field, user_username
 from allauth.socialaccount.adapter import DefaultSocialAccountAdapter
 
 from apps.email.engine import render_email
+
+logger = logging.getLogger(__name__)
 
 MJML_EMAIL_MAP = {
     'account/email/email_confirmation': 'emails/account/email_confirmation',
@@ -89,3 +92,20 @@ class SocialAccountAdapter(DefaultSocialAccountAdapter):
                 user_field(user, 'full_name', merged)
 
         return user
+
+    def pre_social_login(self, request, sociallogin):
+        if sociallogin.account.provider != 'telegram':
+            return
+        if sociallogin.is_existing:
+            return
+        try:
+            from apps.telegram.models import TelegramLink
+
+            telegram_id = int(sociallogin.account.uid)
+            link = TelegramLink.objects.select_related('user').get(telegram_id=telegram_id)
+            sociallogin.connect(request, link.user)
+            logger.info('Auto-connected Telegram OAuth for user %s via TelegramLink', link.user.pk)
+        except TelegramLink.DoesNotExist:
+            pass
+        except Exception:
+            logger.exception('Error in pre_social_login Telegram auto-connect')

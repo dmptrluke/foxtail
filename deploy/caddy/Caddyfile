@@ -9,7 +9,12 @@ furry.nz {
 		Permissions-Policy "camera=(), microphone=(), geolocation=(), payment=(), usb=(), bluetooth=(), midi=(), accelerometer=(), gyroscope=(), magnetometer=(), autoplay=(), fullscreen=(self), interest-cohort=()"
 	}
 	encode zstd gzip
-	reverse_proxy prod-app:8000
+	handle /webhook/* {
+		reverse_proxy prod-bot:8001
+	}
+	handle {
+		reverse_proxy prod-app:8000
+	}
 }
 
 # Staging
@@ -20,5 +25,10 @@ test.furry.nz {
 		Permissions-Policy "camera=(), microphone=(), geolocation=(), payment=(), usb=(), bluetooth=(), midi=(), accelerometer=(), gyroscope=(), magnetometer=(), autoplay=(), fullscreen=(self), interest-cohort=()"
 	}
 	encode zstd gzip
-	reverse_proxy staging-app:8000
+	handle /webhook/* {
+		reverse_proxy staging-bot:8001
+	}
+	handle {
+		reverse_proxy staging-app:8000
+	}
 }

@@ -43,6 +43,10 @@ dependencies = [
 ]
 
 [dependency-groups]
+bot = [
+    "aiogram>=3.26,<4",
+    "httpx>=0.28",
+]
 dev = [
     "debugpy==1.8.20",
     "django-debug-toolbar==6.2.0",
@@ -134,7 +138,7 @@ ignore = [
 quote-style = "single"
 
 [tool.ruff.lint.isort]
-known-first-party = ["apps"]
+known-first-party = ["apps", "bot"]
 section-order = ["future", "standard-library", "django", "third-party", "first-party", "local-folder"]
 
 [tool.ruff.lint.isort.sections]

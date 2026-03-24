@@ -66,6 +66,7 @@ INSTALLED_APPS = [
     'apps.core',
     'apps.email',
     'apps.accounts',
+    'apps.telegram',
     'apps.content',
     'apps.events',
     'apps.organisations',
@@ -475,6 +476,7 @@ if _telegram_client_id:
                     'server_url': 'https://oauth.telegram.org',
                     'scope': ['openid', 'profile'],
                     'fetch_userinfo': False,
+                    'uid_field': 'id',
                 },
             },
         ],
@@ -594,6 +596,9 @@ IMAGEFIELD_FORMATS = {
     },
 }
 
+# Redis
+REDIS_URL = env.str('CACHE_URL', default='redis://redis/1')
+
 # huey
 # <https://huey.readthedocs.io/en/latest/django.html>
 
@@ -602,9 +607,9 @@ HUEY = {
     'name': 'foxtail',
     'immediate': env.bool('HUEY_IMMEDIATE', default=False),
     'results': False,
-    'url': env.str('CACHE_URL', default='redis://redis/1'),
+    'url': REDIS_URL,
     'consumer': {
-        'workers': 1,
+        'workers': 4,
         'worker_type': 'thread',
     },
 }

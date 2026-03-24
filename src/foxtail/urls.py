@@ -30,6 +30,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     # Auth & OIDC
     path('accounts/', include('apps.accounts.urls')),
+    path('accounts/', include('apps.telegram.urls')),
     path('accounts/', include('allauth.urls')),
     path('', include('allauth.idp.urls')),
     # Backward-compatible aliases for old oidc_provider paths

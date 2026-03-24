@@ -9,6 +9,7 @@ from apps.blog.tests.factories import AuthorFactory, CommentFactory, PostFactory
 from apps.content.tests.factories import PageFactory
 from apps.events.tests.factories import EventFactory, EventInterestFactory, PastEventFactory
 from apps.organisations.tests.factories import EventSeriesFactory, OrganisationFactory, SocialLinkFactory
+from apps.telegram.tests.factories import ExpiredLinkTokenFactory, LinkTokenFactory, TelegramLinkFactory
 
 # accounts
 register(UserFactory, 'user')
@@ -36,6 +37,11 @@ register(EventInterestFactory)
 register(OrganisationFactory)
 register(SocialLinkFactory)
 register(EventSeriesFactory)
+
+# telegram
+register(TelegramLinkFactory)
+register(LinkTokenFactory)
+register(ExpiredLinkTokenFactory)
 
 
 @pytest.fixture(autouse=True)
