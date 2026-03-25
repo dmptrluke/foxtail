@@ -474,14 +474,14 @@ wheels = [
 
 [[package]]
 name = "django-formguard"
-version = "0.8.2"
+version = "0.8.3"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "django" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/d0/ff/eb3d70cf1288a76908cf496478b134d38a0f8e54e624d127eb8da66981b1/django_formguard-0.8.2.tar.gz", hash = "sha256:3371b032907947642af7d2ba8501c95b7f5a4915aa9a896d4d8d5c00873bc059", size = 55827, upload-time = "2026-03-23T08:29:01.79Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/77/2f/9207a8e39104f220ca1e15e1779adc404cb8db6ea84d6a439686ac22ae08/django_formguard-0.8.3.tar.gz", hash = "sha256:f31c773abdd5949b88b471ac1b87b0ffea384e89db00eaeaabfeed63f8acc1df", size = 50515, upload-time = "2026-03-25T03:45:09.325Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/41/5e/b1165854b922bc2d25836f0788de1948ccdb009cd3049b0c4bc3853182e8/django_formguard-0.8.2-py3-none-any.whl", hash = "sha256:9d5b7e4a4a7103ac099e82efa028a83d8753ed7804b975f7b80cf4483050fe20", size = 17607, upload-time = "2026-03-23T08:29:02.67Z" },
+    { url = "https://files.pythonhosted.org/packages/7a/df/ef1e0108ba7d216a2d602e2a679b62905f8c2e467e0adcbb476b761c4be3/django_formguard-0.8.3-py3-none-any.whl", hash = "sha256:922a789e68809f30ef6df94e558606eaa516fa015d113f6fa92a1f32981e6238", size = 17605, upload-time = "2026-03-25T03:45:07.84Z" },
 ]
 
 [[package]]
@@ -503,7 +503,7 @@ vips = [
 
 [[package]]
 name = "django-markdownfield"
-version = "0.13.2"
+version = "0.15.1"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "django" },
@@ -511,9 +511,9 @@ dependencies = [
     { name = "nh3" },
     { name = "shortuuid" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/3d/b9/d92a67e768645f373fb98e5e0fc0407051017eb2df1c0062bbf3f352e365/django_markdownfield-0.13.2.tar.gz", hash = "sha256:aa3cc557b5bd691c144ccde18d8cdb409facf35b4b43d24e16a6a24189d9273f", size = 790485, upload-time = "2026-03-09T05:09:24.573Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/ce/2f/c0316e670ef066a1f234e7eaccb7f344ab6409d4f38e5ed777371c1a2e7c/django_markdownfield-0.15.1.tar.gz", hash = "sha256:d71b773b44977a199538d8888d51039b1341bdffed8b90dd449add0f21bac7cd", size = 809506, upload-time = "2026-03-25T03:36:54.599Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/46/07/95c3165903355be26ac06f3b101e302fe1552d0faa9dc525b0e2e1bcb88c/django_markdownfield-0.13.2-py3-none-any.whl", hash = "sha256:1a2700e2308889133004df4a854416d53a96a92f562bc4f86e3f2210868bcdb8", size = 749305, upload-time = "2026-03-09T05:09:22.803Z" },
+    { url = "https://files.pythonhosted.org/packages/d1/d5/0ea95568911a67b50e6930d8c42d72ac2061fcad863cc6b32c6f0c87801c/django_markdownfield-0.15.1-py3-none-any.whl", hash = "sha256:2b7531830d80b3f5421f0e72afa9b7a4a30fa72a31224ef9851d7157d76ce9fd", size = 754747, upload-time = "2026-03-25T03:36:57.774Z" },
 ]
 
 [[package]]
@@ -572,14 +572,14 @@ s3 = [
 
 [[package]]
 name = "django-structured-data"
-version = "0.12.0"
+version = "0.13.1"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "django" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/20/45/496485c738b3b5be5e20bd3e3ce72df8abaf1cdbd4fc02076b280a52e0af/django_structured_data-0.12.0.tar.gz", hash = "sha256:def2da15f7ab43fd2f87fb859f0c52d334ced6c621e1378e1b3d5988a4cc3a19", size = 15266, upload-time = "2026-03-17T22:17:54.772Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/c4/78/c81c75a165f6460f63eb2d0b0769d1ddf568f0508cea724dd41934e2f752/django_structured_data-0.13.1.tar.gz", hash = "sha256:9f5236568e8dd6fb84fdd6cb9126544376d6c077e7d62f2e84bdeeb791989c47", size = 15164, upload-time = "2026-03-25T03:45:05.812Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/e6/46/3f119a9f5d5e60a5d30016a8c85f1e28f9c8f337798c6c5bb70455616a18/django_structured_data-0.12.0-py3-none-any.whl", hash = "sha256:a971b909ebc00906a7ff81fa56fec411987d47a5dd575f9ad988830331636898", size = 12215, upload-time = "2026-03-17T22:17:55.925Z" },
+    { url = "https://files.pythonhosted.org/packages/18/94/77c2ba4049ad91a3897cefce76b6676f3fe4d655e1636702d380ef8b4020/django_structured_data-0.13.1-py3-none-any.whl", hash = "sha256:9957119371d9687645c751425c11f4e4c348f026161db7be290c18f44ec74300", size = 12228, upload-time = "2026-03-25T03:45:04.579Z" },
 ]
 
 [[package]]
@@ -756,14 +756,14 @@ requires-dist = [
     { name = "django-csp", specifier = "==4.0" },
     { name = "django-csp-helpers", specifier = "==1.0.1" },
     { name = "django-environ", specifier = "==0.13.0" },
-    { name = "django-formguard", specifier = ">=0.8.2" },
+    { name = "django-formguard", specifier = ">=0.8.3" },
     { name = "django-imagefield", extras = ["vips"], specifier = "==0.23.0a3" },
-    { name = "django-markdownfield", specifier = "==0.13.2" },
+    { name = "django-markdownfield", specifier = "==0.15.1" },
     { name = "django-published", specifier = "==0.10.0" },
     { name = "django-redis", specifier = "==6.0.0" },
     { name = "django-solo", specifier = ">=2.4.0" },
     { name = "django-storages", extras = ["s3"], specifier = "==1.14.6" },
-    { name = "django-structured-data", specifier = "==0.12.0" },
+    { name = "django-structured-data", specifier = "==0.13.1" },
     { name = "django-taggit", specifier = "==6.1.0" },
     { name = "django-vite", specifier = "==3.1.0" },
     { name = "django-widget-tweaks", specifier = "==1.5.1" },
