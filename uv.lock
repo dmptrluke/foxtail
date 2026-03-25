@@ -504,7 +504,7 @@ vips = [
 
 [[package]]
 name = "django-markdownfield"
-version = "0.15.1"
+version = "0.16.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "django" },
@@ -512,9 +512,9 @@ dependencies = [
     { name = "nh3" },
     { name = "shortuuid" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/ce/2f/c0316e670ef066a1f234e7eaccb7f344ab6409d4f38e5ed777371c1a2e7c/django_markdownfield-0.15.1.tar.gz", hash = "sha256:d71b773b44977a199538d8888d51039b1341bdffed8b90dd449add0f21bac7cd", size = 809506, upload-time = "2026-03-25T03:36:54.599Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/95/ef/84bb52a0aab37adbe181d68b479740bd215e60f759715536f1658c5a1a82/django_markdownfield-0.16.0.tar.gz", hash = "sha256:f8ad00b00106b154266b75279be30a62d1e0de98f775ab7d93327a2eacaa86fa", size = 806249, upload-time = "2026-03-25T23:17:07.005Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/d1/d5/0ea95568911a67b50e6930d8c42d72ac2061fcad863cc6b32c6f0c87801c/django_markdownfield-0.15.1-py3-none-any.whl", hash = "sha256:2b7531830d80b3f5421f0e72afa9b7a4a30fa72a31224ef9851d7157d76ce9fd", size = 754747, upload-time = "2026-03-25T03:36:57.774Z" },
+    { url = "https://files.pythonhosted.org/packages/21/47/5206ac1ff05f3711132d5899db8f6efe3ce149a5062394ab8e04ff520e49/django_markdownfield-0.16.0-py3-none-any.whl", hash = "sha256:7b908e96114f91dd5ed511e15325afc2d19a8143f7e781d57b81315b6185e675", size = 764935, upload-time = "2026-03-25T23:17:05.244Z" },
 ]
 
 [[package]]
