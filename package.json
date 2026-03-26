@@ -16,7 +16,7 @@
         "@popperjs/core": "^2.11.8",
         "bootstrap": "^5.3.8",
         "colcade": "^0.2.0",
-        "cropperjs": "^1.6.2",
+        "cropperjs": "^2.0.0",
         "htmx.org": "^2.0.8",
         "maplibre-gl": "^5.20.2",
         "sass": "^1.98.0",
