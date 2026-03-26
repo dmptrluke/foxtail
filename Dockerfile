@@ -17,7 +17,7 @@ RUN npm run-script build-${BUILD_MODE}
 
 FROM python:3.13-slim AS deps
 WORKDIR /app
-COPY --from=ghcr.io/astral-sh/uv:0.6 /uv /usr/local/bin/uv
+COPY --from=ghcr.io/astral-sh/uv:0.11 /uv /usr/local/bin/uv
 COPY pyproject.toml uv.lock ./
 RUN --mount=type=cache,target=/root/.cache/uv \
     uv sync --frozen --no-install-project --no-dev --group bot
