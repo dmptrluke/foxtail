@@ -1,6 +1,6 @@
 # Assets
 
-FROM node:22-slim AS assets
+FROM node:24-slim AS assets
 ARG BUILD_MODE=production
 ENV NODE_ENV=$BUILD_MODE
 
