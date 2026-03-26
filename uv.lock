@@ -394,15 +394,15 @@ wheels = [
 
 [[package]]
 name = "django-cjswidget"
-version = "0.6.0"
+version = "0.7.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "django" },
     { name = "shortuuid" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/bf/c0/3a9e3e4b83d10e43279c7dc891e561d443b570efff5c71f3e7134c91c45b/django_cjswidget-0.6.0.tar.gz", hash = "sha256:0a61d0c9d41ed03a9ff793c44284129a2a093a1087e0abb8619c43849b9b662a", size = 28786, upload-time = "2026-03-24T23:03:40.22Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/7a/e2/a8babeeef77974c16196f965911f105ceaf217fafb4f1e8d178944be116a/django_cjswidget-0.7.0.tar.gz", hash = "sha256:35618a1e9fb34d3e32cdfdde209cf0013eb0e26540c245be4d1b85467d9542a7", size = 33007, upload-time = "2026-03-25T21:56:29.967Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/91/65/39525cd947f4316a983d2da8edca6adc4618072363e55fe6947831247485/django_cjswidget-0.6.0-py3-none-any.whl", hash = "sha256:0ae52be15be0b95476cd898a385895e26ee01c20b9cf652de02471e9ab2a1d12", size = 25858, upload-time = "2026-03-24T23:03:41.39Z" },
+    { url = "https://files.pythonhosted.org/packages/0e/dc/88b3805e527b8e0ac5bff14f1827233e102276932f3373f01d7967c925c7/django_cjswidget-0.7.0-py3-none-any.whl", hash = "sha256:97946ac3c9fd3353fd6f189c774f3d3fb3d88d26fa285158d1732192126d7d50", size = 27961, upload-time = "2026-03-25T21:56:28.661Z" },
 ]
 
 [[package]]
@@ -475,14 +475,14 @@ wheels = [
 
 [[package]]
 name = "django-formguard"
-version = "0.8.3"
+version = "0.9.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "django" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/77/2f/9207a8e39104f220ca1e15e1779adc404cb8db6ea84d6a439686ac22ae08/django_formguard-0.8.3.tar.gz", hash = "sha256:f31c773abdd5949b88b471ac1b87b0ffea384e89db00eaeaabfeed63f8acc1df", size = 50515, upload-time = "2026-03-25T03:45:09.325Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/73/e5/62a8e09387c898d4e86d3726f8bf6aa66191c0378d4a14c9b94b4316a4df/django_formguard-0.9.0.tar.gz", hash = "sha256:68debeacaddea9ab7ccf559d92969ff6564f6cacabe7f0c4dcb3642a6dd35c87", size = 52180, upload-time = "2026-03-26T05:46:07.645Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/7a/df/ef1e0108ba7d216a2d602e2a679b62905f8c2e467e0adcbb476b761c4be3/django_formguard-0.8.3-py3-none-any.whl", hash = "sha256:922a789e68809f30ef6df94e558606eaa516fa015d113f6fa92a1f32981e6238", size = 17605, upload-time = "2026-03-25T03:45:07.84Z" },
+    { url = "https://files.pythonhosted.org/packages/09/12/d49ef0d2a443b243922a860e6221660a557e1c44efc14af36be4e17458ab/django_formguard-0.9.0-py3-none-any.whl", hash = "sha256:66f9aa6a7c7f54ed5792dbbd0acd7e400d3d4b3e8f8681997cd72870d3060b2e", size = 17530, upload-time = "2026-03-26T05:46:09.131Z" },
 ]
 
 [[package]]
@@ -807,7 +807,7 @@ test = [
     { name = "feedparser", specifier = "==6.0.12" },
     { name = "hypothesis", specifier = ">=6.151.9" },
     { name = "pytest", specifier = "==9.0.2" },
-    { name = "pytest-cov", specifier = "==7.0.0" },
+    { name = "pytest-cov", specifier = "==7.1.0" },
     { name = "pytest-django", specifier = "==4.12.0" },
     { name = "pytest-factoryboy", specifier = "==2.8.1" },
     { name = "pytest-xdist", specifier = "==3.8.0" },
@@ -1311,16 +1311,16 @@ wheels = [
 
 [[package]]
 name = "pytest-cov"
-version = "7.0.0"
+version = "7.1.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "coverage" },
     { name = "pluggy" },
     { name = "pytest" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/5e/f7/c933acc76f5208b3b00089573cf6a2bc26dc80a8aece8f52bb7d6b1855ca/pytest_cov-7.0.0.tar.gz", hash = "sha256:33c97eda2e049a0c5298e91f519302a1334c26ac65c1a483d6206fd458361af1", size = 54328, upload-time = "2025-09-09T10:57:02.113Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/b1/51/a849f96e117386044471c8ec2bd6cfebacda285da9525c9106aeb28da671/pytest_cov-7.1.0.tar.gz", hash = "sha256:30674f2b5f6351aa09702a9c8c364f6a01c27aae0c1366ae8016160d1efc56b2", size = 55592, upload-time = "2026-03-21T20:11:16.284Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/ee/49/1377b49de7d0c1ce41292161ea0f721913fa8722c19fb9c1e3aa0367eecb/pytest_cov-7.0.0-py3-none-any.whl", hash = "sha256:3b8e9558b16cc1479da72058bdecf8073661c7f57f7d3c5f22a1c23507f2d861", size = 22424, upload-time = "2025-09-09T10:57:00.695Z" },
+    { url = "https://files.pythonhosted.org/packages/9d/7a/d968e294073affff457b041c2be9868a40c1c71f4a35fcc1e45e5493067b/pytest_cov-7.1.0-py3-none-any.whl", hash = "sha256:a0461110b7865f9a271aa1b51e516c9a95de9d696734a2f71e3e78f46e1d4678", size = 22876, upload-time = "2026-03-21T20:11:14.438Z" },
 ]
 
 [[package]]
