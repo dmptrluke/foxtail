@@ -20,12 +20,12 @@ _NON_ALNUM_RE = re.compile(r'[^a-z0-9]')
 
 _DATA_FILE = Path(__file__).parent / 'data' / 'reserved_usernames.json'
 _RESERVED_RAW = frozenset(json.loads(_DATA_FILE.read_text()))
+
 # pre-normalize the reserved list: strip separators, deleet, collapse repeated chars
 _RESERVED_NORMALIZED = frozenset(
     _DEDUP_RE.sub(r'\1', _SEPARATOR_RE.sub('', w).translate(_LEET_MAP)) for w in _RESERVED_RAW
 )
 
-# impersonation terms use natural spelling (no dedup)
 _AUTHORITY_TERMS = [
     'admin',
     'bot',
@@ -87,24 +87,22 @@ def _normalize_full(value):
 
 
 def _normalize_light(value):
-    """Fold without dedup (for impersonation combo check)."""
+    """Fold without dedup or leet-mapping (for impersonation combo check)."""
     cleaned = _INVISIBLE_RE.sub('', value)
     ascii_folded = unidecode(cleaned).lower()
-    stripped = _NON_ALNUM_RE.sub('', ascii_folded)
-    return stripped.translate(_LEET_MAP)
+    return _NON_ALNUM_RE.sub('', ascii_folded)
 
 
 def _has_impersonation_combo(normalized):
     """Check if the normalized username contains both an authority term and a protected name."""
-    found_authority = None
-    for term in _AUTHORITY_TERMS:
-        if term in normalized:
-            found_authority = term
-            break
-    if not found_authority:
-        return False
-    remainder = normalized.replace(found_authority, '', 1)
-    return any(term != found_authority and term in remainder for term in _PROTECTED_NAMES + _AUTHORITY_TERMS)
+    search_terms = _PROTECTED_NAMES + _AUTHORITY_TERMS
+    for authority in _AUTHORITY_TERMS:
+        if authority not in normalized:
+            continue
+        remainder = normalized.replace(authority, '', 1)
+        if any(t != authority and t in remainder for t in search_terms):
+            return True
+    return False
 
 
 def validate_blacklist(value):
@@ -116,7 +114,9 @@ def validate_blacklist(value):
             params={'value': value},
         )
 
-    if _has_impersonation_combo(_normalize_light(value)):
+    pre_leet = _normalize_light(value)
+    post_leet = pre_leet.translate(_LEET_MAP)
+    if _has_impersonation_combo(pre_leet) or _has_impersonation_combo(post_leet):
         raise ValidationError(
             'This username is not allowed.',
             params={'value': value},
