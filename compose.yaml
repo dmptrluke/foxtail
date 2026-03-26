@@ -3,7 +3,7 @@
 
 services:
   db:
-    image: postgres:17
+    image: postgres:18
     environment:
       POSTGRES_USER: foxtail
       POSTGRES_PASSWORD: foxtail
