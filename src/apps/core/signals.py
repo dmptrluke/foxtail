@@ -3,7 +3,8 @@ Async image rendition processing via huey.
 
 Replaces django-imagefield's synchronous post_save processing (IMAGEFIELD_AUTOGENERATE)
 with a huey task that runs on the worker. Tracks image and PPOI field changes to avoid
-unnecessary task enqueues on unrelated saves.
+unnecessary task enqueues on unrelated saves. Oversized uploads are downscaled in pre_save
+before they reach storage.
 
 Connected in CoreConfig.ready().
 """
@@ -12,6 +13,7 @@ from django.db import transaction
 
 from imagefield.fields import IMAGEFIELDS
 
+from apps.core.imaging import downscale_fieldfile
 from apps.core.tasks import process_imagefields
 
 # Map each model to its image fields that have rendition formats defined.
@@ -49,6 +51,12 @@ def on_post_init(sender, instance, **kwargs):
         instance.__dict__[f'_orig_{field.name}'] = file.name if file else ''
         if field.ppoi_field:
             instance.__dict__[f'_orig_{field.ppoi_field}'] = getattr(instance, field.ppoi_field, '')
+
+
+def on_pre_save(sender, instance, **kwargs):
+    """Downscale oversized image uploads before they're saved to storage."""
+    for field in fields_by_model.get(sender, ()):
+        downscale_fieldfile(getattr(instance, field.name))
 
 
 def on_post_save(sender, instance, **kwargs):

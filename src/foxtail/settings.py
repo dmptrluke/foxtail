@@ -548,7 +548,8 @@ if DEBUG:
 # django-imagefield
 # <https://django-imagefield.readthedocs.io/en/latest/>
 
-MAX_IMAGE_FILE_SIZE = 5 * 1024 * 1024  # 5 MB
+MAX_IMAGE_FILE_SIZE = 20 * 1024 * 1024  # 20 MB
+MAX_IMAGE_DIMENSION = 4500  # px, longest edge - uploads exceeding this are downscaled before storage
 
 IMAGEFIELD_BACKEND = 'vips'
 IMAGEFIELD_AUTOGENERATE = False

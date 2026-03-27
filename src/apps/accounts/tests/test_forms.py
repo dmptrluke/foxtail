@@ -1,5 +1,6 @@
 from io import BytesIO
 
+from django.conf import settings
 from django.core.files.uploadedfile import SimpleUploadedFile
 
 import pytest
@@ -8,7 +9,6 @@ from formguard.test import GuardedFormTestMixin
 from PIL import Image
 
 from apps.accounts.forms import SignupForm, UserForm
-from apps.accounts.forms.custom import MAX_AVATAR_SIZE
 
 from .factories import UserFactory
 
@@ -269,9 +269,11 @@ class TestUserForm:
         assert len(form.errors) == 1
         assert 'date_of_birth' in form.errors
 
-    # avatar exceeding 5 MB is rejected
+    # avatar exceeding MAX_IMAGE_FILE_SIZE is rejected
     def test_avatar_oversized(self):
-        avatar = SimpleUploadedFile('avatar.png', _png_bytes(MAX_AVATAR_SIZE + 1), content_type='image/png')
+        avatar = SimpleUploadedFile(
+            'avatar.png', _png_bytes(settings.MAX_IMAGE_FILE_SIZE + 1), content_type='image/png'
+        )
         proto_user = UserFactory.build()
         form = UserForm(
             {'username': proto_user.username},
@@ -280,9 +282,9 @@ class TestUserForm:
         assert not form.is_valid()
         assert 'avatar' in form.errors
 
-    # avatar exactly at 5 MB passes size check
+    # avatar exactly at MAX_IMAGE_FILE_SIZE passes size check
     def test_avatar_at_limit(self):
-        avatar = SimpleUploadedFile('avatar.png', _png_bytes(MAX_AVATAR_SIZE), content_type='image/png')
+        avatar = SimpleUploadedFile('avatar.png', _png_bytes(settings.MAX_IMAGE_FILE_SIZE), content_type='image/png')
         proto_user = UserFactory.build()
         form = UserForm(
             {'username': proto_user.username},
@@ -290,7 +292,7 @@ class TestUserForm:
         )
         assert 'avatar' not in (form.errors or {})
 
-    # avatar under 5 MB passes size check
+    # avatar under MAX_IMAGE_FILE_SIZE passes size check
     def test_avatar_under_limit(self):
         avatar = SimpleUploadedFile('avatar.png', _png_bytes(), content_type='image/png')
         proto_user = UserFactory.build()

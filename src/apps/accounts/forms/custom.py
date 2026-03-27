@@ -1,10 +1,9 @@
+from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 from django.forms import ImageField, ModelForm, SelectDateWidget
 
 from apps.core.widgets import CroppedImageWidget
-
-MAX_AVATAR_SIZE = 5 * 1024 * 1024
 
 
 class UserForm(ModelForm):
@@ -22,8 +21,9 @@ class UserForm(ModelForm):
         if not avatar or not hasattr(avatar, 'size'):
             return avatar
 
-        if avatar.size > MAX_AVATAR_SIZE:
-            raise ValidationError('Avatar must be smaller than 5 MB.')
+        if avatar.size > settings.MAX_IMAGE_FILE_SIZE:
+            mb = settings.MAX_IMAGE_FILE_SIZE / (1024 * 1024)
+            raise ValidationError(f'Avatar must be smaller than {mb:.0f} MB.')
 
         return avatar
 

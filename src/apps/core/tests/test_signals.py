@@ -1,7 +1,7 @@
 from types import SimpleNamespace
 from unittest.mock import MagicMock, patch
 
-from ..signals import _has_image, _image_fields_changed, on_post_init, on_post_save
+from ..signals import _has_image, _image_fields_changed, on_post_init, on_post_save, on_pre_save
 
 
 def _make_field(name, ppoi_field=None):
@@ -150,3 +150,28 @@ class TestOnPostSave:
         with patch('apps.core.signals.process_imagefields') as mock_task:
             callback()
             mock_task.assert_called_once_with('events', 'event', 42)
+
+
+class TestOnPreSave:
+    # calls downscale_fieldfile for each image field on the model
+    @patch('apps.core.signals.downscale_fieldfile')
+    @patch('apps.core.signals.fields_by_model')
+    def test_downscales_image_fields(self, mock_fbm, mock_downscale):
+        field = _make_field('image')
+        mock_fbm.get.return_value = [field]
+
+        instance = _make_instance()
+        on_pre_save(sender=None, instance=instance)
+
+        mock_downscale.assert_called_once_with(instance.image)
+
+    # skips models with no image fields
+    @patch('apps.core.signals.downscale_fieldfile')
+    @patch('apps.core.signals.fields_by_model')
+    def test_skips_models_without_fields(self, mock_fbm, mock_downscale):
+        mock_fbm.get.return_value = ()
+
+        instance = _make_instance()
+        on_pre_save(sender=None, instance=instance)
+
+        mock_downscale.assert_not_called()
