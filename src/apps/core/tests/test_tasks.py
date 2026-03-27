@@ -3,6 +3,7 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 
+from ..storages import LocalReadCache
 from ..tasks import process_imagefields
 
 
@@ -76,3 +77,33 @@ class TestProcessImagefields:
 
         assert file_obj.process.call_count == 2
         assert 'Failed to process' in caplog.text
+
+    # wraps storage with LocalReadCache during processing, restores after
+    @patch('apps.core.tasks.IMAGEFIELDS')
+    @patch('django.apps.apps.get_model')
+    def test_uses_local_read_cache(self, mock_get_model, mock_imagefields, fake_model):
+        mock_instance = MagicMock()
+        fake_model.objects.get.return_value = mock_instance
+        mock_get_model.return_value = fake_model
+
+        mock_field = MagicMock()
+        mock_field.model = _FakeModel
+        mock_field.name = 'image'
+        mock_imagefields.__iter__ = lambda self: iter([mock_field])
+
+        original_storage = MagicMock()
+        file_obj = MagicMock()
+        file_obj.name = 'photo.jpg'
+        file_obj.storage = original_storage
+        file_obj.field.formats = ['thumb']
+        mock_instance.image = file_obj
+
+        storages_during_process = []
+        file_obj.process.side_effect = lambda spec: storages_during_process.append(file_obj.storage)
+
+        process_imagefields('events', 'event', 1)
+
+        assert len(storages_during_process) == 1
+        assert isinstance(storages_during_process[0], LocalReadCache)
+        assert storages_during_process[0]._skip_exists is True
+        assert file_obj.storage is original_storage
