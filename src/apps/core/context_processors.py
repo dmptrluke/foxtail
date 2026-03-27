@@ -13,6 +13,7 @@ def site(request):
         'DEBUG': settings.DEBUG,
         'SITE_URL': settings.SITE_URL,
         'DEFAULT_COLOR_SCHEME': settings.DEFAULT_COLOR_SCHEME,
+        'CDN_ORIGIN': settings.ASSET_HOSTS[0] if settings.ASSET_HOSTS else None,
     }
 
 

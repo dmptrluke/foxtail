@@ -18,7 +18,7 @@
         {% block title_full %}{% block title %}{% endblock title %} | {{ conf.org_name }}{% endblock title_full %}
     </title>
 
-    <link rel="preconnect" href="https://cdn.furry.nz" crossorigin>
+    {% if CDN_ORIGIN %}<link rel="preconnect" href="{{ CDN_ORIGIN }}" crossorigin>{% endif %}
     <link rel="preload" href="{% vite_asset_url 'fonts/inter-latin-wght-normal.woff2' %}" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="{% vite_asset_url '../node_modules/@fontsource-variable/plus-jakarta-sans/files/plus-jakarta-sans-latin-wght-normal.woff2' %}" as="font" type="font/woff2" crossorigin>
 
