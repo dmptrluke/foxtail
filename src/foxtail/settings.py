@@ -18,6 +18,7 @@ import environ
 import pymdownx.emoji
 from csp.constants import NONCE, NONE, SELF
 from formguard.conf import BUILTINS
+from imagefield.webp import webp
 
 SRC_DIR = Path(__file__).resolve(strict=True).parents[1]
 BASE_DIR = SRC_DIR.parent
@@ -554,46 +555,47 @@ MAX_IMAGE_DIMENSION = 4500  # px, longest edge - uploads exceeding this are down
 IMAGEFIELD_BACKEND = 'vips'
 IMAGEFIELD_AUTOGENERATE = False
 IMAGEFIELD_BIN_DEPTH = 2
+
 IMAGEFIELD_FORMATS = {
     'accounts.user.avatar': {
-        'small': ['default', ('crop', (80, 80))],
-        'medium': ['default', ('crop', (160, 160))],
-        'large': ['default', ('crop', (400, 400))],
-        'admin': ['default', ('thumbnail', (300, 300))],
+        'small': webp(['default', ('crop', (80, 80))]),
+        'medium': webp(['default', ('crop', (160, 160))]),
+        'large': webp(['default', ('crop', (400, 400))]),
+        'admin': webp(['default', ('thumbnail', (300, 300))]),
     },
     'accounts.clientmetadata.logo': {
-        'admin': ['default', ('thumbnail', (300, 300))],
+        'admin': webp(['default', ('thumbnail', (300, 300))]),
     },
     'foxtail_blog.author.avatar': {
-        'small': ['default', ('crop', (80, 80))],
-        'small_2x': ['default', ('crop', (160, 160))],
-        'admin': ['default', ('thumbnail', (300, 300))],
+        'small': webp(['default', ('crop', (80, 80))]),
+        'small_2x': webp(['default', ('crop', (160, 160))]),
+        'admin': webp(['default', ('thumbnail', (300, 300))]),
     },
     'foxtail_blog.post.image': {
-        'card': ['default', ('crop', (600, 315))],
-        'card_2x': ['default', ('crop', (1200, 630))],
-        'banner': ['default', ('crop', (1440, 443))],
-        'banner_2x': ['default', ('crop', (2880, 886))],
-        'tall': ['default', ('crop', (960, 768))],
-        'tall_2x': ['default', ('crop', (1920, 1536))],
-        'admin': ['default', ('thumbnail', (300, 300))],
+        'card': webp(['default', ('crop', (600, 315))]),
+        'card_2x': webp(['default', ('crop', (1200, 630))]),
+        'banner': webp(['default', ('crop', (1440, 443))]),
+        'banner_2x': webp(['default', ('crop', (2880, 886))]),
+        'tall': webp(['default', ('crop', (960, 768))]),
+        'tall_2x': webp(['default', ('crop', (1920, 1536))]),
+        'admin': webp(['default', ('thumbnail', (300, 300))]),
     },
     'events.event.image': {
-        'card': ['default', ('crop', (600, 315))],
-        'card_2x': ['default', ('crop', (1200, 630))],
-        'banner': ['default', ('crop', (1440, 443))],
-        'banner_2x': ['default', ('crop', (2880, 886))],
-        'tall': ['default', ('crop', (960, 768))],
-        'tall_2x': ['default', ('crop', (1920, 1536))],
-        'admin': ['default', ('thumbnail', (300, 300))],
+        'card': webp(['default', ('crop', (600, 315))]),
+        'card_2x': webp(['default', ('crop', (1200, 630))]),
+        'banner': webp(['default', ('crop', (1440, 443))]),
+        'banner_2x': webp(['default', ('crop', (2880, 886))]),
+        'tall': webp(['default', ('crop', (960, 768))]),
+        'tall_2x': webp(['default', ('crop', (1920, 1536))]),
+        'admin': webp(['default', ('thumbnail', (300, 300))]),
     },
     'organisations.organisation.logo': {
-        'square': ['default', ('crop', (400, 400))],
-        'admin': ['default', ('thumbnail', (300, 300))],
+        'square': webp(['default', ('crop', (400, 400))]),
+        'admin': webp(['default', ('thumbnail', (300, 300))]),
     },
     'organisations.eventseries.logo': {
-        'square': ['default', ('crop', (400, 400))],
-        'admin': ['default', ('thumbnail', (300, 300))],
+        'square': webp(['default', ('crop', (400, 400))]),
+        'admin': webp(['default', ('thumbnail', (300, 300))]),
     },
 }
 
