@@ -27,6 +27,7 @@ urlpatterns = [
     # Redirects
     path('go/<int:pk>/', organisations_views.SocialLinkRedirectView.as_view(), name='social_link_redirect'),
     # Admin
+    path('markdownfield/', include('markdownfield.urls')),
     path('admin/', admin.site.urls),
     # Auth & OIDC
     path('accounts/', include('apps.accounts.urls')),

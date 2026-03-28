@@ -406,13 +406,19 @@ if DEBUG:
 # Third-party
 # =============================================================================
 
+# Build metadata
+
+GIT_SHA = env('GIT_SHA', default='')
+RELEASE_VERSION = env('RELEASE_VERSION', default='')
+BUILD_VERSION = RELEASE_VERSION or (GIT_SHA[:8] if GIT_SHA else '')
+
 # unfold
 # <https://unfoldadmin.com/docs/configuration/settings/>
 
 UNFOLD = {
     'SITE_TITLE': f'{SITE_DOMAIN} admin',
     'SITE_HEADER': SITE_DOMAIN,
-    'SITE_SUBHEADER': env('RELEASE_VERSION', default='') or 'dev',
+    'SITE_SUBHEADER': BUILD_VERSION or 'dev',
     'SITE_ICON': {
         'light': lambda request: static('images/paw.svg'),
         'dark': lambda request: static('images/paw-light.svg'),
@@ -828,12 +834,6 @@ FORMGUARD_CHECKS = BUILTINS + [
 FORMGUARD_TURNSTILE_SITE_KEY = env('TURNSTILE_SITE_KEY', default='1x00000000000000000000AA')
 FORMGUARD_TURNSTILE_SECRET_KEY = env('TURNSTILE_SECRET_KEY', default='1x0000000000000000000000000000000AA')
 FORMGUARD_TURNSTILE_IP_HEADER = 'HTTP_X_FORWARDED_FOR'
-
-# Build metadata
-
-GIT_SHA = env('GIT_SHA', default='')
-RELEASE_VERSION = env('RELEASE_VERSION', default='')
-BUILD_VERSION = RELEASE_VERSION or (GIT_SHA[:8] if GIT_SHA else '')
 
 # Sentry.io
 # <https://docs.sentry.io/platforms/python/django/>
