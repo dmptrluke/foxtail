@@ -45,7 +45,7 @@ ROOT_URLCONF = 'foxtail.urls'
 WSGI_APPLICATION = 'foxtail.wsgi.application'
 
 INSTALLED_APPS = [
-    'unfold',
+    'unfold.apps.BasicAppConfig',
     'unfold.contrib.filters',
     'apps.admin.apps.CustomAdminConfig',
     'django.contrib.auth',
@@ -426,6 +426,7 @@ UNFOLD = {
     'SHOW_HISTORY': True,
     'SHOW_VIEW_ON_SITE': True,
     'ENVIRONMENT': 'apps.admin.admin.environment_callback',
+    'DASHBOARD_CALLBACK': 'apps.admin.dashboard.dashboard_callback',
     'COLORS': {
         'primary': {
             '50': 'oklch(97.7% 0.010 280)',
@@ -455,7 +456,7 @@ UNFOLD = {
                         'link': reverse_lazy('admin:accounts_user_changelist'),
                     },
                     {
-                        'title': 'Email addresses',
+                        'title': 'Email Addresses',
                         'icon': 'mail',
                         'link': reverse_lazy('admin:account_emailaddress_changelist'),
                     },
@@ -463,6 +464,11 @@ UNFOLD = {
                         'title': 'Groups',
                         'icon': 'group',
                         'link': reverse_lazy('admin:auth_group_changelist'),
+                    },
+                    {
+                        'title': 'MFA Devices',
+                        'icon': 'security',
+                        'link': reverse_lazy('admin:mfa_authenticator_changelist'),
                     },
                 ],
             },
@@ -481,7 +487,7 @@ UNFOLD = {
                         'link': reverse_lazy('admin:events_event_changelist'),
                     },
                     {
-                        'title': 'Event series',
+                        'title': 'Event Series',
                         'icon': 'event_repeat',
                         'link': reverse_lazy('admin:organisations_eventseries_changelist'),
                     },
@@ -492,7 +498,7 @@ UNFOLD = {
                 'separator': True,
                 'items': [
                     {
-                        'title': 'Blog posts',
+                        'title': 'Blog Posts',
                         'icon': 'article',
                         'link': reverse_lazy('admin:foxtail_blog_post_changelist'),
                     },
@@ -519,7 +525,7 @@ UNFOLD = {
                 ],
             },
             {
-                'title': 'OIDC provider',
+                'title': 'OIDC Provider',
                 'separator': True,
                 'collapsible': True,
                 'items': [
@@ -536,24 +542,14 @@ UNFOLD = {
                 ],
             },
             {
-                'title': 'Social auth',
+                'title': 'Social Auth',
                 'separator': True,
                 'collapsible': True,
                 'items': [
                     {
-                        'title': 'Social apps',
-                        'icon': 'apps',
-                        'link': reverse_lazy('admin:socialaccount_socialapp_changelist'),
-                    },
-                    {
-                        'title': 'Social accounts',
+                        'title': 'Social Accounts',
                         'icon': 'person_add',
                         'link': reverse_lazy('admin:socialaccount_socialaccount_changelist'),
-                    },
-                    {
-                        'title': 'MFA devices',
-                        'icon': 'security',
-                        'link': reverse_lazy('admin:mfa_authenticator_changelist'),
                     },
                 ],
             },
@@ -563,12 +559,12 @@ UNFOLD = {
                 'collapsible': True,
                 'items': [
                     {
-                        'title': 'Linked accounts',
+                        'title': 'Linked Accounts',
                         'icon': 'link',
                         'link': reverse_lazy('admin:telegram_telegramlink_changelist'),
                     },
                     {
-                        'title': 'Link tokens',
+                        'title': 'Link Tokens',
                         'icon': 'token',
                         'link': reverse_lazy('admin:telegram_linktoken_changelist'),
                     },
@@ -579,7 +575,7 @@ UNFOLD = {
                 'separator': True,
                 'items': [
                     {
-                        'title': 'Site settings',
+                        'title': 'Site Settings',
                         'icon': 'settings',
                         'link': reverse_lazy('admin:core_sitesettings_changelist'),
                     },

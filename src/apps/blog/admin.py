@@ -7,8 +7,7 @@ from django.utils.html import format_html
 from published.admin import PublishedAdmin
 from unfold.admin import ModelAdmin as UnfoldModelAdmin
 from unfold.contrib.filters.admin import ChoicesDropdownFilter, RelatedDropdownFilter
-from unfold.decorators import display
-from unfold.widgets import UnfoldAdminTextareaWidget
+from unfold.decorators import action, display
 
 from apps.core.admin_helpers import publish_status_badge as _publish_status_badge
 from apps.core.widgets import UnfoldTagWidget
@@ -19,7 +18,6 @@ from .models import Author, Comment, Post
 class PostAdminForm(ModelForm):
     class Meta:
         widgets = {
-            'description': UnfoldAdminTextareaWidget(attrs={'rows': 4}),
             'tags': UnfoldTagWidget,
         }
 
@@ -50,7 +48,6 @@ class PostAdmin(UnfoldModelAdmin, PublishedAdmin):
     autocomplete_fields = ['organisations', 'event_series', 'events']
     prepopulated_fields = {'slug': ('title',)}
     search_fields = ['title']
-    raw_id_fields = ('author',)
     readonly_fields = ['publish_status_badge']
     list_filter = [
         'created',
@@ -59,6 +56,14 @@ class PostAdmin(UnfoldModelAdmin, PublishedAdmin):
         ('publish_status', ChoicesDropdownFilter),
     ]
     list_display = ['title', 'author', 'created', 'show_status', 'tag_list']
+    actions_detail = ['view_comments']
+
+    @action(description='Comments', icon='chat_bubble', attrs={'target': '_blank'})
+    def view_comments(self, request, object_id):
+        from django.http import HttpResponseRedirect
+
+        url = reverse('admin:foxtail_blog_comment_changelist')
+        return HttpResponseRedirect(f'{url}?post__id__exact={object_id}')
 
     @admin.display(description='Current status')
     def publish_status_badge(self, obj):
@@ -86,6 +91,12 @@ class PostAdmin(UnfoldModelAdmin, PublishedAdmin):
 class CommentAdmin(UnfoldModelAdmin):
     list_display = ('text_preview', 'post_link', 'author', 'approved', 'created')
     raw_id_fields = ('author',)
+    actions = ['approve_comments']
+
+    @admin.action(description='Approve selected comments')
+    def approve_comments(self, request, queryset):
+        updated = queryset.filter(approved=False).update(approved=True)
+        self.message_user(request, f'{updated} comment(s) approved.')
 
     def post_link(self, obj):
         return format_html(

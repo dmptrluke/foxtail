@@ -6,23 +6,27 @@ from solo.models import SingletonModel
 class SiteSettings(SingletonModel):
     """Admin-editable site branding and configuration."""
 
-    org_name = models.CharField(max_length=100, default='furry.nz')
+    org_name = models.CharField('Organisation Name', max_length=100, default='furry.nz')
     org_description = models.TextField(
+        'Organisation Description',
         blank=True,
         help_text='Short description for structured data and SEO.',
     )
     theme_color = models.CharField(
+        'Theme Color',
         max_length=7,
         default='#281e33',
         help_text='Hex color for browser theme-color meta tag.',
     )
-    facebook_app_id = models.CharField(max_length=50, blank=True)
+    facebook_app_id = models.CharField('Facebook App ID', max_length=50, blank=True)
 
-    telegram_url = models.URLField(blank=True)
-    bluesky_url = models.URLField(blank=True)
-    x_url = models.URLField(blank=True)
+    telegram_url = models.URLField('Telegram URL', blank=True)
+    bluesky_url = models.URLField('Bluesky URL', blank=True)
+    x_url = models.URLField('X URL', blank=True)
 
-    contact_email = models.EmailField(blank=True, help_text='Public contact address shown on contact page.')
+    contact_email = models.EmailField(
+        'Contact Email', blank=True, help_text='Public contact address shown on contact page.'
+    )
 
     class Meta:
         verbose_name = 'site settings'

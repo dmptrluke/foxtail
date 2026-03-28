@@ -10,6 +10,6 @@ from .models import SiteSettings
 class SiteSettingsAdmin(UnfoldModelAdmin, SingletonModelAdmin):
     fieldsets = (
         ('Branding', {'fields': ('org_name', 'org_description', 'theme_color', 'facebook_app_id')}),
-        ('Social links', {'fields': ('telegram_url', 'bluesky_url', 'x_url')}),
+        ('Social Links', {'fields': ('telegram_url', 'bluesky_url', 'x_url')}),
         ('Contact', {'fields': ('contact_email',)}),
     )

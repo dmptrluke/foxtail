@@ -1,16 +1,29 @@
-from django.contrib import admin
+from django.contrib import admin, messages
 from django.contrib.auth.admin import UserAdmin
+from django.contrib.auth.forms import AdminPasswordChangeForm
+from django.forms import PasswordInput
+from django.http import HttpResponseRedirect
 from django.urls import reverse
+from django.utils import timezone
 from django.utils.html import format_html
 
 from allauth.account.admin import EmailAddressAdmin as BaseEmailAddressAdmin
 from allauth.account.models import EmailAddress
 from allauth.idp.oidc.admin import ClientAdmin as BaseClientAdmin
 from allauth.idp.oidc.models import Client
+from allauth.mfa.admin import AuthenticatorAdmin as BaseAuthenticatorAdmin
 from allauth.mfa.models import Authenticator
+from allauth.socialaccount.admin import (
+    SocialAccountAdmin as BaseSocialAccountAdmin,
+)
+from allauth.socialaccount.admin import (
+    SocialTokenAdmin as BaseSocialTokenAdmin,
+)
+from allauth.socialaccount.models import SocialAccount, SocialApp, SocialToken
 from unfold.admin import ModelAdmin as UnfoldModelAdmin
 from unfold.admin import StackedInline, TabularInline
-from unfold.decorators import display
+from unfold.decorators import action, display
+from unfold.widgets import INPUT_CLASSES
 
 from .models import ClientMetadata, User, Verification
 
@@ -25,10 +38,23 @@ class VerificationInline(StackedInline):
     raw_id_fields = ('verified_by',)
 
 
+class EmailAddressInline(TabularInline):
+    model = EmailAddress
+    extra = 0
+    show_count = True
+    hide_title = True
+    fields = ('email', 'primary', 'verified')
+    readonly_fields = ('email',)
+
+    def has_add_permission(self, request, obj=None):
+        return False
+
+
 class AuthenticatorInline(TabularInline):
     model = Authenticator
     extra = 0
     show_count = True
+    hide_title = True
     readonly_fields = ('type', 'created_at', 'last_used_at')
     fields = ('type', 'created_at', 'last_used_at')
 
@@ -36,24 +62,61 @@ class AuthenticatorInline(TabularInline):
         return False
 
 
+class UnfoldPasswordChangeForm(AdminPasswordChangeForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field in self.fields.values():
+            if isinstance(field.widget, PasswordInput):
+                field.widget.attrs['class'] = ' '.join(INPUT_CLASSES)
+
+
 class CustomUserAdmin(UnfoldModelAdmin, UserAdmin):
+    change_password_form = UnfoldPasswordChangeForm
     list_display = ['show_user', 'full_name', 'date_joined', 'last_login', 'is_active', 'is_verified_display']
-    inlines = [VerificationInline, AuthenticatorInline]
+    inlines = [EmailAddressInline, VerificationInline, AuthenticatorInline]
+    actions = ['verify_users']
+    actions_detail = ['verify_user']
 
     exclude = ('first_name', 'last_name')
-    readonly_fields = ('email',)
+    readonly_fields = ('email', 'last_login', 'date_joined')
 
     fieldsets = (
-        (None, {'fields': ('username', 'email', 'password')}),
+        (None, {'fields': ('username', 'email', 'password', 'is_active')}),
         ('Personal info', {'fields': ('full_name', 'date_of_birth')}),
+        ('Important dates', {'fields': ('last_login', 'date_joined')}),
         (
             'Permissions',
             {
-                'fields': ('is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions'),
+                'classes': ('collapse',),
+                'fields': ('is_staff', 'is_superuser', 'groups', 'user_permissions'),
             },
         ),
-        ('Important dates', {'fields': ('last_login', 'date_joined')}),
     )
+
+    @action(description='Verify User', icon='verified')
+    def verify_user(self, request, object_id):
+        user = User.objects.get(pk=object_id)
+        Verification.objects.get_or_create(
+            user=user,
+            defaults={
+                'verified_by': request.user,
+                'verified_at': timezone.now(),
+            },
+        )
+        messages.success(request, f'{user.username} has been verified.')
+        return HttpResponseRedirect(reverse('admin:accounts_user_change', args=[object_id]))
+
+    @admin.action(description='Verify selected users')
+    def verify_users(self, request, queryset):
+        for user in queryset:
+            Verification.objects.get_or_create(
+                user=user,
+                defaults={
+                    'verified_by': request.user,
+                    'verified_at': timezone.now(),
+                },
+            )
+        messages.success(request, f'{queryset.count()} user(s) verified.')
 
     @display(description='User', header=True, ordering='username')
     def show_user(self, obj):
@@ -91,8 +154,32 @@ class CustomEmailAddressAdmin(UnfoldModelAdmin, BaseEmailAddressAdmin):
         return format_html('<a href="{}">{}</a>', url, obj.user)
 
 
+class CustomAuthenticatorAdmin(UnfoldModelAdmin, BaseAuthenticatorAdmin):
+    pass
+
+
+class CustomSocialAccountAdmin(UnfoldModelAdmin, BaseSocialAccountAdmin):
+    pass
+
+
+class CustomSocialTokenAdmin(UnfoldModelAdmin, BaseSocialTokenAdmin):
+    list_display = ('account_link', 'app', 'truncated_token', 'expires_at')
+
+    @admin.display(description='Account')
+    def account_link(self, obj):
+        url = reverse('admin:socialaccount_socialtoken_change', args=[obj.pk])
+        return format_html('<a href="{}">{}</a>', url, obj.account)
+
+
 admin.site.register(User, CustomUserAdmin)
 admin.site.unregister(Client)
 admin.site.register(Client, CustomClientAdmin)
 admin.site.unregister(EmailAddress)
 admin.site.register(EmailAddress, CustomEmailAddressAdmin)
+admin.site.unregister(Authenticator)
+admin.site.register(Authenticator, CustomAuthenticatorAdmin)
+admin.site.unregister(SocialAccount)
+admin.site.register(SocialAccount, CustomSocialAccountAdmin)
+admin.site.unregister(SocialApp)
+admin.site.unregister(SocialToken)
+admin.site.register(SocialToken, CustomSocialTokenAdmin)

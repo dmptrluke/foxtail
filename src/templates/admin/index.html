@@ -1,0 +1,85 @@
+{% extends "admin/base.html" %}
+{% load i18n unfold %}
+
+{% block title %}{% if subtitle %}{{ subtitle }} | {% endif %}{{ title }} | {{ site_title|default:_('Django site admin') }}{% endblock %}
+
+{% block branding %}
+    {% include "unfold/helpers/site_branding.html" %}
+{% endblock %}
+
+{% block content %}
+<div class="flex flex-col gap-8">
+
+    {# Stat cards #}
+    <div class="grid grid-cols-2 lg:grid-cols-4 xl:grid-cols-7 gap-4">
+        {% component "unfold/components/card.html" with title="Total users" icon="person" class="col-span-1" %}
+            <p class="text-2xl font-bold px-4 pb-3">{{ total_users }}</p>
+        {% endcomponent %}
+
+        {% component "unfold/components/card.html" with title="New this week" icon="person_add" class="col-span-1" %}
+            <p class="text-2xl font-bold px-4 pb-3">{{ new_this_week }}</p>
+        {% endcomponent %}
+
+        {% component "unfold/components/card.html" with title="New this month" icon="trending_up" class="col-span-1" %}
+            <p class="text-2xl font-bold px-4 pb-3">{{ new_this_month }}</p>
+        {% endcomponent %}
+
+        {% component "unfold/components/card.html" with title="Events" icon="event" class="col-span-1" %}
+            <p class="text-2xl font-bold px-4 pb-3">{{ total_events }}</p>
+        {% endcomponent %}
+
+        {% component "unfold/components/card.html" with title="Organisations" icon="corporate_fare" class="col-span-1" %}
+            <p class="text-2xl font-bold px-4 pb-3">{{ total_orgs }}</p>
+        {% endcomponent %}
+
+        {% component "unfold/components/card.html" with title="Blog posts" icon="article" class="col-span-1" %}
+            <p class="text-2xl font-bold px-4 pb-3">{{ total_posts }}</p>
+        {% endcomponent %}
+
+        {% component "unfold/components/card.html" with title="Pages" icon="description" class="col-span-1" %}
+            <p class="text-2xl font-bold px-4 pb-3">{{ total_pages }}</p>
+        {% endcomponent %}
+    </div>
+
+    {# Registration chart + upcoming events #}
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        {% component "unfold/components/card.html" with title="User registrations" %}
+            {% component "unfold/components/chart/line.html" with data=registration_chart height="200" %}
+            {% endcomponent %}
+        {% endcomponent %}
+
+        {% component "unfold/components/card.html" with title="Upcoming events" %}
+            {% component "unfold/components/table.html" with table=events_table card_included=1 striped=1 %}
+            {% endcomponent %}
+        {% endcomponent %}
+    </div>
+
+    {# Recent posts + recent signups #}
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        {% component "unfold/components/card.html" with title="Recent blog posts" %}
+            {% component "unfold/components/table.html" with table=posts_table card_included=1 striped=1 %}
+            {% endcomponent %}
+        {% endcomponent %}
+
+        {% component "unfold/components/card.html" with title="Recent signups" %}
+            {% component "unfold/components/table.html" with table=signups_table card_included=1 striped=1 %}
+            {% endcomponent %}
+        {% endcomponent %}
+    </div>
+
+    {# Recent comments #}
+    {% component "unfold/components/card.html" with title="Recent comments" %}
+        {% component "unfold/components/table.html" with table=comments_table card_included=1 striped=1 %}
+        {% endcomponent %}
+    {% endcomponent %}
+
+    {# Recent actions #}
+    <div class="flex flex-col lg:flex-row lg:gap-8">
+        <div class="grow">
+            {% include "unfold/helpers/app_list_default.html" %}
+        </div>
+        {% include "unfold/helpers/history.html" %}
+    </div>
+
+</div>
+{% endblock %}
