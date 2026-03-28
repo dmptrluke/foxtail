@@ -3,6 +3,8 @@ from django.forms import Select, SelectMultiple
 from django.forms.widgets import ClearableFileInput
 from django.urls import reverse
 
+from unfold.widgets import UnfoldAdminTextInputWidget
+
 
 class ImageWidget(ClearableFileInput):
     """File input with size validation and optional PPOI (point of interest) field"""
@@ -59,6 +61,17 @@ class _AutocompleteMixin:
         attrs = super().build_attrs(base_attrs, extra_attrs)
         attrs['data-autocomplete-url'] = self.get_url()
         return attrs
+
+
+class UnfoldTagWidget(UnfoldAdminTextInputWidget):
+    """Taggit tag input with unfold styling."""
+
+    def format_value(self, value):
+        if isinstance(value, str):
+            return value
+        if value is not None:
+            return ', '.join(tag.tag.name if hasattr(tag, 'tag') else str(tag) for tag in value)
+        return ''
 
 
 class AutocompleteSelect(_AutocompleteMixin, Select):

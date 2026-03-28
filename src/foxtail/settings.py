@@ -13,6 +13,8 @@ from pathlib import Path
 from urllib.parse import urlparse
 
 from django.contrib.messages import constants as messages
+from django.templatetags.static import static
+from django.urls import reverse_lazy
 
 import environ
 import pymdownx.emoji
@@ -43,6 +45,8 @@ ROOT_URLCONF = 'foxtail.urls'
 WSGI_APPLICATION = 'foxtail.wsgi.application'
 
 INSTALLED_APPS = [
+    'unfold',
+    'unfold.contrib.filters',
     'apps.admin.apps.CustomAdminConfig',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -401,6 +405,183 @@ if DEBUG:
 # =============================================================================
 # Third-party
 # =============================================================================
+
+# unfold
+# <https://unfoldadmin.com/docs/configuration/settings/>
+
+UNFOLD = {
+    'SITE_TITLE': f'{SITE_DOMAIN} admin',
+    'SITE_HEADER': SITE_DOMAIN,
+    'SITE_SUBHEADER': env('RELEASE_VERSION', default='') or 'dev',
+    'SITE_ICON': {
+        'light': lambda request: static('images/paw.svg'),
+        'dark': lambda request: static('images/paw-light.svg'),
+    },
+    'SHOW_HISTORY': True,
+    'SHOW_VIEW_ON_SITE': True,
+    'ENVIRONMENT': 'apps.admin.admin.environment_callback',
+    'COLORS': {
+        'primary': {
+            '50': 'oklch(97.7% 0.010 280)',
+            '100': 'oklch(94.5% 0.025 280)',
+            '200': 'oklch(89.5% 0.050 280)',
+            '300': 'oklch(83.5% 0.075 280)',
+            '400': 'oklch(75.0% 0.100 280)',
+            '500': 'oklch(66.0% 0.110 280)',
+            '600': 'oklch(55.5% 0.115 280)',
+            '700': 'oklch(45.0% 0.110 280)',
+            '800': 'oklch(36.5% 0.100 280)',
+            '900': 'oklch(29.5% 0.080 280)',
+            '950': 'oklch(22.0% 0.060 280)',
+        },
+    },
+    'SIDEBAR': {
+        'show_search': True,
+        'show_all_applications': True,
+        'navigation': [
+            {
+                'title': 'Accounts',
+                'separator': True,
+                'items': [
+                    {
+                        'title': 'Users',
+                        'icon': 'person',
+                        'link': reverse_lazy('admin:accounts_user_changelist'),
+                    },
+                    {
+                        'title': 'Email addresses',
+                        'icon': 'mail',
+                        'link': reverse_lazy('admin:account_emailaddress_changelist'),
+                    },
+                    {
+                        'title': 'Groups',
+                        'icon': 'group',
+                        'link': reverse_lazy('admin:auth_group_changelist'),
+                    },
+                ],
+            },
+            {
+                'title': 'Community',
+                'separator': True,
+                'items': [
+                    {
+                        'title': 'Organisations',
+                        'icon': 'corporate_fare',
+                        'link': reverse_lazy('admin:organisations_organisation_changelist'),
+                    },
+                    {
+                        'title': 'Events',
+                        'icon': 'event',
+                        'link': reverse_lazy('admin:events_event_changelist'),
+                    },
+                    {
+                        'title': 'Event series',
+                        'icon': 'event_repeat',
+                        'link': reverse_lazy('admin:organisations_eventseries_changelist'),
+                    },
+                ],
+            },
+            {
+                'title': 'Content',
+                'separator': True,
+                'items': [
+                    {
+                        'title': 'Blog posts',
+                        'icon': 'article',
+                        'link': reverse_lazy('admin:foxtail_blog_post_changelist'),
+                    },
+                    {
+                        'title': 'Authors',
+                        'icon': 'badge',
+                        'link': reverse_lazy('admin:foxtail_blog_author_changelist'),
+                    },
+                    {
+                        'title': 'Comments',
+                        'icon': 'chat_bubble',
+                        'link': reverse_lazy('admin:foxtail_blog_comment_changelist'),
+                    },
+                    {
+                        'title': 'Pages',
+                        'icon': 'description',
+                        'link': reverse_lazy('admin:content_page_changelist'),
+                    },
+                    {
+                        'title': 'Tags',
+                        'icon': 'label',
+                        'link': reverse_lazy('admin:taggit_tag_changelist'),
+                    },
+                ],
+            },
+            {
+                'title': 'OIDC provider',
+                'separator': True,
+                'collapsible': True,
+                'items': [
+                    {
+                        'title': 'Clients',
+                        'icon': 'key',
+                        'link': reverse_lazy('admin:allauth_idp_oidc_client_changelist'),
+                    },
+                    {
+                        'title': 'Tokens',
+                        'icon': 'token',
+                        'link': reverse_lazy('admin:allauth_idp_oidc_token_changelist'),
+                    },
+                ],
+            },
+            {
+                'title': 'Social auth',
+                'separator': True,
+                'collapsible': True,
+                'items': [
+                    {
+                        'title': 'Social apps',
+                        'icon': 'apps',
+                        'link': reverse_lazy('admin:socialaccount_socialapp_changelist'),
+                    },
+                    {
+                        'title': 'Social accounts',
+                        'icon': 'person_add',
+                        'link': reverse_lazy('admin:socialaccount_socialaccount_changelist'),
+                    },
+                    {
+                        'title': 'MFA devices',
+                        'icon': 'security',
+                        'link': reverse_lazy('admin:mfa_authenticator_changelist'),
+                    },
+                ],
+            },
+            {
+                'title': 'Telegram',
+                'separator': True,
+                'collapsible': True,
+                'items': [
+                    {
+                        'title': 'Linked accounts',
+                        'icon': 'link',
+                        'link': reverse_lazy('admin:telegram_telegramlink_changelist'),
+                    },
+                    {
+                        'title': 'Link tokens',
+                        'icon': 'token',
+                        'link': reverse_lazy('admin:telegram_linktoken_changelist'),
+                    },
+                ],
+            },
+            {
+                'title': 'Settings',
+                'separator': True,
+                'items': [
+                    {
+                        'title': 'Site settings',
+                        'icon': 'settings',
+                        'link': reverse_lazy('admin:core_sitesettings_changelist'),
+                    },
+                ],
+            },
+        ],
+    },
+}
 
 # allauth
 # <https://docs.allauth.org/en/latest/account/configuration.html>

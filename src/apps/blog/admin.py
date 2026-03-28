@@ -1,11 +1,17 @@
 from django.contrib import admin
-from django.contrib.admin import ModelAdmin
-from django.forms import ModelForm, Textarea
+from django.forms import ModelForm
 from django.template.defaultfilters import truncatechars
 from django.urls import reverse
 from django.utils.html import format_html
 
-from published.admin import PublishedAdmin, add_to_fieldsets, add_to_list_display, add_to_readonly_fields
+from published.admin import PublishedAdmin
+from unfold.admin import ModelAdmin as UnfoldModelAdmin
+from unfold.contrib.filters.admin import ChoicesDropdownFilter, RelatedDropdownFilter
+from unfold.decorators import display
+from unfold.widgets import UnfoldAdminTextareaWidget
+
+from apps.core.admin_helpers import publish_status_badge as _publish_status_badge
+from apps.core.widgets import UnfoldTagWidget
 
 from .models import Author, Comment, Post
 
@@ -13,17 +19,19 @@ from .models import Author, Comment, Post
 class PostAdminForm(ModelForm):
     class Meta:
         widgets = {
-            'description': Textarea(attrs={'cols': 60, 'rows': 4}),
+            'description': UnfoldAdminTextareaWidget(attrs={'rows': 4}),
+            'tags': UnfoldTagWidget,
         }
 
 
-class PostAdmin(PublishedAdmin):
+class PostAdmin(UnfoldModelAdmin, PublishedAdmin):
+    warn_unsaved_form = True
     form = PostAdminForm
     fieldsets = (
         ('Metadata', {'fields': ('title', 'author', 'tags', 'description')}),
         ('Content', {'fields': ('text',)}),
         ('Related Content', {'fields': ('organisations', 'event_series', 'events')}),
-        add_to_fieldsets(section=True, collapse=False),
+        ('Publishing', {'fields': ('publish_status', 'live_as_of', 'publish_status_badge')}),
         (
             'Image',
             {
@@ -43,9 +51,29 @@ class PostAdmin(PublishedAdmin):
     prepopulated_fields = {'slug': ('title',)}
     search_fields = ['title']
     raw_id_fields = ('author',)
-    readonly_fields = add_to_readonly_fields()
-    list_filter = ('created', 'tags', 'author')
-    list_display = ['title', 'tag_list', 'created', 'modified', 'author'] + add_to_list_display()
+    readonly_fields = ['publish_status_badge']
+    list_filter = [
+        'created',
+        'tags',
+        ('author', RelatedDropdownFilter),
+        ('publish_status', ChoicesDropdownFilter),
+    ]
+    list_display = ['title', 'author', 'created', 'show_status', 'tag_list']
+
+    @admin.display(description='Current status')
+    def publish_status_badge(self, obj):
+        return _publish_status_badge(obj)
+
+    @display(
+        description='Status',
+        label={
+            'Never Available': 'danger',
+            'Available': 'success',
+            'Available after "Publish Date"': 'info',
+        },
+    )
+    def show_status(self, obj):
+        return obj.get_publish_status_display()
 
     def get_queryset(self, request):
         return super().get_queryset(request).prefetch_related('tags')
@@ -55,8 +83,8 @@ class PostAdmin(PublishedAdmin):
         return ', '.join(sorted(t.name for t in obj.tags.all()))
 
 
-class CommentAdmin(ModelAdmin):
-    list_display = ('text_preview', 'post_link', 'author', 'created')
+class CommentAdmin(UnfoldModelAdmin):
+    list_display = ('text_preview', 'post_link', 'author', 'approved', 'created')
     raw_id_fields = ('author',)
 
     def post_link(self, obj):
@@ -71,7 +99,7 @@ class CommentAdmin(ModelAdmin):
     post_link.short_description = 'Post'
 
 
-class AuthorAdmin(ModelAdmin):
+class AuthorAdmin(UnfoldModelAdmin):
     list_display = ('name', 'user', 'link')
     search_fields = ('name',)
     raw_id_fields = ('user',)

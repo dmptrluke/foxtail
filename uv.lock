@@ -504,7 +504,7 @@ vips = [
 
 [[package]]
 name = "django-markdownfield"
-version = "0.16.0"
+version = "0.17.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "django" },
@@ -512,9 +512,9 @@ dependencies = [
     { name = "nh3" },
     { name = "shortuuid" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/95/ef/84bb52a0aab37adbe181d68b479740bd215e60f759715536f1658c5a1a82/django_markdownfield-0.16.0.tar.gz", hash = "sha256:f8ad00b00106b154266b75279be30a62d1e0de98f775ab7d93327a2eacaa86fa", size = 806249, upload-time = "2026-03-25T23:17:07.005Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/62/c5/a56b483ca5e1b0560adbe08bd6d10c1875d2224710dc7c0d6cb5e3e88e38/django_markdownfield-0.17.0.tar.gz", hash = "sha256:b27957255465ab9972cb5f88bf012d62a2f9a0c87e0b8c7291ec4c08a96a25c4", size = 807155, upload-time = "2026-03-28T06:49:52.148Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/21/47/5206ac1ff05f3711132d5899db8f6efe3ce149a5062394ab8e04ff520e49/django_markdownfield-0.16.0-py3-none-any.whl", hash = "sha256:7b908e96114f91dd5ed511e15325afc2d19a8143f7e781d57b81315b6185e675", size = 764935, upload-time = "2026-03-25T23:17:05.244Z" },
+    { url = "https://files.pythonhosted.org/packages/34/88/4adb0bd3585846f27e156baf113353fdd7a108c152b269769c8ab7941700/django_markdownfield-0.17.0-py3-none-any.whl", hash = "sha256:73cbe25d3e738bbc54642e98ba28e199a64cf125865533b40c3346a08f52c48d", size = 765410, upload-time = "2026-03-28T06:49:53.895Z" },
 ]
 
 [[package]]
@@ -593,6 +593,18 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/34/a6/f1beaf8f552fe90c153cc039316ebab942c23dfbc88588dde081fefca816/django_taggit-6.1.0.tar.gz", hash = "sha256:c4d1199e6df34125dd36db5eb0efe545b254dec3980ce5dd80e6bab3e78757c3", size = 38151, upload-time = "2024-09-29T08:07:39.477Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/6b/34/4185c345530b91d05cb82e05d07148f481a5eb5dc2ac44e092b3daa6f206/django_taggit-6.1.0-py3-none-any.whl", hash = "sha256:ab776264bbc76cb3d7e49e1bf9054962457831bd21c3a42db9138b41956e4cf0", size = 75749, upload-time = "2024-09-29T08:07:14.612Z" },
+]
+
+[[package]]
+name = "django-unfold"
+version = "0.87.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "django" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/4a/8e/74d2772b46236f062772c23c527cc2b4c33296a8b8306a4856b7e93830f6/django_unfold-0.87.0.tar.gz", hash = "sha256:011048047eea2e789e087660203ca221243885e0c93dbcb47539ff80dde9b76c", size = 1117584, upload-time = "2026-03-25T15:36:10.063Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/89/8d/76967f4593eec3422378eccf1ae24279a194afb5b1ab2daaece9f00c5e44/django_unfold-0.87.0-py3-none-any.whl", hash = "sha256:7ac7eac54d2a6f9eab98e3a90bf0696996ef1638a13b053226e5a007f895aadb", size = 1239731, upload-time = "2026-03-25T15:36:08.698Z" },
 ]
 
 [[package]]
@@ -700,6 +712,7 @@ dependencies = [
     { name = "django-storages", extra = ["s3"] },
     { name = "django-structured-data" },
     { name = "django-taggit" },
+    { name = "django-unfold" },
     { name = "django-vite" },
     { name = "django-widget-tweaks" },
     { name = "fido2" },
@@ -760,13 +773,14 @@ requires-dist = [
     { name = "django-environ", specifier = ">=0.13,<1" },
     { name = "django-formguard", specifier = ">=0.8" },
     { name = "django-imagefield", extras = ["vips"], specifier = ">=0.23.0a3" },
-    { name = "django-markdownfield", specifier = ">=0.15" },
+    { name = "django-markdownfield", specifier = ">=0.17" },
     { name = "django-published", specifier = ">=1.1" },
     { name = "django-redis", specifier = ">=6.0,<7" },
     { name = "django-solo", specifier = ">=2.5" },
     { name = "django-storages", extras = ["s3"], specifier = ">=1.14,<2" },
     { name = "django-structured-data", specifier = ">=0.13" },
     { name = "django-taggit", specifier = ">=6.1,<7" },
+    { name = "django-unfold", specifier = ">=0.87.0" },
     { name = "django-vite", specifier = ">=3.1,<4" },
     { name = "django-widget-tweaks", specifier = ">=1.5" },
     { name = "fido2", specifier = ">=2.1" },
