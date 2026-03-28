@@ -93,6 +93,7 @@ INSTALLED_APPS = [
     'imagefield',
     'huey.contrib.djhuey',
     'django_cleanup.apps.CleanupConfig',
+    'fetch_metadata',
 ]
 
 if DEBUG:
@@ -105,7 +106,7 @@ MIDDLEWARE = [
     'csp.middleware.CSPMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'apps.core.middleware.FetchMetadataMiddleware',
+    'fetch_metadata.middleware.FetchMetadataMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -118,6 +119,23 @@ if DEBUG:
     DEBUG_TOOLBAR_CONFIG = {
         'SHOW_TOOLBAR_CALLBACK': lambda _request: DEBUG,
     }
+    DEBUG_TOOLBAR_PANELS = [
+        'debug_toolbar.panels.history.HistoryPanel',
+        'debug_toolbar.panels.versions.VersionsPanel',
+        'debug_toolbar.panels.timer.TimerPanel',
+        'debug_toolbar.panels.settings.SettingsPanel',
+        'debug_toolbar.panels.headers.HeadersPanel',
+        'debug_toolbar.panels.request.RequestPanel',
+        'debug_toolbar.panels.sql.SQLPanel',
+        'debug_toolbar.panels.staticfiles.StaticFilesPanel',
+        'debug_toolbar.panels.templates.TemplatesPanel',
+        'debug_toolbar.panels.alerts.AlertsPanel',
+        'debug_toolbar.panels.cache.CachePanel',
+        'debug_toolbar.panels.signals.SignalsPanel',
+        'debug_toolbar.panels.redirects.RedirectsPanel',
+        'debug_toolbar.panels.profiling.ProfilingPanel',
+        'fetch_metadata.contrib.toolbar.FetchMetadataPanel',
+    ]
 
 # =============================================================================
 # Django
@@ -678,6 +696,13 @@ MFA_WEBAUTHN_ALLOW_INSECURE_ORIGIN = DEBUG
 
 IDP_OIDC_ADAPTER = 'apps.accounts.adapter.FoxtailOIDCAdapter'
 IDP_OIDC_PRIVATE_KEY = env('OIDC_RSA_PRIVATE_KEY', default='')
+
+# Fetch Metadata
+# OIDC discovery and JWKS endpoints receive cross-site GET requests from relying parties
+FETCH_METADATA_EXEMPT_PATHS = [
+    '/.well-known/',
+    '/openid/',
+]
 
 # CSP Headers
 # <https://django-csp.readthedocs.io/en/latest/>

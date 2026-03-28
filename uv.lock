@@ -474,6 +474,23 @@ wheels = [
 ]
 
 [[package]]
+name = "django-fetch-metadata"
+version = "0.1.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "django" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/30/9b/4c00f9449274412dcc429ba83bda34140c875a20a5f3d0971328b9280e26/django_fetch_metadata-0.1.0.tar.gz", hash = "sha256:74a85b4511427619b9874b916655f87cde4a020b7a7bede406ef7f06ce1bdfb2", size = 41561, upload-time = "2026-03-28T22:17:03.222Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/46/ba/430d0a255ef0e811c21effe4d2beee90240fb663299bfe06afce33bc4e40/django_fetch_metadata-0.1.0-py3-none-any.whl", hash = "sha256:3c90acafe380bbc8d9c98654f1ff3692d66907668fe1558ebc4494f6e224b70d", size = 14629, upload-time = "2026-03-28T22:17:04.586Z" },
+]
+
+[package.optional-dependencies]
+toolbar = [
+    { name = "django-debug-toolbar" },
+]
+
+[[package]]
 name = "django-formguard"
 version = "0.9.0"
 source = { registry = "https://pypi.org/simple" }
@@ -703,6 +720,7 @@ dependencies = [
     { name = "django-csp" },
     { name = "django-csp-helpers" },
     { name = "django-environ" },
+    { name = "django-fetch-metadata" },
     { name = "django-formguard" },
     { name = "django-imagefield", extra = ["vips"] },
     { name = "django-markdownfield" },
@@ -741,6 +759,7 @@ bot = [
 dev = [
     { name = "debugpy" },
     { name = "django-debug-toolbar" },
+    { name = "django-fetch-metadata", extra = ["toolbar"] },
     { name = "factory-boy" },
     { name = "faker" },
 ]
@@ -748,6 +767,7 @@ test = [
     { name = "coverage" },
     { name = "debugpy" },
     { name = "django-debug-toolbar" },
+    { name = "django-fetch-metadata", extra = ["toolbar"] },
     { name = "factory-boy" },
     { name = "faker" },
     { name = "feedparser" },
@@ -771,6 +791,7 @@ requires-dist = [
     { name = "django-csp", specifier = ">=4.0,<5" },
     { name = "django-csp-helpers", specifier = ">=1.0.3" },
     { name = "django-environ", specifier = ">=0.13,<1" },
+    { name = "django-fetch-metadata", specifier = ">=0.1" },
     { name = "django-formguard", specifier = ">=0.8" },
     { name = "django-imagefield", extras = ["vips"], specifier = ">=0.23.0a3" },
     { name = "django-markdownfield", specifier = ">=0.17" },
@@ -809,6 +830,7 @@ bot = [
 dev = [
     { name = "debugpy", specifier = "==1.8.20" },
     { name = "django-debug-toolbar", specifier = "==6.2.0" },
+    { name = "django-fetch-metadata", extras = ["toolbar"], specifier = ">=0.1" },
     { name = "factory-boy", specifier = "==3.3.3" },
     { name = "faker", specifier = "==40.11.1" },
 ]
@@ -816,6 +838,7 @@ test = [
     { name = "coverage", specifier = "==7.13.5" },
     { name = "debugpy", specifier = "==1.8.20" },
     { name = "django-debug-toolbar", specifier = "==6.2.0" },
+    { name = "django-fetch-metadata", extras = ["toolbar"], specifier = ">=0.1" },
     { name = "factory-boy", specifier = "==3.3.3" },
     { name = "faker", specifier = "==40.11.1" },
     { name = "feedparser", specifier = "==6.0.12" },
