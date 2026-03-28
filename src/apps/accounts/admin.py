@@ -70,12 +70,55 @@ class UnfoldPasswordChangeForm(AdminPasswordChangeForm):
                 field.widget.attrs['class'] = ' '.join(INPUT_CLASSES)
 
 
+class HasMFAFilter(admin.SimpleListFilter):
+    title = 'MFA'
+    parameter_name = 'has_mfa'
+
+    def lookups(self, request, model_admin):
+        return [('yes', 'Enabled'), ('no', 'Disabled')]
+
+    def queryset(self, request, queryset):
+        from django.db.models import Exists, OuterRef
+
+        subquery = Authenticator.objects.filter(user_id=OuterRef('pk')).exclude(type=Authenticator.Type.RECOVERY_CODES)
+        if self.value() == 'yes':
+            return queryset.filter(Exists(subquery))
+        if self.value() == 'no':
+            return queryset.exclude(Exists(subquery))
+        return queryset
+
+
+class IsVerifiedFilter(admin.SimpleListFilter):
+    title = 'Verified'
+    parameter_name = 'is_verified'
+
+    def lookups(self, request, model_admin):
+        return [('yes', 'Verified'), ('no', 'Unverified')]
+
+    def queryset(self, request, queryset):
+        if self.value() == 'yes':
+            return queryset.filter(verification__isnull=False)
+        if self.value() == 'no':
+            return queryset.filter(verification__isnull=True)
+        return queryset
+
+
 class CustomUserAdmin(UnfoldModelAdmin, UserAdmin):
     change_password_form = UnfoldPasswordChangeForm
-    list_display = ['show_user', 'full_name', 'date_joined', 'last_login', 'is_active', 'is_verified_display']
+    list_display = [
+        'show_user',
+        'full_name',
+        'date_joined',
+        'last_login',
+        'is_active',
+        'is_verified_display',
+        'has_mfa_display',
+    ]
     inlines = [EmailAddressInline, VerificationInline, AuthenticatorInline]
     actions = ['verify_users']
-    actions_detail = ['verify_user']
+    actions_detail = ['verify_user', 'generate_recovery_codes']
+
+    list_filter = ['is_active', 'groups', HasMFAFilter, IsVerifiedFilter]
 
     exclude = ('first_name', 'last_name')
     readonly_fields = ('email', 'last_login', 'date_joined')
@@ -83,6 +126,7 @@ class CustomUserAdmin(UnfoldModelAdmin, UserAdmin):
     fieldsets = (
         (None, {'fields': ('username', 'email', 'password', 'is_active')}),
         ('Personal info', {'fields': ('full_name', 'date_of_birth')}),
+        ('Avatar', {'fields': ('avatar', 'avatar_ppoi')}),
         ('Important dates', {'fields': ('last_login', 'date_joined')}),
         (
             'Permissions',
@@ -104,6 +148,28 @@ class CustomUserAdmin(UnfoldModelAdmin, UserAdmin):
             },
         )
         messages.success(request, f'{user.username} has been verified.')
+        return HttpResponseRedirect(reverse('admin:accounts_user_change', args=[object_id]))
+
+    @action(description='Recovery Codes', icon='key')
+    def generate_recovery_codes(self, request, object_id):
+        from allauth.mfa.recovery_codes.internal.auth import RecoveryCodes
+
+        user = User.objects.get(pk=object_id)
+        has_mfa = Authenticator.objects.filter(user=user).exclude(type=Authenticator.Type.RECOVERY_CODES).exists()
+        if not has_mfa:
+            messages.error(request, f'{user.username} does not have MFA enabled.')
+            return HttpResponseRedirect(reverse('admin:accounts_user_change', args=[object_id]))
+
+        rc = RecoveryCodes.activate(user)
+        unused = rc.get_unused_codes()
+        if unused:
+            code_list = ', '.join(unused)
+            messages.success(request, f'Recovery codes for {user.username}: {code_list}')
+        else:
+            Authenticator.objects.filter(user=user, type=Authenticator.Type.RECOVERY_CODES).delete()
+            rc = RecoveryCodes.activate(user)
+            code_list = ', '.join(rc.get_unused_codes())
+            messages.success(request, f'New recovery codes for {user.username}: {code_list}')
         return HttpResponseRedirect(reverse('admin:accounts_user_change', args=[object_id]))
 
     @admin.action(description='Verify selected users')
@@ -130,8 +196,23 @@ class CustomUserAdmin(UnfoldModelAdmin, UserAdmin):
         except Verification.DoesNotExist:
             return False
 
+    @admin.display(boolean=True, description='MFA')
+    def has_mfa_display(self, obj):
+        return obj._has_mfa
+
     def get_queryset(self, request):
-        return super().get_queryset(request).select_related('verification')
+        from django.db.models import Exists, OuterRef
+
+        return (
+            super()
+            .get_queryset(request)
+            .select_related('verification')
+            .annotate(
+                _has_mfa=Exists(
+                    Authenticator.objects.filter(user_id=OuterRef('pk')).exclude(type=Authenticator.Type.RECOVERY_CODES)
+                )
+            )
+        )
 
 
 class ClientMetadataInline(StackedInline):
@@ -163,7 +244,8 @@ class CustomSocialAccountAdmin(UnfoldModelAdmin, BaseSocialAccountAdmin):
 
 
 class CustomSocialTokenAdmin(UnfoldModelAdmin, BaseSocialTokenAdmin):
-    list_display = ('account_link', 'app', 'truncated_token', 'expires_at')
+    list_display = ('account_link', 'truncated_token', 'expires_at')
+    exclude = ('app',)
 
     @admin.display(description='Account')
     def account_link(self, obj):
