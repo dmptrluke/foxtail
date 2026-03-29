@@ -1,17 +1,18 @@
 from django import template
-from django.forms import MultiWidget
+from django.forms import MultiWidget, SelectDateWidget
 
 register = template.Library()
 
 # distinguishes "not passed" from explicitly passing None.
 _UNSET = object()
 
+_COMPOUND_WIDGETS = (MultiWidget, SelectDateWidget)
+
 
 def _field_context(field, **extra):
-    # Builds the base template context, adding is_multiwidget for layout decisions.
     return {
         'field': field,
-        'is_multiwidget': isinstance(field.field.widget, MultiWidget),
+        'is_multiwidget': isinstance(field.field.widget, _COMPOUND_WIDGETS),
         **extra,
     }
 

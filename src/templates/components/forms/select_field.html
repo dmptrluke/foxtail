@@ -1,7 +1,7 @@
 {% load widget_tweaks form_tags %}
 {% if not inline %}<div class="mb-3">{% endif %}
     {% if not hide_label and not inline %}<label class="form-label" for="{{ field.id_for_label }}">{{ field.label }}</label>{% endif %}
-    {% if is_multiwidget %}<div class="d-flex flex-column gap-2">{% endif %}
+    {% if is_multiwidget %}<div class="d-flex gap-2">{% endif %}
     {% if field.errors %}
         {% render_field field class="form-select is-invalid" %}
         <div class="invalid-feedback">{{ field.errors|plain_errors }}</div>

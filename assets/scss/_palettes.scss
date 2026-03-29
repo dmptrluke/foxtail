@@ -54,6 +54,7 @@
 		$surface: color.adjust($body-bg, $lightness: 5%);
 		--ft-surface: #{$surface};
 		--ft-surface-rgb: #{red($surface), green($surface), blue($surface)};
+		--bs-border-color: #{color.scale($body-color, $lightness: -48%)};
 	} @else {
 		--ft-text-light: #{color.adjust($body-color, $lightness: 10%)};
 		--ft-text-muted: #{color.adjust($body-color, $lightness: 12%)};
@@ -63,6 +64,7 @@
 		--ft-text-faintest: #{color.adjust($body-color, $lightness: 35%)};
 		--ft-surface: #fff;
 		--ft-surface-rgb: 255, 255, 255;
+		--bs-border-color: #{color.adjust($body-color, $lightness: 62%)};
 	}
 
 	// Hero gradients: 3-stop diagonal from $dark through $primary/$secondary variants.
@@ -92,14 +94,27 @@
 	// Button overrides (Bootstrap pre-compiles hover/active from Sass vars at build time,
 	// so runtime theme switches need explicit CSS custom property overrides)
 	.btn-primary {
-		--bs-btn-bg: #{$primary};
-		--bs-btn-border-color: #{$primary};
-		--bs-btn-hover-bg: #{color.adjust($primary, $lightness: -8%)};
-		--bs-btn-hover-border-color: #{color.adjust($primary, $lightness: -10%)};
-		--bs-btn-active-bg: #{color.adjust($primary, $lightness: -10%)};
-		--bs-btn-active-border-color: #{color.adjust($primary, $lightness: -12.5%)};
-		--bs-btn-disabled-bg: #{$primary};
-		--bs-btn-disabled-border-color: #{$primary};
+		$btn-bg: if($dark-mode, color.adjust($primary, $lightness: -12%), $primary);
+		--bs-btn-bg: #{$btn-bg};
+		--bs-btn-border-color: #{$btn-bg};
+		--bs-btn-hover-bg: #{color.adjust($btn-bg, $lightness: -8%)};
+		--bs-btn-hover-border-color: #{color.adjust($btn-bg, $lightness: -10%)};
+		--bs-btn-active-bg: #{color.adjust($btn-bg, $lightness: -10%)};
+		--bs-btn-active-border-color: #{color.adjust($btn-bg, $lightness: -12.5%)};
+		--bs-btn-disabled-bg: #{$btn-bg};
+		--bs-btn-disabled-border-color: #{$btn-bg};
+	}
+
+	.btn-secondary {
+		$btn-bg: if($dark-mode, color.adjust($secondary, $lightness: -12%), $secondary);
+		--bs-btn-bg: #{$btn-bg};
+		--bs-btn-border-color: #{$btn-bg};
+		--bs-btn-hover-bg: #{color.adjust($btn-bg, $lightness: -8%)};
+		--bs-btn-hover-border-color: #{color.adjust($btn-bg, $lightness: -10%)};
+		--bs-btn-active-bg: #{color.adjust($btn-bg, $lightness: -10%)};
+		--bs-btn-active-border-color: #{color.adjust($btn-bg, $lightness: -12.5%)};
+		--bs-btn-disabled-bg: #{$btn-bg};
+		--bs-btn-disabled-border-color: #{$btn-bg};
 	}
 
 	.btn-outline-primary {

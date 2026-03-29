@@ -2,6 +2,11 @@ form {
 	.asteriskField {
 		display: none;
 	}
+
+	fieldset > .mb-3:last-child,
+	.account-section > .row:last-child .mb-3 {
+		margin-bottom: 0 !important;
+	}
 }
 
 .form-group {
@@ -22,23 +27,15 @@ form {
 	}
 }
 
-// hack to not show extra useless padding with invisible capthca
-#div_id_captcha {
-	margin-bottom: 0;
+// Tom Select: remove extra margin from wrapper
+.ts-wrapper {
+	margin-bottom: 0 !important;
 }
 
-// hack to make sure captcha errors show up on forms
-#div_id_captcha .invalid-feedback {
-	display: inline;
-}
-
-.selectdatewidget.form-control {
-	margin-bottom: ($spacer * .5);
-}
 
 .image-preview {
-	position: relative;
-	display: inline-block;
+	display: block;
+	margin-bottom: $spacer;
 
 	img {
 		max-width: 160px;
@@ -47,23 +44,182 @@ form {
 		display: block;
 	}
 
-	&[data-ppoi] img {
-		cursor: crosshair;
+	&.image-preview-round img {
+		border-radius: 50% !important;
+	}
+}
+
+.image-widget-controls {
+	display: flex;
+	gap: 0.5rem;
+	align-items: center;
+}
+
+// EasyMDE editor styling
+.EasyMDEContainer {
+	border: var(--bs-border-width) solid var(--bs-border-color);
+	border-radius: var(--bs-border-radius);
+	overflow: hidden;
+
+	.editor-toolbar {
+		border: none !important;
+		background: var(--bs-body-bg) !important;
+
+		button {
+			margin: 0 1px;
+			color: var(--bs-body-color) !important;
+			background: var(--bs-body-bg) !important;
+
+			&:hover, &.active {
+				background: var(--bs-border-color) !important;
+			}
+		}
+
+		i.separator {
+			margin: 0 6px;
+			border-color: var(--bs-border-color) !important;
+			opacity: 0.5;
+		}
 	}
 
-	.image-ppoi-dot {
-		position: absolute;
-		width: 14px;
-		height: 14px;
-		border-radius: 50%;
-		background: rgba(255, 255, 255, 0.85);
-		border: 2px solid var(--bs-primary);
-		box-shadow: 0 0 4px rgba(0, 0, 0, 0.4);
-		transform: translate(-50%, -50%);
-		pointer-events: none;
+	.CodeMirror {
+		border: none !important;
+	}
+
+	.editor-statusbar {
+		border: none !important;
+		background: var(--bs-body-bg);
+		color: var(--ft-text-muted);
+	}
+}
+
+[data-bs-theme="dark"] .EasyMDEContainer {
+	.CodeMirror {
+		background: var(--bs-body-bg);
+		color: var(--bs-body-color);
+	}
+
+	.editor-preview,
+	.editor-preview-side {
+		background: var(--bs-body-bg);
+		color: var(--bs-body-color);
+	}
+
+	.CodeMirror-cursor {
+		border-left-color: var(--bs-body-color);
+	}
+
+	.editor-toolbar {
+		background: var(--ft-surface) !important;
+		border-bottom: 1px solid var(--ft-text-faintest);
+
+		button {
+			color: var(--ft-text-light) !important;
+			background: var(--ft-surface) !important;
+
+			&:hover, &.active {
+				background: color-mix(in srgb, var(--ft-surface) 70%, var(--bs-body-color)) !important;
+			}
+		}
+
+		i.separator {
+			border-color: var(--ft-text-faintest) !important;
+		}
+	}
+
+	.editor-statusbar {
+		color: var(--ft-text-muted);
+		background: var(--ft-surface);
+		border-top: 1px solid var(--ft-text-faintest);
+	}
+
+	.CodeMirror-activeline-background {
+		background: var(--ft-surface);
+	}
+
+	.CodeMirror-selected {
+		background: rgba(var(--ft-surface-rgb), 0.6);
+	}
+
+	.CodeMirror-focused .CodeMirror-selected {
+		background: rgba(var(--ft-surface-rgb), 0.8);
 	}
 }
 
 .image-crop-container img {
 	max-width: 100%;
+}
+
+// Prevent body scroll behind dialog (iOS Safari)
+body:has(dialog[open]) {
+	overflow: hidden;
+}
+
+// Native <dialog> base styles
+.app-dialog {
+	border: none;
+	border-radius: $border-radius-lg;
+	padding: 0;
+	max-width: 800px;
+	width: calc(100% - 2rem);
+	max-height: calc(100vh - 2rem);
+	background: var(--bs-body-bg);
+	color: var(--bs-body-color);
+	box-shadow: var(--ft-shadow-lg);
+
+	&::backdrop {
+		background: rgba($dark, 0.6);
+	}
+
+	.dialog-header {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		padding: $spacer;
+		border-bottom: 1px solid var(--bs-border-color);
+	}
+
+	.dialog-title {
+		margin: 0;
+		font-size: 1.25rem;
+		font-weight: 600;
+	}
+
+	.dialog-body {
+		padding: $spacer;
+		overflow-y: auto;
+		max-height: calc(100vh - 10rem);
+	}
+
+	.dialog-footer {
+		display: flex;
+		justify-content: flex-end;
+		gap: 0.5rem;
+		padding: $spacer;
+		border-top: 1px solid var(--bs-border-color);
+	}
+}
+
+.image-ppoi-preview {
+	position: relative;
+	display: inline-block;
+
+	img {
+		max-width: 100%;
+		max-height: 60vh;
+		display: block;
+		cursor: crosshair;
+	}
+
+	.image-ppoi-dot {
+		position: absolute;
+		width: 18px;
+		height: 18px;
+		border-radius: 50%;
+		background: rgba(255, 255, 255, 0.9);
+		border: 2.5px solid var(--bs-primary);
+		box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.15), 0 2px 6px rgba(0, 0, 0, 0.3);
+		transform: translate(-50%, -50%);
+		pointer-events: none;
+	}
 }
