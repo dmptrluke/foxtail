@@ -7,7 +7,7 @@ from apps.core.widgets import CroppedImageWidget
 
 
 class UserForm(ModelForm):
-    avatar = ImageField(required=False, widget=CroppedImageWidget(aspect_ratio=1))
+    avatar = ImageField(required=False, widget=CroppedImageWidget(aspect_ratio=1, preview_round=True))
 
     class Meta:
         model = get_user_model()

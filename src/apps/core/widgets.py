@@ -14,7 +14,7 @@ class ImageWidget(ClearableFileInput):
     def __init__(self, max_file_size=None, ppoi_field=None, attrs=None, **kwargs):
         if max_file_size is None:
             max_file_size = settings.MAX_IMAGE_FILE_SIZE
-        defaults = {'class': 'form-control'}
+        defaults = {'class': 'd-none'}
         if attrs:
             defaults.update(attrs)
         self.max_file_size = max_file_size
@@ -33,17 +33,18 @@ class ImageWidget(ClearableFileInput):
 
 
 class CroppedImageWidget(ImageWidget):
-    """ImageWidget with client-side cropping at a fixed aspect ratio"""
+    """ImageWidget with client-side cropping, optionally at a fixed aspect ratio."""
 
-    template_name = 'components/forms/widgets/image_crop.html'
-
-    def __init__(self, aspect_ratio=None, **kwargs):
+    def __init__(self, aspect_ratio=None, preview_round=False, **kwargs):
         self.aspect_ratio = aspect_ratio
+        self.preview_round = preview_round
         super().__init__(**kwargs)
 
     def get_context(self, name, value, attrs):
         context = super().get_context(name, value, attrs)
+        context['widget']['crop'] = True
         context['widget']['aspect_ratio'] = self.aspect_ratio
+        context['widget']['preview_round'] = self.preview_round
         return context
 
 

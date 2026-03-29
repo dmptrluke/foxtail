@@ -158,10 +158,6 @@ function onLoad() {
         import('./imageWidget.js').then(m => m.initImageWidgets());
     }
 
-    if (document.querySelector('[data-crop-widget]')) {
-        import('./cropWidget.js').then(m => m.initCropWidgets());
-    }
-
     if (document.querySelector('[data-map]')) {
         import('./map.js').then(m => m.initMaps());
     }

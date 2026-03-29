@@ -1,23 +1,36 @@
 <div class="image-widget"
      data-image-widget
-     data-max-file-size="{{ widget.max_file_size }}"{% if widget.ppoi_field %} data-ppoi-field="{{ widget.ppoi_field }}"{% endif %}>
+     data-max-file-size="{{ widget.max_file_size }}"
+     {% if widget.crop and widget.aspect_ratio %}data-crop-aspect-ratio="{{ widget.aspect_ratio }}"
+     {% elif widget.crop %}data-crop{% endif %}
+     {% if widget.ppoi_field %}data-ppoi-field="{{ widget.ppoi_field }}"{% endif %}
+     {% if widget.preview_round %}data-preview-round{% endif %}>
 
     {% if widget.is_initial %}
-        <div class="image-preview mb-2">
+        <div class="image-preview{% if widget.preview_round %} image-preview-round{% endif %}">
             <img src="{{ widget.value.url }}" alt="" class="rounded">
         </div>
     {% endif %}
 
-    <input type="{{ widget.type }}" name="{{ widget.name }}"{% include "django/forms/widgets/attrs.html" %}
-           accept="image/jpeg,image/png,image/webp">
+    <div class="image-widget-controls">
+        <label for="{{ widget.attrs.id }}" class="btn btn-secondary mb-0">Upload</label>
+        <input type="{{ widget.type }}" name="{{ widget.name }}"{% include "django/forms/widgets/attrs.html" %}
+               accept="image/jpeg,image/png,image/webp">
 
-    {% if widget.is_initial and not widget.required %}
-        <div class="form-check mt-2">
+        {% if widget.is_initial and not widget.required %}
             <input type="checkbox"
                    name="{{ widget.checkbox_name }}"
                    id="{{ widget.checkbox_id }}"
-                   class="form-check-input">
-            <label class="form-check-label" for="{{ widget.checkbox_id }}">Remove</label>
-        </div>
-    {% endif %}
+                   class="d-none">
+            <button type="button" class="btn btn-outline-danger image-remove-btn"
+                    data-checkbox-id="{{ widget.checkbox_id }}">Remove</button>
+        {% endif %}
+
+        {% if widget.ppoi_field %}
+            <button type="button" class="btn btn-secondary image-edit-btn{% if not widget.is_initial %} d-none{% endif %}"
+                    title="Edit focal point">
+                <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12,8A4,4 0 0,1 16,12A4,4 0 0,1 12,16A4,4 0 0,1 8,12A4,4 0 0,1 12,8M3.05,13H1V11H3.05C3.5,6.83 6.83,3.5 11,3.05V1H13V3.05C17.17,3.5 20.5,6.83 20.95,11H23V13H20.95C20.5,17.17 17.17,20.5 13,20.95V23H11V20.95C6.83,20.5 3.5,17.17 3.05,13M12,5A7,7 0 0,0 5,12A7,7 0 0,0 12,19A7,7 0 0,0 19,12A7,7 0 0,0 12,5Z"/></svg>
+            </button>
+        {% endif %}
+    </div>
 </div>
