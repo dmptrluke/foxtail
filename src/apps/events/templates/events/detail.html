@@ -1,10 +1,14 @@
 {% extends "base/page.html" %}
-{% load cache jsonld opengraph meta twitter breadcrumbs event_calendar rules image %}
+{% load cache django_vite jsonld opengraph meta twitter breadcrumbs event_calendar rules image %}
 
 {% if event.image %}{% block body_class %}has-hero-banner{% endblock %}{% endif %}
 
 {% block extra_head %}
     <link rel="canonical" href="{{ SITE_URL }}{{ event.get_absolute_url }}"/>
+    {% if event.latitude and event.longitude %}
+        <link rel="modulepreload" href="{% vite_asset_url 'js/map.js' %}">
+        <link rel="dns-prefetch" href="https://api.maptiler.com">
+    {% endif %}
     {% json_ld_for event %}
     {% og_for event %}
     {% meta_for event %}

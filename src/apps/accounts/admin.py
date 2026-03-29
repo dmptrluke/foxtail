@@ -105,6 +105,7 @@ class IsVerifiedFilter(admin.SimpleListFilter):
 
 class CustomUserAdmin(UnfoldModelAdmin, UserAdmin):
     change_password_form = UnfoldPasswordChangeForm
+    list_per_page = 25
     list_display = [
         'show_user',
         'full_name',

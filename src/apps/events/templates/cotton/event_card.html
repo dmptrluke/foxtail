@@ -6,6 +6,8 @@
             <img src="{{ event.image.card }}"
                  srcset="{{ event.image.card }} 1x, {{ event.image.card_2x }} 2x"
                  alt="{{ event.title }}"
+                 width="600" height="315"
+                 loading="lazy" decoding="async"
                  style="object-position: {{ event.image_ppoi|ppoi_position }}">
         </div>
     {% endif %}

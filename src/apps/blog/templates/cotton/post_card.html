@@ -6,6 +6,8 @@
             <img src="{{ post.image.card }}"
                  srcset="{{ post.image.card }} 1x, {{ post.image.card_2x }} 2x"
                  alt="{{ post.title }}"
+                 width="600" height="315"
+                 loading="lazy" decoding="async"
                  style="object-position: {{ post.image_ppoi|ppoi_position }}">
         </a>
     {% endif %}
