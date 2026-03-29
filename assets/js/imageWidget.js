@@ -43,10 +43,10 @@ class ImageUploadWidget {
         const removeBtn = this.container.querySelector('.image-remove-btn');
         if (removeBtn) {
             const checkbox = document.getElementById(removeBtn.dataset.checkboxId);
+            const preview = this.container.querySelector('.image-preview');
             if (checkbox) {
                 removeBtn.addEventListener('click', () => {
                     checkbox.checked = !checkbox.checked;
-                    const preview = this.container.querySelector('.image-preview');
                     if (preview) preview.classList.toggle('opacity-50', checkbox.checked);
                     removeBtn.textContent = checkbox.checked ? 'Undo' : 'Remove';
                     removeBtn.classList.toggle('btn-outline-danger', !checkbox.checked);
