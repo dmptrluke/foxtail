@@ -13,7 +13,7 @@
     {% endif %}
 
     <div class="image-widget-controls">
-        <label for="{{ widget.attrs.id }}" class="btn btn-secondary mb-0">Upload</label>
+        <label for="{{ widget.attrs.id }}" class="btn btn-secondary mb-0">{% if widget.is_initial %}Change{% else %}Upload{% endif %}</label>
         <input type="{{ widget.type }}" name="{{ widget.name }}"{% include "django/forms/widgets/attrs.html" %}
                accept="image/jpeg,image/png,image/webp">
 
