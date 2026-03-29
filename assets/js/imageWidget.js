@@ -239,7 +239,7 @@ class ImageUploadWidget {
         const parts = (this.ppoiInput.value || '0.5x0.5').split('x');
         const px = parseFloat(parts[0]);
         const py = parseFloat(parts[1]);
-        this.setPpoiDot(isNaN(px) ? 0.5 : px, isNaN(py) ? 0.5 : py);
+        this.setPpoiDot(Number.isNaN(px) ? 0.5 : px, Number.isNaN(py) ? 0.5 : py);
 
         this.pendingFile = null;
         this.dialog.showModal();
@@ -338,6 +338,7 @@ class ImageUploadWidget {
     finalize(canvas, mimeType) {
         canvas.toBlob((blob) => {
             if (!blob || !this.dialog.open) {
+                // biome-ignore lint/suspicious/noConsole: intentional user-facing diagnostic
                 if (!blob) console.warn('Image crop failed: could not generate blob');
                 return;
             }

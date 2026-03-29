@@ -138,11 +138,11 @@ form {
 	}
 
 	.CodeMirror-selected {
-		background: rgba(var(--ft-surface-rgb), 0.6);
+		background: rgb(var(--ft-surface-rgb), 0.6);
 	}
 
 	.CodeMirror-focused .CodeMirror-selected {
-		background: rgba(var(--ft-surface-rgb), 0.8);
+		background: rgb(var(--ft-surface-rgb), 0.8);
 	}
 }
 
@@ -216,9 +216,9 @@ body:has(dialog[open]) {
 		width: 18px;
 		height: 18px;
 		border-radius: 50%;
-		background: rgba(255, 255, 255, 0.9);
+		background: rgb(255 255 255 / 90%);
 		border: 2.5px solid var(--bs-primary);
-		box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.15), 0 2px 6px rgba(0, 0, 0, 0.3);
+		box-shadow: 0 0 0 1px rgb(0 0 0 / 15%), 0 2px 6px rgb(0 0 0 / 30%);
 		transform: translate(-50%, -50%);
 		pointer-events: none;
 	}

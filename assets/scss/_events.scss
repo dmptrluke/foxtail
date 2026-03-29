@@ -5,7 +5,7 @@
 	grid-template-columns: 1fr;
 	gap: 1.5rem;
 	padding: 2rem 0;
-	border-bottom: 1px solid rgba(var(--bs-secondary-rgb), 0.12);
+	border-bottom: 1px solid rgb(var(--bs-secondary-rgb), 0.12);
 
 	@include media-breakpoint-up(md) {
 		grid-template-columns: 1.2fr 1fr;
@@ -256,7 +256,7 @@
 	flex-direction: column;
 	align-items: center;
 	padding: 0.5rem 0.25rem;
-	background: rgba(var(--bs-secondary-rgb), 0.06);
+	background: rgb(var(--bs-secondary-rgb), 0.06);
 	border-radius: 0;
 	min-width: 0;
 	transition: background 0.15s ease;

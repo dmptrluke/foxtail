@@ -7,7 +7,7 @@ export function initMaps() {
         const lng = parseFloat(el.dataset.lng);
         const zoom = parseFloat(el.dataset.zoom) || 15;
         const style = el.dataset.style;
-        if (!style || isNaN(lat) || isNaN(lng)) return;
+        if (!style || Number.isNaN(lat) || Number.isNaN(lng)) return;
 
         try {
             const map = new maplibregl.Map({
@@ -27,7 +27,7 @@ export function initMaps() {
         } catch {
             el.style.display = 'none';
             const fallback = el.nextElementSibling;
-            if (fallback && fallback.classList.contains('map-fallback')) {
+            if (fallback?.classList.contains('map-fallback')) {
                 fallback.style.display = '';
             }
         }

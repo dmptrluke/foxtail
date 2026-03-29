@@ -3,7 +3,7 @@
 
 .theme-retro {
 	// Stock Bootstrap font stack
-	--bs-body-font-family: -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+	--bs-body-font-family: -apple-system, blinkmacsystemfont, roboto, "Helvetica Neue", arial, "Noto Sans", sans-serif;
 
 	// No custom shadows
 	--ft-shadow-sm: none;
@@ -47,7 +47,7 @@
 	.account-method-card,
 	.account-confirm {
 		box-shadow: none;
-		border: 1px solid rgba(var(--bs-secondary-rgb), 0.15);
+		border: 1px solid rgb(var(--bs-secondary-rgb), 0.15);
 	}
 
 	.event-card {
@@ -115,11 +115,11 @@
 
 		.tag-row .tag-pill {
 			color: var(--ft-text-light);
-			background: rgba(var(--bs-secondary-rgb), 0.15);
+			background: rgb(var(--bs-secondary-rgb), 0.15);
 
 			&:hover {
 				color: var(--bs-body-color);
-				background: rgba(var(--bs-secondary-rgb), 0.22);
+				background: rgb(var(--bs-secondary-rgb), 0.22);
 			}
 
 			&.active {
@@ -154,7 +154,7 @@
 	}
 
 	.hero-avatar {
-		border: 2px solid rgba(255, 255, 255, 0.3);
+		border: 2px solid rgb(255 255 255 / 30%);
 	}
 
 	// Stock Bootstrap badge radii
@@ -170,7 +170,7 @@
 	}
 
 	#footer {
-		background: rgba(var(--bs-secondary-rgb), 0.04);
-		border-top: 1px solid rgba(var(--bs-secondary-rgb), 0.15);
+		background: rgb(var(--bs-secondary-rgb), 0.04);
+		border-top: 1px solid rgb(var(--bs-secondary-rgb), 0.15);
 	}
 }

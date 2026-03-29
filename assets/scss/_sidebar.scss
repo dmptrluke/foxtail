@@ -8,7 +8,7 @@
 // Sidebar card: surface box with border, holds all card elements
 .sidebar-card {
 	background: var(--ft-surface);
-	border: 1px solid rgba(var(--bs-secondary-rgb), 0.12);
+	border: 1px solid rgb(var(--bs-secondary-rgb), 0.12);
 	border-radius: $card-border-radius;
 	overflow: hidden;
 
@@ -48,13 +48,13 @@
 		width: 100%;
 		object-fit: cover;
 		display: block;
-		background: rgba(var(--bs-secondary-rgb), 0.08);
+		background: rgb(var(--bs-secondary-rgb), 0.08);
 	}
 
 	// Bottom bar with border-top (links, CTA buttons)
 	.footer {
 		padding: 0.75rem 1.25rem;
-		border-top: 1px solid rgba(var(--bs-secondary-rgb), 0.08);
+		border-top: 1px solid rgb(var(--bs-secondary-rgb), 0.08);
 		font-size: 0.8rem;
 
 		a {
@@ -88,7 +88,7 @@
 	.preview {
 		display: block;
 		padding: 0.65rem 0;
-		border-bottom: 1px solid rgba(var(--bs-secondary-rgb), 0.08);
+		border-bottom: 1px solid rgb(var(--bs-secondary-rgb), 0.08);
 		text-decoration: none;
 		color: var(--bs-body-color);
 		transition: background 0.15s ease;
@@ -129,7 +129,7 @@
 		justify-content: space-between;
 		align-items: center;
 		padding: 0.45rem 0;
-		border-bottom: 1px solid rgba(var(--bs-secondary-rgb), 0.06);
+		border-bottom: 1px solid rgb(var(--bs-secondary-rgb), 0.06);
 		font-size: 0.875rem;
 		font-weight: 500;
 		color: var(--bs-body-color);
@@ -167,7 +167,7 @@
 		font-size: 0.75rem;
 		font-weight: 600;
 		color: var(--ft-text-faint);
-		background: rgba(var(--bs-secondary-rgb), 0.08);
+		background: rgb(var(--bs-secondary-rgb), 0.08);
 		padding: 0.1rem 0.5rem;
 		border-radius: 2px;
 	}
@@ -183,7 +183,7 @@
 			height: 80px;
 			object-fit: cover;
 			flex-shrink: 0;
-			background: rgba(var(--bs-secondary-rgb), 0.08);
+			background: rgb(var(--bs-secondary-rgb), 0.08);
 		}
 
 		.info {

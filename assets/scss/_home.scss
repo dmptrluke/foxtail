@@ -148,7 +148,7 @@
 	gap: 1.5rem;
 	margin-bottom: 2rem;
 	padding-bottom: 2rem;
-	border-bottom: 1px solid rgba(var(--bs-secondary-rgb), 0.12);
+	border-bottom: 1px solid rgb(var(--bs-secondary-rgb), 0.12);
 
 	@include media-breakpoint-up(md) {
 		grid-template-columns: 1.2fr 1fr;
@@ -229,7 +229,7 @@
 	flex-direction: column;
 	background: var(--ft-surface);
 	border-radius: $card-border-radius;
-	border: 1px solid rgba(var(--bs-secondary-rgb), 0.12);
+	border: 1px solid rgb(var(--bs-secondary-rgb), 0.12);
 	overflow: hidden;
 	transition: box-shadow 0.2s ease, transform 0.2s ease;
 
@@ -303,7 +303,7 @@
 	flex-wrap: wrap;
 	gap: 1.25rem;
 	padding: 1.15rem 0.5rem;
-	border-bottom: 1px solid rgba(var(--bs-secondary-rgb), 0.1);
+	border-bottom: 1px solid rgb(var(--bs-secondary-rgb), 0.1);
 	text-decoration: none;
 	color: var(--bs-body-color);
 	transition: background 0.15s ease;
@@ -314,13 +314,13 @@
 	}
 
 	&:hover {
-		background: rgba(var(--bs-primary-rgb), 0.04);
+		background: rgb(var(--bs-primary-rgb), 0.04);
 		text-decoration: none;
 		color: var(--bs-body-color);
 	}
 
 	&:first-child {
-		border-top: 1px solid rgba(var(--bs-secondary-rgb), 0.1);
+		border-top: 1px solid rgb(var(--bs-secondary-rgb), 0.1);
 	}
 }
 

@@ -62,7 +62,7 @@
 .error-home-link {
 	display: inline-block;
 	padding: 0.55rem 1.5rem;
-	border: 1px solid rgba(var(--bs-secondary-rgb), 0.25);
+	border: 1px solid rgb(var(--bs-secondary-rgb), 0.25);
 	border-radius: 8px;
 	color: var(--bs-body-color);
 	font-size: 0.875rem;
@@ -78,7 +78,7 @@
 	}
 }
 
-@media (max-width: 480px) {
+@media (width <= 480px) {
 	.error-shell {
 		padding: 2rem 1.5rem;
 	}

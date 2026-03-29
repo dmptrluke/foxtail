@@ -1,5 +1,4 @@
 // Theme system: color-scheme mixin + per-theme palettes (light and dark).
-//
 // --bs-* overrides Bootstrap's compiled defaults at runtime.
 // --ft-* covers derived values Bootstrap doesn't generate (text hierarchy, heroes, shadows).
 // Shadows use var(--bs-dark-rgb) so they auto-adapt per scheme; dark mode bumps opacity.
@@ -54,7 +53,7 @@
 		$surface: color.adjust($body-bg, $lightness: 5%);
 		--ft-surface: #{$surface};
 		--ft-surface-rgb: #{red($surface), green($surface), blue($surface)};
-		--bs-border-color: rgba(var(--bs-secondary-rgb), 0.25);
+		--bs-border-color: rgb(var(--bs-secondary-rgb), 0.25);
 	} @else {
 		--ft-text-light: #{color.adjust($body-color, $lightness: 10%)};
 		--ft-text-muted: #{color.adjust($body-color, $lightness: 12%)};
@@ -64,7 +63,7 @@
 		--ft-text-faintest: #{color.adjust($body-color, $lightness: 35%)};
 		--ft-surface: #fff;
 		--ft-surface-rgb: 255, 255, 255;
-		--bs-border-color: rgba(var(--bs-secondary-rgb), 0.25);
+		--bs-border-color: rgb(var(--bs-secondary-rgb), 0.25);
 	}
 
 	// Hero gradients: 3-stop diagonal from $dark through $primary/$secondary variants.
@@ -144,15 +143,15 @@
 
 // Shadows: light mode derives from --bs-dark-rgb, dark mode uses solid black at higher opacity
 :root {
-	--ft-shadow-sm: 0 1px 3px rgba(var(--bs-dark-rgb), 0.04), 0 2px 8px rgba(var(--bs-dark-rgb), 0.06);
-	--ft-shadow-md: 0 2px 4px rgba(var(--bs-dark-rgb), 0.04), 0 8px 24px rgba(var(--bs-dark-rgb), 0.08);
-	--ft-shadow-lg: 0 4px 8px rgba(var(--bs-dark-rgb), 0.06), 0 12px 32px rgba(var(--bs-dark-rgb), 0.16);
+	--ft-shadow-sm: 0 1px 3px rgb(var(--bs-dark-rgb), 0.04), 0 2px 8px rgb(var(--bs-dark-rgb), 0.06);
+	--ft-shadow-md: 0 2px 4px rgb(var(--bs-dark-rgb), 0.04), 0 8px 24px rgb(var(--bs-dark-rgb), 0.08);
+	--ft-shadow-lg: 0 4px 8px rgb(var(--bs-dark-rgb), 0.06), 0 12px 32px rgb(var(--bs-dark-rgb), 0.16);
 }
 
 [data-bs-theme="dark"] {
-	--ft-shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.15), 0 2px 8px rgba(0, 0, 0, 0.2);
-	--ft-shadow-md: 0 2px 4px rgba(0, 0, 0, 0.15), 0 8px 24px rgba(0, 0, 0, 0.25);
-	--ft-shadow-lg: 0 4px 8px rgba(0, 0, 0, 0.2), 0 12px 32px rgba(0, 0, 0, 0.35);
+	--ft-shadow-sm: 0 1px 3px rgb(0 0 0 / 15%), 0 2px 8px rgb(0 0 0 / 20%);
+	--ft-shadow-md: 0 2px 4px rgb(0 0 0 / 15%), 0 8px 24px rgb(0 0 0 / 25%);
+	--ft-shadow-lg: 0 4px 8px rgb(0 0 0 / 20%), 0 12px 32px rgb(0 0 0 / 35%);
 }
 
 // --- Light palettes ---

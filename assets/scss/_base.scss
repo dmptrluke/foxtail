@@ -3,15 +3,15 @@ html {
 	background: var(--bs-body-bg);
 	scrollbar-gutter: stable;
 
-	@media (min-width: 1921px) {
+	@media (width >= 1921px) {
 		font-size: 17px;
 	}
 }
 
 body {
 	padding-top: calc(4rem + env(safe-area-inset-top, 0px));
-	padding-left: env(safe-area-inset-left, 0px);
-	padding-right: env(safe-area-inset-right, 0px);
+	padding-left: env(safe-area-inset-left, 0);
+	padding-right: env(safe-area-inset-right, 0);
 	display: flex;
 	flex-direction: column;
 	height: 100% !important;

@@ -11,7 +11,7 @@
 	padding: 1.25rem;
 	border-radius: $card-border-radius;
 	background: var(--bs-body-bg);
-	border: 1px solid rgba(var(--bs-secondary-rgb), 0.15);
+	border: 1px solid rgb(var(--bs-secondary-rgb), 0.15);
 	height: 100%;
 	position: relative;
 	transition: box-shadow 0.2s ease, transform 0.2s ease;
@@ -37,7 +37,7 @@
 }
 
 .org-card-logo-placeholder {
-	background: rgba(var(--bs-secondary-rgb), 0.1);
+	background: rgb(var(--bs-secondary-rgb), 0.1);
 	display: flex;
 	align-items: center;
 	justify-content: center;
@@ -274,7 +274,7 @@
 	background: var(--bs-warning);
 	color: var(--bs-dark);
 	padding: 0.2rem 0.75rem;
-	border-radius: 0 0 $border-radius-sm 0;
+	border-radius: 0 0 $border-radius-sm;
 	font-size: 0.6rem;
 }
 
@@ -309,7 +309,7 @@
 	align-items: center;
 	gap: 1rem;
 	padding: 0.6rem 0;
-	border-bottom: 1px solid rgba(var(--bs-secondary-rgb), 0.1);
+	border-bottom: 1px solid rgb(var(--bs-secondary-rgb), 0.1);
 	text-decoration: none;
 	color: var(--bs-body-color);
 
@@ -368,6 +368,6 @@
 		content: '';
 		flex: 1;
 		height: 1px;
-		background: rgba(var(--bs-secondary-rgb), 0.2);
+		background: rgb(var(--bs-secondary-rgb), 0.2);
 	}
 }

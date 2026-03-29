@@ -9,14 +9,14 @@
 		display: flex;
 		align-items: center;
 	}
-	background: rgba(var(--bs-dark-rgb), 0.92) !important;
+	background: rgb(var(--bs-dark-rgb), 0.92) !important;
 
 	.has-hero-banner & {
-		background: rgba(var(--bs-dark-rgb), 0.99) !important;
+		background: rgb(var(--bs-dark-rgb), 0.99) !important;
 	}
 	padding-top: calc(var(--bs-navbar-padding-y) + env(safe-area-inset-top, 0px));
-	padding-left: env(safe-area-inset-left, 0px);
-	padding-right: env(safe-area-inset-right, 0px);
+	padding-left: env(safe-area-inset-left, 0);
+	padding-right: env(safe-area-inset-right, 0);
 
 	.navbar-toggler {
 		border: none;
@@ -45,10 +45,10 @@
 	.dropdown-menu {
 		border-radius: 10px;
 		border: 1px solid rgba($white, 0.08);
-		background: rgba(var(--bs-dark-rgb), 0.95);
+		background: rgb(var(--bs-dark-rgb), 0.95);
 		backdrop-filter: blur(20px);
 		padding: 0.35rem;
-		box-shadow: 0 8px 32px rgba(var(--bs-dark-rgb), 0.4), 0 2px 8px rgba(var(--bs-dark-rgb), 0.2);
+		box-shadow: 0 8px 32px rgb(var(--bs-dark-rgb), 0.4), 0 2px 8px rgb(var(--bs-dark-rgb), 0.2);
 
 		&[data-bs-popper] {
 			margin-top: .5rem;

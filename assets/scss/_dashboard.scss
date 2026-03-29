@@ -26,7 +26,7 @@
 	gap: 1rem;
 	padding: 1rem 1.25rem;
 	background: var(--ft-surface);
-	border: 1px solid rgba(var(--bs-secondary-rgb), 0.12);
+	border: 1px solid rgb(var(--bs-secondary-rgb), 0.12);
 	border-radius: $card-border-radius;
 	margin-bottom: 0.5rem;
 	transition: box-shadow 0.15s ease;
@@ -36,7 +36,7 @@
 	}
 
 	&.account-item-warn {
-		border-color: rgba(var(--bs-warning-rgb), 0.35);
+		border-color: rgb(var(--bs-warning-rgb), 0.35);
 	}
 
 	.account-item-body {
@@ -64,7 +64,7 @@
 
 .account-method-card {
 	background: var(--ft-surface);
-	border: 1px solid rgba(var(--bs-secondary-rgb), 0.12);
+	border: 1px solid rgb(var(--bs-secondary-rgb), 0.12);
 	border-radius: $card-border-radius;
 	padding: 1.25rem 1.5rem;
 	margin-bottom: 0.75rem;
@@ -92,7 +92,7 @@
 
 .account-confirm {
 	background: var(--ft-surface);
-	border: 1px solid rgba(var(--bs-warning-rgb), 0.3);
+	border: 1px solid rgb(var(--bs-warning-rgb), 0.3);
 	border-radius: $card-border-radius;
 	padding: 1.25rem 1.5rem;
 	margin-bottom: 1.5rem;
@@ -174,7 +174,7 @@
 	flex-direction: column;
 	background: var(--ft-surface);
 	border-radius: $card-border-radius;
-	border: 1px solid rgba(var(--bs-secondary-rgb), 0.12);
+	border: 1px solid rgb(var(--bs-secondary-rgb), 0.12);
 	padding: 1.25rem 1.5rem;
 	text-decoration: none;
 	color: var(--bs-body-color);
@@ -194,7 +194,7 @@
 		width: 2.75rem;
 		height: 2.75rem;
 		border-radius: 10px;
-		background: rgba(var(--bs-primary-rgb), 0.08);
+		background: rgb(var(--bs-primary-rgb), 0.08);
 		color: var(--bs-primary);
 		margin-bottom: 1rem;
 		flex-shrink: 0;
@@ -217,7 +217,7 @@
 		@include label-style;
 		margin-top: 0.75rem;
 		padding-top: 0.75rem;
-		border-top: 1px solid rgba(var(--bs-secondary-rgb), 0.1);
+		border-top: 1px solid rgb(var(--bs-secondary-rgb), 0.1);
 	}
 
 	.tile-status-ok {
