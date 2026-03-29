@@ -293,7 +293,7 @@ STORAGES = {
         'BACKEND': 'apps.core.storages.MediaS3Storage' if S3_MEDIA else 'django.core.files.storage.FileSystemStorage',
     },
     'staticfiles': {
-        'BACKEND': 'whitenoise.storage.CompressedManifestStaticFilesStorage',
+        'BACKEND': 'whitenoise.storage.CompressedStaticFilesStorage',
     },
 }
 STATIC_ROOT = str(BASE_DIR / 'static')
@@ -304,9 +304,6 @@ if not S3_MEDIA:
 
 if TESTING:
     WHITENOISE_AUTOREFRESH = True
-    STORAGES['staticfiles'] = {
-        'BACKEND': 'whitenoise.storage.CompressedStaticFilesStorage',
-    }
 
 # django-vite
 # <https://github.com/MrBin99/django-vite>

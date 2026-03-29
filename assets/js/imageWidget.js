@@ -42,18 +42,20 @@ class ImageUploadWidget {
 
         const removeBtn = this.container.querySelector('.image-remove-btn');
         if (removeBtn) {
-            const checkbox = document.getElementById(removeBtn.dataset.checkboxId);
-            const preview = this.container.querySelector('.image-preview');
-            if (checkbox) {
-                removeBtn.addEventListener('click', () => {
-                    checkbox.checked = !checkbox.checked;
-                    if (preview) preview.classList.toggle('opacity-50', checkbox.checked);
-                    removeBtn.textContent = checkbox.checked ? 'Undo' : 'Remove';
-                    removeBtn.classList.toggle('btn-outline-danger', !checkbox.checked);
-                    removeBtn.classList.toggle('btn-outline-warning', checkbox.checked);
-                });
-            }
+            removeBtn.addEventListener('click', () => this.toggleRemove());
         }
+    }
+
+    toggleRemove() {
+        const removeBtn = this.container.querySelector('.image-remove-btn');
+        const checkbox = document.getElementById(removeBtn.dataset.checkboxId);
+        if (!checkbox) return;
+        const preview = this.container.querySelector('.image-preview');
+        checkbox.checked = !checkbox.checked;
+        if (preview) preview.classList.toggle('opacity-50', checkbox.checked);
+        removeBtn.textContent = checkbox.checked ? 'Undo' : 'Remove';
+        removeBtn.classList.toggle('btn-outline-danger', !checkbox.checked);
+        removeBtn.classList.toggle('btn-outline-warning', checkbox.checked);
     }
 
     showEditButton() {
@@ -361,7 +363,7 @@ class ImageUploadWidget {
 export function initImageWidgets() {
     document.querySelectorAll('[data-image-widget]').forEach(container => {
         if (container.dataset.imageWidgetInit) return;
-        container.dataset.imageWidgetInit = '';
+        container.dataset.imageWidgetInit = '1';
         new ImageUploadWidget(container);
     });
 }
