@@ -15,7 +15,7 @@ RUN npm run-script build-${BUILD_MODE}
 
 # Dependencies
 
-FROM python:3.13-slim AS deps
+FROM python:3.14-slim AS deps
 WORKDIR /app
 COPY --from=ghcr.io/astral-sh/uv:0.6 /uv /usr/local/bin/uv
 COPY pyproject.toml uv.lock ./
@@ -24,7 +24,7 @@ RUN --mount=type=cache,target=/root/.cache/uv \
 
 # Application
 
-FROM python:3.13-slim AS app
+FROM python:3.14-slim AS app
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
     PYTHONPATH="/app/src" \
