@@ -832,6 +832,7 @@ MARKDOWN_EXTENSIONS = [
     'pymdownx.caret',
     'pymdownx.emoji',
     'pymdownx.magiclink',
+    'tables',
     'sane_lists',
     'def_list',
     'nl2br',
