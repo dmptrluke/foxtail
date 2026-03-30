@@ -5,7 +5,6 @@ from django.db import models
 from django.utils.functional import cached_property
 from django.utils.timezone import now
 
-from allauth.account.models import EmailAddress
 from imagefield.fields import ImageField as ProcessedImageField
 
 from apps.core.validators import file_size_validator
@@ -50,6 +49,8 @@ class User(AbstractUser):
 
     @cached_property
     def email_verified(self):
+        from allauth.account.models import EmailAddress
+
         return EmailAddress.objects.filter(user=self, email=self.email, verified=True, primary=True).exists()
 
     @cached_property

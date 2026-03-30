@@ -17,7 +17,6 @@ from django.templatetags.static import static
 from django.urls import reverse_lazy
 
 import environ
-import pymdownx.emoji
 from csp.constants import NONCE, NONE, SELF
 from formguard.conf import BUILTINS
 from imagefield.webp import webp
@@ -817,7 +816,7 @@ HUEY = {
     'results': False,
     'url': REDIS_URL,
     'consumer': {
-        'workers': 4,
+        'workers': env.int('HUEY_WORKERS', default=4),
         'worker_type': 'thread',
     },
 }
@@ -830,7 +829,6 @@ MARKDOWN_EXTENSIONS = [
     'pymdownx.betterem',
     'pymdownx.tilde',
     'pymdownx.caret',
-    'pymdownx.emoji',
     'pymdownx.magiclink',
     'tables',
     'sane_lists',
@@ -840,7 +838,7 @@ MARKDOWN_EXTENSIONS = [
     'smarty',
 ]
 
-MARKDOWN_EXTENSION_CONFIGS = {'pymdownx.emoji': {'emoji_generator': pymdownx.emoji.to_alt}}
+MARKDOWN_EXTENSION_CONFIGS = {}
 
 MARKDOWN_LINK_BLACKLIST = ['furry.nz', 'furry.org.nz']
 

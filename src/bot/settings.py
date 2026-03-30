@@ -24,8 +24,10 @@ INSTALLED_APPS = [
     'apps.telegram',
 ]
 
-MIDDLEWARE = [
-    'allauth.account.middleware.AccountMiddleware',
+MIDDLEWARE = []
+
+SILENCED_SYSTEM_CHECKS = [
+    'allauth.account.W002',  # AccountMiddleware not needed (bot has no HTTP stack)
 ]
 
 SITE_ID = 1
