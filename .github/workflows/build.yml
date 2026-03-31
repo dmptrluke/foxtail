@@ -23,6 +23,8 @@ jobs:
     permissions:
       packages: write
       contents: read
+      id-token: write
+      attestations: write
 
     steps:
       - name: Checkout
@@ -53,6 +55,7 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build and Push
+        id: push
         uses: docker/build-push-action@d08e5c354a6adb9ed34480a06d141179aa583294 # v7
         with:
           platforms: linux/amd64
@@ -69,6 +72,14 @@ jobs:
           sbom: true
           cache-from: type=gha
           cache-to: type=gha,mode=max
+
+      - name: Attest image
+        if: github.event_name != 'pull_request'
+        uses: actions/attest@59d89421af93a897026c735860bf21b6eb4f7b26 # v4
+        with:
+          subject-name: ghcr.io/dmptrluke/foxtail
+          subject-digest: ${{ steps.push.outputs.digest }}
+          push-to-registry: true
 
   deploy-staging:
     needs: build
