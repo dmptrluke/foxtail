@@ -11,6 +11,7 @@ import apps.content.sitemaps as content_sitemaps
 import apps.core.views as core_views
 import apps.events.sitemaps as event_sitemaps
 import apps.organisations.views as organisations_views
+from apps.telegram.views import telegram_webhook
 
 sitemaps = {
     'static': content_sitemaps.StaticSitemap,
@@ -29,6 +30,8 @@ urlpatterns = [
     # Admin
     path('markdownfield/', include('markdownfield.urls')),
     path('admin/', admin.site.urls),
+    # Telegram bot webhook
+    path('telegram/webhook/', telegram_webhook, name='telegram_webhook'),
     # Auth & OIDC
     path('accounts/', include('apps.accounts.urls')),
     path('accounts/', include('apps.telegram.urls')),

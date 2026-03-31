@@ -55,17 +55,5 @@ services:
       - path: .env
         required: false
 
-  bot:
-    build: *shared-build
-    command: python src/bot/run.py --poll
-    environment:
-      <<: *shared-env
-      DJANGO_SETTINGS_MODULE: "bot.settings"
-      SERVICE_NAME: "bot"
-    depends_on: *shared-depends
-    env_file:
-      - path: .env
-        required: false
-
 volumes:
   storage:

@@ -20,7 +20,7 @@ WORKDIR /app
 COPY --from=ghcr.io/astral-sh/uv:0.6 /uv /usr/local/bin/uv
 COPY pyproject.toml uv.lock ./
 RUN --mount=type=cache,target=/root/.cache/uv \
-    uv sync --frozen --no-install-project --no-dev --group bot
+    uv sync --frozen --no-install-project --no-dev
 
 # Application
 

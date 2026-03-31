@@ -45,10 +45,6 @@ dependencies = [
 ]
 
 [dependency-groups]
-bot = [
-    "aiogram>=3.26,<4",
-    "httpx>=0.28",
-]
 dev = [
     "debugpy==1.8.20",
     "django-debug-toolbar==6.2.0",

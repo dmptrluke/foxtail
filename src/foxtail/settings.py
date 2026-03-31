@@ -700,6 +700,11 @@ FETCH_METADATA_EXEMPT_PATHS = [
     '/openid/',
 ]
 
+# Telegram bot
+
+TELEGRAM_BOT_TOKEN = env('TELEGRAM_BOT_TOKEN', default='')
+TELEGRAM_WEBHOOK_SECRET = env('TELEGRAM_WEBHOOK_SECRET', default='')
+
 # CSP Headers
 # <https://django-csp.readthedocs.io/en/latest/>
 

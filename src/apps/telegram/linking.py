@@ -44,11 +44,3 @@ def unlink(telegram_id):
     sa_deleted, _ = SocialAccount.objects.filter(provider='telegram', uid=str(telegram_id)).delete()
     logger.info('Unlinked telegram_id=%s (links=%d, social=%d)', telegram_id, tg_deleted, sa_deleted)
     return tg_deleted > 0
-
-
-async def aunlink(telegram_id):
-    """Async version of unlink."""
-    tg_deleted, _ = await TelegramLink.objects.filter(telegram_id=telegram_id).adelete()
-    sa_deleted, _ = await SocialAccount.objects.filter(provider='telegram', uid=str(telegram_id)).adelete()
-    logger.info('Unlinked telegram_id=%s (links=%d, social=%d)', telegram_id, tg_deleted, sa_deleted)
-    return tg_deleted > 0

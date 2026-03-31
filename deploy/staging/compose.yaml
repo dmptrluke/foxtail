@@ -79,30 +79,6 @@ services:
       retries: 3
       start_period: 90s
 
-  bot:
-    image: ghcr.io/dmptrluke/foxtail:${IMAGE_TAG:-latest}
-    restart: unless-stopped
-    env_file: .env
-    environment:
-      DATABASE_URL: "postgres://foxtail:foxtail@db/foxtail"
-      DJANGO_SETTINGS_MODULE: "bot.settings"
-      SERVICE_NAME: "bot"
-    depends_on:
-      db:
-        condition: service_healthy
-    command: python src/bot/run.py
-    healthcheck:
-      test: ["CMD-SHELL", "python -c \"import urllib.request; urllib.request.urlopen('http://localhost:8001/health/')\""]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 15s
-    networks:
-      default:
-      caddy:
-        aliases:
-          - staging-bot
-
 networks:
   caddy:
     external: true
