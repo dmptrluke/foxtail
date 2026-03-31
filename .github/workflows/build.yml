@@ -93,7 +93,7 @@ jobs:
       - name: Deploy to staging
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: sudo -E /opt/foxtail/scripts/deploy-staging.sh
+        run: sudo /opt/foxtail/scripts/deploy-staging.sh
 
   sentry-staging:
     needs: deploy-staging
@@ -162,7 +162,7 @@ jobs:
       - name: Deploy to production
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: sudo -E /opt/foxtail/scripts/deploy-prod.sh
+        run: sudo /opt/foxtail/scripts/deploy-prod.sh
 
   sentry-production:
     needs: deploy-production
