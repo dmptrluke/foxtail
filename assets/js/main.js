@@ -6,7 +6,6 @@ import 'bootstrap/js/dist/alert';
 
 import 'colcade';
 import htmx from 'htmx.org';
-import { UAParser } from 'ua-parser-js';
 import { getCsrfToken } from './csrf.js';
 
 htmx.config.includeIndicatorStyles = false;
@@ -86,18 +85,23 @@ function initThemeToggle() {
     const popups = [picker, debugPopup].filter(Boolean);
 
     // Populate client-side debug fields
-    function updateDebugInfo() {
+    async function updateDebugInfo() {
         if (!debugPopup) return;
         const set = (key, val) => {
             const el = debugPopup.querySelector(`[data-debug="${key}"]`);
             if (el) el.textContent = val;
         };
-        const { browser, os, device } = UAParser(navigator.userAgent);
         set('screen', `${window.innerWidth}x${window.innerHeight}`);
-        const browserPart = [browser.name, browser.version].filter(Boolean).join(' ');
-        const osPart = [os.name, os.version].filter(Boolean).join(' ');
-        set('browser', [browserPart, osPart].filter(Boolean).join(' / '));
-        set('device', device.vendor ? [device.vendor, device.model].filter(Boolean).join(' ') : 'Desktop');
+        const uad = navigator.userAgentData;
+        if (uad) {
+            const hints = await uad.getHighEntropyValues(['platform', 'platformVersion', 'model']);
+            const brand = uad.brands?.find(b => !b.brand.includes('Not'))?.brand;
+            set('browser', [brand, hints.platform, hints.platformVersion].filter(Boolean).join(' / '));
+            set('device', hints.model || (uad.mobile ? 'Mobile' : 'Desktop'));
+        } else {
+            set('browser', navigator.userAgent);
+            set('device', 'Unknown');
+        }
         const ls = (key, fallback) => localStorage.getItem(key) || fallback;
         set('theme', `${ls('color-scheme', DEFAULT_COLOR_SCHEME)} / ${ls('style-theme', 'default')} / ${ls('dark-mode', 'auto')}`);
     }
