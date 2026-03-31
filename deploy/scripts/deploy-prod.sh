@@ -2,6 +2,7 @@
 set -euo pipefail
 
 cd /opt/foxtail/prod
+gh attestation verify oci://ghcr.io/dmptrluke/foxtail:stable -R dmptrluke/foxtail
 docker compose pull app worker
 docker compose run --rm app django-admin migrate --noinput
 
