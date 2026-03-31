@@ -143,7 +143,7 @@ if DEBUG:
 # Hosting
 # <https://docs.djangoproject.com/en/stable/ref/settings/#allowed-hosts>
 
-ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=[]) + ['localhost']
+ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=[]) + ['localhost', '127.0.0.1']
 USE_X_FORWARDED_HOST = env.bool('USE_X_FORWARDED_HOST', default=False)
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
