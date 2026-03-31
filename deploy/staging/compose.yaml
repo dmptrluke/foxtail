@@ -30,6 +30,7 @@ services:
   app:
     image: ghcr.io/dmptrluke/foxtail:${IMAGE_TAG:-latest}
     restart: unless-stopped
+    command: gunicorn --bind 0.0.0.0:8000 --worker-tmp-dir /dev/shm --forwarded-allow-ips '*' -k gthread --threads 2 foxtail.wsgi:application
     env_file: .env
     environment:
       DATABASE_URL: "postgres://foxtail:foxtail@db/foxtail"
@@ -61,6 +62,7 @@ services:
     environment:
       DATABASE_URL: "postgres://foxtail:foxtail@db/foxtail"
       CACHE_URL: "redis://redis/1"
+      HUEY_WORKERS: "2"
       SERVICE_NAME: "worker"
     volumes:
       - storage:/app/storage
@@ -71,10 +73,11 @@ services:
         condition: service_healthy
     command: django-admin run_huey
     healthcheck:
-      test: ["CMD-SHELL", "pgrep -f run_huey"]
+      test: ["CMD-SHELL", "python -c \"import time; t=float(open('/tmp/huey-heartbeat').read()); assert time.time()-t < 120\""]
       interval: 30s
       timeout: 10s
       retries: 3
+      start_period: 90s
 
   bot:
     image: ghcr.io/dmptrluke/foxtail:${IMAGE_TAG:-latest}
@@ -89,10 +92,11 @@ services:
         condition: service_healthy
     command: python src/bot/run.py
     healthcheck:
-      test: ["CMD-SHELL", "pgrep -f 'bot.run'"]
+      test: ["CMD-SHELL", "python -c \"import urllib.request; urllib.request.urlopen('http://localhost:8001/health/')\""]
       interval: 30s
       timeout: 10s
       retries: 3
+      start_period: 15s
     networks:
       default:
       caddy:

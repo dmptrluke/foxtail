@@ -1,11 +1,22 @@
 import logging
+import time
+from pathlib import Path
 
-from huey.contrib.djhuey import task
+from huey import crontab
+from huey.contrib.djhuey import periodic_task, task
 from imagefield.fields import IMAGEFIELDS
 
 from apps.core.storages import LocalReadCache
 
+HEARTBEAT_FILE = Path('/tmp/huey-heartbeat')  # noqa: S108
+
 logger = logging.getLogger(__name__)
+
+
+@periodic_task(crontab(minute='*'))
+def heartbeat():
+    """Write a timestamp so the container healthcheck can verify the worker is alive."""
+    HEARTBEAT_FILE.write_text(str(time.time()))
 
 
 @task()

@@ -66,7 +66,11 @@ def main(poll=False):
             webhook_path = '/webhook/telegram/'
             webhook_secret = settings.TELEGRAM_WEBHOOK_SECRET
 
+            async def health_handler(request):
+                return web.Response(text='ok')
+
             app = web.Application()
+            app.router.add_get('/health/', health_handler)
             handler = SimpleRequestHandler(
                 dispatcher=dp,
                 bot=bot,
