@@ -51,6 +51,7 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
 
 WORKDIR /app
 
+COPY --from=ghcr.io/dmptrluke/healthcheck@sha256:3e9025c3550d94f35f1c565f8e71f89c9492fa4e79e440292ab776a144c460bb /healthcheck /usr/local/bin/healthcheck
 COPY --from=deps /app/.venv /app/.venv
 COPY --from=builder /app/build ./build
 COPY --from=builder /app/static ./static
