@@ -33,7 +33,7 @@ class TestReservedWordBlocking:
     def test_repeated_chars(self, name):
         _blocked(name)
 
-    # Unicode homoglyphs are caught via unidecode
+    # Unicode homoglyphs are caught via anyascii
     @pytest.mark.parametrize(
         'name',
         [

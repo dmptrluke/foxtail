@@ -5,7 +5,7 @@ from pathlib import Path
 from django.core.exceptions import ValidationError
 from django.core.validators import RegexValidator
 
-from unidecode import unidecode
+from anyascii import anyascii
 
 _LEET_MAP = str.maketrans('013457@$!', 'oieastasi')
 
@@ -80,7 +80,7 @@ _PROTECTED_NAMES = [
 def _normalize_full(value):
     """Fold a username with all layers including dedup (for reserved list check)."""
     cleaned = _INVISIBLE_RE.sub('', value)
-    ascii_folded = unidecode(cleaned).lower()
+    ascii_folded = anyascii(cleaned).lower()
     stripped = _SEPARATOR_RE.sub('', ascii_folded)
     deleeted = stripped.translate(_LEET_MAP)
     return _DEDUP_RE.sub(r'\1', deleeted)
@@ -89,7 +89,7 @@ def _normalize_full(value):
 def _normalize_light(value):
     """Fold without dedup or leet-mapping (for impersonation combo check)."""
     cleaned = _INVISIBLE_RE.sub('', value)
-    ascii_folded = unidecode(cleaned).lower()
+    ascii_folded = anyascii(cleaned).lower()
     return _NON_ALNUM_RE.sub('', ascii_folded)
 
 

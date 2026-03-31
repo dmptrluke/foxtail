@@ -253,7 +253,7 @@ class TestReDoS:
         s = char * count
         _normalize_full(s)
 
-    # long unicode strings through unidecode don't hang
+    # long unicode strings through anyascii don't hang
     @given(st.text(min_size=500, max_size=5000))
     @settings(max_examples=200, deadline=2000, suppress_health_check=[HealthCheck.too_slow])
     def test_long_unicode(self, s):
