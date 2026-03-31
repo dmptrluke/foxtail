@@ -43,7 +43,7 @@ services:
       redis:
         condition: service_healthy
     healthcheck:
-      test: ["CMD-SHELL", "python -c 'import urllib.request; urllib.request.urlopen(\"http://localhost:8000/health/\")'"]
+      test: ["CMD", "python3", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health/')"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -69,9 +69,9 @@ services:
         condition: service_healthy
       redis:
         condition: service_healthy
-    command: django-admin run_huey
+    command: ["django-admin", "run_huey"]
     healthcheck:
-      test: ["CMD-SHELL", "python -c \"import time; t=float(open('/tmp/huey-heartbeat').read()); assert time.time()-t < 120\""]
+      test: ["CMD", "python3", "-c", "import time; t=float(open('/tmp/huey-heartbeat').read()); assert time.time()-t < 120"]
       interval: 30s
       timeout: 10s
       retries: 3

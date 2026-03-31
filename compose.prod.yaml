@@ -28,9 +28,7 @@ services:
     build: *shared-build
     ports:
       - "8000:8000"
-    command: >
-      sh -c "django-admin migrate --noinput &&
-      gunicorn --bind 0.0.0.0:8000 -k gthread --threads 4 foxtail.wsgi:application"
+    command: ["gunicorn", "--bind", "0.0.0.0:8000", "-k", "gthread", "--threads", "4", "foxtail.wsgi:application"]
     environment:
       <<: *shared-env
       ALLOWED_HOSTS: "localhost,127.0.0.1"
@@ -44,7 +42,7 @@ services:
 
   worker:
     build: *shared-build
-    command: django-admin run_huey
+    command: ["django-admin", "run_huey"]
     environment:
       <<: *shared-env
       SERVICE_NAME: "worker"
