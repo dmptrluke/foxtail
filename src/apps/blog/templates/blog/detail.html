@@ -30,7 +30,7 @@
             <c-tag-row :tags="post.tags.all" url_name="blog:list" />
 
             <c-hero.title>{{ post.title }}</c-hero.title>
-            <c-hero.subtitle>{{ post.created|date:"F jS, Y" }} &middot; {{ post.text_rendered|reading_time }}{% if post.author %} — by {{ post.author.name }}{% endif %}</c-hero.subtitle>
+            <c-hero.subtitle>{{ post.created|date:"F jS, Y" }}</c-hero.subtitle>
         </c-hero>
 
         {% if post.image %}

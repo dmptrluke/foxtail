@@ -27,9 +27,49 @@ form {
 	}
 }
 
-// Tom Select: remove extra margin from wrapper
+// Tom Select
 .ts-wrapper {
 	margin-bottom: 0 !important;
+}
+
+.ts-control {
+	background: var(--bs-body-bg);
+	color: var(--bs-body-color);
+	border-color: var(--bs-border-color);
+
+	input {
+		color: var(--bs-body-color) !important;
+	}
+}
+
+.ts-wrapper.focus .ts-control {
+	border-color: color-mix(in srgb, var(--bs-primary) 50%, #fff);
+	box-shadow: 0 0 0 0.25rem var(--bs-focus-ring-color);
+}
+
+.ts-dropdown {
+	background: var(--ft-surface);
+	color: var(--bs-body-color);
+	border-color: var(--bs-border-color);
+
+	.active {
+		background: color-mix(in srgb, var(--ft-surface) 70%, var(--bs-body-color));
+		color: var(--bs-body-color);
+	}
+}
+
+.ts-wrapper.multi .ts-control .item {
+	background: var(--bs-secondary-bg);
+	color: var(--bs-body-color);
+	border-color: var(--bs-border-color);
+
+	&.active {
+		background: color-mix(in srgb, var(--bs-secondary-bg) 70%, var(--bs-body-color));
+	}
+
+	.remove {
+		border-color: var(--bs-border-color) !important;
+	}
 }
 
 
@@ -166,10 +206,6 @@ body:has(dialog[open]) {
 	background: var(--bs-body-bg);
 	color: var(--bs-body-color);
 	box-shadow: var(--ft-shadow-lg);
-
-	&::backdrop {
-		background: rgba($dark, 0.6);
-	}
 
 	.dialog-header {
 		display: flex;

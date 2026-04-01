@@ -171,14 +171,25 @@ class ImageUploadWidget {
             footer.querySelector('.ppoi-done-btn').addEventListener('click', () => this.onPpoiDone());
 
             const ppoiPreview = body.querySelector('.image-ppoi-preview');
-            ppoiPreview.addEventListener('click', (e) => {
-                const img = ppoiPreview.querySelector('img');
-                if (e.target !== img) return;
-                const { x, y } = this.ppoiCoordsFromClick(e, img);
+            const ppoiImg = ppoiPreview.querySelector('img');
+            ppoiImg.draggable = false;
+
+            const updatePpoi = (e) => {
+                const { x, y } = this.ppoiCoordsFromClick(e, ppoiImg);
                 this.ppoiInput.value = `${x.toFixed(4)}x${y.toFixed(4)}`;
                 const dot = ppoiPreview.querySelector('.image-ppoi-dot');
                 dot.style.left = `${x * 100}%`;
                 dot.style.top = `${y * 100}%`;
+            };
+
+            ppoiPreview.addEventListener('pointerdown', (e) => {
+                if (e.target !== ppoiImg) return;
+                ppoiPreview.setPointerCapture(e.pointerId);
+                updatePpoi(e);
+            });
+            ppoiPreview.addEventListener('pointermove', (e) => {
+                if (!ppoiPreview.hasPointerCapture(e.pointerId)) return;
+                updatePpoi(e);
             });
         }
     }

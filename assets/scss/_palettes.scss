@@ -53,6 +53,8 @@
 		$surface: color.adjust($body-bg, $lightness: 5%);
 		--ft-surface: #{$surface};
 		--ft-surface-rgb: #{red($surface), green($surface), blue($surface)};
+		--bs-secondary-bg: #{color.adjust($body-bg, $lightness: 8%)};
+		--bs-tertiary-bg: #{color.adjust($body-bg, $lightness: 4%)};
 		--bs-border-color: rgb(var(--bs-secondary-rgb), 0.25);
 	} @else {
 		--ft-text-light: #{color.adjust($body-color, $lightness: 10%)};
@@ -63,6 +65,8 @@
 		--ft-text-faintest: #{color.adjust($body-color, $lightness: 35%)};
 		--ft-surface: #fff;
 		--ft-surface-rgb: 255, 255, 255;
+		--bs-secondary-bg: #{color.adjust($body-bg, $lightness: -8%)};
+		--bs-tertiary-bg: #{color.adjust($body-bg, $lightness: -4%)};
 		--bs-border-color: rgb(var(--bs-secondary-rgb), 0.25);
 	}
 
@@ -84,6 +88,23 @@
 		$hero-end: color.adjust($secondary, $lightness: -12%);
 		--ft-hero-gradient: linear-gradient(135deg, #{$hero-start} 0%, #{$hero-mid} 50%, #{$hero-end} 100%);
 		--ft-hero-sticky: linear-gradient(135deg, #{rgba($hero-start, 0.92)}, #{rgba($hero-mid, 0.92)}, #{rgba($hero-end, 0.92)});
+	}
+
+	// Focus ring: Bootstrap compiles from Sass $primary at build time,
+	// override so it adapts per theme
+	--bs-focus-ring-color: #{rgba($primary, 0.25)};
+
+	.form-control:focus,
+	.form-select:focus {
+		border-color: #{color.mix($primary, #fff, 50%)};
+		box-shadow: 0 0 0 0.25rem #{rgba($primary, 0.25)};
+	}
+
+	// Dialog backdrop: ::backdrop doesn't inherit custom properties from the DOM
+	$backdrop: color.change(color.mix($dark, #000, 60%), $alpha: 0.6);
+
+	.app-dialog::backdrop {
+		background: #{$backdrop};
 	}
 
 	// Darker: custom theme color not in Bootstrap's palette
