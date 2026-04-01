@@ -13,13 +13,13 @@ from csp_helpers.mixins import CSPFormMixin
 from markdownfield.widgets import MDEWidget
 from taggit.forms import TagField
 
-from apps.core.widgets import AutocompleteSelect, ImageWidget
+from apps.core.widgets import AutocompleteSelect, AutocompleteTag, ImageWidget
 
 from .models import Event
 
 
 class EventForm(CSPFormMixin, ModelForm):
-    tags = TagField(required=False, help_text='Comma-separated list of tags.')
+    tags = TagField(required=False, widget=AutocompleteTag('autocomplete:tag'))
     image = ImageField(required=False, widget=ImageWidget(ppoi_field='image_ppoi'))
     live_as_of = DateTimeField(
         required=False,

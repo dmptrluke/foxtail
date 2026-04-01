@@ -3,6 +3,7 @@ from django.forms import Select, SelectMultiple
 from django.forms.widgets import ClearableFileInput
 from django.urls import reverse
 
+from taggit.forms import TagWidget
 from unfold.widgets import UnfoldAdminTextInputWidget
 
 
@@ -81,3 +82,7 @@ class AutocompleteSelect(_AutocompleteMixin, Select):
 
 class AutocompleteSelectMultiple(_AutocompleteMixin, SelectMultiple):
     pass
+
+
+class AutocompleteTag(_AutocompleteMixin, TagWidget):
+    """Tag input with autocomplete suggestions and free-form tag creation."""

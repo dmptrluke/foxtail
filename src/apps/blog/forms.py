@@ -11,7 +11,7 @@ from csp_helpers.mixins import CSPFormMixin
 from markdownfield.widgets import MDEWidget
 from taggit.forms import TagField
 
-from apps.core.widgets import AutocompleteSelectMultiple, CroppedImageWidget
+from apps.core.widgets import AutocompleteSelectMultiple, AutocompleteTag, CroppedImageWidget
 
 from .models import Author, Comment, Post
 
@@ -24,7 +24,7 @@ class CommentForm(ModelForm):
 
 
 class PostForm(CSPFormMixin, ModelForm):
-    tags = TagField(required=False, help_text='Comma-separated list of tags.')
+    tags = TagField(required=False, widget=AutocompleteTag('autocomplete:tag'))
     image = ImageField(required=False, widget=CroppedImageWidget(aspect_ratio=1200 / 630, ppoi_field='image_ppoi'))
     live_as_of = DateTimeField(
         required=False,
