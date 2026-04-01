@@ -42,7 +42,7 @@
 	}
 
 	.dropdown-menu {
-		border-radius: 10px;
+		border-radius: var(--ft-radius-lg);
 		border: 1px solid rgba($white, 0.08);
 		background: rgb(var(--bs-dark-rgb), 0.95);
 		backdrop-filter: blur(20px);
@@ -56,7 +56,7 @@
 		.dropdown-item {
 			color: rgba($white, .7);
 			padding: .65rem 1rem;
-			border-radius: 6px;
+			border-radius: var(--ft-radius-sm);
 			transition: background 0.12s ease, color 0.12s ease;
 
 			&:hover,

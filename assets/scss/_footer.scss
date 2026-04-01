@@ -7,7 +7,7 @@
 	transform: translateX(-50%);
 	background: var(--ft-surface);
 	border: 1px solid rgb(var(--bs-secondary-rgb), 0.15);
-	border-radius: 8px;
+	border-radius: var(--ft-radius);
 	box-shadow: var(--ft-shadow-md);
 	padding: 0.5rem 0.65rem;
 	z-index: $zindex-fixed;

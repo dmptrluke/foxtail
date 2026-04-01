@@ -45,21 +45,18 @@ $terminal-mono: 'IBM Plex Mono', ui-monospace, menlo, consolas, monospace;
 		letter-spacing: normal;
 	}
 
-	// Buttons: bracketed
+	// Buttons
 	.btn {
 		text-transform: lowercase;
 		letter-spacing: 0.02em;
-
-		&::before { content: '[ '; }
-		&::after { content: ' ]'; }
 	}
 
-	.sidebar-card .btn::before,
-	.sidebar-card .btn::after,
-	.btn-group .btn::before,
-	.btn-group .btn::after {
-		content: none;
-	}
+	// Brackets on hero CTAs and link-style buttons
+	.hero-home .btn::before,
+	.btn-link::before { content: '[ '; }
+
+	.hero-home .btn::after,
+	.btn-link::after { content: ' ]'; }
 
 	// Hero pills
 	.hero .hero-pill {

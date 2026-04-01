@@ -31,7 +31,7 @@
 .org-card-logo {
 	width: 3rem;
 	height: 3rem;
-	border-radius: 8px;
+	border-radius: var(--ft-radius);
 	flex-shrink: 0;
 	object-fit: cover;
 }

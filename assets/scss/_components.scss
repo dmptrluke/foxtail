@@ -69,7 +69,7 @@ p a {
 	padding: 0.2rem 0.6rem;
 	white-space: nowrap;
 	background: rgba($white, 0.15);
-	border-radius: 6px;
+	border-radius: var(--ft-radius-sm);
 	color: rgba($white, 0.85);
 	text-decoration: none;
 

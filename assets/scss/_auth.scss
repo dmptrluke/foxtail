@@ -61,7 +61,7 @@
   max-width: 560px;
   padding: 2.5rem 2.5rem 2rem;
   box-shadow: var(--auth-card-shadow);
-  border-radius: 12px;
+  border-radius: var(--ft-radius-lg);
 
   @media (width >= 1921px) {
     zoom: 1.1;
@@ -120,7 +120,7 @@
   width: 100%;
   padding: 0.55rem 0.75rem;
   border: 1px solid var(--auth-border);
-  border-radius: 8px;
+  border-radius: var(--ft-radius);
   background: var(--auth-card-bg);
   color: var(--auth-text);
   font-size: 0.8rem;
@@ -183,7 +183,7 @@
     width: 100%;
     padding: 0.55rem 0.75rem;
     border: 1px solid var(--auth-border);
-    border-radius: 8px;
+    border-radius: var(--ft-radius);
     font-size: 0.9rem;
     color: var(--auth-text);
     background: var(--auth-card-bg);
@@ -238,7 +238,7 @@
   width: 100%;
   padding: 0.65rem 1.5rem;
   border: none;
-  border-radius: 8px;
+  border-radius: var(--ft-radius);
   background: var(--bs-primary);
   color: #fff;
   font-size: 0.9rem;
@@ -262,7 +262,7 @@
   width: 100%;
   padding: 0.65rem 1.5rem;
   border: 1px solid var(--auth-border);
-  border-radius: 8px;
+  border-radius: var(--ft-radius);
   background: var(--auth-card-bg);
   color: var(--auth-text);
   font-size: 0.9rem;
@@ -317,7 +317,7 @@
 .auth-alert {
   padding: 0.6rem 0.85rem;
   margin-bottom: 1.25rem;
-  border-radius: 8px;
+  border-radius: var(--ft-radius);
   font-size: 0.825rem;
   line-height: 1.4;
   border-left: 3px solid;
@@ -419,7 +419,7 @@
   gap: 0.85rem;
   padding: 0.75rem 1rem;
   border: 1px solid var(--auth-border);
-  border-radius: 8px;
+  border-radius: var(--ft-radius);
   cursor: pointer;
   transition: border-color 0.15s, box-shadow 0.15s;
   text-decoration: none;
@@ -482,7 +482,7 @@
   gap: 0.35rem 1.5rem;
   background: rgb(var(--bs-secondary-rgb), 0.06);
   border: 1px solid var(--auth-border);
-  border-radius: 8px;
+  border-radius: var(--ft-radius);
   padding: 1rem 1.25rem;
   margin-bottom: 1.25rem;
   font-family: 'SF Mono', 'Cascadia Code', 'Fira Code', monospace;
