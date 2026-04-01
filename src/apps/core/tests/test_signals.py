@@ -7,18 +7,20 @@ from ..signals import _has_image, _image_fields_changed, on_post_init, on_post_s
 def _make_field(name, ppoi_field=None):
     field = MagicMock()
     field.name = name
+    field.attname = name
     field.formats = ['thumb']
     field.ppoi_field = ppoi_field
     return field
 
 
 def _make_instance(file_name='photo.jpg'):
-    file_obj = SimpleNamespace(name=file_name)
-    return SimpleNamespace(
-        image=file_obj,
+    """Build a fake model instance with the raw value in __dict__ (like Django does)."""
+    instance = SimpleNamespace(
         _meta=SimpleNamespace(app_label='core', model_name='fakemodel'),
         pk=1,
     )
+    instance.__dict__['image'] = file_name
+    return instance
 
 
 class TestOnPostInit:

@@ -1,5 +1,5 @@
 {% extends "base/page.html" %}
-{% load cache jsonld opengraph meta twitter breadcrumbs rules image text %}
+{% load blog_sidebar cache jsonld opengraph meta twitter breadcrumbs rules image text %}
 
 {% if post.image %}{% block body_class %}has-hero-banner{% endblock %}{% endif %}
 
@@ -57,7 +57,7 @@
             {% if post.author %}
                 {% include "blog/_author_sidebar.html" with author=post.author %}
             {% endif %}
-            {% include "blog/_sidebar.html" %}
+            {% blog_sidebar %}
         </c-slot>
     </c-layout-sidebar>
 {% endblock content %}

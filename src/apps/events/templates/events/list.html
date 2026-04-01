@@ -1,5 +1,5 @@
 {% extends "base/page.html" %}
-{% load breadcrumbs image jsonld opengraph meta twitter text %}
+{% load breadcrumbs cache image jsonld opengraph meta twitter text %}
 
 
 {% block title %}{% if year %}Events in {{ year }}{% else %}Furry Events{% endif %}{% endblock %}
@@ -72,7 +72,9 @@
             <div class="grid-col d-none d-md-block col-md-6 col-lg-4"></div>
             <div class="grid-col d-none d-lg-block col-md-6 col-lg-4"></div>
             {% for event in upcoming_events %}
-                <c-event-card :event="event" />
+                {% cache 3600 event_card event.pk event.modified %}
+                    <c-event-card :event="event" />
+                {% endcache %}
             {% endfor %}
         </div>
     {% elif not past_events %}
@@ -88,7 +90,9 @@
             <div class="grid-col d-none d-md-block col-md-6 col-lg-4"></div>
             <div class="grid-col d-none d-lg-block col-md-6 col-lg-4"></div>
             {% for event in past_events %}
-                <c-event-card :event="event" />
+                {% cache 3600 event_card event.pk event.modified %}
+                    <c-event-card :event="event" />
+                {% endcache %}
             {% endfor %}
         </div>
     {% endif %}

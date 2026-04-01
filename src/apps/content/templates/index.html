@@ -130,34 +130,15 @@
     <section class="mb-5">
         <c-section-header link_url="{% url 'blog:list' %}">Latest News</c-section-header>
 
-        {% for post in post_list %}
-                {% if forloop.first %}
-                    <article class="news-feature">
-                        <div class="news-feature-img">
-                            {% if post.image %}
-                                <img src="{{ post.image.card }}"
-                                     srcset="{{ post.image.card }} 1x, {{ post.image.card_2x }} 2x"
-                                     alt="{{ post.title }}"
-                                     style="object-position: {{ post.image_ppoi|ppoi_position }}">
-                            {% else %}
-                                <div class="card-img-placeholder"></div>
-                            {% endif %}
-                        </div>
-                        <header>
-                            <time datetime="{{ post.created|date:'Y-m-d' }}">{{ post.created|date:"M j, Y" }}</time>
-                            <h3><a href="{{ post.get_absolute_url }}" class="stretched-link">{{ post.title }}</a></h3>
-                            <p>{{ post.text_rendered|plain_text|truncatechars:400 }}</p>
-                        </header>
-                    </article>
-                {% else %}
-                    {% if forloop.counter == 2 %}<div class="news-grid">{% endif %}
-                        <article class="news-compact">
-                            <div class="news-compact-img">
+        {% cache 1800 homepage_news %}
+            {% for post in post_list %}
+                    {% if forloop.first %}
+                        <article class="news-feature">
+                            <div class="news-feature-img">
                                 {% if post.image %}
                                     <img src="{{ post.image.card }}"
                                          srcset="{{ post.image.card }} 1x, {{ post.image.card_2x }} 2x"
                                          alt="{{ post.title }}"
-                                         loading="lazy"
                                          style="object-position: {{ post.image_ppoi|ppoi_position }}">
                                 {% else %}
                                     <div class="card-img-placeholder"></div>
@@ -166,12 +147,33 @@
                             <header>
                                 <time datetime="{{ post.created|date:'Y-m-d' }}">{{ post.created|date:"M j, Y" }}</time>
                                 <h3><a href="{{ post.get_absolute_url }}" class="stretched-link">{{ post.title }}</a></h3>
-                                <p>{{ post.text_rendered|plain_text|truncatechars:150 }}</p>
+                                <p>{{ post.text_rendered|plain_text|truncatechars:400 }}</p>
                             </header>
                         </article>
-                    {% if forloop.last %}</div>{% endif %}
-                {% endif %}
-        {% endfor %}
+                    {% else %}
+                        {% if forloop.counter == 2 %}<div class="news-grid">{% endif %}
+                            <article class="news-compact">
+                                <div class="news-compact-img">
+                                    {% if post.image %}
+                                        <img src="{{ post.image.card }}"
+                                             srcset="{{ post.image.card }} 1x, {{ post.image.card_2x }} 2x"
+                                             alt="{{ post.title }}"
+                                             loading="lazy"
+                                             style="object-position: {{ post.image_ppoi|ppoi_position }}">
+                                    {% else %}
+                                        <div class="card-img-placeholder"></div>
+                                    {% endif %}
+                                </div>
+                                <header>
+                                    <time datetime="{{ post.created|date:'Y-m-d' }}">{{ post.created|date:"M j, Y" }}</time>
+                                    <h3><a href="{{ post.get_absolute_url }}" class="stretched-link">{{ post.title }}</a></h3>
+                                    <p>{{ post.text_rendered|plain_text|truncatechars:150 }}</p>
+                                </header>
+                            </article>
+                        {% if forloop.last %}</div>{% endif %}
+                    {% endif %}
+            {% endfor %}
+        {% endcache %}
     </section>
 
     {# ── Events ── #}
@@ -179,32 +181,34 @@
         <section>
             <c-section-header link_url="{% url 'events:list' %}">Upcoming Events</c-section-header>
 
-            <div class="event-list">
-                {% for event in event_list %}
-                        <a href="{{ event.get_absolute_url }}" class="event-item">
-                            <c-cal_badge :date="event.start" large />
-                            <div class="event-details">
-                                <h3>
-                                    {{ event.title }}
-                                    {% if forloop.first and days_until is not None %}
-                                        <span class="badge bg-primary-subtle text-primary-emphasis ms-1">in {{ days_until }} day{{ days_until|pluralize }}</span>
+            {% cache 1800 homepage_events %}
+                <div class="event-list">
+                    {% for event in event_list %}
+                            <a href="{{ event.get_absolute_url }}" class="event-item">
+                                <c-cal_badge :date="event.start" large />
+                                <div class="event-details">
+                                    <h3>
+                                        {{ event.title }}
+                                        {% if forloop.first and days_until is not None %}
+                                            <span class="badge bg-primary-subtle text-primary-emphasis ms-1">in {{ days_until }} day{{ days_until|pluralize }}</span>
+                                        {% endif %}
+                                    </h3>
+                                    <p>{{ event.description_rendered|plain_text|truncatechars:170 }}</p>
+                                    {% if event.location %}
+                                        <span class="event-location">{{ event.location }}</span>
                                     {% endif %}
-                                </h3>
-                                <p>{{ event.description_rendered|plain_text|truncatechars:170 }}</p>
-                                {% if event.location %}
-                                    <span class="event-location">{{ event.location }}</span>
-                                {% endif %}
-                            </div>
-                            {% with interests=event.interests.all %}
-                                {% with total=interests|length %}
-                                    {% if total > 0 %}
-                                        <c-avatar_stack :interests="interests" overflow="{{ total|add:'-3' }}" :total="total" />
-                                    {% endif %}
+                                </div>
+                                {% with interests=event.interests.all %}
+                                    {% with total=interests|length %}
+                                        {% if total > 0 %}
+                                            <c-avatar_stack :interests="interests" overflow="{{ total|add:'-3' }}" :total="total" />
+                                        {% endif %}
+                                    {% endwith %}
                                 {% endwith %}
-                            {% endwith %}
-                        </a>
-                {% endfor %}
-            </div>
+                            </a>
+                    {% endfor %}
+                </div>
+            {% endcache %}
         </section>
     {% endif %}
 {% endblock content %}

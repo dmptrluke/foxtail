@@ -1,4 +1,4 @@
-{% load cache humanize text %}
+{% load humanize text %}
 
 <form action="{% url 'blog:list' %}" class="sidebar-card search">
     <label class="visually-hidden" for="search-field">Search</label>
@@ -8,30 +8,28 @@
     </div>
 </form>
 
-{% cache 3600 blog_sidebar %}
-    <c-sidebar>
-        <c-sidebar.header>Recent Posts <small><a title="RSS Feed" href="{% url 'blog:feed' %}"><c-icons.rss-square /></a></small></c-sidebar.header>
-        <c-sidebar.content>
-            {% for post in sidebar_post_list %}
-                <a href="{{ post.get_absolute_url }}" class="preview">
-                    <strong>{{ post.title }}</strong>
-                    <span class="meta">{{ post.created|naturaltime }}</span>
-                    <p>{{ post.text_rendered|plain_text|truncatechars:80 }}</p>
-                </a>
-            {% endfor %}
-        </c-sidebar.content>
-    </c-sidebar>
+<c-sidebar>
+    <c-sidebar.header>Recent Posts <small><a title="RSS Feed" href="{% url 'blog:feed' %}"><c-icons.rss-square /></a></small></c-sidebar.header>
+    <c-sidebar.content>
+        {% for post in sidebar_post_list %}
+            <a href="{{ post.get_absolute_url }}" class="preview">
+                <strong>{{ post.title }}</strong>
+                <span class="meta">{{ post.created|naturaltime }}</span>
+                <p>{{ post.text_rendered|plain_text|truncatechars:80 }}</p>
+            </a>
+        {% endfor %}
+    </c-sidebar.content>
+</c-sidebar>
 
-    <c-sidebar>
-        <c-sidebar.header>Categories</c-sidebar.header>
-        <c-sidebar.content>
-            {% for tag in sidebar_tag_list %}
-                <a href="{% url 'blog:list' %}?tag={{ tag.slug }}"
-                class="filter{% if request.GET.tag == tag.slug %} active{% endif %}">
-                    {{ tag.name|capfirst }}
-                    <span class="count">{{ tag.num_times }}</span>
-                </a>
-            {% endfor %}
-        </c-sidebar.content>
-    </c-sidebar>
-{% endcache %}
+<c-sidebar>
+    <c-sidebar.header>Categories</c-sidebar.header>
+    <c-sidebar.content>
+        {% for tag in sidebar_tag_list %}
+            <a href="{% url 'blog:list' %}?tag={{ tag.slug }}"
+            class="filter{% if request.GET.tag == tag.slug %} active{% endif %}">
+                {{ tag.name|capfirst }}
+                <span class="count">{{ tag.num_times }}</span>
+            </a>
+        {% endfor %}
+    </c-sidebar.content>
+</c-sidebar>

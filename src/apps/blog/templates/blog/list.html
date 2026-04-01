@@ -1,5 +1,5 @@
 {% extends "base/page.html" %}
-{% load breadcrumbs cache jsonld opengraph meta twitter %}
+{% load blog_sidebar breadcrumbs cache jsonld opengraph meta twitter %}
 
 
 {% block title %}{% if year %}News from {{ year }}{% else %}News{% endif %}{% endblock %}
@@ -67,7 +67,7 @@
         </c-slot>
 
         <c-slot name="sidebar">
-            {% include "blog/_sidebar.html" %}
+            {% blog_sidebar %}
         </c-slot>
     </c-layout-sidebar>
 {% endblock content %}

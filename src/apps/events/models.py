@@ -37,6 +37,40 @@ class EventQuerySet(models.QuerySet):
         """Select related organisation, series, and series.organisation"""
         return self.select_related('organisation', 'series', 'series__organisation')
 
+    def link_fields(self):
+        """Select only the fields needed to render an event link (title, URL, date)."""
+        return self.only('title', 'slug', 'start', 'publish_status', 'live_as_of')
+
+    def not_ended(self):
+        """Filter to events that haven't ended yet (future or ongoing)."""
+        from django.utils.timezone import localdate
+
+        today = localdate()
+        return self.filter(models.Q(start__gte=today) | models.Q(end__gte=today))
+
+    def ended(self):
+        """Filter to events that have ended."""
+        from django.utils.timezone import localdate
+
+        today = localdate()
+        return self.exclude(models.Q(start__gte=today) | models.Q(end__gte=today))
+
+    def for_homepage(self):
+        """Select fields and prefetch interests for homepage event cards."""
+        from django.db.models import Prefetch
+
+        return self.only(
+            'title',
+            'slug',
+            'start',
+            'location',
+            'description_rendered',
+            'publish_status',
+            'live_as_of',
+        ).prefetch_related(
+            Prefetch('interests', queryset=EventInterest.objects.with_user_display()),
+        )
+
     def for_organisation(self, org):
         """Filter to events belonging to an org directly or through a series"""
         return self.filter(models.Q(organisation=org) | models.Q(series__organisation=org)).distinct()
@@ -195,6 +229,20 @@ class EventInterestQuerySet(models.QuerySet):
     def status_counts(self):
         """Return {status: count} for all interest statuses"""
         return {r['status']: r['n'] for r in self.values('status').annotate(n=Count('pk'))}
+
+    def with_user_display(self):
+        """Select the interest's user with only the fields needed for avatar rendering."""
+        return self.select_related('user').only(
+            'id',
+            'event_id',
+            'status',
+            'user__id',
+            'user__username',
+            'user__avatar',
+            'user__avatar_width',
+            'user__avatar_height',
+            'user__avatar_ppoi',
+        )
 
 
 class EventInterest(models.Model):

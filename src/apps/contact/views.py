@@ -18,11 +18,6 @@ class ContactView(GuardedFormViewMixin, CSPViewMixin, FormView):
     success_url = reverse_lazy('contact:contact')
     guard_on_failure = reject_silently(message='Your message has been sent.')
 
-    def get_initial(self):
-        initial = super().get_initial()
-        initial['email'] = self.request.GET.get('email', None)
-        return initial
-
     def form_valid(self, form):
         name = form.cleaned_data['name']
         context = {

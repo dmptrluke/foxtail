@@ -26,14 +26,13 @@ for _field in IMAGEFIELDS:
 
 def _has_image(instance):
     """Check if any image field on the instance has a file set."""
-    return any(getattr(instance, f.name).name for f in fields_by_model.get(type(instance), ()))
+    return any(instance.__dict__.get(f.attname) for f in fields_by_model.get(type(instance), ()))
 
 
 def _image_fields_changed(instance):
     """Compare current image/PPOI values against the post_init snapshot."""
     for field in fields_by_model.get(type(instance), ()):
-        file = getattr(instance, field.name)
-        current = file.name if file else ''
+        current = instance.__dict__.get(field.attname, '') or ''
         original = instance.__dict__.get(f'_orig_{field.name}')
         if original is None or current != original:
             return True
@@ -45,12 +44,15 @@ def _image_fields_changed(instance):
 
 
 def on_post_init(sender, instance, **kwargs):
-    """Snapshot image and PPOI values for change detection."""
+    """Snapshot image and PPOI values for change detection.
+
+    Reads from __dict__ to bypass the FileField descriptor so deferred
+    fields (via only/defer) are safely skipped instead of lazy-loaded.
+    """
     for field in fields_by_model.get(sender, ()):
-        file = getattr(instance, field.name)
-        instance.__dict__[f'_orig_{field.name}'] = file.name if file else ''
+        instance.__dict__[f'_orig_{field.name}'] = instance.__dict__.get(field.attname, '') or ''
         if field.ppoi_field:
-            instance.__dict__[f'_orig_{field.ppoi_field}'] = getattr(instance, field.ppoi_field, '')
+            instance.__dict__[f'_orig_{field.ppoi_field}'] = instance.__dict__.get(field.ppoi_field, '')
 
 
 def on_pre_save(sender, instance, **kwargs):

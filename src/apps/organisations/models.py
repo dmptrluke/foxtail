@@ -18,6 +18,10 @@ logger = logging.getLogger(__name__)
 
 
 class OrganisationQuerySet(models.QuerySet):
+    def link_fields(self):
+        """Select only the fields needed to render an organisation link (name, URL)."""
+        return self.only('name', 'slug')
+
     def with_social_links(self):
         """Prefetch related social links"""
         return self.prefetch_related('social_links')
@@ -178,6 +182,12 @@ class SocialLink(models.Model):
         return reverse('social_link_redirect', args=[self.pk])
 
 
+class EventSeriesQuerySet(models.QuerySet):
+    def link_fields(self):
+        """Select only the fields needed to render an event series link (name, URL)."""
+        return self.only('name', 'slug')
+
+
 class EventSeries(models.Model):
     name = models.CharField(max_length=200)
     slug = AutoSlugField(populate_from='name', unique=True)
@@ -196,6 +206,8 @@ class EventSeries(models.Model):
 
     created = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
+
+    objects = EventSeriesQuerySet.as_manager()
 
     class Meta:
         ordering = ['name']

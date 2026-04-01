@@ -39,6 +39,25 @@ class Author(models.Model):
         return self.name
 
 
+class PostQuerySet(models.QuerySet):
+    def link_fields(self):
+        """Select only the fields needed to render a post link (title, URL, date)."""
+        return self.only('title', 'slug', 'created', 'publish_status', 'live_as_of')
+
+    def with_related_content(self):
+        """Prefetch related orgs, series, and events with only their link fields."""
+        from django.db.models import Prefetch
+
+        from apps.events.models import Event
+        from apps.organisations.models import EventSeries, Organisation
+
+        return self.prefetch_related(
+            Prefetch('organisations', queryset=Organisation.objects.link_fields()),
+            Prefetch('event_series', queryset=EventSeries.objects.link_fields()),
+            Prefetch('events', queryset=Event.objects.link_fields()),
+        )
+
+
 class Post(PublishedModel):
     title = models.CharField(max_length=100, help_text='100 characters or fewer.')
     slug = models.SlugField(
@@ -69,6 +88,8 @@ class Post(PublishedModel):
     organisations = models.ManyToManyField('organisations.Organisation', blank=True)
     event_series = models.ManyToManyField('organisations.EventSeries', blank=True)
     events = models.ManyToManyField('events.Event', blank=True)
+
+    objects = PostQuerySet.as_manager()
 
     class Meta:
         ordering = ['-created']
@@ -121,6 +142,24 @@ class Post(PublishedModel):
         return data
 
 
+class CommentQuerySet(models.QuerySet):
+    def with_author_display(self):
+        """Select the comment's author with only the fields needed for rendering."""
+        return self.select_related('author').only(
+            'id',
+            'post_id',
+            'text',
+            'created',
+            'approved',
+            'author__id',
+            'author__username',
+            'author__avatar',
+            'author__avatar_width',
+            'author__avatar_height',
+            'author__avatar_ppoi',
+        )
+
+
 class Comment(models.Model):
     post = models.ForeignKey('foxtail_blog.Post', on_delete=models.CASCADE, related_name='comments')
     author = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
@@ -128,6 +167,8 @@ class Comment(models.Model):
     text = models.TextField(max_length=280, help_text='280 characters or fewer.')
     created = models.DateTimeField(auto_now_add=True)
     approved = models.BooleanField(default=False)
+
+    objects = CommentQuerySet.as_manager()
 
     def __str__(self):
         return self.text

@@ -74,10 +74,3 @@ class TestContactView(GuardedFormTestMixin):
         assert response.status_code == 302
         assert len(mailoutbox) == 0
         assert 'formguard triggered' in caplog.text
-
-    # GET with ?email= query param pre-fills the email field
-    def test_email_prefill_from_query_param(self, client):
-        response = client.get(self.url, {'email': 'prefilled@example.com'})
-
-        form = response.context['form']
-        assert form.initial['email'] == 'prefilled@example.com'

@@ -1,4 +1,5 @@
 from django.conf import settings
+from django.core.cache import cache
 from django.db.models import Q
 from django.utils.timezone import now
 from django.views.generic import DetailView, TemplateView
@@ -20,12 +21,8 @@ class IndexView(StructuredDataMixin, TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         today = now().date()
-        context['post_list'] = queryset_filter(Post.objects).select_related('author').all()[:3]
-        event_list = list(
-            queryset_filter(Event.objects)
-            .filter(Q(start__gte=today) | Q(end__gte=today))
-            .prefetch_related('interests__user')[:3]
-        )
+        context['post_list'] = queryset_filter(Post.objects).all()[:3]
+        event_list = list(queryset_filter(Event.objects).not_ended().for_homepage()[:3])
         context['event_list'] = event_list
 
         context['featured_organisations'] = Organisation.objects.filter(featured=True).with_social_links()[:6]
@@ -55,7 +52,7 @@ class IndexView(StructuredDataMixin, TemplateView):
             context['user_next_event'] = first_interest.event
             context['user_next_event_days'] = (first_interest.event.start - today).days
 
-        context['org_count'] = Organisation.objects.count()
+        context['org_count'] = cache.get_or_set('org_count', Organisation.objects.count, 86400)
 
         has_mfa = Authenticator.objects.filter(user=user).exclude(type=Authenticator.Type.RECOVERY_CODES).exists()
         account_age = (now() - user.date_joined).days

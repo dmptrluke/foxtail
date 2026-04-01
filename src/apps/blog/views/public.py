@@ -1,5 +1,6 @@
 from django.contrib import messages
 from django.contrib.postgres.search import SearchQuery, SearchRank, SearchVector
+from django.core.cache import cache
 from django.db.models import Count, Q
 from django.http import Http404, HttpResponseForbidden
 from django.shortcuts import get_object_or_404, redirect
@@ -20,16 +21,13 @@ from ..models import Comment, Post
 
 
 def _blog_years():
-    return list(
-        queryset_filter(Post.objects).dates('created', 'year', order='DESC').values_list('created__year', flat=True)
-    )
-
-
-def _sidebar_context():
-    return {
-        'sidebar_post_list': queryset_filter(Post.objects).all()[:3],
-        'sidebar_tag_list': Post.tags.annotate(num_times=Count('taggit_taggeditem_items')).order_by('-num_times')[:8],
-    }
+    result = cache.get('blog_years')
+    if result is None:
+        result = list(
+            queryset_filter(Post.objects).dates('created', 'year', order='DESC').values_list('created__year', flat=True)
+        )
+        cache.set('blog_years', result, 3600)
+    return result
 
 
 class BlogListView(StructuredDataMixin, PublishedListMixin, ListView):
@@ -40,7 +38,6 @@ class BlogListView(StructuredDataMixin, PublishedListMixin, ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context.update(_sidebar_context())
         context['blog_years'] = _blog_years()
 
         tag_slug = self.request.GET.get('tag')
@@ -107,7 +104,6 @@ class BlogListYearView(StructuredDataMixin, PublishedListMixin, YearMixin, ListV
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context.update(_sidebar_context())
         context['blog_years'] = _blog_years()
         context['year'] = str(self.get_year())
         return context
@@ -125,13 +121,11 @@ class BlogListYearView(StructuredDataMixin, PublishedListMixin, YearMixin, ListV
 class BlogDetailView(HtmxMixin, PublishedDetailMixin, DetailView):
     model = Post
     template_name = 'blog/detail.html'
-    queryset = (
-        Post.objects.select_related('author').prefetch_related('tags', 'organisations', 'event_series', 'events').all()
-    )
+    queryset = Post.objects.select_related('author').prefetch_related('tags').with_related_content().all()
 
     def _comment_queryset(self):
         # Authors see their own pending comments so they know submission worked
-        qs = self.object.comments.select_related('author').order_by('created')
+        qs = self.object.comments.with_author_display().order_by('created')
         user = self.request.user
         if user.has_perm('blog.manage_comments'):
             return qs
@@ -141,7 +135,6 @@ class BlogDetailView(HtmxMixin, PublishedDetailMixin, DetailView):
 
     def get_context_data(self, form=None, **kwargs):
         context = super().get_context_data(**kwargs)
-        context.update(_sidebar_context())
 
         post = self.object
         context['related_organisations'] = post.organisations.all()

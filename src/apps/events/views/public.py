@@ -1,7 +1,6 @@
-from django.db.models import Q
+from django.core.cache import cache
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
-from django.utils.timezone import localdate
 from django.views import View
 from django.views.generic import DetailView, ListView
 from django.views.generic.dates import YearMixin
@@ -11,16 +10,19 @@ from published.utils import queryset_filter
 from structured_data.views import StructuredDataMixin
 
 from apps.core.views import ApiView
-from apps.organisations.models import Organisation
 
 from ..ics import generate_ics
 from ..models import Event, EventInterest
 
 
 def _event_years():
-    return list(
-        queryset_filter(Event.objects).dates('start', 'year', order='DESC').values_list('start__year', flat=True)
-    )
+    result = cache.get('event_years')
+    if result is None:
+        result = list(
+            queryset_filter(Event.objects).dates('start', 'year', order='DESC').values_list('start__year', flat=True)
+        )
+        cache.set('event_years', result, 3600)
+    return result
 
 
 class EventListView(StructuredDataMixin, ListView):
@@ -30,29 +32,14 @@ class EventListView(StructuredDataMixin, ListView):
     def get_queryset(self):
         return Event.objects.none()
 
-    def _get_base_queryset(self):
-        qs = queryset_filter(Event.objects, self.request.user).with_relations()
-        org_slug = self.request.GET.get('org')
-        if org_slug:
-            try:
-                org = Organisation.objects.get(slug=org_slug)
-                qs = qs.for_organisation(org)
-                self._filter_org = org
-            except Organisation.DoesNotExist:
-                pass
-        return qs
-
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        today = localdate()
-        upcoming_filter = Q(start__gte=today) | Q(end__gte=today)
-        published = self._get_base_queryset()
-        upcoming = list(published.filter(upcoming_filter).prefetch_related('tags').order_by('start'))
+        published = queryset_filter(Event.objects, self.request.user).with_relations().prefetch_related('tags')
+        upcoming = list(published.not_ended().order_by('start'))
         context['upcoming_events'] = upcoming
-        context['past_events'] = published.exclude(upcoming_filter).prefetch_related('tags').order_by('-start')
+        context['past_events'] = published.ended().order_by('-start')
         context['featured_event'] = upcoming[0] if upcoming else None
         context['event_years'] = _event_years()
-        context['filter_org'] = getattr(self, '_filter_org', None)
         return context
 
     def get_structured_data(self):
@@ -76,16 +63,14 @@ class EventListYearView(StructuredDataMixin, YearMixin, ListView):
         year = int(self.get_year())
 
         context['year'] = str(year)
-        today = localdate()
-        upcoming_filter = Q(start__gte=today) | Q(end__gte=today)
         year_qs = (
             queryset_filter(Event.objects, self.request.user)
             .with_relations()
             .filter(start__year=year)
             .prefetch_related('tags')
         )
-        context['upcoming_events'] = year_qs.filter(upcoming_filter).order_by('start')
-        context['past_events'] = year_qs.exclude(upcoming_filter).order_by('-start')
+        context['upcoming_events'] = year_qs.not_ended().order_by('start')
+        context['past_events'] = year_qs.ended().order_by('-start')
         context['event_years'] = _event_years()
         return context
 
@@ -113,7 +98,9 @@ class EventDetailView(PublishedDetailMixin, YearMixin, DetailView):
         context = super().get_context_data(**kwargs)
         from apps.blog.models import Post
 
-        context['related_posts'] = list(queryset_filter(Post.objects).filter(events=self.object).order_by('-created'))
+        context['related_posts'] = list(
+            queryset_filter(Post.objects).filter(events=self.object).link_fields().order_by('-created')
+        )
 
         event = self.object
         org = event.resolved_organisation
@@ -135,7 +122,7 @@ class EventDetailView(PublishedDetailMixin, YearMixin, DetailView):
             interest = EventInterest.objects.filter(event=self.object, user=self.request.user).first()
             context['user_interest_status'] = interest.status if interest else ''
 
-        context['interests'] = list(self.object.interests.select_related('user')[:10])
+        context['interests'] = list(self.object.interests.with_user_display()[:10])
 
         count_map = self.object.interests.status_counts()
         context['interest_count'] = sum(count_map.values())
