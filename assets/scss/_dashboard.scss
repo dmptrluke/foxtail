@@ -27,7 +27,7 @@
 	padding: 1rem 1.25rem;
 	background: var(--ft-surface);
 	border: 1px solid rgb(var(--bs-secondary-rgb), 0.12);
-	border-radius: $card-border-radius;
+	border-radius: var(--ft-radius-card);
 	margin-bottom: 0.5rem;
 	transition: box-shadow 0.15s ease;
 
@@ -65,7 +65,7 @@
 .account-method-card {
 	background: var(--ft-surface);
 	border: 1px solid rgb(var(--bs-secondary-rgb), 0.12);
-	border-radius: $card-border-radius;
+	border-radius: var(--ft-radius-card);
 	padding: 1.25rem 1.5rem;
 	margin-bottom: 0.75rem;
 	transition: box-shadow 0.15s ease;
@@ -93,7 +93,7 @@
 .account-confirm {
 	background: var(--ft-surface);
 	border: 1px solid rgb(var(--bs-warning-rgb), 0.3);
-	border-radius: $card-border-radius;
+	border-radius: var(--ft-radius-card);
 	padding: 1.25rem 1.5rem;
 	margin-bottom: 1.5rem;
 
@@ -114,7 +114,7 @@
 
 // Dashboard
 .hero-dashboard {
-	font-family: $headings-font-family;
+	font-family: var(--ft-font-heading);
 	padding: 2rem 0 2.5rem;
 
 	.dashboard-avatar-link {
@@ -173,7 +173,7 @@
 	display: flex;
 	flex-direction: column;
 	background: var(--ft-surface);
-	border-radius: $card-border-radius;
+	border-radius: var(--ft-radius-card);
 	border: 1px solid rgb(var(--bs-secondary-rgb), 0.12);
 	padding: 1.25rem 1.5rem;
 	text-decoration: none;

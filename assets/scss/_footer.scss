@@ -138,7 +138,7 @@
 .popup-theme {
 	@include popup-base;
 	width: calc(100vw - 2rem);
-	max-width: 26rem;
+	max-width: 24rem;
 
 	&-row {
 		@include popup-base-row;

@@ -37,6 +37,10 @@
 	--bs-body-bg-rgb: #{red($body-bg), green($body-bg), blue($body-bg)};
 	--bs-body-color: #{$body-color};
 	--bs-body-color-rgb: #{red($body-color), green($body-color), blue($body-color)};
+	--bs-secondary-color: #{rgba($body-color, 0.75)};
+	--bs-secondary-color-rgb: #{red($body-color), green($body-color), blue($body-color)};
+	--bs-tertiary-color: #{rgba($body-color, 0.5)};
+	--bs-tertiary-color-rgb: #{red($body-color), green($body-color), blue($body-color)};
 	--bs-link-color: #{$link-color};
 	--bs-link-color-rgb: #{red($link-color), green($link-color), blue($link-color)};
 	--bs-link-hover-color: #{$link-hover-color};
@@ -57,8 +61,12 @@
 		$surface: color.adjust($body-bg, $lightness: 5%);
 		--ft-surface: #{$surface};
 		--ft-surface-rgb: #{red($surface), green($surface), blue($surface)};
-		--bs-secondary-bg: #{color.adjust($body-bg, $lightness: 8%)};
-		--bs-tertiary-bg: #{color.adjust($body-bg, $lightness: 4%)};
+		$secondary-bg: color.adjust($body-bg, $lightness: 8%);
+		$tertiary-bg: color.adjust($body-bg, $lightness: 4%);
+		--bs-secondary-bg: #{$secondary-bg};
+		--bs-secondary-bg-rgb: #{red($secondary-bg), green($secondary-bg), blue($secondary-bg)};
+		--bs-tertiary-bg: #{$tertiary-bg};
+		--bs-tertiary-bg-rgb: #{red($tertiary-bg), green($tertiary-bg), blue($tertiary-bg)};
 		--bs-border-color: rgb(var(--bs-secondary-rgb), 0.25);
 	} @else {
 		--ft-text-light: #{color.adjust($body-color, $lightness: 10%)};
@@ -69,8 +77,12 @@
 		--ft-text-faintest: #{color.adjust($body-color, $lightness: 35%)};
 		--ft-surface: #fff;
 		--ft-surface-rgb: 255, 255, 255;
-		--bs-secondary-bg: #{color.adjust($body-bg, $lightness: -8%)};
-		--bs-tertiary-bg: #{color.adjust($body-bg, $lightness: -4%)};
+		$secondary-bg: color.adjust($body-bg, $lightness: -8%);
+		$tertiary-bg: color.adjust($body-bg, $lightness: -4%);
+		--bs-secondary-bg: #{$secondary-bg};
+		--bs-secondary-bg-rgb: #{red($secondary-bg), green($secondary-bg), blue($secondary-bg)};
+		--bs-tertiary-bg: #{$tertiary-bg};
+		--bs-tertiary-bg-rgb: #{red($tertiary-bg), green($tertiary-bg), blue($tertiary-bg)};
 		--bs-border-color: rgb(var(--bs-secondary-rgb), 0.25);
 	}
 
@@ -190,15 +202,68 @@
 	);
 }
 
+// Autumn: burgundy-brown to copper
 .theme-autumn {
 	@include color-scheme(
-		$primary: #c85a20, $secondary: #a07830, $dark: #2a1a10, $darker: #321e12,
-		$success: #5a8e3a, $info: #8a4a5a, $warning: #d4922a, $danger: #c04030,
-		$body-bg: #fdf6ee, $body-color: #302018,
-		$link-color: #9a5028, $link-hover-color: #7a3a18,
-		$accent: #c85a20,
-		$hero-gradient: linear-gradient(135deg, #2a1a10 0%, #a44a1a 50%, #705421 100%),
-		$hero-sticky: linear-gradient(135deg, rgba(42, 26, 16, 0.92), rgba(164, 74, 26, 0.92), rgba(112, 84, 33, 0.92))
+		$primary: #7a3828, $secondary: #986048, $dark: #2a1210, $darker: #1e0e0a,
+		$success: #5a8e4a, $info: #6a6a80, $warning: #c89040, $danger: #b84030,
+		$body-bg: #fcf5f0, $body-color: #301a14,
+		$link-color: #7a4030, $link-hover-color: #5a2a1a,
+		$accent: #986048,
+		$hero-gradient: linear-gradient(135deg, #2a1210 0%, #6a3028 50%, #8a5a30 100%),
+		$hero-sticky: linear-gradient(135deg, rgba(42, 18, 16, 0.92), rgba(106, 48, 40, 0.92), rgba(138, 90, 48, 0.92))
+	);
+}
+
+// Twilight: purple-brown to dusty rust
+.theme-twilight {
+	@include color-scheme(
+		$primary: #5a3840, $secondary: #7a5a58, $dark: #281418, $darker: #1e1012,
+		$success: #5a8e5a, $info: #6a6080, $warning: #c89848, $danger: #b84848,
+		$body-bg: #faf6f4, $body-color: #2e1e20,
+		$link-color: #6a4048, $link-hover-color: #4a2830,
+		$accent: #7a5a58,
+		$hero-gradient: linear-gradient(135deg, #281418 0%, #4a2820 50%, #6a4830 100%),
+		$hero-sticky: linear-gradient(135deg, rgba(40, 20, 24, 0.92), rgba(74, 40, 32, 0.92), rgba(106, 72, 48, 0.92))
+	);
+}
+
+// Dusk: burgundy-copper, leaves meets twilight
+.theme-dusk {
+	@include color-scheme(
+		$primary: #6a3434, $secondary: #8a5850, $dark: #261014, $darker: #1c0c0e,
+		$success: #5a8e50, $info: #6a6078, $warning: #c89040, $danger: #b84438,
+		$body-bg: #faf5f2, $body-color: #2e1a18,
+		$link-color: #70383a, $link-hover-color: #502428,
+		$accent: #8a5850,
+		$hero-gradient: linear-gradient(135deg, #261014 0%, #582828 50%, #7a4838 100%),
+		$hero-sticky: linear-gradient(135deg, rgba(38, 16, 20, 0.92), rgba(88, 40, 40, 0.92), rgba(122, 72, 56, 0.92))
+	);
+}
+
+// Contrast: black and white, blue accent
+.theme-contrast {
+	@include color-scheme(
+		$primary: #1a1a1a, $secondary: #4a4a4a, $dark: #000000, $darker: #000000,
+		$success: #1a7a2a, $info: #1a5a8a, $warning: #8a6a00, $danger: #b81a1a,
+		$body-bg: #ffffff, $body-color: #000000,
+		$link-color: #0a4a8a, $link-hover-color: #083068,
+		$accent: #0a4a8a,
+		$hero-gradient: linear-gradient(135deg, #000000 0%, #1a1a1a 50%, #333333 100%),
+		$hero-sticky: linear-gradient(135deg, rgba(0, 0, 0, 0.95), rgba(26, 26, 26, 0.95), rgba(51, 51, 51, 0.95))
+	);
+}
+
+// Ocean: deep navy to bright blue
+.theme-ocean {
+	@include color-scheme(
+		$primary: #1e3a5a, $secondary: #3a6090, $dark: #0a1828, $darker: #081220,
+		$success: #3a8a5a, $info: #3a70a0, $warning: #c8a040, $danger: #c05040,
+		$body-bg: #f4f7fa, $body-color: #1a2838,
+		$link-color: #2a5080, $link-hover-color: #1a3860,
+		$accent: #3a6090,
+		$hero-gradient: linear-gradient(135deg, #0a1828 0%, #1a3050 50%, #2a4a70 100%),
+		$hero-sticky: linear-gradient(135deg, rgba(10, 24, 40, 0.92), rgba(26, 48, 80, 0.92), rgba(42, 74, 112, 0.92))
 	);
 }
 
@@ -280,13 +345,65 @@
 
 [data-bs-theme="dark"].theme-autumn {
 	@include color-scheme(
-		$primary: #e08840, $secondary: #c8a050, $dark: #181008, $darker: #100a04,
-		$success: #80a848, $info: #c07080, $warning: #d8a030, $danger: #d85040,
-		$body-bg: #1c1408, $body-color: #d8d0c0,
-		$link-color: #d87830, $link-hover-color: #f09048,
-		$accent: #e08840,
-		$hero-gradient: linear-gradient(135deg, #181008 0%, #28190a 50%, #433317 100%),
-		$hero-sticky: linear-gradient(135deg, rgba(24, 16, 8, 0.78), rgba(48, 30, 12, 0.78), rgba(82, 63, 28, 0.78)),
+		$primary: #c07050, $secondary: #c89070, $dark: #180a08, $darker: #100806,
+		$success: #80a858, $info: #9888a8, $warning: #d8a858, $danger: #c85040,
+		$body-bg: #1a1008, $body-color: #d8ccc4,
+		$link-color: #c07050, $link-hover-color: #d89070,
+		$accent: #c89070,
+		$hero-gradient: linear-gradient(135deg, #180a08 0%, #4a2018 50%, #6a3820 100%),
+		$hero-sticky: linear-gradient(135deg, rgba(24, 10, 8, 0.78), rgba(74, 32, 24, 0.78), rgba(106, 56, 32, 0.78)),
+		$dark-mode: true
+	);
+}
+
+[data-bs-theme="dark"].theme-twilight {
+	@include color-scheme(
+		$primary: #a87878, $secondary: #b89890, $dark: #180a10, $darker: #100810,
+		$success: #80a870, $info: #9880a8, $warning: #d0a860, $danger: #c86060,
+		$body-bg: #181014, $body-color: #d4ccd0,
+		$link-color: #a87878, $link-hover-color: #c89898,
+		$accent: #b89890,
+		$hero-gradient: linear-gradient(135deg, #180a10 0%, #301818 50%, #4a3028 100%),
+		$hero-sticky: linear-gradient(135deg, rgba(24, 10, 16, 0.78), rgba(48, 24, 24, 0.78), rgba(74, 48, 40, 0.78)),
+		$dark-mode: true
+	);
+}
+
+[data-bs-theme="dark"].theme-dusk {
+	@include color-scheme(
+		$primary: #b87070, $secondary: #c09088, $dark: #180810, $darker: #10060a,
+		$success: #80a868, $info: #9880a0, $warning: #d0a858, $danger: #c85850,
+		$body-bg: #1a0e10, $body-color: #d4c8cc,
+		$link-color: #b87070, $link-hover-color: #d09090,
+		$accent: #c09088,
+		$hero-gradient: linear-gradient(135deg, #180810 0%, #381818 50%, #583028 100%),
+		$hero-sticky: linear-gradient(135deg, rgba(24, 8, 16, 0.78), rgba(56, 24, 24, 0.78), rgba(88, 48, 40, 0.78)),
+		$dark-mode: true
+	);
+}
+
+[data-bs-theme="dark"].theme-contrast {
+	@include color-scheme(
+		$primary: #e0e0e0, $secondary: #a0a0a0, $dark: #000000, $darker: #000000,
+		$success: #40c850, $info: #50a0e0, $warning: #e0c040, $danger: #e84040,
+		$body-bg: #000000, $body-color: #ffffff,
+		$link-color: #60b0f0, $link-hover-color: #90d0ff,
+		$accent: #60b0f0,
+		$hero-gradient: linear-gradient(135deg, #000000 0%, #0a0a0a 50%, #1a1a1a 100%),
+		$hero-sticky: linear-gradient(135deg, rgba(0, 0, 0, 0.95), rgba(10, 10, 10, 0.95), rgba(26, 26, 26, 0.95)),
+		$dark-mode: true
+	);
+}
+
+[data-bs-theme="dark"].theme-ocean {
+	@include color-scheme(
+		$primary: #6098c8, $secondary: #80b0d8, $dark: #060e18, $darker: #040a10,
+		$success: #58b878, $info: #58a0d8, $warning: #d8b050, $danger: #d06050,
+		$body-bg: #0a1420, $body-color: #c8d4e0,
+		$link-color: #68a8d8, $link-hover-color: #88c0f0,
+		$accent: #68a8d8,
+		$hero-gradient: linear-gradient(135deg, #060e18 0%, #102040 50%, #1a3860 100%),
+		$hero-sticky: linear-gradient(135deg, rgba(6, 14, 24, 0.78), rgba(16, 32, 64, 0.78), rgba(26, 56, 96, 0.78)),
 		$dark-mode: true
 	);
 }

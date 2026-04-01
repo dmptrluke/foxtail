@@ -102,7 +102,7 @@ p a {
 // Date badge (shared between homepage event list and org page)
 
 .cal-badge {
-	font-family: $label-font-family;
+	font-family: var(--ft-font-label);
 	display: flex;
 	flex-direction: column;
 	align-items: center;
@@ -110,7 +110,7 @@ p a {
 	min-width: 2.75rem;
 	height: 2.75rem;
 	background: rgb(var(--bs-primary-rgb), 0.08);
-	border-radius: $card-border-radius;
+	border-radius: var(--ft-radius-card);
 	flex-shrink: 0;
 	transition: background 0.15s;
 
@@ -276,6 +276,6 @@ p a {
 	color: var(--ft-text-faint);
 	background: rgb(var(--bs-secondary-rgb), 0.03);
 	border: 1px dashed rgb(var(--bs-secondary-rgb), 0.2);
-	border-radius: $card-border-radius;
+	border-radius: var(--ft-radius-card);
 	font-size: 0.925rem;
 }

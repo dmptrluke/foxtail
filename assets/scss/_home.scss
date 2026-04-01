@@ -35,7 +35,7 @@
 	text-align: center;
 
 	.community-stat-num {
-		font-family: $headings-font-family;
+		font-family: var(--ft-font-heading);
 		font-size: 1.5rem;
 		font-weight: 800;
 		line-height: 1;
@@ -70,7 +70,7 @@
 
 	.onboarding-card {
 		padding: 1.5rem;
-		border-radius: $card-border-radius + 4px;
+		border-radius: var(--ft-radius-lg);
 		background: var(--bs-body-bg);
 		text-decoration: none;
 		color: inherit;
@@ -89,7 +89,7 @@
 		}
 
 		h2 {
-			font-family: $headings-font-family;
+			font-family: var(--ft-font-heading);
 			font-size: 1rem;
 			font-weight: 700;
 			margin-bottom: 0.3rem;
@@ -138,7 +138,7 @@
 	aspect-ratio: 1.91 / 1;
 	width: 100%;
 	background: linear-gradient(135deg, var(--bs-primary) 0%, var(--bs-secondary) 100%);
-	border-radius: $card-border-radius;
+	border-radius: var(--ft-radius-card);
 }
 
 // News: featured post
@@ -157,14 +157,14 @@
 
 	.news-feature-img {
 		overflow: hidden;
-		border-radius: $card-border-radius;
+		border-radius: var(--ft-radius-card);
 
 		img, .card-img-placeholder {
 			width: 100%;
 			aspect-ratio: 2 / 1;
 			object-fit: cover;
 			transition: transform 0.3s ease;
-			border-radius: $card-border-radius;
+			border-radius: var(--ft-radius-card);
 		}
 	}
 
@@ -179,7 +179,7 @@
 
 		time {
 			display: block;
-			font-family: $label-font-family;
+			font-family: var(--ft-font-label);
 			font-size: 0.8rem;
 			font-weight: 500;
 			color: var(--bs-secondary);
@@ -229,7 +229,7 @@
 	display: flex;
 	flex-direction: column;
 	background: var(--ft-surface);
-	border-radius: $card-border-radius;
+	border-radius: var(--ft-radius-card);
 	border: 1px solid rgb(var(--bs-secondary-rgb), 0.12);
 	overflow: hidden;
 	transition: box-shadow 0.2s ease, transform 0.2s ease;
@@ -259,7 +259,7 @@
 
 		time {
 			display: block;
-			font-family: $label-font-family;
+			font-family: var(--ft-font-label);
 			font-size: 0.8rem;
 			font-weight: 500;
 			color: var(--bs-secondary);
@@ -308,7 +308,7 @@
 	text-decoration: none;
 	color: var(--bs-body-color);
 	transition: background 0.15s ease;
-	border-radius: $card-border-radius;
+	border-radius: var(--ft-radius-card);
 
 	@include media-breakpoint-up(md) {
 		flex-wrap: nowrap;

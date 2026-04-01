@@ -20,20 +20,18 @@ $spacers: (
 	5: ($spacer * 2),
 	6: ($spacer * 3)
 );
-// font roles
+// font stacks (Sass compile-time defaults; runtime overrides via --ft-font-* in _base.scss)
 $font-family-base: 'Inter Variable', inter, -apple-system, blinkmacsystemfont, "Segoe UI", "Helvetica Neue", arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-$font-family-display: $font-family-base;
 $font-family-accent: 'Plus Jakarta Sans Variable', $font-family-base;
 
-// role mappings to components
+// Bootstrap compile-time mappings
 $font-family-sans-serif: $font-family-base;
-
-$headings-font-family: $font-family-display;
-$btn-font-family: $font-family-display;
+$headings-font-family: $font-family-base;
+$btn-font-family: $font-family-base;
 $label-font-family: $font-family-accent;
 $navbar-font-family: $font-family-accent;
-$nav-link-font-family: $navbar-font-family;
-$navbar-brand-font-family: $navbar-font-family;
+$nav-link-font-family: $font-family-accent;
+$navbar-brand-font-family: $font-family-accent;
 
 // dusty plum
 $primary: #4a3d55;
@@ -47,8 +45,6 @@ $danger: #c75b5b;
 
 $body-bg: #f8f6fa;
 $body-color: #2d2639;
-
-// shadows and hero gradient are CSS custom properties in _palettes.scss
 
 // soft rounded edges
 $border-radius: 8px;

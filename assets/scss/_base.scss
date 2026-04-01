@@ -1,3 +1,31 @@
+:root {
+	--ft-font-body: #{$font-family-base};
+	--ft-font-heading: #{$font-family-base};
+	--ft-font-label: #{$font-family-accent};
+	--ft-font-nav: #{$font-family-accent};
+	--ft-radius: #{$border-radius};
+	--ft-radius-sm: #{$border-radius-sm};
+	--ft-radius-lg: #{$border-radius-lg};
+	--ft-radius-card: #{$card-border-radius};
+}
+
+body {
+	font-family: var(--ft-font-body);
+}
+
+h1, h2, h3, h4, h5, h6,
+.h1, .h2, .h3, .h4, .h5, .h6 {
+	font-family: var(--ft-font-heading);
+}
+
+.btn {
+	font-family: var(--ft-font-body);
+}
+
+#navigation {
+	font-family: var(--ft-font-nav);
+}
+
 html {
 	height: 100% !important;
 	background: var(--bs-body-bg);

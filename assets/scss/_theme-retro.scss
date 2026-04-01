@@ -2,8 +2,11 @@
 // Reverts to stock Bootstrap look.
 
 .theme-retro {
-	// Stock Bootstrap font stack
-	--bs-body-font-family: -apple-system, blinkmacsystemfont, roboto, "Helvetica Neue", arial, "Noto Sans", sans-serif;
+	// System font stack everywhere
+	--ft-font-body: -apple-system, blinkmacsystemfont, roboto, "Helvetica Neue", arial, "Noto Sans", sans-serif;
+	--ft-font-heading: var(--ft-font-body);
+	--ft-font-label: var(--ft-font-body);
+	--ft-font-nav: var(--ft-font-body);
 
 	// No custom shadows
 	--ft-shadow-sm: none;
@@ -11,8 +14,8 @@
 	--ft-shadow-lg: none;
 
 	// Flat hero: solid color, no gradient
-	--ft-hero-gradient: var(--bs-dark);
-	--ft-hero-sticky: var(--bs-dark);
+	--ft-hero-gradient: linear-gradient(135deg, var(--bs-dark), var(--bs-dark));
+	--ft-hero-sticky: linear-gradient(135deg, var(--bs-dark), var(--bs-dark));
 
 	// Stock Bootstrap radii
 	--bs-border-radius: .375rem;
@@ -20,19 +23,6 @@
 	--bs-border-radius-lg: .5rem;
 	--bs-border-radius-xl: 1rem;
 	--bs-border-radius-xxl: 2rem;
-
-	// System font stack everywhere
-	h1, h2, h3, h4, h5, h6,
-	.h1, .h2, .h3, .h4, .h5, .h6 {
-		font-family: inherit;
-	}
-
-	.btn,
-	label,
-	.nav-link,
-	.navbar-brand {
-		font-family: inherit;
-	}
 
 	h3, .h3 {
 		letter-spacing: normal;

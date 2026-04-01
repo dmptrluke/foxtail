@@ -1,0 +1,123 @@
+// Theme: Terminal
+// Monospace everything.
+
+$terminal-mono: 'IBM Plex Mono', ui-monospace, menlo, consolas, monospace;
+
+.theme-terminal {
+	--ft-font-body: #{$terminal-mono};
+	--ft-font-heading: #{$terminal-mono};
+	--ft-font-label: #{$terminal-mono};
+	--ft-font-nav: #{$terminal-mono};
+	--ft-radius: 0;
+	--ft-radius-sm: 0;
+	--ft-radius-lg: 0;
+	--ft-radius-card: 0;
+	--bs-border-radius: 0;
+	--bs-border-radius-sm: 0;
+	--bs-border-radius-lg: 0;
+	--bs-border-radius-xl: 0;
+	--bs-border-radius-xxl: 0;
+
+	// Flatten shadows to borders
+	--ft-shadow-sm: none;
+	--ft-shadow-md: none;
+	--ft-shadow-lg: none;
+
+	// Solid dark hero, no gradient
+	--ft-hero-gradient: linear-gradient(135deg, var(--bs-dark), var(--bs-dark));
+	--ft-hero-sticky: linear-gradient(135deg, var(--bs-dark), var(--bs-dark));
+
+	// Terminal prompt decorations
+	.hero h1::before {
+		content: '>';
+		opacity: 0.5;
+		margin-right: 0.4em;
+	}
+
+	.hero .hero-subtitle::before {
+		content: '// ';
+		opacity: 0.4;
+	}
+
+	// Headings: kill letter-spacing
+	h1, h2, h3, h4, h5, h6,
+	.h1, .h2, .h3, .h4, .h5, .h6 {
+		letter-spacing: normal;
+	}
+
+	// Buttons: bracketed
+	.btn {
+		text-transform: lowercase;
+		letter-spacing: 0.02em;
+
+		&::before { content: '[ '; }
+		&::after { content: ' ]'; }
+	}
+
+	.sidebar-card .btn::before,
+	.sidebar-card .btn::after,
+	.btn-group .btn::before,
+	.btn-group .btn::after {
+		content: none;
+	}
+
+	// Hero pills
+	.hero .hero-pill {
+		text-transform: lowercase;
+	}
+
+	// Cards: bordered boxes, no elevation
+	.card,
+	.sidebar-card,
+	.news-compact,
+	.dashboard-tile,
+	.account-item,
+	.account-method-card,
+	.account-confirm,
+	.empty-state {
+		box-shadow: none;
+		border: 1px solid rgb(var(--bs-secondary-rgb), 0.2);
+	}
+
+	.event-card {
+		box-shadow: none;
+		border: 1px solid rgb(255 255 255 / 15%);
+	}
+
+	.onboarding-card {
+		border: 1px solid rgb(var(--bs-secondary-rgb), 0.15);
+	}
+
+	// Navbar: opaque, no blur
+	#navigation {
+		backdrop-filter: none;
+		background: var(--bs-dark) !important;
+		border-bottom: 1px solid rgb(255 255 255 / 10%);
+	}
+
+	#navigation .dropdown-menu {
+		border: 1px solid rgb(255 255 255 / 10%);
+	}
+
+	// Static hero
+	.hero-sticky {
+		backdrop-filter: none;
+	}
+
+	// Alerts: left border accent
+	.alert {
+		border: none;
+		border-left: 3px solid;
+	}
+
+	// Square avatars
+	.hero-avatar,
+	.navbar-avatar,
+	.avatar-stack-item,
+	.avatar-stack-count,
+	.comment-item img,
+	.image-preview-round img,
+	.image-preview img {
+		border-radius: 0 !important;
+	}
+}

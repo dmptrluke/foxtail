@@ -13,6 +13,7 @@
     "dependencies": {
         "@fontsource-utils/scss": "^0.2.2",
         "@fontsource-variable/plus-jakarta-sans": "^5.2.8",
+        "@fontsource/ibm-plex-mono": "^5.2.7",
         "@popperjs/core": "^2.11.8",
         "bootstrap": "^5.3.8",
         "colcade": "^0.2.0",

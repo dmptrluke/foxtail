@@ -120,7 +120,7 @@
 		padding: 0.3rem 0.85rem;
 		color: rgba($white, 0.65);
 		background: rgba($white, 0.08);
-		border-radius: 6px;
+		border-radius: var(--ft-radius-sm);
 		text-decoration: none;
 		transition: background 0.15s ease, color 0.15s ease;
 

@@ -9,7 +9,7 @@
 .sidebar-card {
 	background: var(--ft-surface);
 	border: 1px solid rgb(var(--bs-secondary-rgb), 0.12);
-	border-radius: $card-border-radius;
+	border-radius: var(--ft-radius-card);
 	overflow: hidden;
 
 	// Label heading at top of card

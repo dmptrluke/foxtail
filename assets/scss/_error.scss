@@ -21,7 +21,7 @@
 
 .error-label {
 	display: block;
-	font-family: $font-family-accent;
+	font-family: var(--ft-font-label);
 	font-size: 0.7rem;
 	font-weight: 600;
 	text-transform: uppercase;

@@ -1,5 +1,6 @@
 @use 'pkg:@fontsource-utils/scss' as fontsource;
 @use 'pkg:@fontsource-variable/plus-jakarta-sans/scss' as jakarta;
+@use 'pkg:@fontsource/ibm-plex-mono/scss' as plex-mono;
 
 // Inter Variable - self-hosted with full OpenType features (cv05, sups, subs, etc.)
 // Subsetted from Inter v4.1 via pyftsubset with --layout-features=*
@@ -43,3 +44,6 @@
 // Jakarta Sans - fontsource (no OpenType features needed)
 
 @include fontsource.faces($metadata: jakarta.$metadata, $subsets: (latin, latin-ext));
+
+// IBM Plex Mono - terminal theme
+@include fontsource.faces($metadata: plex-mono.$metadata, $subsets: (latin, latin-ext), $weights: (400, 600));

@@ -9,7 +9,7 @@
 	flex-direction: column;
 	gap: 1rem;
 	padding: 1.25rem;
-	border-radius: $card-border-radius;
+	border-radius: var(--ft-radius-card);
 	background: var(--bs-body-bg);
 	border: 1px solid rgb(var(--bs-secondary-rgb), 0.15);
 	height: 100%;
@@ -237,7 +237,7 @@
 	background: var(--bs-dark);
 	padding: 1.25rem;
 	padding-top: 1.75rem;
-	border-radius: $card-border-radius;
+	border-radius: var(--ft-radius-card);
 	text-decoration: none;
 	color: $white;
 	position: relative;
@@ -274,7 +274,7 @@
 	background: var(--bs-warning);
 	color: var(--bs-dark);
 	padding: 0.2rem 0.75rem;
-	border-radius: 0 0 $border-radius-sm;
+	border-radius: 0 0 var(--ft-radius-sm);
 	font-size: 0.6rem;
 }
 
