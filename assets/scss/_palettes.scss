@@ -8,6 +8,8 @@
 	$success, $info, $warning, $danger,
 	$body-bg, $body-color,
 	$link-color, $link-hover-color,
+	$accent,
+	$hero-gradient, $hero-sticky,
 	$dark-mode: false
 ) {
 	@if $dark-mode {
@@ -39,6 +41,8 @@
 	--bs-link-color-rgb: #{red($link-color), green($link-color), blue($link-color)};
 	--bs-link-hover-color: #{$link-hover-color};
 	--bs-link-hover-color-rgb: #{red($link-hover-color), green($link-hover-color), blue($link-hover-color)};
+	--ft-accent: #{$accent};
+	--ft-accent-rgb: #{red($accent), green($accent), blue($accent)};
 
 	// Text hierarchy: progressively fade body-color toward the background.
 	// Light uses color.adjust (absolute shift), dark uses color.scale (proportional)
@@ -70,25 +74,9 @@
 		--bs-border-color: rgb(var(--bs-secondary-rgb), 0.25);
 	}
 
-	// Hero gradients: 3-stop diagonal from $dark through $primary/$secondary variants.
-	// Dark mode mixes toward $darker for near-black tones; sticky is slightly lighter
-	// and translucent (sits over .hero-scroll-wrapper's solid --bs-dark background).
-	@if $dark-mode {
-		$hero-start: $dark;
-		$hero-mid: color.adjust(color.mix($darker, $primary, 92%), $lightness: +2%);
-		$hero-end: color.adjust(color.mix($darker, $secondary, 82%), $lightness: +5%);
-		--ft-hero-gradient: linear-gradient(135deg, #{$hero-start} 0%, #{$hero-mid} 50%, #{$hero-end} 100%);
-		$sticky-start: $dark;
-		$sticky-mid: color.adjust($hero-mid, $lightness: +2%);
-		$sticky-end: color.adjust($hero-end, $lightness: +4%);
-		--ft-hero-sticky: linear-gradient(135deg, #{rgba($sticky-start, 0.78)}, #{rgba($sticky-mid, 0.78)}, #{rgba($sticky-end, 0.78)});
-	} @else {
-		$hero-start: $dark;
-		$hero-mid: color.adjust($primary, $lightness: -8%);
-		$hero-end: color.adjust($secondary, $lightness: -12%);
-		--ft-hero-gradient: linear-gradient(135deg, #{$hero-start} 0%, #{$hero-mid} 50%, #{$hero-end} 100%);
-		--ft-hero-sticky: linear-gradient(135deg, #{rgba($hero-start, 0.92)}, #{rgba($hero-mid, 0.92)}, #{rgba($hero-end, 0.92)});
-	}
+	// Hero gradients: each theme defines its own gradient and sticky variant
+	--ft-hero-gradient: #{$hero-gradient};
+	--ft-hero-sticky: #{$hero-sticky};
 
 	// Focus ring: Bootstrap compiles from Sass $primary at build time,
 	// override so it adapts per theme
@@ -183,7 +171,10 @@
 		$primary: #4a3d55, $secondary: #7a6490, $dark: #281e33, $darker: #2d2a33,
 		$success: #5a9e6f, $info: #5b5e9a, $warning: #d4a054, $danger: #c75b5b,
 		$body-bg: #f8f6fa, $body-color: #2d2639,
-		$link-color: #5b5e9a, $link-hover-color: #454881
+		$link-color: #5b5e9a, $link-hover-color: #454881,
+		$accent: #4a3d55,
+		$hero-gradient: linear-gradient(135deg, #281e33 0%, #352b3d 50%, #5b4a6b 100%),
+		$hero-sticky: linear-gradient(135deg, rgba(40, 30, 51, 0.92), rgba(53, 43, 61, 0.92), rgba(91, 74, 107, 0.92))
 	);
 }
 
@@ -192,7 +183,10 @@
 		$primary: #5c4a3a, $secondary: #8c7161, $dark: #2e2118, $darker: #3a2e25,
 		$success: #6a9e5a, $info: #7a8a5e, $warning: #c89a4a, $danger: #b85c4a,
 		$body-bg: #faf8f5, $body-color: #332b24,
-		$link-color: #7a6550, $link-hover-color: #5c4a3a
+		$link-color: #7a6550, $link-hover-color: #5c4a3a,
+		$accent: #5c4a3a,
+		$hero-gradient: linear-gradient(135deg, #2e2118 0%, #42352a 50%, #675347 100%),
+		$hero-sticky: linear-gradient(135deg, rgba(46, 33, 24, 0.92), rgba(66, 53, 42, 0.92), rgba(103, 83, 71, 0.92))
 	);
 }
 
@@ -201,7 +195,10 @@
 		$primary: #c85a20, $secondary: #a07830, $dark: #2a1a10, $darker: #321e12,
 		$success: #5a8e3a, $info: #8a4a5a, $warning: #d4922a, $danger: #c04030,
 		$body-bg: #fdf6ee, $body-color: #302018,
-		$link-color: #9a5028, $link-hover-color: #7a3a18
+		$link-color: #9a5028, $link-hover-color: #7a3a18,
+		$accent: #c85a20,
+		$hero-gradient: linear-gradient(135deg, #2a1a10 0%, #a44a1a 50%, #705421 100%),
+		$hero-sticky: linear-gradient(135deg, rgba(42, 26, 16, 0.92), rgba(164, 74, 26, 0.92), rgba(112, 84, 33, 0.92))
 	);
 }
 
@@ -210,7 +207,10 @@
 		$primary: #3a5a3a, $secondary: #5a7a5a, $dark: #1a2a1a, $darker: #1e2e1e,
 		$success: #5a9e5a, $info: #5a7a8a, $warning: #c8a040, $danger: #b85a4a,
 		$body-bg: #f6faf6, $body-color: #2a332a,
-		$link-color: #3a6a4a, $link-hover-color: #2a5038
+		$link-color: #3a6a4a, $link-hover-color: #2a5038,
+		$accent: #4a6a5a,
+		$hero-gradient: linear-gradient(135deg, #1a2a1a 0%, #2a412a 50%, #405640 100%),
+		$hero-sticky: linear-gradient(135deg, rgba(26, 42, 26, 0.92), rgba(42, 65, 42, 0.92), rgba(64, 86, 64, 0.92))
 	);
 }
 
@@ -219,7 +219,34 @@
 		$primary: #4a5568, $secondary: #718096, $dark: #1a202c, $darker: #171923,
 		$success: #48bb78, $info: #4299e1, $warning: #d69e2e, $danger: #e53e3e,
 		$body-bg: #f7fafc, $body-color: #2d3748,
-		$link-color: #4a6fa5, $link-hover-color: #2c5282
+		$link-color: #4a6fa5, $link-hover-color: #2c5282,
+		$accent: #4a5568,
+		$hero-gradient: linear-gradient(135deg, #1a202c 0%, #394150 50%, #556274 100%),
+		$hero-sticky: linear-gradient(135deg, rgba(26, 32, 44, 0.92), rgba(57, 65, 80, 0.92), rgba(85, 98, 116, 0.92))
+	);
+}
+
+.theme-berry {
+	@include color-scheme(
+		$primary: #6b3244, $secondary: #8a5068, $dark: #2a1018, $darker: #1e0c12,
+		$success: #5a9e6f, $info: #7a6a8a, $warning: #c8a050, $danger: #c04040,
+		$body-bg: #faf5f7, $body-color: #2d1a22,
+		$link-color: #7a4058, $link-hover-color: #5a2a3a,
+		$accent: #a07050,
+		$hero-gradient: linear-gradient(135deg, #2a1018 0%, #4f2532 50%, #63394a 100%),
+		$hero-sticky: linear-gradient(135deg, rgba(42, 16, 24, 0.92), rgba(79, 37, 50, 0.92), rgba(99, 57, 74, 0.92))
+	);
+}
+
+.theme-tui {
+	@include color-scheme(
+		$primary: #1e3a40, $secondary: #2a5a6a, $dark: #0c1618, $darker: #081012,
+		$success: #5a9e6a, $info: #3a7090, $warning: #b08040, $danger: #c06050,
+		$body-bg: #f3f6f7, $body-color: #18282e,
+		$link-color: #2a5060, $link-hover-color: #1e3a48,
+		$accent: #407060,
+		$hero-gradient: linear-gradient(135deg, #0c1618 0%, #1a3840 50%, #1e4858 100%),
+		$hero-sticky: linear-gradient(135deg, rgba(12, 22, 24, 0.92), rgba(26, 56, 64, 0.92), rgba(30, 72, 88, 0.92))
 	);
 }
 
@@ -231,6 +258,9 @@
 		$success: #6ab880, $info: #8b8ed4, $warning: #e0b46a, $danger: #d87070,
 		$body-bg: #1a1520, $body-color: #d8d0e0,
 		$link-color: #9a9dd4, $link-hover-color: #b5b8e8,
+		$accent: #9b8aad,
+		$hero-gradient: linear-gradient(135deg, #120d1a 0%, #1d1726 50%, #342c40 100%),
+		$hero-sticky: linear-gradient(135deg, rgba(18, 13, 26, 0.78), rgba(34, 27, 44, 0.78), rgba(62, 52, 76, 0.78)),
 		$dark-mode: true
 	);
 }
@@ -241,6 +271,9 @@
 		$success: #7ab06a, $info: #a0aa78, $warning: #d8b060, $danger: #c87060,
 		$body-bg: #1e1810, $body-color: #d8d0c8,
 		$link-color: #b09878, $link-hover-color: #c8b090,
+		$accent: #b09880,
+		$hero-gradient: linear-gradient(135deg, #1a1410 0%, #241e16 50%, #40352c 100%),
+		$hero-sticky: linear-gradient(135deg, rgba(26, 20, 16, 0.78), rgba(42, 35, 26, 0.78), rgba(76, 63, 52, 0.78)),
 		$dark-mode: true
 	);
 }
@@ -251,6 +284,9 @@
 		$success: #80a848, $info: #c07080, $warning: #d8a030, $danger: #d85040,
 		$body-bg: #1c1408, $body-color: #d8d0c0,
 		$link-color: #d87830, $link-hover-color: #f09048,
+		$accent: #e08840,
+		$hero-gradient: linear-gradient(135deg, #181008 0%, #28190a 50%, #433317 100%),
+		$hero-sticky: linear-gradient(135deg, rgba(24, 16, 8, 0.78), rgba(48, 30, 12, 0.78), rgba(82, 63, 28, 0.78)),
 		$dark-mode: true
 	);
 }
@@ -261,6 +297,35 @@
 		$success: #70b870, $info: #78a0b0, $warning: #d8b850, $danger: #c87060,
 		$body-bg: #141e14, $body-color: #c8d8c8,
 		$link-color: #70a880, $link-hover-color: #90c8a0,
+		$accent: #b8b858,
+		$hero-gradient: linear-gradient(135deg, #0e1a0e 0%, #152615 50%, #2a402a 100%),
+		$hero-sticky: linear-gradient(135deg, rgba(14, 26, 14, 0.78), rgba(25, 45, 25, 0.78), rgba(50, 76, 50, 0.78)),
+		$dark-mode: true
+	);
+}
+
+[data-bs-theme="dark"].theme-berry {
+	@include color-scheme(
+		$primary: #b07088, $secondary: #c090a8, $dark: #180810, $darker: #10060a,
+		$success: #6ab880, $info: #a088b8, $warning: #d8b060, $danger: #d86060,
+		$body-bg: #1e1218, $body-color: #d8c8d0,
+		$link-color: #c08098, $link-hover-color: #d8a0b8,
+		$accent: #c8a080,
+		$hero-gradient: linear-gradient(135deg, #180810 0%, #221118 50%, #3e2732 100%),
+		$hero-sticky: linear-gradient(135deg, rgba(24, 8, 16, 0.78), rgba(41, 20, 29, 0.78), rgba(75, 47, 60, 0.78)),
+		$dark-mode: true
+	);
+}
+
+[data-bs-theme="dark"].theme-tui {
+	@include color-scheme(
+		$primary: #78a0a8, $secondary: #90b4b8, $dark: #081218, $darker: #040e10,
+		$success: #70b880, $info: #5898b8, $warning: #c8a060, $danger: #c87060,
+		$body-bg: #101820, $body-color: #c8d4d8,
+		$link-color: #7098b0, $link-hover-color: #90b8d0,
+		$accent: #48b880,
+		$hero-gradient: linear-gradient(135deg, #081218 0%, #0e1a1e 50%, #1a3038 100%),
+		$hero-sticky: linear-gradient(135deg, rgba(8, 18, 24, 0.78), rgba(14, 26, 30, 0.78), rgba(26, 48, 56, 0.78)),
 		$dark-mode: true
 	);
 }
@@ -271,6 +336,9 @@
 		$success: #68d898, $info: #68b8f0, $warning: #e8c050, $danger: #f06060,
 		$body-bg: #161a22, $body-color: #d0d8e0,
 		$link-color: #78a0d0, $link-hover-color: #98c0e8,
+		$accent: #90a0b8,
+		$hero-gradient: linear-gradient(135deg, #0e1218 0%, #171d27 50%, #2f3742 100%),
+		$hero-sticky: linear-gradient(135deg, rgba(14, 18, 24, 0.78), rgba(27, 34, 45, 0.78), rgba(55, 65, 78, 0.78)),
 		$dark-mode: true
 	);
 }

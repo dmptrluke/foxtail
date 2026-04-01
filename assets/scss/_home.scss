@@ -85,6 +85,7 @@
 		.icon {
 			font-size: 1.5rem;
 			margin-bottom: 0.75rem;
+			color: var(--ft-accent);
 		}
 
 		h2 {
@@ -208,7 +209,7 @@
 	}
 
 	&:hover h3 a {
-		color: var(--bs-primary);
+		color: var(--ft-accent);
 	}
 }
 
@@ -288,7 +289,7 @@
 	}
 
 	&:hover h3 a {
-		color: var(--bs-primary);
+		color: var(--ft-accent);
 	}
 }
 

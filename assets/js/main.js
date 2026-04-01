@@ -35,7 +35,7 @@ function initCharCounter() {
 
 // --- Theme switcher ---
 
-const COLOR_SCHEMES = ['plum', 'coffee', 'autumn', 'forest', 'slate'];
+const COLOR_SCHEMES = ['plum', 'coffee', 'autumn', 'forest', 'slate', 'berry', 'tui'];
 const STYLE_THEMES = ['default', 'sharp', 'retro', 'glass'];
 const DEFAULT_COLOR_SCHEME = document.documentElement.dataset.defaultScheme;
 
