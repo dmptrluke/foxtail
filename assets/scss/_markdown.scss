@@ -31,6 +31,10 @@
 		}
 	}
 
+	table {
+		@extend .table; // stylelint-disable-line scss/at-extend-no-missing-placeholder
+	}
+
 	iframe {
 		width: 100%;
 		max-width: 100%;
