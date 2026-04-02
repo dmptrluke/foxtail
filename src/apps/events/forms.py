@@ -10,7 +10,6 @@ from django.forms import (
 )
 
 from csp_helpers.mixins import CSPFormMixin
-from markdownfield.widgets import MDEWidget
 from taggit.forms import TagField
 
 from apps.core.widgets import AutocompleteSelect, AutocompleteTag, ImageWidget
@@ -51,7 +50,6 @@ class EventForm(CSPFormMixin, ModelForm):
             'image_ppoi',
         ]
         widgets = {
-            'description': MDEWidget(),
             'organisation': AutocompleteSelect('autocomplete:organisation'),
             'series': AutocompleteSelect('autocomplete:event_series'),
             'address': Textarea(attrs={'rows': 5}),

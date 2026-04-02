@@ -827,25 +827,16 @@ HUEY = {
 }
 
 # Markdown
-# <https://github.com/jamesturk/django-markdownfield>
+# <https://github.com/dmptrluke/django-markdownfield>
 
-MARKDOWN_EXTENSIONS = [
-    'pymdownx.smartsymbols',
-    'pymdownx.betterem',
-    'pymdownx.tilde',
-    'pymdownx.caret',
-    'pymdownx.magiclink',
-    'tables',
-    'sane_lists',
-    'def_list',
-    'nl2br',
-    'abbr',
-    'smarty',
+MARKDOWNFIELD_LINKIFY = True
+MARKDOWNFIELD_TYPOGRAPHER = True
+
+MARKDOWNFIELD_PLUGINS = [
+    'mdit_py_plugins.deflist.deflist_plugin',
 ]
 
-MARKDOWN_EXTENSION_CONFIGS = {}
-
-MARKDOWN_LINK_BLACKLIST = ['furry.nz', 'furry.org.nz']
+MARKDOWNFIELD_BLOCKED_LINK_DOMAINS = ['furry.nz', 'furry.org.nz']
 
 # Formguard
 # <https://github.com/dmptrluke/django-formguard>
