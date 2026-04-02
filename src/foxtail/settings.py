@@ -60,7 +60,6 @@ INSTALLED_APPS = [
     'django.contrib.sitemaps',
     'rules.apps.AutodiscoverRulesConfig',
     'markdownfield',
-    'cjswidget',
     'published',
     'structured_data',
     'solo',
