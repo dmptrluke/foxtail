@@ -25,8 +25,8 @@
         "vite": "^8.0.3"
     },
     "devDependencies": {
-        "@biomejs/biome": "2.4.9",
-        "@percy/cli": "^1.31.10",
+        "@biomejs/biome": "2.4.10",
+        "@percy/cli": "^1.31.11",
         "stylelint": "^17.6.0",
         "stylelint-config-standard-scss": "^17.0.0"
     }
