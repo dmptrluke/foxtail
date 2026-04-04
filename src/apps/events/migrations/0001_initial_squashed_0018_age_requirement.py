@@ -1,10 +1,12 @@
-import apps.core.fields
-import apps.core.validators
 import django.db.models.deletion
-import markdownfield.models
-import taggit.managers
 from django.conf import settings
 from django.db import migrations, models
+
+import markdownfield.models
+import taggit.managers
+
+import apps.core.fields
+import apps.images.validators
 
 
 def create_editors_group(apps, schema_editor):
@@ -68,7 +70,7 @@ class Migration(migrations.Migration):
                         blank=True,
                         height_field='image_height',
                         upload_to='events',
-                        validators=[apps.core.validators.FileSizeValidator()],
+                        validators=[apps.images.validators.FileSizeValidator()],
                         width_field='image_width',
                     ),
                 ),

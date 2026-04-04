@@ -7,7 +7,7 @@ from django.utils.timezone import now
 
 from imagefield.fields import ImageField as ProcessedImageField
 
-from apps.core.validators import file_size_validator
+from apps.images.validators import file_size_validator
 
 from . import rules  # noqa: F401
 from .validators import username_validators

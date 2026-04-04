@@ -20,7 +20,7 @@ from published.models import PublishedModel
 from taggit.managers import TaggableManager
 
 from apps.core.fields import AutoSlugField
-from apps.core.validators import file_size_validator
+from apps.images.validators import file_size_validator
 
 logger = logging.getLogger(__name__)
 

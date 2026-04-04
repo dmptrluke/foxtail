@@ -92,7 +92,7 @@ class TestDownscaleImage:
         assert downscale_image(data, max_dimension=4096) is None
 
     # uses MAX_IMAGE_DIMENSION from settings when no max_dimension given
-    @patch('apps.core.imaging.settings')
+    @patch('apps.images.imaging.settings')
     def test_uses_settings_default(self, mock_settings):
         mock_settings.MAX_IMAGE_DIMENSION = 2000
         data = _make_jpeg(3000, 2000)

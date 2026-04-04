@@ -12,7 +12,8 @@ from django.forms import (
 from csp_helpers.mixins import CSPFormMixin
 from taggit.forms import TagField
 
-from apps.core.widgets import AutocompleteSelect, AutocompleteTag, ImageWidget
+from apps.core.widgets import AutocompleteSelect, AutocompleteTag
+from apps.images.widgets import ImageWidget
 
 from .models import Event
 

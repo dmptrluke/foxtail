@@ -6,15 +6,15 @@ with a huey task that runs on the worker. Tracks image and PPOI field changes to
 unnecessary task enqueues on unrelated saves. Oversized uploads are downscaled in pre_save
 before they reach storage.
 
-Connected in CoreConfig.ready().
+Connected in ImagesConfig.ready().
 """
 
 from django.db import transaction
 
 from imagefield.fields import IMAGEFIELDS
 
-from apps.core.imaging import downscale_fieldfile
-from apps.core.tasks import process_imagefields
+from apps.images.imaging import downscale_fieldfile
+from apps.images.tasks import process_imagefields
 
 # Map each model to its image fields that have rendition formats defined.
 # Built once at import time - IMAGEFIELDS is fully populated after all models are loaded.

@@ -67,6 +67,7 @@ INSTALLED_APPS = [
     'csp_helpers',
     'formguard',
     'apps.core',
+    'apps.images',
     'apps.email',
     'apps.accounts',
     'apps.telegram',

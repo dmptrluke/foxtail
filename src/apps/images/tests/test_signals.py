@@ -25,7 +25,7 @@ def _make_instance(file_name='photo.jpg'):
 
 class TestOnPostInit:
     # snapshots current file name into instance __dict__
-    @patch('apps.core.signals.fields_by_model')
+    @patch('apps.images.signals.fields_by_model')
     def test_snapshots_field_values(self, mock_fbm):
         field = _make_field('image')
         mock_fbm.get.return_value = [field]
@@ -36,7 +36,7 @@ class TestOnPostInit:
         assert instance.__dict__['_orig_image'] == 'photo.jpg'
 
     # snapshots PPOI field value when present
-    @patch('apps.core.signals.fields_by_model')
+    @patch('apps.images.signals.fields_by_model')
     def test_snapshots_ppoi(self, mock_fbm):
         field = _make_field('image', ppoi_field='image_ppoi')
         mock_fbm.get.return_value = [field]
@@ -50,7 +50,7 @@ class TestOnPostInit:
 
 class TestHasImage:
     # returns True when an image field has a file set
-    @patch('apps.core.signals.fields_by_model')
+    @patch('apps.images.signals.fields_by_model')
     def test_with_file(self, mock_fbm):
         field = _make_field('image')
         mock_fbm.get.return_value = [field]
@@ -59,7 +59,7 @@ class TestHasImage:
         assert _has_image(instance) is True
 
     # returns False when image field is empty
-    @patch('apps.core.signals.fields_by_model')
+    @patch('apps.images.signals.fields_by_model')
     def test_without_file(self, mock_fbm):
         field = _make_field('image')
         mock_fbm.get.return_value = [field]
@@ -70,7 +70,7 @@ class TestHasImage:
 
 class TestImageFieldsChanged:
     # detects when file name differs from snapshot
-    @patch('apps.core.signals.fields_by_model')
+    @patch('apps.images.signals.fields_by_model')
     def test_detects_file_change(self, mock_fbm):
         field = _make_field('image')
         mock_fbm.get.return_value = [field]
@@ -81,7 +81,7 @@ class TestImageFieldsChanged:
         assert _image_fields_changed(instance) is True
 
     # detects PPOI changes
-    @patch('apps.core.signals.fields_by_model')
+    @patch('apps.images.signals.fields_by_model')
     def test_detects_ppoi_change(self, mock_fbm):
         field = _make_field('image', ppoi_field='image_ppoi')
         mock_fbm.get.return_value = [field]
@@ -94,7 +94,7 @@ class TestImageFieldsChanged:
         assert _image_fields_changed(instance) is True
 
     # returns False when nothing changed
-    @patch('apps.core.signals.fields_by_model')
+    @patch('apps.images.signals.fields_by_model')
     def test_no_change(self, mock_fbm):
         field = _make_field('image')
         mock_fbm.get.return_value = [field]
@@ -107,16 +107,16 @@ class TestImageFieldsChanged:
 
 class TestOnPostSave:
     # newly created instance without image does not enqueue processing
-    @patch('apps.core.signals.process_imagefields')
-    @patch('apps.core.signals._has_image', return_value=False)
+    @patch('apps.images.signals.process_imagefields')
+    @patch('apps.images.signals._has_image', return_value=False)
     def test_skips_created_without_image(self, mock_has, mock_task):
         instance = MagicMock()
         on_post_save(sender=None, instance=instance, created=True)
         mock_task.assert_not_called()
 
     # newly created instance with an image enqueues processing
-    @patch('apps.core.signals.transaction')
-    @patch('apps.core.signals._has_image', return_value=True)
+    @patch('apps.images.signals.transaction')
+    @patch('apps.images.signals._has_image', return_value=True)
     def test_enqueues_created_with_image(self, mock_has, mock_txn):
         instance = MagicMock()
         instance._meta.app_label = 'events'
@@ -128,16 +128,16 @@ class TestOnPostSave:
         mock_txn.on_commit.assert_called_once()
 
     # updated instance with no field changes does not enqueue processing
-    @patch('apps.core.signals.process_imagefields')
-    @patch('apps.core.signals._image_fields_changed', return_value=False)
+    @patch('apps.images.signals.process_imagefields')
+    @patch('apps.images.signals._image_fields_changed', return_value=False)
     def test_skips_unchanged_update(self, mock_changed, mock_task):
         instance = MagicMock()
         on_post_save(sender=None, instance=instance, created=False)
         mock_task.assert_not_called()
 
     # changed image field enqueues processing via on_commit
-    @patch('apps.core.signals.transaction')
-    @patch('apps.core.signals._image_fields_changed', return_value=True)
+    @patch('apps.images.signals.transaction')
+    @patch('apps.images.signals._image_fields_changed', return_value=True)
     def test_enqueues_on_change(self, mock_changed, mock_txn):
         instance = MagicMock()
         instance._meta.app_label = 'events'
@@ -149,15 +149,15 @@ class TestOnPostSave:
         mock_txn.on_commit.assert_called_once()
         callback = mock_txn.on_commit.call_args[0][0]
 
-        with patch('apps.core.signals.process_imagefields') as mock_task:
+        with patch('apps.images.signals.process_imagefields') as mock_task:
             callback()
             mock_task.assert_called_once_with('events', 'event', 42)
 
 
 class TestOnPreSave:
     # calls downscale_fieldfile for each image field on the model
-    @patch('apps.core.signals.downscale_fieldfile')
-    @patch('apps.core.signals.fields_by_model')
+    @patch('apps.images.signals.downscale_fieldfile')
+    @patch('apps.images.signals.fields_by_model')
     def test_downscales_image_fields(self, mock_fbm, mock_downscale):
         field = _make_field('image')
         mock_fbm.get.return_value = [field]
@@ -168,8 +168,8 @@ class TestOnPreSave:
         mock_downscale.assert_called_once_with(instance.image)
 
     # skips models with no image fields
-    @patch('apps.core.signals.downscale_fieldfile')
-    @patch('apps.core.signals.fields_by_model')
+    @patch('apps.images.signals.downscale_fieldfile')
+    @patch('apps.images.signals.fields_by_model')
     def test_skips_models_without_fields(self, mock_fbm, mock_downscale):
         mock_fbm.get.return_value = ()
 

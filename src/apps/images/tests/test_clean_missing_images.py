@@ -21,8 +21,8 @@ def _make_model_with_images(instances):
 
 class TestCleanMissingImages:
     # dry run lists missing files without clearing them
-    @patch('apps.core.management.commands.clean_missing_images.default_storage')
-    @patch('apps.core.management.commands.clean_missing_images.apps')
+    @patch('apps.images.management.commands.clean_missing_images.default_storage')
+    @patch('apps.images.management.commands.clean_missing_images.apps')
     def test_dry_run_reports_missing(self, mock_apps, mock_storage, capsys):
         model = _make_model_with_images([(1, 'missing.jpg')])
         mock_apps.get_models.return_value = [model]
@@ -35,8 +35,8 @@ class TestCleanMissingImages:
         model.objects.filter.return_value.update.assert_not_called()
 
     # clears image fields that reference missing files
-    @patch('apps.core.management.commands.clean_missing_images.default_storage')
-    @patch('apps.core.management.commands.clean_missing_images.apps')
+    @patch('apps.images.management.commands.clean_missing_images.default_storage')
+    @patch('apps.images.management.commands.clean_missing_images.apps')
     def test_clears_missing_fields(self, mock_apps, mock_storage, capsys):
         model = _make_model_with_images([(1, 'missing.jpg')])
         mock_apps.get_models.return_value = [model]
@@ -49,8 +49,8 @@ class TestCleanMissingImages:
         model.objects.filter.return_value.update.assert_called_once()
 
     # reports success when all files exist
-    @patch('apps.core.management.commands.clean_missing_images.default_storage')
-    @patch('apps.core.management.commands.clean_missing_images.apps')
+    @patch('apps.images.management.commands.clean_missing_images.default_storage')
+    @patch('apps.images.management.commands.clean_missing_images.apps')
     def test_no_missing_images(self, mock_apps, mock_storage, capsys):
         model = _make_model_with_images([(1, 'exists.jpg')])
         mock_apps.get_models.return_value = [model]

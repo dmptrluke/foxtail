@@ -3,7 +3,8 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 
-from ..storages import LocalReadCache
+from apps.core.storages import LocalReadCache
+
 from ..tasks import process_imagefields
 
 
@@ -19,7 +20,7 @@ def fake_model():
 
 class TestProcessImagefields:
     # missing instance logs a warning and returns early
-    @patch('apps.core.tasks.IMAGEFIELDS', [])
+    @patch('apps.images.tasks.IMAGEFIELDS', [])
     @patch('django.apps.apps.get_model')
     def test_missing_instance_logs_warning(self, mock_get_model, fake_model, caplog):
         fake_model.objects.get.side_effect = _FakeModel.DoesNotExist
@@ -31,7 +32,7 @@ class TestProcessImagefields:
         assert 'not found' in caplog.text
 
     # processes each rendition spec for matching image fields
-    @patch('apps.core.tasks.IMAGEFIELDS')
+    @patch('apps.images.tasks.IMAGEFIELDS')
     @patch('django.apps.apps.get_model')
     def test_processes_renditions(self, mock_get_model, mock_imagefields, fake_model, caplog):
         mock_instance = MagicMock()
@@ -54,7 +55,7 @@ class TestProcessImagefields:
         assert file_obj.process.call_count == 2
 
     # exception during one rendition does not stop processing others
-    @patch('apps.core.tasks.IMAGEFIELDS')
+    @patch('apps.images.tasks.IMAGEFIELDS')
     @patch('django.apps.apps.get_model')
     def test_exception_continues(self, mock_get_model, mock_imagefields, fake_model, caplog):
         mock_instance = MagicMock()
@@ -79,7 +80,7 @@ class TestProcessImagefields:
         assert 'Failed to process' in caplog.text
 
     # wraps storage with LocalReadCache during processing, restores after
-    @patch('apps.core.tasks.IMAGEFIELDS')
+    @patch('apps.images.tasks.IMAGEFIELDS')
     @patch('django.apps.apps.get_model')
     def test_uses_local_read_cache(self, mock_get_model, mock_imagefields, fake_model):
         mock_instance = MagicMock()

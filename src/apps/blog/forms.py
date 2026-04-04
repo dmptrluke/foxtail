@@ -10,7 +10,8 @@ from django.forms import (
 from csp_helpers.mixins import CSPFormMixin
 from taggit.forms import TagField
 
-from apps.core.widgets import AutocompleteSelectMultiple, AutocompleteTag, CroppedImageWidget
+from apps.core.widgets import AutocompleteSelectMultiple, AutocompleteTag
+from apps.images.widgets import CroppedImageWidget
 
 from .models import Author, Comment, Post
 

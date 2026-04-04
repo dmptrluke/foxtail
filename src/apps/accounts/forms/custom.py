@@ -3,7 +3,7 @@ from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 from django.forms import ImageField, ModelForm, SelectDateWidget
 
-from apps.core.widgets import CroppedImageWidget
+from apps.images.widgets import CroppedImageWidget
 
 
 class UserForm(ModelForm):
