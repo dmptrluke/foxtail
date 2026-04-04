@@ -15,6 +15,7 @@ from published.models import PublishedModel
 from taggit.managers import TaggableManager
 
 from apps.core.validators import VALIDATOR_EXTENDED
+from apps.images.upload import scramble_upload
 
 logger = logging.getLogger(__name__)
 
@@ -30,7 +31,7 @@ class Author(models.Model):
     )
     description = models.TextField(blank=True, help_text='Short bio or tagline.')
     link = models.URLField(blank=True, help_text='Website, social media, etc.')
-    avatar = ProcessedImageField(upload_to='blog/authors', blank=True, auto_add_fields=True)
+    avatar = ProcessedImageField(upload_to=scramble_upload('blog/authors'), blank=True, auto_add_fields=True)
 
     class Meta:
         ordering = ['name']
@@ -78,7 +79,7 @@ class Post(PublishedModel):
     created = models.DateTimeField(auto_now_add=True, verbose_name='date created')
     modified = models.DateTimeField(auto_now=True, verbose_name='date modified')
 
-    image = ProcessedImageField(upload_to='blog', blank=True, auto_add_fields=True)
+    image = ProcessedImageField(upload_to=scramble_upload('blog'), blank=True, auto_add_fields=True)
 
     description = models.TextField(max_length=140, blank=True, help_text='140 characters or fewer.')
 

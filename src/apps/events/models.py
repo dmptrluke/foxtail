@@ -20,6 +20,7 @@ from published.models import PublishedModel
 from taggit.managers import TaggableManager
 
 from apps.core.fields import AutoSlugField
+from apps.images.upload import scramble_upload
 from apps.images.validators import file_size_validator
 
 logger = logging.getLogger(__name__)
@@ -100,7 +101,7 @@ class Event(PublishedModel):
     age_requirement = models.CharField(max_length=3, choices=AGE_CHOICES, blank=True)
 
     image = ProcessedImageField(
-        upload_to='events', blank=True, auto_add_fields=True, validators=[file_size_validator()]
+        upload_to=scramble_upload('events'), blank=True, auto_add_fields=True, validators=[file_size_validator()]
     )
 
     created = models.DateTimeField(auto_now_add=True, verbose_name='date created')

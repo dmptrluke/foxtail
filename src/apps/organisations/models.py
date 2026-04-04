@@ -13,6 +13,7 @@ from markdownfield.models import MarkdownField, RenderedMarkdownField
 from markdownfield.validators import VALIDATOR_CLASSY
 
 from apps.core.fields import AutoSlugField
+from apps.images.upload import scramble_upload
 
 logger = logging.getLogger(__name__)
 
@@ -68,7 +69,7 @@ class Organisation(models.Model):
     description = MarkdownField(rendered_field='description_rendered', validator=VALIDATOR_CLASSY, blank=True)
     description_rendered = RenderedMarkdownField()
 
-    logo = ProcessedImageField(upload_to='organisations', blank=True, auto_add_fields=True)
+    logo = ProcessedImageField(upload_to=scramble_upload('organisations'), blank=True, auto_add_fields=True)
     url = models.URLField(blank=True)
     country = models.CharField(max_length=2, choices=COUNTRY_CHOICES, blank=True)
     featured = models.BooleanField(default=False)
@@ -195,7 +196,7 @@ class EventSeries(models.Model):
     description = MarkdownField(rendered_field='description_rendered', validator=VALIDATOR_CLASSY, blank=True)
     description_rendered = RenderedMarkdownField()
 
-    logo = ProcessedImageField(upload_to='organisations/series', blank=True, auto_add_fields=True)
+    logo = ProcessedImageField(upload_to=scramble_upload('organisations/series'), blank=True, auto_add_fields=True)
     organisation = models.ForeignKey(
         'organisations.Organisation',
         on_delete=models.SET_NULL,

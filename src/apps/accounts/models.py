@@ -7,6 +7,7 @@ from django.utils.timezone import now
 
 from imagefield.fields import ImageField as ProcessedImageField
 
+from apps.images.upload import scramble_upload
 from apps.images.validators import file_size_validator
 
 from . import rules  # noqa: F401
@@ -31,7 +32,7 @@ class User(AbstractUser):
     date_of_birth = models.DateField(null=True, blank=True)
 
     avatar = ProcessedImageField(
-        upload_to='avatars',
+        upload_to=scramble_upload('avatars'),
         blank=True,
         auto_add_fields=True,
         validators=[FileExtensionValidator(['jpg', 'jpeg', 'png', 'webp']), file_size_validator()],
@@ -87,7 +88,7 @@ class ClientMetadata(models.Model):
         on_delete=models.CASCADE,
         related_name='metadata',
     )
-    logo = ProcessedImageField(upload_to='oidc/clients/', blank=True, auto_add_fields=True)
+    logo = ProcessedImageField(upload_to=scramble_upload('oidc/clients'), blank=True, auto_add_fields=True)
     website_url = models.URLField(blank=True)
     terms_url = models.URLField(blank=True)
     contact_email = models.EmailField(blank=True)
