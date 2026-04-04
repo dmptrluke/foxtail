@@ -24,7 +24,7 @@
     <c-layout-sidebar>
         <c-slot name="content">
             {% if eventseries.description_rendered %}
-                <c-rendered-markdown>{{ eventseries.description_rendered|safe }}</c-rendered-markdown>
+                <c-rendered-markdown>{{ eventseries.description_rendered }}</c-rendered-markdown>
             {% endif %}
 
             {% if events %}

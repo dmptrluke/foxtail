@@ -9,6 +9,7 @@ from django.http import Http404, HttpResponse, JsonResponse
 from django.shortcuts import render
 from django.template import loader
 from django.views import View
+from django.views.decorators.http import require_GET
 
 logger = logging.getLogger(__name__)
 
@@ -72,6 +73,7 @@ def handler_500(request, *args, **kwargs):
         return HttpResponse(html, status=500, content_type='text/html')
 
 
+@require_GET
 def test_error(request, code):
     """Debug-only view for previewing error pages."""
     templates = {

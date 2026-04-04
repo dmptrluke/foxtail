@@ -44,7 +44,7 @@
 
     <c-layout-sidebar>
         <c-slot name="content">
-            <c-rendered-markdown>{{ post.text_rendered|safe }}</c-rendered-markdown>
+            <c-rendered-markdown>{{ post.text_rendered }}</c-rendered-markdown>
 
             {% include "blog/_related_content.html" %}
 

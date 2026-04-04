@@ -9,23 +9,6 @@
 	--ft-radius-card: #{$card-border-radius};
 }
 
-body {
-	font-family: var(--ft-font-body);
-}
-
-h1, h2, h3, h4, h5, h6,
-.h1, .h2, .h3, .h4, .h5, .h6 {
-	font-family: var(--ft-font-heading);
-}
-
-.btn {
-	font-family: var(--ft-font-body);
-}
-
-#navigation {
-	font-family: var(--ft-font-nav);
-}
-
 html {
 	height: 100% !important;
 	background: var(--bs-body-bg);
@@ -37,6 +20,7 @@ html {
 }
 
 body {
+	font-family: var(--ft-font-body);
 	padding-top: calc(4rem + env(safe-area-inset-top, 0px));
 	padding-left: env(safe-area-inset-left, 0);
 	padding-right: env(safe-area-inset-right, 0);
@@ -48,12 +32,25 @@ body {
 	font-feature-settings: 'cv05' 1;
 }
 
-main {
-	flex: 1 0 auto;
+h1, h2, h3, h4, h5, h6,
+.h1, .h2, .h3, .h4, .h5, .h6 {
+	font-family: var(--ft-font-heading);
 }
 
 h3, .h3 {
 	letter-spacing: -0.015em;
+}
+
+.btn {
+	font-family: var(--ft-font-body);
+}
+
+#navigation {
+	font-family: var(--ft-font-nav);
+}
+
+main {
+	flex: 1 0 auto;
 }
 
 sup {

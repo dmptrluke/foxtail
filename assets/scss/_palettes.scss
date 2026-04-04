@@ -86,6 +86,16 @@
 		--bs-border-color: rgb(var(--bs-secondary-rgb), 0.25);
 	}
 
+	@if $dark-mode {
+		--ft-shadow-sm: 0 1px 3px rgb(var(--bs-dark-rgb), 0.04), 0 2px 8px rgb(var(--bs-dark-rgb), 0.06);
+		--ft-shadow-md: 0 2px 4px rgb(var(--bs-dark-rgb), 0.04), 0 8px 24px rgb(var(--bs-dark-rgb), 0.08);
+		--ft-shadow-lg: 0 4px 8px rgb(var(--bs-dark-rgb), 0.06), 0 12px 32px rgb(var(--bs-dark-rgb), 0.16);
+	} @else {
+		--ft-shadow-sm: 0 1px 3px rgb(0 0 0 / 15%), 0 2px 8px rgb(0 0 0 / 20%);
+		--ft-shadow-md: 0 2px 4px rgb(0 0 0 / 15%), 0 8px 24px rgb(0 0 0 / 25%);
+		--ft-shadow-lg: 0 4px 8px rgb(0 0 0 / 20%), 0 12px 32px rgb(0 0 0 / 35%);
+	}
+
 	// Hero gradients: each theme defines its own gradient and sticky variant
 	--ft-hero-gradient: #{$hero-gradient};
 	--ft-hero-sticky: #{$hero-sticky};
@@ -162,22 +172,9 @@
 	}
 }
 
-// Shadows: light mode derives from --bs-dark-rgb, dark mode uses solid black at higher opacity
-:root {
-	--ft-shadow-sm: 0 1px 3px rgb(var(--bs-dark-rgb), 0.04), 0 2px 8px rgb(var(--bs-dark-rgb), 0.06);
-	--ft-shadow-md: 0 2px 4px rgb(var(--bs-dark-rgb), 0.04), 0 8px 24px rgb(var(--bs-dark-rgb), 0.08);
-	--ft-shadow-lg: 0 4px 8px rgb(var(--bs-dark-rgb), 0.06), 0 12px 32px rgb(var(--bs-dark-rgb), 0.16);
-}
-
-[data-bs-theme="dark"] {
-	--ft-shadow-sm: 0 1px 3px rgb(0 0 0 / 15%), 0 2px 8px rgb(0 0 0 / 20%);
-	--ft-shadow-md: 0 2px 4px rgb(0 0 0 / 15%), 0 8px 24px rgb(0 0 0 / 25%);
-	--ft-shadow-lg: 0 4px 8px rgb(0 0 0 / 20%), 0 12px 32px rgb(0 0 0 / 35%);
-}
-
 // --- Light palettes ---
 
-// Plum: default, applied to :root (no theme class needed)
+// Plum: default
 :root {
 	@include color-scheme(
 		$primary: #4a3d55, $secondary: #7a6490, $dark: #281e33, $darker: #2d2a33,

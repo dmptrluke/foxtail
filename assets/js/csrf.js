@@ -1,3 +1,3 @@
 export function getCsrfToken() {
-    return document.cookie.match(/(__Host-csrftoken|csrftoken)=([^;]+)/)?.[2] || '';
+    return /(__Host-csrftoken|csrftoken)=([^;]+)/.exec(document.cookie)?.[2] || '';
 }

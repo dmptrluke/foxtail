@@ -8,12 +8,12 @@ class ImageUploadWidget {
     constructor(container) {
         this.container = container;
         this.fileInput = container.querySelector('input[type="file"]');
-        this.maxSize = parseInt(container.dataset.maxFileSize, 10) || 20 * 1024 * 1024;
+        this.maxSize = Number.parseInt(container.dataset.maxFileSize, 10) || 20 * 1024 * 1024;
 
         // Feature detection from data attributes
         this.cropEnabled = container.hasAttribute('data-crop')
             || container.hasAttribute('data-crop-aspect-ratio');
-        this.cropAspectRatio = parseFloat(container.dataset.cropAspectRatio) || NaN;
+        this.cropAspectRatio = Number.parseFloat(container.dataset.cropAspectRatio) || NaN;
 
         const ppoiFieldName = container.dataset.ppoiField || null;
         this.ppoiInput = ppoiFieldName
@@ -248,8 +248,8 @@ class ImageUploadWidget {
         ppoiImg.src = previewImg.src;
 
         const parts = (this.ppoiInput.value || '0.5x0.5').split('x');
-        const px = parseFloat(parts[0]);
-        const py = parseFloat(parts[1]);
+        const px = Number.parseFloat(parts[0]);
+        const py = Number.parseFloat(parts[1]);
         this.setPpoiDot(Number.isNaN(px) ? 0.5 : px, Number.isNaN(py) ? 0.5 : py);
 
         this.pendingFile = null;

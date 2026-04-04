@@ -83,7 +83,7 @@
         <c-layout-sidebar>
             <c-slot name="content">
                 {% if organisation.description_rendered %}
-                    <c-rendered-markdown>{{ organisation.description_rendered|safe }}</c-rendered-markdown>
+                    <c-rendered-markdown>{{ organisation.description_rendered }}</c-rendered-markdown>
                 {% endif %}
 
                 {% if events %}

@@ -521,16 +521,13 @@
 [data-bs-theme="dark"] .auth-shell {
   --auth-bg-mid: var(--ft-darker);
   --auth-bg-end: var(--ft-darker);
+  --auth-text-muted: var(--ft-text-light);
+  --auth-text-faint: var(--ft-text-muted);
 
   &::before {
     background: radial-gradient(ellipse at 20% 80%, rgb(90 158 111 / 3%) 0%, transparent 50%),
                 radial-gradient(ellipse at 80% 20%, rgb(91 94 154 / 3%) 0%, transparent 50%);
   }
-}
-
-[data-bs-theme="dark"] .auth-shell {
-  --auth-text-muted: var(--ft-text-light);
-  --auth-text-faint: var(--ft-text-muted);
 }
 
 [data-bs-theme="dark"] .auth-card {

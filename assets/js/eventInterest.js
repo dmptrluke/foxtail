@@ -40,7 +40,7 @@ export function initEventInterest() {
                         },
                         body: JSON.stringify({ status: nextStatus || undefined }),
                     });
-                    if (!res.ok) throw new Error();
+                    if (!res.ok) throw new Error(`Unable to update status. Server responded with ${res.status}`);
                     const data = await res.json();
                     updateCounts(group, data);
                 } catch {
