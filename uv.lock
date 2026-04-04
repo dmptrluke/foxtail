@@ -683,6 +683,7 @@ dependencies = [
     { name = "rules" },
     { name = "segno" },
     { name = "sentry-sdk" },
+    { name = "shortuuid" },
     { name = "whitenoise" },
 ]
 
@@ -748,6 +749,7 @@ requires-dist = [
     { name = "rules", specifier = ">=3.5" },
     { name = "segno", specifier = ">=1.6" },
     { name = "sentry-sdk", specifier = ">=2.56" },
+    { name = "shortuuid", specifier = ">=1.0.13" },
     { name = "whitenoise", specifier = ">=6.12,<7" },
 ]
 
