@@ -1,3 +1,5 @@
+import uuid
+
 from django.contrib.auth.models import AbstractUser
 from django.core.exceptions import ValidationError
 from django.core.validators import FileExtensionValidator
@@ -15,6 +17,8 @@ from .validators import username_validators
 
 
 class User(AbstractUser):
+    uuid = models.UUIDField(default=uuid.uuid4, unique=True, editable=False)
+
     username = models.CharField(
         'username',
         max_length=30,
@@ -89,6 +93,10 @@ class ClientMetadata(models.Model):
         related_name='metadata',
     )
     logo = ProcessedImageField(upload_to=scramble_upload('oidc/clients'), blank=True, auto_add_fields=True)
+    legacy_sub = models.BooleanField(
+        default=False,
+        help_text='Use sequential user ID as the OIDC sub claim instead of UUID.',
+    )
     website_url = models.URLField(blank=True)
     terms_url = models.URLField(blank=True)
     contact_email = models.EmailField(blank=True)
