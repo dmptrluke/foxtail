@@ -11,8 +11,8 @@ class ImageUploadWidget {
         this.maxSize = Number.parseInt(container.dataset.maxFileSize, 10) || 20 * 1024 * 1024;
 
         // Feature detection from data attributes
-        this.cropEnabled = container.hasAttribute('data-crop')
-            || container.hasAttribute('data-crop-aspect-ratio');
+        this.cropEnabled = 'crop' in container.dataset
+            || 'cropAspectRatio' in container.dataset;
         this.cropAspectRatio = Number.parseFloat(container.dataset.cropAspectRatio) || NaN;
 
         const ppoiFieldName = container.dataset.ppoiField || null;
@@ -21,12 +21,12 @@ class ImageUploadWidget {
             : null;
 
         // Crop state
-        this.Cropper = null;
+        this.CropperClass = null;
         this.dialog = null;
         this.dialogTitle = null;
         this.cropper = null;
         this.pendingFile = null;
-        this.settingFiles = false;
+        this.suppressChangeEvent = false;
         this.croppedCanvas = null;
         this.croppedMimeType = null;
 
@@ -99,7 +99,7 @@ class ImageUploadWidget {
             preview.className = 'image-preview';
             this.container.prepend(preview);
         }
-        const roundClass = this.container.hasAttribute('data-preview-round') ? ' image-preview-round' : '';
+        const roundClass = 'previewRound' in this.container.dataset ? ' image-preview-round' : '';
         preview.className = `image-preview${roundClass}`;
         preview.innerHTML = `<img src="${dataUrl}" alt="" class="rounded">`;
         return preview;
@@ -108,7 +108,7 @@ class ImageUploadWidget {
     // --- File change handler ---
 
     onFileChange() {
-        if (this.settingFiles) return;
+        if (this.suppressChangeEvent) return;
         const file = this.fileInput.files[0];
         if (!file) return;
         if (!this.validateFile(file)) return;
@@ -135,7 +135,7 @@ class ImageUploadWidget {
     // --- Dialog ---
 
     buildDialog() {
-        const hasPpoi = !!this.ppoiInput;
+        const hasPpoiField = !!this.ppoiInput;
         const { dialog, title, body, footer } = createDialog('Crop image');
 
         this.dialog = dialog;
@@ -158,7 +158,7 @@ class ImageUploadWidget {
         footer.innerHTML = `
             <button type="button" class="btn btn-secondary cancel-btn">Cancel</button>
             <button type="button" class="btn btn-secondary ppoi-back-btn d-none">Back</button>
-            <button type="button" class="btn btn-primary crop-confirm-btn">${hasPpoi ? 'Next' : 'Crop'}</button>
+            <button type="button" class="btn btn-primary crop-confirm-btn">${hasPpoiField ? 'Next' : 'Crop'}</button>
             <button type="button" class="btn btn-primary ppoi-done-btn d-none">Done</button>`;
 
         dialog.addEventListener('close', () => this.onDialogClose());
@@ -166,7 +166,7 @@ class ImageUploadWidget {
         footer.querySelector('.cancel-btn').addEventListener('click', () => dialog.close());
         footer.querySelector('.crop-confirm-btn').addEventListener('click', () => this.onCropConfirm());
 
-        if (hasPpoi) {
+        if (hasPpoiField) {
             footer.querySelector('.ppoi-back-btn').addEventListener('click', () => this.onPpoiBack());
             footer.querySelector('.ppoi-done-btn').addEventListener('click', () => this.onPpoiDone());
 
@@ -272,16 +272,16 @@ class ImageUploadWidget {
     // --- Cropper (lazy import) ---
 
     async initCropper() {
-        if (!this.Cropper) {
+        if (!this.CropperClass) {
             const [{ default: Cropper }] = await Promise.all([
                 import('cropperjs'),
                 import('cropperjs/dist/cropper.css'),
             ]);
-            this.Cropper = Cropper;
+            this.CropperClass = Cropper;
         }
         this.destroyCropper();
         const img = this.dialog.querySelector('.crop-source');
-        this.cropper = new this.Cropper(img, {
+        this.cropper = new this.CropperClass(img, {
             aspectRatio: this.cropAspectRatio,
             viewMode: 1,
             autoCropArea: 1,
@@ -310,8 +310,8 @@ class ImageUploadWidget {
         this.dialog.querySelector('.crop-confirm-btn').disabled = true;
 
         const canvas = this.getCroppedOutput();
-        const mimeType = this.pendingFile.type === 'image/png' ? 'image/png'
-            : this.pendingFile.type === 'image/webp' ? 'image/webp'
+        const mimeType = ['image/png', 'image/webp'].includes(this.pendingFile.type)
+            ? this.pendingFile.type
             : 'image/jpeg';
 
         if (this.ppoiInput) {
@@ -359,9 +359,9 @@ class ImageUploadWidget {
             const name = (this.pendingFile.name.replace(/\.[^.]+$/, '') || 'image') + ext;
             const dt = new DataTransfer();
             dt.items.add(new File([blob], name, { type: blob.type }));
-            this.settingFiles = true;
+            this.suppressChangeEvent = true;
             this.fileInput.files = dt.files;
-            this.settingFiles = false;
+            this.suppressChangeEvent = false;
 
             this.showPreview(canvas.toDataURL(mimeType));
             this.showEditButton();

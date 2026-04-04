@@ -1,6 +1,6 @@
 {% load static django_vite jsonld opengraph %}
 <!doctype html>
-<html lang="en" class="no-js" data-default-scheme="{{ DEFAULT_COLOR_SCHEME }}" prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# article: http://ogp.me/ns/article#">
+<html lang="en" class="no-js theme-{{ DEFAULT_COLOR_SCHEME }}" data-default-scheme="{{ DEFAULT_COLOR_SCHEME }}">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -30,12 +30,12 @@
             var h = document.documentElement, c = h.classList;
             c.remove('no-js'); c.add('js');
             var s = localStorage.getItem('color-scheme') || h.dataset.defaultScheme;
-            if (s !== 'plum') c.add('theme-' + s);
+            if (s) { c.remove('theme-' + h.dataset.defaultScheme); c.add('theme-' + s); }
             var t = localStorage.getItem('style-theme') || 'default';
             if (t !== 'default') c.add('theme-' + t);
             var m = localStorage.getItem('dark-mode') || 'auto';
             if (m === 'dark' || (m === 'auto' && matchMedia('(prefers-color-scheme: dark)').matches))
-                h.setAttribute('data-bs-theme', 'dark');
+                h.dataset.bsTheme = 'dark';
         })();
     </script>
 

@@ -46,16 +46,16 @@ function applyTheme() {
     const mode = localStorage.getItem('dark-mode') || 'auto';
 
     COLOR_SCHEMES.forEach(s => root.classList.remove(`theme-${s}`));
-    if (scheme !== 'plum') root.classList.add(`theme-${scheme}`);
+    root.classList.add(`theme-${scheme}`);
 
     STYLE_THEMES.forEach(s => { if (s !== 'default') root.classList.remove(`theme-${s}`); });
     if (style !== 'default') root.classList.add(`theme-${style}`);
 
     const dark = mode === 'dark' || (mode === 'auto' && matchMedia('(prefers-color-scheme: dark)').matches);
     if (dark) {
-        root.setAttribute('data-bs-theme', 'dark');
+        root.dataset.bsTheme = 'dark';
     } else {
-        root.removeAttribute('data-bs-theme');
+        delete root.dataset.bsTheme;
     }
 }
 

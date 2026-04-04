@@ -14,10 +14,12 @@ from django.views.decorators.http import require_GET
 logger = logging.getLogger(__name__)
 
 
+@require_GET
 def health(request):
     return HttpResponse('ok')
 
 
+@require_GET
 def robots(request):
     if settings.ROBOTS_ALLOWED:
         text = dedent(f"""\

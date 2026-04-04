@@ -175,7 +175,7 @@
 // --- Light palettes ---
 
 // Plum: default
-:root {
+.theme-plum {
 	@include color-scheme(
 		$primary: #4a3d55, $secondary: #7a6490, $dark: #281e33, $darker: #2d2a33,
 		$success: #5a9e6f, $info: #5b5e9a, $warning: #d4a054, $danger: #c75b5b,
@@ -314,7 +314,7 @@
 
 // --- Dark palettes ---
 
-[data-bs-theme="dark"] {
+[data-bs-theme="dark"].theme-plum {
 	@include color-scheme(
 		$primary: #9b8aad, $secondary: #a090b8, $dark: #120d1a, $darker: #0e0a14,
 		$success: #6ab880, $info: #8b8ed4, $warning: #e0b46a, $danger: #d87070,
