@@ -1,10 +1,10 @@
-<c-vars url_name="" dark="" />
+<c-vars tag_url="" dark="" />
 
 {% if tags %}
     <div class="tag-row{% if dark %} tag-row-dark{% endif %}">
         {% for tag in tags %}
-            {% if url_name %}
-                <a href="{% url url_name %}?tag={{ tag.slug }}" class="tag-pill">{{ tag.name|capfirst }}</a>
+            {% if tag_url %}
+                <a href="{% url tag_url slug=tag.slug %}" class="tag-pill">{{ tag.name|capfirst }}</a>
             {% else %}
                 <span class="tag-pill">{{ tag.name|title }}</span>
             {% endif %}

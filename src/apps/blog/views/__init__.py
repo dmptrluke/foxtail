@@ -10,6 +10,7 @@ from .public import (
     BlogDetailView,
     BlogListView,
     BlogListYearView,
+    BlogTagView,
     CommentDeleteView,
 )
 
@@ -17,6 +18,7 @@ __all__ = [
     'BlogDetailView',
     'BlogListView',
     'BlogListYearView',
+    'BlogTagView',
     'CommentApproveView',
     'CommentDeleteView',
     'CommentManageListView',

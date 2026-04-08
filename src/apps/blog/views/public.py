@@ -39,32 +39,15 @@ class BlogListView(StructuredDataMixin, PublishedListMixin, ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['blog_years'] = _blog_years()
-
-        tag_slug = self.request.GET.get('tag')
-        if tag_slug:
-            try:
-                context['tag'] = Tag.objects.get(slug=tag_slug)
-            except Tag.DoesNotExist:
-                raise Http404 from None
-
         return context
 
     def get_structured_data(self):
-
         q = self.request.GET.get('q')
-        tag_slug = self.request.GET.get('tag')
         org_name = SiteSettings.get_solo().org_name
 
         if q:
             name = f'Search results for "{q}"'
             description = f'Search results for {q} on {org_name}'
-        elif tag_slug:
-            try:
-                tag_name = Tag.objects.get(slug=tag_slug).name
-            except Tag.DoesNotExist:
-                tag_name = tag_slug
-            name = f'News tagged "{tag_name}"'
-            description = f'News posts tagged {tag_name} on {org_name}'
         else:
             name = 'Community News'
             description = 'Community news and updates for New Zealand furries'
@@ -80,8 +63,6 @@ class BlogListView(StructuredDataMixin, PublishedListMixin, ListView):
         queryset = super().get_queryset()
 
         q = self.request.GET.get('q')
-        tag = self.request.GET.get('tag')
-
         if q:
             vector = SearchVector('title', weight='A', config='english') + SearchVector(
                 'text', weight='B', config='english'
@@ -91,13 +72,45 @@ class BlogListView(StructuredDataMixin, PublishedListMixin, ListView):
             rank = SearchRank(vector, query, weights=[0.2, 0.4, 0.6, 0.8])
 
             queryset = queryset.annotate(rank=rank).filter(rank__gte=0.01).prefetch_related('tags').order_by('-rank')
-
-        elif tag:
-            queryset = queryset.prefetch_related('tags').filter(tags__slug__in=[tag])
         else:
             queryset = queryset.prefetch_related('tags').all()
 
         return queryset
+
+
+class BlogTagView(StructuredDataMixin, PublishedListMixin, ListView):
+    model = Post
+    paginate_by = 10
+    context_object_name = 'posts'
+    template_name = 'blog/list.html'
+
+    def get_tag(self):
+        if not hasattr(self, '_tag'):
+            try:
+                self._tag = Tag.objects.get(slug=self.kwargs['slug'])
+            except Tag.DoesNotExist:
+                raise Http404 from None
+        return self._tag
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['blog_years'] = _blog_years()
+        context['tag'] = self.get_tag()
+        return context
+
+    def get_structured_data(self):
+        tag = self.get_tag()
+        org_name = SiteSettings.get_solo().org_name
+        return {
+            '@type': 'CollectionPage',
+            'name': f'News tagged "{tag.name}"',
+            'description': f'News posts tagged {tag.name} on {org_name}',
+            'url': self.request.build_absolute_uri(),
+        }
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        return queryset.prefetch_related('tags').filter(tags__slug__in=[self.kwargs['slug']])
 
 
 class BlogListYearView(StructuredDataMixin, PublishedListMixin, YearMixin, ListView):

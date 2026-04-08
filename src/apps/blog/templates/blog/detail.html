@@ -28,7 +28,7 @@
                 {% endif %}
             </c-hero.nav>
 
-            <c-tag-row :tags="post.tags.all" url_name="blog:list" />
+            <c-tag-row :tags="post.tags.all" tag_url="blog:tag" />
 
             <c-hero.title>{{ post.title }}</c-hero.title>
             <c-hero.subtitle>{{ post.created|date:"F jS, Y" }}</c-hero.subtitle>

@@ -25,8 +25,8 @@
     <c-sidebar.header>Categories</c-sidebar.header>
     <c-sidebar.content>
         {% for tag in sidebar_tag_list %}
-            <a href="{% url 'blog:list' %}?tag={{ tag.slug }}"
-            class="filter{% if request.GET.tag == tag.slug %} active{% endif %}">
+            <a href="{% url 'blog:tag' slug=tag.slug %}"
+            class="filter{% if request.resolver_match.url_name == 'tag' and request.resolver_match.kwargs.slug == tag.slug %} active{% endif %}">
                 {{ tag.name|capfirst }}
                 <span class="count">{{ tag.num_times }}</span>
             </a>
