@@ -19,6 +19,12 @@ class SiteSettings(SingletonModel):
         help_text='Hex color for browser theme-color meta tag.',
     )
     facebook_app_id = models.CharField('Facebook App ID', max_length=50, blank=True)
+    google_site_verification = models.CharField(
+        'Google Site Verification',
+        max_length=100,
+        blank=True,
+        help_text='Content value from the Google Search Console meta tag.',
+    )
 
     telegram_url = models.URLField('Telegram URL', blank=True)
     bluesky_url = models.URLField('Bluesky URL', blank=True)

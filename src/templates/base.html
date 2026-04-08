@@ -8,6 +8,7 @@
     <meta name="application-name" content="{{ conf.org_name }}">
     {% og_sitewide %}
     {% if conf.facebook_app_id %}<meta property="fb:app_id" content="{{ conf.facebook_app_id }}">{% endif %}
+    {% if conf.google_site_verification %}<meta name="google-site-verification" content="{{ conf.google_site_verification }}">{% endif %}
     {% json_ld_sitewide %}
 
     <meta name="theme-color" content="{{ conf.theme_color }}">
