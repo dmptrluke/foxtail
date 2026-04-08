@@ -3,6 +3,9 @@
 
 {% block title %}Create Account{% endblock %}
 
+{# allow indexing (shell.html defaults to noindex) #}
+{% block robots %}{% endblock robots %}
+
 {% block extra_head %}{{ form.media }}{% endblock %}
 
 {% block heading %}<h1>Create account</h1>{% endblock %}

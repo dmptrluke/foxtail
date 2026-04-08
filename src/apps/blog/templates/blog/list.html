@@ -2,7 +2,7 @@
 {% load blog_sidebar breadcrumbs cache jsonld opengraph meta twitter %}
 
 
-{% block title %}{% if year %}News from {{ year }}{% else %}News{% endif %}{% endblock %}
+{% block title %}{% if year %}Community News from {{ year }}{% elif tag %}News tagged "{{ tag.name }}"{% else %}Community News{% endif %}{% endblock %}
 
 {% block extra_head %}
     {% json_ld_for structured_data %}

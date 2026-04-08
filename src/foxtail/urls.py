@@ -10,6 +10,7 @@ import apps.blog.sitemaps as blog_sitemaps
 import apps.content.sitemaps as content_sitemaps
 import apps.core.views as core_views
 import apps.events.sitemaps as event_sitemaps
+import apps.organisations.sitemaps as organisation_sitemaps
 import apps.organisations.views as organisations_views
 from apps.telegram.views import telegram_webhook
 
@@ -18,6 +19,8 @@ sitemaps = {
     'page': content_sitemaps.PageSitemap,
     'post': blog_sitemaps.PostSitemap,
     'event': event_sitemaps.EventSitemap,
+    'organisation': organisation_sitemaps.OrganisationSitemap,
+    'series': organisation_sitemaps.EventSeriesSitemap,
 }
 
 urlpatterns = [

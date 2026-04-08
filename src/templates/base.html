@@ -40,6 +40,8 @@
         })();
     </script>
 
+    {% block robots %}{% endblock robots %}
+    {% block canonical %}<link rel="canonical" href="{{ SITE_URL }}{{ request.path }}{% if request.GET.page %}?page={{ request.GET.page }}{% endif %}">{% endblock canonical %}
     {% block extra_head %}{% endblock extra_head %}
 </head>
 

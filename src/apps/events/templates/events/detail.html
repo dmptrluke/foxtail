@@ -3,8 +3,9 @@
 
 {% if event.image %}{% block body_class %}has-hero-banner{% endblock %}{% endif %}
 
+{% block canonical %}<link rel="canonical" href="{{ SITE_URL }}{{ event.get_absolute_url }}">{% endblock canonical %}
+
 {% block extra_head %}
-    <link rel="canonical" href="{{ SITE_URL }}{{ event.get_absolute_url }}"/>
     {% if event.latitude and event.longitude %}
         <link rel="modulepreload" href="{% vite_asset_url 'js/map.js' %}">
         <link rel="dns-prefetch" href="https://api.maptiler.com">

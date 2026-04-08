@@ -3,9 +3,9 @@
 
 {% block title %}Sign In{% endblock %}
 
-{% block extra_head %}
-    <link rel="canonical" href="{{ SITE_URL }}{% url 'account_login' %}"/>
-{% endblock %}
+{# allow indexing (shell.html defaults to noindex) #}
+{% block robots %}{% endblock robots %}
+{% block canonical %}<link rel="canonical" href="{{ SITE_URL }}{% url 'account_login' %}">{% endblock canonical %}
 
 {% block heading %}<h1>Sign in</h1>{% endblock %}
 

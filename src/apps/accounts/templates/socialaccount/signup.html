@@ -3,6 +3,9 @@
 
 {% block title %}Create Account{% endblock %}
 
+{# allow indexing (shell.html defaults to noindex) #}
+{% block robots %}{% endblock robots %}
+
 {% block heading %}
     <h1>Almost there</h1>
     <p class="auth-subtitle">Complete your registration to finish signing up with <strong>{{ account.get_provider.name }}</strong>.</p>

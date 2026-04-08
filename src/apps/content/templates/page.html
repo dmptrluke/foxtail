@@ -3,9 +3,7 @@
 
 {% block title %}{{ page.title }}{% endblock %}
 
-{% block extra_head %}
-    <link rel="canonical" href="{{ SITE_URL }}{{ page.get_absolute_url }}"/>
-{% endblock %}
+{% block canonical %}<link rel="canonical" href="{{ SITE_URL }}{{ page.get_absolute_url }}">{% endblock canonical %}
 
 {% block hero %}
     <c-hero>

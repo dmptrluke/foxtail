@@ -2,7 +2,7 @@
 {% load breadcrumbs cache image jsonld opengraph meta twitter text %}
 
 
-{% block title %}{% if year %}Events in {{ year }}{% else %}Furry Events{% endif %}{% endblock %}
+{% block title %}{% if year %}Events in {{ year }}{% else %}Upcoming Events{% endif %}{% endblock %}
 
 {% block extra_head %}
     {% json_ld_for structured_data %}

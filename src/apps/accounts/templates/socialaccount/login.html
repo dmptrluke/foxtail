@@ -2,6 +2,9 @@
 
 {% block title %}{% if process == "connect" %}Connect {{ provider.name }}{% else %}Sign In{% endif %}{% endblock %}
 
+{# allow indexing (shell.html defaults to noindex) #}
+{% block robots %}{% endblock robots %}
+
 {% block heading %}
     <h1>{% if process == "connect" %}Connect {{ provider.name }}{% else %}Continue with {{ provider.name }}{% endif %}</h1>
     {% if process == "connect" %}

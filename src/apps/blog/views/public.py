@@ -52,17 +52,26 @@ class BlogListView(StructuredDataMixin, PublishedListMixin, ListView):
     def get_structured_data(self):
 
         q = self.request.GET.get('q')
-        tag = self.request.GET.get('tag')
+        tag_slug = self.request.GET.get('tag')
         org_name = SiteSettings.get_solo().org_name
+
         if q:
+            name = f'Search results for "{q}"'
             description = f'Search results for {q} on {org_name}'
-        elif tag:
-            description = f'News posts tagged {tag} on {org_name}'
+        elif tag_slug:
+            try:
+                tag_name = Tag.objects.get(slug=tag_slug).name
+            except Tag.DoesNotExist:
+                tag_name = tag_slug
+            name = f'News tagged "{tag_name}"'
+            description = f'News posts tagged {tag_name} on {org_name}'
         else:
+            name = 'Community News'
             description = 'Community news and updates for New Zealand furries'
+
         return {
             '@type': 'CollectionPage',
-            'name': 'News',
+            'name': name,
             'description': description,
             'url': self.request.build_absolute_uri(),
         }
@@ -112,8 +121,8 @@ class BlogListYearView(StructuredDataMixin, PublishedListMixin, YearMixin, ListV
         year = self.get_year()
         return {
             '@type': 'CollectionPage',
-            'name': f'News from {year}',
-            'description': f'Furry community news from {year}',
+            'name': f'Community News from {year}',
+            'description': f'Community news and updates from {year}',
             'url': self.request.build_absolute_uri(),
         }
 

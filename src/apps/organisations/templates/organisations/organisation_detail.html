@@ -1,8 +1,9 @@
 {% extends "base/page.html" %}
 {% load breadcrumbs icon jsonld text %}
 
+{% block canonical %}<link rel="canonical" href="{{ SITE_URL }}{{ organisation.get_absolute_url }}">{% endblock canonical %}
+
 {% block extra_head %}
-    <link rel="canonical" href="{{ SITE_URL }}{{ organisation.get_absolute_url }}"/>
     {% json_ld_for organisation %}
 {% endblock %}
 

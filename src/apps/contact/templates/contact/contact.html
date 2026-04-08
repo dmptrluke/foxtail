@@ -1,7 +1,10 @@
 {% extends "base/shell.html" %}
 {% load form_tags %}
 
-{% block title %}Contact Us{% endblock %}
+{% block title %}Contact{% endblock %}
+
+{# allow indexing (shell.html defaults to noindex) #}
+{% block robots %}{% endblock robots %}
 
 {% block extra_head %}{{ form.media }}{% endblock %}
 

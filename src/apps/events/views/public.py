@@ -45,8 +45,8 @@ class EventListView(StructuredDataMixin, ListView):
     def get_structured_data(self):
         return {
             '@type': 'CollectionPage',
-            'name': 'Furry Events',
-            'description': 'Furry conventions, meets, and community gatherings across New Zealand and beyond',
+            'name': 'Upcoming Events',
+            'description': 'Upcoming furry conventions, meets, and community gatherings in New Zealand',
             'url': self.request.build_absolute_uri(),
         }
 
@@ -79,7 +79,7 @@ class EventListYearView(StructuredDataMixin, YearMixin, ListView):
         return {
             '@type': 'CollectionPage',
             'name': f'Events in {year}',
-            'description': f'Furry conventions and community events from {year}',
+            'description': f'Furry conventions and community events in {year}',
             'url': self.request.build_absolute_uri(),
         }
 

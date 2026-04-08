@@ -1,7 +1,9 @@
 {% extends "base/page.html" %}
 {% load humanize account cache jsonld opengraph meta twitter icon image text %}
 
-{% block title_full %}{{ conf.org_name }} — the community hub for New Zealand furries{% endblock title_full %}
+{% block title_full %}{{ conf.org_name }} - the community hub for New Zealand furries{% endblock title_full %}
+
+{% block canonical %}<link rel="canonical" href="{{ SITE_URL }}{% url 'content:index' %}">{% endblock canonical %}
 
 {% block extra_head %}
     {% json_ld_for structured_data %}
