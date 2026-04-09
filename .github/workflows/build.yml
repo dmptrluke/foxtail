@@ -6,7 +6,6 @@ on:
       - 'dependabot**'
     tags:
       - 'v*'
-  pull_request:
 
 permissions:
   contents: read
