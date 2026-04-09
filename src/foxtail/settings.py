@@ -705,6 +705,11 @@ FETCH_METADATA_EXEMPT_PATHS = [
 TELEGRAM_BOT_TOKEN = env('TELEGRAM_BOT_TOKEN', default='')
 TELEGRAM_WEBHOOK_SECRET = env('TELEGRAM_WEBHOOK_SECRET', default='')
 
+# Analytics (Umami)
+
+UMAMI_SCRIPT_URL = env('UMAMI_SCRIPT_URL', default='')
+UMAMI_WEBSITE_ID = env('UMAMI_WEBSITE_ID', default='')
+
 # CSP Headers
 # <https://django-csp.readthedocs.io/en/latest/>
 
@@ -745,6 +750,12 @@ CONTENT_SECURITY_POLICY = {
         'report-uri': env('CSP_REPORT_URI', default=None),
     },
 }
+
+if UMAMI_SCRIPT_URL:
+    from urllib.parse import urlparse as _umami_urlparse
+
+    _umami_origin = f'{_umami_urlparse(UMAMI_SCRIPT_URL).scheme}://{_umami_urlparse(UMAMI_SCRIPT_URL).netloc}'
+    CONTENT_SECURITY_POLICY['DIRECTIVES']['connect-src'] += [_umami_origin]
 
 if VITE_DEV_MODE:
     CONTENT_SECURITY_POLICY['DIRECTIVES']['script-src'] += ['http://localhost:5173']
