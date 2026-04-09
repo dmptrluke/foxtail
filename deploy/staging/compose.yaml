@@ -7,7 +7,7 @@ services:
     restart: unless-stopped
     environment:
       POSTGRES_USER: foxtail
-      POSTGRES_PASSWORD: foxtail
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     volumes:
       - db:/var/lib/postgresql/data
     healthcheck:
@@ -33,7 +33,7 @@ services:
     command: ["gunicorn", "--bind", "0.0.0.0:8000", "--worker-tmp-dir", "/dev/shm", "--forwarded-allow-ips", "*", "-k", "gthread", "--threads", "2", "foxtail.wsgi:application"]
     env_file: .env
     environment:
-      DATABASE_URL: "postgres://foxtail:foxtail@db/foxtail"
+      DATABASE_URL: "postgres://foxtail:${POSTGRES_PASSWORD}@db/foxtail"
       CACHE_URL: "redis://redis/1"
       SERVICE_NAME: "app"
     volumes:
@@ -60,7 +60,7 @@ services:
     restart: unless-stopped
     env_file: .env
     environment:
-      DATABASE_URL: "postgres://foxtail:foxtail@db/foxtail"
+      DATABASE_URL: "postgres://foxtail:${POSTGRES_PASSWORD}@db/foxtail"
       CACHE_URL: "redis://redis/1"
       HUEY_WORKERS: "2"
       SERVICE_NAME: "worker"

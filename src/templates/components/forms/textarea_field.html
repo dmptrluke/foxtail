@@ -2,10 +2,10 @@
 {% if not inline %}<div class="mb-3">{% endif %}
     {% if not hide_label and not inline %}<label class="form-label" for="{{ field.id_for_label }}">{{ field.label }}</label>{% endif %}
     {% if field.errors %}
-        {% render_field field class="form-control is-invalid" %}
+        {% if hide_label %}{% render_field field class="form-control is-invalid" aria-label=field.label %}{% else %}{% render_field field class="form-control is-invalid" %}{% endif %}
         <div class="invalid-feedback">{{ field.errors|plain_errors }}</div>
     {% else %}
-        {% render_field field class="form-control" %}
+        {% if hide_label %}{% render_field field class="form-control" aria-label=field.label %}{% else %}{% render_field field class="form-control" %}{% endif %}
     {% endif %}
-    {% if not inline and field.help_text %}<div id="hint_{{ field.id_for_label }}" class="form-text">{{ field.help_text }}</div>{% endif %}
+    {% if not inline and field.help_text %}<div id="{{ field.id_for_label }}_helptext" class="form-text">{{ field.help_text }}</div>{% endif %}
 {% if not inline %}</div>{% endif %}

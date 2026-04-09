@@ -32,15 +32,6 @@ body {
 	font-feature-settings: 'cv05' 1;
 }
 
-h1, h2, h3, h4, h5, h6,
-.h1, .h2, .h3, .h4, .h5, .h6 {
-	font-family: var(--ft-font-heading);
-}
-
-h3, .h3 {
-	letter-spacing: -0.015em;
-}
-
 .btn {
 	font-family: var(--ft-font-body);
 }
@@ -51,6 +42,15 @@ h3, .h3 {
 
 main {
 	flex: 1 0 auto;
+}
+
+h1, h2, h3, h4, h5, h6,
+.h1, .h2, .h3, .h4, .h5, .h6 {
+	font-family: var(--ft-font-heading);
+}
+
+h3, .h3 {
+	letter-spacing: -0.015em;
 }
 
 sup {

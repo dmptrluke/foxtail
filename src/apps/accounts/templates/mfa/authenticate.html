@@ -57,10 +57,10 @@
     {% endif %}
 
     <div class="mt-4">
-        <a href="#" class="auth-back" onclick="document.getElementById('logout-from-stage').submit(); return false;">
+        <button type="button" class="auth-back" onclick="document.getElementById('logout-from-stage').submit();">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
             Cancel sign in
-        </a>
+        </button>
     </div>
 
     <form id="logout-from-stage" method="post" action="{% url 'account_logout' %}" class="d-none">

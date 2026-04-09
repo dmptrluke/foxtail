@@ -7,13 +7,19 @@
     {# main navigation #}
     {% load rules %}
     {% with vn=request.resolver_match.view_name %}
-    <div class="navbar-nav me-auto mb-2 mb-lg-0">
-        <a class="nav-item nav-link{% if vn == 'groups:organisation_list' or vn == 'groups:organisation_detail' %} active{% endif %}"
-           href="{% url 'groups:organisation_list' %}">Groups</a>
-        <a class="nav-item nav-link{% if vn == 'events:list' or vn == 'events:list_year' or vn == 'events:detail' %} active{% endif %}"
-           href="{% url 'events:list' %}">Events</a>
-        <a class="nav-item nav-link{% if vn == 'blog:list' or vn == 'blog:list_year' or vn == 'blog:detail' %} active{% endif %}"
-           href="{% url 'blog:list' %}">News</a>
+    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+            <a class="nav-link{% if vn == 'groups:organisation_list' or vn == 'groups:organisation_detail' %} active{% endif %}"
+               href="{% url 'groups:organisation_list' %}">Groups</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link{% if vn == 'events:list' or vn == 'events:list_year' or vn == 'events:detail' %} active{% endif %}"
+               href="{% url 'events:list' %}">Events</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link{% if vn == 'blog:list' or vn == 'blog:list_year' or vn == 'blog:detail' %} active{% endif %}"
+               href="{% url 'blog:list' %}">News</a>
+        </li>
 
         {% has_perm 'blog.manage_posts' user as can_manage_posts %}
         {% has_perm 'blog.manage_comments' user as can_manage_comments %}
@@ -29,10 +35,10 @@
                 </div>
             </li>
         {% endif %}
-    </div>
+    </ul>
     {% endwith %}
     {# user menu #}
-    <div class="navbar-nav">
+    <ul class="navbar-nav">
         {% if user.is_authenticated %}
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle{% if "account_" in request.resolver_match.url_name %} active{% endif %}"
@@ -54,7 +60,9 @@
                 </div>
             </li>
         {% else %}
-            <a class="nav-item nav-link" href="{% url 'account_login' %}">Sign In</a>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'account_login' %}">Sign In</a>
+            </li>
         {% endif %}
-    </div>
+    </ul>
 </div>

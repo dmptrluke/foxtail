@@ -500,6 +500,10 @@
   color: var(--auth-link);
   text-decoration: none;
   margin-bottom: 1.25rem;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
 
   &:hover {
     color: var(--auth-link-hover);

@@ -117,7 +117,7 @@
 
 		p {
 			font-size: 0.8rem;
-			color: var(--ft-text-muted);
+			color: var(--ft-text-light);
 			margin: 0.25rem 0 0;
 			@include line-clamp(2);
 		}
@@ -159,7 +159,7 @@
 	// Small muted text (timestamps, addresses)
 	.meta {
 		font-size: 0.75rem;
-		color: var(--ft-text-faint);
+		color: var(--ft-text-soft);
 	}
 
 	// Count pill (tag/category counts)

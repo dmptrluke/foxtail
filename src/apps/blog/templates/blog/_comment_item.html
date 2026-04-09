@@ -1,7 +1,7 @@
 {% load avatar rules %}
 
 <div class="comment-item{% if not comment.approved %} comment-pending{% endif %}" id="comment-{{ comment.pk }}">
-    <img src="{{ comment.author|avatar_url:64 }}" alt="{{ comment.author.get_short_name }}" width="64" height="64" loading="lazy">
+    <img src="{{ comment.author|avatar_url:64 }}" alt="" width="64" height="64" loading="lazy">
     <div class="comment-body">
         <strong>{{ comment.author.get_short_name }}</strong>
         {% if not comment.approved %}<span class="badge text-bg-warning">Pending</span>{% endif %}

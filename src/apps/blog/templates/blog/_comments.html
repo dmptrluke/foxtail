@@ -1,5 +1,5 @@
-<div class="comments-section">
-    <div class="comments-heading">Comments</div>
+<section class="comments-section" aria-labelledby="comments-heading">
+    <h2 class="comments-heading" id="comments-heading">Comments</h2>
     <div id="comment-list">
         {% for comment in comment_list %}
             {% include "blog/_comment_item.html" %}
@@ -7,4 +7,4 @@
     </div>
 
     {% include "blog/_comment_form.html" %}
-</div>
+</section>
