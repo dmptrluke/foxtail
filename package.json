@@ -19,13 +19,13 @@
         "colcade": "^0.2.0",
         "cropperjs": "^1.6.2",
         "htmx.org": "^2.0.8",
-        "maplibre-gl": "^5.21.1",
-        "sass": "^1.98.0",
+        "maplibre-gl": "^5.22.0",
+        "sass": "^1.99.0",
         "tom-select": "^2.5.2",
-        "vite": "^8.0.5"
+        "vite": "^8.0.8"
     },
     "devDependencies": {
-        "@biomejs/biome": "2.4.10",
+        "@biomejs/biome": "2.4.11",
         "@percy/cli": "^1.31.11",
         "stylelint": "^17.6.0",
         "stylelint-config-standard-scss": "^17.0.0"
