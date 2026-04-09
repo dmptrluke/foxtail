@@ -25,10 +25,19 @@ jobs:
         with:
           enable-cache: true
 
+      - uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6
+        with:
+          node-version: '22.x'
+          cache: npm
+
+      - run: npm ci
+
       - name: Lint
         run: |
           uvx ruff check src/
           uvx ruff format --check src/
+          npx biome check --no-errors-on-unmatched
+          npx stylelint "assets/**/*.scss"
 
   test:
     runs-on: ubuntu-latest
@@ -85,6 +94,19 @@ jobs:
 
       - name: Install Python dependencies
         run: uv sync --locked --no-install-project --group test
+
+      - name: Check for missing migrations
+        env:
+          PYTHONPATH: src
+          TESTING: true
+          SECRET_KEY: fake
+          EMAIL_ASYNC: false
+          HUEY_IMMEDIATE: "true"
+          CONTACT_EMAILS: test@example.com
+          DATABASE_URL: postgres://postgres:hunter2@localhost:${{ job.services.postgres.ports['5432'] }}/postgres
+          CACHE_URL: redis://localhost:${{ job.services.redis.ports[6379] }}/1
+          SITE_URL: http://localhost:8000
+        run: uv run python src/manage.py makemigrations --check --dry-run
 
       - name: Test with pytest
         env:
