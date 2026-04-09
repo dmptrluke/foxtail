@@ -27,13 +27,13 @@ class TestBlogListView:
     # tag filter returns posts with that tag
     def test_tag_filter(self, client, post: Post):
         tag = post.tags.first()
-        response = client.get(self.url, {'tag': tag.slug})
+        response = client.get(reverse('blog:tag', kwargs={'slug': tag.slug}))
         assert response.status_code == 200
         assert post in response.context['posts']
 
     # invalid tag slug returns 404
     def test_tag_filter_invalid(self, client, post: Post):
-        response = client.get(self.url, {'tag': 'nonexistent-tag-slug'})
+        response = client.get(reverse('blog:tag', kwargs={'slug': 'nonexistent-tag-slug'}))
         assert response.status_code == 404
 
     # sidebar context includes recent posts and tags
