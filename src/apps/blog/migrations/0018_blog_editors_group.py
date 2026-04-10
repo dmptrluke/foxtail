@@ -13,7 +13,7 @@ def remove_group(apps, schema_editor):
 
 class Migration(migrations.Migration):
     dependencies = [
-        ('foxtail_blog', '0017_imagefield_deconstruct'),
+        ('blog', '0017_imagefield_deconstruct'),
     ]
 
     operations = [

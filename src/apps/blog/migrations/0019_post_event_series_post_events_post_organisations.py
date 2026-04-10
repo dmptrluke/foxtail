@@ -7,7 +7,7 @@ class Migration(migrations.Migration):
 
     dependencies = [
         ('events', '0015_event_organisation_event_series_alter_event_image'),
-        ('foxtail_blog', '0018_blog_editors_group'),
+        ('blog', '0018_blog_editors_group'),
         ('organisations', '0001_initial'),
     ]
 

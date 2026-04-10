@@ -2,8 +2,8 @@ from django.db import migrations
 
 
 def migrate_authors(apps, schema_editor):
-    Post = apps.get_model('foxtail_blog', 'Post')
-    Author = apps.get_model('foxtail_blog', 'Author')
+    Post = apps.get_model('blog', 'Post')
+    Author = apps.get_model('blog', 'Author')
 
     author_names = Post.objects.exclude(author_legacy='').values_list('author_legacy', flat=True).distinct()
     author_map = {}
@@ -18,7 +18,7 @@ def migrate_authors(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('foxtail_blog', '0014_author_model'),
+        ('blog', '0014_author_model'),
     ]
 
     operations = [

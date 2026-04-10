@@ -6,7 +6,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('foxtail_blog', '0004_comments'),
+        ('blog', '0004_comments'),
     ]
 
     operations = [

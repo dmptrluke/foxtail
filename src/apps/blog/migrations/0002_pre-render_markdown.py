@@ -8,7 +8,7 @@ from markdownfield.models import MarkdownField
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('foxtail_blog', '0001_initial'),
+        ('blog', '0001_initial'),
     ]
 
     operations = [

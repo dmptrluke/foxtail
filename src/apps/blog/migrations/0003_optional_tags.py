@@ -8,7 +8,7 @@ import taggit.managers
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('foxtail_blog', '0002_pre-render_markdown'),
+        ('blog', '0002_pre-render_markdown'),
     ]
 
     operations = [

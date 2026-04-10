@@ -24,7 +24,7 @@ class TestCommentAdmin:
         admin = CommentAdmin(Comment, None)
         expected = format_html(
             '<a href="{}">{}</a>',
-            reverse('admin:foxtail_blog_post_change', args=(post.pk,)),
+            reverse('admin:blog_post_change', args=(post.pk,)),
             post.title,
         )
         assert admin.post_link(comment) == expected

@@ -3,7 +3,7 @@ from django.db import migrations, models
 
 class Migration(migrations.Migration):
     dependencies = [
-        ('foxtail_blog', '0012_image_null_to_empty'),
+        ('blog', '0012_image_null_to_empty'),
     ]
 
     operations = [

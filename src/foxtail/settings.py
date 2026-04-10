@@ -513,17 +513,17 @@ UNFOLD = {
                     {
                         'title': 'Blog Posts',
                         'icon': 'article',
-                        'link': reverse_lazy('admin:foxtail_blog_post_changelist'),
+                        'link': reverse_lazy('admin:blog_post_changelist'),
                     },
                     {
                         'title': 'Authors',
                         'icon': 'badge',
-                        'link': reverse_lazy('admin:foxtail_blog_author_changelist'),
+                        'link': reverse_lazy('admin:blog_author_changelist'),
                     },
                     {
                         'title': 'Comments',
                         'icon': 'chat_bubble',
-                        'link': reverse_lazy('admin:foxtail_blog_comment_changelist'),
+                        'link': reverse_lazy('admin:blog_comment_changelist'),
                     },
                     {
                         'title': 'Pages',
@@ -785,12 +785,12 @@ IMAGEFIELD_FORMATS = {
     'accounts.clientmetadata.logo': {
         'admin': webp(['default', ('thumbnail', (300, 300))]),
     },
-    'foxtail_blog.author.avatar': {
+    'blog.author.avatar': {
         'small': webp(['default', ('crop', (80, 80))]),
         'small_2x': webp(['default', ('crop', (160, 160))]),
         'admin': webp(['default', ('thumbnail', (300, 300))]),
     },
-    'foxtail_blog.post.image': {
+    'blog.post.image': {
         'card': webp(['default', ('crop', (600, 315))]),
         'card_2x': webp(['default', ('crop', (1200, 630))]),
         'banner': webp(['default', ('crop', (1440, 443))]),

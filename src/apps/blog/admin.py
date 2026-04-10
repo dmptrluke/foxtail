@@ -62,7 +62,7 @@ class PostAdmin(UnfoldModelAdmin, PublishedAdmin):
     def view_comments(self, request, object_id):
         from django.http import HttpResponseRedirect
 
-        url = reverse('admin:foxtail_blog_comment_changelist')
+        url = reverse('admin:blog_comment_changelist')
         return HttpResponseRedirect(f'{url}?post__id__exact={object_id}')
 
     @admin.display(description='Current status')
@@ -100,7 +100,7 @@ class CommentAdmin(UnfoldModelAdmin):
 
     def post_link(self, obj):
         return format_html(
-            '<a href="{}">{}</a>', reverse('admin:foxtail_blog_post_change', args=(obj.post.pk,)), obj.post.title
+            '<a href="{}">{}</a>', reverse('admin:blog_post_change', args=(obj.post.pk,)), obj.post.title
         )
 
     def text_preview(self, obj):

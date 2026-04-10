@@ -7,7 +7,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('foxtail_blog', '0019_post_event_series_post_events_post_organisations'),
+        ('blog', '0019_post_event_series_post_events_post_organisations'),
     ]
 
     operations = [

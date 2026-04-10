@@ -7,7 +7,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('foxtail_blog', '0013_image_remove_null'),
+        ('blog', '0013_image_remove_null'),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
@@ -42,7 +42,7 @@ class Migration(migrations.Migration):
                 null=True,
                 on_delete=django.db.models.deletion.SET_NULL,
                 related_name='posts',
-                to='foxtail_blog.author',
+                to='blog.author',
             ),
         ),
     ]

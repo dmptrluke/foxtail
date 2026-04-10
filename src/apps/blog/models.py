@@ -70,7 +70,7 @@ class Post(PublishedModel):
     allow_comments = models.BooleanField(default=True)
 
     author = models.ForeignKey(
-        'foxtail_blog.Author',
+        'blog.Author',
         on_delete=models.SET_NULL,
         null=True,
         blank=True,
@@ -162,7 +162,7 @@ class CommentQuerySet(models.QuerySet):
 
 
 class Comment(models.Model):
-    post = models.ForeignKey('foxtail_blog.Post', on_delete=models.CASCADE, related_name='comments')
+    post = models.ForeignKey('blog.Post', on_delete=models.CASCADE, related_name='comments')
     author = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
 
     text = models.TextField(max_length=280, help_text='280 characters or fewer.')

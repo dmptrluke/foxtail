@@ -72,7 +72,7 @@ def dashboard_callback(request, context):
                 'cols': [
                     format_html(
                         '<a href="{}" class="text-primary-600 dark:text-primary-400">{}</a>',
-                        reverse('admin:foxtail_blog_post_change', args=[p.pk]),
+                        reverse('admin:blog_post_change', args=[p.pk]),
                         p.title,
                     ),
                     str(p.author) if p.author else '-',
@@ -113,7 +113,7 @@ def dashboard_callback(request, context):
                     c.text[:60] + ('...' if len(c.text) > 60 else ''),
                     format_html(
                         '<a href="{}" class="text-primary-600 dark:text-primary-400">{}</a>',
-                        reverse('admin:foxtail_blog_post_change', args=[c.post_id]),
+                        reverse('admin:blog_post_change', args=[c.post_id]),
                         c.post.title[:30],
                     ),
                     str(c.author) if c.author else 'Anonymous',
@@ -127,7 +127,7 @@ def dashboard_callback(request, context):
                     ),
                     format_html(
                         '<a href="{}" class="text-primary-600 dark:text-primary-400 text-xs">Edit</a>',
-                        reverse('admin:foxtail_blog_comment_change', args=[c.pk]),
+                        reverse('admin:blog_comment_change', args=[c.pk]),
                     ),
                 ],
             }
