@@ -456,7 +456,7 @@ vips = [
 
 [[package]]
 name = "django-markdownfield"
-version = "0.19.0"
+version = "0.20.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "django" },
@@ -466,9 +466,9 @@ dependencies = [
     { name = "nh3" },
     { name = "shortuuid" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/d8/f0/45cce1695f567100b2588003e1b2d64cf430cf85854ceb363f13250ee0df/django_markdownfield-0.19.0.tar.gz", hash = "sha256:8816df001f9b32e7a70b3e6c334f02d61e3203878a1b5186a7ad39fe37978028", size = 186043, upload-time = "2026-04-02T09:14:05.619Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/e6/11/e2c01834ade263d742a5cc705386f671f3b71aab48a01b3d8b50dcd2b447/django_markdownfield-0.20.0.tar.gz", hash = "sha256:e4ec3d96cf739125aa6f4892bd6fa16c05c9cbf5f4a4a8f23fe749b24659c856", size = 184685, upload-time = "2026-04-10T11:50:34.685Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/5d/41/45340b029500f15dc0690536981b9ec6b6303607f5104f2b76a1d3abfb1c/django_markdownfield-0.19.0-py3-none-any.whl", hash = "sha256:4713fe5b5b7c7a5d92702a5ca6f45ec7f952e2447d890cab43c01808ac408fb2", size = 139784, upload-time = "2026-04-02T09:14:03.806Z" },
+    { url = "https://files.pythonhosted.org/packages/25/82/fb95a4f83e92a713b32afc8718d438fa4a6213eb1f18470c76c1e5963ca2/django_markdownfield-0.20.0-py3-none-any.whl", hash = "sha256:505933cec36c9886542c398919c4efa8e519697aedcafbd14c62ba5683ac24c8", size = 138042, upload-time = "2026-04-10T11:50:32.718Z" },
 ]
 
 [[package]]
@@ -726,7 +726,7 @@ requires-dist = [
     { name = "django-fetch-metadata", specifier = ">=0.1" },
     { name = "django-formguard", specifier = ">=0.8" },
     { name = "django-imagefield", extras = ["vips"], specifier = ">=0.23.0a3" },
-    { name = "django-markdownfield", specifier = ">=0.19.0" },
+    { name = "django-markdownfield", specifier = ">=0.20.0" },
     { name = "django-published", specifier = ">=1.1" },
     { name = "django-redis", specifier = ">=6.0,<7" },
     { name = "django-solo", specifier = ">=2.5" },
