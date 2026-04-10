@@ -9,7 +9,7 @@
 </form>
 
 <c-sidebar>
-    <c-sidebar.header>Recent Posts <small><a title="RSS Feed" href="{% url 'blog:feed' %}"><c-icons.rss-square /></a></small></c-sidebar.header>
+    <c-sidebar.header>Recent Posts <a title="RSS Feed" href="{% url 'blog:feed' %}"><c-icons.rss-square /></a></c-sidebar.header>
     <c-sidebar.content>
         {% for post in sidebar_post_list %}
             <a href="{{ post.get_absolute_url }}" class="preview">
