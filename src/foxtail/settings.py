@@ -460,6 +460,15 @@ UNFOLD = {
         'show_all_applications': True,
         'navigation': [
             {
+                'items': [
+                    {
+                        'title': 'View Site',
+                        'icon': 'open_in_new',
+                        'link': '/',
+                    },
+                ],
+            },
+            {
                 'title': 'Accounts',
                 'separator': True,
                 'items': [

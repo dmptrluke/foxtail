@@ -25,6 +25,8 @@ node_modules
 !.vscode/extensions.json
 *.code-workspace
 
+.idea/
+
 # Stashed apps
 _stashed/
 
