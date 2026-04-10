@@ -54,8 +54,8 @@ class LatestEntriesFeed(Feed):
     def feed_extra_kwargs(self, obj):
         conf = SiteSettings.get_solo()
         return {
-            'webfeeds_icon': self._absolute_static('images/paw-96.png'),
-            'webfeeds_logo': self._absolute_static('images/paw.svg'),
+            'webfeeds_icon': self._absolute_static('images/paw-bg-96.png'),
+            'webfeeds_logo': self._absolute_static('images/paw-bg.svg'),
             'webfeeds_accent_color': conf.theme_color.lstrip('#'),
         }
 
