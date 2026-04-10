@@ -434,7 +434,7 @@ UNFOLD = {
     'SITE_SUBHEADER': BUILD_VERSION or 'dev',
     'SITE_ICON': {
         'light': lambda request: static('images/paw.svg'),
-        'dark': lambda request: static('images/paw-light.svg'),
+        'dark': lambda request: static('images/paw-white.svg'),
     },
     'SHOW_HISTORY': True,
     'SHOW_VIEW_ON_SITE': True,
@@ -922,9 +922,9 @@ def _sitewide_structured_data():
             'url': SITE_URL,
             'logo': {
                 '@type': 'ImageObject',
-                'url': 'https://cdn.furry.nz/static/images/paw-dark@3x.png',
-                'width': 90,
-                'height': 90,
+                'url': f'{SITE_URL}/static/images/paw-512.png',
+                'width': 512,
+                'height': 512,
             },
         },
     ]
@@ -937,7 +937,7 @@ def _sitewide_og_data():
     return {
         'og:site_name': s.org_name,
         'og:locale': 'en_NZ',
-        'og:logo': 'https://cdn.furry.nz/static/images/paw-dark@3x.png',
+        'og:logo': f'{SITE_URL}/static/images/paw-512.png',
     }
 
 

@@ -12,8 +12,9 @@
     {% json_ld_sitewide %}
 
     <meta name="theme-color" content="{{ conf.theme_color }}">
-    <link rel="icon" type="image/png" sizes="32x32" href="{% static "favicon-32x32.png" %}">
-    <link rel="icon" type="image/png" sizes="16x16" href="{% static "favicon-16x16.png" %}">
+    <link rel="icon" href="{% static "favicon.svg" %}" type="image/svg+xml">
+    <link rel="icon" href="{% static "favicon.ico" %}" sizes="48x48">
+    <link rel="apple-touch-icon" href="{% static "apple-touch-icon.png" %}">
 
     <title>
         {% block title_full %}{% block title %}{% endblock title %} | {{ conf.org_name }}{% endblock title_full %}

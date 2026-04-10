@@ -28,6 +28,8 @@ class FoxtailAtomFeed(Atom1Feed):
 
     def add_root_elements(self, handler):
         super().add_root_elements(handler)
+        if self.feed.get('webfeeds_icon'):
+            handler.addQuickElement('webfeeds:icon', self.feed['webfeeds_icon'])
         if self.feed.get('webfeeds_logo'):
             handler.addQuickElement('webfeeds:logo', self.feed['webfeeds_logo'])
         if self.feed.get('webfeeds_accent_color'):
@@ -50,12 +52,10 @@ class LatestEntriesFeed(Feed):
         return reverse_lazy('blog:feed')
 
     def feed_extra_kwargs(self, obj):
-        logo_url = static('images/paw.svg')
-        if not logo_url.startswith('http'):
-            logo_url = settings.SITE_URL + logo_url
         conf = SiteSettings.get_solo()
         return {
-            'webfeeds_logo': logo_url,
+            'webfeeds_icon': self._absolute_static('images/paw-96.png'),
+            'webfeeds_logo': self._absolute_static('images/paw.svg'),
             'webfeeds_accent_color': conf.theme_color.lstrip('#'),
         }
 
@@ -96,6 +96,13 @@ class LatestEntriesFeed(Feed):
         except Exception:
             logger.exception('Missing image rendition for post %s', item.pk)
             return []
+
+    @staticmethod
+    def _absolute_static(path):
+        url = static(path)
+        if not url.startswith('http'):
+            url = settings.SITE_URL + url
+        return url
 
     @staticmethod
     def _enclosure(url):
