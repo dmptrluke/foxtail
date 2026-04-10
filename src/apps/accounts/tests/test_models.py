@@ -17,9 +17,9 @@ def test_string_representation(user):
     assert str(user) == user.username
 
 
-# get_full_name() returns full_name, not first/last name
+# get_full_name() returns username
 def test_get_full_name(user):
-    assert user.get_full_name() == user.full_name
+    assert user.get_full_name() == user.username
 
 
 # get_short_name() returns username

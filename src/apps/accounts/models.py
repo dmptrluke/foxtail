@@ -47,7 +47,7 @@ class User(AbstractUser):
             raise ValidationError({'date_of_birth': 'Date of birth can not be in the future.'})
 
     def get_full_name(self):
-        return self.full_name
+        return self.username
 
     def get_short_name(self):
         return self.username
