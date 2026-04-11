@@ -1,12 +1,9 @@
-{% load widget_tweaks form_tags %}
-<div class="form-check{% if not inline %} mb-3{% endif %}">
-    {% if field.errors %}
-        {% render_field field class="form-check-input is-invalid" %}
-        {% if not hide_label and not inline %}<label class="form-check-label" for="{{ field.id_for_label }}">{{ field.label }}</label>{% endif %}
-        <div class="invalid-feedback">{{ field.errors|plain_errors }}</div>
-    {% else %}
-        {% render_field field class="form-check-input" %}
-        {% if not hide_label and not inline %}<label class="form-check-label" for="{{ field.id_for_label }}">{{ field.label }}</label>{% endif %}
-    {% endif %}
-    {% if not inline and field.help_text %}<div class="form-text">{{ field.help_text }}</div>{% endif %}
+{% load form_tags %}
+{% if field.is_hidden %}{{ field }}{% else %}
+<div class="form-check{% if not inline %} mb-3{% endif %}{% if wrapper_class %} {{ wrapper_class }}{% endif %}">
+    {{ field }}
+    {% if not hide_label and not inline %}<label class="form-check-label" for="{{ field.id_for_label }}">{{ field.label }}</label>{% endif %}
+    {% include "components/forms/_errors.html" %}
+    {% if not inline %}{% include "components/forms/_help_text.html" %}{% endif %}
 </div>
+{% endif %}

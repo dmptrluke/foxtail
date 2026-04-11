@@ -86,7 +86,6 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.openid_connect',
     'anymail',
     'taggit',
-    'widget_tweaks',
     'allauth.idp',
     'allauth.idp.oidc',
     'imagefield',

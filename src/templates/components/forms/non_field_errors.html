@@ -1,6 +1,5 @@
-{% load form_tags %}
-{% if form.non_field_errors %}
+{% if errors %}
     <div class="alert alert-danger" role="alert">
-        {{ form.non_field_errors|plain_errors }}
+        {{ errors }}
     </div>
 {% endif %}

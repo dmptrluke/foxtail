@@ -1,7 +1,9 @@
 {% load form_tags %}
-<div class="mb-3">
+{% if field.is_hidden %}{{ field }}{% else %}
+<div class="mb-3{% if wrapper_class %} {{ wrapper_class }}{% endif %}">
     {% if not hide_label %}<label class="form-label" for="{{ field.id_for_label }}">{{ field.label }}</label>{% endif %}
     {{ field }}
-    {% if field.errors %}<div class="invalid-feedback d-block">{{ field.errors|plain_errors }}</div>{% endif %}
-    {% if field.help_text %}<div class="form-text">{{ field.help_text }}</div>{% endif %}
+    {% if errors %}<div id="{{ field.id_for_label }}_errors" class="invalid-feedback d-block">{{ errors }}</div>{% endif %}
+    {% include "components/forms/_help_text.html" %}
 </div>
+{% endif %}

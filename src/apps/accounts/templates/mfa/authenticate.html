@@ -1,5 +1,5 @@
 {% extends "base/shell.html" %}
-{% load form_tags widget_tweaks %}
+{% load form_tags %}
 
 {% block title %}Two-Factor Authentication{% endblock %}
 
@@ -39,18 +39,16 @@
             {% csrf_token %}
             {% non_field_errors form %}
 
-            <div class="form-group">
-                <label for="{{ form.code.id_for_label }}">
-                    {% if "totp" in user_authenticator_types and "recovery_codes" in user_authenticator_types %}
-                        Authenticator or recovery code
-                    {% elif "totp" in user_authenticator_types %}
-                        Authenticator code
-                    {% else %}
-                        Recovery code
-                    {% endif %}
-                </label>
-                {% render_field form.code class="form-control" %}
-            </div>
+            <label class="form-label" for="{{ form.code.id_for_label }}">
+                {% if "totp" in user_authenticator_types and "recovery_codes" in user_authenticator_types %}
+                    Authenticator or recovery code
+                {% elif "totp" in user_authenticator_types %}
+                    Authenticator code
+                {% else %}
+                    Recovery code
+                {% endif %}
+            </label>
+            {% text_field form.code hide_label=True %}
 
             <button type="submit" class="auth-btn-primary">Verify</button>
         </form>

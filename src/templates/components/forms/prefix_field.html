@@ -1,14 +1,12 @@
-{% load widget_tweaks form_tags %}
-<div class="mb-3">
+{% load form_tags %}
+{% if field.is_hidden %}{{ field }}{% else %}
+<div class="mb-3{% if wrapper_class %} {{ wrapper_class }}{% endif %}">
     {% if not hide_label %}<label class="form-label" for="{{ field.id_for_label }}">{{ field.label }}</label>{% endif %}
     <div class="input-group">
         <span class="input-group-text">{{ prefix }}</span>
-        {% if field.errors %}
-            {% render_field field class="form-control is-invalid" %}
-            <div class="invalid-feedback">{{ field.errors|plain_errors }}</div>
-        {% else %}
-            {% render_field field class="form-control" %}
-        {% endif %}
+        {{ field }}
+        {% include "components/forms/_errors.html" %}
     </div>
-    {% if field.help_text %}<div class="form-text">{{ field.help_text }}</div>{% endif %}
+    {% include "components/forms/_help_text.html" %}
 </div>
+{% endif %}

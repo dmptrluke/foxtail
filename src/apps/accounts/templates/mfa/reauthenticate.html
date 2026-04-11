@@ -1,5 +1,5 @@
 {% extends "base/shell.html" %}
-{% load form_tags widget_tweaks %}
+{% load form_tags %}
 
 {% block title %}Confirm Access{% endblock %}
 
@@ -14,10 +14,7 @@
 
         {% non_field_errors form %}
 
-        <div class="form-group">
-            <label for="{{ form.code.id_for_label }}">Authenticator code</label>
-            {% render_field form.code class="form-control" %}
-        </div>
+        {% text_field form.code %}
         {{ redirect_field }}
 
         <button type="submit" class="auth-btn-primary">Confirm</button>

@@ -2,7 +2,7 @@
 # See https://pre-commit.com/hooks.html for more hooks
 exclude: 'node_modules|storage|build|.git|.pytest_cache|.tox'
 default_language_version:
-    python: python3.13
+    python: python3.14
 repos:
 -   repo: https://github.com/pre-commit/pre-commit-hooks
     rev: 3e8a8703264a2f4a69428a0aa4dcb512790b2c8c  # v6.0.0
