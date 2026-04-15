@@ -35,3 +35,4 @@ build/
 storage/
 /static/
 TODOS.md
+.gstack/

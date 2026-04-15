@@ -1,27 +1,27 @@
 {
-    "$schema": "https://biomejs.dev/schemas/2.4.9/schema.json",
-    "vcs": {
-        "enabled": true,
-        "clientKind": "git",
-        "useIgnoreFile": true
-    },
-    "files": {
-        "includes": ["assets/js/**"]
-    },
-    "formatter": {
-        "enabled": false
-    },
-    "linter": {
-        "enabled": true,
-        "rules": {
-            "recommended": true,
-            "suspicious": {
-                "useIterableCallbackReturn": "off",
-                "noConsole": "warn"
-            }
-        }
-    },
-    "assist": {
-        "enabled": false
-    }
+	"$schema": "https://biomejs.dev/schemas/2.4.10/schema.json",
+	"vcs": {
+		"enabled": true,
+		"clientKind": "git",
+		"useIgnoreFile": true
+	},
+	"files": {
+		"includes": ["assets/js/**"]
+	},
+	"formatter": {
+		"enabled": false
+	},
+	"linter": {
+		"enabled": true,
+		"rules": {
+			"recommended": true,
+			"suspicious": {
+				"useIterableCallbackReturn": "off",
+				"noConsole": "warn"
+			}
+		}
+	},
+	"assist": {
+		"enabled": false
+	}
 }
