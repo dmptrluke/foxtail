@@ -15,6 +15,9 @@ db.sqlite3
 # Ruff
 .ruff_cache/
 
+# Build caches
+.cache/
+
 # NPM
 node_modules
 

@@ -29,7 +29,6 @@ body {
 	height: 100% !important;
 	background-image: linear-gradient(var(--bs-dark) calc(4rem + env(safe-area-inset-top, 0px)), transparent calc(4rem + env(safe-area-inset-top, 0px)));
 	background-attachment: fixed;
-	font-feature-settings: 'cv05' 1;
 }
 
 .btn {
@@ -54,14 +53,14 @@ h3, .h3 {
 }
 
 sup {
-	font-feature-settings: 'cv05' 1, 'sups' 1;
+	font-feature-settings: 'sups' 1;
 	font-size: inherit;
 	vertical-align: baseline;
 	top: auto;
 }
 
 sub {
-	font-feature-settings: 'cv05' 1, 'subs' 1;
+	font-feature-settings: 'subs' 1;
 	font-size: inherit;
 	vertical-align: baseline;
 	bottom: auto;
