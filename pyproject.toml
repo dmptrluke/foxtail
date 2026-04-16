@@ -19,7 +19,7 @@ dependencies = [
     "django-published>=1.1",
     "django-redis>=6.0,<7",
     "huey",
-    "django-storages[s3]>=1.14,<2",
+    "django-storages[s3]>=1.14.6,<2",
     "django-structured-data>=0.13",
     "django-taggit>=6.1,<7",
     "fido2>=2.1",
