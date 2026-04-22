@@ -717,7 +717,7 @@ requires-dist = [
     { name = "django-published", specifier = ">=1.1" },
     { name = "django-redis", specifier = ">=6.0,<7" },
     { name = "django-solo", specifier = ">=2.5" },
-    { name = "django-storages", extras = ["s3"], specifier = ">=1.14,<2" },
+    { name = "django-storages", extras = ["s3"], specifier = ">=1.14.6,<2" },
     { name = "django-structured-data", specifier = ">=0.13" },
     { name = "django-taggit", specifier = ">=6.1,<7" },
     { name = "django-unfold", specifier = ">=0.87.0" },
