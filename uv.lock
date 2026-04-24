@@ -728,7 +728,7 @@ requires-dist = [
     { name = "icalendar", specifier = ">=7.0" },
     { name = "markdown", specifier = ">=3.10" },
     { name = "mjml-python", specifier = ">=1.4.0" },
-    { name = "psycopg", extras = ["binary"], specifier = ">=3.3,<4" },
+    { name = "psycopg", extras = ["binary"], specifier = ">=3.3.3,<4" },
     { name = "pyjwt", specifier = ">=2.12,<3" },
     { name = "requests", specifier = ">=2.33" },
     { name = "requests-oauthlib", specifier = ">=2.0" },
