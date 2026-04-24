@@ -8,7 +8,7 @@ import pytest
 from apps.blog.models import Post
 from apps.blog.tests.factories import PostFactory
 from apps.events.models import Event
-from apps.events.tests.factories import EventFactory
+from apps.events.tests.factories import EventFactory, EventInterestFactory
 from apps.organisations.tests.factories import OrganisationFactory
 
 from ..models import Page
@@ -101,6 +101,35 @@ class TestIndexView:
         context = view.get_context_data()
 
         assert 'days_until' not in context
+
+    # ongoing event shows active countdown state instead of negative days
+    def test_ongoing_event_countdown_is_live(self, db, request_factory: RequestFactory):
+        EventFactory(
+            start=timezone.localdate() - timedelta(days=2),
+            end=timezone.localdate() + timedelta(days=2),
+        )
+        view = IndexView()
+        view.setup(request_factory.get('/'))
+        context = view.get_context_data()
+
+        assert context['event_is_live'] is True
+        assert context['days_until'] is None
+
+    # authenticated user's ongoing interest event shows active countdown state
+    def test_user_next_event_countdown_is_live(self, db, user, request_factory: RequestFactory):
+        event = EventFactory(
+            start=timezone.localdate() - timedelta(days=2),
+            end=timezone.localdate() + timedelta(days=2),
+        )
+        EventInterestFactory(event=event, user=user)
+        request = request_factory.get('/')
+        request.user = user
+        view = IndexView()
+        view.setup(request)
+        context = view.get_context_data()
+
+        assert context['user_next_event_is_live'] is True
+        assert context['user_next_event_days'] is None
 
 
 class TestPageView:

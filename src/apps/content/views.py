@@ -1,7 +1,7 @@
 from django.conf import settings
 from django.core.cache import cache
 from django.db.models import Q
-from django.utils.timezone import now
+from django.utils.timezone import localdate, now
 from django.views.generic import DetailView, TemplateView
 
 from published.utils import queryset_filter
@@ -20,7 +20,7 @@ class IndexView(StructuredDataMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        today = now().date()
+        today = localdate()
         context['post_list'] = queryset_filter(Post.objects).all()[:3]
         event_list = list(queryset_filter(Event.objects).not_ended().for_homepage()[:3])
         context['event_list'] = event_list
@@ -28,7 +28,10 @@ class IndexView(StructuredDataMixin, TemplateView):
         context['featured_organisations'] = Organisation.objects.filter(featured=True).with_social_links()[:6]
 
         if event_list:
-            context['days_until'] = (event_list[0].start - today).days
+            next_event = event_list[0]
+            end_date = next_event.end or next_event.start
+            context['event_is_live'] = next_event.start <= today <= end_date
+            context['days_until'] = None if context['event_is_live'] else (next_event.start - today).days
 
         if getattr(self.request, 'user', None) and self.request.user.is_authenticated:
             self._add_dashboard_context(context, today)
@@ -49,8 +52,13 @@ class IndexView(StructuredDataMixin, TemplateView):
         context['user_event_count'] = len(user_events)
         first_interest = user_events[0] if user_events else None
         if first_interest:
-            context['user_next_event'] = first_interest.event
-            context['user_next_event_days'] = (first_interest.event.start - today).days
+            user_next_event = first_interest.event
+            context['user_next_event'] = user_next_event
+            end_date = user_next_event.end or user_next_event.start
+            context['user_next_event_is_live'] = user_next_event.start <= today <= end_date
+            context['user_next_event_days'] = (
+                None if context['user_next_event_is_live'] else (user_next_event.start - today).days
+            )
 
         context['org_count'] = cache.get_or_set('org_count', Organisation.objects.count, 86400)
 
