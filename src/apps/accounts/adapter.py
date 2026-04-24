@@ -13,6 +13,7 @@ class FoxtailOIDCAdapter(DefaultOIDCAdapter):
         'email': 'Email Address',
         'profile': 'Profile Information',
         'verification': 'Verification Status',
+        'aws.cognito.signin.user.admin': 'Cognito Profile API Access',
     }
 
     def get_issuer(self):

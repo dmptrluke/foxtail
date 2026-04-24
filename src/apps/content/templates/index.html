@@ -42,7 +42,9 @@
                             <c-icons.paw width="1.5em" height="1.5em" />
                             <h2>Your events</h2>
                             <p>You're interested in {{ user_event_count }} upcoming event{{ user_event_count|pluralize }}. Next: {{ user_next_event.title }}.</p>
-                            {% if user_next_event_days is not None %}
+                            {% if user_next_event_is_live %}
+                                <span class="onboarding-badge">On now</span>
+                            {% elif user_next_event_days is not None %}
                                 <span class="onboarding-badge">In {{ user_next_event_days }} day{{ user_next_event_days|pluralize }}</span>
                             {% endif %}
                         </a>
@@ -51,7 +53,9 @@
                             <c-icons.paw width="1.5em" height="1.5em" />
                             <h2>Next up</h2>
                             <p>{{ event_list.0.title }}{% if event_list.0.location %} - {{ event_list.0.location }}{% endif %}</p>
-                            {% if days_until is not None %}
+                            {% if event_is_live %}
+                                <span class="onboarding-badge">On now</span>
+                            {% elif days_until is not None %}
                                 <span class="onboarding-badge">In {{ days_until }} day{{ days_until|pluralize }}</span>
                             {% endif %}
                         </a>
@@ -191,7 +195,9 @@
                                 <div class="event-details">
                                     <h3>
                                         {{ event.title }}
-                                        {% if forloop.first and days_until is not None %}
+                                        {% if forloop.first and event_is_live %}
+                                            <span class="badge bg-primary-subtle text-primary-emphasis ms-1">on now</span>
+                                        {% elif forloop.first and days_until is not None %}
                                             <span class="badge bg-primary-subtle text-primary-emphasis ms-1">in {{ days_until }} day{{ days_until|pluralize }}</span>
                                         {% endif %}
                                     </h3>

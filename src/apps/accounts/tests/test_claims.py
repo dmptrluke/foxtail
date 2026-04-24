@@ -164,3 +164,9 @@ def test_get_user_by_sub_invalid(user):
 
     adapter = FoxtailOIDCAdapter()
     assert adapter.get_user_by_sub(client=client, sub='not-a-uuid') is None
+
+
+# Cognito-specific scope is presented with a readable consent label
+def test_scope_display_cognito_admin_label():
+    adapter = FoxtailOIDCAdapter()
+    assert adapter.scope_display['aws.cognito.signin.user.admin'] == 'Cognito Profile API Access'
