@@ -32,6 +32,15 @@
 {% endblock hero %}
 
 {% block pre_content %}
+    {% if show_furconz_welcome_banner %}
+        <div class="container px-3 px-md-4 my-4">
+            <div class="alert alert-info mb-0" role="status" aria-live="polite">
+                <strong>Welcome, FurcoNZ visitors!</strong>
+                Due to the FurcoNZ restructure, your request has been redirected here. Please follow the <strong><a href="https://t.me/furconznews" target="_blank" rel="noopener noreferrer">FurcoNZ telegram channel</a></strong> for further updates.
+            </div>
+        </div>
+    {% endif %}
+
     <div class="onboarding">
         <div class="container px-3 px-md-4">
             <div class="onboarding-inner">

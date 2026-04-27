@@ -131,6 +131,18 @@ class TestIndexView:
         assert context['user_next_event_is_live'] is True
         assert context['user_next_event_days'] is None
 
+    # FurcoNZ banner is shown once, then removed from the session
+    def test_furconz_banner_flag_consumed(self, db, request_factory: RequestFactory):
+        request = request_factory.get('/')
+        request.session = {'show_furconz_welcome_banner': True}
+
+        view = IndexView()
+        view.setup(request)
+        context = view.get_context_data()
+
+        assert context['show_furconz_welcome_banner'] is True
+        assert request.session.get('show_furconz_welcome_banner') is None
+
 
 class TestPageView:
     """Test PageView detail context."""

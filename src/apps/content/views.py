@@ -8,6 +8,7 @@ from published.utils import queryset_filter
 from structured_data.views import StructuredDataMixin
 
 from apps.blog.models import Post
+from apps.core.middleware import FURCONZ_REDIRECT_SESSION_KEY
 from apps.core.models import SiteSettings
 from apps.events.models import Event, EventInterest
 from apps.organisations.models import Organisation
@@ -21,6 +22,13 @@ class IndexView(StructuredDataMixin, TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         today = localdate()
+        session = getattr(self.request, 'session', None)
+
+        if session is not None:
+            context['show_furconz_welcome_banner'] = bool(session.pop(FURCONZ_REDIRECT_SESSION_KEY, False))
+        else:
+            context['show_furconz_welcome_banner'] = False
+
         context['post_list'] = queryset_filter(Post.objects).all()[:3]
         event_list = list(queryset_filter(Event.objects).not_ended().for_homepage()[:3])
         context['event_list'] = event_list

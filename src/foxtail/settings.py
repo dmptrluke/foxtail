@@ -103,6 +103,7 @@ MIDDLEWARE = [
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'csp.middleware.CSPMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'apps.core.middleware.FurcoNZRedirectMiddleware',
     'django.middleware.common.CommonMiddleware',
     'fetch_metadata.middleware.FetchMetadataMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
