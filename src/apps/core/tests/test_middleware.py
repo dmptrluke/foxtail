@@ -5,7 +5,7 @@ from django.http import HttpResponse
 from django.test import RequestFactory
 from django.utils import timezone
 
-from ..middleware import FurcoNZRedirectMiddleware, RequestLoggingMiddleware, TimezoneMiddleware
+from ..middleware import RequestLoggingMiddleware, TimezoneMiddleware
 
 
 class TestTimezoneMiddleware:
@@ -76,39 +76,3 @@ class TestRequestLoggingMiddleware:
         mw(request_factory.get('/health/'))
 
         mock_logger.info.assert_not_called()
-
-
-class TestFurcoNZRedirectMiddleware:
-    def _make_middleware(self):
-        return FurcoNZRedirectMiddleware(lambda r: HttpResponse('ok'))
-
-    # referer from furconz.org.nz marks the session so the homepage can show the banner
-    def test_sets_banner_flag_for_furconz_referrer(self, request_factory: RequestFactory):
-        mw = self._make_middleware()
-        request = request_factory.get('/', HTTP_REFERER='https://furconz.org.nz/news')
-        request.session = {}
-
-        mw(request)
-
-        assert request.session['show_furconz_welcome_banner'] is True
-
-    # unrelated referers do not set the banner session flag
-    def test_ignores_non_furconz_referrer(self, request_factory: RequestFactory):
-        mw = self._make_middleware()
-        request = request_factory.get('/', HTTP_REFERER='https://example.com/')
-        request.session = {}
-
-        mw(request)
-
-        assert request.session.get('show_furconz_welcome_banner') is None
-
-    # debug query parameter enables local manual testing without external redirects
-    def test_debug_query_parameter_sets_flag(self, request_factory: RequestFactory, settings):
-        settings.DEBUG = True
-        mw = self._make_middleware()
-        request = request_factory.get('/?from_furconz=1')
-        request.session = {}
-
-        mw(request)
-
-        assert request.session['show_furconz_welcome_banner'] is True
