@@ -103,7 +103,6 @@ MIDDLEWARE = [
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'csp.middleware.CSPMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    'apps.core.middleware.FurcoNZRedirectMiddleware',
     'django.middleware.common.CommonMiddleware',
     'fetch_metadata.middleware.FetchMetadataMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -700,6 +699,7 @@ MFA_WEBAUTHN_ALLOW_INSECURE_ORIGIN = DEBUG
 
 IDP_OIDC_ADAPTER = 'apps.accounts.adapter.FoxtailOIDCAdapter'
 IDP_OIDC_PRIVATE_KEY = env('OIDC_RSA_PRIVATE_KEY', default='')
+IDP_OIDC_PRIVATE_KEY_FALLBACKS = env.list('OIDC_RSA_PRIVATE_KEY_FALLBACKS', default=[])
 
 # Fetch Metadata
 # OIDC discovery and JWKS endpoints receive cross-site GET requests from relying parties
