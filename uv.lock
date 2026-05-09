@@ -290,16 +290,16 @@ wheels = [
 
 [[package]]
 name = "django"
-version = "5.2.13"
+version = "5.2.14"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "asgiref" },
     { name = "sqlparse" },
     { name = "tzdata", marker = "sys_platform == 'win32'" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/1f/c5/c69e338eb2959f641045802e5ea87ca4bf5ac90c5fd08953ca10742fad51/django-5.2.13.tar.gz", hash = "sha256:a31589db5188d074c63f0945c3888fad104627dfcc236fb2b97f71f89da33bc4", size = 10890368, upload-time = "2026-04-07T14:02:15.072Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/65/95/95f7faa0950867afaa0bef2460c6263afd6a2c78cc9434046ed28160b015/django-5.2.14.tar.gz", hash = "sha256:58a63ba841662e5c686b57ba1fec52ddd68c0b93bd96ac3029d55728f00bf8a2", size = 10895118, upload-time = "2026-05-05T13:57:31.104Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/59/b1/51ab36b2eefcf8cdb9338c7188668a157e29e30306bfc98a379704c9e10d/django-5.2.13-py3-none-any.whl", hash = "sha256:5788fce61da23788a8ce6f02583765ab060d396720924789f97fa42119d37f7a", size = 8310982, upload-time = "2026-04-07T14:02:08.883Z" },
+    { url = "https://files.pythonhosted.org/packages/14/44/f172870cf87aa25afef48fb72adba89ee8b77fcab6f3b23d240b923f1528/django-5.2.14-py3-none-any.whl", hash = "sha256:6f712143bd3064310d1f50fac859c3e9a274bdcfc9595339853be7779297fc76", size = 8311320, upload-time = "2026-05-05T13:57:25.795Z" },
 ]
 
 [[package]]
@@ -551,14 +551,14 @@ wheels = [
 
 [[package]]
 name = "django-unfold"
-version = "0.91.0"
+version = "0.92.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "django" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/a4/cd/a2fdc41f2eed90242338982e2afadccdab4db7043a829b41a9ec54baaa35/django_unfold-0.91.0.tar.gz", hash = "sha256:98543cf149f9b363ad83c77747ff7e9e89323324b10e6afa4d3a672cb0c4f86d", size = 1121543, upload-time = "2026-04-27T13:25:30.417Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/2a/f7/789d25724f9466a6b0d61a5d88ae34d2dd96623ef478a2490330cb4a2aa5/django_unfold-0.92.0.tar.gz", hash = "sha256:cf3e2b1350899fc4380f5870eef25042993d10aa59544f92d4c9986854c5c048", size = 1122249, upload-time = "2026-05-01T07:49:20.88Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/cb/e8/2591119368628867284550ee5c337bae1f4b4c0e5a8a59f231899326a26f/django_unfold-0.91.0-py3-none-any.whl", hash = "sha256:486a468ec4788e0668a9e73686796b04450709171af4ac213b6d229a8015676a", size = 1245169, upload-time = "2026-04-27T13:25:31.765Z" },
+    { url = "https://files.pythonhosted.org/packages/e9/36/5546921b5217fe60a3deb2176ad778988dd9733ff9d2adc87534daa7b539/django_unfold-0.92.0-py3-none-any.whl", hash = "sha256:7f57f7db6208faa2eb108586b0d7c2dd03ac37eb45d5d79549f35594c6b24760", size = 1246206, upload-time = "2026-05-01T07:49:19.081Z" },
 ]
 
 [[package]]
@@ -702,7 +702,7 @@ test = [
 requires-dist = [
     { name = "anyascii", specifier = ">=0.3" },
     { name = "argon2-cffi", specifier = ">=25.1" },
-    { name = "django", specifier = ">=5.2.13,<6" },
+    { name = "django", specifier = ">=5.2.14,<6" },
     { name = "django-allauth", extras = ["mfa", "idp-oidc"], specifier = ">=65.16.1,<66" },
     { name = "django-anymail", extras = ["mailgun"], specifier = ">=15.0,<16" },
     { name = "django-cleanup", specifier = ">=9.0" },
@@ -720,12 +720,12 @@ requires-dist = [
     { name = "django-storages", extras = ["s3"], specifier = ">=1.14.6,<2" },
     { name = "django-structured-data", specifier = ">=0.13" },
     { name = "django-taggit", specifier = ">=6.1,<7" },
-    { name = "django-unfold", specifier = ">=0.91.0" },
+    { name = "django-unfold", specifier = ">=0.92.0" },
     { name = "django-vite", specifier = ">=3.1,<4" },
     { name = "fido2", specifier = ">=2.2.0" },
     { name = "gunicorn", specifier = ">=26.0.0,<27" },
     { name = "huey" },
-    { name = "icalendar", specifier = ">=7.0" },
+    { name = "icalendar", specifier = ">=7.1.0" },
     { name = "markdown", specifier = ">=3.10" },
     { name = "mjml-python", specifier = ">=1.4.0" },
     { name = "psycopg", extras = ["binary"], specifier = ">=3.3.4,<4" },
@@ -734,7 +734,7 @@ requires-dist = [
     { name = "requests-oauthlib", specifier = ">=2.0" },
     { name = "rules", specifier = ">=3.5" },
     { name = "segno", specifier = ">=1.6" },
-    { name = "sentry-sdk", specifier = ">=2.58.0" },
+    { name = "sentry-sdk", specifier = ">=2.59.0" },
     { name = "shortuuid", specifier = ">=1.0.13" },
     { name = "whitenoise", specifier = ">=6.12,<7" },
 ]
@@ -798,15 +798,15 @@ wheels = [
 
 [[package]]
 name = "icalendar"
-version = "7.0.3"
+version = "7.1.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "python-dateutil" },
     { name = "tzdata" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/b8/60/6b0356a2ed1c9689ae14bd8e44f22eac67c420a0ecca4df8306b70906600/icalendar-7.0.3.tar.gz", hash = "sha256:95027ece087ab87184d765f03761f25875821f74cdd18d3b57e9c868216d8fde", size = 443788, upload-time = "2026-03-03T12:00:10.952Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/99/4c/ea2ca8ea012a2bf486657ebc5704d97bd9628e1cb85130b3f5298ac08f60/icalendar-7.1.0.tar.gz", hash = "sha256:10cd223c792fcc43bee4c3ebe3149d4cf32406c85cfef146624df5a0d414260f", size = 467258, upload-time = "2026-04-30T23:25:20.282Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/fa/c6/431fbf9063a6a4306d4cedae7823d69baf0979ba6ca57ab24a9d898cd0aa/icalendar-7.0.3-py3-none-any.whl", hash = "sha256:8c9fea6d3a89671bba8b6938d8565b4d0ec465c6a2796ef0f92790dcb9e627cd", size = 442406, upload-time = "2026-03-03T12:00:09.228Z" },
+    { url = "https://files.pythonhosted.org/packages/1b/df/68d5aa80188ad0880f12e2fc60d5df10fc831fdb11ef1d91e417e24ef4ee/icalendar-7.1.0-py3-none-any.whl", hash = "sha256:6de875370d22fc4aff172ad7c439b39fb109dc2eab9ce358fcb95e8689ad7b56", size = 471220, upload-time = "2026-04-30T23:25:18.584Z" },
 ]
 
 [[package]]
@@ -1274,15 +1274,15 @@ wheels = [
 
 [[package]]
 name = "sentry-sdk"
-version = "2.58.0"
+version = "2.59.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "certifi" },
     { name = "urllib3" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/26/b3/fb8291170d0e844173164709fc0fa0c221ed75a5da740c8746f2a83b4eb1/sentry_sdk-2.58.0.tar.gz", hash = "sha256:c1144d947352d54e5b7daa63596d9f848adf684989c06c4f5a659f0c85a18f6f", size = 438764, upload-time = "2026-04-13T17:23:26.265Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/65/e0/9bf5e5fc7442b10880f3ec0eff0ef4208b84a099606f343ec4f5445227fb/sentry_sdk-2.59.0.tar.gz", hash = "sha256:cd265808ef8bf3f3edf69b527c0a0b2b6b1322762679e55b8987db2e9584aec1", size = 447331, upload-time = "2026-05-04T12:19:06.538Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/fa/eb/d875669993b762556ae8b2efd86219943b4c0864d22204d622a9aee3052b/sentry_sdk-2.58.0-py2.py3-none-any.whl", hash = "sha256:688d1c704ddecf382ea3326f21a67453d4caa95592d722b7c780a36a9d23109e", size = 460919, upload-time = "2026-04-13T17:23:24.675Z" },
+    { url = "https://files.pythonhosted.org/packages/bf/00/b8cc413748fb6383d1582e7cda51314f99743351c462a92dc690d5b5853b/sentry_sdk-2.59.0-py2.py3-none-any.whl", hash = "sha256:abcf65ee9a9d9cdebf9ad369782408ecca9c1c792686ef06ba34f5ab233527fe", size = 468432, upload-time = "2026-05-04T12:19:04.741Z" },
 ]
 
 [[package]]
