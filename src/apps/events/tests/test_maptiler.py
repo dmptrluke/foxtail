@@ -26,6 +26,16 @@ class TestGeocode:
         result = geocode('TSB Arena, Wellington', 'test-key')
         assert result == (Decimal('-41.28646'), Decimal('174.776236'))
 
+    # multiline addresses are normalized before building the MapTiler query
+    @patch('apps.events.maptiler.requests.get')
+    def test_normalizes_multiline_address(self, mock_get):
+        mock_get.return_value = Mock(status_code=200, json=lambda: {'features': []})
+
+        geocode('TSB Arena\n4 Queens Wharf\nWellington', 'test-key')
+
+        url = mock_get.call_args.args[0]
+        assert url == 'https://api.maptiler.com/geocoding/TSB%20Arena%204%20Queens%20Wharf%20Wellington.json'
+
     # geocode returns None when no features match
     @patch('apps.events.maptiler.requests.get')
     def test_returns_none_on_empty_results(self, mock_get):
