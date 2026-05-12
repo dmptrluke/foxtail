@@ -10,7 +10,7 @@ from unfold.decorators import display
 from apps.core.admin_helpers import publish_status_badge as _publish_status_badge
 from apps.core.widgets import UnfoldTagWidget
 
-from .models import Event, EventInterest
+from .models import Event, EventInterest, EventTicketTier
 from .tasks import geocode_event
 
 
@@ -19,6 +19,12 @@ class EventInterestInline(TabularInline):
     extra = 0
     show_count = True
     readonly_fields = ('user', 'status', 'created')
+
+
+class EventTicketTierInline(TabularInline):
+    model = EventTicketTier
+    extra = 0
+    fields = ('name', 'price', 'currency', 'available_from', 'available_until', 'is_sold_out', 'order')
 
 
 class EventAdminForm(ModelForm):
@@ -83,7 +89,7 @@ class EventAdmin(UnfoldModelAdmin):
     def publish_status_badge(self, obj):
         return _publish_status_badge(obj)
 
-    inlines = [EventInterestInline]
+    inlines = [EventTicketTierInline, EventInterestInline]
     autocomplete_fields = ['organisation', 'series']
     search_fields = ['title']
     list_display = ('title', 'organisation', 'start', 'end', 'show_status', 'tag_list')

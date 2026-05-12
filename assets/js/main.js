@@ -173,6 +173,10 @@ function onLoad() {
     if (document.querySelector('[data-interest-url]')) {
         import('./eventInterest.js').then(m => m.initEventInterest());
     }
+
+    if (document.querySelector('[data-ticket-formset]')) {
+        import('./eventTicketTiers.js').then(m => m.initEventTicketTiers());
+    }
 }
 
 onLoad();

@@ -4,7 +4,7 @@ from factory.django import DjangoModelFactory
 
 from apps.core.tests.factories import TaggedModelFactory
 
-from ..models import Event
+from ..models import Event, EventTicketTier
 
 
 class EventFactory(TaggedModelFactory):
@@ -23,6 +23,16 @@ class EventFactory(TaggedModelFactory):
 
 class PastEventFactory(EventFactory):
     start = Faker('past_date')
+
+
+class EventTicketTierFactory(DjangoModelFactory):
+    class Meta:
+        model = EventTicketTier
+
+    event = factory.SubFactory(EventFactory)
+    name = 'General admission'
+    price = factory.Faker('pydecimal', left_digits=2, right_digits=2, positive=True)
+    currency = 'NZD'
 
 
 class EventInterestFactory(DjangoModelFactory):

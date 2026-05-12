@@ -1,4 +1,5 @@
 from datetime import timedelta
+from decimal import Decimal
 from unittest.mock import patch
 
 from django.contrib.messages import get_messages
@@ -8,8 +9,8 @@ from django.utils.timezone import now
 import pytest
 from published.constants import AVAILABLE
 
-from ..models import Event
-from .factories import EventFactory, EventInterestFactory
+from ..models import Event, EventTicketTier
+from .factories import EventFactory, EventInterestFactory, EventTicketTierFactory
 
 pytestmark = pytest.mark.django_db
 
@@ -140,6 +141,27 @@ class TestEventDetailView:
         response = client.get(event.get_absolute_url())
         assert 'user_interest_status' not in response.context
 
+    # pricing is hidden when an event has no ticket tiers
+    def test_pricing_hidden_without_tiers(self, client, event: Event):
+        response = client.get(event.get_absolute_url())
+        assert b'Pricing' not in response.content
+
+    # pricing shows ticket tier names, prices, and availability labels
+    def test_pricing_renders_tiers(self, client):
+        event = EventFactory()
+        EventTicketTierFactory(
+            event=event,
+            name='Early bird',
+            price=Decimal('25.00'),
+            currency='AUD',
+            available_from=now() + timedelta(days=1),
+        )
+        response = client.get(event.get_absolute_url())
+        assert b'Pricing' in response.content
+        assert b'Early bird' in response.content
+        assert b'AUD 25.00' in response.content
+        assert b'Opens' in response.content
+
 
 class TestEventManageListView:
     url = reverse('events:manage_list')
@@ -185,6 +207,10 @@ class TestEventCreateView:
             'publish_status': AVAILABLE,
             'tags': 'meetup, social',
             'image_ppoi': '0.5x0.5',
+            'ticket_tiers-TOTAL_FORMS': '0',
+            'ticket_tiers-INITIAL_FORMS': '0',
+            'ticket_tiers-MIN_NUM_FORMS': '0',
+            'ticket_tiers-MAX_NUM_FORMS': '1000',
         }
         response = client.post(self.url, data)
         event = Event.objects.get(slug='new-event')
@@ -193,6 +219,37 @@ class TestEventCreateView:
         assert set(event.tags.names()) == {'meetup', 'social'}
         messages = list(get_messages(response.wsgi_request))
         assert any('created' in str(m) for m in messages)
+
+    # editor can create ticket tiers while creating an event
+    def test_creates_ticket_tiers(self, client, editor):
+        client.force_login(editor)
+        data = {
+            'title': 'New Event',
+            'slug': 'new-event',
+            'description': 'Event description.',
+            'location': 'Wellington',
+            'start': '2026-06-15',
+            'publish_status': AVAILABLE,
+            'tags': '',
+            'image_ppoi': '0.5x0.5',
+            'ticket_tiers-TOTAL_FORMS': '1',
+            'ticket_tiers-INITIAL_FORMS': '0',
+            'ticket_tiers-MIN_NUM_FORMS': '0',
+            'ticket_tiers-MAX_NUM_FORMS': '1000',
+            'ticket_tiers-0-name': 'Adult',
+            'ticket_tiers-0-price': '25.00',
+            'ticket_tiers-0-currency': 'AUD',
+            'ticket_tiers-0-available_from': '',
+            'ticket_tiers-0-available_until': '',
+            'ticket_tiers-0-order': '0',
+        }
+        response = client.post(self.url, data)
+        event = Event.objects.get(slug='new-event')
+        tier = event.ticket_tiers.get()
+        assert response.status_code == 302
+        assert tier.name == 'Adult'
+        assert tier.price == Decimal('25.00')
+        assert tier.currency == 'AUD'
 
     # geocoding task is enqueued when address is provided
     @patch('apps.events.views.manage.transaction.on_commit', lambda fn: fn())
@@ -209,6 +266,10 @@ class TestEventCreateView:
             'publish_status': AVAILABLE,
             'tags': 'test',
             'image_ppoi': '0.5x0.5',
+            'ticket_tiers-TOTAL_FORMS': '0',
+            'ticket_tiers-INITIAL_FORMS': '0',
+            'ticket_tiers-MIN_NUM_FORMS': '0',
+            'ticket_tiers-MAX_NUM_FORMS': '1000',
         }
         client.post(self.url, data)
         event = Event.objects.get(slug='geocode-test')
@@ -236,6 +297,10 @@ class TestEventUpdateView:
             'publish_status': event.publish_status,
             'tags': 'edited',
             'image_ppoi': '0.5x0.5',
+            'ticket_tiers-TOTAL_FORMS': '0',
+            'ticket_tiers-INITIAL_FORMS': '0',
+            'ticket_tiers-MIN_NUM_FORMS': '0',
+            'ticket_tiers-MAX_NUM_FORMS': '1000',
         }
         response = client.post(url, data)
         assert response.status_code == 302
@@ -244,6 +309,116 @@ class TestEventUpdateView:
         assert list(event.tags.names()) == ['edited']
         messages = list(get_messages(response.wsgi_request))
         assert any('saved' in str(m) for m in messages)
+
+    # editor can update and add ticket tiers from the event form
+    def test_updates_ticket_tiers(self, client, editor, event: Event):
+        tier = EventTicketTier.objects.create(event=event, name='Adult', price=Decimal('20.00'), currency='NZD')
+        client.force_login(editor)
+        url = reverse('events:event_edit', kwargs={'pk': event.pk})
+        data = {
+            'title': event.title,
+            'slug': event.slug,
+            'description': event.description,
+            'location': event.location,
+            'start': event.start.isoformat(),
+            'publish_status': event.publish_status,
+            'tags': ', '.join(event.tags.names()),
+            'image_ppoi': '0.5x0.5',
+            'ticket_tiers-TOTAL_FORMS': '2',
+            'ticket_tiers-INITIAL_FORMS': '1',
+            'ticket_tiers-MIN_NUM_FORMS': '0',
+            'ticket_tiers-MAX_NUM_FORMS': '1000',
+            'ticket_tiers-0-id': str(tier.pk),
+            'ticket_tiers-0-name': 'Adult',
+            'ticket_tiers-0-price': '22.00',
+            'ticket_tiers-0-currency': 'AUD',
+            'ticket_tiers-0-available_from': '',
+            'ticket_tiers-0-available_until': '',
+            'ticket_tiers-0-is_sold_out': 'on',
+            'ticket_tiers-0-order': '0',
+            'ticket_tiers-1-name': 'Child',
+            'ticket_tiers-1-price': '10.00',
+            'ticket_tiers-1-currency': 'NZD',
+            'ticket_tiers-1-available_from': '',
+            'ticket_tiers-1-available_until': '',
+            'ticket_tiers-1-order': '1',
+        }
+        response = client.post(url, data)
+        assert response.status_code == 302
+        event.refresh_from_db()
+        assert list(event.ticket_tiers.values_list('name', 'price', 'currency', 'is_sold_out')) == [
+            ('Adult', Decimal('22.00'), 'AUD', True),
+            ('Child', Decimal('10.00'), 'NZD', False),
+        ]
+
+    # blank extra tier rows do not block editing existing tiers
+    def test_updates_ticket_tier_with_blank_extra_row(self, client, editor, event: Event):
+        tier = EventTicketTier.objects.create(event=event, name='Adult', price=Decimal('20.00'), currency='NZD')
+        client.force_login(editor)
+        url = reverse('events:event_edit', kwargs={'pk': event.pk})
+        data = {
+            'title': event.title,
+            'slug': event.slug,
+            'description': event.description,
+            'location': event.location,
+            'start': event.start.isoformat(),
+            'publish_status': event.publish_status,
+            'tags': ', '.join(event.tags.names()),
+            'image_ppoi': '0.5x0.5',
+            'ticket_tiers-TOTAL_FORMS': '2',
+            'ticket_tiers-INITIAL_FORMS': '1',
+            'ticket_tiers-MIN_NUM_FORMS': '0',
+            'ticket_tiers-MAX_NUM_FORMS': '1000',
+            'ticket_tiers-0-id': str(tier.pk),
+            'ticket_tiers-0-name': 'Adult',
+            'ticket_tiers-0-price': '22.00',
+            'ticket_tiers-0-currency': 'NZD',
+            'ticket_tiers-0-available_from': '',
+            'ticket_tiers-0-available_until': '',
+            'ticket_tiers-0-order': '0',
+            'ticket_tiers-1-name': '',
+            'ticket_tiers-1-price': '',
+            'ticket_tiers-1-currency': 'NZD',
+            'ticket_tiers-1-available_from': '',
+            'ticket_tiers-1-available_until': '',
+            'ticket_tiers-1-order': '1',
+        }
+        response = client.post(url, data)
+        assert response.status_code == 302
+        tier.refresh_from_db()
+        assert tier.price == Decimal('22.00')
+        assert event.ticket_tiers.count() == 1
+
+    # editor can delete ticket tiers from the event form
+    def test_deletes_ticket_tiers(self, client, editor, event: Event):
+        tier = EventTicketTier.objects.create(event=event, name='Adult', price=Decimal('20.00'), currency='NZD')
+        client.force_login(editor)
+        url = reverse('events:event_edit', kwargs={'pk': event.pk})
+        data = {
+            'title': event.title,
+            'slug': event.slug,
+            'description': event.description,
+            'location': event.location,
+            'start': event.start.isoformat(),
+            'publish_status': event.publish_status,
+            'tags': ', '.join(event.tags.names()),
+            'image_ppoi': '0.5x0.5',
+            'ticket_tiers-TOTAL_FORMS': '1',
+            'ticket_tiers-INITIAL_FORMS': '1',
+            'ticket_tiers-MIN_NUM_FORMS': '0',
+            'ticket_tiers-MAX_NUM_FORMS': '1000',
+            'ticket_tiers-0-id': str(tier.pk),
+            'ticket_tiers-0-name': 'Adult',
+            'ticket_tiers-0-price': '20.00',
+            'ticket_tiers-0-currency': 'NZD',
+            'ticket_tiers-0-available_from': '',
+            'ticket_tiers-0-available_until': '',
+            'ticket_tiers-0-order': '0',
+            'ticket_tiers-0-DELETE': 'on',
+        }
+        response = client.post(url, data)
+        assert response.status_code == 302
+        assert not EventTicketTier.objects.filter(pk=tier.pk).exists()
 
     # geocoding task is enqueued when address changes
     @patch('apps.events.views.manage.transaction.on_commit', lambda fn: fn())
@@ -261,6 +436,10 @@ class TestEventUpdateView:
             'publish_status': event.publish_status,
             'tags': ', '.join(event.tags.names()),
             'image_ppoi': '0.5x0.5',
+            'ticket_tiers-TOTAL_FORMS': '0',
+            'ticket_tiers-INITIAL_FORMS': '0',
+            'ticket_tiers-MIN_NUM_FORMS': '0',
+            'ticket_tiers-MAX_NUM_FORMS': '1000',
         }
         client.post(url, data)
         mock_task.assert_called_once_with(event.pk, 'New Address, Wellington')
@@ -284,6 +463,10 @@ class TestEventUpdateView:
             'publish_status': event.publish_status,
             'tags': ', '.join(event.tags.names()),
             'image_ppoi': '0.5x0.5',
+            'ticket_tiers-TOTAL_FORMS': '0',
+            'ticket_tiers-INITIAL_FORMS': '0',
+            'ticket_tiers-MIN_NUM_FORMS': '0',
+            'ticket_tiers-MAX_NUM_FORMS': '1000',
         }
         client.post(url, data)
         event.refresh_from_db()
@@ -308,6 +491,10 @@ class TestEventUpdateView:
             'publish_status': event.publish_status,
             'tags': ', '.join(event.tags.names()),
             'image_ppoi': '0.5x0.5',
+            'ticket_tiers-TOTAL_FORMS': '0',
+            'ticket_tiers-INITIAL_FORMS': '0',
+            'ticket_tiers-MIN_NUM_FORMS': '0',
+            'ticket_tiers-MAX_NUM_FORMS': '1000',
         }
         client.post(url, data)
         mock_task.assert_not_called()

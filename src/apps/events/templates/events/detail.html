@@ -139,14 +139,26 @@
                 </c-sidebar.content>
             </c-sidebar>
 
-            {# Cost card (dummy data - field doesn't exist yet) #}
-            <c-sidebar>
-                <c-sidebar.header>Cost</c-sidebar.header>
-                <c-sidebar.content>
-                    <p><strong>Check event website</strong></p>
-                    <p>Pricing varies by registration type and date.</p>
-                </c-sidebar.content>
-            </c-sidebar>
+            {% if event.ticket_tiers.all %}
+                <c-sidebar>
+                    <c-sidebar.header>Pricing</c-sidebar.header>
+                    <c-sidebar.content>
+                        <div class="event-ticket-list-public">
+                            {% for tier in event.ticket_tiers.all %}
+                                <div class="event-ticket-tier">
+                                    <div class="event-ticket-name">{{ tier.name }}</div>
+                                    <div class="event-ticket-price">{{ tier.formatted_price }}</div>
+                                    {% if tier.status_label %}
+                                        <div class="event-ticket-status event-ticket-status-{{ tier.status_label|slugify }}">
+                                            {{ tier.status_label }}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </c-sidebar.content>
+                </c-sidebar>
+            {% endif %}
 
             {# CTA #}
             <c-sidebar>

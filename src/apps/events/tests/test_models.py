@@ -8,7 +8,7 @@ from django.utils.timezone import now
 
 import pytest
 
-from ..models import Event
+from ..models import Event, EventTicketTier
 
 pytestmark = pytest.mark.django_db
 
@@ -167,6 +167,33 @@ class TestEventStructuredData:
         sd = event.structured_data
         assert 'organizer' not in sd
 
+    # ticket tiers are exposed as schema.org offers
+    def test_ticket_tiers_in_offers(self, event: Event):
+        EventTicketTier.objects.create(event=event, name='Adult', price=Decimal('20.00'), currency='AUD')
+        event.__dict__.pop('structured_data', None)
+        sd = event.structured_data
+        assert sd['offers'] == [
+            {
+                '@type': 'Offer',
+                'name': 'Adult',
+                'price': '20.00',
+                'priceCurrency': 'AUD',
+                'url': event.url,
+            }
+        ]
+
+    # closed ticket tiers are omitted from structured data
+    def test_closed_ticket_tiers_omitted_from_offers(self, event: Event):
+        EventTicketTier.objects.create(
+            event=event,
+            name='Early bird',
+            price=Decimal('10.00'),
+            available_until=now() - timedelta(days=1),
+        )
+        event.__dict__.pop('structured_data', None)
+        sd = event.structured_data
+        assert 'offers' not in sd
+
 
 class TestEvent:
     # __str__ returns the title
@@ -189,6 +216,60 @@ class TestEvent:
         event.start = date(2026, 6, 15)
         event.end = date(2026, 6, 20)
         event.clean()
+
+
+class TestEventTicketTier:
+    # default currency is stored explicitly as NZD
+    def test_default_currency(self, event: Event):
+        tier = EventTicketTier.objects.create(event=event, name='Adult', price=Decimal('20.00'))
+        assert tier.currency == 'NZD'
+
+    # free tiers render as Free instead of a currency amount
+    def test_formatted_price_free(self, event: Event):
+        tier = EventTicketTier(event=event, name='Free entry', price=Decimal('0.00'), currency='AUD')
+        assert tier.formatted_price == 'Free'
+
+    # paid tiers include the currency code to avoid ambiguous dollar signs
+    def test_formatted_price_paid(self, event: Event):
+        tier = EventTicketTier(event=event, name='Adult', price=Decimal('15.50'), currency='AUD')
+        assert tier.formatted_price == 'AUD 15.50'
+
+    # future tiers show an opens date
+    def test_status_label_opens(self, event: Event):
+        tier = EventTicketTier(
+            event=event,
+            name='Early bird',
+            price=Decimal('15.00'),
+            available_from=now() + timedelta(days=1),
+        )
+        assert tier.status_label.startswith('Opens ')
+
+    # tiers past available_until show closed
+    def test_status_label_closed(self, event: Event):
+        tier = EventTicketTier(
+            event=event,
+            name='Early bird',
+            price=Decimal('15.00'),
+            available_until=now() - timedelta(days=1),
+        )
+        assert tier.status_label == 'Closed'
+
+    # sold-out tiers show sold out during the active window
+    def test_status_label_sold_out(self, event: Event):
+        tier = EventTicketTier(event=event, name='Adult', price=Decimal('20.00'), is_sold_out=True)
+        assert tier.status_label == 'Sold out'
+
+    # date windows must be chronological
+    def test_clean_available_until_before_from(self, event: Event):
+        tier = EventTicketTier(
+            event=event,
+            name='Early bird',
+            price=Decimal('15.00'),
+            available_from=now(),
+            available_until=now() - timedelta(days=1),
+        )
+        with pytest.raises(ValidationError, match='Available until cannot be before available from'):
+            tier.clean()
 
 
 class TestEventAgeRequirement:

@@ -91,7 +91,9 @@ class EventDetailView(PublishedDetailMixin, YearMixin, DetailView):
     def get_queryset(self):
         year = int(self.get_year())
         return (
-            Event.objects.filter(start__year=year, slug=self.kwargs['slug']).with_relations().prefetch_related('tags')
+            Event.objects.filter(start__year=year, slug=self.kwargs['slug'])
+            .with_relations()
+            .prefetch_related('tags', 'ticket_tiers')
         )
 
     def get_context_data(self, **kwargs):

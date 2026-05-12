@@ -5,8 +5,10 @@ from django.forms import (
     HiddenInput,
     ImageField,
     ModelForm,
+    NumberInput,
     Textarea,
     TimeInput,
+    inlineformset_factory,
 )
 
 from csp_helpers.mixins import CSPFormMixin
@@ -15,7 +17,7 @@ from taggit.forms import TagField
 from apps.core.widgets import AutocompleteSelect, AutocompleteTag
 from apps.images.widgets import ImageWidget
 
-from .models import Event
+from .models import Event, EventTicketTier
 
 
 class EventForm(CSPFormMixin, ModelForm):
@@ -65,3 +67,40 @@ class EventForm(CSPFormMixin, ModelForm):
         super().__init__(*args, **kwargs)
         if self.instance and self.instance.pk:
             self.fields['tags'].initial = self.instance.tags.all()
+
+
+class EventTicketTierForm(CSPFormMixin, ModelForm):
+    available_from = DateTimeField(
+        required=False,
+        widget=DateTimeInput(attrs={'type': 'datetime-local'}, format='%Y-%m-%dT%H:%M'),
+        input_formats=['%Y-%m-%dT%H:%M'],
+    )
+    available_until = DateTimeField(
+        required=False,
+        widget=DateTimeInput(attrs={'type': 'datetime-local'}, format='%Y-%m-%dT%H:%M'),
+        input_formats=['%Y-%m-%dT%H:%M'],
+    )
+
+    class Meta:
+        model = EventTicketTier
+        fields = ['name', 'price', 'currency', 'available_from', 'available_until', 'is_sold_out', 'order']
+        widgets = {
+            'price': NumberInput(attrs={'min': '0', 'step': '0.01'}),
+            'order': HiddenInput(),
+        }
+
+    def has_changed(self):
+        changed = super().has_changed()
+        if changed and not self.instance.pk and set(self.changed_data) == {'order'}:
+            return False
+        return changed
+
+
+EventTicketTierFormSet = inlineformset_factory(
+    Event,
+    EventTicketTier,
+    form=EventTicketTierForm,
+    fields=['name', 'price', 'currency', 'available_from', 'available_until', 'is_sold_out', 'order'],
+    extra=1,
+    can_delete=True,
+)

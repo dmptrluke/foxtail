@@ -87,6 +87,56 @@
             </div>
         </div>
 
+        <fieldset class="mb-4 event-ticket-editor" data-ticket-formset>
+            <legend>Pricing</legend>
+            <p class="form-text">Ticket tiers are optional. Use dates for early bird, late registration, or closed pricing windows.</p>
+            {{ ticket_formset.management_form }}
+            {% if ticket_formset.non_form_errors %}
+                <div class="invalid-feedback d-block">{{ ticket_formset.non_form_errors|join:"; " }}</div>
+            {% endif %}
+            <div class="event-ticket-list" data-ticket-list>
+                {% for tier_form in ticket_formset.forms %}
+                    <div class="event-ticket-row" data-ticket-form>
+                        {{ tier_form.id }}
+                        {{ tier_form.order }}
+                        <div class="event-ticket-delete-field">{{ tier_form.DELETE }}</div>
+                        <div class="row g-3 align-items-end">
+                            <div class="col-md-4">{% text_field tier_form.name %}</div>
+                            <div class="col-sm-6 col-md-2">{% text_field tier_form.price %}</div>
+                            <div class="col-sm-6 col-md-2">{% select_field tier_form.currency %}</div>
+                            <div class="col-md-2">{% text_field tier_form.available_from %}</div>
+                            <div class="col-md-2">{% text_field tier_form.available_until %}</div>
+                        </div>
+                        <div class="event-ticket-row-actions">
+                            {% check_field tier_form.is_sold_out inline=True %}
+                            <button type="button" class="btn btn-outline-danger btn-sm" data-ticket-remove>Remove</button>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+            <template data-ticket-empty-form>
+                <div class="event-ticket-row" data-ticket-form>
+                    {{ ticket_formset.empty_form.id }}
+                    {{ ticket_formset.empty_form.order }}
+                    <div class="event-ticket-delete-field">{{ ticket_formset.empty_form.DELETE }}</div>
+                    <div class="row g-3 align-items-end">
+                        <div class="col-md-4">{% text_field ticket_formset.empty_form.name %}</div>
+                        <div class="col-sm-6 col-md-2">{% text_field ticket_formset.empty_form.price %}</div>
+                        <div class="col-sm-6 col-md-2">{% select_field ticket_formset.empty_form.currency %}</div>
+                        <div class="col-md-2">{% text_field ticket_formset.empty_form.available_from %}</div>
+                        <div class="col-md-2">{% text_field ticket_formset.empty_form.available_until %}</div>
+                    </div>
+                    <div class="event-ticket-row-actions">
+                        {% check_field ticket_formset.empty_form.is_sold_out inline=True %}
+                        <button type="button" class="btn btn-outline-danger btn-sm" data-ticket-remove>Remove</button>
+                    </div>
+                </div>
+            </template>
+            <button type="button" class="btn btn-outline-primary btn-sm mt-3" data-ticket-add>
+                <c-icons.plus /> Add ticket tier
+            </button>
+        </fieldset>
+
         {# Description — full width #}
         <fieldset class="mb-4">
             <legend>Description</legend>

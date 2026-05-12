@@ -1,17 +1,20 @@
 import html
 import logging
 from datetime import datetime, timedelta
+from decimal import Decimal
 from zoneinfo import ZoneInfo
 
 from django.conf import settings
 from django.core.exceptions import ValidationError
+from django.core.validators import MinValueValidator
 from django.db import models
 from django.db.models import Count
 from django.urls import reverse
+from django.utils.formats import date_format
 from django.utils.functional import cached_property
 from django.utils.html import strip_tags
 from django.utils.text import Truncator
-from django.utils.timezone import now
+from django.utils.timezone import localtime, now
 
 from imagefield.fields import ImageField as ProcessedImageField
 from markdownfield.models import MarkdownField, RenderedMarkdownField
@@ -30,6 +33,12 @@ AGE_CHOICES = [
     ('13', '13+'),
     ('16', '16+'),
     ('18', '18+'),
+]
+
+CURRENCY_CHOICES = [
+    ('NZD', 'NZD'),
+    ('AUD', 'AUD'),
+    ('USD', 'USD'),
 ]
 
 
@@ -223,7 +232,80 @@ class Event(PublishedModel):
             org_url = settings.SITE_URL + org.get_absolute_url()
             data['organizer'] = {'@type': 'Organization', '@id': org_url, 'name': org.name, 'url': org_url}
 
+        offers = [tier.structured_data for tier in self.ticket_tiers.all() if tier.include_in_structured_data]
+        if offers:
+            data['offers'] = offers
+
         return data
+
+
+class EventTicketTier(models.Model):
+    event = models.ForeignKey('events.Event', on_delete=models.CASCADE, related_name='ticket_tiers')
+    name = models.CharField(max_length=100)
+    price = models.DecimalField(max_digits=8, decimal_places=2, validators=[MinValueValidator(Decimal('0.00'))])
+    currency = models.CharField(max_length=3, choices=CURRENCY_CHOICES, default='NZD')
+    available_from = models.DateTimeField(blank=True, null=True)
+    available_until = models.DateTimeField(blank=True, null=True)
+    is_sold_out = models.BooleanField(default=False)
+    order = models.PositiveSmallIntegerField(default=0)
+
+    class Meta:
+        ordering = ['order', 'pk']
+        constraints = [
+            models.CheckConstraint(condition=models.Q(price__gte=0), name='events_tickettier_price_gte_0'),
+        ]
+
+    def __str__(self):
+        return f'{self.event} - {self.name}'
+
+    def clean(self):
+        super().clean()
+        if self.available_from and self.available_until and self.available_until < self.available_from:
+            raise ValidationError({'available_until': 'Available until cannot be before available from.'})
+
+    @property
+    def formatted_price(self):
+        """Return the price with currency disambiguation."""
+        if self.price == Decimal('0.00'):
+            return 'Free'
+        return f'{self.currency} {self.price:.2f}'
+
+    @property
+    def status_label(self):
+        """Return the public availability label for this ticket tier."""
+        current_time = now()
+        if self.available_from and self.available_from > current_time:
+            return f'Opens {date_format(localtime(self.available_from), "M j, Y")}'
+        if self.available_until and self.available_until < current_time:
+            return 'Closed'
+        if self.is_sold_out:
+            return 'Sold out'
+        return ''
+
+    @property
+    def structured_data(self):
+        url = self.event.url or settings.SITE_URL + self.event.get_absolute_url()
+        data = {
+            '@type': 'Offer',
+            'name': self.name,
+            'price': str(self.price),
+            'priceCurrency': self.currency,
+            'url': url,
+        }
+        if self.available_from:
+            data['validFrom'] = self.available_from
+        if self.available_until:
+            data['validThrough'] = self.available_until
+        if self.status_label in {'Closed', 'Sold out'}:
+            data['availability'] = 'https://schema.org/SoldOut'
+        return data
+
+    @property
+    def include_in_structured_data(self):
+        """Return True when the tier should be represented as an Event offer."""
+        if self.available_until and self.available_until < now():
+            return False
+        return True
 
 
 class EventInterestQuerySet(models.QuerySet):

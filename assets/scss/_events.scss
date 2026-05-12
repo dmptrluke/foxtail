@@ -233,6 +233,77 @@
 	}
 }
 
+// Ticket tiers
+
+.event-ticket-editor {
+	.event-ticket-list {
+		display: grid;
+		gap: 0.85rem;
+	}
+
+	.event-ticket-row {
+		padding: 1rem;
+		border: 1px solid var(--bs-border-color);
+		border-radius: var(--ft-radius);
+		background: rgb(var(--bs-secondary-rgb), 0.035);
+	}
+
+	.event-ticket-delete-field {
+		display: none;
+	}
+
+	.event-ticket-row-actions {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 1rem;
+		margin-top: 0.75rem;
+	}
+}
+
+.event-ticket-list-public {
+	display: grid;
+	gap: 0.65rem;
+	margin: 0;
+}
+
+.event-ticket-tier {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr) auto;
+	gap: 0.25rem 0.75rem;
+	align-items: baseline;
+	padding-bottom: 0.65rem;
+	border-bottom: 1px solid rgb(var(--bs-secondary-rgb), 0.12);
+
+	&:last-child {
+		padding-bottom: 0;
+		border-bottom: 0;
+	}
+}
+
+.event-ticket-name {
+	font-weight: 700;
+}
+
+.event-ticket-price {
+	font-family: var(--ft-font-label);
+	font-size: 0.9rem;
+	font-weight: 700;
+	color: var(--ft-text-soft);
+	white-space: nowrap;
+}
+
+.event-ticket-status {
+	grid-column: 1 / -1;
+	font-size: 0.85rem;
+	color: var(--ft-text-muted);
+}
+
+.event-ticket-status-closed,
+.event-ticket-status-sold-out {
+	color: var(--bs-danger);
+}
+
 // Mini calendar strip
 
 .event-cal {

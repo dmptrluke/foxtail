@@ -24,7 +24,26 @@ class EventManageListView(PermissionMixin, ListView):
 
 
 class _EventFormMixin:
+    ticket_formset_prefix = 'ticket_tiers'
+
+    def get_ticket_formset(self):
+        from ..forms import EventTicketTierFormSet
+
+        instance = self.object if getattr(self, 'object', None) else None
+        if self.request.method in {'POST', 'PUT'}:
+            return EventTicketTierFormSet(self.request.POST, instance=instance, prefix=self.ticket_formset_prefix)
+        return EventTicketTierFormSet(instance=instance, prefix=self.ticket_formset_prefix)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['ticket_formset'] = kwargs.get('ticket_formset') or self.get_ticket_formset()
+        return context
+
     def _save_event(self, form, success_msg):
+        ticket_formset = self.get_ticket_formset()
+        if not ticket_formset.is_valid():
+            return self.form_invalid(form, ticket_formset=ticket_formset)
+
         self.object = form.save(commit=False)
         if 'address' in form.changed_data:
             # Clear stale coordinates until async geocode completes
@@ -33,10 +52,15 @@ class _EventFormMixin:
         self.object.save()
         form.save_m2m()
         self.object.tags.set(form.cleaned_data.get('tags', []))
+        ticket_formset.instance = self.object
+        ticket_formset.save()
         if self.object.address and 'address' in form.changed_data:
             transaction.on_commit(lambda: geocode_event(self.object.pk, self.object.address))
         messages.success(self.request, success_msg.format(title=self.object.title))
         return HttpResponseRedirect(reverse('events:event_edit', kwargs={'pk': self.object.pk}))
+
+    def form_invalid(self, form, ticket_formset=None):
+        return self.render_to_response(self.get_context_data(form=form, ticket_formset=ticket_formset))
 
 
 class EventCreateView(_EventFormMixin, CSPViewMixin, PermissionMixin, CreateView):
