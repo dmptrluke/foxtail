@@ -12,6 +12,7 @@ import apps.core.views as core_views
 import apps.events.sitemaps as event_sitemaps
 import apps.organisations.sitemaps as organisation_sitemaps
 import apps.organisations.views as organisations_views
+from apps.accounts.views import OIDCJwksView
 from apps.telegram.views import telegram_webhook
 
 sitemaps = {
@@ -39,12 +40,13 @@ urlpatterns = [
     path('accounts/', include('apps.accounts.urls')),
     path('accounts/', include('apps.telegram.urls')),
     path('accounts/', include('allauth.urls')),
+    path('.well-known/jwks.json', OIDCJwksView.as_view()),
     path('', include('allauth.idp.urls')),
     # Backward-compatible aliases for old oidc_provider paths
     path('openid/authorize', oidc_views.authorization),
     path('openid/token', oidc_views.token),
     path('openid/userinfo', oidc_views.user_info),
-    path('openid/jwks', oidc_views.jwks),
+    path('openid/jwks', OIDCJwksView.as_view()),
     path('openid/end-session', oidc_views.logout),
     # Apps
     path('autocomplete/', include('apps.core.autocomplete_urls')),

@@ -1,20 +1,25 @@
 import base64
 import io
+import logging
 import secrets
 import string
 
+from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.cache import cache
-from django.http import Http404, HttpResponse
+from django.http import Http404, HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse
+from django.utils.decorators import method_decorator
 from django.views import View
 from django.views.generic import ListView, TemplateView, UpdateView
 
 import segno
+from allauth.account.internal.decorators import login_not_required
 from allauth.account.models import EmailAddress
 from allauth.account.views import PasswordResetView, SignupView
+from allauth.core.internal import jwkkit
 from allauth.core.ratelimit import consume_or_429
 from allauth.idp.oidc.models import Client as OIDCClient
 from allauth.idp.oidc.models import Token as OIDCToken
@@ -28,6 +33,8 @@ from rules.contrib.views import PermissionRequiredMixin
 from apps.accounts.forms import UserForm
 from apps.accounts.models import User, Verification
 from apps.core.mixins import HtmxMixin
+
+logger = logging.getLogger(__name__)
 
 
 class MFAAuthenticateView(AuthenticateView):
@@ -290,12 +297,52 @@ class UnverifyUserView(PermissionRequiredMixin, LoginRequiredMixin, View):
         return redirect('account_verification')
 
 
+@method_decorator(login_not_required, name='dispatch')
+class OIDCJwksView(View):
+    """Return all public OIDC signing keys accepted for token verification."""
+
+    def _load_jwk(self, key: str, label: str) -> dict | None:
+        """Return a JWK for a PEM key, logging invalid configuration."""
+        try:
+            jwk, _ = jwkkit.load_jwk_from_pem(key.replace('\\n', '\n'))
+        except Exception:
+            logger.exception('Failed to load OIDC %s signing key for JWKS.', label)
+            return None
+        return jwk
+
+    def get(self, request: HttpRequest, *args, **kwargs) -> JsonResponse:
+        primary_key = settings.IDP_OIDC_PRIVATE_KEY
+        candidates = [('primary', primary_key)]
+        candidates.extend(
+            (f'fallback {index}', key)
+            for index, key in enumerate(getattr(settings, 'IDP_OIDC_PRIVATE_KEY_FALLBACKS', []), start=1)
+            if key and key != primary_key
+        )
+
+        keys = []
+        seen_kids = set()
+        for label, key in candidates:
+            if not key:
+                continue
+            jwk = self._load_jwk(key, label)
+            kid = jwk.get('kid') if jwk else None
+            if jwk and kid not in seen_kids:
+                keys.append(jwk)
+                seen_kids.add(kid)
+
+        response = JsonResponse({'keys': keys})
+        response['Access-Control-Allow-Origin'] = '*'
+        response['Cache-Control'] = 'public, max-age=3600'
+        return response
+
+
 __all__ = [
     'ConfirmVerificationView',
     'ConsentList',
     'ConsentRevoke',
     'DashboardView',
     'GenerateTokenView',
+    'OIDCJwksView',
     'UnverifyUserView',
     'UserView',
     'VerificationView',
