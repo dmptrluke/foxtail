@@ -233,26 +233,85 @@
 	}
 }
 
-// Ticket tiers
+// Manage formsets
 
-.event-ticket-editor {
-	.event-ticket-list {
+.manage-formset {
+	.manage-formset-list {
 		display: grid;
 		gap: 0.85rem;
 	}
 
-	.event-ticket-row {
+	.manage-formset-row {
 		padding: 1rem;
 		border: 1px solid var(--bs-border-color);
 		border-radius: var(--ft-radius);
 		background: rgb(var(--bs-secondary-rgb), 0.035);
 	}
 
-	.event-ticket-delete-field {
+	.manage-formset-row-toolbar {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 0.75rem;
+		margin-bottom: 0.75rem;
+	}
+
+	.manage-formset-row-body {
+		min-width: 0;
+	}
+
+	.manage-formset-delete-field {
 		display: none;
 	}
 
-	.event-ticket-row-actions {
+	.manage-formset-row-order-controls {
+		display: flex;
+		justify-content: flex-end;
+		gap: 0.5rem;
+	}
+
+	.manage-formset-icon-button {
+		display: inline-grid;
+		width: 2rem;
+		height: 2rem;
+		place-items: center;
+		padding: 0;
+	}
+
+	.manage-formset-drag-handle {
+		display: inline-grid;
+		width: 2.25rem;
+		height: 2.25rem;
+		place-items: center;
+		padding: 0;
+		border: 0;
+		border-radius: var(--ft-radius-sm);
+		background: transparent;
+		color: var(--bs-secondary-color);
+		cursor: grab;
+
+		.icon {
+			width: 1.35rem;
+			height: 1.35rem;
+		}
+
+		&:hover,
+		&:focus-visible {
+			color: var(--bs-body-color);
+			background: rgb(var(--bs-secondary-rgb), 0.12);
+		}
+
+		&:focus-visible {
+			outline: 2px solid var(--bs-primary);
+			outline-offset: 2px;
+		}
+
+		&:active {
+			cursor: grabbing;
+		}
+	}
+
+	.manage-formset-row-actions {
 		display: flex;
 		align-items: center;
 		justify-content: space-between;

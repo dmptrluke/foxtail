@@ -195,6 +195,16 @@ class TestEventCreateView:
         response = client.get(self.url)
         assert response.status_code == 403
 
+    # editor starts with no visible ticket tier rows; JavaScript uses the template for new rows
+    def test_ticket_tier_editor_starts_without_blank_row(self, client, editor):
+        client.force_login(editor)
+
+        response = client.get(self.url)
+
+        assert response.status_code == 200
+        assert response.context['ticket_formset'].total_form_count() == 0
+        assert 'data-manage-formset-empty-form' in response.content.decode()
+
     # editor can create an event with tags, redirects to edit view
     def test_creates_event(self, client, editor):
         client.force_login(editor)
@@ -236,7 +246,7 @@ class TestEventCreateView:
             'ticket_tiers-INITIAL_FORMS': '0',
             'ticket_tiers-MIN_NUM_FORMS': '0',
             'ticket_tiers-MAX_NUM_FORMS': '1000',
-            'ticket_tiers-0-name': 'Adult',
+            'ticket_tiers-0-name': 'Standard',
             'ticket_tiers-0-price': '25.00',
             'ticket_tiers-0-currency': 'AUD',
             'ticket_tiers-0-available_from': '',
@@ -247,7 +257,7 @@ class TestEventCreateView:
         event = Event.objects.get(slug='new-event')
         tier = event.ticket_tiers.get()
         assert response.status_code == 302
-        assert tier.name == 'Adult'
+        assert tier.name == 'Standard'
         assert tier.price == Decimal('25.00')
         assert tier.currency == 'AUD'
 
@@ -310,9 +320,30 @@ class TestEventUpdateView:
         messages = list(get_messages(response.wsgi_request))
         assert any('saved' in str(m) for m in messages)
 
+    # ticket tier editor exposes visible controls for manual ordering
+    def test_ticket_tier_editor_renders_order_controls(self, client, editor, event: Event):
+        EventTicketTier.objects.create(event=event, name='Standard', price=Decimal('20.00'), currency='NZD')
+        client.force_login(editor)
+
+        response = client.get(reverse('events:event_edit', kwargs={'pk': event.pk}))
+
+        assert response.status_code == 200
+        content = response.content.decode()
+        assert 'data-manage-formset data-manage-formset-orderable' in content
+        assert 'manage-formset-row-toolbar' in content
+        assert 'class="manage-formset-drag-handle" data-manage-formset-drag-handle' in content
+        assert 'manage-formset-row-body' in content
+        assert 'Drag to reorder ticket tier' in content
+        assert 'data-manage-formset-move-up' in content
+        assert 'Move ticket tier up' in content
+        assert 'data-manage-formset-move-down' in content
+        assert 'Move ticket tier down' in content
+        assert 'form-check-label' in content
+        assert 'Sold out' in content
+
     # editor can update and add ticket tiers from the event form
     def test_updates_ticket_tiers(self, client, editor, event: Event):
-        tier = EventTicketTier.objects.create(event=event, name='Adult', price=Decimal('20.00'), currency='NZD')
+        tier = EventTicketTier.objects.create(event=event, name='Standard', price=Decimal('20.00'), currency='NZD')
         client.force_login(editor)
         url = reverse('events:event_edit', kwargs={'pk': event.pk})
         data = {
@@ -329,14 +360,14 @@ class TestEventUpdateView:
             'ticket_tiers-MIN_NUM_FORMS': '0',
             'ticket_tiers-MAX_NUM_FORMS': '1000',
             'ticket_tiers-0-id': str(tier.pk),
-            'ticket_tiers-0-name': 'Adult',
+            'ticket_tiers-0-name': 'Standard',
             'ticket_tiers-0-price': '22.00',
             'ticket_tiers-0-currency': 'AUD',
             'ticket_tiers-0-available_from': '',
             'ticket_tiers-0-available_until': '',
             'ticket_tiers-0-is_sold_out': 'on',
             'ticket_tiers-0-order': '0',
-            'ticket_tiers-1-name': 'Child',
+            'ticket_tiers-1-name': 'Sponsor',
             'ticket_tiers-1-price': '10.00',
             'ticket_tiers-1-currency': 'NZD',
             'ticket_tiers-1-available_from': '',
@@ -347,13 +378,197 @@ class TestEventUpdateView:
         assert response.status_code == 302
         event.refresh_from_db()
         assert list(event.ticket_tiers.values_list('name', 'price', 'currency', 'is_sold_out')) == [
-            ('Adult', Decimal('22.00'), 'AUD', True),
-            ('Child', Decimal('10.00'), 'NZD', False),
+            ('Standard', Decimal('22.00'), 'AUD', True),
+            ('Sponsor', Decimal('10.00'), 'NZD', False),
         ]
+
+    # submitted order fields control the display order of saved ticket tiers
+    def test_updates_ticket_tier_order(self, client, editor, event: Event):
+        standard = EventTicketTier.objects.create(
+            event=event, name='Standard', price=Decimal('20.00'), currency='NZD', order=0
+        )
+        sponsor = EventTicketTier.objects.create(
+            event=event, name='Sponsor', price=Decimal('10.00'), currency='NZD', order=1
+        )
+        client.force_login(editor)
+        url = reverse('events:event_edit', kwargs={'pk': event.pk})
+        data = {
+            'title': event.title,
+            'slug': event.slug,
+            'description': event.description,
+            'location': event.location,
+            'start': event.start.isoformat(),
+            'publish_status': event.publish_status,
+            'tags': ', '.join(event.tags.names()),
+            'image_ppoi': '0.5x0.5',
+            'ticket_tiers-TOTAL_FORMS': '2',
+            'ticket_tiers-INITIAL_FORMS': '2',
+            'ticket_tiers-MIN_NUM_FORMS': '0',
+            'ticket_tiers-MAX_NUM_FORMS': '1000',
+            'ticket_tiers-0-id': str(standard.pk),
+            'ticket_tiers-0-name': 'Standard',
+            'ticket_tiers-0-price': '20.00',
+            'ticket_tiers-0-currency': 'NZD',
+            'ticket_tiers-0-available_from': '',
+            'ticket_tiers-0-available_until': '',
+            'ticket_tiers-0-order': '1',
+            'ticket_tiers-1-id': str(sponsor.pk),
+            'ticket_tiers-1-name': 'Sponsor',
+            'ticket_tiers-1-price': '10.00',
+            'ticket_tiers-1-currency': 'NZD',
+            'ticket_tiers-1-available_from': '',
+            'ticket_tiers-1-available_until': '',
+            'ticket_tiers-1-order': '0',
+        }
+
+        response = client.post(url, data)
+
+        assert response.status_code == 302
+        assert list(event.ticket_tiers.values_list('name', 'order')) == [('Sponsor', 0), ('Standard', 1)]
+
+    # missing order fields get sequential fallback values server-side
+    def test_ticket_tier_blank_order_falls_back_to_sequence(self, client, editor, event: Event):
+        client.force_login(editor)
+        url = reverse('events:event_edit', kwargs={'pk': event.pk})
+        data = {
+            'title': event.title,
+            'slug': event.slug,
+            'description': event.description,
+            'location': event.location,
+            'start': event.start.isoformat(),
+            'publish_status': event.publish_status,
+            'tags': ', '.join(event.tags.names()),
+            'image_ppoi': '0.5x0.5',
+            'ticket_tiers-TOTAL_FORMS': '2',
+            'ticket_tiers-INITIAL_FORMS': '0',
+            'ticket_tiers-MIN_NUM_FORMS': '0',
+            'ticket_tiers-MAX_NUM_FORMS': '1000',
+            'ticket_tiers-0-name': 'Standard',
+            'ticket_tiers-0-price': '20.00',
+            'ticket_tiers-0-currency': 'NZD',
+            'ticket_tiers-0-available_from': '',
+            'ticket_tiers-0-available_until': '',
+            'ticket_tiers-0-order': '',
+            'ticket_tiers-1-name': 'Sponsor',
+            'ticket_tiers-1-price': '10.00',
+            'ticket_tiers-1-currency': 'NZD',
+            'ticket_tiers-1-available_from': '',
+            'ticket_tiers-1-available_until': '',
+        }
+
+        response = client.post(url, data)
+
+        assert response.status_code == 302
+        assert list(event.ticket_tiers.values_list('name', 'order')) == [('Standard', 0), ('Sponsor', 1)]
+
+    # duplicate submitted order values are normalized to a stable contiguous sequence
+    def test_ticket_tier_duplicate_order_values_are_normalized(self, client, editor, event: Event):
+        standard = EventTicketTier.objects.create(
+            event=event, name='Standard', price=Decimal('20.00'), currency='NZD', order=0
+        )
+        sponsor = EventTicketTier.objects.create(
+            event=event, name='Sponsor', price=Decimal('10.00'), currency='NZD', order=1
+        )
+        vip = EventTicketTier.objects.create(event=event, name='VIP', price=Decimal('50.00'), currency='NZD', order=2)
+        client.force_login(editor)
+        url = reverse('events:event_edit', kwargs={'pk': event.pk})
+        data = {
+            'title': event.title,
+            'slug': event.slug,
+            'description': event.description,
+            'location': event.location,
+            'start': event.start.isoformat(),
+            'publish_status': event.publish_status,
+            'tags': ', '.join(event.tags.names()),
+            'image_ppoi': '0.5x0.5',
+            'ticket_tiers-TOTAL_FORMS': '3',
+            'ticket_tiers-INITIAL_FORMS': '3',
+            'ticket_tiers-MIN_NUM_FORMS': '0',
+            'ticket_tiers-MAX_NUM_FORMS': '1000',
+            'ticket_tiers-0-id': str(standard.pk),
+            'ticket_tiers-0-name': 'Standard',
+            'ticket_tiers-0-price': '20.00',
+            'ticket_tiers-0-currency': 'NZD',
+            'ticket_tiers-0-available_from': '',
+            'ticket_tiers-0-available_until': '',
+            'ticket_tiers-0-order': '0',
+            'ticket_tiers-1-id': str(sponsor.pk),
+            'ticket_tiers-1-name': 'Sponsor',
+            'ticket_tiers-1-price': '10.00',
+            'ticket_tiers-1-currency': 'NZD',
+            'ticket_tiers-1-available_from': '',
+            'ticket_tiers-1-available_until': '',
+            'ticket_tiers-1-order': '0',
+            'ticket_tiers-2-id': str(vip.pk),
+            'ticket_tiers-2-name': 'VIP',
+            'ticket_tiers-2-price': '50.00',
+            'ticket_tiers-2-currency': 'NZD',
+            'ticket_tiers-2-available_from': '',
+            'ticket_tiers-2-available_until': '',
+            'ticket_tiers-2-order': '5',
+        }
+
+        response = client.post(url, data)
+
+        assert response.status_code == 302
+        assert list(event.ticket_tiers.values_list('name', 'order')) == [('Standard', 0), ('Sponsor', 1), ('VIP', 2)]
+
+    # deleted ticket tiers are excluded when normalizing order values
+    def test_ticket_tier_deleted_rows_are_excluded_from_order_normalization(self, client, editor, event: Event):
+        standard = EventTicketTier.objects.create(
+            event=event, name='Standard', price=Decimal('20.00'), currency='NZD', order=0
+        )
+        sponsor = EventTicketTier.objects.create(
+            event=event, name='Sponsor', price=Decimal('10.00'), currency='NZD', order=1
+        )
+        vip = EventTicketTier.objects.create(event=event, name='VIP', price=Decimal('50.00'), currency='NZD', order=2)
+        client.force_login(editor)
+        url = reverse('events:event_edit', kwargs={'pk': event.pk})
+        data = {
+            'title': event.title,
+            'slug': event.slug,
+            'description': event.description,
+            'location': event.location,
+            'start': event.start.isoformat(),
+            'publish_status': event.publish_status,
+            'tags': ', '.join(event.tags.names()),
+            'image_ppoi': '0.5x0.5',
+            'ticket_tiers-TOTAL_FORMS': '3',
+            'ticket_tiers-INITIAL_FORMS': '3',
+            'ticket_tiers-MIN_NUM_FORMS': '0',
+            'ticket_tiers-MAX_NUM_FORMS': '1000',
+            'ticket_tiers-0-id': str(standard.pk),
+            'ticket_tiers-0-name': 'Standard',
+            'ticket_tiers-0-price': '20.00',
+            'ticket_tiers-0-currency': 'NZD',
+            'ticket_tiers-0-available_from': '',
+            'ticket_tiers-0-available_until': '',
+            'ticket_tiers-0-order': '0',
+            'ticket_tiers-1-id': str(sponsor.pk),
+            'ticket_tiers-1-name': 'Sponsor',
+            'ticket_tiers-1-price': '10.00',
+            'ticket_tiers-1-currency': 'NZD',
+            'ticket_tiers-1-available_from': '',
+            'ticket_tiers-1-available_until': '',
+            'ticket_tiers-1-order': '1',
+            'ticket_tiers-1-DELETE': 'on',
+            'ticket_tiers-2-id': str(vip.pk),
+            'ticket_tiers-2-name': 'VIP',
+            'ticket_tiers-2-price': '50.00',
+            'ticket_tiers-2-currency': 'NZD',
+            'ticket_tiers-2-available_from': '',
+            'ticket_tiers-2-available_until': '',
+            'ticket_tiers-2-order': '2',
+        }
+
+        response = client.post(url, data)
+
+        assert response.status_code == 302
+        assert list(event.ticket_tiers.values_list('name', 'order')) == [('Standard', 0), ('VIP', 1)]
 
     # blank extra tier rows do not block editing existing tiers
     def test_updates_ticket_tier_with_blank_extra_row(self, client, editor, event: Event):
-        tier = EventTicketTier.objects.create(event=event, name='Adult', price=Decimal('20.00'), currency='NZD')
+        tier = EventTicketTier.objects.create(event=event, name='Standard', price=Decimal('20.00'), currency='NZD')
         client.force_login(editor)
         url = reverse('events:event_edit', kwargs={'pk': event.pk})
         data = {
@@ -370,7 +585,7 @@ class TestEventUpdateView:
             'ticket_tiers-MIN_NUM_FORMS': '0',
             'ticket_tiers-MAX_NUM_FORMS': '1000',
             'ticket_tiers-0-id': str(tier.pk),
-            'ticket_tiers-0-name': 'Adult',
+            'ticket_tiers-0-name': 'Standard',
             'ticket_tiers-0-price': '22.00',
             'ticket_tiers-0-currency': 'NZD',
             'ticket_tiers-0-available_from': '',
@@ -391,7 +606,7 @@ class TestEventUpdateView:
 
     # editor can delete ticket tiers from the event form
     def test_deletes_ticket_tiers(self, client, editor, event: Event):
-        tier = EventTicketTier.objects.create(event=event, name='Adult', price=Decimal('20.00'), currency='NZD')
+        tier = EventTicketTier.objects.create(event=event, name='Standard', price=Decimal('20.00'), currency='NZD')
         client.force_login(editor)
         url = reverse('events:event_edit', kwargs={'pk': event.pk})
         data = {
@@ -408,7 +623,7 @@ class TestEventUpdateView:
             'ticket_tiers-MIN_NUM_FORMS': '0',
             'ticket_tiers-MAX_NUM_FORMS': '1000',
             'ticket_tiers-0-id': str(tier.pk),
-            'ticket_tiers-0-name': 'Adult',
+            'ticket_tiers-0-name': 'Standard',
             'ticket_tiers-0-price': '20.00',
             'ticket_tiers-0-currency': 'NZD',
             'ticket_tiers-0-available_from': '',

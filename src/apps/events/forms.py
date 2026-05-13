@@ -10,6 +10,7 @@ from django.forms import (
     TimeInput,
     inlineformset_factory,
 )
+from django.forms.models import BaseInlineFormSet
 
 from csp_helpers.mixins import CSPFormMixin
 from taggit.forms import TagField
@@ -86,8 +87,13 @@ class EventTicketTierForm(CSPFormMixin, ModelForm):
         fields = ['name', 'price', 'currency', 'available_from', 'available_until', 'is_sold_out', 'order']
         widgets = {
             'price': NumberInput(attrs={'min': '0', 'step': '0.01'}),
-            'order': HiddenInput(),
+            'order': HiddenInput(attrs={'data-manage-formset-order': ''}),
         }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['is_sold_out'].label = 'Sold out'
+        self.fields['order'].required = False
 
     def has_changed(self):
         changed = super().has_changed()
@@ -96,11 +102,51 @@ class EventTicketTierForm(CSPFormMixin, ModelForm):
         return changed
 
 
+class EventTicketTierFormSetBase(BaseInlineFormSet):
+    order_field_name = 'order'
+
+    def _active_ordered_forms(self):
+        ordered_forms = []
+        for form_index, form in enumerate(self.forms):
+            if not hasattr(form, 'cleaned_data') or not form.cleaned_data:
+                continue
+            if self.can_delete and self._should_delete_form(form):
+                continue
+
+            order = form.cleaned_data.get(self.order_field_name)
+            if order in (None, ''):
+                order = form_index
+            ordered_forms.append((order, form_index, form))
+
+        return [form for _, _, form in sorted(ordered_forms, key=lambda item: (item[0], item[1]))]
+
+    def _normalize_orders(self):
+        for order, form in enumerate(self._active_ordered_forms()):
+            form.cleaned_data[self.order_field_name] = order
+            setattr(form.instance, self.order_field_name, order)
+
+    def clean(self):
+        super().clean()
+        if any(self.errors):
+            return
+        self._normalize_orders()
+
+    def save(self, commit=True):
+        self._normalize_orders()
+        result = super().save(commit=commit)
+        if commit:
+            for form in self._active_ordered_forms():
+                if form.instance.pk:
+                    form.instance.save(update_fields=[self.order_field_name])
+        return result
+
+
 EventTicketTierFormSet = inlineformset_factory(
     Event,
     EventTicketTier,
     form=EventTicketTierForm,
+    formset=EventTicketTierFormSetBase,
     fields=['name', 'price', 'currency', 'available_from', 'available_until', 'is_sold_out', 'order'],
-    extra=1,
+    extra=0,
     can_delete=True,
 )
