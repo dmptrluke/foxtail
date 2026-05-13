@@ -174,8 +174,8 @@ function onLoad() {
         import('./eventInterest.js').then(m => m.initEventInterest());
     }
 
-    if (document.querySelector('[data-ticket-formset]')) {
-        import('./eventTicketTiers.js').then(m => m.initEventTicketTiers());
+    if (document.querySelector('[data-manage-formset]')) {
+        import('./manageFormset.js').then(m => m.initManageFormsets());
     }
 }
 
