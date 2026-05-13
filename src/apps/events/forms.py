@@ -14,6 +14,7 @@ from django.forms import (
 from csp_helpers.mixins import CSPFormMixin
 from taggit.forms import TagField
 
+from apps.core.forms import OrderedInlineFormSetMixin
 from apps.core.widgets import AutocompleteSelect, AutocompleteTag
 from apps.images.widgets import ImageWidget
 
@@ -86,8 +87,12 @@ class EventTicketTierForm(CSPFormMixin, ModelForm):
         fields = ['name', 'price', 'currency', 'available_from', 'available_until', 'is_sold_out', 'order']
         widgets = {
             'price': NumberInput(attrs={'min': '0', 'step': '0.01'}),
-            'order': HiddenInput(),
+            'order': HiddenInput(attrs={'data-admin-formset-order': ''}),
         }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['order'].required = False
 
     def has_changed(self):
         changed = super().has_changed()
@@ -96,10 +101,15 @@ class EventTicketTierForm(CSPFormMixin, ModelForm):
         return changed
 
 
+class EventTicketTierFormSetBase(OrderedInlineFormSetMixin):
+    pass
+
+
 EventTicketTierFormSet = inlineformset_factory(
     Event,
     EventTicketTier,
     form=EventTicketTierForm,
+    formset=EventTicketTierFormSetBase,
     fields=['name', 'price', 'currency', 'available_from', 'available_until', 'is_sold_out', 'order'],
     extra=1,
     can_delete=True,

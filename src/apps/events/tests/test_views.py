@@ -310,6 +310,21 @@ class TestEventUpdateView:
         messages = list(get_messages(response.wsgi_request))
         assert any('saved' in str(m) for m in messages)
 
+    # ticket tier editor exposes visible controls for manual ordering
+    def test_ticket_tier_editor_renders_order_controls(self, client, editor, event: Event):
+        EventTicketTier.objects.create(event=event, name='Adult', price=Decimal('20.00'), currency='NZD')
+        client.force_login(editor)
+
+        response = client.get(reverse('events:event_edit', kwargs={'pk': event.pk}))
+
+        assert response.status_code == 200
+        content = response.content.decode()
+        assert 'data-admin-formset data-admin-formset-orderable' in content
+        assert 'data-admin-formset-move-up' in content
+        assert 'Move ticket tier up' in content
+        assert 'data-admin-formset-move-down' in content
+        assert 'Move ticket tier down' in content
+
     # editor can update and add ticket tiers from the event form
     def test_updates_ticket_tiers(self, client, editor, event: Event):
         tier = EventTicketTier.objects.create(event=event, name='Adult', price=Decimal('20.00'), currency='NZD')
@@ -350,6 +365,85 @@ class TestEventUpdateView:
             ('Adult', Decimal('22.00'), 'AUD', True),
             ('Child', Decimal('10.00'), 'NZD', False),
         ]
+
+    # submitted order fields control the display order of saved ticket tiers
+    def test_updates_ticket_tier_order(self, client, editor, event: Event):
+        adult = EventTicketTier.objects.create(
+            event=event, name='Adult', price=Decimal('20.00'), currency='NZD', order=0
+        )
+        child = EventTicketTier.objects.create(
+            event=event, name='Child', price=Decimal('10.00'), currency='NZD', order=1
+        )
+        client.force_login(editor)
+        url = reverse('events:event_edit', kwargs={'pk': event.pk})
+        data = {
+            'title': event.title,
+            'slug': event.slug,
+            'description': event.description,
+            'location': event.location,
+            'start': event.start.isoformat(),
+            'publish_status': event.publish_status,
+            'tags': ', '.join(event.tags.names()),
+            'image_ppoi': '0.5x0.5',
+            'ticket_tiers-TOTAL_FORMS': '2',
+            'ticket_tiers-INITIAL_FORMS': '2',
+            'ticket_tiers-MIN_NUM_FORMS': '0',
+            'ticket_tiers-MAX_NUM_FORMS': '1000',
+            'ticket_tiers-0-id': str(adult.pk),
+            'ticket_tiers-0-name': 'Adult',
+            'ticket_tiers-0-price': '20.00',
+            'ticket_tiers-0-currency': 'NZD',
+            'ticket_tiers-0-available_from': '',
+            'ticket_tiers-0-available_until': '',
+            'ticket_tiers-0-order': '1',
+            'ticket_tiers-1-id': str(child.pk),
+            'ticket_tiers-1-name': 'Child',
+            'ticket_tiers-1-price': '10.00',
+            'ticket_tiers-1-currency': 'NZD',
+            'ticket_tiers-1-available_from': '',
+            'ticket_tiers-1-available_until': '',
+            'ticket_tiers-1-order': '0',
+        }
+
+        response = client.post(url, data)
+
+        assert response.status_code == 302
+        assert list(event.ticket_tiers.values_list('name', 'order')) == [('Child', 0), ('Adult', 1)]
+
+    # missing order fields get sequential fallback values server-side
+    def test_ticket_tier_blank_order_falls_back_to_sequence(self, client, editor, event: Event):
+        client.force_login(editor)
+        url = reverse('events:event_edit', kwargs={'pk': event.pk})
+        data = {
+            'title': event.title,
+            'slug': event.slug,
+            'description': event.description,
+            'location': event.location,
+            'start': event.start.isoformat(),
+            'publish_status': event.publish_status,
+            'tags': ', '.join(event.tags.names()),
+            'image_ppoi': '0.5x0.5',
+            'ticket_tiers-TOTAL_FORMS': '2',
+            'ticket_tiers-INITIAL_FORMS': '0',
+            'ticket_tiers-MIN_NUM_FORMS': '0',
+            'ticket_tiers-MAX_NUM_FORMS': '1000',
+            'ticket_tiers-0-name': 'Adult',
+            'ticket_tiers-0-price': '20.00',
+            'ticket_tiers-0-currency': 'NZD',
+            'ticket_tiers-0-available_from': '',
+            'ticket_tiers-0-available_until': '',
+            'ticket_tiers-0-order': '',
+            'ticket_tiers-1-name': 'Child',
+            'ticket_tiers-1-price': '10.00',
+            'ticket_tiers-1-currency': 'NZD',
+            'ticket_tiers-1-available_from': '',
+            'ticket_tiers-1-available_until': '',
+        }
+
+        response = client.post(url, data)
+
+        assert response.status_code == 302
+        assert list(event.ticket_tiers.values_list('name', 'order')) == [('Adult', 0), ('Child', 1)]
 
     # blank extra tier rows do not block editing existing tiers
     def test_updates_ticket_tier_with_blank_extra_row(self, client, editor, event: Event):

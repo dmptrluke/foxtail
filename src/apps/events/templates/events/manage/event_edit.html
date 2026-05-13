@@ -87,19 +87,23 @@
             </div>
         </div>
 
-        <fieldset class="mb-4 event-ticket-editor" data-ticket-formset>
+        <fieldset class="mb-4 event-ticket-editor" data-admin-formset data-admin-formset-orderable>
             <legend>Pricing</legend>
             <p class="form-text">Ticket tiers are optional. Use dates for early bird, late registration, or closed pricing windows.</p>
             {{ ticket_formset.management_form }}
             {% if ticket_formset.non_form_errors %}
                 <div class="invalid-feedback d-block">{{ ticket_formset.non_form_errors|join:"; " }}</div>
             {% endif %}
-            <div class="event-ticket-list" data-ticket-list>
+            <div class="event-ticket-list" data-admin-formset-list>
                 {% for tier_form in ticket_formset.forms %}
-                    <div class="event-ticket-row" data-ticket-form>
+                    <div class="event-ticket-row" data-admin-formset-row>
                         {{ tier_form.id }}
                         {{ tier_form.order }}
                         <div class="event-ticket-delete-field">{{ tier_form.DELETE }}</div>
+                        <div class="event-ticket-row-order-controls" aria-label="Ticket tier order controls">
+                            <button type="button" class="btn btn-outline-secondary btn-sm" data-admin-formset-move-up aria-label="Move ticket tier up">Move up</button>
+                            <button type="button" class="btn btn-outline-secondary btn-sm" data-admin-formset-move-down aria-label="Move ticket tier down">Move down</button>
+                        </div>
                         <div class="row g-3 align-items-end">
                             <div class="col-md-4">{% text_field tier_form.name %}</div>
                             <div class="col-sm-6 col-md-2">{% text_field tier_form.price %}</div>
@@ -109,16 +113,20 @@
                         </div>
                         <div class="event-ticket-row-actions">
                             {% check_field tier_form.is_sold_out inline=True %}
-                            <button type="button" class="btn btn-outline-danger btn-sm" data-ticket-remove>Remove</button>
+                            <button type="button" class="btn btn-outline-danger btn-sm" data-admin-formset-remove>Remove</button>
                         </div>
                     </div>
                 {% endfor %}
             </div>
-            <template data-ticket-empty-form>
-                <div class="event-ticket-row" data-ticket-form>
+            <template data-admin-formset-empty-form>
+                <div class="event-ticket-row" data-admin-formset-row>
                     {{ ticket_formset.empty_form.id }}
                     {{ ticket_formset.empty_form.order }}
                     <div class="event-ticket-delete-field">{{ ticket_formset.empty_form.DELETE }}</div>
+                    <div class="event-ticket-row-order-controls" aria-label="Ticket tier order controls">
+                        <button type="button" class="btn btn-outline-secondary btn-sm" data-admin-formset-move-up aria-label="Move ticket tier up">Move up</button>
+                        <button type="button" class="btn btn-outline-secondary btn-sm" data-admin-formset-move-down aria-label="Move ticket tier down">Move down</button>
+                    </div>
                     <div class="row g-3 align-items-end">
                         <div class="col-md-4">{% text_field ticket_formset.empty_form.name %}</div>
                         <div class="col-sm-6 col-md-2">{% text_field ticket_formset.empty_form.price %}</div>
@@ -128,11 +136,11 @@
                     </div>
                     <div class="event-ticket-row-actions">
                         {% check_field ticket_formset.empty_form.is_sold_out inline=True %}
-                        <button type="button" class="btn btn-outline-danger btn-sm" data-ticket-remove>Remove</button>
+                        <button type="button" class="btn btn-outline-danger btn-sm" data-admin-formset-remove>Remove</button>
                     </div>
                 </div>
             </template>
-            <button type="button" class="btn btn-outline-primary btn-sm mt-3" data-ticket-add>
+            <button type="button" class="btn btn-outline-primary btn-sm mt-3" data-admin-formset-add>
                 <c-icons.plus /> Add ticket tier
             </button>
         </fieldset>
