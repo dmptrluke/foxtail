@@ -84,7 +84,7 @@ class TestPostStructuredData:
         sd = post.structured_data
         assert 'image' not in sd
 
-    # about references linked organisations by @id
+    # about references linked organisations as generic entities
     def test_about_organisations(self, post: Post):
         from apps.organisations.tests.factories import OrganisationFactory
 
@@ -93,9 +93,9 @@ class TestPostStructuredData:
         post.__dict__.pop('structured_data', None)
         sd = post.structured_data
         org_url = org.structured_data['@id']
-        assert {'@type': 'Organization', '@id': org_url, 'name': org.name, 'url': org_url} in sd['about']
+        assert {'@type': 'Thing', '@id': org_url, 'name': org.name} in sd['about']
 
-    # about references linked events by @id
+    # about references linked events as generic entities
     def test_about_events(self, post: Post):
         from apps.events.tests.factories import EventFactory
 
@@ -104,7 +104,7 @@ class TestPostStructuredData:
         post.__dict__.pop('structured_data', None)
         sd = post.structured_data
         event_url = event.structured_data['@id']
-        assert {'@type': 'Event', '@id': event_url, 'name': event.title, 'url': event_url} in sd['about']
+        assert {'@type': 'Thing', '@id': event_url, 'name': event.title} in sd['about']
 
     # about absent when no organisations or events linked
     def test_about_absent_when_empty(self, post: Post):
