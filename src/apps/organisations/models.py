@@ -50,6 +50,7 @@ class Organisation(models.Model):
         ('waikato', 'Waikato'),
         ('bay-of-plenty', 'Bay of Plenty'),
         ('central-ni', 'Central North Island'),
+        ('manawatu-whanganui', 'Manawatū-Whanganui'),
         ('wellington', 'Wellington'),
         ('top-of-the-south', 'Nelson/Marlborough'),
         ('canterbury', 'Canterbury'),
