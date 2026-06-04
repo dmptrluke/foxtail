@@ -439,14 +439,14 @@ wheels = [
 
 [[package]]
 name = "django-imagefield"
-version = "0.23.0a3"
+version = "0.23.0a4"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "pillow" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/b6/3a/b8fc23614522bad47c222d39f2c40aa5cbeffc48e6efc3a9ba59b7314db0/django_imagefield-0.23.0a3.tar.gz", hash = "sha256:40188517945bd5343dfa04a6a54c644777f773648eb6e726c422e33ee84a4636", size = 24485, upload-time = "2026-02-05T20:01:57.805Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/92/e9/b57c271eaf18ec173bf3f6a3a3f0d3e58fc1f1fb2cd995ec7067c3d219ec/django_imagefield-0.23.0a4.tar.gz", hash = "sha256:d6d0de980ce6ce71e5ff15c909a938cd5b08e7749cc8d2c60d7c14219d2f0aa0", size = 24760, upload-time = "2026-05-21T12:16:01.476Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/b7/15/826b2a348ff5e5b0029a869393a7e2ab460a68834437acd3058fb87a8679/django_imagefield-0.23.0a3-py3-none-any.whl", hash = "sha256:e0e3e53a448c16269bfab2c6ed1bf2680c97f4e72037e5c93940f9e226b728a2", size = 31442, upload-time = "2026-02-05T20:01:59.131Z" },
+    { url = "https://files.pythonhosted.org/packages/b8/9f/14b7896b77398345cea4f935a54ae35fe3bd19dcd7d580f179dd14b141ac/django_imagefield-0.23.0a4-py3-none-any.whl", hash = "sha256:4fc05d8d9a731262444a9042b7fbb11eacd1d7e52f74ffca1abd7f0e99b4f6aa", size = 31634, upload-time = "2026-05-21T12:16:00.117Z" },
 ]
 
 [package.optional-dependencies]
@@ -712,7 +712,7 @@ requires-dist = [
     { name = "django-environ", specifier = ">=0.13,<1" },
     { name = "django-fetch-metadata", specifier = ">=0.1" },
     { name = "django-formguard", specifier = ">=0.9.3" },
-    { name = "django-imagefield", extras = ["vips"], specifier = ">=0.23.0a3" },
+    { name = "django-imagefield", extras = ["vips"], specifier = ">=0.23.0a4" },
     { name = "django-markdownfield", specifier = ">=0.20.2" },
     { name = "django-published", specifier = ">=1.1" },
     { name = "django-redis", specifier = ">=6.0,<7" },
