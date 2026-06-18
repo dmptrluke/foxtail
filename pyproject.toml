@@ -17,7 +17,7 @@ dependencies = [
     "mjml-python>=1.4.0",
     "django-markdownfield>=0.20.2",
     "django-published>=1.1",
-    "django-redis>=6.0,<7",
+    "django-redis>=7.0.0,<8",
     "huey",
     "django-storages[s3]>=1.14.6,<2",
     "django-structured-data>=0.13.4",
