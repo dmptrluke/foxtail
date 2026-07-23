@@ -24,7 +24,7 @@ dependencies = [
     "django-taggit>=6.1,<7",
     "fido2>=2.2.1",
     "gunicorn>=26.0.0,<27",
-    "icalendar>=7.2.0",
+    "icalendar>=7.2.2",
     "markdown>=3.10",
     "psycopg[binary]>=3.3.4,<4",
     "pyjwt>=2.13.0,<3",
@@ -32,12 +32,12 @@ dependencies = [
     "requests-oauthlib>=2.0",
     "rules>=3.5",
     "segno>=1.6",
-    "sentry-sdk>=2.64.0",
+    "sentry-sdk>=2.66.1",
     "anyascii>=0.3",
     "whitenoise>=6.12,<7",
     "django-solo>=2.5",
     "django-formguard>=0.9.3",
-    "django-unfold>=0.100.0",
+    "django-unfold>=0.101.0",
     "django-fetch-metadata>=0.1",
     "shortuuid>=1.0.13",
 ]
@@ -48,18 +48,18 @@ dev = [
     "django-debug-toolbar==6.3.0",
     "django-fetch-metadata[toolbar]>=0.2.1",
     "factory-boy==3.3.3",
-    "faker==40.28.1",
+    "faker==40.35.0",
 ]
 test = [
     { include-group = "dev" },
     "feedparser==6.0.12",
-    "coverage==7.15.0",
+    "coverage==7.15.2",
     "pytest==9.1.1",
     "pytest-cov==7.1.0",
     "pytest-django==4.12.0",
     "pytest-factoryboy==2.8.1",
     "pytest-xdist==3.8.0",
-    "hypothesis>=6.156.4",
+    "hypothesis>=6.161.1",
 ]
 
 [tool.pytest.ini_options]
