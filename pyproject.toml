@@ -45,7 +45,7 @@ dependencies = [
 [dependency-groups]
 dev = [
     "debugpy==1.8.21",
-    "django-debug-toolbar==6.3.0",
+    "django-debug-toolbar==7.0.0",
     "django-fetch-metadata[toolbar]>=0.2.1",
     "factory-boy==3.3.3",
     "faker==40.35.0",
