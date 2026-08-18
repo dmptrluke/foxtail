@@ -747,7 +747,7 @@ CONTENT_SECURITY_POLICY = {
             'https://www.youtube-nocookie.com',
         ],
         'font-src': [SELF] + ASSET_HOSTS,
-        'img-src': [SELF, 'data:', 'https://api.maptiler.com'] + ASSET_HOSTS,
+        'img-src': [SELF, 'data:', 'https://api.maptiler.com', 'https://fonts.gstatic.com'] + ASSET_HOSTS,
         'object-src': [NONE],
         'worker-src': ['blob:'],
         'connect-src': [SELF, 'https://sentry.io', 'https://api.maptiler.com'],
