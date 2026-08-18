@@ -46,7 +46,7 @@
                                 </form>
                             {% endif %}
                             {% if not emailaddress.primary %}
-                                <form method="post" action="{% url 'account_email' %}" onsubmit="return confirm('Remove this email address?')">
+                                <form method="post" action="{% url 'account_email' %}" hx-confirm="Remove this email address?">
                                     {% csrf_token %}
                                     <input type="hidden" name="email" value="{{ emailaddress.email }}">
                                     <button type="submit" name="action_remove" class="btn btn-outline-danger btn-sm">Remove</button>
