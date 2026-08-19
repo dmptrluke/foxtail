@@ -17,7 +17,7 @@ from django.templatetags.static import static
 from django.urls import reverse_lazy
 
 import environ
-from csp.constants import NONCE, NONE, SELF
+from csp.constants import NONCE, NONE, SELF, STRICT_DYNAMIC, UNSAFE_INLINE
 from formguard.conf import BUILTINS
 from imagefield.webp import webp
 
@@ -731,7 +731,7 @@ _csp_script_src = [
 
 # we don't use strict-dynamic in debug because it breaks django-debug-toolbar
 if not DEBUG:
-    _csp_script_src += ["'strict-dynamic'"]
+    _csp_script_src += [UNSAFE_INLINE, STRICT_DYNAMIC]
 
 CONTENT_SECURITY_POLICY = {
     # admin is excluded because Django admin requires 'unsafe-eval' for JSONField widgets
@@ -739,19 +739,19 @@ CONTENT_SECURITY_POLICY = {
     'DIRECTIVES': {
         'default-src': [SELF],
         'script-src': _csp_script_src,
-        'style-src': [SELF, NONCE] + ASSET_HOSTS,
+        'style-src': [SELF, NONCE, UNSAFE_INLINE] + ASSET_HOSTS,
         'style-src-attr': ["'unsafe-inline'"],
         'frame-src': [
             'https://challenges.cloudflare.com',
             'https://www.youtube.com',
             'https://www.youtube-nocookie.com',
         ],
-        'font-src': [SELF] + ASSET_HOSTS,
-        'img-src': [SELF, 'data:', 'https://api.maptiler.com'] + ASSET_HOSTS,
+        'font-src': [SELF, 'data:', 'https://fonts.gstatic.com'] + ASSET_HOSTS,
+        'img-src': [SELF, 'blob:', 'data:', 'https://api.maptiler.com'] + ASSET_HOSTS,
         'object-src': [NONE],
         'worker-src': ['blob:'],
         'connect-src': [SELF, 'https://sentry.io', 'https://api.maptiler.com'],
-        'base-uri': [NONE],
+        'base-uri': [SELF],
         'frame-ancestors': [NONE],
         # form-action omitted: script-src nonce policy prevents form injection attacks
         'upgrade-insecure-requests': not DEBUG,

@@ -12,7 +12,7 @@
 {% endblock %}
 
 {% block content %}
-    <form method="post" action="{% url 'account_confirm_login_code' %}" class="auth-form">
+    <form type="submit" form="logout-from-stage" class="auth-back" id="logout-from-stage">
         {% csrf_token %}
         {% non_field_errors verify_form %}
 
