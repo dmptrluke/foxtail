@@ -39,11 +39,30 @@ const COLOR_SCHEMES = ['plum', 'slate', 'coffee', 'forest', 'autumn', 'berry', '
 const STYLE_THEMES = ['default', 'retro', 'glass', 'terminal'];
 const DEFAULT_COLOR_SCHEME = document.documentElement.dataset.defaultScheme;
 
+// localStorage can throw (rather than simply being unavailable) in some browser
+// configurations, e.g. Firefox with storage disabled or strict tracking protection.
+// Guard every access so a blocked/unavailable store can't break the rest of the script.
+function storageGet(key) {
+    try {
+        return localStorage.getItem(key);
+    } catch {
+        return null;
+    }
+}
+
+function storageSet(key, value) {
+    try {
+        localStorage.setItem(key, value);
+    } catch {
+        // ignore: storage unavailable
+    }
+}
+
 function applyTheme() {
     const root = document.documentElement;
-    const scheme = localStorage.getItem('color-scheme') || DEFAULT_COLOR_SCHEME;
-    const style = localStorage.getItem('style-theme') || 'default';
-    const mode = localStorage.getItem('dark-mode') || 'auto';
+    const scheme = storageGet('color-scheme') || DEFAULT_COLOR_SCHEME;
+    const style = storageGet('style-theme') || 'default';
+    const mode = storageGet('dark-mode') || 'auto';
 
     COLOR_SCHEMES.forEach(s => root.classList.remove(`theme-${s}`));
     root.classList.add(`theme-${scheme}`);
@@ -60,9 +79,9 @@ function applyTheme() {
 }
 
 function updatePickerState(picker) {
-    const scheme = localStorage.getItem('color-scheme') || DEFAULT_COLOR_SCHEME;
-    const style = localStorage.getItem('style-theme') || 'default';
-    const mode = localStorage.getItem('dark-mode') || 'auto';
+    const scheme = storageGet('color-scheme') || DEFAULT_COLOR_SCHEME;
+    const style = storageGet('style-theme') || 'default';
+    const mode = storageGet('dark-mode') || 'auto';
 
     picker.querySelectorAll('[data-scheme]').forEach(btn => {
         btn.classList.toggle('active', btn.dataset.scheme === scheme);
@@ -102,7 +121,7 @@ function initThemeToggle() {
             set('browser', navigator.userAgent);
             set('device', 'Unknown');
         }
-        const ls = (key, fallback) => localStorage.getItem(key) || fallback;
+        const ls = (key, fallback) => storageGet(key) || fallback;
         set('theme', `${ls('color-scheme', DEFAULT_COLOR_SCHEME)} / ${ls('style-theme', 'default')} / ${ls('dark-mode', 'auto')}`);
     }
 
@@ -128,11 +147,11 @@ function initThemeToggle() {
             if (!btn) return;
 
             if (btn.dataset.scheme) {
-                localStorage.setItem('color-scheme', btn.dataset.scheme);
+                storageSet('color-scheme', btn.dataset.scheme);
             } else if (btn.dataset.style) {
-                localStorage.setItem('style-theme', btn.dataset.style);
+                storageSet('style-theme', btn.dataset.style);
             } else if (btn.dataset.mode) {
-                localStorage.setItem('dark-mode', btn.dataset.mode);
+                storageSet('dark-mode', btn.dataset.mode);
             }
             applyTheme();
             updatePickerState(picker);

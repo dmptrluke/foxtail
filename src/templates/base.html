@@ -32,11 +32,16 @@
         (function() {
             var h = document.documentElement, c = h.classList;
             c.remove('no-js'); c.add('js');
-            var s = localStorage.getItem('color-scheme') || h.dataset.defaultScheme;
+            // localStorage can throw (rather than simply being unavailable) in some
+            // browser configurations, e.g. Firefox with storage disabled or strict
+            // tracking protection. Guard access so this doesn't break the page.
+            var ls;
+            try { ls = localStorage; } catch { ls = null; }
+            var s = (ls && ls.getItem('color-scheme')) || h.dataset.defaultScheme;
             if (s) { c.remove('theme-' + h.dataset.defaultScheme); c.add('theme-' + s); }
-            var t = localStorage.getItem('style-theme') || 'default';
+            var t = (ls && ls.getItem('style-theme')) || 'default';
             if (t !== 'default') c.add('theme-' + t);
-            var m = localStorage.getItem('dark-mode') || 'auto';
+            var m = (ls && ls.getItem('dark-mode')) || 'auto';
             if (m === 'dark' || (m === 'auto' && matchMedia('(prefers-color-scheme: dark)').matches))
                 h.dataset.bsTheme = 'dark';
         })();
