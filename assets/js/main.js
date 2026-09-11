@@ -38,12 +38,19 @@ function initCharCounter() {
 const COLOR_SCHEMES = ['plum', 'slate', 'coffee', 'forest', 'autumn', 'berry', 'tui', 'twilight', 'dusk', 'ocean', 'contrast'];
 const STYLE_THEMES = ['default', 'retro', 'glass', 'terminal'];
 const DEFAULT_COLOR_SCHEME = document.documentElement.dataset.defaultScheme;
+const DARK_MODE_MEDIA_QUERY = '(prefers-color-scheme: dark)';
+
+function getDarkModeMediaQuery() {
+    if (typeof window.matchMedia !== 'function') return null;
+    return window.matchMedia(DARK_MODE_MEDIA_QUERY);
+}
 
 function applyTheme() {
     const root = document.documentElement;
     const scheme = localStorage.getItem('color-scheme') || DEFAULT_COLOR_SCHEME;
     const style = localStorage.getItem('style-theme') || 'default';
     const mode = localStorage.getItem('dark-mode') || 'auto';
+    const darkModeMediaQuery = getDarkModeMediaQuery();
 
     COLOR_SCHEMES.forEach(s => root.classList.remove(`theme-${s}`));
     root.classList.add(`theme-${scheme}`);
@@ -51,7 +58,7 @@ function applyTheme() {
     STYLE_THEMES.forEach(s => { if (s !== 'default') root.classList.remove(`theme-${s}`); });
     if (style !== 'default') root.classList.add(`theme-${style}`);
 
-    const dark = mode === 'dark' || (mode === 'auto' && matchMedia('(prefers-color-scheme: dark)').matches);
+    const dark = mode === 'dark' || (mode === 'auto' && darkModeMediaQuery?.matches);
     if (dark) {
         root.dataset.bsTheme = 'dark';
     } else {
@@ -77,7 +84,12 @@ function updatePickerState(picker) {
 
 function initThemeToggle() {
     applyTheme();
-    matchMedia('(prefers-color-scheme: dark)').addEventListener('change', applyTheme);
+    const darkModeMediaQuery = getDarkModeMediaQuery();
+    if (typeof darkModeMediaQuery?.addEventListener === 'function') {
+        darkModeMediaQuery.addEventListener('change', applyTheme);
+    } else if (typeof darkModeMediaQuery?.addListener === 'function') {
+        darkModeMediaQuery.addListener(applyTheme);
+    }
     window.addEventListener('storage', applyTheme);
 
     const picker = document.querySelector('.popup-theme');

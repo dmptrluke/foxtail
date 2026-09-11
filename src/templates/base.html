@@ -37,7 +37,7 @@
             var t = localStorage.getItem('style-theme') || 'default';
             if (t !== 'default') c.add('theme-' + t);
             var m = localStorage.getItem('dark-mode') || 'auto';
-            if (m === 'dark' || (m === 'auto' && matchMedia('(prefers-color-scheme: dark)').matches))
+            if (m === 'dark' || (m === 'auto' && typeof matchMedia === 'function' && matchMedia('(prefers-color-scheme: dark)').matches))
                 h.dataset.bsTheme = 'dark';
         })();
     </script>
