@@ -7,6 +7,7 @@ import 'bootstrap/js/dist/alert';
 import 'colcade';
 import htmx from 'htmx.org';
 import { getCsrfToken } from './csrf.js';
+import { closestElement, onMediaQueryChange } from './domCompat.js';
 
 htmx.config.includeIndicatorStyles = false;
 htmx.config.selfRequestsOnly = true;
@@ -77,7 +78,7 @@ function updatePickerState(picker) {
 
 function initThemeToggle() {
     applyTheme();
-    matchMedia('(prefers-color-scheme: dark)').addEventListener('change', applyTheme);
+    onMediaQueryChange(matchMedia('(prefers-color-scheme: dark)'), applyTheme);
     window.addEventListener('storage', applyTheme);
 
     const picker = document.querySelector('.popup-theme');
@@ -124,7 +125,7 @@ function initThemeToggle() {
     // Theme picker option clicks
     if (picker) {
         picker.addEventListener('click', (e) => {
-            const btn = e.target.closest('.popup-theme-option');
+            const btn = closestElement(e.target, '.popup-theme-option');
             if (!btn) return;
 
             if (btn.dataset.scheme) {
@@ -141,7 +142,7 @@ function initThemeToggle() {
 
     // Close popups on outside click
     document.addEventListener('click', (e) => {
-        if (!e.target.closest('.popup-wrapper')) {
+        if (!closestElement(e.target, '.popup-wrapper')) {
             popups.forEach(p => { p.hidden = true; });
         }
     });
