@@ -44,16 +44,16 @@ dependencies = [
 
 [dependency-groups]
 dev = [
-    "debugpy==1.8.21",
+    "debugpy==1.8.22",
     "django-debug-toolbar==7.1.1",
     "django-fetch-metadata[toolbar]>=0.2.1",
     "factory-boy==3.3.3",
-    "faker==40.38.0",
+    "faker==40.39.0",
 ]
 test = [
     { include-group = "dev" },
     "feedparser==6.0.14",
-    "coverage==7.16.0",
+    "coverage==7.16.1",
     "pytest==9.1.1",
     "pytest-cov==7.1.0",
     "pytest-django==4.14.0",
