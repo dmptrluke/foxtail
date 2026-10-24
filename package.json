@@ -21,7 +21,7 @@
         "sass": "^1.104.0",
         "sortablejs": "^1.15.7",
         "tom-select": "^2.6.2",
-        "vite": "^8.2.2"
+        "vite": "^8.3.5"
     },
     "devDependencies": {
         "@biomejs/biome": "2.5.12",
