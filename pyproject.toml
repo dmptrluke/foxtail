@@ -53,7 +53,7 @@ dev = [
 test = [
     { include-group = "dev" },
     "feedparser==6.0.14",
-    "coverage==7.16.2",
+    "coverage==7.17.0",
     "pytest==9.1.1",
     "pytest-cov==7.1.0",
     "pytest-django==4.14.0",
