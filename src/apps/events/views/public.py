@@ -38,7 +38,12 @@ class EventListView(StructuredDataMixin, ListView):
         upcoming = list(published.not_ended().order_by('start'))
         context['upcoming_events'] = upcoming
         context['past_events'] = published.ended().order_by('-start')
-        context['featured_event'] = upcoming[0] if upcoming else None
+        context['featured_event'] = None
+        for event in upcoming:
+            org = event.resolved_organisation
+            if org and (org.country == 'NZ' or (not org.country and org.region)):
+                context['featured_event'] = event
+                break
         context['event_years'] = _event_years()
         return context
 
@@ -124,7 +129,7 @@ class EventDetailView(PublishedDetailMixin, YearMixin, DetailView):
             interest = EventInterest.objects.filter(event=self.object, user=self.request.user).first()
             context['user_interest_status'] = interest.status if interest else ''
 
-        context['interests'] = list(self.object.interests.with_user_display()[:10])
+        context['interests'] = list(self.object.interests.with_user_display()[:3])
 
         count_map = self.object.interests.status_counts()
         context['interest_count'] = sum(count_map.values())

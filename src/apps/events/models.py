@@ -8,7 +8,7 @@ from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.core.validators import MinValueValidator
 from django.db import models
-from django.db.models import Count
+from django.db.models import Case, Count, Value, When
 from django.urls import reverse
 from django.utils.formats import date_format
 from django.utils.functional import cached_property
@@ -314,17 +314,22 @@ class EventInterestQuerySet(models.QuerySet):
         return {r['status']: r['n'] for r in self.values('status').annotate(n=Count('pk'))}
 
     def with_user_display(self):
-        """Select the interest's user with only the fields needed for avatar rendering."""
-        return self.select_related('user').only(
-            'id',
-            'event_id',
-            'status',
-            'user__id',
-            'user__username',
-            'user__avatar',
-            'user__avatar_width',
-            'user__avatar_height',
-            'user__avatar_ppoi',
+        """Load users for avatar rendering, ordering uploaded pictures first"""
+        return (
+            self.select_related('user')
+            .only(
+                'id',
+                'event_id',
+                'status',
+                'user__id',
+                'user__username',
+                'user__avatar',
+                'user__avatar_width',
+                'user__avatar_height',
+                'user__avatar_ppoi',
+            )
+            .alias(avatar_priority=Case(When(user__avatar='', then=Value(1)), default=Value(0)))
+            .order_by('avatar_priority', 'pk')
         )
 
 

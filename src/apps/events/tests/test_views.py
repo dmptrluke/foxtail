@@ -9,6 +9,8 @@ from django.utils.timezone import now
 import pytest
 from published.constants import AVAILABLE
 
+from apps.organisations.tests.factories import EventSeriesFactory, OrganisationFactory
+
 from ..models import Event, EventTicketTier
 from .factories import EventFactory, EventInterestFactory, EventTicketTierFactory
 
@@ -40,10 +42,37 @@ class TestEventListView:
         assert ongoing in response.context['upcoming_events']
         assert ongoing not in response.context['past_events']
 
-    # featured event is the first upcoming event
-    def test_featured_event(self, client, event: Event):
+    # the banner selects the next NZ event while the list keeps overseas events
+    def test_featured_event_is_next_nz_event(self, client):
+        australian = OrganisationFactory(country='AU')
+        new_zealand = OrganisationFactory(country='NZ')
+        overseas_event = EventFactory(organisation=australian, start=now().date() + timedelta(days=1))
+        nz_event = EventFactory(
+            organisation=None,
+            series=EventSeriesFactory(organisation=new_zealand),
+            start=now().date() + timedelta(days=2),
+        )
         response = client.get(self.url)
-        assert response.context['featured_event'] == event
+        assert response.context['featured_event'] == nz_event
+        assert list(response.context['upcoming_events']) == [overseas_event, nz_event]
+        assert b'Next New Zealand Event' in response.content
+
+    # a group region identifies an NZ event when its country is unset
+    def test_featured_event_uses_group_region(self, client):
+        australian = OrganisationFactory(country='AU', region='auckland')
+        regional = OrganisationFactory(country='', region='wellington')
+        EventFactory(organisation=australian, start=now().date() + timedelta(days=1))
+        nz_event = EventFactory(organisation=regional, start=now().date() + timedelta(days=2))
+        response = client.get(self.url)
+        assert response.context['featured_event'] == nz_event
+
+    # overseas events stay in the list when there is no NZ event for the banner
+    def test_no_nz_featured_event(self, client):
+        overseas_event = EventFactory(organisation=OrganisationFactory(country='AU'))
+        response = client.get(self.url)
+        assert response.context['featured_event'] is None
+        assert overseas_event in response.context['upcoming_events']
+        assert b'Next New Zealand Event' not in response.content
 
     # event_years context contains distinct years
     def test_event_years(self, client, event: Event):
