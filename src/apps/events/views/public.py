@@ -40,8 +40,7 @@ class EventListView(StructuredDataMixin, ListView):
         context['past_events'] = published.ended().order_by('-start')
         context['featured_event'] = None
         for event in upcoming:
-            org = event.resolved_organisation
-            if org and (org.country == 'NZ' or (not org.country and org.region)):
+            if event.organisation.is_new_zealand:
                 context['featured_event'] = event
                 break
         context['event_years'] = _event_years()
@@ -110,18 +109,12 @@ class EventDetailView(PublishedDetailMixin, YearMixin, DetailView):
         )
 
         event = self.object
-        org = event.resolved_organisation
+        org = event.organisation
         series = event.series
         show_series = bool(series)
         # Hide series when org has one series with the same name (redundant display).
         # Check name equality before count() to avoid the DB query when names differ.
-        if (
-            show_series
-            and org
-            and series.organisation_id == org.pk
-            and series.name == org.name
-            and org.series.count() == 1
-        ):
+        if show_series and series.organisation_id == org.pk and series.name == org.name and org.series.count() == 1:
             show_series = False
         context['show_series'] = show_series
 

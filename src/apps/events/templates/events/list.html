@@ -48,10 +48,10 @@
                         <span>{{ featured_event.location }}</span>
                     </div>
                     <p>{{ featured_event.description_rendered|plain_text|truncatechars:200 }}</p>
-                    {% if featured_event.tags.all or featured_event.resolved_organisation.country %}
+                    {% if featured_event.tags.all or featured_event.organisation.country %}
                         <div class="tag-row tag-row-dark">
-                            {% if featured_event.resolved_organisation.country %}
-                                <span class="tag-pill">{{ featured_event.resolved_organisation.get_country_display }}</span>
+                            {% if featured_event.organisation.country %}
+                                <span class="tag-pill">{{ featured_event.organisation.get_country_display }}</span>
                             {% endif %}
                             {% for tag in featured_event.tags.all %}
                                 <span class="tag-pill">{{ tag.name|title }}</span>

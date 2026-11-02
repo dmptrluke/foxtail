@@ -5,7 +5,7 @@ from decimal import Decimal
 from zoneinfo import ZoneInfo
 
 from django.conf import settings
-from django.core.exceptions import ValidationError
+from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.core.validators import MinValueValidator
 from django.db import models
 from django.db.models import Case, Count, Value, When
@@ -22,18 +22,12 @@ from markdownfield.validators import VALIDATOR_CLASSY
 from published.models import PublishedModel
 from taggit.managers import TaggableManager
 
+from apps.core.choices import AgeRequirement
 from apps.core.fields import AutoSlugField
 from apps.images.upload import scramble_upload
 from apps.images.validators import file_size_validator
 
 logger = logging.getLogger(__name__)
-
-AGE_CHOICES = [
-    ('all', 'All Ages'),
-    ('13', '13+'),
-    ('16', '16+'),
-    ('18', '18+'),
-]
 
 CURRENCY_CHOICES = [
     ('NZD', 'NZD'),
@@ -44,8 +38,8 @@ CURRENCY_CHOICES = [
 
 class EventQuerySet(models.QuerySet):
     def with_relations(self):
-        """Select related organisation, series, and series.organisation"""
-        return self.select_related('organisation', 'series', 'series__organisation')
+        """Select the event's organisation and series"""
+        return self.select_related('organisation', 'series')
 
     def link_fields(self):
         """Select only the fields needed to render an event link (title, URL, date)."""
@@ -81,10 +75,6 @@ class EventQuerySet(models.QuerySet):
             Prefetch('interests', queryset=EventInterest.objects.with_user_display()),
         )
 
-    def for_organisation(self, org):
-        """Filter to events belonging to an org directly or through a series"""
-        return self.filter(models.Q(organisation=org) | models.Q(series__organisation=org)).distinct()
-
 
 class Event(PublishedModel):
     title = models.CharField(max_length=100, help_text='100 characters or fewer.')
@@ -95,8 +85,10 @@ class Event(PublishedModel):
     description_rendered = RenderedMarkdownField()
     url = models.URLField(blank=True)
 
-    organisation = models.ForeignKey('organisations.Organisation', on_delete=models.SET_NULL, null=True, blank=True)
-    series = models.ForeignKey('organisations.EventSeries', on_delete=models.SET_NULL, null=True, blank=True)
+    organisation = models.ForeignKey('organisations.Organisation', on_delete=models.PROTECT, related_name='events')
+    series = models.ForeignKey(
+        'organisations.EventSeries', on_delete=models.SET_NULL, null=True, blank=True, related_name='events'
+    )
 
     location = models.CharField(max_length=200)
     address = models.TextField(blank=True)
@@ -107,7 +99,7 @@ class Event(PublishedModel):
     end = models.DateField(null=True, blank=True, help_text='End date and time are optional.')
     end_time = models.TimeField(null=True, blank=True, help_text='End date and time are optional.')
 
-    age_requirement = models.CharField(max_length=3, choices=AGE_CHOICES, blank=True)
+    age_requirement = models.CharField(max_length=3, choices=AgeRequirement.choices, blank=True)
 
     image = ProcessedImageField(
         upload_to=scramble_upload('events'), blank=True, auto_add_fields=True, validators=[file_size_validator()]
@@ -123,37 +115,19 @@ class Event(PublishedModel):
 
     def clean(self):
         super().clean()
-        if self.end and self.end < self.start:
-            raise ValidationError({'end': 'End date cannot be before start date.'})
-        if self.series and self.series.organisation and self.organisation:
-            raise ValidationError(
-                {'organisation': 'Events in a series with an organisation cannot also have a direct organisation.'}
-            )
-
-    @cached_property
-    def resolved_organisation(self):
-        """Return the organisation, preferring the series' org over a direct assignment"""
-        if self.series and self.series.organisation:
-            return self.series.organisation
-        return self.organisation
-
-    @property
-    def resolved_age_requirement(self):
-        """Return age requirement, falling back to the resolved organisation's setting"""
-        if self.age_requirement:
-            return self.age_requirement
-        org = self.resolved_organisation
-        if org:
-            return org.age_requirement
-        return ''
-
-    @property
-    def resolved_age_requirement_display(self):
-        """Return the human-readable age requirement label, with org fallback"""
-        value = self.resolved_age_requirement
-        if not value:
-            return ''
-        return dict(AGE_CHOICES).get(value, value)
+        errors = {}
+        if self.start and self.end and self.end < self.start:
+            errors['end'] = 'End date cannot be before start date.'
+        if self.series_id:
+            try:
+                series_org_id = self.series.organisation_id
+            except ObjectDoesNotExist:
+                errors['series'] = 'Select a valid series.'
+            else:
+                if self.organisation_id and series_org_id != self.organisation_id:
+                    errors['series'] = 'The series must belong to the event organisation.'
+        if errors:
+            raise ValidationError(errors)
 
     def __str__(self):
         return self.title
@@ -163,23 +137,13 @@ class Event(PublishedModel):
 
     @property
     def is_ended(self):
-        """Check if the event has ended; events without an end date are assumed over at midnight after start"""
-        if self.end:
-            end = (
-                datetime.combine(self.end, self.end_time, tzinfo=ZoneInfo('Pacific/Auckland'))
-                if self.end_time
-                else datetime.combine(self.end, datetime.min.time(), tzinfo=ZoneInfo('Pacific/Auckland'))
-            )
-        else:
-            end = (
-                datetime.combine(self.start, self.end_time, tzinfo=ZoneInfo('Pacific/Auckland'))
-                if self.end_time
-                else datetime.combine(
-                    self.start + timedelta(days=1), datetime.min.time(), tzinfo=ZoneInfo('Pacific/Auckland')
-                )
-            )
-
-        return end < now()
+        """Check whether the event has ended, treating a date without a time as inclusive"""
+        end_date = self.end or self.start
+        end_time = self.end_time or datetime.min.time()
+        if not self.end_time:
+            end_date += timedelta(days=1)
+        end = datetime.combine(end_date, end_time, tzinfo=ZoneInfo('Pacific/Auckland'))
+        return end <= now()
 
     @cached_property
     def structured_data(self):
@@ -227,10 +191,9 @@ class Event(PublishedModel):
             except Exception:
                 logger.exception('Missing image for event %s', self.pk)
 
-        org = self.resolved_organisation
-        if org:
-            org_url = settings.SITE_URL + org.get_absolute_url()
-            data['organizer'] = {'@type': 'Organization', '@id': org_url, 'name': org.name, 'url': org_url}
+        org = self.organisation
+        org_url = settings.SITE_URL + org.get_absolute_url()
+        data['organizer'] = {'@type': 'Organization', '@id': org_url, 'name': org.name, 'url': org_url}
 
         offers = [tier.structured_data for tier in self.ticket_tiers.all() if tier.include_in_structured_data]
         if offers:

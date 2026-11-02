@@ -24,22 +24,45 @@ function initTagAutocomplete(el) {
 
 function initSelectAutocomplete(el) {
     const isMultiple = el.multiple;
+    const parent = document.getElementById(el.dataset.autocompleteParent);
+    let generation = 0;
     // Clear Django's "---------" label; the option must remain for blank submissions
     const blank = el.querySelector('option[value=""]');
     if (blank) blank.textContent = '';
-    new TomSelect(el, {
+    const control = new TomSelect(el, {
         plugins: isMultiple ? ['remove_button'] : ['clear_button'],
         allowEmptyOption: false,
         valueField: 'id',
         labelField: 'text',
         searchField: 'text',
         load(query, callback) {
-            fetch(`${el.dataset.autocompleteUrl}?q=${encodeURIComponent(query)}`)
+            const requestGeneration = generation;
+            const parentValue = parent?.value;
+            const url = new URL(el.dataset.autocompleteUrl, document.baseURI);
+            url.searchParams.set('q', query);
+            if (parent) url.searchParams.set(el.dataset.autocompleteParentParam, parentValue);
+            fetch(url)
                 .then(r => r.json())
-                .then(data => callback(data.results))
+                .then(data => callback(requestGeneration === generation && parentValue === parent?.value ? data.results : []))
                 .catch(() => callback());
         },
     });
+    if (parent) {
+        parent.addEventListener('change', () => {
+            generation++;
+            control.clear();
+            control.clearOptions();
+            control.setTextboxValue('');
+            if (parent.value) {
+                control.enable();
+                control.load('');
+            } else {
+                control.disable();
+            }
+        });
+        if (parent.value) control.load('');
+        else control.disable();
+    }
 }
 
 export function initAutocomplete() {

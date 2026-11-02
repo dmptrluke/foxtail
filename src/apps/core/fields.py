@@ -99,19 +99,15 @@ class AutoSlugField(models.SlugField):
             self._get_unique_lookups(instance),
         )
 
-        taken_slugs = sorted(
+        taken_slugs = set(
             conflicts.filter(**{f'{self.attname}__regex': rf'^{slug}(-\d+)?$'}).values_list(self.attname, flat=True)
         )
 
         if slug not in taken_slugs:
             return slug
 
-        taken_slugs.remove(slug)
-
         i = 1
-        for value in taken_slugs:
-            if not value.endswith(str(i)):
-                break
+        while f'{slug}-{i}' in taken_slugs:
             i += 1
 
         return f'{slug}-{i}'

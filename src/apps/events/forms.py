@@ -15,6 +15,7 @@ from django.forms.models import BaseInlineFormSet
 from csp_helpers.mixins import CSPFormMixin
 from taggit.forms import TagField
 
+from apps.core.querysets import filter_by_parent
 from apps.core.widgets import AutocompleteSelect, AutocompleteTag
 from apps.images.widgets import ImageWidget
 
@@ -37,6 +38,7 @@ class EventForm(CSPFormMixin, ModelForm):
         fields = [
             'title',
             'slug',
+            'tags',
             'description',
             'url',
             'organisation',
@@ -66,8 +68,17 @@ class EventForm(CSPFormMixin, ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        if self.instance and self.instance.pk:
-            self.fields['tags'].initial = self.instance.tags.all()
+        organisation_id = (
+            self.data.get(self.add_prefix('organisation')) if self.is_bound else self.initial.get('organisation')
+        )
+        series = self.fields['series']
+        series.queryset = filter_by_parent(series.queryset, 'organisation', organisation_id)
+        series.widget.attrs.update(
+            {
+                'data-autocomplete-parent': self['organisation'].id_for_label,
+                'data-autocomplete-parent-param': 'organisation',
+            }
+        )
 
 
 class EventTicketTierForm(CSPFormMixin, ModelForm):

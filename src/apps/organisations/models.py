@@ -2,6 +2,7 @@ import html
 import logging
 
 from django.conf import settings
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.urls import reverse
 from django.utils.functional import cached_property
@@ -12,6 +13,7 @@ from imagefield.fields import ImageField as ProcessedImageField
 from markdownfield.models import MarkdownField, RenderedMarkdownField
 from markdownfield.validators import VALIDATOR_CLASSY
 
+from apps.core.choices import AgeRequirement
 from apps.core.fields import AutoSlugField
 from apps.images.upload import scramble_upload
 
@@ -37,12 +39,6 @@ class Organisation(models.Model):
         ('organisation', 'Organisation'),
         ('community', 'Community Group'),
         ('interest', 'Interest Group'),
-    ]
-    AGE_CHOICES = [
-        ('all', 'All Ages'),
-        ('13', '13+'),
-        ('16', '16+'),
-        ('18', '18+'),
     ]
     REGION_CHOICES = [
         ('northland', 'Northland'),
@@ -76,7 +72,7 @@ class Organisation(models.Model):
     featured = models.BooleanField(default=False)
     group_type = models.CharField(max_length=20, choices=TYPE_CHOICES, default='organisation')
     region = models.CharField(max_length=20, choices=REGION_CHOICES, blank=True)
-    age_requirement = models.CharField(max_length=3, choices=AGE_CHOICES, blank=True)
+    age_requirement = models.CharField(max_length=3, choices=AgeRequirement.choices, blank=True)
 
     created = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
@@ -93,6 +89,13 @@ class Organisation(models.Model):
 
     def get_absolute_url(self):
         return reverse('groups:organisation_detail', kwargs={'slug': self.slug})
+
+    @property
+    def is_new_zealand(self):
+        """Identify NZ groups by country, falling back to their region"""
+        if self.country:
+            return self.country == 'NZ'
+        return bool(self.region)
 
     @property
     def has_detail_content(self):
@@ -200,11 +203,10 @@ class EventSeries(models.Model):
     logo = ProcessedImageField(upload_to=scramble_upload('organisations/series'), blank=True, auto_add_fields=True)
     organisation = models.ForeignKey(
         'organisations.Organisation',
-        on_delete=models.SET_NULL,
-        null=True,
-        blank=True,
+        on_delete=models.PROTECT,
         related_name='series',
     )
+    age_requirement = models.CharField(max_length=3, choices=AgeRequirement.choices, blank=True)
 
     created = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
@@ -220,3 +222,8 @@ class EventSeries(models.Model):
 
     def get_absolute_url(self):
         return reverse('series:eventseries_detail', kwargs={'slug': self.slug})
+
+    def clean(self):
+        super().clean()
+        if self.pk and self.organisation_id and self.events.exclude(organisation_id=self.organisation_id).exists():
+            raise ValidationError({'organisation': 'The organisation must match all events in this series.'})

@@ -105,7 +105,7 @@ class TestOrganisationDetailView:
     def test_events_include_series_linked(self, client):
         org = OrganisationFactory()
         series = EventSeriesFactory(organisation=org)
-        event = EventFactory(series=series, organisation=None)
+        event = EventFactory(series=series, organisation=org)
         response = client.get(org.get_absolute_url())
         assert event in response.context['events']
 
@@ -121,8 +121,8 @@ class TestOrganisationDetailView:
         org = OrganisationFactory()
         series_b = EventSeriesFactory(name='Beta', organisation=org)
         series_a = EventSeriesFactory(name='Alpha', organisation=org)
-        ev_a = EventFactory(series=series_a, organisation=None, start=now().date() + timedelta(days=5))
-        ev_b = EventFactory(series=series_b, organisation=None, start=now().date() + timedelta(days=10))
+        ev_a = EventFactory(series=series_a, organisation=org, start=now().date() + timedelta(days=5))
+        ev_b = EventFactory(series=series_b, organisation=org, start=now().date() + timedelta(days=10))
         ev_none = EventFactory(organisation=org, series=None, start=now().date() + timedelta(days=1))
         response = client.get(org.get_absolute_url())
         events = list(response.context['events'])
@@ -140,7 +140,7 @@ class TestEventSeriesDetailView:
     # events belonging to the series appear in context
     def test_context_includes_events(self, client):
         series = EventSeriesFactory()
-        event = EventFactory(series=series)
+        event = EventFactory(series=series, organisation=series.organisation)
         other = EventFactory()
         response = client.get(series.get_absolute_url())
         assert event in response.context['events']

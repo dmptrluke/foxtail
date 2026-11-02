@@ -102,6 +102,12 @@ def unique_together_slug_model():
 
 
 class TestAutoSlugFieldUnique:
+    # repeated names remain saveable when generated suffixes reach double digits
+    def test_suffixes_beyond_nine(self, unique_slug_model):
+        objects = [unique_slug_model.objects.create(title='Repeated name') for _ in range(15)]
+        assert len({obj.slug for obj in objects}) == 15
+        assert objects[-1].slug == 'repeated-name-14'
+
     # empty slug is auto-populated from the source field
     def test_generates_slug_from_source(self, unique_slug_model):
         obj = unique_slug_model.objects.create(title='Hello World')

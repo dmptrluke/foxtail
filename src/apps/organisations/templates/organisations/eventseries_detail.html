@@ -1,21 +1,17 @@
 {% extends "base/page.html" %}
+{% load breadcrumbs %}
 
 {% block title %}{{ eventseries.name }} Event Series{% endblock %}
 
 {% block hero %}
     <c-hero>
         <c-hero.nav>
-            {% load breadcrumbs %}
-            {% if eventseries.organisation %}
-                {% url 'groups:organisation_detail' slug=eventseries.organisation.slug as org_url %}
-                {% breadcrumbs org_url eventseries.organisation.name eventseries.get_absolute_url eventseries.name %}
-            {% else %}
-                {% breadcrumbs eventseries.get_absolute_url eventseries.name %}
-            {% endif %}
+            {% breadcrumbs eventseries.organisation.get_absolute_url eventseries.organisation.name eventseries.get_absolute_url eventseries.name %}
         </c-hero.nav>
         <c-hero.title>{{ eventseries.name }}</c-hero.title>
-        {% if eventseries.organisation %}
-            <c-hero.subtitle>by <a href="{{ org_url }}">{{ eventseries.organisation.name }}</a></c-hero.subtitle>
+        <c-hero.subtitle>by <a href="{{ eventseries.organisation.get_absolute_url }}">{{ eventseries.organisation.name }}</a></c-hero.subtitle>
+        {% if eventseries.age_requirement %}
+            <span class="age-badge age-badge-hero{% if eventseries.age_requirement == '18' %} tag-pill-warning{% endif %}">{{ eventseries.get_age_requirement_display }}</span>
         {% endif %}
     </c-hero>
 {% endblock hero %}

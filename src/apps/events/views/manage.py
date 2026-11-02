@@ -24,9 +24,12 @@ class EventManageListView(PermissionMixin, ListView):
 
 
 class _EventFormMixin:
+    """Share event and ticket-tier editing between create and update views"""
+
     ticket_formset_prefix = 'ticket_tiers'
 
     def get_ticket_formset(self):
+        """Build the event's ticket-tier formset for the current request"""
         from ..forms import EventTicketTierFormSet
 
         instance = self.object if getattr(self, 'object', None) else None
@@ -39,7 +42,9 @@ class _EventFormMixin:
         context['ticket_formset'] = kwargs.get('ticket_formset') or self.get_ticket_formset()
         return context
 
+    @transaction.atomic
     def _save_event(self, form, success_msg):
+        """Save the event, tags, and ticket tiers in one transaction"""
         ticket_formset = self.get_ticket_formset()
         if not ticket_formset.is_valid():
             return self.form_invalid(form, ticket_formset=ticket_formset)
@@ -51,7 +56,6 @@ class _EventFormMixin:
             self.object.longitude = None
         self.object.save()
         form.save_m2m()
-        self.object.tags.set(form.cleaned_data.get('tags', []))
         ticket_formset.instance = self.object
         ticket_formset.save()
         if self.object.address and 'address' in form.changed_data:

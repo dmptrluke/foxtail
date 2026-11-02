@@ -10,7 +10,7 @@ from .models import EventSeries, Organisation, SocialLink
 
 class SocialLinkInline(TabularInline):
     model = SocialLink
-    extra = 1
+    extra = 0
     show_count = True
     fields = ['platform', 'url', 'is_primary', 'click_count']
     readonly_fields = ['click_count']
@@ -47,15 +47,14 @@ class OrganisationAdmin(UnfoldModelAdmin):
 
 class EventSeriesAdmin(UnfoldModelAdmin):
     fieldsets = (
-        (None, {'fields': ('name', 'slug', 'description', 'organisation')}),
+        (None, {'fields': ('name', 'slug', 'description', 'organisation', 'age_requirement')}),
         ('Logo', {'fields': ('logo', 'logo_ppoi')}),
     )
-    list_display = ['name', 'organisation_link', 'created']
+    list_display = ['name', 'organisation_link', 'age_requirement', 'created']
+    list_select_related = ['organisation']
 
     @admin.display(description='Organisation')
     def organisation_link(self, obj):
-        if not obj.organisation:
-            return '-'
         url = reverse('admin:organisations_organisation_change', args=[obj.organisation_id])
         return format_html('<a href="{}">{}</a>', url, obj.organisation)
 

@@ -11,7 +11,6 @@ from published.utils import queryset_filter
 from structured_data.views import StructuredDataMixin
 
 from apps.blog.models import Post
-from apps.events.models import Event
 
 from .forms import SocialLinkRedirectForm
 from .models import EventSeries, Organisation, SocialLink
@@ -65,7 +64,7 @@ class OrganisationDetailView(DetailView):
         series = list(org.series.all())
         context['series'] = series
         events = list(
-            queryset_filter(Event.objects.for_organisation(org))
+            queryset_filter(org.events.all())
             .with_relations()
             .order_by(F('series__name').asc(nulls_last=True), '-start')
         )
@@ -95,7 +94,7 @@ class EventSeriesDetailView(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         series = self.object
-        events = queryset_filter(Event.objects).with_relations().filter(series=series).order_by('-start')
+        events = queryset_filter(series.events.all()).with_relations().order_by('-start')
         context['events'] = events
         context['posts'] = (
             queryset_filter(Post.objects).filter(Q(event_series=series) | Q(events__in=events)).link_fields().distinct()

@@ -9,6 +9,7 @@ from ..models import Event, EventTicketTier
 
 class EventFactory(TaggedModelFactory):
     title = Faker('name')
+    organisation = factory.SubFactory('apps.organisations.tests.factories.OrganisationFactory')
 
     description = Faker('paragraph')
     location = Faker('sentence')

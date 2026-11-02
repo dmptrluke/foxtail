@@ -30,25 +30,21 @@
                 {% endif %}
             </c-hero.nav>
 
-            {% if event.resolved_organisation or event.series or event.tags.all or event.resolved_age_requirement %}
-                <div class="tag-row">
-                    {% if event.resolved_organisation %}
-                        <a href="{{ event.resolved_organisation.get_absolute_url }}" class="tag-pill tag-pill-meta">{{ event.resolved_organisation.name }}</a>
-                    {% endif %}
-                    {% if show_series %}
-                        <a href="{{ event.series.get_absolute_url }}" class="tag-pill tag-pill-meta">{{ event.series.name }}</a>
-                    {% endif %}
-                    {% if event.resolved_organisation.country %}
-                        <span class="tag-pill tag-pill-meta">{{ event.resolved_organisation.get_country_display }}</span>
-                    {% endif %}
-                    {% for tag in event.tags.all %}
-                        <span class="tag-pill">{{ tag.name|title }}</span>
-                    {% endfor %}
-                    {% if event.resolved_age_requirement %}
-                        <span class="tag-pill tag-pill-meta{% if event.resolved_age_requirement == '18' %} tag-pill-warning{% endif %}">{{ event.resolved_age_requirement_display }}</span>
-                    {% endif %}
-                </div>
-            {% endif %}
+            <div class="tag-row">
+                <a href="{{ event.organisation.get_absolute_url }}" class="tag-pill tag-pill-meta">{{ event.organisation.name }}</a>
+                {% if show_series %}
+                    <a href="{{ event.series.get_absolute_url }}" class="tag-pill tag-pill-meta">{{ event.series.name }}</a>
+                {% endif %}
+                {% if event.organisation.country %}
+                    <span class="tag-pill tag-pill-meta">{{ event.organisation.get_country_display }}</span>
+                {% endif %}
+                {% for tag in event.tags.all %}
+                    <span class="tag-pill">{{ tag.name|title }}</span>
+                {% endfor %}
+                {% if event.age_requirement %}
+                    <span class="tag-pill tag-pill-meta{% if event.age_requirement == '18' %} tag-pill-warning{% endif %}">{{ event.get_age_requirement_display }}</span>
+                {% endif %}
+            </div>
 
             <c-hero.title>{{ event.title }}</c-hero.title>
             <c-hero.subtitle>

@@ -48,14 +48,14 @@ class TestEventListView:
         new_zealand = OrganisationFactory(country='NZ')
         overseas_event = EventFactory(organisation=australian, start=now().date() + timedelta(days=1))
         nz_event = EventFactory(
-            organisation=None,
+            organisation=new_zealand,
             series=EventSeriesFactory(organisation=new_zealand),
             start=now().date() + timedelta(days=2),
         )
         response = client.get(self.url)
         assert response.context['featured_event'] == nz_event
         assert list(response.context['upcoming_events']) == [overseas_event, nz_event]
-        assert b'Next New Zealand Event' in response.content
+        assert b'Next Up in New Zealand' in response.content
 
     # a group region identifies an NZ event when its country is unset
     def test_featured_event_uses_group_region(self, client):
@@ -72,7 +72,7 @@ class TestEventListView:
         response = client.get(self.url)
         assert response.context['featured_event'] is None
         assert overseas_event in response.context['upcoming_events']
-        assert b'Next New Zealand Event' not in response.content
+        assert b'Next Up in New Zealand' not in response.content
 
     # event_years context contains distinct years
     def test_event_years(self, client, event: Event):
@@ -98,6 +98,17 @@ class TestEventListYearView:
 
 
 class TestEventDetailView:
+    # event badges show only the event's age rather than organisation or series limits
+    @pytest.mark.parametrize('age', ['', 'all'])
+    def test_age_badge_is_independent(self, client, age):
+        org = OrganisationFactory(age_requirement='18')
+        series = EventSeriesFactory(organisation=org, age_requirement='16')
+        event = EventFactory(organisation=org, series=series, age_requirement=age)
+        response = client.get(event.get_absolute_url())
+        assert b'18+' not in response.content
+        assert b'16+' not in response.content
+        assert (b'All Ages' in response.content) == (age == 'all')
+
     # detail view renders a published event
     def test_renders_event(self, client, event: Event):
         response = client.get(event.get_absolute_url())
@@ -109,7 +120,7 @@ class TestEventDetailView:
         from apps.organisations.tests.factories import EventSeriesFactory
 
         series = EventSeriesFactory(name='Cool Series')
-        event = EventFactory(series=series, organisation=None)
+        event = EventFactory(series=series, organisation=series.organisation)
         response = client.get(event.get_absolute_url())
         assert response.context['show_series'] is True
 
@@ -124,7 +135,7 @@ class TestEventDetailView:
 
         org = OrganisationFactory(name='Wellington Furries')
         series = EventSeriesFactory(name='Wellington Furries', organisation=org)
-        event = EventFactory(series=series, organisation=None)
+        event = EventFactory(series=series, organisation=series.organisation)
         response = client.get(event.get_absolute_url())
         assert response.context['show_series'] is False
 
@@ -134,7 +145,7 @@ class TestEventDetailView:
 
         org = OrganisationFactory(name='Wellington Furries')
         series = EventSeriesFactory(name='Monthly Meets', organisation=org)
-        event = EventFactory(series=series, organisation=None)
+        event = EventFactory(series=series, organisation=series.organisation)
         response = client.get(event.get_absolute_url())
         assert response.context['show_series'] is True
 
@@ -145,7 +156,7 @@ class TestEventDetailView:
         org = OrganisationFactory(name='Wellington Furries')
         series = EventSeriesFactory(name='Wellington Furries', organisation=org)
         EventSeriesFactory(name='Annual Con', organisation=org)
-        event = EventFactory(series=series, organisation=None)
+        event = EventFactory(series=series, organisation=series.organisation)
         response = client.get(event.get_absolute_url())
         assert response.context['show_series'] is True
 
@@ -241,6 +252,7 @@ class TestEventCreateView:
             'title': 'New Event',
             'slug': 'new-event',
             'description': 'Event description.',
+            'organisation': OrganisationFactory().pk,
             'location': 'Wellington',
             'start': '2026-06-15',
             'publish_status': AVAILABLE,
@@ -266,6 +278,7 @@ class TestEventCreateView:
             'title': 'New Event',
             'slug': 'new-event',
             'description': 'Event description.',
+            'organisation': OrganisationFactory().pk,
             'location': 'Wellington',
             'start': '2026-06-15',
             'publish_status': AVAILABLE,
@@ -299,6 +312,7 @@ class TestEventCreateView:
             'title': 'Geocode Test',
             'slug': 'geocode-test',
             'description': 'Test event.',
+            'organisation': OrganisationFactory().pk,
             'location': 'Wellington',
             'address': '123 Main St, Wellington',
             'start': '2026-06-15',
@@ -316,6 +330,33 @@ class TestEventCreateView:
 
 
 class TestEventUpdateView:
+    # a ticket-tier save failure rolls back changes to the event and its tags
+    @patch('apps.events.forms.EventTicketTierFormSet.save', side_effect=RuntimeError('Ticket save failed'))
+    def test_ticket_failure_rolls_back_event(self, mock_save, client, editor, event: Event):
+        original_title = event.title
+        event.tags.set(['original'])
+        client.force_login(editor)
+        data = {
+            'title': 'Changed title',
+            'slug': event.slug,
+            'description': event.description,
+            'organisation': event.organisation_id,
+            'location': event.location,
+            'start': event.start.isoformat(),
+            'publish_status': event.publish_status,
+            'tags': 'edited',
+            'image_ppoi': '0.5x0.5',
+            'ticket_tiers-TOTAL_FORMS': '0',
+            'ticket_tiers-INITIAL_FORMS': '0',
+            'ticket_tiers-MIN_NUM_FORMS': '0',
+            'ticket_tiers-MAX_NUM_FORMS': '1000',
+        }
+        with pytest.raises(RuntimeError, match='Ticket save failed'):
+            client.post(reverse('events:event_edit', kwargs={'pk': event.pk}), data)
+        event.refresh_from_db()
+        assert event.title == original_title
+        assert list(event.tags.names()) == ['original']
+
     # regular user gets 403
     def test_requires_editor_permission(self, client, user, event: Event):
         client.force_login(user)
@@ -331,6 +372,7 @@ class TestEventUpdateView:
             'title': 'Updated Title',
             'slug': event.slug,
             'description': event.description,
+            'organisation': event.organisation_id,
             'location': event.location,
             'start': event.start.isoformat(),
             'publish_status': event.publish_status,
@@ -379,6 +421,7 @@ class TestEventUpdateView:
             'title': event.title,
             'slug': event.slug,
             'description': event.description,
+            'organisation': event.organisation_id,
             'location': event.location,
             'start': event.start.isoformat(),
             'publish_status': event.publish_status,
@@ -425,6 +468,7 @@ class TestEventUpdateView:
             'title': event.title,
             'slug': event.slug,
             'description': event.description,
+            'organisation': event.organisation_id,
             'location': event.location,
             'start': event.start.isoformat(),
             'publish_status': event.publish_status,
@@ -463,6 +507,7 @@ class TestEventUpdateView:
             'title': event.title,
             'slug': event.slug,
             'description': event.description,
+            'organisation': event.organisation_id,
             'location': event.location,
             'start': event.start.isoformat(),
             'publish_status': event.publish_status,
@@ -505,6 +550,7 @@ class TestEventUpdateView:
             'title': event.title,
             'slug': event.slug,
             'description': event.description,
+            'organisation': event.organisation_id,
             'location': event.location,
             'start': event.start.isoformat(),
             'publish_status': event.publish_status,
@@ -557,6 +603,7 @@ class TestEventUpdateView:
             'title': event.title,
             'slug': event.slug,
             'description': event.description,
+            'organisation': event.organisation_id,
             'location': event.location,
             'start': event.start.isoformat(),
             'publish_status': event.publish_status,
@@ -604,6 +651,7 @@ class TestEventUpdateView:
             'title': event.title,
             'slug': event.slug,
             'description': event.description,
+            'organisation': event.organisation_id,
             'location': event.location,
             'start': event.start.isoformat(),
             'publish_status': event.publish_status,
@@ -642,6 +690,7 @@ class TestEventUpdateView:
             'title': event.title,
             'slug': event.slug,
             'description': event.description,
+            'organisation': event.organisation_id,
             'location': event.location,
             'start': event.start.isoformat(),
             'publish_status': event.publish_status,
@@ -674,6 +723,7 @@ class TestEventUpdateView:
             'title': event.title,
             'slug': event.slug,
             'description': event.description,
+            'organisation': event.organisation_id,
             'location': event.location,
             'address': 'New Address, Wellington',
             'start': event.start.isoformat(),
@@ -701,6 +751,7 @@ class TestEventUpdateView:
             'title': event.title,
             'slug': event.slug,
             'description': event.description,
+            'organisation': event.organisation_id,
             'location': event.location,
             'address': '',
             'start': event.start.isoformat(),
@@ -729,6 +780,7 @@ class TestEventUpdateView:
             'title': 'Updated Title',
             'slug': event.slug,
             'description': event.description,
+            'organisation': event.organisation_id,
             'location': event.location,
             'address': '123 Main St',
             'start': event.start.isoformat(),

@@ -1,6 +1,7 @@
-from datetime import UTC, date, time, timedelta
+from datetime import UTC, date, datetime, time, timedelta
 from decimal import Decimal
 from unittest.mock import PropertyMock, patch
+from zoneinfo import ZoneInfo
 
 from django.conf import settings
 from django.core.exceptions import ValidationError
@@ -14,6 +15,17 @@ pytestmark = pytest.mark.django_db
 
 
 class TestEventIsEnded:
+    # an all-day event remains active through its final date and ends at the next midnight
+    @patch('apps.events.models.now')
+    def test_final_day_is_inclusive(self, mock_now, event: Event):
+        event.start = date(2026, 6, 13)
+        event.end = date(2026, 6, 15)
+        event.end_time = None
+        mock_now.return_value = datetime(2026, 6, 15, 12, tzinfo=ZoneInfo('Pacific/Auckland'))
+        assert event.is_ended is False
+        mock_now.return_value = datetime(2026, 6, 16, 0, tzinfo=ZoneInfo('Pacific/Auckland'))
+        assert event.is_ended is True
+
     # event with past end date and no end time is ended
     def test_past_end_date(self, event: Event):
         event.end = date(2019, 12, 2)
@@ -147,7 +159,7 @@ class TestEventStructuredData:
         sd = event.structured_data
         assert 'image' not in sd
 
-    # organizer references org's @id when event has a resolved organisation
+    # organizer references the event organisation's canonical identity
     def test_organizer_references_org_id(self):
         from apps.organisations.tests.factories import OrganisationFactory
 
@@ -158,14 +170,6 @@ class TestEventStructuredData:
         sd = event.structured_data
         org_url = org.structured_data['@id']
         assert sd['organizer'] == {'@type': 'Organization', '@id': org_url, 'name': org.name, 'url': org_url}
-
-    # organizer absent when event has no organisation
-    def test_organizer_absent_without_org(self, event: Event):
-        event.organisation = None
-        event.series = None
-        event.__dict__.pop('structured_data', None)
-        sd = event.structured_data
-        assert 'organizer' not in sd
 
     # ticket tiers are exposed as schema.org offers
     def test_ticket_tiers_in_offers(self, event: Event):
@@ -270,63 +274,6 @@ class TestEventTicketTier:
         )
         with pytest.raises(ValidationError, match='Available until cannot be before available from'):
             tier.clean()
-
-
-class TestEventAgeRequirement:
-    # event's own age_requirement is used when set
-    def test_own_age_requirement(self, event: Event):
-        event.age_requirement = '18'
-        assert event.resolved_age_requirement == '18'
-
-    # falls back to resolved organisation's age_requirement
-    def test_fallback_to_org(self):
-        from apps.organisations.tests.factories import OrganisationFactory
-
-        from .factories import EventFactory
-
-        org = OrganisationFactory(age_requirement='16')
-        event = EventFactory(organisation=org, age_requirement='')
-        assert event.resolved_age_requirement == '16'
-
-    # event's own value takes priority over org's
-    def test_event_overrides_org(self):
-        from apps.organisations.tests.factories import OrganisationFactory
-
-        from .factories import EventFactory
-
-        org = OrganisationFactory(age_requirement='16')
-        event = EventFactory(organisation=org, age_requirement='18')
-        assert event.resolved_age_requirement == '18'
-
-    # returns empty string when neither event nor org has a value
-    def test_no_age_requirement(self, event: Event):
-        event.age_requirement = ''
-        event.organisation = None
-        event.series = None
-        assert event.resolved_age_requirement == ''
-
-    # display property returns human-readable label
-    def test_display_label(self, event: Event):
-        event.age_requirement = '13'
-        assert event.resolved_age_requirement_display == '13+'
-
-    # display property returns empty string when no age requirement
-    def test_display_empty(self, event: Event):
-        event.age_requirement = ''
-        event.organisation = None
-        event.series = None
-        assert event.resolved_age_requirement_display == ''
-
-    # falls back through series to org
-    def test_fallback_through_series(self):
-        from apps.organisations.tests.factories import EventSeriesFactory, OrganisationFactory
-
-        from .factories import EventFactory
-
-        org = OrganisationFactory(age_requirement='18')
-        series = EventSeriesFactory(organisation=org)
-        event = EventFactory(series=series, organisation=None, age_requirement='')
-        assert event.resolved_age_requirement == '18'
 
 
 class TestEventInterest:
