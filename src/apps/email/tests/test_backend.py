@@ -26,7 +26,10 @@ class TestAsyncEmailBackend:
     # fail_silently=False propagates enqueue errors
     def test_send_messages_raises_on_enqueue_failure(self):
         backend = AsyncEmailBackend(fail_silently=False)
-        with patch('apps.email.backend.send_email_message', side_effect=ConnectionError), pytest.raises(ConnectionError):
+        with (
+            patch('apps.email.backend.send_email_message', side_effect=ConnectionError),
+            pytest.raises(ConnectionError),
+        ):
             backend.send_messages([_make_message()])
 
     # fail_silently=True swallows enqueue errors and logs them
