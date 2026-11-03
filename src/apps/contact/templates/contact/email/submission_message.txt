@@ -1,3 +1,4 @@
+{% autoescape off %}
 A user has submitted a request using the contact form on the website. The details are below:
 
 Name: {{ name }}
@@ -5,3 +6,4 @@ Name: {{ name }}
 Email: {{ email }}
 Message:
 {{ message }}
+{% endautoescape %}

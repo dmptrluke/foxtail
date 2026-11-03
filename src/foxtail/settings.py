@@ -349,7 +349,7 @@ else:
     vars().update(EMAIL_CONFIG)
 
 EMAIL_REAL_BACKEND = EMAIL_BACKEND
-EMAIL_BACKEND = 'apps.email.engine.AsyncEmailBackend'
+EMAIL_BACKEND = 'apps.email.backend.AsyncEmailBackend'
 
 # Logging
 # <https://docs.djangoproject.com/en/stable/ref/settings/#logging>

@@ -1,5 +1,6 @@
+{% load static %}
 <mj-section background-color="#281e33" padding="20px 24px">
   <mj-column>
-    <mj-image src="https://furry.nz/static/paw.png" alt="{{ conf.org_name }}" width="32px" align="left" padding="0" />
+    <mj-image src="{{ SITE_URL }}{% static 'images/paw-96.png' %}" alt="{{ conf.org_name }}" width="32px" align="left" padding="0" />
   </mj-column>
 </mj-section>

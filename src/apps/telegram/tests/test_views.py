@@ -43,6 +43,19 @@ class TestLinkTelegramView:
 
 @pytest.mark.django_db
 class TestLinkTelegramConfirmView:
+    # bot confirmation cannot take an OAuth identity whose bot-link record is missing
+    def test_rejects_other_social_account_owner(self, client, user, second_user, link_token_factory):
+        account = SocialAccount.objects.create(user=second_user, provider='telegram', uid='123456')
+        token = link_token_factory(telegram_id=123456)
+        client.force_login(user)
+
+        response = client.post(reverse('telegram_link_confirm'), {'token': token.token}, follow=True)
+
+        assert b'already linked' in response.content.lower()
+        account.refresh_from_db()
+        assert account.user == second_user
+        assert not TelegramLink.objects.exists()
+
     # successful link creation
     def test_confirm_creates_link(self, client, user, link_token_factory):
         client.force_login(user)

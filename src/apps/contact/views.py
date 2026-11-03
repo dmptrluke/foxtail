@@ -7,7 +7,7 @@ from csp_helpers.mixins import CSPViewMixin
 from formguard.handlers import reject_silently
 from formguard.views import GuardedFormViewMixin
 
-from apps.email.engine import send_email
+from apps.email.rendering import send_email
 
 from .forms import ContactForm
 
@@ -25,15 +25,13 @@ class ContactView(GuardedFormViewMixin, CSPViewMixin, FormView):
             'authentication': False,
             'email': form.cleaned_data['email'],
             'message': form.cleaned_data['message'],
-            'SITE_URL': settings.SITE_URL,
         }
         if self.request.user.is_authenticated:
             context['authentication'] = self.request.user.username
 
         send_email(
-            subject=f'Contact form submission - {name}',
+            template_prefix='contact/email/submission',
             to=settings.CONTACT_EMAILS,
-            template='emails/contact/submission',
             context=context,
         )
 

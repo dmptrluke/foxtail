@@ -1,0 +1,8 @@
+<mjml>
+  {% include 'emails/_head.mjml' %}
+  <mj-body>
+    {% include 'emails/_header.mjml' %}
+    {% block content %}{% endblock %}
+    {% include 'emails/_footer.mjml' %}
+  </mj-body>
+</mjml>

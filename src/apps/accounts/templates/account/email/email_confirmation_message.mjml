@@ -1,0 +1,20 @@
+{% extends 'emails/base.mjml' %}
+{% load account %}
+
+{% block content %}
+{% user_display user as user_display %}
+  <mj-section padding-top="32px">
+    <mj-column>
+      <mj-text css-class="heading" padding-bottom="8px">
+        Verify your email
+      </mj-text>
+      <mj-text>
+        Hi {{ user_display }}, please confirm this email address belongs to your {{ conf.org_name }} account.
+      </mj-text>
+      <mj-button href="{{ activate_url }}">Verify email address</mj-button>
+      <mj-text css-class="fallback-url">
+        Or visit this link: {{ activate_url }}
+      </mj-text>
+    </mj-column>
+  </mj-section>
+{% endblock %}
