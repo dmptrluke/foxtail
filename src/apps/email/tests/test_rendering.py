@@ -2,7 +2,6 @@ from django.conf import settings
 
 import pytest
 
-from apps.core.models import SiteSettings
 from apps.email.rendering import build_message, mjml_template_exists, send_email
 
 pytestmark = pytest.mark.django_db
