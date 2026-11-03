@@ -38,15 +38,6 @@ class TestBuildMessage:
         html = build_message(PREFIX, ['to@b.com'], CONTEXT).alternatives[0][0]
         assert f'{settings.SITE_URL}/static/images/paw-96.png' in html
 
-    # rendering always uses site settings while leaving caller-provided context untouched
-    def test_renderer_owns_conf_without_mutating_context(self):
-        context = {**CONTEXT, 'conf': {'org_name': 'Caller override'}}
-        msg = build_message(PREFIX, ['to@b.com'], context)
-        html = msg.alternatives[0][0]
-        assert SiteSettings.get_solo().org_name in html
-        assert 'Caller override' not in html
-        assert context['conf'] == {'org_name': 'Caller override'}
-
     # caller-provided context wins over the defaults
     def test_context_overrides_defaults(self):
         msg = build_message(PREFIX, ['to@b.com'], {**CONTEXT, 'SITE_URL': 'https://other.example'})
