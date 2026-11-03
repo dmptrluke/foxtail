@@ -28,13 +28,13 @@ class FoxtailOIDCAdapter(DefaultOIDCAdapter):
         if client.metadata.legacy_sub:
             try:
                 pk = int(sub)
-            except (ValueError, TypeError):
+            except ValueError, TypeError:
                 return None
             user = User.objects.filter(pk=pk).first()
         else:
             try:
                 uuid_val = uuid.UUID(sub)
-            except (ValueError, TypeError):
+            except ValueError, TypeError:
                 return None
             user = User.objects.filter(uuid=uuid_val).first()
 

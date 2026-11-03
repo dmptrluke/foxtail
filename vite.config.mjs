@@ -11,12 +11,12 @@ export default defineConfig(({ mode }) => ({
         strictPort: true,
     },
     build: {
-        outDir: resolve(__dirname, 'build/static'),
+        outDir: resolve(import.meta.dirname, 'build/static'),
         emptyOutDir: true,
         manifest: true,
         rolldownOptions: {
             input: {
-                main: resolve(__dirname, 'assets/js/main.js'),
+                main: resolve(import.meta.dirname, 'assets/js/main.js'),
             },
         },
         sourcemap: true,
@@ -29,7 +29,7 @@ export default defineConfig(({ mode }) => ({
                 quietDeps: true,
                 silenceDeprecations: ['import', 'global-builtin', 'color-functions'],
                 importers: [new NodePackageImporter()],
-                loadPaths: [resolve(__dirname, 'node_modules')],
+                loadPaths: [resolve(import.meta.dirname, 'node_modules')],
             },
         },
     },

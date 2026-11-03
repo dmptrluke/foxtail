@@ -11,5 +11,5 @@ def ppoi_position(ppoi):
     try:
         x, y = ppoi.split('x')
         return f'{float(x) * 100:.0f}% {float(y) * 100:.0f}%'
-    except (ValueError, AttributeError):
+    except ValueError, AttributeError:
         return '50% 50%'

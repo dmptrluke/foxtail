@@ -22,7 +22,7 @@ def site(request):
 def conf(request):
     try:
         return {'conf': SiteSettings.get_solo()}
-    except (OperationalError, ProgrammingError):
+    except OperationalError, ProgrammingError:
         logger.warning('SiteSettings table not available (pending migration?)')
         return {}
 

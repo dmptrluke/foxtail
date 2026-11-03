@@ -10,7 +10,9 @@ node_modules
 .gitattributes
 .pre-commit-config.yaml
 .ruff_cache
+.cache
 .pytest_cache
+.hypothesis/
 .coverage
 htmlcov
 __pycache__
@@ -20,5 +22,6 @@ compose.prod.yaml
 deploy
 build
 storage
+logs/
 static
 assets/*.json

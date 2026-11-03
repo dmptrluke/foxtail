@@ -10,8 +10,8 @@ A login provider and general community website for the NZ community.
 ### Prerequisites
 
 - [Docker](https://docs.docker.com/get-docker/) (for PostgreSQL and Redis)
-- Python 3.13+ with [uv](https://docs.astral.sh/uv/)
-- Node.js 22+ with npm
+- Python 3.14 with [uv](https://docs.astral.sh/uv/)
+- Node.js 26 LTS with npm
 
 ### Configuration
 

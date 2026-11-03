@@ -1,6 +1,6 @@
 # Assets
 
-FROM dhi.io/node:22-debian13-dev AS assets
+FROM dhi.io/node:26-debian13-dev AS assets
 ARG BUILD_MODE=production
 ENV NODE_ENV=$BUILD_MODE
 
@@ -17,7 +17,7 @@ RUN npm run-script build-${BUILD_MODE}
 
 FROM dhi.io/python:3.14-debian13-dev AS deps
 WORKDIR /app
-COPY --from=ghcr.io/astral-sh/uv:0.6 /uv /usr/local/bin/uv
+COPY --from=ghcr.io/astral-sh/uv:0.13.6 /uv /usr/local/bin/uv
 COPY pyproject.toml uv.lock ./
 RUN --mount=type=cache,target=/root/.cache/uv \
     uv sync --frozen --no-install-project --no-dev

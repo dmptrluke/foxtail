@@ -115,7 +115,7 @@ class ApiView(View):
         if self.request.content_type == 'application/json':
             try:
                 return json.loads(self.request.body)
-            except (json.JSONDecodeError, ValueError):
+            except json.JSONDecodeError, ValueError:
                 return {}
         return self.request.POST
 

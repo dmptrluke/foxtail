@@ -749,7 +749,7 @@ CONTENT_SECURITY_POLICY = {
         'font-src': [SELF, 'data:', 'https://fonts.gstatic.com'] + ASSET_HOSTS,
         'img-src': [SELF, 'blob:', 'data:', 'https://api.maptiler.com'] + ASSET_HOSTS,
         'object-src': [NONE],
-        'worker-src': ['blob:'],
+        'worker-src': [SELF, 'blob:'],
         'connect-src': [SELF, 'https://sentry.io', 'https://api.maptiler.com'],
         'base-uri': [SELF],
         'frame-ancestors': [NONE],
@@ -767,6 +767,7 @@ if UMAMI_SCRIPT_URL:
 
 if VITE_DEV_MODE:
     CONTENT_SECURITY_POLICY['DIRECTIVES']['script-src'] += ['http://localhost:5173']
+    CONTENT_SECURITY_POLICY['DIRECTIVES']['worker-src'] += ['http://localhost:5173']
     CONTENT_SECURITY_POLICY['DIRECTIVES']['connect-src'] += ['ws://localhost:5173']
     CONTENT_SECURITY_POLICY['DIRECTIVES']['font-src'] += ['http://localhost:5173']
     CONTENT_SECURITY_POLICY['DIRECTIVES']['img-src'] += ['http://localhost:5173']

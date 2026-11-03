@@ -14,33 +14,34 @@ concurrency:
 
 jobs:
   lint:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     timeout-minutes: 5
 
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
       - name: Install uv
-        uses: astral-sh/setup-uv@07a047e608db84b3d8c06cd9a7c7dcc9c355c18e # v10.3.2
+        uses: astral-sh/setup-uv@68559e99cc807c1eb7e9238fd43a15bba460eec2 # v10.3.3
         with:
           enable-cache: true
+          version: 0.13.6
 
-      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v6
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
-          node-version: '22.x'
+          node-version: '26.x'
           cache: npm
 
       - run: npm ci
 
       - name: Lint
         run: |
-          uvx ruff check src/
-          uvx ruff format --check src/
+          uvx ruff==0.17.3 check src/
+          uvx ruff==0.17.3 format --check src/
           npx biome check --no-errors-on-unmatched
           npx stylelint "assets/**/*.scss"
 
   test:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     timeout-minutes: 15
 
     services:
@@ -73,9 +74,9 @@ jobs:
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
-      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v6
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
-          node-version: '22.x'
+          node-version: '26.x'
           cache: npm
 
       - name: Install JS dependencies
@@ -88,9 +89,10 @@ jobs:
         run: npm run test:js
 
       - name: Install uv
-        uses: astral-sh/setup-uv@07a047e608db84b3d8c06cd9a7c7dcc9c355c18e # v10.3.2
+        uses: astral-sh/setup-uv@68559e99cc807c1eb7e9238fd43a15bba460eec2 # v10.3.3
         with:
           enable-cache: true
+          version: 0.13.6
 
       - name: Set up Python
         run: uv python install 3.14
@@ -107,7 +109,7 @@ jobs:
           HUEY_IMMEDIATE: "true"
           CONTACT_EMAILS: test@example.com
           DATABASE_URL: postgres://postgres:hunter2@localhost:${{ job.services.postgres.ports['5432'] }}/postgres
-          CACHE_URL: redis://localhost:${{ job.services.redis.ports[6379] }}/1
+          CACHE_URL: redis://localhost:${{ job.services.redis.ports['6379'] }}/1
           SITE_URL: http://localhost:8000
         run: uv run python src/manage.py makemigrations --check --dry-run
 
@@ -121,28 +123,28 @@ jobs:
           DIRECTORY_ENABLED: true
           CONTACT_EMAILS: test@example.com
           DATABASE_URL: postgres://postgres:hunter2@localhost:${{ job.services.postgres.ports['5432'] }}/postgres
-          CACHE_URL: redis://localhost:${{ job.services.redis.ports[6379] }}/1
+          CACHE_URL: redis://localhost:${{ job.services.redis.ports['6379'] }}/1
           SITE_URL: http://localhost:8000
         run: |
           uv run python -m pytest -n auto --cov=apps --cov-report=xml --cov-report=term-missing --junitxml=junit.xml -o junit_family=legacy
 
       - name: Upload coverage to Codecov
         if: ${{ !cancelled() }}
-        uses: codecov/codecov-action@303a32d7a59b442fa8d48b6a1cc6825c09c847a5 # v5
+        uses: codecov/codecov-action@303a32d7a59b442fa8d48b6a1cc6825c09c847a5 # v7.1.1
         with:
           files: coverage.xml
           token: ${{ secrets.CODECOV_TOKEN }}
 
       - name: Upload test results to Codecov
         if: ${{ !cancelled() }}
-        uses: codecov/codecov-action@303a32d7a59b442fa8d48b6a1cc6825c09c847a5 # v5
+        uses: codecov/codecov-action@303a32d7a59b442fa8d48b6a1cc6825c09c847a5 # v7.1.1
         with:
           files: junit.xml
           token: ${{ secrets.CODECOV_TOKEN }}
           report_type: test_results
 
   percy:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     timeout-minutes: 10
 
     services:
@@ -184,9 +186,9 @@ jobs:
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
-      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v6
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
-          node-version: '22.x'
+          node-version: '26.x'
           cache: npm
 
       - name: Install JS dependencies
@@ -196,9 +198,10 @@ jobs:
         run: npm run-script build-development
 
       - name: Install uv
-        uses: astral-sh/setup-uv@07a047e608db84b3d8c06cd9a7c7dcc9c355c18e # v10.3.2
+        uses: astral-sh/setup-uv@68559e99cc807c1eb7e9238fd43a15bba460eec2 # v10.3.3
         with:
           enable-cache: true
+          version: 0.13.6
 
       - name: Set up Python
         run: uv python install 3.14
@@ -209,7 +212,7 @@ jobs:
       - name: Run migrations and collect static files
         env:
           DATABASE_URL: postgres://postgres:hunter2@localhost:${{ job.services.postgres.ports['5432'] }}/postgres
-          CACHE_URL: redis://localhost:${{ job.services.redis.ports[6379] }}/1
+          CACHE_URL: redis://localhost:${{ job.services.redis.ports['6379'] }}/1
         run: |
           uv run python src/manage.py migrate --no-input
           uv run python src/manage.py collectstatic --no-input
@@ -217,7 +220,7 @@ jobs:
       - name: Start Django server
         env:
           DATABASE_URL: postgres://postgres:hunter2@localhost:${{ job.services.postgres.ports['5432'] }}/postgres
-          CACHE_URL: redis://localhost:${{ job.services.redis.ports[6379] }}/1
+          CACHE_URL: redis://localhost:${{ job.services.redis.ports['6379'] }}/1
         run: |
           uv run python src/manage.py runserver 8000 &
           sleep 3

@@ -40,3 +40,27 @@ updates:
       update-types:
         - minor
         - patch
+- package-ecosystem: docker
+  directory: "/"
+  schedule:
+    interval: weekly
+    time: '09:00'
+    timezone: Pacific/Auckland
+  open-pull-requests-limit: 100
+  groups:
+    docker-minor-patch:
+      update-types:
+        - minor
+        - patch
+- package-ecosystem: pre-commit
+  directory: "/"
+  schedule:
+    interval: weekly
+    time: '09:00'
+    timezone: Pacific/Auckland
+  open-pull-requests-limit: 100
+  groups:
+    pre-commit-minor-patch:
+      update-types:
+        - minor
+        - patch

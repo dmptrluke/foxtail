@@ -95,7 +95,7 @@ def telegram_webhook(request):
 
     try:
         update = json.loads(request.body)
-    except (json.JSONDecodeError, ValueError):
+    except json.JSONDecodeError, ValueError:
         return HttpResponse(status=400)
 
     _handle_update(update)

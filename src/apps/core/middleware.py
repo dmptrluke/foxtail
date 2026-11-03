@@ -15,7 +15,7 @@ class TimezoneMiddleware:
         if tzname:
             try:
                 timezone.activate(zoneinfo.ZoneInfo(tzname))
-            except (ValueError, KeyError):
+            except ValueError, KeyError:
                 del request.session['django_timezone']
         else:
             timezone.deactivate()
