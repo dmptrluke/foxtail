@@ -109,6 +109,7 @@ class EventDetailView(PublishedDetailMixin, YearMixin, DetailView):
         )
 
         event = self.object
+        context['page_color_scheme'] = event.color_scheme
         org = event.organisation
         series = event.series
         show_series = bool(series)

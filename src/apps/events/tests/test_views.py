@@ -98,6 +98,38 @@ class TestEventListYearView:
 
 
 class TestEventDetailView:
+    # event palettes render before scripts run and replace only the footer color controls
+    def test_event_color_scheme(self, client, event):
+        event.color_scheme = 'ocean'
+        event.save()
+        response = client.get(event.get_absolute_url())
+        content = response.content.decode()
+        assert response.status_code == 200
+        assert 'class="no-js theme-ocean"' in content
+        assert 'data-page-scheme="ocean"' in content
+        assert 'Set by this event' in content
+        assert 'data-scheme="plum"' not in content
+        assert 'data-mode="dark"' in content
+        assert 'data-style="retro"' in content
+
+    # listings containing themed events and unthemed detail pages retain the site palette and picker
+    @pytest.mark.parametrize('page', ['detail', 'list', 'list_year'])
+    def test_default_color_scheme(self, client, event, settings, page):
+        settings.DEFAULT_COLOR_SCHEME = 'coffee'
+        if page == 'detail':
+            url = event.get_absolute_url()
+        else:
+            event.color_scheme = 'ocean'
+            event.save()
+            kwargs = {'year': event.start.year} if page == 'list_year' else None
+            url = reverse(f'events:{page}', kwargs=kwargs)
+        response = client.get(url)
+        content = response.content.decode()
+        assert response.status_code == 200
+        assert 'class="no-js theme-coffee"' in content
+        assert 'data-page-scheme=' not in content
+        assert 'data-scheme="plum"' in content
+
     # event badges show only the event's age rather than organisation or series limits
     @pytest.mark.parametrize('age', ['', 'all'])
     def test_age_badge_is_independent(self, client, age):
@@ -245,11 +277,12 @@ class TestEventCreateView:
         assert response.context['ticket_formset'].total_form_count() == 0
         assert 'data-manage-formset-empty-form' in response.content.decode()
 
-    # editor can create an event with tags, redirects to edit view
+    # editor can create an event with tags and a color palette, redirecting to the edit view
     def test_creates_event(self, client, editor):
         client.force_login(editor)
         data = {
             'title': 'New Event',
+            'color_scheme': 'forest',
             'slug': 'new-event',
             'description': 'Event description.',
             'organisation': OrganisationFactory().pk,
@@ -268,6 +301,7 @@ class TestEventCreateView:
         assert response.status_code == 302
         assert response['Location'] == reverse('events:event_edit', kwargs={'pk': event.pk})
         assert set(event.tags.names()) == {'meetup', 'social'}
+        assert event.color_scheme == 'forest'
         messages = list(get_messages(response.wsgi_request))
         assert any('created' in str(m) for m in messages)
 
@@ -364,12 +398,13 @@ class TestEventUpdateView:
         response = client.get(url)
         assert response.status_code == 403
 
-    # editor can update an event and its tags
+    # editor can update an event, its tags, and its color palette
     def test_updates_event(self, client, editor, event: Event):
         client.force_login(editor)
         url = reverse('events:event_edit', kwargs={'pk': event.pk})
         data = {
             'title': 'Updated Title',
+            'color_scheme': 'ocean',
             'slug': event.slug,
             'description': event.description,
             'organisation': event.organisation_id,
@@ -387,6 +422,7 @@ class TestEventUpdateView:
         assert response.status_code == 302
         event.refresh_from_db()
         assert event.title == 'Updated Title'
+        assert event.color_scheme == 'ocean'
         assert list(event.tags.names()) == ['edited']
         messages = list(get_messages(response.wsgi_request))
         assert any('saved' in str(m) for m in messages)

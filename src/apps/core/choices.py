@@ -1,6 +1,22 @@
 from django.db import models
 
 
+class ColorScheme(models.TextChoices):
+    """Define supported color palettes"""
+
+    PLUM = 'plum', 'Plum'
+    SLATE = 'slate', 'Slate'
+    COFFEE = 'coffee', 'Coffee'
+    FOREST = 'forest', 'Forest'
+    AUTUMN = 'autumn', 'Autumn'
+    BERRY = 'berry', 'Berry'
+    TUI = 'tui', 'Tui'
+    TWILIGHT = 'twilight', 'Twilight'
+    DUSK = 'dusk', 'Dusk'
+    OCEAN = 'ocean', 'Ocean'
+    CONTRAST = 'contrast', 'Contrast'
+
+
 class AgeRequirement(models.TextChoices):
     """Define supported age requirements"""
 

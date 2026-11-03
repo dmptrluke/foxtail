@@ -50,6 +50,7 @@ class EventAdmin(UnfoldModelAdmin):
                     'organisation',
                     'series',
                     'age_requirement',
+                    'color_scheme',
                 ),
             },
         ),

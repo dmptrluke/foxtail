@@ -50,6 +50,7 @@ class EventForm(CSPFormMixin, ModelForm):
             'end',
             'end_time',
             'age_requirement',
+            'color_scheme',
             'publish_status',
             'live_as_of',
             'image',

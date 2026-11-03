@@ -10,6 +10,35 @@ pytestmark = pytest.mark.django_db
 
 
 class TestEventForm:
+    # event editors can select a palette or clear it to restore visitor preferences
+    @pytest.mark.parametrize('scheme', ['forest', 'twilight', 'contrast', ''])
+    def test_saves_color_scheme(self, event, scheme):
+        event.color_scheme = 'ocean'
+        event.save()
+        form = EventForm(
+            instance=event,
+            data={
+                'title': event.title,
+                'description': event.description,
+                'organisation': event.organisation_id,
+                'location': event.location,
+                'start': event.start.isoformat(),
+                'publish_status': event.publish_status,
+                'image_ppoi': '0.5x0.5',
+                'color_scheme': scheme,
+            },
+        )
+        assert form.is_valid(), form.errors
+        form.save()
+        event.refresh_from_db()
+        assert event.color_scheme == scheme
+
+    # arbitrary class names cannot be submitted as event palettes
+    def test_rejects_unknown_color_scheme(self):
+        form = EventForm(data={'color_scheme': 'unknown'})
+        assert not form.is_valid()
+        assert 'color_scheme' in form.errors
+
     # the event editor offers only series owned by its selected organisation
     def test_series_choices_match_organisation(self, organisation):
         matching = EventSeriesFactory(organisation=organisation)

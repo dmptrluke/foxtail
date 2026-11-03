@@ -32,6 +32,9 @@
                 <div class="popup-theme" hidden>
                     <div class="popup-theme-row">
                         <span class="popup-theme-label">Color</span>
+                        {% if page_color_scheme %}
+                        <span>Set by this event</span>
+                        {% else %}
                         <button class="popup-theme-option" data-scheme="plum"><span class="popup-theme-dot" style="--dot:#4a3d55"></span>Plum</button>
                         <button class="popup-theme-option" data-scheme="slate"><span class="popup-theme-dot" style="--dot:#4a5568"></span>Slate</button>
                         <button class="popup-theme-option" data-scheme="coffee"><span class="popup-theme-dot" style="--dot:#5c4a3a"></span>Coffee</button>
@@ -43,6 +46,7 @@
                         <button class="popup-theme-option" data-scheme="dusk"><span class="popup-theme-dot" style="--dot:#6a3434"></span>Dusk</button>
                         <button class="popup-theme-option" data-scheme="ocean"><span class="popup-theme-dot" style="--dot:#1e3a5a"></span>Ocean</button>
                         <button class="popup-theme-option" data-scheme="contrast"><span class="popup-theme-dot" style="--dot:#000000"></span>Contrast</button>
+                        {% endif %}
                     </div>
                     <div class="popup-theme-row">
                         <span class="popup-theme-label">Style</span>

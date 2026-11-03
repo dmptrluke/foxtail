@@ -22,7 +22,7 @@ from markdownfield.validators import VALIDATOR_CLASSY
 from published.models import PublishedModel
 from taggit.managers import TaggableManager
 
-from apps.core.choices import AgeRequirement
+from apps.core.choices import AgeRequirement, ColorScheme
 from apps.core.fields import AutoSlugField
 from apps.images.upload import scramble_upload
 from apps.images.validators import file_size_validator
@@ -100,6 +100,12 @@ class Event(PublishedModel):
     end_time = models.TimeField(null=True, blank=True, help_text='End date and time are optional.')
 
     age_requirement = models.CharField(max_length=3, choices=AgeRequirement.choices, blank=True)
+    color_scheme = models.CharField(
+        max_length=8,
+        choices=ColorScheme.choices,
+        blank=True,
+        help_text='Override the color palette on this event page. Leave blank to use the visitor or site preference.',
+    )
 
     image = ProcessedImageField(
         upload_to=scramble_upload('events'), blank=True, auto_add_fields=True, validators=[file_size_validator()]

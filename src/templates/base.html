@@ -1,6 +1,6 @@
 {% load static django_vite jsonld opengraph %}
 <!doctype html>
-<html lang="en" class="no-js theme-{{ DEFAULT_COLOR_SCHEME }}" data-default-scheme="{{ DEFAULT_COLOR_SCHEME }}">
+<html lang="en" class="no-js theme-{{ page_color_scheme|default:DEFAULT_COLOR_SCHEME }}" data-default-scheme="{{ DEFAULT_COLOR_SCHEME }}"{% if page_color_scheme %} data-page-scheme="{{ page_color_scheme }}"{% endif %}>
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -32,7 +32,7 @@
         (function() {
             var h = document.documentElement, c = h.classList;
             c.remove('no-js'); c.add('js');
-            var s = localStorage.getItem('color-scheme') || h.dataset.defaultScheme;
+            var s = h.dataset.pageScheme || localStorage.getItem('color-scheme') || h.dataset.defaultScheme;
             if (s) { c.remove('theme-' + h.dataset.defaultScheme); c.add('theme-' + s); }
             var t = localStorage.getItem('style-theme') || 'default';
             if (t !== 'default') c.add('theme-' + t);
